@@ -1,0 +1,103 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 20-may-2016, 13:40:12
+    Author     : Jesús Aragón
+*/
+
+
+@font-face {
+    font-family: fontprincipal;
+    src: url(../fonts/Montserrat/Montserrat-Regular.ttf);
+}
+
+div {
+    font-family: fontprincipal;
+}
+.logo{
+    background-color: gray;
+}
+.fondoGris{
+    background-color: #D0D2D3 !important;
+    background-image: none !important;
+}
+.btn-success{
+    background-image: -webkit-linear-gradient(top,#F7931E 0,#e38d13 100%)!important;
+    background-image: -o-linear-gradient(top,#F7931E 0,#e38d13 100%)!important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#F7931E),to(#e38d13))!important;
+    background-image: linear-gradient(to bottom,#F7931E 0,#e38d13 100%)!important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F7931E', endColorstr='#e38d13', GradientType=0)!important;
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false)!important;
+    background-repeat: repeat-x;
+    border-color: #F7931E !important;
+    background-color: #F7931E !important;
+}
+.btn-success:hover :active{
+    background-image: -webkit-linear-gradient(top,#F7931E 0,#e38d13 100%)!important;
+    background-image: -o-linear-gradient(top,#F7931E 0,#e38d13 100%)!important;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#F7931E),to(#e38d13))!important;
+    background-image: linear-gradient(to bottom,#F7931E 0,#e38d13 100%)!important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F7931E', endColorstr='#e38d13', GradientType=0)!important;
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false)!important;
+    background-repeat: repeat-x;
+    border-color: #F7931E !important;
+    background-color: #F7931E !important;
+    background-position-x: 0px;
+    background-position-y: -1px;
+}
+.chart {
+  width: 100%; 
+  height: 600px;
+}
+.contenedorAlumno{
+    background-color: #F7931E; /*color colegio*/ 
+    padding: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.25);
+    color: white;
+}
+.elemento-movil{
+    margin: 2px;
+    cursor: pointer;
+    width: 80px;
+    height: 80px;
+}
+.imagenlista{
+    height: 40px;   
+}
+.listaalumnos{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.btn-default{
+    background-color: #F7931E;
+}
+.btn-naranja{
+     background-color: #F7931E;
+}
+.infousuario{
+                color: white;
+                position: absolute;
+                background-color: #F7931E;
+                width: 100%;
+                height: 50px;
+                display: block;
+                margin-top: -50px;
+                padding-top: 5px;
+                padding-right: 20px;
+                padding-left: 20px;
+            }
+/*.tooltip > .tooltip-arrow {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-bottom-color: #cc0000;  black 
+  border-width: 0 5px 5px;
+}
+.tooltip > .tooltip-inner{
+    background-color: #cc0000;
+}*/
+

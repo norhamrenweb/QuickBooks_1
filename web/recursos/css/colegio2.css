@@ -1,0 +1,114 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 20-may-2016, 15:14:10
+    Author     : Jesús Aragón
+*/
+
+.panel-heading a:after {
+    font-family:'Glyphicons Halflings';
+    content:"\e114";
+    float: right;
+    color: grey;
+}
+.panel-heading a.collapsed:after {
+    content:"\e080";
+}
+.chart_wrap {
+    border:1px solid gray;
+    position: relative;
+    padding-bottom: 100%;
+    height: 0;
+    overflow:hidden;
+}
+.chart {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width:100%;
+    height:100%;
+}
+ body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th{
+    text-align: center;
+}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #c7ddef;
+}
+#barraNavegacion{
+    background-color: #cc0000;
+}
+.navbar-brand{
+    color: white;
+}
+.navbar-brand hover{
+    color: black;
+}
+.btn-white{
+    background-color: white;
+    color: #cc0000;
+}
+.btn-red{
+    background-color: #cc0000;
+    color: white;
+}
+.contenedorLogo{
+    position: fixed;
+    top: 0;
+    padding-top: 112px;
+    padding-bottom: 0;
+    padding-left: 30px;
+    height: 100%;
+    width: 16.66666%;
+    width: 220px;
+    background-color: transparent;
+    text-align: center;
+    
+}
+.banner{
+    width: 325px;
+    height: 48px;
+    background-size: contain;
+    background-image: url("../img/banner.jpg");
+    background-repeat: no-repeat;
+}
+/*ICONO BACK TO TOP*/
+.back-to-top {
+
+background: none;
+margin: 0;
+position: fixed;
+bottom: 50px;
+right: 0;
+width: 60px;
+height: 60px;
+z-index: 100;
+display: none;
+text-decoration: none;
+color: #ffffff;
+background-color: #cc0000;
+
+}
+
+ .back-to-top :hover{
+    color: grey;
+}
+
+.back-to-top i {
+    background-color: transparent;
+  color: white;
+  text-align: center;
+  font-size: 50px;
+  display: block;
+  margin-top: 5px;
+  margin-right: auto;
+  margin-left: auto;
+
+}
+

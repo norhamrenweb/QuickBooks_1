@@ -1,0 +1,80 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15-nov-2016, 16:06:21
+    Author     : Jesus
+*/
+
+#div1, #div2{
+    /*float:left; */ 
+    height:35px;            
+    padding:10px;
+    background-color: #eee;
+    height: 500px;
+    /*border:1px solid #aaaaaa;*/
+}
+.listBlock {
+    float: left;
+}
+#sortable1, #sortable2 {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background: #eee;
+    padding: 5px;
+    border: 1px solid black;
+}
+#sortable1 img, #sortable2 img {
+    color:black;
+    cursor: move;
+    margin: 5px;
+    padding: 5px;
+    font-size: 1.2em;
+
+    background: none;
+    background-color: white;
+}
+.selected {
+    background:red !important;
+    border: 1px solid coral;
+}
+.hidden {
+    display:none !important;
+}
+
+/*Calendarios*/
+.datetimepicker_desing {
+    margin-bottom: 35px;
+    cursor: pointer;
+}
+
+.datetimepicker_desing input {
+    font-size: 14px;
+    font-weight: bold;
+    color: #289548;
+}
+
+.datetimepicker_desing .input-group-addon:last-child {
+    box-shadow: 2px 2px 2px #aaa;
+}
+
+.datetimepicker_desing .day.active, .datetimepicker_desing .day.active:hover {
+    background-color: #289548;
+}
+
+.datetimepicker {
+    margin-bottom: 35px;
+}
+
+.datetimepicker input {
+    font-size: 18px;
+    font-weight: bold;
+    color: #289548;
+}
+
+.datetimepicker .input-group-addon:last-child {
+    box-shadow: 1px 1px 1px #aaa;
+}
