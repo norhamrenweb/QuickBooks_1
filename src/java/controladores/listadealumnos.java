@@ -77,18 +77,23 @@ public class listadealumnos extends MultiActionController{
        
         return listaAlumnos;
     }
-     public ModelAndView addstudents(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+     public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("listadealumnos");
        
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
+         
         
-       String[] studentIds = hsr.getParameterValues("");
+       String[] studentIds = hsr.getParameterValues("destino[]");
+       String[] args = hsr.getParameterValues("TXTnombreLessons");
+       
+       Createlesson c = new Createlesson();
+       c.newlesson(studentIds,args);
         
         mv.addObject("message", "Lesson Updated");
         
         return mv;
     }
+      
 }
+
+
