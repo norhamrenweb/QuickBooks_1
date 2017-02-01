@@ -18,12 +18,13 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 /**
  *
  * @author nmohamed
  */
-public class listadealumnos implements Controller{
+public class listadealumnos extends MultiActionController{
     
       Connection cn;
     
@@ -33,8 +34,8 @@ public class listadealumnos implements Controller{
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
-    @Override
-    public ModelAndView handleRequest(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    
+    public ModelAndView cargalista(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("listadealumnos");
        
@@ -76,5 +77,23 @@ public class listadealumnos implements Controller{
        
         return listaAlumnos;
     }
-    
+     public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("listadealumnos");
+       
+         
+        
+       String[] studentIds = hsr.getParameterValues("destino[]");
+       String[] args = hsr.getParameterValues("TXTnombreLessons");
+       
+       Createlesson c = new Createlesson();
+       c.newlesson(studentIds,args);
+        
+        mv.addObject("message", "Lesson Updated");
+        
+        return mv;
+    }
+      
 }
+
+
