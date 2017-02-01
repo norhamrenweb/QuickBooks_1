@@ -49,44 +49,48 @@
             </fieldset>
             <fieldset>
                     <legend>Select students</legend>
-                    <div class="col-xs-2"></div>
-                    <div class="col-xs-3">
-                        <label>Filter</label>
-                        
-                        <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
-                            <c:forEach var="levels" items="${gradelevels}">
-                                <option value="${levels.id_students}" >${levels.nombre_students}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="col-xs-2"></div>
-                    <div class="col-xs-3">
-                        <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
-                            <c:forEach var="alumnos" items="${listadealumnos}">
-                                <option value="${alumnos.id_students}" >${alumnos.nombre_students}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="col-xs-2">
-                        <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                            <input type="button" class="btn pasar" value="<spring:message code="etiq.txtadd"/> »">
-                        </div>
-                        <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                            <input type="button" class="btn quitar" value="« <spring:message code="etiq.txtremove"/>">
-                        </div>
-                        <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                            <input type="button" class="btn pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
-                        </div>
-                        <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                            <input type="button" class="btn quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
-                        </div>
-                    </div>
-                
-                    <div class="col-xs-3">
-                        <select class="form-control submit" size="20" multiple name="destino[]" id="destino" style="width: 100% !important;"> 
+                    <div class="col-xs-12">
+                        <div class="col-xs-2"></div>
+                        <div class="col-xs-3">
+                            <label>Filter</label>
 
-                    </select>
-                </div>
+                            <select class="form-control" name="level" id="level" style="width: 100% !important;">
+                                <c:forEach var="levels" items="${gradelevels}">
+                                    <option value="${levels.id_students}" >${levels.nombre_students}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                    <div class="col-xs-2"></div>
+                        <div class="col-xs-3">
+                            <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
+                                <c:forEach var="alumnos" items="${listadealumnos}">
+                                    <option value="${alumnos.id_students}" >${alumnos.nombre_students}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <input type="button" class="btn pasar" value="<spring:message code="etiq.txtadd"/> »">
+                            </div>
+                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <input type="button" class="btn quitar" value="« <spring:message code="etiq.txtremove"/>">
+                            </div>
+                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <input type="button" class="btn pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
+                            </div>
+                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <input type="button" class="btn quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
+                            </div>
+                        </div>
+                
+                        <div class="col-xs-3">
+                            <select class="form-control submit" size="20" multiple name="destino[]" id="destino" style="width: 100% !important;"> 
+
+                            </select>
+                        </div>
+                    </div>
                 <div class="col-xs-2"></div>
             </fieldset>
         <div class="col-xs-12 text-center">
