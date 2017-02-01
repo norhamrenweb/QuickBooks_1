@@ -85,7 +85,7 @@ public class listadealumnos extends MultiActionController{
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         
-       int[] studentIds = hsr.getParameterValues("");
+       String[] studentIds = hsr.getParameterValues("");
         
         mv.addObject("message", "Lesson Updated");
         
