@@ -8,6 +8,7 @@ package controladores;
 import Montessori.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +46,44 @@ public class listadealumnos extends MultiActionController{
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         mv.addObject("listadealumnos", this.getStudents());
+         Statement st = this.cn.createStatement();
+         ResultSet rs = st.executeQuery("SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels");
+         List <String> grades = new ArrayList();
+         while(rs.next())
+         {
+         grades.add(rs.getString("GradeLevel"));
+         }
+        mv.addObject("gradelevels", grades);
+        
+        return mv;
+    }
+//     public ModelAndView gradelista(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+//        
+//        ModelAndView mv = new ModelAndView("listadealumnos");
+//       
+//         DriverManagerDataSource dataSource;
+//        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+//        this.cn = dataSource.getConnection();
+//         Statement st = this.cn.createStatement();
+//         ResultSet rs = st.executeQuery("SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels");
+//         List <String> grades = new ArrayList();
+//         while(rs.next())
+//         {
+//         grades.add(rs.getString("GradeLevel"));
+//         }
+//        mv.addObject("gradelevels", grades);
+//       
+//        
+//        return mv;
+//    }
+    public ModelAndView cargalistagrade(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("listadealumnos");
+       
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+         mv.addObject("listadealumnosgrade", this.getStudentsgrade(hsr.getParameter("grade")));
         
         return mv;
     }
@@ -57,6 +96,37 @@ public class listadealumnos extends MultiActionController{
              Statement st = this.cn.createStatement();
              
             String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled'";
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                Students alumnos = new Students();
+                alumnos.setId_students(rs.getInt("StudentID"));
+                alumnos.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
+                alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
+                alumnos.setFoto(rs.getString("PathToPicture"));
+                alumnos.setLevel_id(rs.getString("GradeLevel"));
+                alumnos.setPlacement("Placement");
+                alumnos.setSubstatus("Substatus");
+                listaAlumnos.add(alumnos);
+            }
+            //this.finalize();
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+        }
+       
+        return listaAlumnos;
+    }
+     public ArrayList<Students> getStudentsgrade(String grade) throws SQLException
+    {
+//        this.conectarOracle();
+        ArrayList<Students> listaAlumnos = new ArrayList<>();
+        try {
+            
+             Statement st = this.cn.createStatement();
+             
+            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel ='"+grade+"'";
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
