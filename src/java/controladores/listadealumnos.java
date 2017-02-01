@@ -27,6 +27,8 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 public class listadealumnos extends MultiActionController{
     
       Connection cn;
+      
+//      private ServletContext servlet;
     
     private Object getBean(String nombrebean, ServletContext servlet)
     {
@@ -84,9 +86,9 @@ public class listadealumnos extends MultiActionController{
          
         
        String[] studentIds = hsr.getParameterValues("destino[]");
-       String[] args = hsr.getParameterValues("TXTnombreLessons");
+       String args = hsr.getParameter("TXTnombreLessons");
        
-       Createlesson c = new Createlesson();
+       Createlesson c = new Createlesson(hsr.getServletContext());
        c.newlesson(studentIds,args);
         
         mv.addObject("message", "Lesson Updated");

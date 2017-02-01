@@ -40,15 +40,15 @@ public class Createlesson {
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
-    public void newlesson(String[] studentIds,String[] args) throws SQLException
+    public void newlesson(String[] studentIds,String args) throws SQLException
     { int lessonid=0;
     DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",this.servlet);
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-       st.executeUpdate("insert into lessons(nombre_lessons) values (' "+args[1]+"')");
+       st.executeUpdate("insert into lessons(nombre_lessons) values (' "+args+"')");
        
-            ResultSet rs = st.executeQuery("select id_lessons from lessons where nombre_lessons =' "+args[1]+"'");
+            ResultSet rs = st.executeQuery("select id_lessons from lessons where nombre_lessons =' "+args+"'");
             while(rs.next())
             {
             lessonid = rs.getInt("id_lessons");

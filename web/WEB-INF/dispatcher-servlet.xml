@@ -48,7 +48,7 @@
         </bean>
     </property> 
     </bean>
-
+<bean class="controladores.DatosUsuarioControlador" name="ControladorIdioma"/>
 
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="interceptors">

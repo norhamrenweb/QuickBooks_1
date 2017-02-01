@@ -38,7 +38,7 @@
         <h1 class="text-center">Crear Lessons</h1>
 
         
-        <form:form id="formStudents" method ="post" action="listadealumnos.htm?select=addstudents" >
+        <form:form id="formStudents" method ="post" action="listadealumnos.htm?select=createlesson" >
         <div class="col-xs-12">
             <label class="control-label"><spring:message code="etiq.txtname"/></label>
             <p class="clear"><input type="text" class="input-sm" name="TXTnombreLessons" value="<spring:message code="etiq.txtname"/>"></p>
