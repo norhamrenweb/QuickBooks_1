@@ -29,22 +29,20 @@
         </script>
     </head>
     <body>
-        <h1>Hello World!</h1>
-<!--        <div class="col-xs-6">
-         <table border="1">
-        <%--<c:forEach items="${listadealumnos}"
-                   var="alumnos">
-            <tr>
-                <td>
-                    <c:out value="${alumnos.nombre_students}"/>
-                </td>
-               
-                       
-            </tr>
-        </c:forEach>--%>
-        </table>
-        </div>-->
+        
+        <div class="panel-heading">
+            <a class="btnBandera" href='datosIdioma.htm?lenguaje=en'>English</a>
+            <a class="btnBandera" href='datosIdioma.htm?lenguaje=es'>Español</a>
+            <a class="btnBandera" href='datosIdioma.htm?lenguaje=ar'>Arabic</a>
+        </div>
+        <h1 class="text-center">Crear Lessons</h1>
+
+        
         <form:form id="formStudents" method ="post" action="listadealumnos.htm?select=addstudents" >
+        <div class="col-xs-12">
+            <label class="control-label"><spring:message code="etiq.txtname"/></label>
+            <p class="clear"><input type="text" class="input-sm" name="TXTnombreLessons" value="<spring:message code="etiq.txtname"/>"></p>
+        </div>
         <div class="col-xs-4">
             
 <!--                <select class="form-control select-level" id="idlevel" name="TXTlevel" onchange="comboSelectionLevel()">          -->

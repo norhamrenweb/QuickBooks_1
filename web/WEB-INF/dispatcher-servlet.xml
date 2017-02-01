@@ -16,7 +16,21 @@
     for the index controller we are using ParameterizableViewController, so we must
     define an explicit mapping for it.
     -->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+            <property name="basename">
+               <value>mensaje</value>
+            </property>
+    </bean>
+    
+    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName">
+            <value>lenguaje</value>
+        </property>
+    </bean>
    
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+      <property name="defaultLocale" value="en" />
+    </bean>
      <!--<bean class="controladores.homepage" id="homepage1"/>-->
    <bean class="controladores.homepage" id="homepage">
      <property name="methodNameResolver">
@@ -27,18 +41,25 @@
     </bean>
     
     <bean class="controladores.listadealumnos" id="listadealumnos1"/>
+    <bean class="controladores.DatosUsuarioControlador" name="ControladorIdioma"/>
 
 
 
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="localeChangeInterceptor"/>
+            </list>
+        </property>
         <property name="mappings">
             <props>
                 <prop key="index.htm">indexController</prop>
                 <prop key="userform.htm">homepage</prop>
                 <prop key="suhomepage.htm">homepage</prop>
                  <prop key="familymap2.htm">homepage</prop>
-                 <prop key="listadealumnos.htm">listadealumnos1</prop>
-                
+                 
+                <prop key="listadealumnos.htm">listadealumnos1</prop>
+                <prop key="datosIdioma.htm">ControladorIdioma</prop>
                 
                   
             </props>
