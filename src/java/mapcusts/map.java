@@ -23,7 +23,8 @@ import quickbooksync.*;
  */
 public class map {
     public String mapCustomer(String RWfamilyname,String QBcustname) throws SQLException, ClassNotFoundException, IOException, ParserConfigurationException, TransformerException, TransformerConfigurationException, SAXException
-    {String message = null;
+    {// there has to be a flag to know which string is which
+        String message = null;
     String existingcustName = null;
     DBconnection connectQB = new DBconnection();
     UpdateLog logdb = new UpdateLog();

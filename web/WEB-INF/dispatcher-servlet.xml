@@ -25,9 +25,15 @@
         </bean>
     </property> 
     </bean>
-    
-    <bean class="controladores.listadealumnos" id="listadealumnos1"/>
-
+<!--    
+    <bean class="controladores.listadealumnos" id="listadealumnos1"/>-->
+<bean class="controladores.listadealumnos" id="listadealumnos1">
+     <property name="methodNameResolver">
+        <bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+           <property name="paramName" value="select"/>
+        </bean>
+    </property> 
+    </bean>
 
 
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">

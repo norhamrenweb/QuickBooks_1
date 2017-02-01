@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import quickbooksync.DBconnection;
 import quickbooksync.QBCustomer;
 import quickbooksync.RWFamily;
 import quickbooksync.Runsync;
@@ -25,37 +26,45 @@ import quickbooksync.Runsync;
  */
 public class getcusts {
     
-     public List<QBCustomer> getCustomer() throws SQLException, ClassNotFoundException, IOException
-   {
-      List <QBCustomer> allcustomer= new ArrayList<>();
-       File file = new File("C:\\Users\\Public\\config.txt");
-		FileInputStream fis = null;
-                fis = new FileInputStream(file);
-
-			
-			int content;
-                        StringBuilder builder = new StringBuilder();
-                       
-			while ((content = fis.read()) != -1) {
-				// convert to char and display it
-				builder.append((char)content);
-			}
-                        String conf = builder.toString();
-                        String[] x = conf.split("&");
-                      
-                        if (fis != null)
-                        {fis.close();}
-                        
-                         Driver myDriver;
- Connection conn;
-        
     
-    myDriver = new cdata.jdbc.quickbooks.QuickBooksDriver();
+    
+    public List<QBCustomer> getCustomer() throws SQLException, ClassNotFoundException, IOException
+   {
        
-     conn = DriverManager.getConnection(x[0]);//"jdbc:quickbooks:user=Admin;password=Admin;URL=http://localhost:8166");
-       
-       java.sql.Statement statementQB = conn.createStatement();
-        ResultSet rs = statementQB.executeQuery("Select ID,Name from Customers");
+      List <QBCustomer> allcustomer= new ArrayList<>();
+//       File file = new File("C:\\Users\\Public\\config.txt");
+//		FileInputStream fis = null;
+//                fis = new FileInputStream(file);
+//
+//			
+//			int content;
+//                        StringBuilder builder = new StringBuilder();
+//                       
+//			while ((content = fis.read()) != -1) {
+//				// convert to char and display it
+//				builder.append((char)content);
+//			}
+//                        String conf = builder.toString();
+//                        String[] x = conf.split("&");
+//                      
+//                        if (fis != null)
+//                        {fis.close();}
+//                        
+//                         Driver myDriver;
+// Connection conn;
+//        
+//    
+//    myDriver = new cdata.jdbc.quickbooks.QuickBooksDriver();
+//       
+//     conn = DriverManager.getConnection(x[0]);//"jdbc:quickbooks:user=Admin;password=Admin;URL=http://localhost:8166");
+//       
+//       java.sql.Statement statementQB = conn.createStatement();
+DBconnection connectQB = new DBconnection();
+        connectQB.createconnQB();
+        
+        
+        ResultSet rs = connectQB.statementQB.executeQuery("Select ID,Name from Customers");
+      
         QBCustomer c = new QBCustomer();
         while(rs.next())
         {
@@ -69,36 +78,39 @@ public class getcusts {
       public List<RWFamily> getFamily() throws SQLException, ClassNotFoundException, IOException
    {
       List <RWFamily> allfamily= new ArrayList<>();
-       File file = new File("C:\\Users\\Public\\config.txt");
-		FileInputStream fis = null;
-                fis = new FileInputStream(file);
-
-			
-			int content;
-                        StringBuilder builder = new StringBuilder();
-                       
-			while ((content = fis.read()) != -1) {
-				// convert to char and display it
-				builder.append((char)content);
-			}
-                        String conf = builder.toString();
-                        String[] x = conf.split("&");
-                      
-                        if (fis != null)
-                        {fis.close();}
-                        
-                         Driver myDriver;
- Connection conn;
+//       File file = new File("C:\\Users\\Public\\config.txt");
+//		FileInputStream fis = null;
+//                fis = new FileInputStream(file);
+//
+//			
+//			int content;
+//                        StringBuilder builder = new StringBuilder();
+//                       
+//			while ((content = fis.read()) != -1) {
+//				// convert to char and display it
+//				builder.append((char)content);
+//			}
+//                        String conf = builder.toString();
+//                        String[] x = conf.split("&");
+//                      
+//                        if (fis != null)
+//                        {fis.close();}
+//                        
+//                         Driver myDriver;
+// Connection conn;
+//        
+//    
+//    myDriver = new org.postgresql.Driver();
+//       
+//     conn = DriverManager.getConnection(x[3],x[4],x[5]);//"jdbc:postgresql://localhost:5432/RenWebTest","postgres","rapunzel");
+//       
+//       java.sql.Statement statementRW = conn.createStatement();
+       
+      DBconnection connectRW = new DBconnection();
+        connectRW.createconnRW();
         
-    
-    myDriver = new org.postgresql.Driver();
-       
-     conn = DriverManager.getConnection(x[3],x[4],x[5]);//"jdbc:postgresql://localhost:5432/RenWebTest","postgres","rapunzel");
-       
-       java.sql.Statement statementRW = conn.createStatement();
-       
-      
-        ResultSet rs = statementRW.executeQuery("Select familyid,familyname from family");
+        
+        ResultSet rs = connectRW.statementRW.executeQuery("Select familyid,familyname from family");
         
         while(rs.next())
         { RWFamily c = new RWFamily();
