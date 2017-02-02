@@ -15,91 +15,112 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
        
-        
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <h1><jstl:out value="${message}"/></h1>
+        <h1 class="text-center"><jstl:out value="${message}"/></h1>
         <form:form id="form1" method ="post" action="suhomepage.htm?opcion=save">
-            <table border="1">
-                <tr>
-                    <th>Quickbooks DB URL:</th>
-                    <td>
+            <div class="col-xs-6">
+                <div class="col-xs-12">Config Quickbooks</div>
+                <div class="col-xs-12">
+                    <div class="col-xs-6">Quickbooks DB URL:</div>
+                    <div class="col-xs-6">
                         <input type="text" name="qbdburl"/>
-                    </td>
-                </tr>
-             <tr>
-                    <th>Quickbooks DB user:</th>
-                    <td>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="col-xs-6">Quickbooks DB user:</div>
+                    <div class="col-xs-6">
                         <input type="text" name="qbdbuser"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Quickbooks DB pswd:</th>
-                    <td>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="col-xs-6">Quickbooks DB pswd:</div>
+                    <div class="col-xs-6">
                         <input type="text" name="qbdbpswd"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Renweb DB URL:</th>
-                    <td>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12"><a data-toggle="collapse" href="#collapse2">Config Renweb</a></div>
+                <div id="collapse2" class="panel-collapse collapse">
+                    
+                
+                <div class="col-xs-12">
+                    <div class="col-xs-6">Renweb DB URL:</div>
+                    <div class="col-xs-6">
                         <input type="text" name="rwdburl"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Renweb DB user:</th>
-                    <td>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="col-xs-6">Renweb DB user:</div>
+                    <div class="col-xs-6">
                         <input type="text" name="rwdbuser"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Renweb DB pswd:</th>
-                    <td>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="col-xs-6">Renweb DB pswd:</div>
+                    <div class="col-xs-6">
                         <input type="text" name="rwdbpswd"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Sync Start Date:</th>
-                    <td>
+                    </div>
+                </div>
+                    </div>
+                <div class="col-xs-12">Config Time</div>
+                <div class="col-xs-12">
+                    <div class="col-xs-6">Sync Start Date:</div>
+                    <div class="col-xs-6">
                         <input type="text" name="startdate"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Item Name:</th>
-                    <td>
+                    </div>
+                </div>
+               <div class="col-xs-12">
+                    <div class="col-xs-6">Item Name:</div>
+                    <div class="col-xs-6">
                         <input type="text" name="itemname"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Eduweb DB URL:</th>
-                    <td>
-                        <input type="text" name="edudburl"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Eduweb DB user:</th>
-                    <td>
-                        <input type="text" name="edudbuser"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Eduweb DB pswd:</th>
-                    <td>
-                        <input type="text" name="edudbpswd"/>
-                    </td>
-                </tr>
+                    </div>
+                </div>
+                
+                <div class="panel-group">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a data-toggle="collapse" href="#collapse1">Config Eduweb</a>
+                        </h4>
+                      </div>
+                      <div id="collapse1" class="panel-collapse collapse">
+                                    <div class="col-xs-6">Eduweb DB URL:</div>
+                                    <div class="col-xs-6">
+                                        <input type="text" name="edudburl"/>
+                                    </div>
+
+                                    <div class="col-xs-6">Eduweb DB user:</div>
+                                    <div class="col-xs-6">
+                                        <input type="text" name="edudbuser"/>
+                                    </div>
+
+                                    <div class="col-xs-6">Eduweb DB pswd:</div>
+                                    <div class="col-xs-6">
+                                        <input type="text" name="edudbpswd"/>
+                                    </div>
+                      </div>
+                    </div>
+                </div>
+               
              
-                <tr>
-                    <td colspan="2">
+                <div class="col-xs-12 text-center">
                       <input type="submit" value="Save" opcion="save"/>   
-                         
-                    </td>
-                </tr>
+                </div>
             </table>
         </form:form>
-         <a href="suhomepage.htm?opcion=runsync"> run </a>  
+            </div>
+        <div class="col-xs-3" style="background-color: grey">
+            <button href="suhomepage.htm?opcion=runsync"> run </button> 
         <br/>
         <jstl:out value="${message1}"/> 
         <br/>
+        </div>
+        <div class="col-xs-3">
         <a href="familymap2.htm?opcion=map"> Map Families </a>
+        </div>
     </body>
 </html>
