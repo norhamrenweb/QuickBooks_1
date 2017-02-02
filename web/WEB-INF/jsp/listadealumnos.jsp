@@ -102,6 +102,9 @@
         ajax.send("");
     }
         </script>
+        <style>
+            .sep
+        </style>
     </head>
     <body>
         
@@ -114,32 +117,47 @@
         <h1 class="text-center">Create Lessons</h1>
 
         
-        <form:form id="formStudents" method ="post" action="listadealumnos.htm?select=createlesson" class="form-inline" >
+        <form:form id="formStudents" method ="post" action="listadealumnos.htm?select=createlesson" >
             <fieldset>
                 <legend>Options</legend>
                 <div class="col-xs-12 form-group">
                     <label class="control-label"><spring:message code="etiq.namelessons"/></label>
                     <input type="text" class="input-sm" name="TXTnombreLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
                 </div>
-                        <div class="col-xs-2">
-                            <select class="form-control" name="levelsubject" id="levelsubject" style="width: 100% !important;" onchange="comboSelectionLevel()">
-                                <c:forEach var="levels" items="${gradelevels}">
-                                    <option value="${levels}" >${levels}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                    <div class="col-xs-3 center-block">
-                        <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
-                        <select class="form-control select-subjects" id="idsubjects" name="TXTsubjects" onchange="comboSelectionSubject()">
-                           <c:forEach var="subject" items="${subjects}">
-                                    <option value="${subject}" >${subject}</option>
-                                </c:forEach>
-                        </select>
 
-                        <input type="hidden" class="btn btn-default" name='accion' id="subjectOnClick" value="subjectOnClick"/>
-
-                    </div>
-                        
+                <div class="col-xs-3 form-group">
+                    <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
+                    <select class="form-control" name="levelsubject" id="levelsubject" onchange="comboSelectionLevel()">
+                        <c:forEach var="levels" items="${gradelevels}">
+                            <option value="${levels}" >${levels}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col-xs-3 center-block">
+                    <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
+                    <select class="form-control select-subjects" id="idsubjects" name="TXTsubjects" onchange="comboSelectionSubject()">
+                       <c:forEach var="subject" items="${subjects}">
+                                <option value="${subject}" >${subject}</option>
+                            </c:forEach>
+                    </select>
+                </div>
+                <div class="col-xs-3 center-block">
+                    <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
+                    <select class="form-control" id="idsubsection" name="TXTsubsection" onchange="comboSelectionSubsection()">
+                       <c:forEach var="subsection" items="${subsection}">
+                                <option value="${subsection}" >${subsection}</option>
+                            </c:forEach>
+                    </select>
+                </div>
+                <div class="col-xs-3 center-block">
+                    <label class="control-label"><spring:message code="etiq.txtequipment"/></label>
+                    <select class="form-control" id="equipment" name="TXTequipment" multiple onchange="comboSelectionEquipment()">
+                       <c:forEach var="equipment" items="${equipment}">
+                                <option value="${equipment}" >${equipment}</option>
+                            </c:forEach>
+                    </select>
+                </div>
+   
             </fieldset>
             <fieldset>
                     <legend>Select students</legend>
