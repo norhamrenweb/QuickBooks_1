@@ -57,25 +57,25 @@ public class listadealumnos extends MultiActionController{
         
         return mv;
     }
-//     public ModelAndView gradelista(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-//        
-//        ModelAndView mv = new ModelAndView("listadealumnos");
-//       
-//         DriverManagerDataSource dataSource;
-//        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-//        this.cn = dataSource.getConnection();
-//         Statement st = this.cn.createStatement();
-//         ResultSet rs = st.executeQuery("SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels");
-//         List <String> grades = new ArrayList();
-//         while(rs.next())
-//         {
-//         grades.add(rs.getString("GradeLevel"));
-//         }
-//        mv.addObject("gradelevels", grades);
-//       
-//        
-//        return mv;
-//    }
+     public ModelAndView gradelista(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("listadealumnos");
+       
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+         Statement st = this.cn.createStatement();
+         ResultSet rs = st.executeQuery("SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels");
+         List <String> grades = new ArrayList();
+         while(rs.next())
+         {
+         grades.add(rs.getString("GradeLevel"));
+         }
+        mv.addObject("gradelevels", grades);
+       
+        
+        return mv;
+    }
     public ModelAndView cargalistagrade(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("listadealumnos");
@@ -83,7 +83,48 @@ public class listadealumnos extends MultiActionController{
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-         mv.addObject("listadealumnosgrade", this.getStudentsgrade(hsr.getParameter("grade")));
+        List <Students> studentsgrades = new ArrayList();
+        studentsgrades =this.getStudentsgrade(hsr.getParameter("seleccion"));
+         mv.addObject("listadealumnos",studentsgrades );
+        
+        return mv;
+    }
+    public ModelAndView cargalistasubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("listadealumnos");
+        List<String> subjects = new ArrayList<>();
+       try {
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        
+        
+            
+             Statement st = this.cn.createStatement();
+             int levelid = 0;
+            String consulta = "SELECT GradeLevelID FROM AH_ZAF.dbo.GradeLevels where GradeLevel ='"+hsr.getParameter("seleccion1")+"'";
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                levelid = rs.getInt("GradeLevelID");
+            }
+            cn.close();
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+             this.cn = dataSource.getConnection();
+             st = this.cn.createStatement();
+          ResultSet rs1 = st.executeQuery("select nombre_subject from subject where id_level="+levelid);
+           while (rs1.next())
+            {
+                subjects.add(rs1.getString("nombre_subject"));
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Subjects: " + ex);
+        }
+        
+      
+         mv.addObject("subjects",subjects );
         
         return mv;
     }
@@ -161,10 +202,37 @@ public class listadealumnos extends MultiActionController{
        Createlesson c = new Createlesson(hsr.getServletContext());
        c.newlesson(studentIds,args);
         
-        mv.addObject("message", "Lesson Updated");
+        mv.addObject("message", "Lesson created");
         
         return mv;
     }
+
+//    private List<String> getSubjects(String level) {
+//        List<String> subjects = new ArrayList<>();
+//        try {
+//            
+//             Statement st = this.cn.createStatement();
+//             int levelid = 0;
+//            String consulta = "SELECT GradeLevelID FROM AH_ZAF.dbo.GradeLevels where GradeLevel ='"+level+"'";
+//            ResultSet rs = st.executeQuery(consulta);
+//          
+//            while (rs.next())
+//            {
+//                levelid = rs.getInt("GradeLevelID");
+//            }
+//            
+//          ResultSet rs1 = st.executeQuery("select nombre_subject from subject where id_level="+levelid);
+//           while (rs1.next())
+//            {
+//                subjects.add(rs1.getString("nombre_subject"));
+//            }
+//            
+//        } catch (SQLException ex) {
+//            System.out.println("Error leyendo Subjects: " + ex);
+//        }
+//       
+//        return subjects;
+//    }
       
 }
 
