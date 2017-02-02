@@ -24,7 +24,7 @@ import quickbooksync.Runsync;
  *
  * @author nmohamed
  */
-public class getcusts {
+public class Getcusts {
     
     
     

@@ -1,5 +1,5 @@
 <%-- 
-    Document   : listadealumnos
+    Document   : createlesson
     Created on : 30-ene-2017, 14:59:17
     Author     : nmohamed
 --%>
@@ -53,7 +53,7 @@
         ajax.onreadystatechange=funcionCallBackLevelStudent;
         var seleccion = document.getElementById("level").value;
         var alumnos = document.getElementById("destino").innerHTML;
-        ajax.open("POST","listadealumnos.htm?select=cargalistagrade&seleccion="+seleccion,true);
+        ajax.open("POST","createlesson.htm?select=studentlistLevel&seleccion="+seleccion,true);
         ajax.send("");
     }
      function funcionCallBackSubject()
@@ -80,7 +80,7 @@
 //        $('#createOnClick').attr('disabled', true);
 //        ajax.onreadystatechange=funcionCallBackSubject;
 //        var seleccion1 = document.getElementById("idsubjects").value;
-//        ajax.open("GET","listadealumnos.htm?select=cargalistasubject&seleccion1="+seleccion1,true);
+//        ajax.open("GET","createlesson.htm?select=cargalistasubject&seleccion1="+seleccion1,true);
 //        ajax.send("");
 //    } 
 
@@ -98,7 +98,7 @@
         $('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange=funcionCallBackSubject;
         var seleccion1 = document.getElementById("levelsubject").value;
-        ajax.open("POST","listadealumnos.htm?select=cargalistasubject&seleccion1="+seleccion1,true);
+        ajax.open("POST","createlesson.htm?select=subjectlistLevel&seleccion1="+seleccion1,true);
         ajax.send("");
     }
         </script>
@@ -117,7 +117,7 @@
         <h1 class="text-center">Create Lessons</h1>
 
         
-        <form:form id="formStudents" method ="post" action="listadealumnos.htm?select=createlesson" >
+        <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
             <fieldset>
                 <legend>Options</legend>
                 <div class="col-xs-12 form-group">

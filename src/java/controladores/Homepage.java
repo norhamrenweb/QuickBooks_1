@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import mapcusts.getcusts;
+import mapcusts.Getcusts;
 import quickbooksync.*;
 
 import org.springframework.context.ApplicationContext;
@@ -36,7 +36,7 @@ import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 
-public class homepage extends MultiActionController  {
+public class Homepage extends MultiActionController  {
    Connection cn;
     private Object getBean(String nombrebean, ServletContext servlet)
 {
@@ -193,7 +193,7 @@ return mv;
 public ModelAndView map(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 ModelAndView mv = 
                 new ModelAndView("familymap2");
-getcusts l = new getcusts();
+Getcusts l = new Getcusts();
 List <QBCustomer> allcustomer= new ArrayList<>();
 allcustomer = l.getCustomer();
 List <RWFamily> allfamily= new ArrayList<>();

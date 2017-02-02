@@ -32,7 +32,7 @@ public class DatosUsuarioControlador implements Controller
         } catch (Exception ex) {
         }
  
-        return new ModelAndView("listadealumnos");
+        return new ModelAndView("createlesson");
     }
 
 

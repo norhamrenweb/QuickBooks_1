@@ -21,7 +21,7 @@ import quickbooksync.*;
  *
  * @author nmohamed
  */
-public class map {
+public class Map {
     public String mapCustomer(String RWfamilyname,String QBcustname) throws SQLException, ClassNotFoundException, IOException, ParserConfigurationException, TransformerException, TransformerConfigurationException, SAXException
     {// there has to be a flag to know which string is which
         String message = null;

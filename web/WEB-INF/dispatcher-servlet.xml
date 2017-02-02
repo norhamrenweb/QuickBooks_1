@@ -32,7 +32,7 @@
       <property name="defaultLocale" value="en" />
     </bean>
      <!--<bean class="controladores.homepage" id="homepage1"/>-->
-   <bean class="controladores.homepage" id="homepage">
+   <bean class="controladores.Homepage" id="homepage">
      <property name="methodNameResolver">
         <bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
            <property name="paramName" value="opcion"/>
@@ -41,7 +41,7 @@
     </bean>
 <!--    
     <bean class="controladores.listadealumnos" id="listadealumnos1"/>-->
-<bean class="controladores.listadealumnos" id="listadealumnos1">
+<bean class="controladores.CreateLessonControlador" id="createlesson">
      <property name="methodNameResolver">
         <bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
            <property name="paramName" value="select"/>
@@ -63,7 +63,7 @@
                 <prop key="suhomepage.htm">homepage</prop>
                  <prop key="familymap2.htm">homepage</prop>
                  
-                <prop key="listadealumnos.htm">listadealumnos1</prop>
+                <prop key="createlesson.htm">createlesson</prop>
                 <prop key="datosIdioma.htm">ControladorIdioma</prop>
                 
                   

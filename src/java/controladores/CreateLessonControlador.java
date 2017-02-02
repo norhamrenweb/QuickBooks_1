@@ -25,7 +25,7 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
  *
  * @author nmohamed
  */
-public class listadealumnos extends MultiActionController{
+public class CreateLessonControlador extends MultiActionController{
     
       Connection cn;
       
@@ -38,14 +38,14 @@ public class listadealumnos extends MultiActionController{
         return beanobject;
     }
     
-    public ModelAndView cargalista(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("listadealumnos");
+        ModelAndView mv = new ModelAndView("createlesson");
        
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-        mv.addObject("listadealumnos", this.getStudents());
+        mv.addObject("createlesson", this.getStudents());
          Statement st = this.cn.createStatement();
          ResultSet rs = st.executeQuery("SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels");
          List <String> grades = new ArrayList();
@@ -57,9 +57,9 @@ public class listadealumnos extends MultiActionController{
         
         return mv;
     }
-     public ModelAndView gradelista(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+     public ModelAndView levellist(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("listadealumnos");
+        ModelAndView mv = new ModelAndView("createlesson");
        
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
@@ -76,22 +76,22 @@ public class listadealumnos extends MultiActionController{
         
         return mv;
     }
-    public ModelAndView cargalistagrade(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("listadealumnos");
+        ModelAndView mv = new ModelAndView("createlesson");
        
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         List <Students> studentsgrades = new ArrayList();
-        studentsgrades =this.getStudentsgrade(hsr.getParameter("seleccion"));
-         mv.addObject("listadealumnos",studentsgrades );
+        studentsgrades =this.getStudentslevel(hsr.getParameter("seleccion"));
+         mv.addObject("createlesson",studentsgrades );
         
         return mv;
     }
-    public ModelAndView cargalistasubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("listadealumnos");
+        ModelAndView mv = new ModelAndView("createlesson");
         List<String> subjects = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
@@ -159,7 +159,7 @@ public class listadealumnos extends MultiActionController{
        
         return listaAlumnos;
     }
-     public ArrayList<Students> getStudentsgrade(String grade) throws SQLException
+     public ArrayList<Students> getStudentslevel(String grade) throws SQLException
     {
 //        this.conectarOracle();
         ArrayList<Students> listaAlumnos = new ArrayList<>();
@@ -192,7 +192,7 @@ public class listadealumnos extends MultiActionController{
     }
      public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("listadealumnos");
+        ModelAndView mv = new ModelAndView("createlesson");
        
          
         
@@ -207,32 +207,7 @@ public class listadealumnos extends MultiActionController{
         return mv;
     }
 
-//    private List<String> getSubjects(String level) {
-//        List<String> subjects = new ArrayList<>();
-//        try {
-//            
-//             Statement st = this.cn.createStatement();
-//             int levelid = 0;
-//            String consulta = "SELECT GradeLevelID FROM AH_ZAF.dbo.GradeLevels where GradeLevel ='"+level+"'";
-//            ResultSet rs = st.executeQuery(consulta);
-//          
-//            while (rs.next())
-//            {
-//                levelid = rs.getInt("GradeLevelID");
-//            }
-//            
-//          ResultSet rs1 = st.executeQuery("select nombre_subject from subject where id_level="+levelid);
-//           while (rs1.next())
-//            {
-//                subjects.add(rs1.getString("nombre_subject"));
-//            }
-//            
-//        } catch (SQLException ex) {
-//            System.out.println("Error leyendo Subjects: " + ex);
-//        }
-//       
-//        return subjects;
-//    }
+
       
 }
 
