@@ -14,7 +14,7 @@
     </head>
     <body>
         <h1><jstl:out value="${message}"/></h1>
-        <a href="listadealumnos.htm?select=cargalista"> Students List </a>
+        <a href="createlesson.htm?select=start"> Students List </a>
         
     </body>
 </html>
