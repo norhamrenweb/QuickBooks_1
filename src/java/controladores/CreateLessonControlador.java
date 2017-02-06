@@ -42,22 +42,22 @@ public class CreateLessonControlador extends MultiActionController{
         
         ModelAndView mv = new ModelAndView("createlesson");
        
-         DriverManagerDataSource dataSource;
+        DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-        mv.addObject("createlesson", this.getStudents());
-         Statement st = this.cn.createStatement();
-         ResultSet rs = st.executeQuery("SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels");
-         List <String> grades = new ArrayList();
-         while(rs.next())
-         {
-         grades.add(rs.getString("GradeLevel"));
-         }
+        mv.addObject("listaAlumnos", this.getStudents());
+        Statement st = this.cn.createStatement();
+        ResultSet rs = st.executeQuery("SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels");
+        List <String> grades = new ArrayList();
+        while(rs.next())
+        {
+        grades.add(rs.getString("GradeLevel"));
+        }
         mv.addObject("gradelevels", grades);
         
         return mv;
     }
-     public ModelAndView levellist(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    public ModelAndView levellist(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
        
@@ -85,7 +85,7 @@ public class CreateLessonControlador extends MultiActionController{
         this.cn = dataSource.getConnection();
         List <Students> studentsgrades = new ArrayList();
         studentsgrades =this.getStudentslevel(hsr.getParameter("seleccion"));
-         mv.addObject("createlesson",studentsgrades );
+        mv.addObject("listaAlumnos",studentsgrades );
         
         return mv;
     }
@@ -128,7 +128,7 @@ public class CreateLessonControlador extends MultiActionController{
         
         return mv;
     }
-     public ArrayList<Students> getStudents() throws SQLException
+    public ArrayList<Students> getStudents() throws SQLException
     {
 //        this.conectarOracle();
         ArrayList<Students> listaAlumnos = new ArrayList<>();
