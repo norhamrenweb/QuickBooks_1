@@ -59,7 +59,7 @@ public class PaymentSync {
                 QBPayment n = new QBPayment();
                 QBCustomer cust = new QBCustomer();
                 MappingTable family = new MappingTable();
-                cust.setId(family.checkmapping(u.getrwFamily().getId()));
+                cust.setId(family.checkmappingrw(u.getrwFamily().getId()));
                 n.setMemo(u.getDescription());
               n.setappliedTo(pc.getAppliedtoRefID(u.getpaymentId()));
               n.setappliedToAmount(pc.getAppliedtoAmount(u.getpaymentId()));
@@ -161,7 +161,7 @@ public class PaymentSync {
                         QBPayment n = new QBPayment();
                         QBCustomer cust = new QBCustomer();
                     MappingTable family = new MappingTable();
-                cust.setId(family.checkmapping(y3.getrwFamily().getId()));
+                cust.setId(family.checkmappingrw(y3.getrwFamily().getId()));
                         //Item item = new Item();
                         // hard coded till we figurs out how it will get this input
                         n.setMemo(y3.getDescription());
