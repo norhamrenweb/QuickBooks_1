@@ -109,7 +109,7 @@
         <br/>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-12">
-        <a href="familymap2.htm?opcion=map"> Map Families </a>
+        <a href="familymap2.htm?select2=start"> Map Families </a>
         </div>
     </body>
 </html>
