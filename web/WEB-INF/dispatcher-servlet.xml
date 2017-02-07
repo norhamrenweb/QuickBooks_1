@@ -39,6 +39,13 @@
         </bean>
     </property> 
     </bean>
+    <bean class="controladores.MappingFamilies" id="map">
+     <property name="methodNameResolver">
+        <bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+           <property name="paramName" value="select2"/>
+        </bean>
+    </property> 
+    </bean>
 <!--    
     <bean class="controladores.listadealumnos" id="listadealumnos1"/>-->
 <bean class="controladores.CreateLessonControlador" id="createlesson">
@@ -61,7 +68,7 @@
                 <prop key="index.htm">indexController</prop>
                 <prop key="userform.htm">homepage</prop>
                 <prop key="suhomepage.htm">homepage</prop>
-                 <prop key="familymap2.htm">homepage</prop>
+                 <prop key="familymap2.htm">map</prop>
                  
                 <prop key="createlesson.htm">createlesson</prop>
                 <prop key="datosIdioma.htm">ControladorIdioma</prop>
