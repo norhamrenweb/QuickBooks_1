@@ -29,7 +29,7 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 
 
-public class MappingFamilies {
+public class MappingFamilies extends MultiActionController{
    Connection cn;
    private Object getBean(String nombrebean, ServletContext servlet)
     {
@@ -40,7 +40,7 @@ public class MappingFamilies {
     
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("familymap");
+        ModelAndView mv = new ModelAndView("familymap2");
         Getcusts getlist = new Getcusts();
         List<QBCustomer> cust = getlist.getCustomer();
         mv.addObject("QBcust",cust);
@@ -50,14 +50,14 @@ public class MappingFamilies {
     }
      public ModelAndView map(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("familymap");
+        ModelAndView mv = new ModelAndView("familymap2");
         String message = null;
         Map domap = new Map();
         QBCustomer x = new QBCustomer();
         RWFamily y = new RWFamily();
-        x.setId(message);
-        y.setId(0);
-        domap.mapCustomer(y,x);
+        x.setId(hsr.getParameter("origen"));
+        y.setId(Integer.parseInt(hsr.getParameter("destino")));
+        message = domap.mapCustomer(y,x);
          mv.addObject("message",message);
         return mv;
     }
