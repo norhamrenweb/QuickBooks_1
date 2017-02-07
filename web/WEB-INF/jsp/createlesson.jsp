@@ -119,7 +119,39 @@
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
             <fieldset>
-                <legend>Options</legend>
+                <legend>Options Date</legend>
+                <div class="form-group">
+                    <div class="row">
+
+                        <div class='col-xs-4'>
+                            <div class="form-group">
+                                <label class="control-label" for="fechainicio"><spring:message code="etiq.txtstartdate"/></label>
+                                <div class='input-group date' id='datetimepickerinicio'>
+                                    <input type='text' name="TXTfechainicio" class="form-control" id="fechainicio" required="required"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='col-xs-4'>
+                            <div class="form-group">
+                                <label class="control-label" for="fechafin"><spring:message code="etiq.txtenddate"/></label>
+                                <div class='input-group date' id='datetimepickerfin'>
+                                    <input type='text' name="TXTfechafin" class="form-control" required="required"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+ 
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Options Lessons</legend>
                 <div class="col-xs-12 form-group">
                     <label class="control-label"><spring:message code="etiq.namelessons"/></label>
                     <input type="text" class="input-sm" name="TXTnombreLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
@@ -128,6 +160,7 @@
                 <div class="col-xs-3 form-group">
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
                     <select class="form-control" name="levelsubject" id="levelsubject" onchange="comboSelectionLevel()">
+                        
                         <c:forEach var="levels" items="${gradelevels}">
                             <option value="${levels}" >${levels}</option>
                         </c:forEach>
@@ -172,6 +205,7 @@
                     <div class="col-xs-12">
                         <div class="col-xs-2">
                             <select class="form-control" name="level" id="level" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
+                                <option selected value="allstudents" >All students</option>
                                 <c:forEach var="levels" items="${gradelevels}">
                                     <option value="${levels}" >${levels}</option>
                                 </c:forEach>
@@ -179,7 +213,7 @@
                         </div>
                         <div class="col-xs-3">
                             <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
-                                <c:forEach var="alumnos" items="${listadealumnos}">
+                                <c:forEach var="alumnos" items="${listaAlumnos}">
                                     <option value="${alumnos.id_students}" >${alumnos.nombre_students}</option>
                                 </c:forEach>
                             </select>
