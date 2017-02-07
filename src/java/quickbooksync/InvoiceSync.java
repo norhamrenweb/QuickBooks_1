@@ -53,7 +53,7 @@ public class InvoiceSync {
                 QBInvoice n = new QBInvoice();
                 QBCustomer cust = new QBCustomer();
                 MappingTable family = new MappingTable();
-                cust.setId(family.checkmapping(u.getrwFamily().getId()));
+                cust.setId(family.checkmappingrw(u.getrwFamily().getId()));
                 Item item = new Item();
               
                 item.setitemQuantity(1);
@@ -171,7 +171,7 @@ public class InvoiceSync {
                         QBInvoice n = new QBInvoice();
                         QBCustomer cust = new QBCustomer();
                     MappingTable family = new MappingTable();
-                cust.setId(family.checkmapping(y3.getrwFamily().getId()));
+                cust.setId(family.checkmappingrw(y3.getrwFamily().getId()));
                         Item item = new Item();
                         // hard coded till we figurs out how it will get this input
                         n.setMemo(y3.getDescription());
