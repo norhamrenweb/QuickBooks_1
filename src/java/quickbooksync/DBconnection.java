@@ -29,7 +29,7 @@ public class DBconnection {
     
     myDriver = new cdata.jdbc.quickbooks.QuickBooksDriver();
        
-     conn = DriverManager.getConnection(Runsync.qbdburl);//"jdbc:quickbooks:user=Admin;password=Admin;URL=http://localhost:8166");
+     conn = DriverManager.getConnection("jdbc:quickbooks:user=Admin;password=Admin;URL=http://localhost:8166");//Runsync.qbdburl);//
        
         statementQB = conn.createStatement();
         }
@@ -42,7 +42,7 @@ public class DBconnection {
     
     myDriver = new org.postgresql.Driver();
        
-     conn = DriverManager.getConnection(Runsync.rwdburl,Runsync.rwdbuser,Runsync.rwdbpswd);//"jdbc:postgresql://localhost:5432/RenWebTest","postgres","rapunzel");
+     conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/RenWebTest","postgres","rapunzel");//Runsync.rwdburl,Runsync.rwdbuser,Runsync.rwdbpswd);//
        
         statementRW = conn.createStatement();
         }
