@@ -28,7 +28,7 @@ public class MappingTable {
          
 
     public MappingTable() throws SQLException {
-        this.conn = DriverManager.getConnection(Runsync.edudburl,Runsync.edudbuser,Runsync.edudbpswd);//"jdbc:postgresql://localhost:5432/postgres","postgres","rapunzel");
+        this.conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","rapunzel");//Runsync.edudburl,Runsync.edudbuser,Runsync.edudbpswd);//
     }
        
     
@@ -42,14 +42,27 @@ public class MappingTable {
         }
         
         }
-    public String checkmapping(int rwFamilyId) throws SQLException
+    public String checkmappingrw(int rwFamilyId) throws SQLException
         { String result=null;
        statement = conn.createStatement();
-      ResultSet rs = statement.executeQuery("select QBCUSTOMERID FROM CUSTOMERMAPPING where RWFAMILYID ='"+rwFamilyId+"'");
+      ResultSet rs = statement.executeQuery("select qbcustomerid FROM customermapping where rwfamilyid ='"+rwFamilyId+"'");
       
      
       if(rs.next()){
-      result = rs.getString("QBCUSTOMERID");//matching customer found
+      result = rs.getString("qbcustomerid");//matching customer found
+      
+              }
+        return result;
+            
+        }
+    public String checkmappingqb(String qbCustId) throws SQLException
+        { String result=null;
+       statement = conn.createStatement();
+      ResultSet rs = statement.executeQuery("select rwfamilyid FROM customermapping where qbcustomerid ='"+qbCustId+"'");
+      
+     
+      if(rs.next()){
+      result = rs.getString("rwfamilyid");//matching customer found
       
               }
         return result;
