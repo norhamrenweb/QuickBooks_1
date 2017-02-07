@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import quickbooksync.DBconnection;
+import quickbooksync.MappingTable;
 import quickbooksync.QBCustomer;
 import quickbooksync.RWFamily;
 import quickbooksync.Runsync;
@@ -65,15 +66,27 @@ DBconnection connectQB = new DBconnection();
         
         ResultSet rs = connectQB.statementQB.executeQuery("Select ID,Name from Customers");
       
-        QBCustomer c = new QBCustomer();
+       
         while(rs.next())
         {
+             QBCustomer c = new QBCustomer();
             c.setName(rs.getString("Name"));
             c.setId(rs.getString("ID"));
         allcustomer.add(c);
         
         }
-            return allcustomer;
+       List <QBCustomer> unmappedcustomer= new ArrayList<>(); 
+       MappingTable m = new MappingTable();
+       String result = null;
+       for (QBCustomer x : allcustomer) {
+       result = m.checkmappingqb(x.getId());
+       if(result==null) //no match found
+       {
+       unmappedcustomer.add(x);
+      
+       }
+               }
+            return unmappedcustomer;
             }
       public List<RWFamily> getFamily() throws SQLException, ClassNotFoundException, IOException
    {
@@ -119,7 +132,18 @@ DBconnection connectQB = new DBconnection();
         allfamily.add(c);
         
         }
-            return allfamily;
+            List <RWFamily> unmappedfamily= new ArrayList<>(); 
+       MappingTable m = new MappingTable();
+       String result = null;
+       for (RWFamily x : allfamily) {
+       result = m.checkmappingrw(x.getId());
+       if(result==null) //no match found
+       {
+       unmappedfamily.add(x);
+      
+       }
+               }
+            return unmappedfamily;
             }
    }
 
