@@ -45,7 +45,7 @@ public class CustomerSync {
             for (RWFamily y : allfamily) {
                 String result = "";
                 
-                if(map.checkmapping(y.getId()) != null)
+                if(map.checkmappingrw(y.getId()) != null)
                     //match found¨
                 {
                     result = "Match Found";
