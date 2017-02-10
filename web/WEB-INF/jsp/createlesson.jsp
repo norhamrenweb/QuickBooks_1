@@ -16,8 +16,69 @@
         <title>Create Lessons</title>
         
         <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+      
+        <link href="recursos/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+        <link href="recursos/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
+
         <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
+        
+        <script src="recursos/js/moment.js" type="text/javascript"></script>
+        <script src="recursos/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+        <script src="recursos/js/es.js" type="text/javascript"></script>
+        <script src="recursos/js/ar.js" type="text/javascript"></script>
+
         <script>
+ $(document).ready(function(){
+       var userLang = navigator.language || navigator.userLanguage;
+       var myDate = new Date();
+         //Muestra calendario
+  
+        $('#datetimepickerinicio').datetimepicker({
+            
+            format: 'DD-MM-YYYY HH:mm',
+            locale: userLang.valueOf(),
+            daysOfWeekDisabled: [0, 6],
+            useCurrent: false,//Important! See issue #1075
+            //defaultDate: '08:32:33',
+            enabledHours: [8,9,10,11,12,13,14,15,16],
+            sideBySide: true,
+            stepping: 5
+  
+        });
+        $('#datetimepickerfin').datetimepicker({
+            
+            format: 'DD-MM-YYYY HH:mm',
+            locale: userLang.valueOf(),
+            daysOfWeekDisabled: [0, 6],
+            useCurrent: false //Important! See issue #1075
+        });
+        
+        $("#datetimepickerinicio").on("dp.change", function (e) {
+            $('#datetimepickerfin').data("DateTimePicker").minDate(e.date);
+        });
+        
+        $("#datetimepickerfin").on("dp.change", function (e) {
+            $('#datetimepickerinicio').data("DateTimePicker").maxDate(e.date);
+        });
+        
+    
+//       //Menu lateral
+//        $('#nav-expander').on('click',function(e){
+//      		e.preventDefault();
+//      		$('body').toggleClass('nav-expanded');
+//      	});
+//      	$('#nav-close').on('click',function(e){
+//      		e.preventDefault();
+//      		$('body').removeClass('nav-expanded');
+//      	});
+//        $('#barralateral').mouseleave(function(o){
+//      		o.preventDefault();
+//      		$('body').removeClass('nav-expanded');
+//      	});
+ 
+     
+    });            
+            
         $().ready(function() 
 	{
 		$('.pasar').click(function() { return !$('#origen option:selected').remove().appendTo('#destino'); });  
@@ -108,11 +169,7 @@
     </head>
     <body>
         
-        <div class="panel-heading">
-            <a class="btnBandera" href='datosIdioma.htm?lenguaje=en'>English</a>
-            <a class="btnBandera" href='datosIdioma.htm?lenguaje=es'>Español</a>
-            <a class="btnBandera" href='datosIdioma.htm?lenguaje=ar'>Arabic</a>
-        </div>
+        
         <div class="container">
         <h1 class="text-center">Create Lessons</h1>
 

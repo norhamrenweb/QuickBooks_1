@@ -88,9 +88,8 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
 }
 }
 public ModelAndView save(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-ModelAndView mv = 
-                new ModelAndView("suhomepage");
-String qbdburl = hsr.getParameter("qbdburl");
+ModelAndView mv = new ModelAndView("suhomepage");
+    String qbdburl = hsr.getParameter("qbdburl");
     String rwdburl = hsr.getParameter("rwdburl");
     String edudburl = hsr.getParameter("edudburl");
     String qbdbuser = hsr.getParameter("qbdbuser");
@@ -191,8 +190,7 @@ return mv;
 
 }
 public ModelAndView map(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-ModelAndView mv = 
-                new ModelAndView("familymap2");
+ModelAndView mv = new ModelAndView("familymap2");
 Getcusts l = new Getcusts();
 List <QBCustomer> allcustomer= new ArrayList<>();
 allcustomer = l.getCustomer();

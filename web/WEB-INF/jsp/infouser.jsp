@@ -12,8 +12,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        
         <link href="recursos/css/style.css" rel="stylesheet" type="text/css"/>
+        <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         <link href="recursos/css/calendar.css" rel="stylesheet" type="text/css">
         
         <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
@@ -31,8 +32,13 @@
             
         </style>
     </head>
-    
+        
         <div class="infousuario">
+        <div class="panel-heading">
+            <a class="btnBandera" href='datosIdioma.htm?lenguaje=en'>English</a>
+            <a class="btnBandera" href='datosIdioma.htm?lenguaje=es'>Español</a>
+            <a class="btnBandera" href='datosIdioma.htm?lenguaje=ar'>Arabic</a>
+        </div>
             <h1 class="text-center">Hi, <c:out value="${message}"/></h1>
             
         </div>        
