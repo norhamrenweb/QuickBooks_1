@@ -48,6 +48,7 @@
         <h1>Mapping Families</h1>
         <form:form id="form" method="POST" action="familymap2.htm?select2=map">  
             <div class="col-xs-3">
+                <div class="col-xs-12">QuickBooks Customers</div>
                 <select class="form-control" size="20" name="origen" id="origen" style="width: 100% !important;">
                      <c:forEach var="custs" items="${QBcust}">
                                     <option value="${custs.id}" >${custs.name}</option>
@@ -58,6 +59,7 @@
             
 
             <div class="col-xs-3">
+                <div class="col-xs-12">Renweb Family</div>
                 <select class="form-control" size="20" name="destino" id="destino" style="width: 100% !important;"> 
                      <c:forEach var="family" items="${RWfamily}">
                             <option value="${family.id}" >${family.familyName}</option>
