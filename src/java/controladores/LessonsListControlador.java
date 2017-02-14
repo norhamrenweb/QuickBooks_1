@@ -13,6 +13,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -45,7 +46,9 @@ public class LessonsListControlador implements Controller{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-        mv.addObject("lessonslist", this.getLessons(5));
+        HttpSession sesion = hsr.getSession();
+        User user = (User) sesion.getAttribute("user");
+        mv.addObject("lessonslist", this.getLessons(user.getId()));
         
         
         return mv;

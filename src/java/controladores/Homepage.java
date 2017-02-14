@@ -10,6 +10,7 @@ package controladores;
  * @author nmohamed
  */
 
+import Montessori.*;
 import java.io.DataOutput;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import mapcusts.Getcusts;
 import quickbooksync.*;
 import controladores.LessonsListControlador;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -53,13 +55,15 @@ ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicati
     }
   @RequestMapping
 public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        String nombreusu = hsr.getParameter("txtusuario");
-        int usertype = 0;
+       
+        HttpSession session = hsr.getSession();
+        User user = new User();
+         user.setName(hsr.getParameter("txtusuario"));
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
       Statement ps = this.cn.createStatement(1004,1007);
-      ResultSet rs = ps.executeQuery("SELECT typeuser FROM usuarios where nombre='"+ nombreusu+"'");
+      ResultSet rs = ps.executeQuery("SELECT typeuser,id_usuario FROM usuarios where nombre='"+ user.getName()+"'");
        if (!rs.next())
        {
            ModelAndView mv = new ModelAndView("userform");
@@ -71,12 +75,14 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
        rs.beforeFirst();
            while (rs.next())
             {
-            usertype= rs.getInt("typeuser");
+            user.setType(rs.getInt("typeuser"));
+            user.setId(rs.getInt("id_usuario"));
             }
-        if (usertype == 3)
+        if (user.getType()== 3)
         {
         ModelAndView mv = new ModelAndView("suhomepage");
         String message = "Welcome super user";
+        session.setAttribute("user", user);
         mv.addObject("message", message);
         return mv;
         }
@@ -84,6 +90,7 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
         {
          ModelAndView mv = new ModelAndView("redirect:/homepage.htm");
         String  message = "welcome user";
+        session.setAttribute("user", user);
         mv.addObject("message", message);
        
         return mv;
