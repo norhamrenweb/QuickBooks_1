@@ -27,15 +27,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mapcusts.Getcusts;
 import quickbooksync.*;
+import controladores.LessonsListControlador;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 
+@RequestMapping("/")
 public class Homepage extends MultiActionController  {
    Connection cn;
     private Object getBean(String nombrebean, ServletContext servlet)
@@ -48,7 +51,7 @@ ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicati
     
         return new ModelAndView("userform");
     }
-  
+  @RequestMapping
 public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String nombreusu = hsr.getParameter("txtusuario");
         int usertype = 0;
@@ -79,9 +82,10 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
         }
         else
         {
-         ModelAndView mv = new ModelAndView("homepage");
+         ModelAndView mv = new ModelAndView("redirect:/homepage.htm");
         String  message = "welcome user";
         mv.addObject("message", message);
+       
         return mv;
         }
 

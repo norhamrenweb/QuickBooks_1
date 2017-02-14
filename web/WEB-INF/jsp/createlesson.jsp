@@ -162,6 +162,40 @@
         ajax.open("POST","createlesson.htm?select=subjectlistLevel&seleccion1="+seleccion1,true);
         ajax.send("");
     }
+    function comboSelectionSubject()
+    {
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        $('#createOnClick').attr('disabled', true);
+        ajax.onreadystatechange=funcionCallBackSubject;
+        var seleccion2 = document.getElementById("idsubjects").value;
+        ajax.open("POST","createlesson.htm?select=subsectionlistSubject&seleccion2="+seleccion2,true);
+        ajax.send("");
+    }
+     function comboSelectionSubsection()
+    {
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        $('#createOnClick').attr('disabled', true);
+        ajax.onreadystatechange=funcionCallBackSubject;
+        var seleccion3 = document.getElementById("idsubsection").value;
+        ajax.open("POST","createlesson.htm?select=equipmentlistSubsection&seleccion3="+seleccion3,true);
+        ajax.send("");
+    }
         </script>
         <style>
             .sep
@@ -214,7 +248,7 @@
                     <input type="text" class="input-sm" name="TXTnombreLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
                 </div>
 
-                <div class="col-xs-3 form-group">
+                 <div class="col-xs-3 form-group">
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
                     <select class="form-control" name="levelsubject" id="levelsubject" onchange="comboSelectionLevel()">
                         
@@ -233,20 +267,21 @@
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
-                    <select class="form-control" id="idsubsection" name="TXTsubsection" onchange="comboSelectionSubsection()">
-                       <c:forEach var="subsection" items="${subsection}">
+                    <select class="form-control" id="idsubsection" name="TXTsubsection" >
+                       <c:forEach var="subsection" items="${subsections}">
                                 <option value="${subsection}" >${subsection}</option>
                             </c:forEach>
                     </select>
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtequipment"/></label>
-                    <select class="form-control" id="equipment" name="TXTequipment" multiple onchange="comboSelectionEquipment()">
+                    <select class="form-control" id="equipment" name="TXTequipment" multiple onchange="comboSelectionSubsection()">
                        <c:forEach var="equipment" items="${equipment}">
                                 <option value="${equipment}" >${equipment}</option>
                             </c:forEach>
                     </select>
                 </div>
+                    
    
             </fieldset>
             <fieldset>
@@ -262,7 +297,7 @@
                     <div class="col-xs-12">
                         <div class="col-xs-2">
                             <select class="form-control" name="level" id="level" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
-                                <option selected value="allstudents" >All students</option>
+<!--                                <option selected value="allstudents" >All students</option>-->
                                 <c:forEach var="levels" items="${gradelevels}">
                                     <option value="${levels}" >${levels}</option>
                                 </c:forEach>

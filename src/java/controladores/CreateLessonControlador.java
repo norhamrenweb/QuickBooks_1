@@ -207,8 +207,78 @@ public class CreateLessonControlador extends MultiActionController{
         return mv;
     }
 
-
+public ModelAndView subsectionlistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("createlesson");
+        List<String> subsections = new ArrayList<>();
+       try {
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        
+        
+            
+             Statement st = this.cn.createStatement();
+             int subjectid = 0;
+            String consulta = "SELECT id FROM public.subject where nombre_subject ='"+hsr.getParameter("seleccion2")+"'";
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                subjectid = rs.getInt("id");
+            }
+            
+          ResultSet rs1 = st.executeQuery("select nombre_sub_section from subsection where id_subject="+subjectid);
+           while (rs1.next())
+            {
+                subsections.add(rs1.getString("nombre_sub_section"));
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Subsections: " + ex);
+        }
+        
       
+         mv.addObject("subsections",subsections );
+        
+        return mv;
+    }
+ public ModelAndView equipmentlistSubsection(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("createlesson");
+        List<String> equipments = new ArrayList<>();
+       try {
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        
+        
+            
+             Statement st = this.cn.createStatement();
+             int subsectionid = 0;
+            String consulta = "SELECT id_subsection FROM public.subsection where nombre_sub_section ='"+hsr.getParameter("seleccion3")+"'";
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                subsectionid = rs.getInt("id_subsection");
+            }
+            
+          ResultSet rs1 = st.executeQuery("select nombre_activity_equipment from activity_equipment where id_subsection="+subsectionid);
+           while (rs1.next())
+            {
+                equipments.add(rs1.getString("nombre_activity_equipment"));
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo equipments: " + ex);
+        }
+        
+      
+         mv.addObject("equipments",equipments );
+        
+        return mv;
+    }     
 }
 
 

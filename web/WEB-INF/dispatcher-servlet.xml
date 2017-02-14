@@ -55,6 +55,8 @@
         </bean>
     </property> 
     </bean>
+
+    <bean class="controladores.LessonsListControlador" id="lessonsList"/>
 <bean class="controladores.DatosUsuarioControlador" name="ControladorIdioma"/>
 
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
@@ -72,7 +74,7 @@
                  
                 <prop key="createlesson.htm">createlesson</prop>
                 <prop key="datosIdioma.htm">ControladorIdioma</prop>
-                
+                <prop key="homepage.htm">lessonsList</prop>
                   
             </props>
         </property>

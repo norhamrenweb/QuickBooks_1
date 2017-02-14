@@ -52,7 +52,7 @@
                     <label class="control-label"></label>
                         <div class='input-group' style="margin-top:19px;">
                             <form:form id="formCreate" action="createlesson.htm?select=start">
-                                <button type="submit" id="crearLessons" value="Crear" class="btn btn-success" disabled="true"><spring:message code="etiq.txtcreatestudent"/></button>
+                                <button type="submit" id="crearLessons1" value="Crear" class="btn btn-success" disabled="true"><spring:message code="etiq.txtcreatestudent"/></button>
                             </form:form>
                         </div>
                 </div>
@@ -76,41 +76,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="lecciones" items="${listalecciones}">
+                    <c:forEach var="lecciones" items="${lessonslist}" >
                         <tr>
-                            <td>${lecciones.fecha_inicio}</td>
-                            <td>${lecciones.nombre_lessons}</td>
-                            <td>${lecciones.nombre}</td>
-                            <td>${lecciones.nombre_subject}</td>
-                            <td>${lecciones.nombre_subsection}</td>
-                            <td>
-                                <c:forEach var="materiales" items="${lecciones.equipment}">
-                                    <div class="nombreActividad">${materiales.nombre_activity_equipment} </div>  
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <div class="col-xs-6 col-xs-offset-3">
-                                    <div class="col-xs-4">
-                                        <button name="TXTid_lessons_detalles" value="${lecciones.id_lessons}" class="btn btn-detalles" id="details" data-toggle="modal" data-target="#myModal" onclick="ajaxModal(${lecciones.id_lessons})"><!--<a href= javascript:popUp('/details.jsp')  target="_blank" onClick="window.open(this.href, this.target, 'width=300,height=400'); return false;">-->
-                                            <span class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="etiq.txtdetails"/>"></span>
-                                        </button>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <form:form id="formMod" action="modify.htm?accion=inicio">
-                                            <button name="TXTid_lessons_modificar" type="submit" class="btn btn-modificar" id="modificarLessons" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="etiq.txtmodify"/>" value="${lecciones.id_lessons}">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                        </form:form>
-                                    </div>
-                                    <div class="col-xs-4">    
-                                        <form:form id="formElim" action="lessonEliminate.htm">
-                                            <button name="TXTid_lessons_eliminar" value="${lecciones.id_lessons}" class="btn btn-eliminar" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="etiq.txtremove"/>">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                            </button>
-                                       </form:form>
-                                    </div>
-                                </div>
-                            </td>
+                            <td>${lecciones.name}</td>
+                           
                         </tr>
                     </c:forEach>
                     </tbody>
