@@ -107,15 +107,18 @@
         <br/>
         <jstl:out value="${message1}"/> 
         <br/>
-        <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
-            <input class="btn btn-sm" type="submit" value="Customer Sync" opcion=""/> 
-        </div>
-        <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
-            <input class="btn btn-sm" type="submit" value="Invoice Sync" opcion=""/> 
-        </div>
-        <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
-            <input class="btn btn-sm" type="submit" value="Payment Sync" opcion=""/> 
-        </div>
+            <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
+                <input class="btn btn-sm" type="submit" value="Customer Sync" opcion=""/> 
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
+                <input class="btn btn-sm" type="submit" value="Invoice Sync" opcion=""/> 
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
+                <input class="btn btn-sm" type="submit" value="Payment Sync" opcion=""/> 
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
+                <input class="btn btn-sm" type="submit" value="Sync All" opcion=""/> 
+            </div>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-12">
         <a href="familymap2.htm?select2=start"> Map Families </a>
