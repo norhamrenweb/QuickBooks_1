@@ -16,10 +16,10 @@ import org.apache.log4j.Logger;
  */
 public class DeletePayment {
     static Logger log = Logger.getLogger(DeletePayment.class.getName());
-    public void deletepayment (List<QBPayment> deletelist) throws SQLException, ClassNotFoundException
+    public void deletepayment (List<QBPayment> deletelist,Config config) throws SQLException, ClassNotFoundException
     {
        DBconnection connectQB = new DBconnection();
-        connectQB.createconnQB();
+        connectQB.createconnQB(config);
         
     for(QBPayment y : deletelist)
     {

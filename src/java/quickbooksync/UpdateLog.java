@@ -28,8 +28,8 @@ public class UpdateLog {
     private final Driver myDriver = new org.postgresql.Driver();
        
         private final Connection conn;
-        public UpdateLog() throws SQLException {
-        this.conn = DriverManager.getConnection(Runsync.edudburl,Runsync.edudbuser,Runsync.edudbpswd);//"jdbc:postgresql://localhost:5432/postgres","postgres","rapunzel");
+        public UpdateLog(Config config) throws SQLException {
+        this.conn = DriverManager.getConnection(config.getEdudburl(),config.getEdudbuser(),config.getEdudbpswd());//"jdbc:postgresql://localhost:5432/postgres","postgres","rapunzel");
     }
         public void updateinvoicelog (List<QBInvoice> invoices, String action ) throws SQLException, ParserConfigurationException, TransformerException, TransformerConfigurationException, SAXException, IOException
         {

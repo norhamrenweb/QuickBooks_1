@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class InsertPayment {
     static Logger log = Logger.getLogger(InsertPayment.class.getName());
-    public void insertPayment (List<QBPayment> addlist) throws SQLException, ClassNotFoundException, ParseException
+    public void insertPayment (List<QBPayment> addlist,Config config) throws SQLException, ClassNotFoundException, ParseException
     {
     // take the input and looping through them to insert in QB InvoiceLineItem table
     /*     DBconnection connectQB = new DBconnection();
@@ -43,7 +43,7 @@ public class InsertPayment {
         }*/
         
         DBconnection connectQB = new DBconnection();
-        connectQB.createconnQB();
+        connectQB.createconnQB(config);
         String fixamount;
        
       

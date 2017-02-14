@@ -16,10 +16,10 @@ import org.apache.log4j.Logger;
  */
 public class DeleteInvoice {
     static Logger log = Logger.getLogger(DeleteInvoice.class.getName());
-    public void deleteinvoice (List<QBInvoice> deletelist) throws SQLException, ClassNotFoundException
+    public void deleteinvoice (List<QBInvoice> deletelist,Config config) throws SQLException, ClassNotFoundException
     {
        DBconnection connectQB = new DBconnection();
-        connectQB.createconnQB();
+        connectQB.createconnQB(config);
         
     for(QBInvoice y : deletelist)
     {

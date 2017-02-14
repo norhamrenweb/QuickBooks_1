@@ -27,19 +27,20 @@ public class InvoiceSync {
         static Logger log = Logger.getLogger(Runsync.class.getName());
 
     
-    public void invoicesync(String[] args){
+    public void invoicesync(Config config){
             
             try {
        
             //----------------------------------------------------------------------
-            UpdateLog logdb = new UpdateLog();
+            UpdateLog logdb = new UpdateLog(config);
+            
             //Retrieve QB and RW transactions based on a start date (start date not done yet)
             List <RWCharge> allcharge= new ArrayList<>();
             RetrieveInvoice x2 = new RetrieveInvoice();
-            allcharge = x2.retrieveCharge();
+            allcharge = x2.retrieveCharge(config);
             List <QBInvoice> allinvoice= new ArrayList<>();
             
-            allinvoice = x2.retrieveInvoice();
+            allinvoice = x2.retrieveInvoice(config);
             //-------------------------------------------------------------------------
             //Check QB transactions against RW to check for updates or deletion
             List <QBInvoice> addlist= new ArrayList<>();
@@ -73,7 +74,7 @@ public class InvoiceSync {
                         }
                         else
                         {
-                            item.setitemName(Runsync.itemname);// hard coded till we figurs out how it will get this input
+                            item.setitemName(config.getItemname());
                             n.setItem(item);
                             n.setAmount(u.getAmount());
                             addlist.add(n);
@@ -124,11 +125,11 @@ public class InvoiceSync {
                 DeleteInvoice delete = new DeleteInvoice();
                  if(!deletelist.isEmpty())
             {
-                 delete.deleteinvoice(deletelist);
+                 delete.deleteinvoice(deletelist,config);
                 logdb.updateinvoicelog(deletelist,"delete");
             }
                
-            allinvoice = x2.retrieveInvoice();// get the updated list of invoices after the deletion    
+            allinvoice = x2.retrieveInvoice(config);// get the updated list of invoices after the deletion    
                 //----------------------------------------------------------------------
                 //Second: update the amount field and insert
                 
@@ -190,7 +191,7 @@ public class InvoiceSync {
                         }
                         else
                         {
-                            item.setitemName(Runsync.itemname);
+                            item.setitemName(config.getItemname());
                             n.setItem(item);
                             n.setAmount(y3.getAmount());
                             addlist.add(n);
@@ -202,20 +203,20 @@ public class InvoiceSync {
             UpdateInvoice update = new UpdateInvoice();
             if (!updatelist.isEmpty())
             {
-                update.updateInvoice(updatelist);
+                update.updateInvoice(updatelist,config);
                 logdb.updateinvoicelog(updatelist,"update");
             }
             
             InsertInvoice add = new InsertInvoice();
             if(!addlist.isEmpty())
             {
-                add.insertInvoice(addlist);
+                add.insertInvoice(addlist,config);
                 logdb.updateinvoicelog(addlist,"addition");
             }
             AddDiscounts discount = new AddDiscounts();   
             if(!discountlist.isEmpty())
             {
-            discount.addDiscounts(discountlist);
+            discount.addDiscounts(discountlist,config);
             logdb.updateinvoicelog(addlist,"addDiscount");
             }
         } catch (SQLException | ClassNotFoundException | ParserConfigurationException | TransformerException | SAXException | IOException | ParseException ex) {

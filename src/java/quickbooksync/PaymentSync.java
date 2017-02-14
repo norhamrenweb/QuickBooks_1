@@ -34,19 +34,19 @@ public class PaymentSync {
      static Logger log = Logger.getLogger(Runsync.class.getName());
 
     
-    public void paymentsync(String[] args){
+    public void paymentsync(Config config){
             
             try {
        
             //----------------------------------------------------------------------
-            UpdateLog logdb = new UpdateLog();
+            UpdateLog logdb = new UpdateLog(config);
             //Retrieve QB and RW payments based on a start date (start date not done yet)
             List <RWPayment> allrwpayment= new ArrayList<>();
             RetrievePayment x2 = new RetrievePayment();
-            allrwpayment = x2.retrieverwPayment();
+            allrwpayment = x2.retrieverwPayment(config);
             List <QBPayment> allpayment= new ArrayList<>();
             
-            allpayment = x2.retrievePayment();
+            allpayment = x2.retrievePayment(config);
             //-------------------------------------------------------------------------
             //Check QB payments against RW to check for updates or deletion
             List <QBPayment> addlist= new ArrayList<>();
@@ -61,8 +61,8 @@ public class PaymentSync {
                 MappingTable family = new MappingTable();
                 cust.setId(family.checkmappingrw(u.getrwFamily().getId()));
                 n.setMemo(u.getDescription());
-              n.setappliedTo(pc.getAppliedtoRefID(u.getpaymentId()));
-              n.setappliedToAmount(pc.getAppliedtoAmount(u.getpaymentId()));
+              n.setappliedTo(pc.getAppliedtoRefID(u.getpaymentId(),config));
+              n.setappliedToAmount(pc.getAppliedtoAmount(u.getpaymentId(),config));
            
                 n.setDate(u.getDate());
                 n.setQBCustomer(cust);
@@ -113,11 +113,11 @@ public class PaymentSync {
                 DeletePayment delete = new DeletePayment();
                  if(!deletelist.isEmpty())
             {
-                 delete.deletepayment(deletelist);
+                 delete.deletepayment(deletelist,config);
                 logdb.updatepaymentlog(deletelist,"delete");
             }
                 
-             allpayment = x2.retrievePayment();// get the updated list of payments after the deletion  
+             allpayment = x2.retrievePayment(config);// get the updated list of payments after the deletion  
                 
                 //----------------------------------------------------------------------
                 //Second: update the amount field and insert
@@ -174,7 +174,7 @@ public class PaymentSync {
                         
                          //item.setitemName("admission fees");
                         //    n.setItem(item);
-                        n.setappliedTo(pc.getAppliedtoRefID(y3.getpaymentId()));
+                        n.setappliedTo(pc.getAppliedtoRefID(y3.getpaymentId(),config));
                             n.setAmount(y3.getAmount());
                             addlist.add(n);
                                                 
@@ -184,14 +184,14 @@ public class PaymentSync {
             UpdatePayment update = new UpdatePayment();
             if (!updatelist.isEmpty())
             {
-                update.updatePayment(updatelist);
+                update.updatePayment(updatelist,config);
                 logdb.updatepaymentlog(updatelist,"update");
             }
             
             InsertPayment add = new InsertPayment();
             if(!addlist.isEmpty())
             {
-                add.insertPayment(addlist);
+                add.insertPayment(addlist,config);
                 logdb.updatepaymentlog(addlist,"addition");
             }
            

@@ -21,7 +21,7 @@ public class DBconnection {
    public java.sql.Statement statementRW;
    static Logger log = Logger.getLogger(DBconnection.class.getName());
     
-     public void createconnQB() throws SQLException, ClassNotFoundException{  
+     public void createconnQB(Config config) throws SQLException, ClassNotFoundException{  
 
  Driver myDriver;
  Connection conn;
@@ -29,12 +29,12 @@ public class DBconnection {
     
     myDriver = new cdata.jdbc.quickbooks.QuickBooksDriver();
        
-     conn = DriverManager.getConnection("jdbc:quickbooks:user=Admin;password=Admin;URL=http://localhost:8166");//Runsync.qbdburl);//
+     conn = DriverManager.getConnection(config.getQbdburl());//"jdbc:quickbooks:user=Admin;password=Admin;URL=http://localhost:8166");//Runsync.qbdburl);//
        
         statementQB = conn.createStatement();
         }
     
-     public void createconnRW() throws SQLException, ClassNotFoundException{  
+     public void createconnRW(Config config) throws SQLException, ClassNotFoundException{  
 
  Driver myDriver;
  Connection conn;
@@ -42,7 +42,7 @@ public class DBconnection {
     
     myDriver = new org.postgresql.Driver();
        
-     conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/RenWebTest","postgres","rapunzel");//Runsync.rwdburl,Runsync.rwdbuser,Runsync.rwdbpswd);//
+     conn = DriverManager.getConnection(config.getRwdburl(),config.getRwdbuser(),config.getRwdbpswd());//Runsync.rwdburl,Runsync.rwdbuser,Runsync.rwdbpswd);//
        
         statementRW = conn.createStatement();
         }

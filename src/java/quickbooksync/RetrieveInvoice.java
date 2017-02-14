@@ -18,12 +18,12 @@ import org.apache.log4j.Logger;
 public class RetrieveInvoice {
     static Logger log = Logger.getLogger(RetrieveInvoice.class.getName());
     
-    public List<QBInvoice> retrieveInvoice() throws SQLException, ClassNotFoundException
+    public List<QBInvoice> retrieveInvoice(Config config) throws SQLException, ClassNotFoundException
    {
    //connect to DB
        //select * from invoicelineitem in QB and create the QBInvoices list
         DBconnection connectQB = new DBconnection();
-        connectQB.createconnQB();
+        connectQB.createconnQB(config);
         List<QBInvoice> invoice = new ArrayList<>();
         
         ResultSet rs = connectQB.statementQB.executeQuery("Select * from InvoiceLineItems");
@@ -51,12 +51,12 @@ public class RetrieveInvoice {
         return invoice;
         
    }
- public List<RWCharge> retrieveCharge() throws SQLException, ClassNotFoundException
+ public List<RWCharge> retrieveCharge(Config config) throws SQLException, ClassNotFoundException
    {
    //connect to DB
        //select * from charges in RW and create the RWCharge list
        DBconnection connectRW = new DBconnection();
-        connectRW.createconnRW();
+        connectRW.createconnRW(config);
         List<RWCharge> charge = new ArrayList<>();
         
         ResultSet rs = connectRW.statementRW.executeQuery("Select * from \"public\".\"Charges\"");

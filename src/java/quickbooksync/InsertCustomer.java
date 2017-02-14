@@ -18,11 +18,11 @@ import org.apache.log4j.Logger;
 public class InsertCustomer {
     static Logger log = Logger.getLogger(InsertCustomer.class.getName());
     
-    public List<String> insertCustomer (List<QBCustomer> addlist) throws SQLException, ClassNotFoundException
+    public List<String> insertCustomer (List<QBCustomer> addlist,Config config) throws SQLException, ClassNotFoundException
     {
     // take the input and looping through them to insert in QB Customers table
         DBconnection connectQB = new DBconnection();
-        connectQB.createconnQB();
+        connectQB.createconnQB(config);
         List<String> ids = new ArrayList<String>();
       
         for (QBCustomer customer : addlist) {

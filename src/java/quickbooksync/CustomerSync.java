@@ -24,7 +24,7 @@ public class CustomerSync {
      static Logger log = Logger.getLogger(Runsync.class.getName());
 
     
-    public void customersync(String[] args){
+    public void customersync(Config config){
             
             try {
             // TODO code application logic here
@@ -32,11 +32,11 @@ public class CustomerSync {
            
             List <RWFamily> allfamily= new ArrayList<>();
             RetrieveCustomer x = new RetrieveCustomer();
-            allfamily = x.retrieveFamily();
+            allfamily = x.retrieveFamily(config);
             List <QBCustomer> allcustomer= new ArrayList<>();
-            UpdateLog logdb = new UpdateLog();
+            UpdateLog logdb = new UpdateLog(config);
             
-            allcustomer = x.retrieveCustomer();
+            allcustomer = x.retrieveCustomer(config);
             //-----------------------------------------------------------------------
             //Compare families and add new families in a list
             List <QBCustomer> newcustomer= new ArrayList<>();
@@ -67,7 +67,7 @@ public class CustomerSync {
             //Add the new families in the list to QB DB
             InsertCustomer insert = new InsertCustomer();
             List<String> custids = new ArrayList<String>();
-            custids = insert.insertCustomer(newcustomer);// after inserting returns the customer ID created by QB
+            custids = insert.insertCustomer(newcustomer,config);// after inserting returns the customer ID created by QB
             logdb.updatecustlog(newcustomer, "addition");
             //--------------------------------------------------------------------
             //Update the family ids mapping table

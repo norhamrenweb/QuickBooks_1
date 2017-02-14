@@ -5,6 +5,8 @@
  */
 package quickbooksync;
 
+import java.util.List;
+
 
 
 /**
@@ -20,33 +22,13 @@ public class Runsync {
      * @throws java.sql.SQLException
      * @throws java.lang.ClassNotFoundException
      */
-    public static String qbdburl;
-    public static String rwdburl;
-    public static String qbdbuser;
-    public static String rwdbuser;
-    public static String rwdbpswd;
-    public static String qbdbpswd;
-    public static String itemname;
-    public static String startdate;
-    public static String edudburl;
-    public static String edudbpswd;
-    public static String edudbuser;
-    public void runsync(String[] args) {
+    
+    public void runsync(Config config) {
        
-    qbdburl = args[0];
-    rwdburl = args[3];
-    edudburl = args[6];
-    qbdbuser = args[1];
-    qbdbpswd = args[2];
-    rwdbuser = args[4];
-    rwdbpswd = args[5];
-    edudbuser = args[7];
-    edudbpswd = args[8];
-    startdate = args[9];
-    itemname = args[10];
-  new CustomerSync().customersync(args);     
-new InvoiceSync().invoicesync(args);
-new PaymentSync().paymentsync(args);
+  
+  new CustomerSync().customersync(config);     
+new InvoiceSync().invoicesync(config);
+new PaymentSync().paymentsync(config);
         
     }
 }
