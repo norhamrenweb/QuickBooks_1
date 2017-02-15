@@ -238,6 +238,7 @@ public class CreateLessonControlador extends MultiActionController{
        
         return listaAlumnos;
     }
+    // get students filtrado por gradelevel
      public ArrayList<Students> getStudentslevel(String grade) throws SQLException
     {
 //        this.conectarOracle();
@@ -279,17 +280,59 @@ public class CreateLessonControlador extends MultiActionController{
          
         
        String[] studentIds = hsr.getParameterValues("destino[]");
-       String args = hsr.getParameter("TXTnombreLessons");
+       Lessons newlesson = new Lessons();
+       newlesson.setName(hsr.getParameter("TXTnombreLessons")); 
+       newlesson.setStart(hsr.getParameter("TXThorainicio"));
+       newlesson.setDate(hsr.getParameter("TXTfecha"));
+       newlesson.setFinish(hsr.getParameter("horafin"));
+       newlesson.setTemplate(false);
        
        Createlesson c = new Createlesson(hsr.getServletContext());
-       c.newlesson(studentIds,args);
+       c.newlesson(studentIds,newlesson);
         
         mv.addObject("message", "Lesson created");
         
         return mv;
     }
-
-  
+//coge la nombre de subject seleccionado y devuelve la lista de lessons que son templates 
+     public ModelAndView namelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
+     {
+     ModelAndView mv = new ModelAndView("createlesson");
+     List<String> lessons = new ArrayList<>();
+     
+      try {
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        
+        
+            
+             Statement st = this.cn.createStatement();
+             int subjectid = 0;
+            String consulta = "SELECT id FROM public.subject where nombre_subject ='"+hsr.getParameter("seleccion2")+"'";
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                subjectid = rs.getInt("id");
+            }
+            
+          ResultSet rs1 = st.executeQuery("select nombre_lessons from lessons where id_subject="+subjectid+" & template = true");
+          lessons.add("Select lesson name");
+           while (rs1.next())
+            {
+                lessons.add(rs1.getString("nombre_lessons"));
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo lessons: " + ex);
+        }
+        
+      
+         mv.addObject("lessons", lessons);
+     
+     return mv;
+     }
 }
 
 
