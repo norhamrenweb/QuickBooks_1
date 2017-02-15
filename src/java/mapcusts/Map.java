@@ -26,9 +26,11 @@ public class Map {
     public String mapCustomer(RWFamily family, QBCustomer cust) throws SQLException, ClassNotFoundException, IOException, ParserConfigurationException, TransformerException, TransformerConfigurationException, SAXException
     {// there has to be a flag to know which string is which
         String message = null;
-    
+    Config config = new Config();
+       GetConfig get = new GetConfig();
+       config = get.getConfig();
        
-        MappingTable mapdb = new MappingTable();
+        MappingTable mapdb = new MappingTable(config);
       
       //get RW family details and update mapping table
           List <QBCustomer> newcustomer= new ArrayList<>();
