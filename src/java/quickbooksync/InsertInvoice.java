@@ -17,11 +17,11 @@ import org.apache.log4j.Logger;
  */
 public class InsertInvoice {
     static Logger log = Logger.getLogger(InsertInvoice.class.getName());
-    public void insertInvoice (List<QBInvoice> addlist) throws SQLException, ClassNotFoundException, ParseException
+    public void insertInvoice (List<QBInvoice> addlist,Config config) throws SQLException, ClassNotFoundException, ParseException
     {
     // take the input and looping through them to insert in QB InvoiceLineItem table
          DBconnection connectQB = new DBconnection();
-        connectQB.createconnQB();
+        connectQB.createconnQB(config);
         String fixamount;
       
         for(QBInvoice invoice : addlist)

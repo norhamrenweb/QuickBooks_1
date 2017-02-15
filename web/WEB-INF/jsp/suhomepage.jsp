@@ -46,7 +46,7 @@
                 </div>
                 <div id="ConfigQuickbooks" class="col-xs-12 panel-collapse collapse form-group">
                     <label>Quickbooks DB URL:</label>
-                    <input class="form-control" type="text" name="qbdburl"/>
+                    <input class="form-control" type="text" value="${config.qbdburl}" name="qbdburl"/>
 
                     <label>Quickbooks DB user:</label>
                     <input class="form-control" type="text" name="qbdbuser"/>
@@ -105,9 +105,9 @@
             <label>Syncronized Quickbooks with RenWeb</label>
             <input type="image" src="recursos/img/images_QB/Syncronized.gif" href="suhomepage.htm?opcion=runsync" class="form-group">
         <br/>
-        <jstl:out value="${message1}"/> 
+        
         <br/>
-            <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
+<!--            <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
                 <input class="btn btn-sm" type="submit" value="Customer Sync" opcion=""/> 
             </div>
             <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
@@ -118,8 +118,16 @@
             </div>
             <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
                 <input class="btn btn-sm" type="submit" value="Sync All" opcion=""/> 
-            </div>
+            </div>-->
+         
+            <a href="suhomepage.htm?opcion=custsync"> Customer Sync </a>
+            <a href="suhomepage.htm?opcion=paysync"> Payment Sync </a>
+            <a href="suhomepage.htm?opcion=invoicesync"> Invoice Sync </a>
+            <a href="suhomepage.htm?opcion=runsync"> Sync All </a>
         </div>
+         <br/>
+        <jstl:out value="${message1}"/> 
+        <br/>
         <div class="col-lg-4 col-md-4 col-xs-12">
         <a href="familymap2.htm?select2=start"> Map Families </a>
         </div>

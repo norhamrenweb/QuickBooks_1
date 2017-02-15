@@ -18,12 +18,12 @@ import org.apache.log4j.Logger;
 public class RetrieveCustomer {
     
     static Logger log = Logger.getLogger(RetrieveCustomer.class.getName());
-   public List<QBCustomer> retrieveCustomer() throws SQLException, ClassNotFoundException
+   public List<QBCustomer> retrieveCustomer(Config config) throws SQLException, ClassNotFoundException
    {
    //connect to DB
        //select * from customers in QB and create the QBCustomer list
        DBconnection connectQB = new DBconnection();
-        connectQB.createconnQB();
+        connectQB.createconnQB(config);
         List<QBCustomer> customer = new ArrayList<>();
         
         ResultSet rs = connectQB.statementQB.executeQuery("Select * from Customers");
@@ -41,12 +41,12 @@ public class RetrieveCustomer {
         return customer;
         
    }
- public List<RWFamily> retrieveFamily() throws SQLException, ClassNotFoundException
+ public List<RWFamily> retrieveFamily(Config config) throws SQLException, ClassNotFoundException
    {
    //connect to DB
        //select * from Family in RW and create the RWFamily list
        DBconnection connectRW = new DBconnection();
-        connectRW.createconnRW();
+        connectRW.createconnRW(config);
         List<RWFamily> family = new ArrayList<>();
         
         ResultSet rs;

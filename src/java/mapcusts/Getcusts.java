@@ -15,11 +15,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import quickbooksync.DBconnection;
-import quickbooksync.MappingTable;
-import quickbooksync.QBCustomer;
-import quickbooksync.RWFamily;
-import quickbooksync.Runsync;
+import quickbooksync.*;
+
 
 /**
  *
@@ -29,7 +26,7 @@ public class Getcusts {
     
     
     
-    public List<QBCustomer> getCustomer() throws SQLException, ClassNotFoundException, IOException
+    public List<QBCustomer> getCustomer(Config config) throws SQLException, ClassNotFoundException, IOException
    {
        
       List <QBCustomer> allcustomer= new ArrayList<>();
@@ -61,7 +58,7 @@ public class Getcusts {
 //       
 //       java.sql.Statement statementQB = conn.createStatement();
 DBconnection connectQB = new DBconnection();
-        connectQB.createconnQB();
+        connectQB.createconnQB(config);
         
         
         ResultSet rs = connectQB.statementQB.executeQuery("Select ID,Name from Customers");
@@ -88,7 +85,7 @@ DBconnection connectQB = new DBconnection();
                }
             return unmappedcustomer;
             }
-      public List<RWFamily> getFamily() throws SQLException, ClassNotFoundException, IOException
+      public List<RWFamily> getFamily(Config config) throws SQLException, ClassNotFoundException, IOException
    {
       List <RWFamily> allfamily= new ArrayList<>();
 //       File file = new File("C:\\Users\\Public\\config.txt");
@@ -120,7 +117,7 @@ DBconnection connectQB = new DBconnection();
 //       java.sql.Statement statementRW = conn.createStatement();
        
       DBconnection connectRW = new DBconnection();
-        connectRW.createconnRW();
+        connectRW.createconnRW(config);
         
         
         ResultSet rs = connectRW.statementRW.executeQuery("Select familyid,familyname from family");

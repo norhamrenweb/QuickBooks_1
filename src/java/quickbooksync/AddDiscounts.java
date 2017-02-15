@@ -16,11 +16,11 @@ import java.util.List;
  */
 public class AddDiscounts {
        
-    public void addDiscounts(List<QBInvoice> discountlist) throws SQLException, ClassNotFoundException
+    public void addDiscounts(List<QBInvoice> discountlist,Config config) throws SQLException, ClassNotFoundException
        {
           
          DBconnection connectQB = new DBconnection();
-        connectQB.createconnQB();
+        connectQB.createconnQB(config);
         String fixamount;
         
         for(QBInvoice d : discountlist)

@@ -80,7 +80,7 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
             }
         if (user.getType()== 3)
         {
-        ModelAndView mv = new ModelAndView("suhomepage");
+        ModelAndView mv = new ModelAndView("redirect:/suhomepage.htm?opcion=loadconfig");
         String message = "Welcome super user";
         session.setAttribute("user", user);
         mv.addObject("message", message);
@@ -156,45 +156,23 @@ String message = "Configuration setting saved";
 public ModelAndView runsync(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 ModelAndView mv = 
                 new ModelAndView("suhomepage");
-DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-      Statement ps = this.cn.createStatement(1004,1007);
-      ResultSet rs = ps.executeQuery("Select * from syncconfig");
-//File file = new File("C:\\Users\\Public\\config.txt");
-//		FileInputStream fis = null;
-//                fis = new FileInputStream(file);
-//
-//			
-//			int content;
-//                        StringBuilder builder = new StringBuilder();
-//                       
-//			while ((content = fis.read()) != -1) {
-//				// convert to char and display it
-//				builder.append((char)content);
-//			}
-//                        String conf = builder.toString();
-//String[] x = conf.split("&");
-String[] x = null;
-while(rs.next())
-{
-x[0]=rs.getString("qbdburl");
-x[1]=rs.getString("qbdbuser");
-x[2]=rs.getString("qbdbpswd");
-x[3]=rs.getString("rwdburl");
-x[4]=rs.getString("rwdbuser");
-x[5]=rs.getString("rwdbpswd");
-x[6]=rs.getString("edudburl");
-x[7]=rs.getString("edudbuser");
-x[8]=rs.getString("edudbpswd");
-x[9]= rs.getDate("startdate").toString();
-x[10]=rs.getString("itemname");
-}
-                        
-                      Runsync s = new Runsync();
-                      s.runsync(x);
+
+Config config = new Config();
+GetConfig get = new GetConfig();
+config = get.getConfig();
+
+ if(config.getQbdburl()!= null && config.getQbdbuser()!=null && config.getQbdbpswd()!=null & config.getRwdburl()!=null && config.getRwdbuser()!= null && config.getRwdbpswd()!= null && config.getEdudburl()!= null && config.getEdudbuser()!= null && config.getEdudbpswd()!= null && config.getStartdate()!= null && config.getItemname()!= null)                       
+ {  Runsync s = new Runsync();
+                      s.runsync(config);
                        
-mv.addObject("message1", "QB synchronized");
+mv.addObject("message1", "QuickBooks synchronized");
+ }
+ 
+ else 
+ {
+ mv.addObject("message1", "A configuration setting is missing");
+ 
+ }
 return mv;
 
 
@@ -204,9 +182,12 @@ public ModelAndView map(HttpServletRequest hsr, HttpServletResponse hsr1) throws
 ModelAndView mv = new ModelAndView("familymap2");
 Getcusts l = new Getcusts();
 List <QBCustomer> allcustomer= new ArrayList<>();
-allcustomer = l.getCustomer();
+Config config = new Config();
+GetConfig get = new GetConfig();
+config = get.getConfig();
+allcustomer = l.getCustomer(config);
 List <RWFamily> allfamily= new ArrayList<>();
-allfamily = l.getFamily();
+allfamily = l.getFamily(config);
 mv.addObject("allcustomer", allcustomer);
 mv.addObject("allfamily", allfamily);
 
@@ -215,4 +196,136 @@ return mv;
 
 
 }
+public ModelAndView custsync(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+ModelAndView mv = 
+                new ModelAndView("suhomepage");
+DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+      Statement ps = this.cn.createStatement(1004,1007);
+      ResultSet rs = ps.executeQuery("Select * from syncconfig");
+
+Config config = new Config();
+while(rs.next())
+{
+config.setQbdburl(rs.getString("qbdburl"));
+config.setQbdbuser(rs.getString("qbdbuser"));
+config.setQbdbpswd(rs.getString("qbdbpswd"));
+config.setRwdburl(rs.getString("rwdburl"));
+config.setRwdbuser(rs.getString("rwdbuser"));
+config.setRwdbpswd(rs.getString("rwdbpswd"));
+config.setEdudburl(rs.getString("edudburl"));
+config.setEdudbuser(rs.getString("edudbuser"));
+config.setEdudbuser(rs.getString("edudbpswd"));
+config.setStartdate(rs.getDate("startdate").toString());
+config.setItemname(rs.getString("itemname"));
+}
+                        
+                      CustomerSync s = new CustomerSync();
+                      s.customersync(config);
+                       
+mv.addObject("message1", "QuickBooks Customers synchronized");
+return mv;
+
+
+
+}
+public ModelAndView paysync(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+ModelAndView mv = 
+                new ModelAndView("suhomepage");
+DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+      Statement ps = this.cn.createStatement(1004,1007);
+      ResultSet rs = ps.executeQuery("Select * from syncconfig");
+
+Config config = new Config();
+while(rs.next())
+{
+config.setQbdburl(rs.getString("qbdburl"));
+config.setQbdbuser(rs.getString("qbdbuser"));
+config.setQbdbpswd(rs.getString("qbdbpswd"));
+config.setRwdburl(rs.getString("rwdburl"));
+config.setRwdbuser(rs.getString("rwdbuser"));
+config.setRwdbpswd(rs.getString("rwdbpswd"));
+config.setEdudburl(rs.getString("edudburl"));
+config.setEdudbuser(rs.getString("edudbuser"));
+config.setEdudbuser(rs.getString("edudbpswd"));
+config.setStartdate(rs.getDate("startdate").toString());
+config.setItemname(rs.getString("itemname"));
+}
+                        
+                      PaymentSync s = new PaymentSync();
+                      s.paymentsync(config);
+                       
+mv.addObject("message1", "QuickBooks Payments synchronized");
+return mv;
+
+
+
+}
+public ModelAndView invoicesync(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+ModelAndView mv = 
+                new ModelAndView("suhomepage");
+DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+      Statement ps = this.cn.createStatement(1004,1007);
+      ResultSet rs = ps.executeQuery("Select * from syncconfig");
+
+Config config = new Config();
+while(rs.next())
+{
+config.setQbdburl(rs.getString("qbdburl"));
+config.setQbdbuser(rs.getString("qbdbuser"));
+config.setQbdbpswd(rs.getString("qbdbpswd"));
+config.setRwdburl(rs.getString("rwdburl"));
+config.setRwdbuser(rs.getString("rwdbuser"));
+config.setRwdbpswd(rs.getString("rwdbpswd"));
+config.setEdudburl(rs.getString("edudburl"));
+config.setEdudbuser(rs.getString("edudbuser"));
+config.setEdudbuser(rs.getString("edudbpswd"));
+config.setStartdate(rs.getDate("startdate").toString());
+config.setItemname(rs.getString("itemname"));
+}
+                        
+                     InvoiceSync s = new InvoiceSync();
+                      s.invoicesync(config);
+                       
+mv.addObject("message1", "QuickBooks Invoices synchronized");
+return mv;
+
+
+
+}
+public ModelAndView loadconfig(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+ModelAndView mv = 
+                new ModelAndView("suhomepage");
+DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+      Statement ps = this.cn.createStatement(1004,1007);
+      ResultSet rs = ps.executeQuery("Select * from syncconfig");
+
+Config config = new Config();
+while(rs.next())
+{
+config.setQbdburl(rs.getString("qbdburl"));
+config.setQbdbuser(rs.getString("qbdbuser"));
+config.setQbdbpswd(rs.getString("qbdbpswd"));
+config.setRwdburl(rs.getString("rwdburl"));
+config.setRwdbuser(rs.getString("rwdbuser"));
+config.setRwdbpswd(rs.getString("rwdbpswd"));
+config.setEdudburl(rs.getString("edudburl"));
+config.setEdudbuser(rs.getString("edudbuser"));
+config.setEdudbuser(rs.getString("edudbpswd"));
+config.setStartdate(rs.getDate("startdate").toString());
+config.setItemname(rs.getString("itemname"));
+}
+                       
+mv.addObject("config", config);
+return mv;
+
+}
+
 }

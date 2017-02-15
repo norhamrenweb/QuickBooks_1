@@ -18,12 +18,12 @@ import org.apache.log4j.Logger;
 public class RetrievePayment {
     static Logger log = Logger.getLogger(RetrievePayment.class.getName());
     
-    public List<QBPayment> retrievePayment() throws SQLException, ClassNotFoundException
+    public List<QBPayment> retrievePayment(Config config) throws SQLException, ClassNotFoundException
    {
    //connect to DB
        //select * from invoicelineitem in QB and create the QBInvoices list
         DBconnection connectQB = new DBconnection();
-        connectQB.createconnQB();
+        connectQB.createconnQB(config);
         List<QBPayment> payment = new ArrayList<>();
         
         ResultSet rs = connectQB.statementQB.executeQuery("Select * from ReceivePayments");
@@ -51,12 +51,12 @@ public class RetrievePayment {
         return payment;
         
    }
- public List<RWPayment> retrieverwPayment() throws SQLException, ClassNotFoundException
+ public List<RWPayment> retrieverwPayment(Config config) throws SQLException, ClassNotFoundException
    {
    //connect to DB
        //select * from charges in RW and create the RWCharge list
        DBconnection connectRW = new DBconnection();
-        connectRW.createconnRW();
+        connectRW.createconnRW(config);
         List<RWPayment> payment = new ArrayList<>();
         
         ResultSet rs = connectRW.statementRW.executeQuery("Select * from \"public\".\"payments\"");

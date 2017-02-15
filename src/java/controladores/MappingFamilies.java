@@ -41,10 +41,13 @@ public class MappingFamilies extends MultiActionController{
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("familymap2");
+        Config config = new Config();
+GetConfig get = new GetConfig();
+config = get.getConfig();
         Getcusts getlist = new Getcusts();
-        List<QBCustomer> cust = getlist.getCustomer();
+        List<QBCustomer> cust = getlist.getCustomer(config);
         mv.addObject("QBcust",cust);
-        List<RWFamily> family = getlist.getFamily();
+        List<RWFamily> family = getlist.getFamily(config);
          mv.addObject("RWfamily",family);
         return mv;
     }
