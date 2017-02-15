@@ -6,6 +6,8 @@
 package quickbooksync;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -27,12 +29,20 @@ public class UpdateLog {
     
     private final Driver myDriver = new org.postgresql.Driver();
        
-        private final Connection conn;
-        public UpdateLog(Config config) throws SQLException {
+        private Connection conn = null;
+        public UpdateLog(Config config) {
+            try{
         this.conn = DriverManager.getConnection(config.getEdudburl(),config.getEdudbuser(),config.getEdudbpswd());//"jdbc:postgresql://localhost:5432/postgres","postgres","rapunzel");
+        }catch (SQLException ex) {
+            
+            StringWriter errors = new StringWriter();
+ex.printStackTrace(new PrintWriter(errors));
+log.error(ex+errors.toString());
+        }
     }
-        public void updateinvoicelog (List<QBInvoice> invoices, String action ) throws SQLException, ParserConfigurationException, TransformerException, TransformerConfigurationException, SAXException, IOException
+        public void updateinvoicelog (List<QBInvoice> invoices, String action )
         {
+            try{
         statement = conn.createStatement();
         for(QBInvoice invoice : invoices)
         {ParseChargeID xml = new ParseChargeID();
@@ -40,19 +50,31 @@ public class UpdateLog {
         statement.executeUpdate("insert into invoicelog (customerid,id,invoiceid,chargeid,amount,action,actiondate) values ('"+ invoice.getqbCustomer().getId() +"','"+invoice.getId()+ "','"+invoice.getinvoiceId()+"','"+chargeid+"','"+ invoice.getAmount()+ "','"+action+"',now())");
         
         }
-       
+       }catch (SQLException ex) {
+            
+            StringWriter errors = new StringWriter();
+ex.printStackTrace(new PrintWriter(errors));
+log.error(ex+errors.toString());
+        }
 }
          public void updatecustlog (List<QBCustomer> customers, String action ) throws SQLException, ParserConfigurationException, TransformerException, TransformerConfigurationException, SAXException, IOException
         {
+            try{
         statement = conn.createStatement();
         for(QBCustomer customer : customers)
         {
         statement.executeUpdate("insert into custlog (custid,familyid,action,actiondate) values ('"+ customer.getId() +"','"+customer.getrwId()+ "','"+action+"',now())");
         
+        }}catch (SQLException ex) {
+            
+            StringWriter errors = new StringWriter();
+ex.printStackTrace(new PrintWriter(errors));
+log.error(ex+errors.toString());
         }
         }
           public void updatepaymentlog (List<QBPayment> payments, String action ) throws SQLException, ParserConfigurationException, TransformerException, TransformerConfigurationException, SAXException, IOException
         {
+            try{
         statement = conn.createStatement();
         for(QBPayment payment : payments)
         {/*ParseChargeID xml = new ParseChargeID();
@@ -60,6 +82,11 @@ public class UpdateLog {
         statement.executeUpdate("insert into paymentlog (customerid,recievepaymentid,paymentid,amount,action,actiondate) values ('"+ payment.getqbCustomer().getId() +"','"+payment.getpaymentId()+"','"+payment.getcustomFields()+"','"+ payment.getAmount()+ "','"+action+"',now())");
         
         }
-       
+       }catch (SQLException ex) {
+            
+            StringWriter errors = new StringWriter();
+ex.printStackTrace(new PrintWriter(errors));
+log.error(ex+errors.toString());
+        }
 }
 }

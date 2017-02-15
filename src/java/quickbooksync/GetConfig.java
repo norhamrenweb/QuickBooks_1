@@ -5,11 +5,14 @@
  */
 package quickbooksync;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -17,8 +20,12 @@ import java.sql.SQLException;
  */
 public class GetConfig {
     public java.sql.Statement statement;
+    static Logger log = Logger.getLogger(Runsync.class.getName());
     
- public Config getConfig() throws SQLException{
+ public Config getConfig(){
+    
+     Config config = new Config();
+     try{
      Driver myDriver;
  Connection conn;
         
@@ -29,7 +36,7 @@ public class GetConfig {
        
         statement = conn.createStatement();
           ResultSet rs = statement.executeQuery("Select * from syncconfig");
-    Config config = new Config();
+ 
 while(rs.next())
 {
     
@@ -48,6 +55,14 @@ config.setItemname(rs.getString("itemname"));
     
 }
  
- return config;
+ 
+  }catch (SQLException ex) {
+            
+            StringWriter errors = new StringWriter();
+ex.printStackTrace(new PrintWriter(errors));
+log.error(ex+errors.toString());
+        }
+    return config; 
  }
+   
 }

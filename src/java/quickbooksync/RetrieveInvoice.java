@@ -5,6 +5,8 @@
  */
 package quickbooksync;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,13 +20,14 @@ import org.apache.log4j.Logger;
 public class RetrieveInvoice {
     static Logger log = Logger.getLogger(RetrieveInvoice.class.getName());
     
-    public List<QBInvoice> retrieveInvoice(Config config) throws SQLException, ClassNotFoundException
-   {
+    public List<QBInvoice> retrieveInvoice(Config config) 
+   {List<QBInvoice> invoice = new ArrayList<>();
    //connect to DB
        //select * from invoicelineitem in QB and create the QBInvoices list
+       try{
         DBconnection connectQB = new DBconnection();
         connectQB.createconnQB(config);
-        List<QBInvoice> invoice = new ArrayList<>();
+        
         
         ResultSet rs = connectQB.statementQB.executeQuery("Select * from InvoiceLineItems");
         
@@ -47,17 +50,23 @@ public class RetrieveInvoice {
            
         invoice.add(x);
         
+        }}catch (SQLException ex) {
+            
+            StringWriter errors = new StringWriter();
+ex.printStackTrace(new PrintWriter(errors));
+log.error(ex+errors.toString());
         }
         return invoice;
         
    }
- public List<RWCharge> retrieveCharge(Config config) throws SQLException, ClassNotFoundException
-   {
+ public List<RWCharge> retrieveCharge(Config config)
+   {List<RWCharge> charge = new ArrayList<>();
    //connect to DB
        //select * from charges in RW and create the RWCharge list
+       try{
        DBconnection connectRW = new DBconnection();
         connectRW.createconnRW(config);
-        List<RWCharge> charge = new ArrayList<>();
+        
         
         ResultSet rs = connectRW.statementRW.executeQuery("Select * from \"public\".\"Charges\"");
         
@@ -79,6 +88,11 @@ public class RetrieveInvoice {
            
         charge.add(x);
         
+        }}catch (SQLException ex) {
+            
+            StringWriter errors = new StringWriter();
+ex.printStackTrace(new PrintWriter(errors));
+log.error(ex+errors.toString());
         }
         return charge;
    }
