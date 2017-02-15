@@ -185,9 +185,9 @@ List <QBCustomer> allcustomer= new ArrayList<>();
 Config config = new Config();
 GetConfig get = new GetConfig();
 config = get.getConfig();
-allcustomer = l.getCustomer(config);
+allcustomer = l.getCustomer();
 List <RWFamily> allfamily= new ArrayList<>();
-allfamily = l.getFamily(config);
+allfamily = l.getFamily();
 mv.addObject("allcustomer", allcustomer);
 mv.addObject("allfamily", allfamily);
 
