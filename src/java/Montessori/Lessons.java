@@ -15,8 +15,43 @@ public class Lessons {
     
     private int id;
     private String name;
-    private Date start;
-    private Date finish;
+    private String start;
+    private String finish;
+    private boolean template;
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public String getFinish() {
+        return finish;
+    }
+
+    public void setFinish(String finish) {
+        this.finish = finish;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+    private String date;
+
+    public boolean isTemplate() {
+        return template;
+    }
+
+    public void setTemplate(boolean template) {
+        this.template = template;
+    }
+    
 
     public int getId() {
         return id;
@@ -34,21 +69,7 @@ public class Lessons {
         this.name = name;
     }
 
-    public Date getStart() {
-        return start;
-    }
-
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
-    public Date getFinish() {
-        return finish;
-    }
-
-    public void setFinish(Date finish) {
-        this.finish = finish;
-    }
+   
     
     
 }
