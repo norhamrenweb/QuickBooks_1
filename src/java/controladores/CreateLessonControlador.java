@@ -49,6 +49,7 @@ public class CreateLessonControlador extends MultiActionController{
         Statement st = this.cn.createStatement();
         ResultSet rs = st.executeQuery("SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels");
         List <String> grades = new ArrayList();
+        grades.add("Select level");
         while(rs.next())
         {
         grades.add(rs.getString("GradeLevel"));
@@ -57,25 +58,25 @@ public class CreateLessonControlador extends MultiActionController{
         
         return mv;
     }
-    public ModelAndView levellist(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
-        ModelAndView mv = new ModelAndView("createlesson");
-       
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-         Statement st = this.cn.createStatement();
-         ResultSet rs = st.executeQuery("SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels");
-         List <String> grades = new ArrayList();
-         while(rs.next())
-         {
-         grades.add(rs.getString("GradeLevel"));
-         }
-        mv.addObject("gradelevels", grades);
-       
-        
-        return mv;
-    }
+//    public ModelAndView levellist(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+//        
+//        ModelAndView mv = new ModelAndView("createlesson");
+//       
+//         DriverManagerDataSource dataSource;
+//        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+//        this.cn = dataSource.getConnection();
+//         Statement st = this.cn.createStatement();
+//         ResultSet rs = st.executeQuery("SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels");
+//         List <String> grades = new ArrayList();
+//         while(rs.next())
+//         {
+//         grades.add(rs.getString("GradeLevel"));
+//         }
+//        mv.addObject("gradelevels", grades);
+//       
+//        
+//        return mv;
+//    }
     public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
@@ -114,7 +115,8 @@ public class CreateLessonControlador extends MultiActionController{
              this.cn = dataSource.getConnection();
              st = this.cn.createStatement();
           ResultSet rs1 = st.executeQuery("select nombre_subject from subject where id_level="+levelid);
-           while (rs1.next())
+           subjects.add("Select Subject");
+          while (rs1.next())
             {
                 subjects.add(rs1.getString("nombre_subject"));
             }
@@ -123,11 +125,88 @@ public class CreateLessonControlador extends MultiActionController{
             System.out.println("Error leyendo Subjects: " + ex);
         }
         
-      
-         mv.addObject("subjects",subjects );
+        
+         mv.addObject("subjects", subjects);
         
         return mv;
     }
+    
+    public ModelAndView subsectionlistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("createlesson");
+        List<String> subsections = new ArrayList<>();
+       try {
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        
+        
+            
+             Statement st = this.cn.createStatement();
+             int subjectid = 0;
+            String consulta = "SELECT id FROM public.subject where nombre_subject ='"+hsr.getParameter("seleccion2")+"'";
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                subjectid = rs.getInt("id");
+            }
+            
+          ResultSet rs1 = st.executeQuery("select nombre_sub_section from subsection where id_subject="+subjectid);
+          subsections.add("Select Subsection");
+           while (rs1.next())
+            {
+                subsections.add(rs1.getString("nombre_sub_section"));
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Subsections: " + ex);
+        }
+        
+      
+         mv.addObject("subsections", subsections);
+        
+        return mv;
+    }
+    
+    public ModelAndView equipmentlistSubsection(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("createlesson");
+        List<String> equipments = new ArrayList<>();
+       try {
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        
+        
+            
+             Statement st = this.cn.createStatement();
+             int subsectionid = 0;
+            String consulta = "SELECT id_subsection FROM public.subsection where nombre_sub_section ='"+hsr.getParameter("seleccion3")+"'";
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                subsectionid = rs.getInt("id_subsection");
+            }
+            
+          ResultSet rs1 = st.executeQuery("select nombre_activity_equipment from activity_equipment where id_subsection="+subsectionid);
+          
+           while (rs1.next())
+            {
+                equipments.add(rs1.getString("nombre_activity_equipment"));
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo equipments: " + ex);
+        }
+        
+      
+         mv.addObject("equipments", equipments);
+        
+        return mv;
+    }   
+    
     public ArrayList<Students> getStudents() throws SQLException
     {
 //        this.conectarOracle();
@@ -162,11 +241,12 @@ public class CreateLessonControlador extends MultiActionController{
      public ArrayList<Students> getStudentslevel(String grade) throws SQLException
     {
 //        this.conectarOracle();
+         if(!grade.equals("Select level")){
         ArrayList<Students> listaAlumnos = new ArrayList<>();
         try {
             
              Statement st = this.cn.createStatement();
-             
+           
             String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel ='"+grade+"'";
             ResultSet rs = st.executeQuery(consulta);
           
@@ -188,7 +268,9 @@ public class CreateLessonControlador extends MultiActionController{
             System.out.println("Error leyendo Alumnos: " + ex);
         }
        
-        return listaAlumnos;
+        return listaAlumnos;}
+         else{ return this.getStudents();}
+         
     }
      public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
@@ -207,78 +289,7 @@ public class CreateLessonControlador extends MultiActionController{
         return mv;
     }
 
-public ModelAndView subsectionlistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
-        ModelAndView mv = new ModelAndView("createlesson");
-        List<String> subsections = new ArrayList<>();
-       try {
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-        
-            
-             Statement st = this.cn.createStatement();
-             int subjectid = 0;
-            String consulta = "SELECT id FROM public.subject where nombre_subject ='"+hsr.getParameter("seleccion2")+"'";
-            ResultSet rs = st.executeQuery(consulta);
-          
-            while (rs.next())
-            {
-                subjectid = rs.getInt("id");
-            }
-            
-          ResultSet rs1 = st.executeQuery("select nombre_sub_section from subsection where id_subject="+subjectid);
-           while (rs1.next())
-            {
-                subsections.add(rs1.getString("nombre_sub_section"));
-            }
-            
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Subsections: " + ex);
-        }
-        
-      
-         mv.addObject("subsections",subsections );
-        
-        return mv;
-    }
- public ModelAndView equipmentlistSubsection(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
-        ModelAndView mv = new ModelAndView("createlesson");
-        List<String> equipments = new ArrayList<>();
-       try {
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-        
-            
-             Statement st = this.cn.createStatement();
-             int subsectionid = 0;
-            String consulta = "SELECT id_subsection FROM public.subsection where nombre_sub_section ='"+hsr.getParameter("seleccion3")+"'";
-            ResultSet rs = st.executeQuery(consulta);
-          
-            while (rs.next())
-            {
-                subsectionid = rs.getInt("id_subsection");
-            }
-            
-          ResultSet rs1 = st.executeQuery("select nombre_activity_equipment from activity_equipment where id_subsection="+subsectionid);
-           while (rs1.next())
-            {
-                equipments.add(rs1.getString("nombre_activity_equipment"));
-            }
-            
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo equipments: " + ex);
-        }
-        
-      
-         mv.addObject("equipments",equipments );
-        
-        return mv;
-    }     
+  
 }
 
 
