@@ -45,9 +45,9 @@ public class MappingFamilies extends MultiActionController{
 GetConfig get = new GetConfig();
 config = get.getConfig();
         Getcusts getlist = new Getcusts();
-        List<QBCustomer> cust = getlist.getCustomer(config);
+        List<QBCustomer> cust = getlist.getCustomer();
         mv.addObject("QBcust",cust);
-        List<RWFamily> family = getlist.getFamily(config);
+        List<RWFamily> family = getlist.getFamily();
          mv.addObject("RWfamily",family);
         return mv;
     }

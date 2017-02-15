@@ -53,7 +53,7 @@ public class InvoiceSync {
             {for(RWCharge u : allcharge){
                 QBInvoice n = new QBInvoice();
                 QBCustomer cust = new QBCustomer();
-                MappingTable family = new MappingTable();
+                MappingTable family = new MappingTable(config);
                 cust.setId(family.checkmappingrw(u.getrwFamily().getId()));
                 Item item = new Item();
               
@@ -171,7 +171,7 @@ public class InvoiceSync {
                     {
                         QBInvoice n = new QBInvoice();
                         QBCustomer cust = new QBCustomer();
-                    MappingTable family = new MappingTable();
+                    MappingTable family = new MappingTable(config);
                 cust.setId(family.checkmappingrw(y3.getrwFamily().getId()));
                         Item item = new Item();
                         // hard coded till we figurs out how it will get this input
@@ -219,7 +219,7 @@ public class InvoiceSync {
             discount.addDiscounts(discountlist,config);
             logdb.updateinvoicelog(addlist,"addDiscount");
             }
-        } catch (SQLException | ClassNotFoundException | ParserConfigurationException | TransformerException | SAXException | IOException | ParseException ex) {
+        } catch (SQLException | ClassNotFoundException | ParserConfigurationException | TransformerException | SAXException | IOException ex) {
             
             StringWriter errors = new StringWriter();
 ex.printStackTrace(new PrintWriter(errors));

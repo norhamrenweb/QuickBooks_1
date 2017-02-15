@@ -58,7 +58,7 @@ public class PaymentSync {
             {for(RWPayment u : allrwpayment){
                 QBPayment n = new QBPayment();
                 QBCustomer cust = new QBCustomer();
-                MappingTable family = new MappingTable();
+                MappingTable family = new MappingTable(config);
                 cust.setId(family.checkmappingrw(u.getrwFamily().getId()));
                 n.setMemo(u.getDescription());
               n.setappliedTo(pc.getAppliedtoRefID(u.getpaymentId(),config));
@@ -160,7 +160,7 @@ public class PaymentSync {
                     {
                         QBPayment n = new QBPayment();
                         QBCustomer cust = new QBCustomer();
-                    MappingTable family = new MappingTable();
+                    MappingTable family = new MappingTable(config);
                 cust.setId(family.checkmappingrw(y3.getrwFamily().getId()));
                         //Item item = new Item();
                         // hard coded till we figurs out how it will get this input
@@ -195,7 +195,7 @@ public class PaymentSync {
                 logdb.updatepaymentlog(addlist,"addition");
             }
            
-        } catch (SQLException | ClassNotFoundException | ParserConfigurationException | TransformerException | SAXException | IOException | ParseException ex) {
+        } catch (SQLException | ClassNotFoundException | ParserConfigurationException | TransformerException | SAXException | IOException ex) {
             
             StringWriter errors = new StringWriter();
 ex.printStackTrace(new PrintWriter(errors));

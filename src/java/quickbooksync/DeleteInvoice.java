@@ -5,10 +5,17 @@
  */
 package quickbooksync;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -16,8 +23,10 @@ import org.apache.log4j.Logger;
  */
 public class DeleteInvoice {
     static Logger log = Logger.getLogger(DeleteInvoice.class.getName());
-    public void deleteinvoice (List<QBInvoice> deletelist,Config config) throws SQLException, ClassNotFoundException
+    public void deleteinvoice (List<QBInvoice> deletelist,Config config)
     {
+        try
+        {
        DBconnection connectQB = new DBconnection();
         connectQB.createconnQB(config);
         
@@ -28,7 +37,12 @@ public class DeleteInvoice {
     connectQB.statementQB.executeUpdate("Delete From Invoices where ID = '"+ y.getinvoiceId()+"'");
         
     }
-
+}catch (SQLException ex) {
+            
+            StringWriter errors = new StringWriter();
+ex.printStackTrace(new PrintWriter(errors));
+log.error(ex+errors.toString());
+        }
     }
     
 }

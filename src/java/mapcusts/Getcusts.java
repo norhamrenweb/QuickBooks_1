@@ -26,8 +26,11 @@ public class Getcusts {
     
     
     
-    public List<QBCustomer> getCustomer(Config config) throws SQLException, ClassNotFoundException, IOException
+    public List<QBCustomer> getCustomer() throws SQLException, ClassNotFoundException, IOException
    {
+       Config config = new Config();
+       GetConfig get = new GetConfig();
+       config = get.getConfig();
        
       List <QBCustomer> allcustomer= new ArrayList<>();
 //       File file = new File("C:\\Users\\Public\\config.txt");
@@ -73,7 +76,7 @@ DBconnection connectQB = new DBconnection();
         
         }
        List <QBCustomer> unmappedcustomer= new ArrayList<>(); 
-       MappingTable m = new MappingTable();
+       MappingTable m = new MappingTable(config);
        String result = null;
        for (QBCustomer x : allcustomer) {
        result = m.checkmappingqb(x.getId());
@@ -85,8 +88,11 @@ DBconnection connectQB = new DBconnection();
                }
             return unmappedcustomer;
             }
-      public List<RWFamily> getFamily(Config config) throws SQLException, ClassNotFoundException, IOException
+      public List<RWFamily> getFamily() throws SQLException, ClassNotFoundException, IOException
    {
+       Config config = new Config();
+       GetConfig get = new GetConfig();
+       config = get.getConfig();
       List <RWFamily> allfamily= new ArrayList<>();
 //       File file = new File("C:\\Users\\Public\\config.txt");
 //		FileInputStream fis = null;
@@ -130,7 +136,7 @@ DBconnection connectQB = new DBconnection();
         
         }
             List <RWFamily> unmappedfamily= new ArrayList<>(); 
-       MappingTable m = new MappingTable();
+       MappingTable m = new MappingTable(config);
        String result = null;
        for (RWFamily x : allfamily) {
        result = m.checkmappingrw(x.getId());

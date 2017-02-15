@@ -40,7 +40,7 @@ public class CustomerSync {
             //-----------------------------------------------------------------------
             //Compare families and add new families in a list
             List <QBCustomer> newcustomer= new ArrayList<>();
-            MappingTable map = new MappingTable();
+            MappingTable map = new MappingTable(config);
             
             for (RWFamily y : allfamily) {
                 String result = "";

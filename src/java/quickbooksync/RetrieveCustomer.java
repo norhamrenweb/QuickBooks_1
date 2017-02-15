@@ -5,6 +5,8 @@
  */
 package quickbooksync;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,13 +20,14 @@ import org.apache.log4j.Logger;
 public class RetrieveCustomer {
     
     static Logger log = Logger.getLogger(RetrieveCustomer.class.getName());
-   public List<QBCustomer> retrieveCustomer(Config config) throws SQLException, ClassNotFoundException
-   {
+   public List<QBCustomer> retrieveCustomer(Config config)
+   {List<QBCustomer> customer = new ArrayList<>();
    //connect to DB
        //select * from customers in QB and create the QBCustomer list
+       try{
        DBconnection connectQB = new DBconnection();
         connectQB.createconnQB(config);
-        List<QBCustomer> customer = new ArrayList<>();
+        
         
         ResultSet rs = connectQB.statementQB.executeQuery("Select * from Customers");
         
@@ -37,17 +40,23 @@ public class RetrieveCustomer {
            x.setName("Name");
         customer.add(x);
         
+        }}catch (SQLException ex) {
+            
+            StringWriter errors = new StringWriter();
+ex.printStackTrace(new PrintWriter(errors));
+log.error(ex+errors.toString());
         }
         return customer;
         
    }
- public List<RWFamily> retrieveFamily(Config config) throws SQLException, ClassNotFoundException
-   {
+ public List<RWFamily> retrieveFamily(Config config)
+   {List<RWFamily> family = new ArrayList<>();
    //connect to DB
        //select * from Family in RW and create the RWFamily list
+       try{
        DBconnection connectRW = new DBconnection();
         connectRW.createconnRW(config);
-        List<RWFamily> family = new ArrayList<>();
+       
         
         ResultSet rs;
        rs = connectRW.statementRW.executeQuery("Select * from public.family");//228. FamilyConfig table in renweb
@@ -61,6 +70,11 @@ public class RetrieveCustomer {
            
         family.add(x);
         
+        }}catch (SQLException ex) {
+            
+            StringWriter errors = new StringWriter();
+ex.printStackTrace(new PrintWriter(errors));
+log.error(ex+errors.toString());
         }
         return family;
    }
