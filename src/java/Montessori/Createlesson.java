@@ -9,10 +9,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import quickbooksync.QBInvoice;
 
 /**
  *
@@ -40,15 +42,15 @@ public class Createlesson {
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
-    public void newlesson(String[] studentIds,String args) throws SQLException
+    public void newlesson(String[] studentIds,Lessons newlessons) throws SQLException
     { int lessonid=0;
     DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-       st.executeUpdate("insert into lessons(nombre_lessons) values (' "+args+"')");
+       st.executeUpdate("insert into lessons(nombre_lessons) values (' "+newlessons.getName()+"')");
        
-            ResultSet rs = st.executeQuery("select id_lessons from lessons where nombre_lessons =' "+args+"'");
+            ResultSet rs = st.executeQuery("select id_lessons from lessons where nombre_lessons =' "+newlessons.getName()+"'");
             while(rs.next())
             {
             lessonid = rs.getInt("id_lessons");
