@@ -33,32 +33,36 @@
        var myDate = new Date();
          //Muestra calendario
   
-        $('#datetimepickerinicio').datetimepicker({
+        $('#fecha').datetimepicker({
             
-            format: 'DD-MM-YYYY HH:mm',
+            format: 'DD-MM-YYYY',
             locale: userLang.valueOf(),
             daysOfWeekDisabled: [0, 6],
-            useCurrent: false,//Important! See issue #1075
+            useCurrent: false//Important! See issue #1075
             //defaultDate: '08:32:33',
-            enabledHours: [8,9,10,11,12,13,14,15,16],
-            sideBySide: true,
-            stepping: 5
+
   
         });
-        $('#datetimepickerfin').datetimepicker({
-            
-            format: 'DD-MM-YYYY HH:mm',
+         $('#horainicio').datetimepicker({
+            format: 'HH:mm',
             locale: userLang.valueOf(),
-            daysOfWeekDisabled: [0, 6],
-            useCurrent: false //Important! See issue #1075
+            useCurrent: false, //Important! See issue #1075
+            stepping: 5
+        });
+        $('#horafin').datetimepicker({
+            
+            format: 'HH:mm',
+            locale: userLang.valueOf(),
+            useCurrent: false, //Important! See issue #1075
+            stepping: 5
         });
         
-        $("#datetimepickerinicio").on("dp.change", function (e) {
-            $('#datetimepickerfin').data("DateTimePicker").minDate(e.date);
+        $("#horainicio").on("dp.change", function (e) {
+            $('#horafin').data("DateTimePicker").minDate(e.date);
         });
         
-        $("#datetimepickerfin").on("dp.change", function (e) {
-            $('#datetimepickerinicio').data("DateTimePicker").maxDate(e.date);
+        $("#horafin").on("dp.change", function (e) {
+            $('#horainicio').data("DateTimePicker").maxDate(e.date);
         });
         
     
@@ -75,8 +79,6 @@
 //      		o.preventDefault();
 //      		$('body').removeClass('nav-expanded');
 //      	});
- 
-     
     });            
             
         $().ready(function() 
@@ -92,8 +94,8 @@
         
  function funcionCallBackLevelStudent()
     {
-           if (ajax.readyState==4){
-                if (ajax.status==200){
+           if (ajax.readyState===4){
+                if (ajax.status===200){
                     document.getElementById("origen").innerHTML= ajax.responseText;
                     }
                 }
@@ -112,38 +114,37 @@
         }
         
         ajax.onreadystatechange=funcionCallBackLevelStudent;
-        var seleccion = document.getElementById("level").value;
+        var seleccion = document.getElementById("levelStudent").value;
         var alumnos = document.getElementById("destino").innerHTML;
         ajax.open("POST","createlesson.htm?select=studentlistLevel&seleccion="+seleccion,true);
         ajax.send("");
     }
+    
      function funcionCallBackSubject()
     {
-           if (ajax.readyState==4){
-                if (ajax.status==200){
-                    document.getElementById("idsubjects").innerHTML= ajax.responseText;
-                    //document.getElementById("idequipment").innerHTML= "<option value=\"0\"><spring:message code="etiq.selectequipment"/></option>"
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                    document.getElementById("subject").innerHTML= ajax.responseText;
                     }
                 }
             }
-//    
-//    function comboSelectionSubject()
-//    {
-//        if (window.XMLHttpRequest) //mozilla
-//       {
-//            ajax = new XMLHttpRequest(); //No Internet explorer
-//        }
-//        else
-//        {
-//            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-//        }
-//
-//        $('#createOnClick').attr('disabled', true);
-//        ajax.onreadystatechange=funcionCallBackSubject;
-//        var seleccion1 = document.getElementById("idsubjects").value;
-//        ajax.open("GET","createlesson.htm?select=cargalistasubject&seleccion1="+seleccion1,true);
-//        ajax.send("");
-//    } 
+    function funcionCallBackSubsection()
+    {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                    document.getElementById("subsection").innerHTML= ajax.responseText;
+                    }
+                }
+            }
+            
+    function funcionCallBackEquipment()
+    {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                    document.getElementById("equipment").innerHTML= ajax.responseText;
+                    }
+                }
+            }
 
     function comboSelectionLevel()
     {
@@ -158,7 +159,7 @@
 
         $('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange=funcionCallBackSubject;
-        var seleccion1 = document.getElementById("levelsubject").value;
+        var seleccion1 = document.getElementById("level").value;
         ajax.open("POST","createlesson.htm?select=subjectlistLevel&seleccion1="+seleccion1,true);
         ajax.send("");
     }
@@ -174,8 +175,8 @@
         }
 
         $('#createOnClick').attr('disabled', true);
-        ajax.onreadystatechange=funcionCallBackSubject;
-        var seleccion2 = document.getElementById("idsubjects").value;
+        ajax.onreadystatechange=funcionCallBackSubsection;
+        var seleccion2 = document.getElementById("subject").value;
         ajax.open("POST","createlesson.htm?select=subsectionlistSubject&seleccion2="+seleccion2,true);
         ajax.send("");
     }
@@ -190,9 +191,13 @@
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
 
-        $('#createOnClick').attr('disabled', true);
-        ajax.onreadystatechange=funcionCallBackSubject;
-        var seleccion3 = document.getElementById("idsubsection").value;
+        if(document.getElementById("subsection").value === 0){
+            $('#createOnClick').attr('disabled', true);
+        }else{
+            $('#createOnClick').attr('disabled', false);
+        }
+        ajax.onreadystatechange=funcionCallBackEquipment;
+        var seleccion3 = document.getElementById("subsection").value;
         ajax.open("POST","createlesson.htm?select=equipmentlistSubsection&seleccion3="+seleccion3,true);
         ajax.send("");
     }
@@ -216,9 +221,9 @@
 
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="fechainicio"><spring:message code="etiq.txtstartdate"/></label>
-                                <div class='input-group date' id='datetimepickerinicio'>
-                                    <input type='text' name="TXTfechainicio" class="form-control" id="fechainicio" required="required"/>
+                                <label class="control-label" for="fecha"><spring:message code="etiq.txtstartdate"/></label>
+                                <div class='input-group date' id='fecha'>
+                                    <input type='text' name="TXTfecha" class="form-control" id="fecha" required="required"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -228,9 +233,20 @@
 
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="fechafin"><spring:message code="etiq.txtenddate"/></label>
-                                <div class='input-group date' id='datetimepickerfin'>
-                                    <input type='text' name="TXTfechafin" class="form-control" required="required"/>
+                                <label class="control-label" for="horainicio"><spring:message code="etiq.txtenddate"/></label>
+                                <div class='input-group date' id='horainicio'>
+                                    <input type='text' name="TXThorainicio" class="form-control" required="required"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-xs-4'>
+                            <div class="form-group">
+                                <label class="control-label" for="horafin"><spring:message code="etiq.txtenddate"/></label>
+                                <div class='input-group date' id='horafin'>
+                                    <input type='text' name="TXThorafin" class="form-control" required="required"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -243,23 +259,21 @@
             </fieldset>
             <fieldset>
                 <legend>Options Lessons</legend>
-                <div class="col-xs-12 form-group">
-                    <label class="control-label"><spring:message code="etiq.namelessons"/></label>
-                    <input type="text" class="input-sm" name="TXTnombreLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
-                </div>
+                
 
                  <div class="col-xs-3 form-group">
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
-                    <select class="form-control" name="levelsubject" id="levelsubject" onchange="comboSelectionLevel()">
-                        
+                    <select class="form-control" name="level" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="levels" items="${gradelevels}">
                             <option value="${levels}" >${levels}</option>
                         </c:forEach>
                     </select>
+                          
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
-                    <select class="form-control select-subjects" id="idsubjects" name="TXTsubjects" onchange="comboSelectionSubject()">
+                    <select class="form-control" name="subject" id="subject"  onchange="comboSelectionSubject()">
+                    
                        <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject}" >${subject}</option>
                             </c:forEach>
@@ -267,7 +281,7 @@
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
-                    <select class="form-control" id="idsubsection" name="TXTsubsection" >
+                    <select class="form-control" name="subsection" id="subsection" onchange="comboSelectionSubsection()">
                        <c:forEach var="subsection" items="${subsections}">
                                 <option value="${subsection}" >${subsection}</option>
                             </c:forEach>
@@ -275,13 +289,16 @@
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtequipment"/></label>
-                    <select class="form-control" id="equipment" name="TXTequipment" multiple onchange="comboSelectionSubsection()">
-                       <c:forEach var="equipment" items="${equipment}">
+                    <select class="form-control" name="equipment" id="equipment" multiple>
+                       <c:forEach var="equipment" items="${equipments}">
                                 <option value="${equipment}" >${equipment}</option>
                             </c:forEach>
                     </select>
                 </div>
-                    
+                <div class="col-xs-12 form-group hidden">
+                    <label class="control-label"><spring:message code="etiq.namelessons"/></label>
+                    <input type="text" class="input-sm" name="TXTnombreLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
+                </div>    
    
             </fieldset>
             <fieldset>
@@ -296,8 +313,8 @@
                     </div>
                     <div class="col-xs-12">
                         <div class="col-xs-2">
-                            <select class="form-control" name="level" id="level" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
-<!--                                <option selected value="allstudents" >All students</option>-->
+                            <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
+
                                 <c:forEach var="levels" items="${gradelevels}">
                                     <option value="${levels}" >${levels}</option>
                                 </c:forEach>
@@ -335,7 +352,7 @@
                 <div class="col-xs-2"></div>
             </fieldset>
         <div class="col-xs-12 text-center">
-            <input type="submit" class="btn btn-success" value="<spring:message code="etiq.txtcreate"/>">
+            <input type="submit" class="btn btn-success" id="createOnClick" disabled="True" value="<spring:message code="etiq.txtcreate"/>">
         </div>
         </form:form>
         
