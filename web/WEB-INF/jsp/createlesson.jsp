@@ -19,6 +19,7 @@
       
         <link href="recursos/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
         <link href="recursos/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
+        <link href="recursos/css/bootstrap-toggle.css" rel="stylesheet" type="text/css"/>
 
         <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
         
@@ -26,8 +27,12 @@
         <script src="recursos/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
         <script src="recursos/js/es.js" type="text/javascript"></script>
         <script src="recursos/js/ar.js" type="text/javascript"></script>
+        <script src="recursos/js/bootstrap-toggle.js" type="text/javascript"></script>
 
         <script>
+
+
+
  $(document).ready(function(){
        var userLang = navigator.language || navigator.userLanguage;
        var myDate = new Date();
@@ -201,10 +206,14 @@
         ajax.open("POST","createlesson.htm?select=equipmentlistSubsection&seleccion3="+seleccion3,true);
         ajax.send("");
     }
+    
+      $(function() {
+    $('#subject').change(function() {
+      $('#divnombreLessons').removeClass('hidden')
+    })
+  })
         </script>
-        <style>
-            .sep
-        </style>
+
     </head>
     <body>
         
@@ -295,9 +304,19 @@
                             </c:forEach>
                     </select>
                 </div>
-                <div class="col-xs-12 form-group hidden">
+                    <div class="row form-group hidden" id="divnombreLessons">
+                <div class="col-xs-3 center-block">
+                    <label class="control-label">Select template lessons</label>
+                    <select class="form-control" name="lessonsTemplate" id="lessonsTemplate">
+                       <c:forEach var="template" items="${lessonsTemplate}">
+                                <option value="${template}" >${template}</option>
+                            </c:forEach>
+                    </select>
+                </div>
+                <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.namelessons"/></label>
                     <input type="text" class="input-sm" name="TXTnombreLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
+                </div>
                 </div>    
    
             </fieldset>
