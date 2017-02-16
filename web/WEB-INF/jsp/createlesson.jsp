@@ -96,7 +96,7 @@
 	});
         
         var ajax;
-        
+        var ajax1;
  function funcionCallBackLevelStudent()
     {
            if (ajax.readyState===4){
@@ -141,6 +141,14 @@
                     }
                 }
             }
+     function funcionCallBackTemplateLessons()
+    {
+           if (ajax1.readyState===4){
+                if (ajax1.status===200){
+                    document.getElementById("lessons").innerHTML= ajax.responseText;
+                    }
+                }
+            }        
             
     function funcionCallBackEquipment()
     {
@@ -179,11 +187,32 @@
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
 
-        $('#createOnClick').attr('disabled', true);
+        
         ajax.onreadystatechange=funcionCallBackSubsection;
         var seleccion2 = document.getElementById("subject").value;
         ajax.open("POST","createlesson.htm?select=subsectionlistSubject&seleccion2="+seleccion2,true);
+
         ajax.send("");
+        
+    }
+   
+    function comboSelectionTemplateLessons()
+    {
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax1 = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax1 = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        
+        ajax1.onreadystatechange=funcionCallBackTemplateLessons;
+        var seleccionTemplate = document.getElementById("subject").value;
+        ajax1.open("POST","createlesson.htm?select=namelistSubject&seleccionTemplate="+seleccionTemplate,true);
+
+        ajax1.send("");
     }
      function comboSelectionSubsection()
     {
@@ -207,11 +236,31 @@
         ajax.send("");
     }
     
-      $(function() {
-    $('#subject').change(function() {
-      $('#divnombreLessons').removeClass('hidden')
-    })
-  })
+//$(function() {
+//$('#subject').change(function() {
+//$('#divnombreLessons').removeClass('hidden');
+//      
+//        if (window.XMLHttpRequest) //mozilla
+//        {
+//            ajax = new XMLHttpRequest(); //No Internet explorer
+//        }
+//        else
+//        {
+//            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+//        }
+//
+//        $('#createOnClick').attr('disabled', true);
+//        ajax.onreadystatechange=funcionCallBackSubsection;
+//        ajax.onreadystatechange=funcionCallBackTemplateLessons;
+//        var seleccion2 = document.getElementById("subject").value;
+//        ajax.open("GET","createlesson.htm?select=subsectionlistSubject&seleccion2="+seleccion2,true);
+//
+//        ajax.open("GET","createlesson.htm?select=namelistSubject&seleccion2="+seleccion2,true);
+//
+//        ajax.send("");
+//    
+//    })
+//})
         </script>
 
     </head>
@@ -281,7 +330,7 @@
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
-                    <select class="form-control" name="subject" id="subject"  onchange="comboSelectionSubject()">
+                    <select class="form-control" name="subject" id="subject"  onchange="comboSelectionSubject();comboSelectionTemplateLessons();">
                     
                        <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject}" >${subject}</option>
@@ -304,11 +353,13 @@
                             </c:forEach>
                     </select>
                 </div>
-                    <div class="row form-group hidden" id="divnombreLessons">
+                    <div class="row form-group" id="divnombreLessons">
                 <div class="col-xs-3 center-block">
                     <label class="control-label">Select template lessons</label>
-                    <select class="form-control" name="lessonsTemplate" id="lessonsTemplate">
-                       <c:forEach var="template" items="${lessonsTemplate}">
+                    
+                    <select class="form-control" name="lessons" id="lessons">
+                       
+                       <c:forEach var="template" items="${lessons}">
                                 <option value="${template}" >${template}</option>
                             </c:forEach>
                     </select>
