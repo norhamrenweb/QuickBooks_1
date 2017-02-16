@@ -143,8 +143,8 @@
             }
      function funcionCallBackTemplateLessons()
     {
-           if (ajax1.readyState===4){
-                if (ajax1.status===200){
+           if (ajax.readyState===4){
+                if (ajax.status===200){
                     document.getElementById("lessons").innerHTML= ajax.responseText;
                     }
                 }
@@ -200,19 +200,19 @@
     {
         if (window.XMLHttpRequest) //mozilla
         {
-            ajax1 = new XMLHttpRequest(); //No Internet explorer
+            ajax = new XMLHttpRequest(); //No Internet explorer
         }
         else
         {
-            ajax1 = new ActiveXObject("Microsoft.XMLHTTP");
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
 
         
-        ajax1.onreadystatechange=funcionCallBackTemplateLessons;
+        ajax.onreadystatechange=funcionCallBackTemplateLessons;
         var seleccionTemplate = document.getElementById("subject").value;
-        ajax1.open("POST","createlesson.htm?select=namelistSubject&seleccionTemplate="+seleccionTemplate,true);
+        ajax.open("POST","createlesson.htm?select=namelistSubject&seleccionTemplate="+seleccionTemplate,true);
 
-        ajax1.send("");
+        ajax.send("");
     }
      function comboSelectionSubsection()
     {
@@ -236,9 +236,9 @@
         ajax.send("");
     }
     
-//$(function() {
-//$('#subject').change(function() {
-//$('#divnombreLessons').removeClass('hidden');
+$(function() {
+$('#subject').change(function() {
+$('#divnombreLessons').removeClass('hidden');
 //      
 //        if (window.XMLHttpRequest) //mozilla
 //        {
@@ -259,8 +259,8 @@
 //
 //        ajax.send("");
 //    
-//    })
-//})
+    })
+})
         </script>
 
     </head>
@@ -330,7 +330,7 @@
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
-                    <select class="form-control" name="subject" id="subject"  onchange="comboSelectionSubject();comboSelectionTemplateLessons();">
+                    <select class="form-control" name="subject" id="subject"  onchange="comboSelectionSubject()">
                     
                        <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject}" >${subject}</option>
@@ -353,7 +353,8 @@
                             </c:forEach>
                     </select>
                 </div>
-                    <div class="row form-group" id="divnombreLessons">
+                <div class="row form-group hidden" id="divnombreLessons">
+                    <input type="button" id="VerTemplates" value="Ver Templates" onclick="comboSelectionTemplateLessons()">
                 <div class="col-xs-3 center-block">
                     <label class="control-label">Select template lessons</label>
                     
