@@ -163,8 +163,8 @@ public class CreateLessonControlador extends MultiActionController{
             System.out.println("Error leyendo Subsections: " + ex);
         }
         
-      
-         mv.addObject("subsections", subsections);
+        mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
+        mv.addObject("subsections", subsections);
         
         return mv;
     }
@@ -281,10 +281,14 @@ public class CreateLessonControlador extends MultiActionController{
         
        String[] studentIds = hsr.getParameterValues("destino[]");
        Lessons newlesson = new Lessons();
-       newlesson.setName(hsr.getParameter("TXTnombreLessons")); 
-       newlesson.setStart(hsr.getParameter("TXThorainicio"));
+       newlesson.setName(hsr.getParameter("TXTnombreLessons"));
        newlesson.setDate(hsr.getParameter("TXTfecha"));
-       newlesson.setFinish(hsr.getParameter("horafin"));
+       newlesson.setStart(hsr.getParameter("TXThorainicio"));
+       newlesson.setFinish(hsr.getParameter("TXThorafin"));
+       newlesson.setLevel(hsr.getParameter("TXTlevel"));
+       newlesson.setSubject(hsr.getParameter("TXTsubject"));
+       newlesson.setSubsection(hsr.getParameter("TXTsubsection"));
+       newlesson.setEquipment(hsr.getParameter("TXTequipment"));
        newlesson.setTemplate(false);
        
        Createlesson c = new Createlesson(hsr.getServletContext());
@@ -309,7 +313,7 @@ public class CreateLessonControlador extends MultiActionController{
             
              Statement st = this.cn.createStatement();
              int subjectid = 0;
-            String consulta = "SELECT id FROM public.subject where nombre_subject ='"+hsr.getParameter("seleccion2")+"'";
+            String consulta = "SELECT id FROM public.subject where nombre_subject ='"+hsr.getParameter("seleccionTemplate")+"'";
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
@@ -317,7 +321,7 @@ public class CreateLessonControlador extends MultiActionController{
                 subjectid = rs.getInt("id");
             }
             
-          ResultSet rs1 = st.executeQuery("select nombre_lessons from lessons where id_subject="+subjectid+" & template = true");
+          ResultSet rs1 = st.executeQuery("select nombre_lessons from lessons where id_subject= "+subjectid+" and template = true");
           lessons.add("Select lesson name");
            while (rs1.next())
             {

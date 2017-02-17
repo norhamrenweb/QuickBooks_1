@@ -70,7 +70,7 @@
             $('#horainicio').data("DateTimePicker").maxDate(e.date);
         });
         
-    
+
 //       //Menu lateral
 //        $('#nav-expander').on('click',function(e){
 //      		e.preventDefault();
@@ -143,8 +143,8 @@
             }
      function funcionCallBackTemplateLessons()
     {
-           if (ajax1.readyState===4){
-                if (ajax1.status===200){
+           if (ajax.readyState===4){
+                if (ajax.status===200){
                     document.getElementById("lessons").innerHTML= ajax.responseText;
                     }
                 }
@@ -200,19 +200,18 @@
     {
         if (window.XMLHttpRequest) //mozilla
         {
-            ajax1 = new XMLHttpRequest(); //No Internet explorer
+            ajax = new XMLHttpRequest(); //No Internet explorer
         }
         else
         {
-            ajax1 = new ActiveXObject("Microsoft.XMLHTTP");
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-
         
-        ajax1.onreadystatechange=funcionCallBackTemplateLessons;
+        
+        ajax.onreadystatechange=funcionCallBackTemplateLessons;
         var seleccionTemplate = document.getElementById("subject").value;
-        ajax1.open("POST","createlesson.htm?select=namelistSubject&seleccionTemplate="+seleccionTemplate,true);
-
-        ajax1.send("");
+        ajax.open("POST","createlesson.htm?select=namelistSubject&seleccionTemplate="+seleccionTemplate,true);
+        ajax.send("");
     }
      function comboSelectionSubsection()
     {
@@ -236,33 +235,25 @@
         ajax.send("");
     }
     
-//$(function() {
-//$('#subject').change(function() {
-//$('#divnombreLessons').removeClass('hidden');
-//      
-//        if (window.XMLHttpRequest) //mozilla
-//        {
-//            ajax = new XMLHttpRequest(); //No Internet explorer
-//        }
-//        else
-//        {
-//            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-//        }
-//
-//        $('#createOnClick').attr('disabled', true);
-//        ajax.onreadystatechange=funcionCallBackSubsection;
-//        ajax.onreadystatechange=funcionCallBackTemplateLessons;
-//        var seleccion2 = document.getElementById("subject").value;
-//        ajax.open("GET","createlesson.htm?select=subsectionlistSubject&seleccion2="+seleccion2,true);
-//
-//        ajax.open("GET","createlesson.htm?select=namelistSubject&seleccion2="+seleccion2,true);
-//
-//        ajax.send("");
-//    
-//    })
-//})
+$(function() {
+    $('#subject').change(function() {
+        $('#divnombreLessons').removeClass('hidden');
+    })
+    
+    $('#LoadTemplates').change(function() {
+         if (this.checked) {
+    $("#lessons").attr("disabled",false);
+    $("#NameLessons").attr("disabled", true);
+    } else {
+    $("#lessons").attr("disabled", true);
+    $("#NameLessons").attr("disabled", false);
+    }
+    })
+})
         </script>
-
+<script>
+ 
+</script>
     </head>
     <body>
         
@@ -319,9 +310,9 @@
                 <legend>Options Lessons</legend>
                 
 
-                 <div class="col-xs-3 form-group">
+                <div class="col-xs-3 form-group">
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
-                    <select class="form-control" name="level" id="level" onchange="comboSelectionLevel()">
+                    <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="levels" items="${gradelevels}">
                             <option value="${levels}" >${levels}</option>
                         </c:forEach>
@@ -330,7 +321,7 @@
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
-                    <select class="form-control" name="subject" id="subject"  onchange="comboSelectionSubject();comboSelectionTemplateLessons();">
+                    <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
                     
                        <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject}" >${subject}</option>
@@ -339,7 +330,7 @@
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
-                    <select class="form-control" name="subsection" id="subsection" onchange="comboSelectionSubsection()">
+                    <select class="form-control" name="TXTsubsection" id="subsection" onchange="comboSelectionSubsection()">
                        <c:forEach var="subsection" items="${subsections}">
                                 <option value="${subsection}" >${subsection}</option>
                             </c:forEach>
@@ -347,27 +338,29 @@
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtequipment"/></label>
-                    <select class="form-control" name="equipment" id="equipment" multiple>
+                    <select class="form-control" name="TXTequipment" id="equipment" multiple>
                        <c:forEach var="equipment" items="${equipments}">
                                 <option value="${equipment}" >${equipment}</option>
                             </c:forEach>
                     </select>
                 </div>
-                    <div class="row form-group" id="divnombreLessons">
-                <div class="col-xs-3 center-block">
-                    <label class="control-label">Select template lessons</label>
-                    
-                    <select class="form-control" name="lessons" id="lessons">
-                       
-                       <c:forEach var="template" items="${lessons}">
-                                <option value="${template}" >${template}</option>
-                            </c:forEach>
-                    </select>
-                </div>
-                <div class="col-xs-3 center-block">
-                    <label class="control-label"><spring:message code="etiq.namelessons"/></label>
-                    <input type="text" class="input-sm" name="TXTnombreLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
-                </div>
+                <div class="row form-group hidden" id="divnombreLessons">
+                    <div class="col-xs-3 center-block">
+                        <label class="control-label"><spring:message code="etiq.namelessons"/></label>
+                        <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
+                    </div>
+                    <div class="col-xs-3 center-block text-center">
+                        <label class="control-label">Select your option</label>
+                        <input type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-off="Load Lessons" data-on="Create Lessons"  id="LoadTemplates" value="Load templates" onchange="comboSelectionTemplateLessons()">
+                    </div>
+                    <div class="col-xs-3 center-block">
+                        <label class="control-label">Select template lessons</label>
+                        <select class="form-control" disabled="true" name="lessons" id="lessons">
+                           <c:forEach var="template" items="${lessons}">
+                                    <option value="${template}" >${template}</option>
+                                </c:forEach>
+                        </select>
+                    </div>
                 </div>    
    
             </fieldset>
