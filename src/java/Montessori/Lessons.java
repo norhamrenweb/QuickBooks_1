@@ -6,6 +6,7 @@
 package Montessori;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -18,6 +19,44 @@ public class Lessons {
     private String start;
     private String finish;
     private boolean template;
+    private Level level;
+    private Subsection subsection;
+    private Subject subject;
+    private String[] equipmentid;
+
+    public String[] getEquipmentid() {
+        return equipmentid;
+    }
+
+    public void setEquipmentid(String[] equipmentid) {
+        this.equipmentid = equipmentid;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
+
+    public Subsection getSubsection() {
+        return subsection;
+    }
+
+    public void setSubsection(Subsection subsection) {
+        this.subsection = subsection;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+   
 
     public String getStart() {
         return start;

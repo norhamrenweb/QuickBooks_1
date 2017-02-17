@@ -5,9 +5,11 @@
  */
 package Montessori;
 
-
-public class Equipment {
-    
+/**
+ *
+ * @author nmohamed
+ */
+public class Subsection {
     private String[] id;
     private String name;
 
@@ -27,6 +29,4 @@ public class Equipment {
         this.name = name;
     }
     
-         
-   
 }
