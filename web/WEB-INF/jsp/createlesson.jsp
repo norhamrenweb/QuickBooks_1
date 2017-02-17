@@ -196,7 +196,7 @@
         
     }
    
-    function comboSelectionTemplateLessons()
+    function comboSelectionLoadTemplateLessons()
     {
         if (window.XMLHttpRequest) //mozilla
         {
@@ -211,6 +211,23 @@
         ajax.onreadystatechange=funcionCallBackTemplateLessons;
         var seleccionTemplate = document.getElementById("subject").value;
         ajax.open("POST","createlesson.htm?select=namelistSubject&seleccionTemplate="+seleccionTemplate,true);
+        ajax.send("");
+    }
+     function comboSelectionTemplateLessons()
+    {
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+        
+        ajax.onreadystatechange=funcionCallBackTemplateLessons;
+        var seleccionTemplate = document.getElementById("lessons").value;
+        ajax.open("POST","createlesson.htm?select=loadLessonplan&seleccionTemplate="+seleccionTemplate,true);
         ajax.send("");
     }
      function comboSelectionSubsection()
@@ -314,7 +331,7 @@ $(function() {
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="levels" items="${gradelevels}">
-                            <option value="${levels}" >${levels}</option>
+                            <option value="${levels.id}" >${levels.name}</option>
                         </c:forEach>
                     </select>
                           
@@ -324,7 +341,7 @@ $(function() {
                     <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
                     
                        <c:forEach var="subject" items="${subjects}">
-                                <option value="${subject}" >${subject}</option>
+                                <option value="${subject.id}" >${subject.name}</option>
                             </c:forEach>
                     </select>
                 </div>
@@ -332,7 +349,7 @@ $(function() {
                     <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
                     <select class="form-control" name="TXTsubsection" id="subsection" onchange="comboSelectionSubsection()">
                        <c:forEach var="subsection" items="${subsections}">
-                                <option value="${subsection}" >${subsection}</option>
+                                <option value="${subsection.id}" >${subsection.name}</option>
                             </c:forEach>
                     </select>
                 </div>
@@ -340,7 +357,7 @@ $(function() {
                     <label class="control-label"><spring:message code="etiq.txtequipment"/></label>
                     <select class="form-control" name="TXTequipment" id="equipment" multiple>
                        <c:forEach var="equipment" items="${equipments}">
-                                <option value="${equipment}" >${equipment}</option>
+                                <option value="${equipment.id}" >${equipment.name}</option>
                             </c:forEach>
                     </select>
                 </div>
@@ -351,13 +368,13 @@ $(function() {
                     </div>
                     <div class="col-xs-3 center-block text-center">
                         <label class="control-label">Select your option</label>
-                        <input type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-off="Load Lessons" data-on="Create Lessons"  id="LoadTemplates" value="Load templates" onchange="comboSelectionTemplateLessons()">
+                        <input type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-off="Load Lessons" data-on="Create Lessons" name="TXTloadtemplates" id="LoadTemplates" value="Load templates" onchange="comboSelectionLoadTemplateLessons()">
                     </div>
                     <div class="col-xs-3 center-block">
                         <label class="control-label">Select template lessons</label>
-                        <select class="form-control" disabled="true" name="lessons" id="lessons">
+                        <select class="form-control" disabled="true" name="lessons" id="lessons" onchange="comboSelectionTemplateLessons()">
                            <c:forEach var="template" items="${lessons}">
-                                    <option value="${template}" >${template}</option>
+                                    <option value="${template.id}" >${template.name}</option>
                                 </c:forEach>
                         </select>
                     </div>
