@@ -5,8 +5,6 @@
  */
 package Montessori;
 
-import java.util.Date;
-
 /**
  *
  * @author nmohamed
@@ -17,7 +15,47 @@ public class Lessons {
     private String name;
     private String start;
     private String finish;
+    private String date;
     private boolean template;
+    private String level;
+    private String subject;
+    private String subsection;
+    private String[] equipments;
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getSubsection() {
+        return subsection;
+    }
+
+    public void setSubsection(String subsection) {
+        this.subsection = subsection;
+    }
+
+    public String[] getEquipments() {
+        return equipments;
+    }
+
+    public void setEquipments(String[] equipments) {
+        this.equipments = equipments;
+    }
+
+
+
 
     public String getStart() {
         return start;
@@ -42,7 +80,7 @@ public class Lessons {
     public void setDate(String date) {
         this.date = date;
     }
-    private String date;
+    
 
     public boolean isTemplate() {
         return template;
