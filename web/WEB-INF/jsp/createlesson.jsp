@@ -331,7 +331,7 @@ $(function() {
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="levels" items="${gradelevels}">
-                            <option value="${levels.id}" >${levels.name}</option>
+                            <option value="${levels}" >${levels}</option>
                         </c:forEach>
                     </select>
                           
@@ -341,7 +341,7 @@ $(function() {
                     <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
                     
                        <c:forEach var="subject" items="${subjects}">
-                                <option value="${subject.id}" >${subject.name}</option>
+                                <option value="${subject.id[0]}" >${subject.name}</option>
                             </c:forEach>
                     </select>
                 </div>
@@ -349,7 +349,7 @@ $(function() {
                     <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
                     <select class="form-control" name="TXTsubsection" id="subsection" onchange="comboSelectionSubsection()">
                        <c:forEach var="subsection" items="${subsections}">
-                                <option value="${subsection.id}" >${subsection.name}</option>
+                                <option value="${subsection.id[0]}" >${subsection.name}</option>
                             </c:forEach>
                     </select>
                 </div>
@@ -357,7 +357,7 @@ $(function() {
                     <label class="control-label"><spring:message code="etiq.txtequipment"/></label>
                     <select class="form-control" name="TXTequipment" id="equipment" multiple>
                        <c:forEach var="equipment" items="${equipments}">
-                                <option value="${equipment.id}" >${equipment.name}</option>
+                                <option value="${equipment.id[0]}" >${equipment.name}</option>
                             </c:forEach>
                     </select>
                 </div>
