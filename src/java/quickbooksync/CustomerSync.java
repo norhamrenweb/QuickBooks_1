@@ -24,7 +24,7 @@ public class CustomerSync {
      static Logger log = Logger.getLogger(Runsync.class.getName());
 
     
-    public void customersync(Config config){
+    public void customersync(Config config) throws ParserConfigurationException, SAXException, TransformerException{
             
             try {
             // TODO code application logic here
@@ -75,7 +75,7 @@ public class CustomerSync {
             map.updatemapping(newcustomer,custids);
             //----------------------------------------------------------------------
            
-        } catch (SQLException | ClassNotFoundException | ParserConfigurationException | TransformerException | SAXException | IOException ex) {
+        } catch (SQLException| java.io.IOException ex) {
             
             StringWriter errors = new StringWriter();
 ex.printStackTrace(new PrintWriter(errors));
