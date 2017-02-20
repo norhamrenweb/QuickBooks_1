@@ -16,19 +16,69 @@
         <title>Home</title>
     <script src="recursos/js/language/es-ES.js" type="text/javascript"></script>
     <script src="recursos/js/language/ar-SA.js" type="text/javascript"></script>
-
+  
+<!--    <link href="recursos/css/dataTables/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>-->
+ <link href="recursos/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<!--    <link href="recursos/css/dataTables/dataTables.bootstrap4.css" rel="stylesheet" type="text/css"/>-->
+<!--    <link href="recursos/css/dataTables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>-->
+    <link href="recursos/css/dataTables/dataTables.foundation.css" rel="stylesheet" type="text/css"/>
+<!--    <link href="recursos/css/dataTables/dataTables.foundation.min.css" rel="stylesheet" type="text/css"/>-->
+    <link href="recursos/css/dataTables/dataTables.jqueryui.css" rel="stylesheet" type="text/css"/>
+<!--    <link href="recursos/css/dataTables/dataTables.jqueryui.min.css" rel="stylesheet" type="text/css"/>-->
+<!--    <link href="recursos/css/dataTables/dataTables.material.css" rel="stylesheet" type="text/css"/>-->
+<!--    <link href="recursos/css/dataTables/dataTables.material.min.css" rel="stylesheet" type="text/css"/>-->
+    <link href="recursos/css/dataTables/dataTables.semanticui.css" rel="stylesheet" type="text/css"/>
+<!--    <link href="recursos/css/dataTables/dataTables.semanticui.min.css" rel="stylesheet" type="text/css"/>-->
+<!--    <link href="recursos/css/dataTables/dataTables.uikit.css" rel="stylesheet" type="text/css"/>-->
+<!--    <link href="recursos/css/dataTables/dataTables.uikit.min.css" rel="stylesheet" type="text/css"/>-->
+<!--      <link href="recursos/css/dataTables/jquery.dataTables.css" rel="stylesheet" type="text/css"/>-->
+<link href="recursos/css/dataTables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="recursos/css/dataTables/jquery.dataTables_themeroller.css" rel="stylesheet" type="text/css"/>
     
+    
+    <script src="recursos/js/dataTables/dataTables.bootstrap.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.bootstrap.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/dataTables.bootstrap4.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.bootstrap4.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/dataTables.foundation.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.foundation.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/dataTables.jqueryui.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.jqueryui.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/dataTables.material.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.material.min.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.semanticui.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.semanticui.min.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.uikit.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.uikit.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/jquery.dataTables.js"></script>
+<!--    <script src="recursos/js/dataTables/jquery.dataTables.min.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/jquery.js" type="text/javascript"></script>-->
+<style>
+    .red{
+        background-color: red !important;
+    }
+</style>
     <script type="text/javascript">
+    $(document).ready( function () {
+
+    var table = $('#table_id').DataTable();
+    var tableLessonsDate = $('#table_datelessons').DataTable();
+    var datelessons = 0;
         
-        var calendar = $("#calendar").calendar(
-            {
-                
-            });     
-            
-//            Clases de eventos
-//            importante: event-important
-//                        event-warning
-            
+    $('#table_id tbody').on('click', 'tr', function () {
+        var data = table.row( this ).data();
+        //alert( 'You clicked on '+data[0]+'\'s row' );
+        var LessonsSelected = tableLessonsDate.row( this ).data();
+        if (data[0] !== LessonsSelected[3]){
+            $(LessonsSelected).find( "row" ).css( "color", "red" );
+        }
+    
+        
+    } );
+    
+    } );    
+    
+
     </script>
     </head>
     <body>
@@ -37,7 +87,7 @@
         <div class="col-xs-6">
 
 
-            <div class="col-xs-2 pull-right">
+            <div class="col-xs-6">
                 <div class="form-group">
                     <label class="control-label"></label>
                         <div class='input-group' style="margin-top:19px;">
@@ -47,7 +97,7 @@
                         </div>
                 </div>
             </div>
-            <div class="col-xs-2 pull-right">
+            <div class="col-xs-6">
                 <div class="form-group">
                     <label class="control-label"></label>
                         <div class='input-group' style="margin-top:19px;">
@@ -66,7 +116,6 @@
                 <table id="table_id" class="display">
                     <thead>
                         <tr>
-                            <td><spring:message code="etiq.txtstartdate"/></td>
                             <td><spring:message code="etiq.namelessons"/></td>
                             <td><spring:message code="etiq.levellessons"/></td>
                             <td><spring:message code="etiq.subjectlessons"/></td>
@@ -79,12 +128,36 @@
                     <c:forEach var="lecciones" items="${lessonslist}" >
                         <tr>
                             <td>${lecciones.name}</td>
-                           
+                            <td>level</td>
+                            <td>subject</td>
+                            <td>subsection</td>
+                            <td>equipment</td>
+                            <td>
+                                <div class="col-xs-4">
+                                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
+                                        <span class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-placement="bottom" title="Detalles"></span>
+                                    </button>
+                                </div>
+                                <div class="col-xs-4">
+                                    <form id="form2" action='modify.htm'>
+                                        <button name="TXTid_lessons_modificar" type="submit" class="btn btn-modificar" id="modificarLessons" data-toggle="tooltip" data-placement="bottom" title="modify" >
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                    </form>    
+                                </div>
+                                <div class="col-xs-4">
+                                    <button name="TXTid_lessons_eliminar" value="" class="btn btn-eliminar" data-toggle="tooltip" data-placement="bottom" title="Eliminar">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
             </table>
-            <div class="col-xs-2 pull-right">
+           
+            </div>
+            <div class="col-xs-6">
                 <div class="form-group">
                     <label class="control-label"></label>
                         <div class='input-group' style="margin-top:19px;">
@@ -94,14 +167,64 @@
                         </div>
                 </div>
             </div>
-            </div>
-
 
         </div>
         <div class="col-xs-6">
-                            
+            <div class="col-xs-12" id="maincontainer">
+                <div class="col-xs-12 center-block text-center">
+                    <h2><spring:message code="etiq.txtactivities"/></h2>
+                </div>
+            </div>
+                <div class="col-xs-12">
+                <table id="table_datelessons" class="display">
+                    <thead>
+                        <tr>
+                            <td>Date</td>
+                            <td>Hour start</td>
+                            <td>Hour end</td>
+                            <td><spring:message code="etiq.namelessons"/></td>
+                            <td>Students</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2017-02-17</td>
+                            <td>8:00</td>
+                            <td>9:00</td>
+                            <td>Estudiantes2</td>
+                            <td>Pepe, Manolo, jaime</td>
+                        </tr>
+                        <tr>
+                            <td>2017-02-20</td>
+                            <td>8:00</td>
+                            <td>9:00</td>
+                            <td>Estudiantes2</td>
+                            <td>Manolo, jaime</td>
+                        </tr>
+                        <tr>
+                            <td>2017-02-20</td>
+                            <td>9:00</td>
+                            <td>10:00</td>
+                            <td>Estudiantes2</td>
+                            <td>Manolo, jaime</td>
+                        </tr>
+                        <%--<c:forEach var="lecciones" items="${lessonslist}" >
+                        <tr>
+                            <td>fecha</td>
+                            <td>${lecciones.name}</td>
+                            <td>level</td>
+                            <td>subject</td>
+                            <td>subsection</td>
+                            <td>equipment</td>
+                            <td>action</td>
+                        </tr>
+                    </c:forEach>--%>
+                    </tbody>
+            </table>
+           
+            </div> 
         
-        <div class="page-header row">
+<!--        <div class="page-header row">
             <div class="col-xs-4">
                 <h3><spring:message code="etiq.txtcalendar"/> 2016-2017</h3>
 		<small><spring:message code="etiq.txtstudentlessons"/> ....... </small>
@@ -122,7 +245,7 @@
                 </div>
             </div>
             <div class="col-xs-12">
-            <select id="language" class="span12">
+                <select id="language" class="span12">
 					<option value="en-US" select>Seleccione el idioma (por : en-US)</option>
 					<option value="ar-SA">Arabe</option>
 					<option value="nl-NL">Dutch</option>
@@ -146,14 +269,14 @@
 					<option value="ko-KR">한국어</option>
 					<option value="th-TH">Thai (Thailand)</option>
 				</select>
-        </div>
+            </div>
 	</div>
         <div class="col-xs-12">
             <div id="calendar"></div>
-        </div>
+        </div>-->
         
     </div>
-    <script type="text/javascript" src="recursos/js/vendor/underscore-min.js"></script>
+<!--    <script type="text/javascript" src="recursos/js/vendor/underscore-min.js"></script>
     <script type="text/javascript" src="recursos/js/calendar.js"></script>
     <script type="text/javascript" src="recursos/js/app.js"></script>
     <script type="text/javascript">
@@ -167,6 +290,6 @@
 //            importante: event-important
 //                        event-warning
             
-    </script>
+    </script>-->
     </body>
 </html>
