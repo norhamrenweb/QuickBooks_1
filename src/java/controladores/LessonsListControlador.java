@@ -69,7 +69,6 @@ public class LessonsListControlador implements Controller{
                 Lessons lesson = new Lessons();
               //  lesson.setId(rs.getString("id_lessons"));
                 lesson.setName(rs.getString("nombre_lessons"));
-                lesson.setName(rs.getString("nombre_lessons"));
                 lessonslist.add(lesson);
                 
             }
