@@ -373,7 +373,7 @@ public class CreateLessonControlador extends MultiActionController{
             
              Statement st = this.cn.createStatement();
              String description=null;
-             String subsectionid[] = null;
+             String subsectionid[] = new String[1];
             String consulta = "SELECT id_subsection,description FROM public.lessons where id_lessons ="+lessonplanid[0];
             ResultSet rs = st.executeQuery(consulta);
           
@@ -391,22 +391,26 @@ public class CreateLessonControlador extends MultiActionController{
                 sub.setId(subsectionid);
                 sub.setName(rs1.getString("nombre_sub_section"));
             }
-        ResultSet rs2 = st.executeQuery("select id_activity_equipment,nombre_activity_equipment from public.activity_equipment where id_subsection= "+subsectionid);
-        String[] ids = null;
+        ResultSet rs2 = st.executeQuery("select id_activity_equipment,nombre_activity_equipment from public.activity_equipment where id_subsection= "+subsectionid[0]);
+        // must change latter
+        int i = 0;
    while (rs2.next())
             {
                 Equipment eq = new Equipment();
+                String[] ids = new String[1];
                ids[0]= ""+rs2.getInt("id_activity_equipment");
+              
                 eq.setId(ids);
                 eq.setName(rs2.getString("nombre_activity_equipment"));
                 allequipments.add(eq);
             }
-    ResultSet rs3 = st.executeQuery("SELECT nombre_activity_equipment,id_activity_equipment FROM public.activity_equipment where public.activity_equipment.id_activity_equipment IN (select id_equipment from public.lessons_equipment where id_lessons"+lessonplanid[0]+")");
+    ResultSet rs3 = st.executeQuery("SELECT nombre_activity_equipment,id_activity_equipment FROM public.activity_equipment where public.activity_equipment.id_activity_equipment IN (select id_equipment from public.lessons_equipment where public.lessons_equipment.id_lessons = "+lessonplanid[0]+")");
        
    while (rs3.next())
             {
                 Equipment eq = new Equipment();
-                ids[0] = ""+rs3.getInt("id_activity_equipment");
+             String[] ids = new String[1];
+             ids[0] = ""+rs3.getInt("id_activity_equipment");
                 eq.setId(ids);
                 eq.setName(rs3.getString("nombre_activity_equipment"));
                 equipments.add(eq);
