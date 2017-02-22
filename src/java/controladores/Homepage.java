@@ -88,7 +88,7 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
         }
         else
         {
-         ModelAndView mv = new ModelAndView("redirect:/homepage.htm");
+         ModelAndView mv = new ModelAndView("redirect:/homepage.htm?select3=loadLessons");
         String  message = "welcome user";
         session.setAttribute("user", user);
         mv.addObject("message", message);

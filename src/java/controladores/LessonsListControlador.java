@@ -26,7 +26,7 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
  *
  * @author nmohamed
  */
-public class LessonsListControlador implements Controller{
+public class LessonsListControlador extends MultiActionController{
     
       Connection cn;
       
@@ -38,8 +38,8 @@ public class LessonsListControlador implements Controller{
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
-   @Override 
-    public ModelAndView handleRequest(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+   
+    public ModelAndView loadLessons(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("homepage");
        
@@ -48,12 +48,30 @@ public class LessonsListControlador implements Controller{
         this.cn = dataSource.getConnection();
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-        mv.addObject("lessonslist", this.getLessons(user.getId()));
+        mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
         
         
         return mv;
     }
-    public ArrayList<Lessons> getLessons(int userid) throws SQLException
+    public ModelAndView loadLessonsTime(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("homepage");
+       
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+//        HttpSession sesion = hsr.getSession();
+//        User user = (User) sesion.getAttribute("user");
+String[] lessonselectid = hsr.getParameterValues("LessonsSelected");
+Lessons lesson = new Lessons();
+lesson.setName(hsr.getParameter("LessonsSelected"));
+lesson.setId(Integer.parseInt(lessonselectid[0]));
+        mv.addObject("lessonslist", this.getLessonsTime(lesson,hsr.getServletContext()));
+        
+        
+        return mv;
+    }
+    public ArrayList<Lessons> getLessons(int userid,ServletContext servlet) throws SQLException
     {
 //        this.conectarOracle();
         ArrayList<Lessons> lessonslist = new ArrayList<>();
@@ -69,6 +87,20 @@ public class LessonsListControlador implements Controller{
                 Lessons lesson = new Lessons();
               //  lesson.setId(rs.getString("id_lessons"));
                 lesson.setName(rs.getString("nombre_lessons"));
+                lesson.setId(rs.getInt("id_lessons"));
+                Level level = new Level();
+                String name = level.fetchName(rs.getInt("id_level"),servlet);
+               level.setName(name);
+                lesson.setLevel(level);
+                Subsection sub = new Subsection();
+                name = sub.fetchName(rs.getInt("id_subsection"), servlet);
+                sub.setName(name);
+                lesson.setSubsection(sub);
+                Subject subject = new Subject();
+                name = subject.fetchName(rs.getInt("id_subject"), servlet);
+                subject.setName(name);
+                lesson.setSubject(subject);
+                
                 lessonslist.add(lesson);
                 
             }
@@ -80,4 +112,32 @@ public class LessonsListControlador implements Controller{
        
         return lessonslist;
     }
+     public ArrayList<Lessons> getLessonsTime(Lessons lessonselected,ServletContext servlet) throws SQLException
+     {
+       ArrayList<Lessons> lessonslist = new ArrayList<>();
+        try {
+            
+             Statement st = this.cn.createStatement();
+             
+            String consulta = "SELECT * FROM public.lessons_time where lesson_id = "+ lessonselected.getId();
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                Lessons lesson = new Lessons();
+              //  lesson.setId(rs.getString("id_lessons"));
+                lesson.setName(lessonselected.getName());
+                lesson.setDate(consulta);
+                lessonslist.add(lesson);
+                
+            }
+            //this.finalize();
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+        }
+       
+        return lessonslist;
+     
+     }
 }

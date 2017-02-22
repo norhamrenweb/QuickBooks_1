@@ -40,7 +40,7 @@
   
         $('#fecha').datetimepicker({
             
-            format: 'DD-MM-YYYY',
+            format: 'YYYY-MM-DD',
             locale: userLang.valueOf(),
             daysOfWeekDisabled: [0, 6],
             useCurrent: false//Important! See issue #1075
@@ -171,10 +171,12 @@
         }
 
         $('#createOnClick').attr('disabled', true);
-        ajax.onreadystatechange=funcionCallBackSubject;
+       ajax.onreadystatechange = funcionCallBackSubject;
         var seleccion1 = document.getElementById("level").value;
         ajax.open("POST","createlesson.htm?select=subjectlistLevel&seleccion1="+seleccion1,true);
+        
         ajax.send("");
+       
     }
     function comboSelectionSubject()
     {
@@ -331,7 +333,7 @@ $(function() {
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="levels" items="${gradelevels}">
-                            <option value="${levels}" >${levels}</option>
+                            <option value="${levels.id[0]}" >${levels.name}</option>
                         </c:forEach>
                     </select>
                           
@@ -396,7 +398,7 @@ $(function() {
                             <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
 
                                 <c:forEach var="levels" items="${gradelevels}">
-                                    <option value="${levels}" >${levels}</option>
+                                    <option value="${levels.id[0]}" >${levels.name}</option>
                                 </c:forEach>
                             </select>
                         </div>

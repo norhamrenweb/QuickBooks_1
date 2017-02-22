@@ -5,6 +5,7 @@
  */
 package Montessori;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -16,8 +17,8 @@ public class Lessons {
     
     private int id;
     private String name;
-    private String start;
-    private String finish;
+    private Timestamp start;
+    private Timestamp finish;
     private boolean template;
     private Level level;
     private Subsection subsection;
@@ -52,27 +53,29 @@ public class Lessons {
         return subject;
     }
 
+    public Timestamp getStart() {
+        return start;
+    }
+
+    public void setStart(Timestamp start) {
+        this.start = start;
+    }
+
+    public Timestamp getFinish() {
+        return finish;
+    }
+
+    public void setFinish(Timestamp finish) {
+        this.finish = finish;
+    }
+
     public void setSubject(Subject subject) {
         this.subject = subject;
     }
 
    
 
-    public String getStart() {
-        return start;
-    }
-
-    public void setStart(String start) {
-        this.start = start;
-    }
-
-    public String getFinish() {
-        return finish;
-    }
-
-    public void setFinish(String finish) {
-        this.finish = finish;
-    }
+  
 
     public String getDate() {
         return date;

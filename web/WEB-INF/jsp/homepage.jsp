@@ -71,6 +71,7 @@
         var LessonsSelected = tableLessonsDate.row( this ).data();
         if (data[0] !== LessonsSelected[3]){
             $(LessonsSelected).find( "row" ).css( "color", "red" );
+           
         }
     
         
@@ -78,7 +79,23 @@
     
     } );    
     
-
+ function ShowLessonTimes()
+    {
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+        ajax.onreadystatechange=funcionCallBackLevelStudent;
+        var seleccion =  tableLessonsDate.row( this ).data();
+       
+        ajax.open("POST","homepage.htm?select=loadLessonsTime&seleccion="+seleccion,true);
+        ajax.send("");
+    }
     </script>
     </head>
     <body>
@@ -113,7 +130,7 @@
                 </div>
             </div>
             <div class="col-xs-12">
-                <table id="table_id" class="display">
+                <table id="table_id" class="display" onclick>
                     <thead>
                         <tr>
                             <td><spring:message code="etiq.namelessons"/></td>
@@ -128,9 +145,9 @@
                     <c:forEach var="lecciones" items="${lessonslist}" >
                         <tr>
                             <td>${lecciones.name}</td>
-                            <td>level</td>
-                            <td>subject</td>
-                            <td>subsection</td>
+                            <td>${lecciones.level.name}</td>
+                            <td>${lecciones.subject.name}</td>
+                            <td>${lecciones.subsection.name}</td>
                             <td>equipment</td>
                             <td>
                                 <div class="col-xs-4">

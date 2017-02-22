@@ -48,7 +48,7 @@ public class Createlesson {
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-       st.executeUpdate("insert into lessons(nombre_lessons) values (' "+newlessons.getName()+"')");
+       st.executeUpdate("insert into lessons(nombre_lessons,id_level,id_subject,id_subsection,date_created) values (' "+newlessons.getName()+"',"+newlessons.getLevel().getName()+","+newlessons.getSubject().getName()+","+newlessons.getSubsection().getName()+",now())");
        
             ResultSet rs = st.executeQuery("select id_lessons from lessons where nombre_lessons =' "+newlessons.getName()+"'");
             while(rs.next())
@@ -60,6 +60,7 @@ public class Createlesson {
             {
                 st.executeUpdate("insert into lessons_students(id_lessons,id_students) values ('"+lessonid+"','"+studentIds[i]+"')");
             }
+            st.executeUpdate("insert into lessons_time(id,teacher_id,lesson_id,lesson_start) values ( 77,5,"+lessonid+",'"+newlessons.getStart()+"')");
     }
        
        

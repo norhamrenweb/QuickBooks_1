@@ -7,7 +7,10 @@ package controladores;
 
 import Montessori.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -47,14 +50,21 @@ public class CreateLessonControlador extends MultiActionController{
         this.cn = dataSource.getConnection();
         mv.addObject("listaAlumnos", this.getStudents());
         Statement st = this.cn.createStatement();
-        ResultSet rs = st.executeQuery("SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels");
-        List <String> grades = new ArrayList();
-        grades.add("Select level");
+        ResultSet rs = st.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        List <Level> grades = new ArrayList();
+        Level l = new Level();
+        l.setName("Select level");
+        grades.add(l);
         while(rs.next())
         {
-        grades.add(rs.getString("GradeLevel"));
+            Level x = new Level();
+             String[] ids = new String[1];
+             ids[0]=""+rs.getInt("GradeLevelID");
+            x.setId(ids);
+            x.setName(rs.getString("GradeLevel"));
+        grades.add(x);
         }
-        mv.addObject("gradelevels", grades);
+            mv.addObject("gradelevels", grades);
         
         return mv;
     }
@@ -67,7 +77,9 @@ public class CreateLessonControlador extends MultiActionController{
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         List <Students> studentsgrades = new ArrayList();
-        studentsgrades =this.getStudentslevel(hsr.getParameter("seleccion"));
+        String[] levelid = hsr.getParameterValues("seleccion");
+        String test = hsr.getParameter("levelStudent");
+        studentsgrades =this.getStudentslevel(levelid[0]);
         mv.addObject("listaAlumnos",studentsgrades );
         
         return mv;
@@ -84,19 +96,21 @@ public class CreateLessonControlador extends MultiActionController{
         
             
              Statement st = this.cn.createStatement();
-             int levelid = 0;
-            String consulta = "SELECT GradeLevelID FROM AH_ZAF.dbo.GradeLevels where GradeLevel ='"+hsr.getParameter("seleccion1")+"'";
-            ResultSet rs = st.executeQuery(consulta);
-          
-            while (rs.next())
-            {
-                levelid = rs.getInt("GradeLevelID");
-            }
-            cn.close();
+             String[] levelid = new String[1];
+//             String test = hsr.getParameter("seleccion1");
+//            String consulta = "SELECT GradeLevelID FROM AH_ZAF.dbo.GradeLevels where GradeLevel ='"+hsr.getParameter("seleccion1")+"'";
+//            ResultSet rs = st.executeQuery(consulta);
+//          
+//            while (rs.next())
+//            {
+//                levelid = rs.getInt("GradeLevelID");
+//            }
+//            cn.close();
             dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
              this.cn = dataSource.getConnection();
              st = this.cn.createStatement();
-          ResultSet rs1 = st.executeQuery("select nombre_subject,id from subject where id_level="+levelid);
+             levelid= hsr.getParameterValues("seleccion1");
+          ResultSet rs1 = st.executeQuery("select nombre_subject,id from subject where id_level="+levelid[0]);
            Subject s = new Subject();
           s.setName("Select Subject");
           subjects.add(s);
@@ -235,16 +249,22 @@ public class CreateLessonControlador extends MultiActionController{
         return listaAlumnos;
     }
     // get students filtrado por gradelevel
-     public ArrayList<Students> getStudentslevel(String grade) throws SQLException
+     public ArrayList<Students> getStudentslevel(String gradeid) throws SQLException
     {
 //        this.conectarOracle();
-         if(!grade.equals("Select level")){
+         
         ArrayList<Students> listaAlumnos = new ArrayList<>();
+        String gradelevel = null;
         try {
             
              Statement st = this.cn.createStatement();
+            ResultSet rs1= st.executeQuery("select GradeLevel from AH_ZAF.dbo.GradeLevels where GradeLevelID ="+gradeid);
+             while(rs1.next())
+             {
+             gradelevel = rs1.getString("GradeLevel");
+             }
            
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel ='"+grade+"'";
+            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel = '"+gradelevel+"'";
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
@@ -265,8 +285,8 @@ public class CreateLessonControlador extends MultiActionController{
             System.out.println("Error leyendo Alumnos: " + ex);
         }
        
-        return listaAlumnos;}
-         else{ return this.getStudents();}
+        return listaAlumnos;
+         
          
     }
      public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -288,23 +308,31 @@ public class CreateLessonControlador extends MultiActionController{
        subsection.setName(hsr.getParameter("TXTsubsection"));
        subsection.setId(hsr.getParameterValues("TXTsubsection"));
        equipmentids=hsr.getParameterValues("TXTequipment");
+
+       java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorainicio")+":00.000");
+     java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorafin")+":00.000");
+
        
-       newlesson.setDate(hsr.getParameter("TXTfecha"));
-       newlesson.setStart(hsr.getParameter("TXThorainicio"));
-       newlesson.setFinish(hsr.getParameter("TXThorafin"));
+       newlesson.setStart(timestampstart);
+     newlesson.setFinish(timestampend);
+       
       newlesson.setLevel(level);
       newlesson.setSubject(subject);
       newlesson.setSubsection(subsection);
        newlesson.setEquipmentid(equipmentids);
-       newlesson.setTemplate(false);
+       
        String test = hsr.getParameter("TXTloadtemplates");
-       if(test.equals("LoadTemplates"))
-       {
+       if(test != null)
+       {        
        newlesson.setName(hsr.getParameter("lessons"));
+       newlesson.setTemplate(true);
+       newlesson.setId(Integer.parseInt(hsr.getParameter("lessons")));
        }
        else
        {
            newlesson.setName(hsr.getParameter("TXTnombreLessons"));
+           newlesson.setTemplate(false);
+           
        }
        Createlesson c = new Createlesson(hsr.getServletContext());
        c.newlesson(studentIds,newlesson);
@@ -362,6 +390,7 @@ public class CreateLessonControlador extends MultiActionController{
              ModelAndView mv = new ModelAndView("createlesson");
              String[] lessonplanid = hsr.getParameterValues("seleccionTemplate");
               List<Equipment> allequipments = new ArrayList<>();
+               List<Equipment> subset = new ArrayList<>();
                List<Equipment> equipments = new ArrayList<>();
                Subsection sub = new Subsection();
              try {
@@ -418,9 +447,29 @@ public class CreateLessonControlador extends MultiActionController{
         } catch (SQLException ex) {
             System.out.println("Error  " + ex);
         }
-        mv.addObject("allequipments",allequipments);
+ 
         mv.addObject("equipments",equipments);
+        
+        for (Equipment e : allequipments)
+        {
+            String result = "";
+        for(Equipment e2 :equipments)
+        {
+            if(e.getName().equals(e2.getName()))
+            {
+                result ="match found";
+               break;
+            }
+            
+        }
+        if (!result.equals("match found")){
+        subset.add(e);
+        }
+        }
+      
+ 
         mv.addObject("subsection", sub);
+               mv.addObject("allequipments",subset);
              return mv;
          
          } 
