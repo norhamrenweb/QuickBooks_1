@@ -62,11 +62,12 @@ public class LessonsListControlador extends MultiActionController{
         this.cn = dataSource.getConnection();
 //        HttpSession sesion = hsr.getSession();
 //        User user = (User) sesion.getAttribute("user");
-String[] lessonselectid = hsr.getParameterValues("LessonsSelected");
+int lessonselectid = Integer.parseInt(hsr.getParameter("LessonsSelected"));
+//String[] lessonselectid = hsr.getParameterValues("LessonsSelected");
 Lessons lesson = new Lessons();
 lesson.setName(hsr.getParameter("LessonsSelected"));
-lesson.setId(Integer.parseInt(lessonselectid[0]));
-        mv.addObject("lessonslist", this.getLessonsTime(lesson,hsr.getServletContext()));
+lesson.setId(lessonselectid);
+        mv.addObject("lessonslist1", this.getLessonsTime(lesson,hsr.getServletContext()));
         
         
         return mv;
