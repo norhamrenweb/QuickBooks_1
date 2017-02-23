@@ -59,28 +59,41 @@
     }
 </style>
     <script type="text/javascript">
-    $(document).ready( function () {
+    
 
-    var table = $('#table_id').DataTable();
-    var tableLessonsDate = $('#table_datelessons').DataTable();
-    var datelessons = 0;
-        
+    
+    $(document).ready( function () {
+        $('#table_id').DataTable();
+        $('#table_datelessons').DataTable();
+//       
     $('#table_id tbody').on('click', 'tr', function () {
-        var data = table.row( this ).data();
-        //alert( 'You clicked on '+data[0]+'\'s row' );
-        var LessonsSelected = tableLessonsDate.row( this ).data();
-        if (data[0] !== LessonsSelected[3]){
-            $(LessonsSelected).find( "row" ).css( "color", "red" );
-           
-        }
-    
+        table = $('#table_id').DataTable();
+        data = table.row( this ).data();
+        data1 = data[0];
+        rowselect();
+    } ); 
+    } ); 
+   
         
-    } );
-    
-    } );    
-    
- function ShowLessonTimes()
+        function funcionCallBackEquipment()
     {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                    document.getElementById("table_datelessons").innerHTML= ajax.responseText;
+                    }
+                }
+            }
+ 
+
+
+   function rowselect()
+    {
+        var LessonsSelected = data1;
+        //var LessonsSelected = $(data1).html();
+        //var LessonsSelected = 565;
+
+        
+        
         if (window.XMLHttpRequest) //mozilla
         {
             ajax = new XMLHttpRequest(); //No Internet explorer
@@ -90,12 +103,15 @@
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
         
-        ajax.onreadystatechange=funcionCallBackLevelStudent;
-        var seleccion =  tableLessonsDate.row( this ).data();
-       
-        ajax.open("POST","homepage.htm?select=loadLessonsTime&seleccion="+seleccion,true);
+//        
+        ajax.onreadystatechange=funcionCallBackEquipment;
+        ajax.open("POST","homepage.htm?select3=loadLessonsTime&LessonsSelected="+LessonsSelected,true);
         ajax.send("");
-    }
+    };
+
+    
+      
+    
     </script>
     </head>
     <body>
@@ -129,10 +145,12 @@
                     <h2><spring:message code="etiq.txtactivities"/></h2>
                 </div>
             </div>
+                
             <div class="col-xs-12">
-                <table id="table_id" class="display" onclick>
+                <table id="table_id" class="display" >
                     <thead>
                         <tr>
+                            <td>id</td>
                             <td><spring:message code="etiq.namelessons"/></td>
                             <td><spring:message code="etiq.levellessons"/></td>
                             <td><spring:message code="etiq.subjectlessons"/></td>
@@ -144,6 +162,7 @@
                     <tbody>
                     <c:forEach var="lecciones" items="${lessonslist}" >
                         <tr>
+                            <td>${lecciones.id}</td>
                             <td>${lecciones.name}</td>
                             <td>${lecciones.level.name}</td>
                             <td>${lecciones.subject.name}</td>
@@ -174,6 +193,7 @@
             </table>
            
             </div>
+
             <div class="col-xs-6">
                 <div class="form-group">
                     <label class="control-label"></label>
@@ -204,7 +224,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <%--<tr>
                             <td>2017-02-17</td>
                             <td>8:00</td>
                             <td>9:00</td>
@@ -224,18 +244,16 @@
                             <td>10:00</td>
                             <td>Estudiantes2</td>
                             <td>Manolo, jaime</td>
-                        </tr>
-                        <%--<c:forEach var="lecciones" items="${lessonslist}" >
+                        </tr>--%>
+                        <c:forEach var="lecciones1" items="${lessonslist1}" >
                         <tr>
                             <td>fecha</td>
-                            <td>${lecciones.name}</td>
-                            <td>level</td>
-                            <td>subject</td>
-                            <td>subsection</td>
-                            <td>equipment</td>
-                            <td>action</td>
+                            <td>Hour start</td>
+                            <td>Hour end</td>
+                            <td>${lecciones1.name}</td>
+                            <td>students</td>
                         </tr>
-                    </c:forEach>--%>
+                    </c:forEach>
                     </tbody>
             </table>
            
