@@ -66,48 +66,48 @@
         $('#table_id').DataTable();
         $('#table_datelessons').DataTable();
 //       
-    $('#table_id tbody').on('click', 'tr', function () {
-        table = $('#table_id').DataTable();
-        data = table.row( this ).data();
-        data1 = data[0];
-        rowselect();
+//    $('#table_id tbody').on('click', 'tr', function () {
+//        table = $('#table_id').DataTable();
+//        data = table.row( this ).data();
+//        data1 = data[0];
+//        rowselect();
     } ); 
-    } ); 
-   
-        
-        function funcionCallBackEquipment()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("table_datelessons").innerHTML= ajax.responseText;
-                    }
-                }
-            }
- 
-
-
-   function rowselect()
-    {
-        var LessonsSelected = data1;
-        //var LessonsSelected = $(data1).html();
-        //var LessonsSelected = 565;
-
-        
-        
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
+//    } ); 
+//   
 //        
-        ajax.onreadystatechange=funcionCallBackEquipment;
-        ajax.open("POST","homepage.htm?select3=loadLessonsTime&LessonsSelected="+LessonsSelected,true);
-        ajax.send("");
-    };
+//        function funcionCallBackEquipment()
+//    {
+//           if (ajax.readyState===4){
+//                if (ajax.status===200){
+//                    document.getElementById("table_datelessons").innerHTML= ajax.responseText;
+//                    }
+//                }
+//            }
+// 
+//
+//
+//   function rowselect()
+//    {
+//        var LessonsSelected = data1;
+//        //var LessonsSelected = $(data1).html();
+//        //var LessonsSelected = 565;
+//
+//        
+//        
+//        if (window.XMLHttpRequest) //mozilla
+//        {
+//            ajax = new XMLHttpRequest(); //No Internet explorer
+//        }
+//        else
+//        {
+//            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+//        }
+//        
+////        
+//        ajax.onreadystatechange=funcionCallBackEquipment;
+//        ajax.open("POST","homepage.htm?select3=loadLessonsTime&LessonsSelected="+LessonsSelected,true);
+//        ajax.send("");
+//  };
 
     
       
@@ -117,7 +117,7 @@
     <body>
 <%--        <h1><c:out value="${message}"/></h1>
         <a href="createlesson.htm?select=start">Create Lessons</a>--%>
-        <div class="col-xs-6">
+        <div class="col-xs-12">
 
 
             <div class="col-xs-6">
@@ -131,14 +131,14 @@
                 </div>
             </div>
             <div class="col-xs-6">
-                <div class="form-group">
+                <%--<div class="form-group">
                     <label class="control-label"></label>
                         <div class='input-group' style="margin-top:19px;">
                             <form:form id="formCreate" action="createlesson.htm?select=start">
                                 <button type="submit" id="crearLessons1" value="Crear" class="btn btn-success" disabled="true"><spring:message code="etiq.txtcreatestudent"/></button>
                             </form:form>
                         </div>
-                </div>
+                </div>--%>
             </div>
             <div class="col-sm-12" id="maincontainer">
                 <div class="col-sm-12 center-block text-center">
@@ -155,7 +155,11 @@
                             <td><spring:message code="etiq.levellessons"/></td>
                             <td><spring:message code="etiq.subjectlessons"/></td>
                             <td><spring:message code="etiq.subsectionlessons"/></td>
-                            <td><spring:message code="etiq.equipmentlessons"/></td>
+                            <%--<td><spring:message code="etiq.equipmentlessons"/></td>--%>
+                            
+                            <td>Date</td>
+                            <td>Start Hour</td>
+                            <td>End Hour</td>
                             <td><spring:message code="etiq.actionlessons"/></td>
                         </tr>
                     </thead>
@@ -167,7 +171,10 @@
                             <td>${lecciones.level.name}</td>
                             <td>${lecciones.subject.name}</td>
                             <td>${lecciones.subsection.name}</td>
-                            <td>equipment</td>
+                            <td>${lecciones.date}</td>
+                            <td>${lecciones.start}</td>
+                            <td>${lecciones.finish}</td>
+<!--                            <td>equipment</td>-->
                             <td>
                                 <div class="col-xs-4">
                                     <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
@@ -194,7 +201,7 @@
            
             </div>
 
-            <div class="col-xs-6">
+            <%--<<div class="col-xs-6">
                 <div class="form-group">
                     <label class="control-label"></label>
                         <div class='input-group' style="margin-top:19px;">
@@ -203,10 +210,10 @@
                             </form:form>
                         </div>
                 </div>
-            </div>
+</div>--%>
 
         </div>
-        <div class="col-xs-6">
+        <%--<div class="col-xs-6">
             <div class="col-xs-12" id="maincontainer">
                 <div class="col-xs-12 center-block text-center">
                     <h2><spring:message code="etiq.txtactivities"/></h2>
@@ -224,7 +231,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <%--<tr>
+                        <tr>
                             <td>2017-02-17</td>
                             <td>8:00</td>
                             <td>9:00</td>
@@ -244,7 +251,7 @@
                             <td>10:00</td>
                             <td>Estudiantes2</td>
                             <td>Manolo, jaime</td>
-                        </tr>--%>
+                        </tr>
                         <c:forEach var="lecciones1" items="${lessonslist1}" >
                         <tr>
                             <td>fecha</td>
@@ -257,9 +264,9 @@
                     </tbody>
             </table>
            
-            </div> 
+            </div> --%>
         
-<!--        <div class="page-header row">
+<%--        <div class="page-header row">
             <div class="col-xs-4">
                 <h3><spring:message code="etiq.txtcalendar"/> 2016-2017</h3>
 		<small><spring:message code="etiq.txtstudentlessons"/> ....... </small>
@@ -325,6 +332,6 @@
 //            importante: event-important
 //                        event-warning
             
-    </script>-->
+    </script>--%>
     </body>
 </html>
