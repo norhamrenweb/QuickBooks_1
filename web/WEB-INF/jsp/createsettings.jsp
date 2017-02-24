@@ -162,7 +162,7 @@
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                    document.getElementById("template").innerHTML= ajax.responseText;
+                    document.getElementById("template", "subsectionTempate").innerHTML= ajax.responseText;
                     }
                 }
             }
@@ -301,11 +301,11 @@ $(function() {
         
         
         <div class="container">
-        <h1 class="text-center">Create Lessons</h1>
+        <h1 class="text-center">Create Setting</h1>
 
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
-            <fieldset>
+            <%--           <fieldset>
                 <legend>Options Date</legend>
                 <div class="form-group">
                     <div class="row">
@@ -347,7 +347,7 @@ $(function() {
                     </div>
  
                 </div>
-            </fieldset>
+            </fieldset>--%>
             <fieldset>
                 <legend>Options Lessons</legend>
                 
@@ -407,13 +407,13 @@ $(function() {
                                 </c:forEach>
                         </select>
                     </div>
-<%--                    <div class="col-xs-3 center-block">
+                    <div class="col-xs-3 center-block">
                         <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
-                        <select class="form-control" name="TXTsubsection" id="template">
+                        <select class="form-control" name="TXTsubsection" id="subsectionTempate">
                              <option value="${subsection.name}" >${subsection.name}</option>
 
                         </select>
-                    </div>--%>
+                    </div>
                     <div class="col-xs-3 center-block">
                         <label class="control-label"><spring:message code="etiq.txtequipment"/> Template</label>
                         <select class="form-control" name="TXTequipment" id="template" multiple>
@@ -484,16 +484,6 @@ $(function() {
         </form:form>
         
         </div>
-        <div class="col-xs-6">
-                <div class="form-group">
-                    <label class="control-label"></label>
-                        <div class='input-group' style="margin-top:19px;">
-                            <form:form id="formCreate" action="createsetting.htm?select=start">
-                               <button type="submit" id="crearLessons" value="Crear" class="btn btn-success">Create Settings</button>
-                            </form:form>
-                        </div>
-                </div>
-            </div>
         <c:out value="${message}"/>
     </body>
 </html>

@@ -55,6 +55,13 @@
         </bean>
     </property> 
     </bean>
+    <bean class="controladores.CreateSettingControlador" id="createsetting">
+     <property name="methodNameResolver">
+        <bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+           <property name="paramName" value="select"/>
+        </bean>
+    </property> 
+    </bean>
      <bean class="controladores.LessonsListControlador" id="lessonsList">
      <property name="methodNameResolver">
         <bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
@@ -80,6 +87,8 @@
                  <prop key="familymap2.htm">map</prop>
                  
                 <prop key="createlesson.htm">createlesson</prop>
+                <prop key="createsetting.htm">createsetting</prop>
+                
                 <prop key="datosIdioma.htm">ControladorIdioma</prop>
                 <prop key="homepage.htm">lessonsList</prop>
                   
