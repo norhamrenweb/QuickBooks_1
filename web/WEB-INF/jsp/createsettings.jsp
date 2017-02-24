@@ -304,54 +304,12 @@ $(function() {
         <h1 class="text-center">Create Setting</h1>
 
         
-        <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
-            <%--           <fieldset>
-                <legend>Options Date</legend>
-                <div class="form-group">
-                    <div class="row">
-
-                        <div class='col-xs-4'>
-                            <div class="form-group">
-                                <label class="control-label" for="fecha"><spring:message code="etiq.txtstartdate"/></label>
-                                <div class='input-group date' id='fecha'>
-                                    <input type='text' name="TXTfecha" class="form-control" id="fecha" required="required"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class='col-xs-4'>
-                            <div class="form-group">
-                                <label class="control-label" for="horainicio"><spring:message code="etiq.txtenddate"/></label>
-                                <div class='input-group date' id='horainicio'>
-                                    <input type='text' name="TXThorainicio" class="form-control" required="required"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-xs-4'>
-                            <div class="form-group">
-                                <label class="control-label" for="horafin"><spring:message code="etiq.txtenddate"/></label>
-                                <div class='input-group date' id='horafin'>
-                                    <input type='text' name="TXThorafin" class="form-control" required="required"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
- 
-                </div>
-            </fieldset>--%>
-            <fieldset>
-                <legend>Options Lessons</legend>
+        <form:form id="formSettings" method ="post" action="createsetting.htm?select=createlesson" >
+                    
+                    <fieldset>
+                <legend>Create subsection</legend>
                 
-
+                <div class="col-xs-12">
                 <div class="col-xs-3 form-group">
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
@@ -363,22 +321,59 @@ $(function() {
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
-                    <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
-                    
-                       <c:forEach var="subject" items="${subjects}">
+                    <select class="form-control" name="TXTsubject" id="subject" multiple size="10" onchange="comboSelectionSubject()">
+                        <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject.id[0]}" >${subject.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col-xs-3 center-block">
+                    <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
+                    <select class="form-control" name="TXTsubsection" id="subsection" multiple size="10" onchange="comboSelectionSubsection()">
+                       <c:forEach var="subsection" items="${subsections}">
+                                <option value="${subsection.id[0]}" >${subsection.name}</option>
                             </c:forEach>
                     </select>
                 </div>
-                <div class="col-xs-3 center-block text-center">
-                    <label class="control-label">Select your option</label>
-                    <input disabled="true" type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-on="Load Lessons" data-off="Create Lessons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">
-                </div>
                 <div class="col-xs-3 center-block">
-                    <label class="control-label"><spring:message code="etiq.namelessons"/></label>
-                    <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
+                        <label class="control-label"><spring:message code="etiq.txtequipment"/></label>
+                        <select class="form-control" name="TXTequipment" id="equipment" multiple size="10">
+                           <c:forEach var="equipment" items="${equipments}">
+                                    <option value="${equipment.id[0]}" >${equipment.name}</option>
+                                </c:forEach>
+                        </select>
+                </div>
+                </div>
+                <div class="col-xs-12" style="margin-top: 20px;">
+                <div class="col-xs-3 center-block"></div>
+                <div class="col-xs-3 center-block form-inline">
+                    <label class="control-label">Name new subject</label>
+                    <input type="text" class="form-control" name="TXTnamenewsubject" id="namenewsubject" required="" placeholder="Name new subsection">
+                    <button name="TXTaddSubject" value="" class="btn btn-detalles" id="addSubject" data-target=".bs-example-modal-lg" onchange="addSubject()">
+                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subject"></span>
+                    </button>
                 </div>
                 
+                <div class="col-xs-3 center-block form-inline">
+                    <label class="control-label">Name new subsection</label>
+                    <input type="text" class="form-control" name="TXTnamenewsubsection" id="NameLessons" required="" placeholder="Name new subsection">
+                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
+                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subsection"></span>
+                    </button>
+                </div>
+                
+                <div class="col-xs-3 center-block form-inline">
+                    <label class="control-label">Name new equipment</label>
+                    <input type="text" class="form-control" name="TXTnamenewsubsection" id="NameLessons" required="" placeholder="Name new subsection">
+                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
+                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add Equipment"></span>
+                    </button>
+                </div>
+                
+                </div>
+                    
+</fieldset>
+<%--                 
                 <div class="hidden col-xs-12" id="divCrearLessons" style="padding-left: 0px;">
                     <div class="col-xs-3 center-block">
                         <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
@@ -422,12 +417,12 @@ $(function() {
                             </c:forEach><%--
                             <c:forEach var="equipments" items="${equipments}">
                                 <option value="${allequipments.id[0]}" >${allequipments.name}</option>
-                            </c:forEach>--%>
+                            </c:forEach>
                         </select>
                     </div>
                 </div>    
    
-            </fieldset>
+
             <fieldset>
                     <legend>Select students</legend>
                     <div class="col-xs-12">
@@ -480,9 +475,9 @@ $(function() {
             </fieldset>
         <div class="col-xs-12 text-center">
             <input type="submit" class="btn btn-success" id="createOnClick" disabled="True" value="<spring:message code="etiq.txtcreate"/>">
-        </div>
+        </div>--%> 
         </form:form>
-        
+       
         </div>
         <c:out value="${message}"/>
     </body>
