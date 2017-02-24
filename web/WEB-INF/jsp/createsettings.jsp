@@ -162,7 +162,7 @@
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                    document.getElementById("template", "subsectionTempate").innerHTML= ajax.responseText;
+                    document.getElementById("template").innerHTML= ajax.responseText;
                     }
                 }
             }
@@ -250,6 +250,8 @@
         ajax.open("POST","createlesson.htm?select=loadLessonplan&seleccionTemplate="+seleccionTemplate,true);
         ajax.send("");
     }
+    
+    
      function comboSelectionSubsection()
     {
         if (window.XMLHttpRequest) //mozilla
@@ -271,7 +273,28 @@
         ajax.open("POST","createlesson.htm?select=equipmentlistSubsection&seleccion3="+seleccion3,true);
         ajax.send("");
     }
-    
+//FUNCIONES PARA AÑADIR SETTINGS
+
+function addSubject()
+    {
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        $('#createOnClick').attr('disabled', true);
+        ajax.onreadystatechange = funcionCallBackSubject;
+        var levelselected = document.getElementById("level").value;
+        var namenewsubject = document.getElementById("namenewsubject").value;
+        ajax.open("POST","createsetting.htm?select=subjectlistLevel&seleccion1="+levelselected+"&namenewsubject="+namenewsubject,true);
+        
+        ajax.send("");
+       
+    }
 $(function() {
     $('#subject').change(function() {
         $('#LoadTemplates').parent().attr("disabled",false);
@@ -356,7 +379,7 @@ $(function() {
                 
                 <div class="col-xs-3 center-block form-inline">
                     <label class="control-label">Name new subsection</label>
-                    <input type="text" class="form-control" name="TXTnamenewsubsection" id="NameLessons" required="" placeholder="Name new subsection">
+                    <input type="text" class="form-control" name="TXTnamenewsubsection" id="NameLessons"  placeholder="Name new subsection">
                     <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
                         <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subsection"></span>
                     </button>
@@ -364,7 +387,7 @@ $(function() {
                 
                 <div class="col-xs-3 center-block form-inline">
                     <label class="control-label">Name new equipment</label>
-                    <input type="text" class="form-control" name="TXTnamenewsubsection" id="NameLessons" required="" placeholder="Name new subsection">
+                    <input type="text" class="form-control" name="TXTnamenewsubsection" id="NameLessons"  placeholder="Name new subsection">
                     <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
                         <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add Equipment"></span>
                     </button>
