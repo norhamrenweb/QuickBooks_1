@@ -7,6 +7,7 @@ package controladores;
 
 import Montessori.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,9 +66,10 @@ public class LessonsListControlador extends MultiActionController{
 int lessonselectid = Integer.parseInt(hsr.getParameter("LessonsSelected"));
 //String[] lessonselectid = hsr.getParameterValues("LessonsSelected");
 Lessons lesson = new Lessons();
-lesson.setName(hsr.getParameter("LessonsSelected"));
+//lesson.setName(hsr.getParameter("LessonsSelected"));
 lesson.setId(lessonselectid);
-        mv.addObject("lessonslist1", this.getLessonsTime(lesson,hsr.getServletContext()));
+ArrayList<Lessons> lessonslist =  this.getLessonsTime(lesson,hsr.getServletContext());
+        mv.addObject("lessonslist1",lessonslist);
         
         
         return mv;
@@ -105,7 +107,33 @@ lesson.setId(lessonselectid);
                 lessonslist.add(lesson);
                 
             }
-            //this.finalize();
+            for(Lessons x:lessonslist)
+            {
+           
+             
+            consulta = "SELECT * FROM public.lessons_time where lesson_id = "+ x.getId();
+            ResultSet rs1 = st.executeQuery(consulta);
+          //must put here if the result set is empty return that the lesson is not scheduled yet
+            while (rs1.next())
+            {
+//               
+               Timestamp stamp = rs1.getTimestamp("lesson_start");
+               Timestamp finish = rs1.getTimestamp("lesson_end");
+               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+               SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm:ss a");
+               String dateStr = sdfDate.format(stamp);
+                String timeStr = sdfTime.format(stamp);
+                 
+                String timeStr2 = sdfTime.format(finish);
+                x.setDate(""+ dateStr);
+                x.setStart(timeStr);
+                x.setFinish(timeStr2);
+               
+                
+            }
+            }
+            
+            this.cn.close();
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
@@ -122,18 +150,53 @@ lesson.setId(lessonselectid);
              
             String consulta = "SELECT * FROM public.lessons_time where lesson_id = "+ lessonselected.getId();
             ResultSet rs = st.executeQuery(consulta);
-          
+          //must put here if the result set is empty return that the lesson is not scheduled yet
             while (rs.next())
             {
                 Lessons lesson = new Lessons();
               //  lesson.setId(rs.getString("id_lessons"));
-                lesson.setName(lessonselected.getName());
-                lesson.setDate(consulta);
+               // lesson.setName(lessonselected.getName());
+               Timestamp stamp = rs.getTimestamp("lesson_start");
+               Timestamp finish = rs.getTimestamp("lesson_end");
+               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+               SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm:ss a");
+               String dateStr = sdfDate.format(stamp);
+                String timeStr = sdfTime.format(stamp);
+                 
+                String timeStr2 = sdfTime.format(finish);
+                lesson.setDate(""+ dateStr);
+                lesson.setStart(timeStr);
+                lesson.setFinish(timeStr2);
                 lessonslist.add(lesson);
                 
             }
-            //this.finalize();
+          
+            consulta = "select * from public.lessons_students where id_lessons = "+ lessonselected.getId() ;
+            ResultSet rs2 = st.executeQuery(consulta);
+            ArrayList<Students> studentlist = new ArrayList<>();
             
+            while(rs2.next())
+            {Students student = new Students();
+            student.setId_students(rs2.getInt("id_students"));
+            studentlist.add(student);
+            }
+            //this.finalize();
+            this.cn.close();
+            DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
+        this.cn = dataSource.getConnection();
+        Statement st1 = this.cn.createStatement();
+        int i = 0;
+        for (Students s :studentlist){
+        ResultSet rs3 = st1.executeQuery("select FirstName,LastName from AH_ZAF.dbo.Students where StudentID = "+s.getId_students());
+                while(rs3.next()){
+                 s.setNombre_students(rs3.getString("FirstName")+","+rs3.getString("LastName"));
+                 Lessons l = new Lessons();
+                 l = lessonslist.get(i);
+                 l.setStudents(studentlist);
+        }
+        
+        }
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
         }

@@ -16,6 +16,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -292,7 +293,8 @@ public class CreateLessonControlador extends MultiActionController{
      public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
-       
+       HttpSession sesion = hsr.getSession();
+        User user = (User) sesion.getAttribute("user");
          
         
        String[] studentIds = hsr.getParameterValues("destino[]");
@@ -313,8 +315,9 @@ public class CreateLessonControlador extends MultiActionController{
      java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorafin")+":00.000");
 
        
-       newlesson.setStart(timestampstart);
-     newlesson.setFinish(timestampend);
+       newlesson.setStart(""+timestampstart);
+     newlesson.setFinish(""+timestampend);
+     newlesson.setTeacherid(user.getId());
        
       newlesson.setLevel(level);
       newlesson.setSubject(subject);

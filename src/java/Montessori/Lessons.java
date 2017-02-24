@@ -17,16 +17,36 @@ public class Lessons {
     
     private int id;
     private String name;
-    private Timestamp start;
-    private Timestamp finish;
+    private String start;
+    private String finish;
     private boolean template;
     private Level level;
     private Subsection subsection;
     private Subject subject;
     private String[] equipmentid;
+    private int teacherid;
+  
+
+    public List<Students> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Students> students) {
+        this.students = students;
+    }
+    private String date;
+    private List<Students> students;
 
     public String[] getEquipmentid() {
         return equipmentid;
+    }
+
+    public int getTeacherid() {
+        return teacherid;
+    }
+
+    public void setTeacherid(int teacherid) {
+        this.teacherid = teacherid;
     }
 
     public void setEquipmentid(String[] equipmentid) {
@@ -53,21 +73,23 @@ public class Lessons {
         return subject;
     }
 
-    public Timestamp getStart() {
+    public String getStart() {
         return start;
     }
 
-    public void setStart(Timestamp start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public Timestamp getFinish() {
+    public String getFinish() {
         return finish;
     }
 
-    public void setFinish(Timestamp finish) {
+    public void setFinish(String finish) {
         this.finish = finish;
     }
+
+    
 
     public void setSubject(Subject subject) {
         this.subject = subject;
@@ -84,7 +106,7 @@ public class Lessons {
     public void setDate(String date) {
         this.date = date;
     }
-    private String date;
+   
 
     public boolean isTemplate() {
         return template;

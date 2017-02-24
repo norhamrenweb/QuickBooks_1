@@ -60,7 +60,7 @@ public class Createlesson {
             {
                 st.executeUpdate("insert into lessons_students(id_lessons,id_students) values ('"+lessonid+"','"+studentIds[i]+"')");
             }
-            st.executeUpdate("insert into lessons_time(id,teacher_id,lesson_id,lesson_start) values ( 77,5,"+lessonid+",'"+newlessons.getStart()+"')");
+            st.executeUpdate("insert into lessons_time(teacher_id,lesson_id,lesson_start,lesson_end) values (5,"+lessonid+",'"+newlessons.getStart()+"','"+newlessons.getFinish()+"')");
     }
        
        
