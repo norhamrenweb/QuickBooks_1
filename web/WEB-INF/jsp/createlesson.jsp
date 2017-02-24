@@ -398,13 +398,13 @@ $(function() {
                                 </c:forEach>
                         </select>
                     </div>
-                    <div class="col-xs-3 center-block">
+<%--                    <div class="col-xs-3 center-block">
                         <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
                         <select class="form-control" name="TXTsubsection" id="template">
                              <option value="${subsection.name}" >${subsection.name}</option>
 
                         </select>
-                    </div>
+                    </div>--%>
                     <div class="col-xs-3 center-block">
                         <label class="control-label"><spring:message code="etiq.txtequipment"/> Template</label>
                         <select class="form-control" name="TXTequipment" id="template" multiple>
