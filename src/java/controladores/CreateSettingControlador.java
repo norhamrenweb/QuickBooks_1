@@ -87,7 +87,7 @@ public class CreateSettingControlador extends MultiActionController{
     }
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("createlesson");
+        ModelAndView mv = new ModelAndView("createsettings");
         List<Subject> subjects = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
@@ -111,6 +111,7 @@ public class CreateSettingControlador extends MultiActionController{
              this.cn = dataSource.getConnection();
              st = this.cn.createStatement();
              levelid= hsr.getParameterValues("seleccion1");
+             String namesubject= hsr.getParameter("namesubject");
           ResultSet rs1 = st.executeQuery("select nombre_subject,id from subject where id_level="+levelid[0]);
            Subject s = new Subject();
           s.setName("Select Subject");
@@ -138,7 +139,7 @@ public class CreateSettingControlador extends MultiActionController{
     
     public ModelAndView subsectionlistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("createlesson");
+        ModelAndView mv = new ModelAndView("createsettings");
         List<Subsection> subsections = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
