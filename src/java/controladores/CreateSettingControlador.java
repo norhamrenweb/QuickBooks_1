@@ -291,57 +291,28 @@ public class CreateSettingControlador extends MultiActionController{
          
          
     }
-     public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+     public ModelAndView createsetting(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("createlesson");
-       HttpSession sesion = hsr.getSession();
+        ModelAndView mv = new ModelAndView("createsettings");
+        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
          
+        int level = Integer.parseInt( hsr.getParameter("TXTlevel"));
+        int subject = Integer.parseInt( hsr.getParameter("TXTsubject"));
+        String namesubsection = hsr.getParameter("TXTnamenewsubsection");
         
-       String[] studentIds = hsr.getParameterValues("destino[]");
-       Lessons newlesson = new Lessons();
-       String[] equipmentids;
-       Subject subject = new Subject();
-       Subsection subsection = new Subsection();
-       Level level = new Level();
-       level.setName(hsr.getParameter("TXTlevel"));
-       level.setId(hsr.getParameterValues("TXTlevel"));
-       subject.setName(hsr.getParameter("TXTsubject"));
-       subject.setId(hsr.getParameterValues("TXTsubject"));
-       subsection.setName(hsr.getParameter("TXTsubsection"));
-       subsection.setId(hsr.getParameterValues("TXTsubsection"));
-       equipmentids=hsr.getParameterValues("TXTequipment");
 
-       java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorainicio")+":00.000");
-     java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorafin")+":00.000");
+        String consulta = "insert into subsection(id_subject,nombre_sub_section) values (?,?)";
+        PreparedStatement pst = this.cn.prepareStatement(consulta);
+        pst.setInt(1, subject);
+        pst.setString(2, namesubsection);
 
-       
-       newlesson.setStart(""+timestampstart);
-     newlesson.setFinish(""+timestampend);
-     newlesson.setTeacherid(user.getId());
-       
-      newlesson.setLevel(level);
-      newlesson.setSubject(subject);
-      newlesson.setSubsection(subsection);
-       newlesson.setEquipmentid(equipmentids);
-       
-       String test = hsr.getParameter("TXTloadtemplates");
-       if(test != null)
-       {        
-       newlesson.setName(hsr.getParameter("lessons"));
-       newlesson.setTemplate(true);
-       newlesson.setId(Integer.parseInt(hsr.getParameter("lessons")));
-       }
-       else
-       {
-           newlesson.setName(hsr.getParameter("TXTnombreLessons"));
-           newlesson.setTemplate(false);
-           
-       }
-       Createlesson c = new Createlesson(hsr.getServletContext());
-       c.newlesson(studentIds,newlesson);
+        int registros = pst.executeUpdate();
         
-        mv.addObject("message", "Lesson created");
+         
+
+        
+        mv.addObject("message", registros);
         
         return mv;
     }
