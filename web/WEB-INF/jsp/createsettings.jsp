@@ -274,8 +274,17 @@
         ajax.send("");
     }
 //FUNCIONES PARA AÑADIR SETTINGS
+ function funcionaddSubject()
+    {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                    document.getElementById("subject").innerHTML= ajax.responseText;
+                    }
+                }
+            }
 
-function addSubject()
+    
+    function addSubsection()
     {
         if (window.XMLHttpRequest) //mozilla
         {
@@ -285,12 +294,12 @@ function addSubject()
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-
-        $('#createOnClick').attr('disabled', true);
-        ajax.onreadystatechange = funcionCallBackSubject;
+        
+        ajax.onreadystatechange = funcionaddSubject;
         var levelselected = document.getElementById("level").value;
-        var namenewsubject = document.getElementById("namenewsubject").value;
-        ajax.open("POST","createsetting.htm?select=subjectlistLevel&seleccion1="+levelselected+"&namenewsubject="+namenewsubject,true);
+        var namenewsubject = document.getElementById("subject").value;
+        var namenewsubsection = document.getElementById("namenewsubsection").value;
+        ajax.open("POST","createsetting.htm?select=subjectlistLevel&seleccion1="+levelselected+"&namenewsubject="+namenewsubject+"&namenewsubsection="+namenewsubsection,true);
         
         ajax.send("");
        
@@ -327,7 +336,7 @@ $(function() {
         <h1 class="text-center">Create Setting</h1>
 
         
-        <form:form id="formSettings" method ="post" action="createsetting.htm?select=createlesson" >
+        <form:form id="formSettings" method ="post" action="createsetting.htm?select=createsetting" >
                     
                     <fieldset>
                 <legend>Create subsection</legend>
@@ -369,25 +378,25 @@ $(function() {
                 </div>
                 <div class="col-xs-12" style="margin-top: 20px;">
                 <div class="col-xs-3 center-block"></div>
-                <div class="col-xs-3 center-block form-inline">
-                    <label class="control-label">Name new subject</label>
+               <div class="col-xs-3 center-block form-inline">
+                    <%-- <label class="control-label">Name new subject</label>
                     <input type="text" class="form-control" name="TXTnamenewsubject" id="namenewsubject" required="" placeholder="Name new subsection">
-                    <button name="TXTaddSubject" value="" class="btn btn-detalles" id="addSubject" data-target=".bs-example-modal-lg" onchange="addSubject()">
+                    <button name="TXTaddSubject" value="" class="btn btn-detalles" id="addSubject" data-target=".bs-example-modal-lg" onclick="addSubject()">
                         <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subject"></span>
-                    </button>
+                    </button>--%>
                 </div>
                 
                 <div class="col-xs-3 center-block form-inline">
                     <label class="control-label">Name new subsection</label>
-                    <input type="text" class="form-control" name="TXTnamenewsubsection" id="NameLessons"  placeholder="Name new subsection">
-                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
+                    <input type="text" class="form-control" name="TXTnamenewsubsection" id="namenewsubsection"  placeholder="Name new subsection">
+                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="addSubsection()">
                         <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subsection"></span>
                     </button>
                 </div>
                 
                 <div class="col-xs-3 center-block form-inline">
                     <label class="control-label">Name new equipment</label>
-                    <input type="text" class="form-control" name="TXTnamenewsubsection" id="NameLessons"  placeholder="Name new subsection">
+                    <input type="text" class="form-control" name="TXTnamenewequipment" id="NameLessons"  placeholder="Name new equipment">
                     <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
                         <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add Equipment"></span>
                     </button>
