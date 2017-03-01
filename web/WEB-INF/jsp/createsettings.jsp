@@ -11,8 +11,6 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
-        <%@ include file="infouser.jsp" %>
-        <%@ include file="menu.jsp" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create Lessons</title>
@@ -379,57 +377,33 @@ $(function() {
                 </div>
                 </div>
                 <div class="col-xs-12" style="margin-top: 20px;">
-                    <div class="col-xs-3 center-block"></div>
-                    <div class="col-xs-3 center-block form-inline">
-                        <%-- <label class="control-label">Name new subject</label>
-                        <input type="text" class="form-control" name="TXTnamenewsubject" id="namenewsubject" required="" placeholder="Name new subsection">
-                        <button name="TXTaddSubject" value="" class="btn btn-detalles" id="addSubject" data-target=".bs-example-modal-lg" onclick="addSubject()">
-                            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subject"></span>
-                        </button>--%>
-                    </div>
-
-                    <div class="col-xs-3 center-block form-inline">
-                        <label class="control-label">Name new subsection</label>
-                        <input type="text" class="form-control" name="TXTnamenewsubsection" id="namenewsubsection"  placeholder="Name new subsection">
-                        <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="addSubsection()">
-                            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subsection"></span>
-                        </button>
-                    </div>
-
-                    <div class="col-xs-3 center-block form-inline">
-                        <label class="control-label">Name new equipment</label>
-                        <input type="text" class="form-control" name="TXTnamenewequipment" id="NameLessons"  placeholder="Name new equipment">
-                        <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
-                            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add equipment"></span>
-                        </button>
-                    </div>
+                <div class="col-xs-3 center-block"></div>
+               <div class="col-xs-3 center-block form-inline">
+                    <%-- <label class="control-label">Name new subject</label>
+                    <input type="text" class="form-control" name="TXTnamenewsubject" id="namenewsubject" required="" placeholder="Name new subsection">
+                    <button name="TXTaddSubject" value="" class="btn btn-detalles" id="addSubject" data-target=".bs-example-modal-lg" onclick="addSubject()">
+                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subject"></span>
+                    </button>--%>
                 </div>
-                <div class="col-xs-12" style="margin-top: 20px;">
-                    <div class="col-xs-3 center-block"></div>
-                    <div class="col-xs-3 center-block form-inline">
-                        <%-- <label class="control-label">Name new subject</label>
-                        <input type="text" class="form-control" name="TXTnamenewsubject" id="namenewsubject" required="" placeholder="Name new subsection">
-                        <button name="TXTaddSubject" value="" class="btn btn-detalles" id="addSubject" data-target=".bs-example-modal-lg" onclick="addSubject()">
-                            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subject"></span>
-                        </button>--%>
-                    </div>
-
-                    <div class="col-xs-3 center-block form-inline">
-                        <label class="control-label">Comments subsection</label>
-                        <input type="text" class="form-control" name="TXTnamenewsubsection" id="namenewsubsection"  placeholder="Name new subsection">
-                        <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="addSubsection()">
-                            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subsection"></span>
-                        </button>
-                    </div>
-
-                    <div class="col-xs-3 center-block form-inline">
-                        <label class="control-label">Comments equipment</label>
-                        <input type="text" class="form-control" name="TXTnamenewequipment" id="NameLessons"  placeholder="Name new equipment">
-                        <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
-                            <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add equipment"></span>
-                        </button>
-                    </div>               
-                </div>    
+                
+                <div class="col-xs-3 center-block form-inline">
+                    <label class="control-label">Name new subsection</label>
+                    <input type="text" class="form-control" name="TXTnamenewsubsection" id="namenewsubsection"  placeholder="Name new subsection">
+                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="addSubsection()">
+                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subsection"></span>
+                    </button>
+                </div>
+                
+                <div class="col-xs-3 center-block form-inline">
+                    <label class="control-label">Name new equipment</label>
+                    <input type="text" class="form-control" name="TXTnamenewequipment" id="NameLessons"  placeholder="Name new equipment">
+                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
+                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add Equipment"></span>
+                    </button>
+                </div>
+                
+                </div>
+                    
 </fieldset>
 <%--                 
                 <div class="hidden col-xs-12" id="divCrearLessons" style="padding-left: 0px;">
