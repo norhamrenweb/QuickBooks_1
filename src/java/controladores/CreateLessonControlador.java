@@ -331,20 +331,20 @@ public class CreateLessonControlador extends MultiActionController{
       newlesson.setSubsection(subsection);
        newlesson.setEquipmentid(equipmentids);
        
-       String test = hsr.getParameter("TXTloadtemplates");
-       if(test != null)
-       {        
-       newlesson.setName(hsr.getParameter("lessons"));
-       newlesson.setTemplate(true);
-       String x = hsr.getParameter("lessons");
-       newlesson.setId(Integer.parseInt(hsr.getParameter("lessons")));
-       }
-       else
-       {
+//       String test = hsr.getParameter("TXTloadtemplates");
+//       if(test != null)
+//       {        
+//       newlesson.setName(hsr.getParameter("lessons"));
+//       newlesson.setTemplate(true);
+//       String x = hsr.getParameter("lessons");
+//       newlesson.setId(Integer.parseInt(hsr.getParameter("lessons")));
+//       }
+//       else
+//       {
            newlesson.setName(hsr.getParameter("TXTnombreLessons"));
            newlesson.setTemplate(false);
            
-       }
+     //  }
        Createlesson c = new Createlesson(hsr.getServletContext());
        c.newlesson(studentIds,newlesson);
         
