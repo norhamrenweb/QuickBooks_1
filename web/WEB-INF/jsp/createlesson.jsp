@@ -97,7 +97,7 @@
         
         var ajax;
 
- function funcionCallBackLevelStudent()
+    function funcionCallBackLevelStudent()
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
