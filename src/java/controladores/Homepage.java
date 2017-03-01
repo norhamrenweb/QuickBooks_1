@@ -58,46 +58,71 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
        
         HttpSession session = hsr.getSession();
         User user = new User();
-         user.setName(hsr.getParameter("txtusuario"));
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-      Statement ps = this.cn.createStatement(1004,1007);
-      ResultSet rs = ps.executeQuery("SELECT typeuser,id_usuario FROM usuarios where nombre='"+ user.getName()+"'");
-       if (!rs.next())
-       {
-           ModelAndView mv = new ModelAndView("userform");
+        int scgrpid = 0;
+        boolean result = false;
+         LoginVerification login = new LoginVerification();
+         user = login.consultUserDB(hsr.getParameter("txtusuario"), hsr.getParameter("txtpassword"));
+         if(user.getId()==0){
+         ModelAndView mv = new ModelAndView("userform");
         String message = "No access rights defined";
         mv.addObject("message", message);
         return mv;
-       }
-       else{
-       rs.beforeFirst();
-           while (rs.next())
-            {
-            user.setType(rs.getInt("typeuser"));
-            user.setId(rs.getInt("id_usuario"));
-            }
-        if (user.getType()== 3)
-        {
-        ModelAndView mv = new ModelAndView("redirect:/suhomepage.htm?opcion=loadconfig");
-        String message = "Welcome super user";
-        session.setAttribute("user", user);
+         }
+         else{
+         scgrpid=login.getSecurityGroupID("MontesoriTest");
+         result = login.fromGroup(scgrpid, user.getId());
+         if (result == true){
+        ModelAndView mv = new ModelAndView("redirect:/homepage.htm?select3=loadLessons");
+     String  message = "welcome user";
+       session.setAttribute("user", user);
         mv.addObject("message", message);
         return mv;
         }
-        else
-        {
-         ModelAndView mv = new ModelAndView("redirect:/homepage.htm?select3=loadLessons");
-        String  message = "welcome user";
-        session.setAttribute("user", user);
+         else {
+           ModelAndView mv = new ModelAndView("userform");
+        String message = "Username or Password incorrect";
         mv.addObject("message", message);
+        return mv;
+       }}
+//        DriverManagerDataSource dataSource;
+//        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+//        this.cn = dataSource.getConnection();
+//      Statement ps = this.cn.createStatement(1004,1007);
+//      ResultSet rs = ps.executeQuery("SELECT typeuser,id_usuario FROM usuarios where nombre='"+ user.getName()+"'");
+//       if (!rs.next())
+//       {
+//           ModelAndView mv = new ModelAndView("userform");
+//        String message = "No access rights defined";
+//        mv.addObject("message", message);
+//        return mv;
+//       }
+//       else{
+//       rs.beforeFirst();
+//           while (rs.next())
+//            {
+//            user.setType(rs.getInt("typeuser"));
+//            user.setId(rs.getInt("id_usuario"));
+//            }
+//        if (user.getType()== 3)
+//        {
+//        ModelAndView mv = new ModelAndView("redirect:/suhomepage.htm?opcion=loadconfig");
+//        String message = "Welcome super user";
+//        session.setAttribute("user", user);
+//        mv.addObject("message", message);
+//        return mv;
+//        }
+//        else
+//        {
+//         ModelAndView mv = new ModelAndView("redirect:/homepage.htm?select3=loadLessons");
+//        String  message = "welcome user";
+//        session.setAttribute("user", user);
        
-        return mv;
-        }
+      
+       
+        
 
 }
-}
+
 public ModelAndView save(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 ModelAndView mv = new ModelAndView("suhomepage");
     String qbdburl = hsr.getParameter("qbdburl");

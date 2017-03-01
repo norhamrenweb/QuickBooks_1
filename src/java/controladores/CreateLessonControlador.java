@@ -329,6 +329,7 @@ public class CreateLessonControlador extends MultiActionController{
        {        
        newlesson.setName(hsr.getParameter("lessons"));
        newlesson.setTemplate(true);
+       String x = hsr.getParameter("lessons");
        newlesson.setId(Integer.parseInt(hsr.getParameter("lessons")));
        }
        else
