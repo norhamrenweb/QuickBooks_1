@@ -298,7 +298,7 @@ public class CreateSettingControlador extends MultiActionController{
         User user = (User) sesion.getAttribute("user");
          
         int level = Integer.parseInt( hsr.getParameter("TXTlevel"));
-        int subject = Integer.parseInt( hsr.getParameter("TXTsubject"));
+        int subject = Integer.parseInt( hsr.getParameter("TXTcourse"));
         String namesubsection = hsr.getParameter("TXTnamenewsubsection");
         
 

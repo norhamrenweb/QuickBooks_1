@@ -154,24 +154,24 @@ public class CreateLessonControlador extends MultiActionController{
                 subjectid = hsr.getParameter("seleccion2");
             
             
-          ResultSet rs1 = st.executeQuery("select nombre_sub_section,id_subsection from public.subsection where id_subject="+subjectid);
+          ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid);
           Subsection s = new Subsection();
-          s.setName("Select Subsection");
+          s.setName("Select Objective");
           subsections.add(s);
            
            while (rs1.next())
             {
              String[] ids = new String[1];
                 Subsection sub = new Subsection();
-            ids[0] = ""+rs1.getInt("id_subsection");
+            ids[0] = ""+rs1.getInt("id");
              sub.setId(ids);
-             sub.setName(rs1.getString("nombre_sub_section"));
+             sub.setName(rs1.getString("name"));
                 subsections.add(sub);
             }
           
             
         } catch (SQLException ex) {
-            System.out.println("Error leyendo Subsections: " + ex);
+            System.out.println("Error leyendo Objectives: " + ex);
         }
         
         mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
@@ -197,19 +197,26 @@ public class CreateLessonControlador extends MultiActionController{
                 subsectionid = hsr.getParameter("seleccion3");
             
             
-          ResultSet rs1 = st.executeQuery("select nombre_activity_equipment,id_activity_equipment from activity_equipment where id_subsection="+subsectionid);
-          String[] ids = new String[1];
+          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+subsectionid+")");
+          //String[] ids = new String[1];
            while (rs1.next())
             {
-             Equipment eq = new Equipment();
-            ids[0] = String.valueOf(rs1.getInt("id_activity_equipment"));
-             eq.setId(ids);
-             eq.setName(rs1.getString("nombre_activity_equipment"));
-                equipments.add(eq);
+//             Equipment eq = new Equipment();
+//            ids[0] = String.valueOf(rs1.getInt("id"));
+//             eq.setId(ids);
+//             eq.setName(rs1.getString("name"));
+//                equipments.add(eq);
+                Equipment eq = new Equipment();
+                String[] id= new String[1];
+               id[0]= ""+rs1.getInt("id");
+              
+                eq.setId(id);
+              eq.setName(rs1.getString("name"));
+               equipments.add(eq);
             }
             
         } catch (SQLException ex) {
-            System.out.println("Error leyendo equipments: " + ex);
+            System.out.println("Error leyendo contents: " + ex);
         }
         
       
@@ -368,15 +375,15 @@ public class CreateLessonControlador extends MultiActionController{
                 subjectid = hsr.getParameter("seleccionTemplate") ;
             //}
             
-          ResultSet rs1 = st.executeQuery("select nombre_lessons,id_lessons from lessons where id_subject= "+subjectid+" and template = true");
+          ResultSet rs1 = st.executeQuery("select name,id from lesson_plan where subject_id= "+subjectid);
           Lessons l = new Lessons();
           l.setName("Select lesson name");
           lessons.add(l);
            while (rs1.next())
             {
                  Lessons ll = new Lessons();
-                 ll.setName(rs1.getString("nombre_lessons"));
-                 ll.setId(rs1.getInt("id_lessons"));
+                 ll.setName(rs1.getString("name"));
+                 ll.setId(rs1.getInt("id"));
                 lessons.add(ll);
             }
             
@@ -407,45 +414,45 @@ public class CreateLessonControlador extends MultiActionController{
              Statement st = this.cn.createStatement();
              String description=null;
              String subsectionid[] = new String[1];
-            String consulta = "SELECT id_subsection,description FROM public.lessons where id_lessons ="+lessonplanid[0];
+            String consulta = "SELECT objective_id FROM public.lessons where id ="+lessonplanid[0];
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
             {
-                description = rs.getString("description");
-                subsectionid[0] = ""+rs.getInt("id_subsection");
+            //    description = rs.getString("comments");
+                subsectionid[0] = ""+rs.getInt("objective_id");
             }
-            consulta = "select nombre_sub_section from public.subsection where id_subsection= "+subsectionid[0];
+            consulta = "select name from public.objective where id= "+subsectionid[0];
           ResultSet rs1 = st.executeQuery(consulta);
           
            while (rs1.next())
             {
                 
                 sub.setId(subsectionid);
-                sub.setName(rs1.getString("nombre_sub_section"));
+                sub.setName(rs1.getString("name"));
             }
-        ResultSet rs2 = st.executeQuery("select id_activity_equipment,nombre_activity_equipment from public.activity_equipment where id_subsection= "+subsectionid[0]);
+        ResultSet rs2 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select content_id from public.objective_content where public.objective_content.objective_id = "+subsectionid[0]);
         // must change latter
         int i = 0;
    while (rs2.next())
             {
                 Equipment eq = new Equipment();
                 String[] ids = new String[1];
-               ids[0]= ""+rs2.getInt("id_activity_equipment");
+               ids[0]= ""+rs2.getInt("id");
               
                 eq.setId(ids);
-                eq.setName(rs2.getString("nombre_activity_equipment"));
+              eq.setName(rs2.getString("name"));
                 allequipments.add(eq);
             }
-    ResultSet rs3 = st.executeQuery("SELECT nombre_activity_equipment,id_activity_equipment FROM public.activity_equipment where public.activity_equipment.id_activity_equipment IN (select id_equipment from public.lessons_equipment where public.lessons_equipment.id_lessons = "+lessonplanid[0]+")");
+    ResultSet rs3 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select content_id from public.lesson_content where public.lesson_content.lessonplan_id = "+lessonplanid[0]+")");
        
    while (rs3.next())
             {
                 Equipment eq = new Equipment();
              String[] ids = new String[1];
-             ids[0] = ""+rs3.getInt("id_activity_equipment");
+             ids[0] = ""+rs3.getInt("id");
                 eq.setId(ids);
-                eq.setName(rs3.getString("nombre_activity_equipment"));
+                eq.setName(rs3.getString("name"));
                 equipments.add(eq);
             }
         } catch (SQLException ex) {
