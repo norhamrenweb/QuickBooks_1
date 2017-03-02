@@ -11,6 +11,7 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
+
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create Lessons</title>
@@ -20,14 +21,16 @@
         <link href="recursos/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
         <link href="recursos/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
         <link href="recursos/css/bootstrap-toggle.css" rel="stylesheet" type="text/css"/>
-
         <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
         
+        <script src="recursos/js/bootstrap.js" type="text/javascript"></script>
+        <script src="recursos/js/bootstrap-toggle.js" type="text/javascript"></script>
+<!--        <script src="recursos/js/bootstrap-modal.js" type="text/javascript"></script>-->
         <script src="recursos/js/moment.js" type="text/javascript"></script>
         <script src="recursos/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
         <script src="recursos/js/es.js" type="text/javascript"></script>
         <script src="recursos/js/ar.js" type="text/javascript"></script>
-        <script src="recursos/js/bootstrap-toggle.js" type="text/javascript"></script>
+        
 
         <script>
 
@@ -297,6 +300,7 @@ $(function() {
  
 </script>
     </head>
+    <%@ include file="menu.jsp" %>
     <body>
         
         
@@ -425,8 +429,17 @@ $(function() {
                             </c:forEach>--%>
                         </select>
                     </div>
+                        
                 </div>    
-   
+   <div class="col-xs-3 center-block form-group">
+                    <label class="control-label">Method</label>
+                    <select class="form-control" name="method" id="method">
+                    
+                       <c:forEach var="method" items="${method}">
+                                <option value="${method.id[0]}" >${method.name}</option>
+                            </c:forEach>
+                    </select>
+                </div>
             </fieldset>
             <fieldset>
                     <legend>Select students</legend>
@@ -478,13 +491,13 @@ $(function() {
                     </div>
                 <div class="col-xs-2"></div>
             </fieldset>
-        <div class="col-xs-12 text-center">
+            <div class="col-xs-12 text-center">
             <input type="submit" class="btn btn-success" id="createOnClick" disabled="True" value="<spring:message code="etiq.txtcreate"/>">
         </div>
         </form:form>
         
         </div>
-        <div class="col-xs-6">
+<%--        <div class="col-xs-6">
                 <div class="form-group">
                     <label class="control-label"></label>
                         <div class='input-group' style="margin-top:19px;">
@@ -493,7 +506,31 @@ $(function() {
                             </form:form>
                         </div>
                 </div>
-            </div>
-        <c:out value="${message}"/>
+        </div>--%>
+<div class="col-xs-12">
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Launch demo modal
+</button>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+       <p><c:out value="${message}"/></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
     </body>
 </html>
