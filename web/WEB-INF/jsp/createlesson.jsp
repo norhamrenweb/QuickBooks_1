@@ -310,13 +310,13 @@ $(function() {
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
             <fieldset>
-                <legend>Options Date</legend>
+                <legend>Select Date</legend>
                 <div class="form-group">
                     <div class="row">
 
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="fecha"><spring:message code="etiq.txtstartdate"/></label>
+                                <label class="control-label" for="fecha">Date</label>
                                 <div class='input-group date' id='fecha'>
                                     <input type='text' name="TXTfecha" class="form-control" id="fecha" required="required"/>
                                     <span class="input-group-addon">
@@ -328,7 +328,7 @@ $(function() {
 
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="horainicio"><spring:message code="etiq.txtenddate"/></label>
+                                <label class="control-label" for="horainicio">Start hour</label>
                                 <div class='input-group date' id='horainicio'>
                                     <input type='text' name="TXThorainicio" class="form-control" required="required"/>
                                     <span class="input-group-addon">
@@ -339,7 +339,7 @@ $(function() {
                         </div>
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="horafin"><spring:message code="etiq.txtenddate"/></label>
+                                <label class="control-label" for="horafin">Finish hour</label>
                                 <div class='input-group date' id='horafin'>
                                     <input type='text' name="TXThorafin" class="form-control" required="required"/>
                                     <span class="input-group-addon">
@@ -353,7 +353,7 @@ $(function() {
                 </div>
             </fieldset>
             <fieldset>
-                <legend>Options Lessons</legend>
+                <legend>Lessons details</legend>
                 
 
                 <div class="col-xs-3 form-group">
@@ -379,12 +379,12 @@ $(function() {
                     <input disabled="true" type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-on="Load Lessons" data-off="Create Lessons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">
                 </div>
                 <div class="col-xs-3 center-block">
-                    <label class="control-label"><spring:message code="etiq.namelessons"/></label>
+                    <label class="control-label">Name lesson</label>
                     <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
                 </div>
                 
                 <div class="hidden col-xs-12" id="divCrearLessons" style="padding-left: 0px;">
-                    <div class="col-xs-3 center-block">
+                    <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Objective</label>
                         <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
                            <c:forEach var="objective" items="${objectives}">
@@ -392,7 +392,7 @@ $(function() {
                                 </c:forEach>
                         </select>
                     </div>
-                    <div class="col-xs-3 center-block">
+                    <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Content</label>
                         <select class="form-control" name="TXTcontent" id="content" multiple>
                            <c:forEach var="content" items="${contents}">
@@ -403,7 +403,7 @@ $(function() {
                 </div>
                         
                 <div class="hidden col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
-                    <div class="col-xs-3 center-block">
+                    <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Select template lessons</label>
                         <select class="form-control" name="lessons" id="lessons" onchange="comboSelectionTemplateLessons()">
                            <c:forEach var="template" items="${lessons}">
@@ -418,7 +418,7 @@ $(function() {
 
                         </select>
                     </div>--%>
-                    <div class="col-xs-3 center-block">
+                    <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Template</label>
                         <select class="form-control" name="TXTcontent" id="template" multiple>
                             <c:forEach var="allcontents" items="${allcontents}">
@@ -431,7 +431,7 @@ $(function() {
                     </div>
                         
                 </div>    
-   <div class="col-xs-3 center-block form-group">
+                <div class="col-xs-3 center-block form-group">
                     <label class="control-label">Method</label>
                     <select class="form-control" name="method" id="method">
                     
@@ -439,6 +439,14 @@ $(function() {
                                 <option value="${method.id[0]}" >${method.name}</option>
                             </c:forEach>
                     </select>
+                </div>
+                <div class="col-xs-3 center-block form-group">
+                    <label class="control-label">Comments</label>
+                    <textarea class="form-control" name="TXTcomments" id="comments" placeholder="add comments" maxlength="200"></textarea>
+                </div>
+                <div class="col-xs-12 center-block form-group">
+                    <label class="control-label">Attachments</label>
+                    <input type="file" class="form-control" name="TXTfile" id="file">
                 </div>
             </fieldset>
             <fieldset>
