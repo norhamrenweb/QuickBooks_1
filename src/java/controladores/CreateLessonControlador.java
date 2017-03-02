@@ -336,6 +336,7 @@ public class CreateLessonControlador extends MultiActionController{
        objective.setName(hsr.getParameter("TXTobjective"));
        objective.setId(hsr.getParameterValues("TXTobjective"));
        contentids=hsr.getParameterValues("TXTcontent");
+       newlesson.setComments(hsr.getParameter("TXTcomments"));
 
        java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorainicio")+":00.000");
      java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorafin")+":00.000");

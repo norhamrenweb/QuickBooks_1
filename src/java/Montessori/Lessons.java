@@ -25,6 +25,15 @@ public class Lessons {
     private Subject subject;
     private String[] contentid;
     private int teacherid;
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+    private String comments;
   
 
     public List<Students> getStudents() {

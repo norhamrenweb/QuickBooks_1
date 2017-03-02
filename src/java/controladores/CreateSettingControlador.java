@@ -49,7 +49,6 @@ public class CreateSettingControlador extends MultiActionController{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-        mv.addObject("listaAlumnos", this.getStudents());
         Statement st = this.cn.createStatement();
         ResultSet rs = st.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
         List <Level> grades = new ArrayList();
@@ -70,21 +69,7 @@ public class CreateSettingControlador extends MultiActionController{
         return mv;
     }
 
-    public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
-        ModelAndView mv = new ModelAndView("createlesson");
-       
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        List <Students> studentsgrades = new ArrayList();
-        String[] levelid = hsr.getParameterValues("seleccion");
-        String test = hsr.getParameter("levelStudent");
-        studentsgrades =this.getStudentslevel(levelid[0]);
-        mv.addObject("listaAlumnos",studentsgrades );
-        
-        return mv;
-    }
+   
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createsettings");
@@ -137,10 +122,10 @@ public class CreateSettingControlador extends MultiActionController{
         return mv;
     }
     
-    public ModelAndView subsectionlistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createsettings");
-        List<Objective> subsections = new ArrayList<>();
+        List<Objective> objectives = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -155,36 +140,36 @@ public class CreateSettingControlador extends MultiActionController{
                 subjectid = hsr.getParameter("seleccion2");
             
             
-          ResultSet rs1 = st.executeQuery("select nombre_sub_section,id_subsection from public.subsection where id_subject="+subjectid);
+          ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid);
           Objective s = new Objective();
-          s.setName("Select Subsection");
-          subsections.add(s);
+          s.setName("Select Objective");
+          objectives.add(s);
            
            while (rs1.next())
             {
              String[] ids = new String[1];
                 Objective sub = new Objective();
-            ids[0] = ""+rs1.getInt("id_subsection");
+            ids[0] = ""+rs1.getInt("id");
              sub.setId(ids);
-             sub.setName(rs1.getString("nombre_sub_section"));
-                subsections.add(sub);
+             sub.setName(rs1.getString("name"));
+                objectives.add(sub);
             }
           
             
         } catch (SQLException ex) {
-            System.out.println("Error leyendo Subsections: " + ex);
+            System.out.println("Error leyendo Objectives: " + ex);
         }
         
         mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
-        mv.addObject("subsections", subsections);
+        mv.addObject("objectives", objectives);
         
         return mv;
     }
     
-    public ModelAndView equipmentlistSubsection(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
-        List<Content> equipments = new ArrayList<>();
+        List<Content> contents = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -193,104 +178,34 @@ public class CreateSettingControlador extends MultiActionController{
         
             
              Statement st = this.cn.createStatement();
-             String subsectionid = null;
+             String objectiveid = null;
             
-                subsectionid = hsr.getParameter("seleccion3");
+                objectiveid = hsr.getParameter("seleccion3");
             
             
-          ResultSet rs1 = st.executeQuery("select nombre_activity_equipment,id_activity_equipment from activity_equipment where id_subsection="+subsectionid);
+          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+objectiveid);
           String[] ids = new String[1];
            while (rs1.next())
             {
              Content eq = new Content();
-            ids[0] = String.valueOf(rs1.getInt("id_activity_equipment"));
+            ids[0] = String.valueOf(rs1.getInt("id"));
              eq.setId(ids);
-             eq.setName(rs1.getString("nombre_activity_equipment"));
-                equipments.add(eq);
+             eq.setName(rs1.getString("name"));
+                contents.add(eq);
             }
             
         } catch (SQLException ex) {
-            System.out.println("Error leyendo equipments: " + ex);
+            System.out.println("Error leyendo contents: " + ex);
         }
         
       
-         mv.addObject("equipments", equipments);
+         mv.addObject("contents", contents);
         
         return mv;
     }   
     
-    public ArrayList<Students> getStudents() throws SQLException
-    {
-//        this.conectarOracle();
-        ArrayList<Students> listaAlumnos = new ArrayList<>();
-        try {
-            
-             Statement st = this.cn.createStatement();
-             
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled'";
-            ResultSet rs = st.executeQuery(consulta);
-          
-            while (rs.next())
-            {
-                Students alumnos = new Students();
-                alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
-                alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
-                alumnos.setFoto(rs.getString("PathToPicture"));
-                alumnos.setLevel_id(rs.getString("GradeLevel"));
-                alumnos.setPlacement("Placement");
-                alumnos.setSubstatus("Substatus");
-                listaAlumnos.add(alumnos);
-            }
-            //this.finalize();
-            
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Alumnos: " + ex);
-        }
-       
-        return listaAlumnos;
-    }
-    // get students filtrado por gradelevel
-     public ArrayList<Students> getStudentslevel(String gradeid) throws SQLException
-    {
-//        this.conectarOracle();
-         
-        ArrayList<Students> listaAlumnos = new ArrayList<>();
-        String gradelevel = null;
-        try {
-            
-             Statement st = this.cn.createStatement();
-            ResultSet rs1= st.executeQuery("select GradeLevel from AH_ZAF.dbo.GradeLevels where GradeLevelID ="+gradeid);
-             while(rs1.next())
-             {
-             gradelevel = rs1.getString("GradeLevel");
-             }
-           
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel = '"+gradelevel+"'";
-            ResultSet rs = st.executeQuery(consulta);
-          
-            while (rs.next())
-            {
-                Students alumnos = new Students();
-                alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
-                alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
-                alumnos.setFoto(rs.getString("PathToPicture"));
-                alumnos.setLevel_id(rs.getString("GradeLevel"));
-                alumnos.setPlacement("Placement");
-                alumnos.setSubstatus("Substatus");
-                listaAlumnos.add(alumnos);
-            }
-            //this.finalize();
-            
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Alumnos: " + ex);
-        }
-       
-        return listaAlumnos;
-         
-         
-    }
+    
+   
      public ModelAndView createsetting(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createsettings");
