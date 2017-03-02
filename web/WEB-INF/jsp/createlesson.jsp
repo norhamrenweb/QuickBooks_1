@@ -277,12 +277,13 @@
     
 $(function() {
     $('#subject').change(function() {
-        $('#LoadTemplates').parent().attr("disabled",false);
-        $('#LoadTemplates').attr("disabled",false);
+//        $('#LoadTemplates').parent().attr("disabled",false);
+//        $('#LoadTemplates').attr("disabled",false);
+        $('#LoadTemplates').children().removeClass("disabled");
     });
     
     $('#LoadTemplates').change(function() {
-         if (this.checked) {
+         if ($("input:radio[name='options']:checked").val() === 'option1' ){
     $("#lessons").attr("disabled", true);
     $('#divCrearLessons').removeClass('hidden');
     $('#divLoadLessons').addClass('hidden');
@@ -294,11 +295,27 @@ $(function() {
 //    $("#NameLessons").attr("disabled", false);
     }
     });
+//    $('#LoadTemplates').change(function() {
+//         if (this.checked).{
+//    $("#lessons").attr("disabled", true);
+//    $('#divCrearLessons').removeClass('disabled');
+//    $('#divLoadLessons').addClass('disabled');
+////    $("#NameLessons").attr("disabled", true);
+//    } else {
+//    $("#lessons").attr("disabled", false);
+//    $('#divLoadLessons').removeClass('disabled');
+//    $('#divCrearLessons').addClass('disabled');
+////    $("#NameLessons").attr("disabled", false);
+//    }
+//    });
 })
         </script>
-<script>
- 
-</script>
+        <style>
+            textarea 
+            {
+            resize: none;
+            }
+        </style>
     </head>
     <%@ include file="menu.jsp" %>
     <body>
@@ -376,7 +393,15 @@ $(function() {
                 </div>
                 <div class="col-xs-3 center-block text-center">
                     <label class="control-label">Select your option</label>
-                    <input disabled="true" type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-on="Load Lessons" data-off="Create Lessons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">
+                    <div class="btn-group" data-toggle="buttons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">
+                        <label class="btn btn-primary active disabled">
+                            <input type="radio" name="options" id="option1" autocomplete="off" value="option1">Create Lessons
+                        </label>
+                        <label class="btn btn-success disabled">
+                            <input type="radio" name="options" id="option2" autocomplete="off" value="option2">Load Lessons
+                        </label>
+                    </div>
+<%--                    <input disabled="true" type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-on="Create Lessons" data-off="Load Lessons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">--%>
                 </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label">Name lesson</label>
@@ -406,9 +431,9 @@ $(function() {
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Select template lessons</label>
                         <select class="form-control" name="lessons" id="lessons" onchange="comboSelectionTemplateLessons()">
-                           <c:forEach var="template" items="${lessons}">
+                            <c:forEach var="template" items="${lessons}">
                                     <option value="${template.id}" >${template.name}</option>
-                                </c:forEach>
+                            </c:forEach>
                         </select>
                     </div>
 <%--                    <div class="col-xs-3 center-block">
