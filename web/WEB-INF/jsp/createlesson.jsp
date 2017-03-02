@@ -133,11 +133,11 @@
                     }
                 }
             }
-    function funcionCallBackSubsection()
+    function funcionCallBackObjective()
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                    document.getElementById("subsection").innerHTML= ajax.responseText;
+                    document.getElementById("objective").innerHTML= ajax.responseText;
                     }
                 }
             }
@@ -149,7 +149,7 @@
                     }
                 }
             }    
-            //FUNCIONA PERO SOLO PUEDO PINTAR EQUIPMENT
+            //FUNCIONA PERO SOLO PUEDO PINTAR Content
 //    function funcionCallBackTemplateLessons()
 //    {
 //           if (ajax.readyState===4){
@@ -167,11 +167,11 @@
                 }
             }
             
-    function funcionCallBackEquipment()
+    function funcionCallBackContent()
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                    document.getElementById("equipment").innerHTML= ajax.responseText;
+                    document.getElementById("content").innerHTML= ajax.responseText;
                     }
                 }
             }
@@ -207,9 +207,9 @@
         }
 
         
-        ajax.onreadystatechange=funcionCallBackSubsection;
+        ajax.onreadystatechange=funcionCallBackObjective;
         var seleccion2 = document.getElementById("subject").value;
-        ajax.open("POST","createlesson.htm?select=subsectionlistSubject&seleccion2="+seleccion2,true);
+        ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccion2,true);
 
         ajax.send("");
         
@@ -246,11 +246,11 @@
         
         ajax.onreadystatechange=funcionCallBackTemplateLessons;
         var seleccionTemplate = document.getElementById("lessons").value;
-        //ajax.open("POST","createlesson.htm?select=subsectionlistSubject&seleccion2="+seleccionTemplate,true);
+        //ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccionTemplate,true);
         ajax.open("POST","createlesson.htm?select=loadLessonplan&seleccionTemplate="+seleccionTemplate,true);
         ajax.send("");
     }
-     function comboSelectionSubsection()
+     function comboSelectionObjective()
     {
         if (window.XMLHttpRequest) //mozilla
         {
@@ -261,14 +261,14 @@
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
 
-        if(document.getElementById("subsection").value === 0){
+        if(document.getElementById("objective").value === 0){
             $('#createOnClick').attr('disabled', true);
         }else{
             $('#createOnClick').attr('disabled', false);
         }
-        ajax.onreadystatechange=funcionCallBackEquipment;
-        var seleccion3 = document.getElementById("subsection").value;
-        ajax.open("POST","createlesson.htm?select=equipmentlistSubsection&seleccion3="+seleccion3,true);
+        ajax.onreadystatechange=funcionCallBackContent;
+        var seleccion3 = document.getElementById("objective").value;
+        ajax.open("POST","createlesson.htm?select=contentlistObjective&seleccion3="+seleccion3,true);
         ajax.send("");
     }
     
@@ -381,18 +381,18 @@ $(function() {
                 
                 <div class="hidden col-xs-12" id="divCrearLessons" style="padding-left: 0px;">
                     <div class="col-xs-3 center-block">
-                        <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
-                        <select class="form-control" name="TXTsubsection" id="subsection" onchange="comboSelectionSubsection()">
-                           <c:forEach var="subsection" items="${subsections}">
-                                    <option value="${subsection.id[0]}" >${subsection.name}</option>
+                        <label class="control-label">Objective</label>
+                        <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
+                           <c:forEach var="objective" items="${objectives}">
+                                    <option value="${objective.id[0]}" >${objective.name}</option>
                                 </c:forEach>
                         </select>
                     </div>
                     <div class="col-xs-3 center-block">
-                        <label class="control-label"><spring:message code="etiq.txtequipment"/></label>
-                        <select class="form-control" name="TXTequipment" id="equipment" multiple>
-                           <c:forEach var="equipment" items="${equipments}">
-                                    <option value="${equipment.id[0]}" >${equipment.name}</option>
+                        <label class="control-label">Content</label>
+                        <select class="form-control" name="TXTcontent" id="content" multiple>
+                           <c:forEach var="content" items="${contents}">
+                                    <option value="${content.id[0]}" >${content.name}</option>
                                 </c:forEach>
                         </select>
                     </div>
@@ -408,20 +408,20 @@ $(function() {
                         </select>
                     </div>
 <%--                    <div class="col-xs-3 center-block">
-                        <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
-                        <select class="form-control" name="TXTsubsection" id="template">
-                             <option value="${subsection.name}" >${subsection.name}</option>
+                        <label class="control-label"><spring:message code="etiq.txtobjective"/></label>
+                        <select class="form-control" name="TXTobjective" id="template">
+                             <option value="${objective.name}" >${objective.name}</option>
 
                         </select>
                     </div>--%>
                     <div class="col-xs-3 center-block">
-                        <label class="control-label"><spring:message code="etiq.txtequipment"/> Template</label>
-                        <select class="form-control" name="TXTequipment" id="template" multiple>
-                            <c:forEach var="allequipments" items="${allequipments}">
-                                <option selected="true" value="${allequipments.id[0]}" >${allequipments.name}</option>
+                        <label class="control-label">Template</label>
+                        <select class="form-control" name="TXTcontent" id="template" multiple>
+                            <c:forEach var="allcontents" items="${allcontents}">
+                                <option selected="true" value="${allcontents.id[0]}" >${allcontents.name}</option>
                             </c:forEach><%--
-                            <c:forEach var="equipments" items="${equipments}">
-                                <option value="${allequipments.id[0]}" >${allequipments.name}</option>
+                            <c:forEach var="contents" items="${contents}">
+                                <option value="${allcontents.id[0]}" >${allcontents.name}</option>
                             </c:forEach>--%>
                         </select>
                     </div>
