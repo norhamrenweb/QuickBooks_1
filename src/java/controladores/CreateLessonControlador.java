@@ -65,7 +65,26 @@ public class CreateLessonControlador extends MultiActionController{
             x.setName(rs.getString("GradeLevel"));
         grades.add(x);
         }
+        DriverManagerDataSource dataSource2;
+        dataSource2 = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource2.getConnection();
+         Statement st2 = this.cn.createStatement();
+        ResultSet rs1 = st2.executeQuery("SELECT name,id FROM public.method");
+        List <Method> methods = new ArrayList();
+        Method m = new Method();
+        m.setName("Select Method");
+        methods.add(m);
+        while(rs1.next())
+        {
+            Method x = new Method();
+             String[] ids = new String[1];
+             ids[0]=""+rs1.getInt("id");
+            x.setId(ids);
+            x.setName(rs1.getString("name"));
+        methods.add(x);
+        }
             mv.addObject("gradelevels", grades);
+            mv.addObject("methods",methods);
         
         return mv;
     }
