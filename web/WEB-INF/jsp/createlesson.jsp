@@ -274,7 +274,7 @@
         ajax.open("POST","createlesson.htm?select=contentlistObjective&seleccion3="+seleccion3,true);
         ajax.send("");
     }
-    
+    var lessoncreate = '<%= request.getParameter("message") %>';
 $(function() {
     $('#subject').change(function() {
 //        $('#LoadTemplates').parent().attr("disabled",false);
@@ -553,7 +553,7 @@ $(function() {
         <h4 class="modal-title" id="myModalLabel">Modal title</h4>
       </div>
       <div class="modal-body">
-       <p><c:out value="${message}"/></p>
+       <p><%= request.getParameter("message") %></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
