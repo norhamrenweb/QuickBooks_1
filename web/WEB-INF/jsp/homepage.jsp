@@ -151,10 +151,10 @@
                     <thead>
                         <tr>
                             <td>id</td>
-                            <td><spring:message code="etiq.namelessons"/></td>
-                            <td><spring:message code="etiq.levellessons"/></td>
-                            <td><spring:message code="etiq.subjectlessons"/></td>
-                            <td><spring:message code="etiq.subsectionlessons"/></td>
+                            <td>Lesson Name</td>
+                            <td>Grade Level</td>
+                            <td>Subject</td>
+                            <td>Objective</td>
                             <%--<td><spring:message code="etiq.equipmentlessons"/></td>--%>
                             
                             <td>Date</td>
@@ -170,7 +170,7 @@
                             <td>${lecciones.name}</td>
                             <td>${lecciones.level.name}</td>
                             <td>${lecciones.subject.name}</td>
-                            <td>${lecciones.subsection.name}</td>
+                            <td>${lecciones.objective.name}</td>
                             <td>${lecciones.date}</td>
                             <td>${lecciones.start}</td>
                             <td>${lecciones.finish}</td>

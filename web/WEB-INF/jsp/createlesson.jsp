@@ -435,7 +435,7 @@ $(function() {
                     <label class="control-label">Method</label>
                     <select class="form-control" name="method" id="method">
                     
-                       <c:forEach var="method" items="${method}">
+                       <c:forEach var="method" items="${methods}">
                                 <option value="${method.id[0]}" >${method.name}</option>
                             </c:forEach>
                     </select>
