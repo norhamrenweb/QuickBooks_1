@@ -40,7 +40,22 @@
        var userLang = navigator.language || navigator.userLanguage;
        var myDate = new Date();
          //Muestra calendario
-  
+         //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
+         var lessoncreate = '<%= request.getParameter("message") %>';
+         
+     if (lessoncreate === 'Lesson created' ){
+     $('#myModal').modal({
+        show: 'false'
+    })
+
+    } else {
+    $("#lessons").attr("disabled", false);
+    $('#divLoadLessons').removeClass('hidden');
+    $('#divCrearLessons').addClass('hidden');
+//    $("#NameLessons").attr("disabled", false);
+    }
+ 
+         
         $('#fecha').datetimepicker({
             
             format: 'YYYY-MM-DD',
@@ -274,7 +289,8 @@
         ajax.open("POST","createlesson.htm?select=contentlistObjective&seleccion3="+seleccion3,true);
         ajax.send("");
     }
-    var lessoncreate = '<%= request.getParameter("message") %>';
+    
+    
 $(function() {
     $('#subject').change(function() {
 //        $('#LoadTemplates').parent().attr("disabled",false);
@@ -550,15 +566,15 @@ $(function() {
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+<!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
       </div>
-      <div class="modal-body">
-       <p><%= request.getParameter("message") %></p>
+      <div class="modal-body text-center">
+       <H1><%= request.getParameter("message") %></H1>
       </div>
-      <div class="modal-footer">
+<!--      <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+      </div>-->
     </div>
   </div>
 </div>
