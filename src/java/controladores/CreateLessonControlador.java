@@ -317,8 +317,8 @@ public class CreateLessonControlador extends MultiActionController{
          
     }
      public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
-        ModelAndView mv = new ModelAndView("createlesson");
+        String message = "Lesson created";
+        ModelAndView mv = new ModelAndView("redirect:/createlesson.htm?select=start", "message", message);
        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
          
@@ -368,7 +368,7 @@ public class CreateLessonControlador extends MultiActionController{
        Createlesson c = new Createlesson(hsr.getServletContext());
        c.newlesson(studentIds,newlesson);
         
-        mv.addObject("message", "Lesson created");
+       
         
         return mv;
     }
