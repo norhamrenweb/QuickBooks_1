@@ -55,18 +55,18 @@ public class Objective {
         this.cn = dataSource.getConnection();
              Statement st = this.cn.createStatement();
              
-            String consulta = "SELECT nombre_sub_section FROM public.subsection where id_subsection = "+id;
+            String consulta = "SELECT name FROM public.objective where id = "+id;
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
             {
-                subName = rs.getString("nombre_sub_section");
+                subName = rs.getString("name");
                 
             }
             //this.finalize();
             
         } catch (SQLException ex) {
-            System.out.println("Error leyendo Alumnos: " + ex);
+            System.out.println("Error reading objectives: " + ex);
         }
        
         return subName;

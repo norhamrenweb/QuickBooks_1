@@ -49,7 +49,7 @@ public class Createlesson {
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-       st.executeUpdate("insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish) values (' "+newlessons.getName()+"',"+newlessons.getLevel().getName()+","+newlessons.getSubject().getName()+","+newlessons.getSubsection().getName()+",now(),5,'"+newlessons.getStart()+"','"+newlessons.getFinish()+"')");
+       st.executeUpdate("insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish) values (' "+newlessons.getName()+"',"+newlessons.getLevel().getName()+","+newlessons.getSubject().getName()+","+newlessons.getObjective().getName()+",now(),5,'"+newlessons.getStart()+"','"+newlessons.getFinish()+"')");
        
             ResultSet rs = st.executeQuery("select id from lessons where name =' "+newlessons.getName()+"'");// this could be a problem if 2 lessons have the same name
             while(rs.next())
@@ -61,7 +61,7 @@ public class Createlesson {
             {
                 st.executeUpdate("insert into lesson_stud_att(lesson_id,student_id) values ('"+lessonid+"','"+studentIds[i]+"')");
             }
-            equipmentids=newlessons.getEquipmentid();
+            equipmentids=newlessons.getContentid();
              for( int i = 0; i <= equipmentids.length - 1; i++)
             {
                 st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids[i]+"')");

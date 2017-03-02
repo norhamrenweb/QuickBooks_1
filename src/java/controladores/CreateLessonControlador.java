@@ -306,17 +306,17 @@ public class CreateLessonControlador extends MultiActionController{
         
        String[] studentIds = hsr.getParameterValues("destino[]");
        Lessons newlesson = new Lessons();
-       String[] equipmentids;
+       String[] contentids;
        Subject subject = new Subject();
-       Objective subsection = new Objective();
+       Objective objective = new Objective();
        Level level = new Level();
        level.setName(hsr.getParameter("TXTlevel"));
        level.setId(hsr.getParameterValues("TXTlevel"));
        subject.setName(hsr.getParameter("TXTsubject"));
        subject.setId(hsr.getParameterValues("TXTsubject"));
-       subsection.setName(hsr.getParameter("TXTobjective"));
-       subsection.setId(hsr.getParameterValues("TXTobjective"));
-       equipmentids=hsr.getParameterValues("TXTequipment");
+       objective.setName(hsr.getParameter("TXTobjective"));
+       objective.setId(hsr.getParameterValues("TXTobjective"));
+       contentids=hsr.getParameterValues("TXTcontent");
 
        java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorainicio")+":00.000");
      java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorafin")+":00.000");
@@ -328,8 +328,8 @@ public class CreateLessonControlador extends MultiActionController{
        
       newlesson.setLevel(level);
       newlesson.setSubject(subject);
-      newlesson.setSubsection(subsection);
-       newlesson.setEquipmentid(equipmentids);
+      newlesson.setObjective(objective);
+       newlesson.setContentid(contentids);
        
 //       String test = hsr.getParameter("TXTloadtemplates");
 //       if(test != null)

@@ -21,9 +21,9 @@ public class Lessons {
     private String finish;
     private boolean template;
     private Level level;
-    private Objective subsection;
+    private Objective objective;
     private Subject subject;
-    private String[] equipmentid;
+    private String[] contentid;
     private int teacherid;
   
 
@@ -37,8 +37,8 @@ public class Lessons {
     private String date;
     private List<Students> students;
 
-    public String[] getEquipmentid() {
-        return equipmentid;
+    public String[] getContentid() {
+        return contentid;
     }
 
     public int getTeacherid() {
@@ -49,8 +49,8 @@ public class Lessons {
         this.teacherid = teacherid;
     }
 
-    public void setEquipmentid(String[] equipmentid) {
-        this.equipmentid = equipmentid;
+    public void setContentid(String[] equipmentid) {
+        this.contentid = equipmentid;
     }
 
     public Level getLevel() {
@@ -61,12 +61,12 @@ public class Lessons {
         this.level = level;
     }
 
-    public Objective getSubsection() {
-        return subsection;
+    public Objective getObjective() {
+        return objective;
     }
 
-    public void setSubsection(Objective subsection) {
-        this.subsection = subsection;
+    public void setObjective(Objective objective) {
+        this.objective = objective;
     }
 
     public Subject getSubject() {
