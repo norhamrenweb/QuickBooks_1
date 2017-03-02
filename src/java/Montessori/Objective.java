@@ -18,7 +18,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * @author nmohamed
  */
-public class Subsection {
+public class Objective {
     private String[] id;
     private String name;
  Connection cn;

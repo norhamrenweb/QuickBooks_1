@@ -21,7 +21,7 @@ public class Lessons {
     private String finish;
     private boolean template;
     private Level level;
-    private Subsection subsection;
+    private Objective subsection;
     private Subject subject;
     private String[] equipmentid;
     private int teacherid;
@@ -61,11 +61,11 @@ public class Lessons {
         this.level = level;
     }
 
-    public Subsection getSubsection() {
+    public Objective getSubsection() {
         return subsection;
     }
 
-    public void setSubsection(Subsection subsection) {
+    public void setSubsection(Objective subsection) {
         this.subsection = subsection;
     }
 

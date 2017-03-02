@@ -6,7 +6,7 @@
 package Montessori;
 
 
-public class Equipment {
+public class Content {
     
     private String[] id;
     private String name;

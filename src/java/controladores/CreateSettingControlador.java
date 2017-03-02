@@ -140,7 +140,7 @@ public class CreateSettingControlador extends MultiActionController{
     public ModelAndView subsectionlistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createsettings");
-        List<Subsection> subsections = new ArrayList<>();
+        List<Objective> subsections = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -156,14 +156,14 @@ public class CreateSettingControlador extends MultiActionController{
             
             
           ResultSet rs1 = st.executeQuery("select nombre_sub_section,id_subsection from public.subsection where id_subject="+subjectid);
-          Subsection s = new Subsection();
+          Objective s = new Objective();
           s.setName("Select Subsection");
           subsections.add(s);
            
            while (rs1.next())
             {
              String[] ids = new String[1];
-                Subsection sub = new Subsection();
+                Objective sub = new Objective();
             ids[0] = ""+rs1.getInt("id_subsection");
              sub.setId(ids);
              sub.setName(rs1.getString("nombre_sub_section"));
@@ -184,7 +184,7 @@ public class CreateSettingControlador extends MultiActionController{
     public ModelAndView equipmentlistSubsection(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
-        List<Equipment> equipments = new ArrayList<>();
+        List<Content> equipments = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -202,7 +202,7 @@ public class CreateSettingControlador extends MultiActionController{
           String[] ids = new String[1];
            while (rs1.next())
             {
-             Equipment eq = new Equipment();
+             Content eq = new Content();
             ids[0] = String.valueOf(rs1.getInt("id_activity_equipment"));
              eq.setId(ids);
              eq.setName(rs1.getString("nombre_activity_equipment"));
@@ -364,10 +364,10 @@ public class CreateSettingControlador extends MultiActionController{
          {
              ModelAndView mv = new ModelAndView("createlesson");
              String[] lessonplanid = hsr.getParameterValues("seleccionTemplate");
-              List<Equipment> allequipments = new ArrayList<>();
-               List<Equipment> subset = new ArrayList<>();
-               List<Equipment> equipments = new ArrayList<>();
-               Subsection sub = new Subsection();
+              List<Content> allequipments = new ArrayList<>();
+               List<Content> subset = new ArrayList<>();
+               List<Content> equipments = new ArrayList<>();
+               Objective sub = new Objective();
              try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -400,7 +400,7 @@ public class CreateSettingControlador extends MultiActionController{
         int i = 0;
    while (rs2.next())
             {
-                Equipment eq = new Equipment();
+                Content eq = new Content();
                 String[] ids = new String[1];
                ids[0]= ""+rs2.getInt("id_activity_equipment");
               
@@ -412,7 +412,7 @@ public class CreateSettingControlador extends MultiActionController{
        
    while (rs3.next())
             {
-                Equipment eq = new Equipment();
+                Content eq = new Content();
              String[] ids = new String[1];
              ids[0] = ""+rs3.getInt("id_activity_equipment");
                 eq.setId(ids);
@@ -425,10 +425,10 @@ public class CreateSettingControlador extends MultiActionController{
  
         mv.addObject("equipments",equipments);
         
-        for (Equipment e : allequipments)
+        for (Content e : allequipments)
         {
             String result = "";
-        for(Equipment e2 :equipments)
+        for(Content e2 :equipments)
         {
             if(e.getName().equals(e2.getName()))
             {

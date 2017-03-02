@@ -136,10 +136,10 @@ public class CreateLessonControlador extends MultiActionController{
         return mv;
     }
     
-    public ModelAndView subsectionlistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
-        List<Subsection> subsections = new ArrayList<>();
+        List<Objective> objectives = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -155,18 +155,18 @@ public class CreateLessonControlador extends MultiActionController{
             
             
           ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid);
-          Subsection s = new Subsection();
+          Objective s = new Objective();
           s.setName("Select Objective");
-          subsections.add(s);
+          objectives.add(s);
            
            while (rs1.next())
             {
              String[] ids = new String[1];
-                Subsection sub = new Subsection();
+                Objective sub = new Objective();
             ids[0] = ""+rs1.getInt("id");
              sub.setId(ids);
              sub.setName(rs1.getString("name"));
-                subsections.add(sub);
+                objectives.add(sub);
             }
           
             
@@ -175,15 +175,15 @@ public class CreateLessonControlador extends MultiActionController{
         }
         
         mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
-        mv.addObject("subsections", subsections);
+        mv.addObject("objectives", objectives);
         
         return mv;
     }
     
-    public ModelAndView equipmentlistSubsection(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
-        List<Equipment> equipments = new ArrayList<>();
+        List<Content> contents = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -192,12 +192,12 @@ public class CreateLessonControlador extends MultiActionController{
         
             
              Statement st = this.cn.createStatement();
-             String subsectionid = null;
+             String objectiveid = null;
             
-                subsectionid = hsr.getParameter("seleccion3");
+                objectiveid = hsr.getParameter("seleccion3");
             
             
-          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+subsectionid+")");
+          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+objectiveid+")");
           //String[] ids = new String[1];
            while (rs1.next())
             {
@@ -206,13 +206,13 @@ public class CreateLessonControlador extends MultiActionController{
 //             eq.setId(ids);
 //             eq.setName(rs1.getString("name"));
 //                equipments.add(eq);
-                Equipment eq = new Equipment();
+                Content eq = new Content();
                 String[] id= new String[1];
                id[0]= ""+rs1.getInt("id");
               
                 eq.setId(id);
               eq.setName(rs1.getString("name"));
-               equipments.add(eq);
+               contents.add(eq);
             }
             
         } catch (SQLException ex) {
@@ -220,7 +220,7 @@ public class CreateLessonControlador extends MultiActionController{
         }
         
       
-         mv.addObject("equipments", equipments);
+         mv.addObject("contents", contents);
         
         return mv;
     }   
@@ -308,14 +308,14 @@ public class CreateLessonControlador extends MultiActionController{
        Lessons newlesson = new Lessons();
        String[] equipmentids;
        Subject subject = new Subject();
-       Subsection subsection = new Subsection();
+       Objective subsection = new Objective();
        Level level = new Level();
        level.setName(hsr.getParameter("TXTlevel"));
        level.setId(hsr.getParameterValues("TXTlevel"));
        subject.setName(hsr.getParameter("TXTsubject"));
        subject.setId(hsr.getParameterValues("TXTsubject"));
-       subsection.setName(hsr.getParameter("TXTsubsection"));
-       subsection.setId(hsr.getParameterValues("TXTsubsection"));
+       subsection.setName(hsr.getParameter("TXTobjective"));
+       subsection.setId(hsr.getParameterValues("TXTobjective"));
        equipmentids=hsr.getParameterValues("TXTequipment");
 
        java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorainicio")+":00.000");
@@ -400,10 +400,10 @@ public class CreateLessonControlador extends MultiActionController{
          {
              ModelAndView mv = new ModelAndView("createlesson");
              String[] lessonplanid = hsr.getParameterValues("seleccionTemplate");
-              List<Equipment> allequipments = new ArrayList<>();
-               List<Equipment> subset = new ArrayList<>();
-               List<Equipment> equipments = new ArrayList<>();
-               Subsection sub = new Subsection();
+              List<Content> allcontents = new ArrayList<>();
+               List<Content> subset = new ArrayList<>();
+               List<Content> contents = new ArrayList<>();
+               Objective sub = new Objective();
              try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -413,58 +413,58 @@ public class CreateLessonControlador extends MultiActionController{
             
              Statement st = this.cn.createStatement();
              String description=null;
-             String subsectionid[] = new String[1];
+             String[] objectiveid = new String[1];
             String consulta = "SELECT objective_id FROM public.lessons where id ="+lessonplanid[0];
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
             {
             //    description = rs.getString("comments");
-                subsectionid[0] = ""+rs.getInt("objective_id");
+                objectiveid[0] = ""+rs.getInt("objective_id");
             }
-            consulta = "select name from public.objective where id= "+subsectionid[0];
+            consulta = "select name from public.objective where id= "+objectiveid[0];
           ResultSet rs1 = st.executeQuery(consulta);
           
            while (rs1.next())
             {
                 
-                sub.setId(subsectionid);
+                sub.setId(objectiveid);
                 sub.setName(rs1.getString("name"));
             }
-        ResultSet rs2 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select content_id from public.objective_content where public.objective_content.objective_id = "+subsectionid[0]);
+        ResultSet rs2 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select content_id from public.objective_content where public.objective_content.objective_id = "+objectiveid[0]);
         // must change latter
         int i = 0;
    while (rs2.next())
             {
-                Equipment eq = new Equipment();
+                Content eq = new Content();
                 String[] ids = new String[1];
                ids[0]= ""+rs2.getInt("id");
               
                 eq.setId(ids);
               eq.setName(rs2.getString("name"));
-                allequipments.add(eq);
+                allcontents.add(eq);
             }
     ResultSet rs3 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select content_id from public.lesson_content where public.lesson_content.lessonplan_id = "+lessonplanid[0]+")");
        
    while (rs3.next())
             {
-                Equipment eq = new Equipment();
+                Content eq = new Content();
              String[] ids = new String[1];
              ids[0] = ""+rs3.getInt("id");
                 eq.setId(ids);
                 eq.setName(rs3.getString("name"));
-                equipments.add(eq);
+                contents.add(eq);
             }
         } catch (SQLException ex) {
             System.out.println("Error  " + ex);
         }
  
-        mv.addObject("equipments",equipments);
+        mv.addObject("equipments",contents);
         
-        for (Equipment e : allequipments)
+        for (Content e : allcontents)
         {
             String result = "";
-        for(Equipment e2 :equipments)
+        for(Content e2 :contents)
         {
             if(e.getName().equals(e2.getName()))
             {
@@ -479,8 +479,8 @@ public class CreateLessonControlador extends MultiActionController{
         }
       
  
-        mv.addObject("subsection", sub);
-               mv.addObject("allequipments",subset);
+        mv.addObject("objective", sub);
+               mv.addObject("allcontents",subset);
              return mv;
          
          } 

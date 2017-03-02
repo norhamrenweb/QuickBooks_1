@@ -95,7 +95,7 @@ ArrayList<Lessons> lessonslist =  this.getLessonsTime(lesson,hsr.getServletConte
                 String name = level.fetchName(rs.getInt("id_level"),servlet);
                level.setName(name);
                 lesson.setLevel(level);
-                Subsection sub = new Subsection();
+                Objective sub = new Objective();
                 name = sub.fetchName(rs.getInt("id_subsection"), servlet);
                 sub.setName(name);
                 lesson.setSubsection(sub);
