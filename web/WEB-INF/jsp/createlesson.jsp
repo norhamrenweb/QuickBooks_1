@@ -46,13 +46,7 @@
      if (lessoncreate === 'Lesson created' ){
      $('#myModal').modal({
         show: 'false'
-    })
-
-    } else {
-    $("#lessons").attr("disabled", false);
-    $('#divLoadLessons').removeClass('hidden');
-    $('#divCrearLessons').addClass('hidden');
-//    $("#NameLessons").attr("disabled", false);
+    });
     }
  
          
@@ -66,7 +60,7 @@
 
   
         });
-         $('#horainicio').datetimepicker({
+        $('#horainicio').datetimepicker({
             format: 'HH:mm',
             locale: userLang.valueOf(),
             useCurrent: false, //Important! See issue #1075
@@ -556,11 +550,11 @@ $(function() {
                         </div>
                 </div>
         </div>--%>
-<div class="col-xs-12">
+<!--<div class="col-xs-12">
 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
   Launch demo modal
 </button>
-</div>
+</div>-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
