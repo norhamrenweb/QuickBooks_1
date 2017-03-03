@@ -68,6 +68,26 @@ public class CreateSettingControlador extends MultiActionController{
             x.setName(rs.getString("GradeLevel"));
         grades.add(x);
         }
+         DriverManagerDataSource dataSource2;
+        dataSource2 = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource2.getConnection();
+         Statement st2 = this.cn.createStatement();
+        ResultSet rs1 = st2.executeQuery("SELECT name,id FROM public.method");
+        List <Method> methods = new ArrayList();
+        Method m = new Method();
+        m.setName("Select Method");
+        methods.add(m);
+        while(rs1.next())
+        {
+            Method x = new Method();
+             String[] ids = new String[1];
+             ids[0]=""+rs1.getInt("id");
+            x.setId(ids);
+            x.setName(rs1.getString("name"));
+        methods.add(x);
+        }
+          
+            mv.addObject("methods",methods);
             mv.addObject("gradelevels", grades);
         
         return mv;
@@ -162,7 +182,7 @@ public class CreateSettingControlador extends MultiActionController{
     
     public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("createlesson");
+        ModelAndView mv = new ModelAndView("createsetting");
         List<Content> contents = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
@@ -246,138 +266,32 @@ public class CreateSettingControlador extends MultiActionController{
    
         return mv;
     }
-//coge la nombre de subject seleccionado y devuelve la lista de lessons que son templates 
-//     public ModelAndView namelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
-//     {
-//     ModelAndView mv = new ModelAndView("createlesson");
-//     List<Lessons> lessons = new ArrayList<>();
-//     
-//      try {
-//         DriverManagerDataSource dataSource;
-//        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-//        this.cn = dataSource.getConnection();
-//        
-//        
-//            
-//             Statement st = this.cn.createStatement();
-//             String subjectid = null;
-//         //   String consulta = "SELECT id FROM public.subject where nombre_subject ='"+hsr.getParameter("seleccionTemplate")+"'";
-//          //  ResultSet rs = st.executeQuery(consulta);
-//          
-////            while (rs.next())
-////            {
-//                subjectid = hsr.getParameter("seleccionTemplate") ;
-//            //}
-//            
-//          ResultSet rs1 = st.executeQuery("select nombre_lessons,id_lessons from lessons where id_subject= "+subjectid+" and template = true");
-//          Lessons l = new Lessons();
-//          l.setName("Select lesson name");
-//          lessons.add(l);
-//           while (rs1.next())
-//            {
-//                 Lessons ll = new Lessons();
-//                 ll.setName(rs1.getString("nombre_lessons"));
-//                 ll.setId(rs1.getInt("id_lessons"));
-//                lessons.add(ll);
-//            }
-//            
-//        } catch (SQLException ex) {
-//            System.out.println("Error leyendo lessons: " + ex);
-//        }
-//        
-//      
-//         mv.addObject("lessons", lessons);
-//     
-//     return mv;
-//     }
-//         public ModelAndView loadLessonplan(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
-//         {
-//             ModelAndView mv = new ModelAndView("createlesson");
-//             String[] lessonplanid = hsr.getParameterValues("seleccionTemplate");
-//              List<Content> allequipments = new ArrayList<>();
-//               List<Content> subset = new ArrayList<>();
-//               List<Content> equipments = new ArrayList<>();
-//               Objective sub = new Objective();
-//             try {
-//         DriverManagerDataSource dataSource;
-//        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-//        this.cn = dataSource.getConnection();
-//        
-//        
-//            
-//             Statement st = this.cn.createStatement();
-//             String description=null;
-//             String subsectionid[] = new String[1];
-//            String consulta = "SELECT id_subsection,description FROM public.lessons where id_lessons ="+lessonplanid[0];
-//            ResultSet rs = st.executeQuery(consulta);
-//          
-//            while (rs.next())
-//            {
-//                description = rs.getString("description");
-//                subsectionid[0] = ""+rs.getInt("id_subsection");
-//            }
-//            consulta = "select nombre_sub_section from public.subsection where id_subsection= "+subsectionid[0];
-//          ResultSet rs1 = st.executeQuery(consulta);
-//          
-//           while (rs1.next())
-//            {
-//                
-//                sub.setId(subsectionid);
-//                sub.setName(rs1.getString("nombre_sub_section"));
-//            }
-//        ResultSet rs2 = st.executeQuery("select id_activity_equipment,nombre_activity_equipment from public.activity_equipment where id_subsection= "+subsectionid[0]);
-//        // must change latter
-//        int i = 0;
-//   while (rs2.next())
-//            {
-//                Content eq = new Content();
-//                String[] ids = new String[1];
-//               ids[0]= ""+rs2.getInt("id_activity_equipment");
-//              
-//                eq.setId(ids);
-//                eq.setName(rs2.getString("nombre_activity_equipment"));
-//                allequipments.add(eq);
-//            }
-//    ResultSet rs3 = st.executeQuery("SELECT nombre_activity_equipment,id_activity_equipment FROM public.activity_equipment where public.activity_equipment.id_activity_equipment IN (select id_equipment from public.lessons_equipment where public.lessons_equipment.id_lessons = "+lessonplanid[0]+")");
-//       
-//   while (rs3.next())
-//            {
-//                Content eq = new Content();
-//             String[] ids = new String[1];
-//             ids[0] = ""+rs3.getInt("id_activity_equipment");
-//                eq.setId(ids);
-//                eq.setName(rs3.getString("nombre_activity_equipment"));
-//                equipments.add(eq);
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Error  " + ex);
-//        }
-// 
-//        mv.addObject("equipments",equipments);
-//        
-//        for (Content e : allequipments)
-//        {
-//            String result = "";
-//        for(Content e2 :equipments)
-//        {
-//            if(e.getName().equals(e2.getName()))
-//            {
-//                result ="match found";
-//               break;
-//            }
-//            
-//        }
-//        if (!result.equals("match found")){
-//        subset.add(e);
-//        }
-//        }
-//      
-// 
-//        mv.addObject("subsection", sub);
-//               mv.addObject("allequipments",subset);
-//             return mv;
-//         
-//         } 
+ public ModelAndView showsettingObjective(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception
+
+ {ModelAndView mv = new ModelAndView("createsetting");
+ String id = hsr.getParameter("id");
+ Objective objectives = new Objective();
+       try {
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+             Statement st = this.cn.createStatement();          
+          ResultSet rs1 = st.executeQuery("SELECT name,description FROM public.objective where id ="+ id);
+        
+           while (rs1.next())
+            {
+             objectives.setName(rs1.getString("name"));
+             objectives.setDescription(rs1.getString("description"));
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo contents: " + ex);
+        }
+        
+      
+         mv.addObject("objectives", objectives);
+ return mv;
+ }
 }
 
 
