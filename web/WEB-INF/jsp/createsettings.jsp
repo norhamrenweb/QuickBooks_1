@@ -14,15 +14,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create Lessons</title>
-        
+
         <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-      
+
         <link href="recursos/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
         <link href="recursos/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
         <link href="recursos/css/bootstrap-toggle.css" rel="stylesheet" type="text/css"/>
 
         <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
-        
+
         <script src="recursos/js/moment.js" type="text/javascript"></script>
         <script src="recursos/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
         <script src="recursos/js/es.js" type="text/javascript"></script>
@@ -33,43 +33,41 @@
 
 
 
- $(document).ready(function(){
-       var userLang = navigator.language || navigator.userLanguage;
-       var myDate = new Date();
-         //Muestra calendario
-  
-        $('#fecha').datetimepicker({
-            
-            format: 'YYYY-MM-DD',
-            locale: userLang.valueOf(),
-            daysOfWeekDisabled: [0, 6],
-            useCurrent: false//Important! See issue #1075
-            //defaultDate: '08:32:33',
+            $(document).ready(function () {
+                var userLang = navigator.language || navigator.userLanguage;
+                var myDate = new Date();
+                //Muestra calendario
 
-  
-        });
-         $('#horainicio').datetimepicker({
-            format: 'HH:mm',
-            locale: userLang.valueOf(),
-            useCurrent: false, //Important! See issue #1075
-            stepping: 5
-        });
-        $('#horafin').datetimepicker({
-            
-            format: 'HH:mm',
-            locale: userLang.valueOf(),
-            useCurrent: false, //Important! See issue #1075
-            stepping: 5
-        });
-        
-        $("#horainicio").on("dp.change", function (e) {
-            $('#horafin').data("DateTimePicker").minDate(e.date);
-        });
-        
-        $("#horafin").on("dp.change", function (e) {
-            $('#horainicio').data("DateTimePicker").maxDate(e.date);
-        });
-        
+                $('#fecha').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    locale: userLang.valueOf(),
+                    daysOfWeekDisabled: [0, 6],
+                    useCurrent: false//Important! See issue #1075
+                            //defaultDate: '08:32:33',
+
+
+                });
+                $('#horainicio').datetimepicker({
+                    format: 'HH:mm',
+                    locale: userLang.valueOf(),
+                    useCurrent: false, //Important! See issue #1075
+                    stepping: 5
+                });
+                $('#horafin').datetimepicker({
+                    format: 'HH:mm',
+                    locale: userLang.valueOf(),
+                    useCurrent: false, //Important! See issue #1075
+                    stepping: 5
+                });
+
+                $("#horainicio").on("dp.change", function (e) {
+                    $('#horafin').data("DateTimePicker").minDate(e.date);
+                });
+
+                $("#horafin").on("dp.change", function (e) {
+                    $('#horainicio').data("DateTimePicker").maxDate(e.date);
+                });
+
 
 //       //Menu lateral
 //        $('#nav-expander').on('click',function(e){
@@ -84,18 +82,32 @@
 //      		o.preventDefault();
 //      		$('body').removeClass('nav-expanded');
 //      	});
-    });            
-            
-        $().ready(function() 
-	{
-		$('.pasar').click(function() { return !$('#origen option:selected').remove().appendTo('#destino'); });  
-		$('.quitar').click(function() { return !$('#destino option:selected').remove().appendTo('#origen'); });
-		$('.pasartodos').click(function() { $('#origen option').each(function() { $(this).remove().appendTo('#destino'); }); });
-		$('.quitartodos').click(function() { $('#destino option').each(function() { $(this).remove().appendTo('#origen'); }); });
-		$('.submit').click(function() { $('#destino option').prop('selected', 'selected'); });
-	});
-        
-        var ajax;
+            });
+
+            $().ready(function ()
+            {
+                $('.pasar').click(function () {
+                    return !$('#origen option:selected').remove().appendTo('#destino');
+                });
+                $('.quitar').click(function () {
+                    return !$('#destino option:selected').remove().appendTo('#origen');
+                });
+                $('.pasartodos').click(function () {
+                    $('#origen option').each(function () {
+                        $(this).remove().appendTo('#destino');
+                    });
+                });
+                $('.quitartodos').click(function () {
+                    $('#destino option').each(function () {
+                        $(this).remove().appendTo('#origen');
+                    });
+                });
+                $('.submit').click(function () {
+                    $('#destino option').prop('selected', 'selected');
+                });
+            });
+
+            var ajax;
 
 // function funcionCallBackLevelStudent()
 //    {
@@ -124,20 +136,20 @@
 //        ajax.open("POST","createlesson.htm?select=studentlistLevel&seleccion="+seleccion,true);
 //        ajax.send("");
 //    }
-    
-     function funcionCallBackSubject()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("subject").innerHTML= ajax.responseText;
+
+            function funcionCallBackSubject()
+            {
+                if (ajax.readyState === 4) {
+                    if (ajax.status === 200) {
+                        document.getElementById("subject").innerHTML = ajax.responseText;
                     }
                 }
             }
-    function funcionCallBackObjective()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("objective").innerHTML= ajax.responseText;
+            function funcionCallBackObjective()
+            {
+                if (ajax.readyState === 4) {
+                    if (ajax.status === 200) {
+                        document.getElementById("objective").innerHTML = ajax.responseText;
                     }
                 }
             }
@@ -166,95 +178,91 @@
 //                    }
 //                }
 //            }
-            
-    function funcionCallBackContent()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("content").innerHTML= ajax.responseText;
+
+            function funcionCallBackContent()
+            {
+                if (ajax.readyState === 4) {
+                    if (ajax.status === 200) {
+                        document.getElementById("content").innerHTML = ajax.responseText;
                     }
                 }
             }
 
-    function comboSelectionLevel()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
+            function comboSelectionLevel()
+            {
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
 
-        $('#createOnClick').attr('disabled', true);
-        ajax.onreadystatechange = funcionCallBackSubject;
-        var seleccion1 = document.getElementById("level").value;
-        ajax.open("POST","createsetting.htm?select=subjectlistLevel&seleccion1="+seleccion1,true);
-        
-        ajax.send("");
-       
-    }
-    function comboSelectionSubject()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
+                $('#createOnClick').attr('disabled', true);
+                ajax.onreadystatechange = funcionCallBackSubject;
+                var seleccion1 = document.getElementById("level").value;
+                ajax.open("POST", "createsetting.htm?select=subjectlistLevel&seleccion1=" + seleccion1, true);
 
-        
-        ajax.onreadystatechange=funcionCallBackObjective;
-        var seleccion2 = document.getElementById("subject").value;
-        ajax.open("POST","createsetting.htm?select=objectivelistSubject&seleccion2="+seleccion2,true);
+                ajax.send("");
 
-        ajax.send("");
-        
-    }
-   
-    function comboSelectionLoadTemplateLessons()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
-        
-        ajax.onreadystatechange=funcionCallBackLoadTemplateLessons;
-        var seleccionSubject = document.getElementById("subject").value;
-        ajax.open("POST","createsetting.htm?select=namelistSubject&seleccionTemplate="+seleccionSubject,true);
-        ajax.send("");
-    }
-    
-    
-     function comboSelectionObjective()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
+            }
+            function comboSelectionSubject()
+            {
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
 
-        if(document.getElementById("objective").value === 0){
-            $('#createOnClick').attr('disabled', true);
-        }else{
-            $('#createOnClick').attr('disabled', false);
-        }
-        ajax.onreadystatechange=funcionCallBackContent;
-        var seleccion3 = document.getElementById("objective").value;
-        ajax.open("POST","createsetting.htm?select=contentlistObjective&seleccion3="+seleccion3,true);
-        ajax.send("");
-    }
+
+                ajax.onreadystatechange = funcionCallBackObjective;
+                var seleccion2 = document.getElementById("subject").value;
+                ajax.open("POST", "createsetting.htm?select=objectivelistSubject&seleccion2=" + seleccion2, true);
+
+                ajax.send("");
+
+            }
+
+            function comboSelectionLoadTemplateLessons()
+            {
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+
+                ajax.onreadystatechange = funcionCallBackLoadTemplateLessons;
+                var seleccionSubject = document.getElementById("subject").value;
+                ajax.open("POST", "createsetting.htm?select=namelistSubject&seleccionTemplate=" + seleccionSubject, true);
+                ajax.send("");
+            }
+
+
+            function comboSelectionObjective()
+            {
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+                if (document.getElementById("objective").value === 0) {
+                    $('#createOnClick').attr('disabled', true);
+                } else {
+                    $('#createOnClick').attr('disabled', false);
+                }
+                ajax.onreadystatechange = funcionCallBackContent;
+                var seleccion3 = document.getElementById("objective").value;
+                ajax.open("POST", "createsetting.htm?select=contentlistObjective&seleccion3=" + seleccion3, true);
+                ajax.send("");
+            }
 //FUNCIONES PARA AÑADIR SETTINGS
 // function funcionaddSubject()
 //    {
@@ -265,234 +273,197 @@
 //                }
 //            }
 
-    
-    function addObjective()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
-    //    ajax.onreadystatechange = funcionaddSubject;
-       
-        var namenewsubject = document.getElementById("subject").value;
-        var namenewobjective = document.getElementById("namenewobjective").value;
-        ajax.open("POST","createsetting.htm?select=createsettingObjective&namenewsubject="+namenewsubject+"&namenewobjective="+namenewobjective,true);
-        
-        ajax.send("");
-       
-    }
-$(function() {
-    $('#subject').change(function() {
-        $('#LoadTemplates').parent().attr("disabled",false);
-        $('#LoadTemplates').attr("disabled",false);
-    });
-    
-    $('#LoadTemplates').change(function() {
-         if (this.checked) {
-    $("#lessons").attr("disabled", true);
-    $('#divCrearLessons').removeClass('hidden');
-    $('#divLoadLessons').addClass('hidden');
-//    $("#NameLessons").attr("disabled", true);
-    } else {
-    $("#lessons").attr("disabled", false);
-    $('#divLoadLessons').removeClass('hidden');
-    $('#divCrearLessons').addClass('hidden');
-//    $("#NameLessons").attr("disabled", false);
-    }
-    });
-})
+
+            function addObjective()
+            {
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+                //    ajax.onreadystatechange = funcionaddSubject;
+
+                var namenewsubject = document.getElementById("subject").value;
+                var namenewobjective = document.getElementById("namenewobjective").value;
+                ajax.open("POST", "createsetting.htm?select=createsettingObjective&namenewsubject=" + namenewsubject + "&namenewobjective=" + namenewobjective, true);
+
+                ajax.send("");
+
+            }
+            function showsetting()
+            {
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+                //    ajax.onreadystatechange = funcionaddSubject;
+
+                var id = document.getElementById("objective").value;
+                ajax.open("POST", "createsetting.htm?select=createsettingshowsettingObjective&namenewsubject=" + id, true);
+
+                ajax.send("");
+
+            }
+            $(function () {
+                $('#objective').click(function () {
+                    $('#formobjetive').removeClass("hidden");
+                    $('#formcontent').addClass("hidden");
+                    showsetting();
+                });
+                $('#content').click(function () {
+                    $('#formcontent').removeClass("hidden");
+                    $('#formobjetive').addClass("hidden");
+                });
+//    $('#LoadTemplates').change(function() {
+//         if (this.checked) {
+//    $("#lessons").attr("disabled", true);
+//    $('#divCrearLessons').removeClass('hidden');
+//    $('#divLoadLessons').addClass('hidden');
+////    $("#NameLessons").attr("disabled", true);
+//    } else {
+//    $("#lessons").attr("disabled", false);
+//    $('#divLoadLessons').removeClass('hidden');
+//    $('#divCrearLessons').addClass('hidden');
+////    $("#NameLessons").attr("disabled", false);
+//    }
+//    });
+            })
         </script>
-<script>
- 
-</script>
+        <style>
+            textarea 
+            {
+                resize: none;
+            }
+        </style>
     </head>
     <body>
-        
-        
+
+
         <div class="container">
-        <h1 class="text-center">Create Setting</h1>
+            <h1 class="text-center">Create Setting</h1>
 
-        
-        <form:form id="formSettings" method ="post" action="createsetting.htm?select=createsetting" >
-                    
-                    <fieldset>
-                <legend>Create objective</legend>
-                
-                <div class="col-xs-12">
-                <div class="col-xs-3 form-group">
-                    <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
-                    <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
-                        <c:forEach var="levels" items="${gradelevels}">
-                            <option value="${levels.id[0]}" >${levels.name}</option>
-                        </c:forEach>
-                    </select>
-                          
-                </div>
-                <div class="col-xs-3 center-block">
-                    <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
-                    <select class="form-control" name="TXTsubject" id="subject" multiple size="10" onchange="comboSelectionSubject()">
-                        <c:forEach var="subject" items="${subjects}">
-                                <option value="${subject.id[0]}" >${subject.name}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-                <div class="col-xs-3 center-block">
-                    <label class="control-label">Objective</label>
-                    <select class="form-control" name="TXTobjective" id="objective" multiple size="10" onchange="comboSelectionObjective()">
-                       <c:forEach var="objective" items="${objectives}">
-                                <option value="${objective.id[0]}" >${objective.name}</option>
-                            </c:forEach>
-                    </select>
-                </div>
-                <div class="col-xs-3 center-block">
-                        <label class="control-label">Content</label>
-                        <select class="form-control" name="TXTcontent" id="content" multiple size="10">
-                           <c:forEach var="content" items="${contents}">
-                                    <option value="${content.id[0]}" >${content.name}</option>
-                                </c:forEach>
-                        </select>
-                </div>
-                </div>
-                <div class="col-xs-12" style="margin-top: 20px;">
-                <div class="col-xs-3 center-block"></div>
-               <div class="col-xs-3 center-block form-inline">
-                    <%-- <label class="control-label">Name new subject</label>
-                    <input type="text" class="form-control" name="TXTnamenewsubject" id="namenewsubject" required="" placeholder="Name new objective">
-                    <button name="TXTaddSubject" value="" class="btn btn-detalles" id="addSubject" data-target=".bs-example-modal-lg" onclick="addSubject()">
-                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subject"></span>
-                    </button>--%>
-                </div>
-                
-                <div class="col-xs-3 center-block form-inline">
-                    <label class="control-label">Name new objective</label>
-                    <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name new objective">
-                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="addObjective()">
-                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add objective"></span>
-                    </button>
-                </div>
-                
-                <div class="col-xs-3 center-block form-inline">
-                    <label class="control-label">Name new content</label>
-                    <input type="text" class="form-control" name="TXTnamenewContent" id="NameLessons"  placeholder="Name new content">
-                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
-                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add Content"></span>
-                    </button>
-                </div>
-                
-                </div>
-                    
-</fieldset>
-<%--                 
-                <div class="hidden col-xs-12" id="divCrearLessons" style="padding-left: 0px;">
-                    <div class="col-xs-3 center-block">
-                        <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
-                        <select class="form-control" name="TXTsubsection" id="subsection" onchange="comboSelectionSubsection()">
-                           <c:forEach var="subsection" items="${subsections}">
-                                    <option value="${subsection.id[0]}" >${subsection.name}</option>
-                                </c:forEach>
-                        </select>
-                    </div>
-                    <div class="col-xs-3 center-block">
-                        <label class="control-label"><spring:message code="etiq.txtequipment"/></label>
-                        <select class="form-control" name="TXTequipment" id="equipment" multiple>
-                           <c:forEach var="equipment" items="${equipments}">
-                                    <option value="${equipment.id[0]}" >${equipment.name}</option>
-                                </c:forEach>
-                        </select>
-                    </div>
-                </div>
-                        
-                <div class="hidden col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
-                    <div class="col-xs-3 center-block">
-                        <label class="control-label">Select template lessons</label>
-                        <select class="form-control" name="lessons" id="lessons" onchange="comboSelectionTemplateLessons()">
-                           <c:forEach var="template" items="${lessons}">
-                                    <option value="${template.id}" >${template.name}</option>
-                                </c:forEach>
-                        </select>
-                    </div>
-                    <div class="col-xs-3 center-block">
-                        <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
-                        <select class="form-control" name="TXTsubsection" id="subsectionTempate">
-                             <option value="${subsection.name}" >${subsection.name}</option>
 
-                        </select>
-                    </div>
-                    <div class="col-xs-3 center-block">
-                        <label class="control-label"><spring:message code="etiq.txtequipment"/> Template</label>
-                        <select class="form-control" name="TXTequipment" id="template" multiple>
-                            <c:forEach var="allequipments" items="${allequipments}">
-                                <option selected="true" value="${allequipments.id[0]}" >${allequipments.name}</option>
-                            </c:forEach><%--
-                            <c:forEach var="equipments" items="${equipments}">
-                                <option value="${allequipments.id[0]}" >${allequipments.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>    
-   
+            <form:form id="formSettings" method ="post" action="createsetting.htm?select=createsetting" >
 
-            <fieldset>
-                    <legend>Select students</legend>
+                <fieldset>
+                    <legend>Select setting</legend>
+
                     <div class="col-xs-12">
-                        <div class="col-xs-2"></div>
-                        <div class="col-xs-3">
-                            <label>Filter</label>
-
-                            
-                        </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="col-xs-2">
-                            <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
-
+                        <div class="col-xs-3 form-group">
+                            <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
+                            <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                                 <c:forEach var="levels" items="${gradelevels}">
                                     <option value="${levels.id[0]}" >${levels.name}</option>
                                 </c:forEach>
                             </select>
+
                         </div>
-                        <div class="col-xs-3">
-                            <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
-                                <c:forEach var="alumnos" items="${listaAlumnos}">
-                                    <option value="${alumnos.id_students}" >${alumnos.nombre_students}</option>
+                        <div class="col-xs-3 center-block">
+                            <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
+                            <select class="form-control" name="TXTsubject" id="subject" multiple size="10" onchange="comboSelectionSubject()">
+                                <c:forEach var="subject" items="${subjects}">
+                                    <option value="${subject.id[0]}" >${subject.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
-                        
-                        <div class="col-xs-2">
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn pasar" value="<spring:message code="etiq.txtadd"/> »">
-                            </div>
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn quitar" value="« <spring:message code="etiq.txtremove"/>">
-                            </div>
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
-                            </div>
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
-                            </div>
+                        <div class="col-xs-3 center-block">
+                            <label class="control-label">Objective</label>
+                            <select class="form-control" name="TXTobjective" id="objective" multiple size="10" onchange="comboSelectionObjective()">
+                                <c:forEach var="objective" items="${objectives}">
+                                    <option value="${objective.id[0]}" >${objective.name}</option>
+                                </c:forEach>
+                            </select>
                         </div>
-                
-                        <div class="col-xs-3">
-                            <select class="form-control submit" size="20" multiple name="destino[]" id="destino" style="width: 100% !important;"> 
-
+                        <div class="col-xs-3 center-block">
+                            <label class="control-label">Content</label>
+                            <select class="form-control" name="TXTcontent" id="content" multiple size="10">
+                                <c:forEach var="content" items="${contents}">
+                                    <option value="${content.id[0]}" >${content.name}</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>
-                <div class="col-xs-2"></div>
-            </fieldset>
-        <div class="col-xs-12 text-center">
-            <input type="submit" class="btn btn-success" id="createOnClick" disabled="True" value="<spring:message code="etiq.txtcreate"/>">
-        </div>--%> 
-        </form:form>
-       
+                </fieldset>
+                <fieldset class="hidden" id="formobjetive">
+                    <legend>Setting objetive</legend>  
+                    <div class="col-xs-12" style="margin-top: 20px;">
+
+                        <div class="col-xs-3 center-block form-group">
+                            <label class="control-label">Name new objective</label>
+                            <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name new objective">
+                        </div>
+                        <div class="col-xs-9 center-block form-group">
+                            <label class="control-label">Comments</label>
+                            <textarea type="text" class="form-control" name="TXTnamenewobjective" id="commentsnewobjective"  placeholder="Comments"></textarea>
+                        </div>
+                        <div class="col-xs-3 center-block form-inline">
+                            <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="addObjective()">
+                                Add Objective
+                                <!--<span class="glyphicon glyphicon-plus-sign" data-toggle="tooltip" data-placement="bottom" title="add objective"></span>-->
+                            </button>
+                            <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="delObjective()">
+                                Delete 
+                                <!--<span class="glyphicon glyphicon-remove-sign" data-toggle="tooltip" data-placement="bottom" title="delete objective"></span>-->
+                            </button>
+                            <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="editObjective()">
+                                Edit<!--<span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="bottom" title="edit objective"></span>-->
+                            </button>
+                        </div>
+
+                    </div>
+
+                </fieldset>
+                <fieldset class="hidden" id="formcontent">
+                    <legend>Setting content</legend>  
+                    <div class="col-xs-12" style="margin-top: 20px;">
+
+                        <div class="col-xs-3 center-block form-group">
+                            <label class="control-label">Name new objective</label>
+                            <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name new objective">
+                        </div>
+                        <div class="col-xs-6 center-block form-group">
+                            <label class="control-label">Comments</label>
+                            <input type="text" class="form-control" name="TXTnamenewobjective" id="commentsnewobjective"  placeholder="Comments">
+                        </div>
+                        <div class="col-xs-3 center-block form-inline">
+                            <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="addObjective()">
+                                <span class="glyphicon glyphicon-plus-sign" data-toggle="tooltip" data-placement="bottom" title="add objective"></span>
+                            </button>
+                            <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="delObjective()">
+                                <span class="glyphicon glyphicon-remove-sign" data-toggle="tooltip" data-placement="bottom" title="delete objective"></span>
+                            </button>
+                            <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="editObjective()">
+                                <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="bottom" title="edit objective"></span>
+                            </button>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+            </form:form>
+                <fieldset>
+                    <legend>Select Method</legend>
+
+                    <div class="col-xs-12">
+                        <div class="col-xs-3 center-block form-group">
+                    <label class="control-label">Method</label>
+                    <select class="form-control" name="method" id="method">
+                    
+                       <c:forEach var="method" items="${methods}">
+                                <option value="${method.id[0]}" >${method.name}</option>
+                            </c:forEach>
+                    </select>
+                </div>
+                    </div>
+                </fieldset>
         </div>
-      <%= request.getParameter("message") %>
+        <%= request.getParameter("message")%>
     </body>
 </html>
