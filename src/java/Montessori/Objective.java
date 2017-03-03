@@ -22,7 +22,16 @@ public class Objective {
     private String[] id;
     private String name;
  Connection cn;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
     private ServletContext servlet;
+    private String description;
       
 //      private ServletContext servlet;
     
