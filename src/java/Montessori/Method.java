@@ -23,6 +23,15 @@ public class Method {
     private String name;
  Connection cn;
     private ServletContext servlet;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    private String description;
       
 //      private ServletContext servlet;
     

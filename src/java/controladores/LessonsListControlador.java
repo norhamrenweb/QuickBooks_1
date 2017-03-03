@@ -190,4 +190,26 @@ public class LessonsListControlador extends MultiActionController{
 //        return lessonslist;
 //     
 //     }
+    public ModelAndView deleteLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("homepage");
+       String[] id = hsr.getParameterValues("seleccion");
+       try {
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        HttpSession sesion = hsr.getSession();
+        User user = (User) sesion.getAttribute("user");
+         Statement st = this.cn.createStatement();
+          
+        String consulta = "DELETE FROM public.lessons WHERE id="+id[0];
+           st.executeUpdate(consulta);
+        mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
+       }catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+        }
+       
+        
+        return mv;
+    }
 }

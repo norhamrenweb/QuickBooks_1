@@ -182,7 +182,7 @@ public class CreateSettingControlador extends MultiActionController{
     
     public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("createsetting");
+        ModelAndView mv = new ModelAndView("createsettings");
         List<Content> contents = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
@@ -213,9 +213,9 @@ public class CreateSettingControlador extends MultiActionController{
         }
         
       
-         mv.addObject("contents", contents);
+       mv.addObject("contents", contents);
         String[] id = hsr.getParameterValues("seleccion3");
- Objective objectives = new Objective();
+ Objective objective = new Objective();
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -225,9 +225,9 @@ public class CreateSettingControlador extends MultiActionController{
         
            while (rs1.next())
             {
-             objectives.setName(rs1.getString("name"));
-             objectives.setDescription(rs1.getString("description"));
-             objectives.setId(id);
+             objective.setName(rs1.getString("name"));
+             objective.setDescription(rs1.getString("description"));
+             objective.setId(id);
             }
             
         } catch (SQLException ex) {
@@ -235,7 +235,8 @@ public class CreateSettingControlador extends MultiActionController{
         }
         
       
-         mv.addObject("objectives", objectives);
+         mv.addObject("objective", objective);
+    
         return mv;
     }   
     
@@ -287,22 +288,22 @@ public class CreateSettingControlador extends MultiActionController{
    
         return mv;
     }
- public ModelAndView showsettingObjective(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception
-
+ public ModelAndView showsettingMethod(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception
  {ModelAndView mv = new ModelAndView("createsetting");
- String id = hsr.getParameter("id");
- Objective objectives = new Objective();
+ String[] id = hsr.getParameterValues("id");
+ Method method = new Method();
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
              Statement st = this.cn.createStatement();          
-          ResultSet rs1 = st.executeQuery("SELECT name,description FROM public.objective where id ="+ id);
+          ResultSet rs1 = st.executeQuery("SELECT name,description FROM public.method where id ="+ id[0]);
         
            while (rs1.next())
             {
-             objectives.setName(rs1.getString("name"));
-             objectives.setDescription(rs1.getString("description"));
+             method.setName(rs1.getString("name"));
+             method.setDescription(rs1.getString("description"));
+             method.setId(id);
             }
             
         } catch (SQLException ex) {
@@ -310,7 +311,33 @@ public class CreateSettingControlador extends MultiActionController{
         }
         
       
-         mv.addObject("objectives", objectives);
+         mv.addObject("methods", method);
+ return mv;
+ }
+  public ModelAndView showsettingContent(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception
+ {ModelAndView mv = new ModelAndView("createsetting");
+ String[] id = hsr.getParameterValues("id");
+ Method method = new Method();
+       try {
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+             Statement st = this.cn.createStatement();          
+          ResultSet rs1 = st.executeQuery("SELECT name,description FROM public.method where id ="+ id[0]);
+        
+           while (rs1.next())
+            {
+             method.setName(rs1.getString("name"));
+             method.setDescription(rs1.getString("description"));
+             method.setId(id);
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo contents: " + ex);
+        }
+        
+      
+         mv.addObject("methods", method);
  return mv;
  }
 }
