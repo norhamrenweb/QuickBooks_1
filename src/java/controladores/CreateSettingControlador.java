@@ -214,7 +214,28 @@ public class CreateSettingControlador extends MultiActionController{
         
       
          mv.addObject("contents", contents);
+        String[] id = hsr.getParameterValues("seleccion3");
+ Objective objectives = new Objective();
+       try {
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+             Statement st = this.cn.createStatement();          
+          ResultSet rs1 = st.executeQuery("SELECT name,description FROM public.objective where id ="+ id[0]);
         
+           while (rs1.next())
+            {
+             objectives.setName(rs1.getString("name"));
+             objectives.setDescription(rs1.getString("description"));
+             objectives.setId(id);
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo contents: " + ex);
+        }
+        
+      
+         mv.addObject("objectives", objectives);
         return mv;
     }   
     
