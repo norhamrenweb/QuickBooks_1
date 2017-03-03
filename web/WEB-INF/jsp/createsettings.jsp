@@ -97,33 +97,33 @@
         
         var ajax;
 
- function funcionCallBackLevelStudent()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("origen").innerHTML= ajax.responseText;
-                    }
-                }
-            }
-            
+// function funcionCallBackLevelStudent()
+//    {
+//           if (ajax.readyState===4){
+//                if (ajax.status===200){
+//                    document.getElementById("origen").innerHTML= ajax.responseText;
+//                    }
+//                }
+//            }
+//            
 
-    function comboSelectionLevelStudent()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
-        ajax.onreadystatechange=funcionCallBackLevelStudent;
-        var seleccion = document.getElementById("levelStudent").value;
-        var alumnos = document.getElementById("destino").innerHTML;
-        ajax.open("POST","createlesson.htm?select=studentlistLevel&seleccion="+seleccion,true);
-        ajax.send("");
-    }
+//    function comboSelectionLevelStudent()
+//    {
+//        if (window.XMLHttpRequest) //mozilla
+//        {
+//            ajax = new XMLHttpRequest(); //No Internet explorer
+//        }
+//        else
+//        {
+//            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+//        }
+//        
+//        ajax.onreadystatechange=funcionCallBackLevelStudent;
+//        var seleccion = document.getElementById("levelStudent").value;
+//        var alumnos = document.getElementById("destino").innerHTML;
+//        ajax.open("POST","createlesson.htm?select=studentlistLevel&seleccion="+seleccion,true);
+//        ajax.send("");
+//    }
     
      function funcionCallBackSubject()
     {
@@ -133,22 +133,22 @@
                     }
                 }
             }
-    function funcionCallBackSubsection()
+    function funcionCallBackObjective()
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                    document.getElementById("subsection").innerHTML= ajax.responseText;
+                    document.getElementById("objective").innerHTML= ajax.responseText;
                     }
                 }
             }
-    function funcionCallBackLoadTemplateLessons()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("lessons").innerHTML= ajax.responseText;
-                    }
-                }
-            }    
+//    function funcionCallBackLoadTemplateLessons()
+//    {
+//           if (ajax.readyState===4){
+//                if (ajax.status===200){
+//                    document.getElementById("lessons").innerHTML= ajax.responseText;
+//                    }
+//                }
+//            }    
             //FUNCIONA PERO SOLO PUEDO PINTAR EQUIPMENT
 //    function funcionCallBackTemplateLessons()
 //    {
@@ -158,20 +158,20 @@
 //                    }
 //                }
 //            }
-    function funcionCallBackTemplateLessons()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("template").innerHTML= ajax.responseText;
-                    }
-                }
-            }
+//    function funcionCallBackTemplateLessons()
+//    {
+//           if (ajax.readyState===4){
+//                if (ajax.status===200){
+//                    document.getElementById("template").innerHTML= ajax.responseText;
+//                    }
+//                }
+//            }
             
-    function funcionCallBackEquipment()
+    function funcionCallBackContent()
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                    document.getElementById("equipment").innerHTML= ajax.responseText;
+                    document.getElementById("content").innerHTML= ajax.responseText;
                     }
                 }
             }
@@ -190,7 +190,7 @@
         $('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackSubject;
         var seleccion1 = document.getElementById("level").value;
-        ajax.open("POST","createlesson.htm?select=subjectlistLevel&seleccion1="+seleccion1,true);
+        ajax.open("POST","createsetting.htm?select=subjectlistLevel&seleccion1="+seleccion1,true);
         
         ajax.send("");
        
@@ -207,9 +207,9 @@
         }
 
         
-        ajax.onreadystatechange=funcionCallBackSubsection;
+        ajax.onreadystatechange=funcionCallBackObjective;
         var seleccion2 = document.getElementById("subject").value;
-        ajax.open("POST","createlesson.htm?select=subsectionlistSubject&seleccion2="+seleccion2,true);
+        ajax.open("POST","createsetting.htm?select=objectivelistSubject&seleccion2="+seleccion2,true);
 
         ajax.send("");
         
@@ -229,30 +229,12 @@
         
         ajax.onreadystatechange=funcionCallBackLoadTemplateLessons;
         var seleccionSubject = document.getElementById("subject").value;
-        ajax.open("POST","createlesson.htm?select=namelistSubject&seleccionTemplate="+seleccionSubject,true);
-        ajax.send("");
-    }
-     function comboSelectionTemplateLessons()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
-        
-        ajax.onreadystatechange=funcionCallBackTemplateLessons;
-        var seleccionTemplate = document.getElementById("lessons").value;
-        //ajax.open("POST","createlesson.htm?select=subsectionlistSubject&seleccion2="+seleccionTemplate,true);
-        ajax.open("POST","createlesson.htm?select=loadLessonplan&seleccionTemplate="+seleccionTemplate,true);
+        ajax.open("POST","createsetting.htm?select=namelistSubject&seleccionTemplate="+seleccionSubject,true);
         ajax.send("");
     }
     
     
-     function comboSelectionSubsection()
+     function comboSelectionObjective()
     {
         if (window.XMLHttpRequest) //mozilla
         {
@@ -263,28 +245,28 @@
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
 
-        if(document.getElementById("subsection").value === 0){
+        if(document.getElementById("objective").value === 0){
             $('#createOnClick').attr('disabled', true);
         }else{
             $('#createOnClick').attr('disabled', false);
         }
-        ajax.onreadystatechange=funcionCallBackEquipment;
-        var seleccion3 = document.getElementById("subsection").value;
-        ajax.open("POST","createlesson.htm?select=equipmentlistSubsection&seleccion3="+seleccion3,true);
+        ajax.onreadystatechange=funcionCallBackContent;
+        var seleccion3 = document.getElementById("objective").value;
+        ajax.open("POST","createsetting.htm?select=contentlistObjective&seleccion3="+seleccion3,true);
         ajax.send("");
     }
 //FUNCIONES PARA AÑADIR SETTINGS
- function funcionaddSubject()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("subject").innerHTML= ajax.responseText;
-                    }
-                }
-            }
+// function funcionaddSubject()
+//    {
+//           if (ajax.readyState===4){
+//                if (ajax.status===200){
+//                    document.getElementById("objective").innerHTML= ajax.responseText;
+//                    }
+//                }
+//            }
 
     
-    function addSubsection()
+    function addObjective()
     {
         if (window.XMLHttpRequest) //mozilla
         {
@@ -295,11 +277,11 @@
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
         
-        ajax.onreadystatechange = funcionaddSubject;
-        var levelselected = document.getElementById("level").value;
+    //    ajax.onreadystatechange = funcionaddSubject;
+       
         var namenewsubject = document.getElementById("subject").value;
-        var namenewsubsection = document.getElementById("namenewsubsection").value;
-        ajax.open("POST","createsetting.htm?select=subjectlistLevel&seleccion1="+levelselected+"&namenewsubject="+namenewsubject+"&namenewsubsection="+namenewsubsection,true);
+        var namenewobjective = document.getElementById("namenewobjective").value;
+        ajax.open("POST","createsetting.htm?select=createsettingObjective&namenewsubject="+namenewsubject+"&namenewobjective="+namenewobjective,true);
         
         ajax.send("");
        
@@ -339,7 +321,7 @@ $(function() {
         <form:form id="formSettings" method ="post" action="createsetting.htm?select=createsetting" >
                     
                     <fieldset>
-                <legend>Create subsection</legend>
+                <legend>Create objective</legend>
                 
                 <div class="col-xs-12">
                 <div class="col-xs-3 form-group">
@@ -360,18 +342,18 @@ $(function() {
                     </select>
                 </div>
                 <div class="col-xs-3 center-block">
-                    <label class="control-label"><spring:message code="etiq.txtsubsection"/></label>
-                    <select class="form-control" name="TXTsubsection" id="subsection" multiple size="10" onchange="comboSelectionSubsection()">
-                       <c:forEach var="subsection" items="${subsections}">
-                                <option value="${subsection.id[0]}" >${subsection.name}</option>
+                    <label class="control-label">Objective</label>
+                    <select class="form-control" name="TXTobjective" id="objective" multiple size="10" onchange="comboSelectionObjective()">
+                       <c:forEach var="objective" items="${objectives}">
+                                <option value="${objective.id[0]}" >${objective.name}</option>
                             </c:forEach>
                     </select>
                 </div>
                 <div class="col-xs-3 center-block">
-                        <label class="control-label"><spring:message code="etiq.txtequipment"/></label>
-                        <select class="form-control" name="TXTequipment" id="equipment" multiple size="10">
-                           <c:forEach var="equipment" items="${equipments}">
-                                    <option value="${equipment.id[0]}" >${equipment.name}</option>
+                        <label class="control-label">Content</label>
+                        <select class="form-control" name="TXTcontent" id="content" multiple size="10">
+                           <c:forEach var="content" items="${contents}">
+                                    <option value="${content.id[0]}" >${content.name}</option>
                                 </c:forEach>
                         </select>
                 </div>
@@ -380,25 +362,25 @@ $(function() {
                 <div class="col-xs-3 center-block"></div>
                <div class="col-xs-3 center-block form-inline">
                     <%-- <label class="control-label">Name new subject</label>
-                    <input type="text" class="form-control" name="TXTnamenewsubject" id="namenewsubject" required="" placeholder="Name new subsection">
+                    <input type="text" class="form-control" name="TXTnamenewsubject" id="namenewsubject" required="" placeholder="Name new objective">
                     <button name="TXTaddSubject" value="" class="btn btn-detalles" id="addSubject" data-target=".bs-example-modal-lg" onclick="addSubject()">
                         <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subject"></span>
                     </button>--%>
                 </div>
                 
                 <div class="col-xs-3 center-block form-inline">
-                    <label class="control-label">Name new subsection</label>
-                    <input type="text" class="form-control" name="TXTnamenewsubsection" id="namenewsubsection"  placeholder="Name new subsection">
-                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="addSubsection()">
-                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add subsection"></span>
+                    <label class="control-label">Name new objective</label>
+                    <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name new objective">
+                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="addObjective()">
+                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="add objective"></span>
                     </button>
                 </div>
                 
                 <div class="col-xs-3 center-block form-inline">
-                    <label class="control-label">Name new equipment</label>
-                    <input type="text" class="form-control" name="TXTnamenewequipment" id="NameLessons"  placeholder="Name new equipment">
+                    <label class="control-label">Name new content</label>
+                    <input type="text" class="form-control" name="TXTnamenewContent" id="NameLessons"  placeholder="Name new content">
                     <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
-                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add Equipment"></span>
+                        <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add Content"></span>
                     </button>
                 </div>
                 
@@ -511,6 +493,6 @@ $(function() {
         </form:form>
        
         </div>
-        <c:out value="${message}"/>
+      <%= request.getParameter("message") %>
     </body>
 </html>
