@@ -72,7 +72,8 @@ public class ProgressControlador extends MultiActionController{
             obj.setName(rs1.getString("objective"));
             lesson.setObjective(obj);
             Subject sub = new Subject();
-            sub.setName(rs1.getString("subject"));
+            String name = sub.fetchName(rs1.getInt("subject"),hsr.getServletContext());
+            sub.setName(name);
             lesson.setSubject(sub);
             lesson.setName(rs1.getString("name"));
             }
