@@ -179,14 +179,7 @@
 //                }
 //            }
 
-            function funcionCallBackContent()
-            {
-                if (ajax.readyState === 4) {
-                    if (ajax.status === 200) {
-                        document.getElementById("content").innerHTML = ajax.responseText;
-                    }
-                }
-            }
+           
 
             function comboSelectionLevel()
             {
@@ -242,7 +235,14 @@
                 ajax.send("");
             }
 
-
+             function funcionCallBackContent()
+            {
+                if (ajax.readyState === 4) {
+                    if (ajax.status === 200) {
+                        document.getElementById("content").innerHTML = ajax.responseText;
+                    }
+                }
+            }
             function comboSelectionObjective()
             {
                 if (window.XMLHttpRequest) //mozilla
@@ -253,11 +253,6 @@
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
 
-                if (document.getElementById("objective").value === 0) {
-                    $('#createOnClick').attr('disabled', true);
-                } else {
-                    $('#createOnClick').attr('disabled', false);
-                }
                 ajax.onreadystatechange = funcionCallBackContent;
                 var seleccion3 = document.getElementById("objective").value;
                 ajax.open("POST", "createsetting.htm?select=contentlistObjective&seleccion3=" + seleccion3, true);
@@ -269,31 +264,41 @@
 //           if (ajax.readyState===4){
 //                if (ajax.status===200){
 //                    document.getElementById("objective").innerHTML= ajax.responseText;
-//                    }
+//                   }
 //                }
 //            }
-
-
-            function addObjective()
+//
+//
+//           function addObjective()
+//            {
+//                if (window.XMLHttpRequest) //mozilla
+//                {
+//                   ajax = new XMLHttpRequest(); //No Internet explorer
+//                } else
+//                {
+//                   ajax = new ActiveXObject("Microsoft.XMLHTTP");
+//                }
+//
+//                //    ajax.onreadystatechange = funcionaddSubject;
+//
+//                var namenewsubject = document.getElementById("subject").value;
+//                var namenewobjective = document.getElementById("namenewobjective").value;
+//                ajax.open("POST", "createsetting.htm?select=createsettingObjective&namenewsubject=" + namenewsubject + "&namenewobjective=" + namenewobjective, true);
+//
+//                ajax.send("");
+//
+//            }
+            
+            function funcionCallBackshowsetting()
             {
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                if (ajax.readyState === 4) {
+                    if (ajax.status === 200) {
+                        document.getElementById("nameobjective").innerHTML = ajax.responseText;
+                    }
                 }
-
-                //    ajax.onreadystatechange = funcionaddSubject;
-
-                var namenewsubject = document.getElementById("subject").value;
-                var namenewobjective = document.getElementById("namenewobjective").value;
-                ajax.open("POST", "createsetting.htm?select=createsettingObjective&namenewsubject=" + namenewsubject + "&namenewobjective=" + namenewobjective, true);
-
-                ajax.send("");
-
             }
-            function showsetting()
+            
+            function editObjective()
             {
                 if (window.XMLHttpRequest) //mozilla
                 {
@@ -303,10 +308,10 @@
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
 
-                //    ajax.onreadystatechange = funcionaddSubject;
+                ajax.onreadystatechange = funcionCallBackshowsetting;
 
                 var id = document.getElementById("objective").value;
-                ajax.open("POST", "createsetting.htm?select=createsettingshowsettingObjective&namenewsubject=" + id, true);
+                ajax.open("POST", "createsetting.htm?select=createsettingshowsettingObjective&id=" + id, true);
 
                 ajax.send("");
 
@@ -314,26 +319,12 @@
             $(function () {
                 $('#objective').click(function () {
                     $('#formobjetive').removeClass("hidden");
-                    $('#formcontent').addClass("hidden");
-                    showsetting();
+                    $('#formcontent').addClass("hidden");                   
                 });
                 $('#content').click(function () {
                     $('#formcontent').removeClass("hidden");
                     $('#formobjetive').addClass("hidden");
                 });
-//    $('#LoadTemplates').change(function() {
-//         if (this.checked) {
-//    $("#lessons").attr("disabled", true);
-//    $('#divCrearLessons').removeClass('hidden');
-//    $('#divLoadLessons').addClass('hidden');
-////    $("#NameLessons").attr("disabled", true);
-//    } else {
-//    $("#lessons").attr("disabled", false);
-//    $('#divLoadLessons').removeClass('hidden');
-//    $('#divCrearLessons').addClass('hidden');
-////    $("#NameLessons").attr("disabled", false);
-//    }
-//    });
             })
         </script>
         <style>
@@ -393,16 +384,17 @@
                 </fieldset>
                 <fieldset class="hidden" id="formobjetive">
                     <legend>Setting objetive</legend>  
-                    <div class="col-xs-12" style="margin-top: 20px;">
+                    <div class="col-xs-12" id="nameobjective">
+                        <div class="col-xs-4">
+                                <label class="control-label">Name</label>
+                                <input type="text" class="form-control" name="TXTnameobjective" value="${objectiveEdit.name}">
+                            </div>
+                            <div class="col-xs-4">
+                                <label class="control-label">Description</label>
+                                <textarea type="text" class="form-control" name="TXTcommentobjective" id="commentsnewobjective" placeholder="${objectiveEdit.description}"></textarea>      
+                            </div>
+                        </div>
 
-                        <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Name new objective</label>
-                            <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name new objective">
-                        </div>
-                        <div class="col-xs-9 center-block form-group">
-                            <label class="control-label">Comments</label>
-                            <textarea type="text" class="form-control" name="TXTnamenewobjective" id="commentsnewobjective"  placeholder="Comments"></textarea>
-                        </div>
                         <div class="col-xs-3 center-block form-inline">
                             <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="addObjective()">
                                 Add Objective
@@ -412,7 +404,7 @@
                                 Delete 
                                 <!--<span class="glyphicon glyphicon-remove-sign" data-toggle="tooltip" data-placement="bottom" title="delete objective"></span>-->
                             </button>
-                            <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="editObjective()">
+                            <button type="button" name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg" onclick="editObjective()">
                                 Edit<!--<span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="bottom" title="edit objective"></span>-->
                             </button>
                         </div>
