@@ -70,14 +70,18 @@ public class ProgressControlador extends MultiActionController{
             while (rs1.next())
             {Objective obj = new Objective();
             obj.setName(rs1.getString("objective"));
+            String[] ids = new String[1];
+            ids[0]= String.valueOf(rs1.getInt("objective_id"));
+            obj.setId(ids);
             lesson.setObjective(obj);
             Subject sub = new Subject();
-            String name = sub.fetchName(rs1.getInt("subject"),hsr.getServletContext());
+            String name = sub.fetchName(rs1.getInt("subject_id"),hsr.getServletContext());
             sub.setName(name);
             lesson.setSubject(sub);
             lesson.setName(rs1.getString("name"));
+            lesson.setId(Integer.parseInt(lessonname));
             }
-    List<Progress> records = this.getRecords(lessonname,hsr.getServletContext());
+    List<Progress> records = this.getRecords(lesson,hsr.getServletContext());
     mv.addObject("attendancelist", records);
     mv.addObject("lessondetailes",lesson);
          } catch (SQLException ex) {
@@ -88,7 +92,7 @@ public class ProgressControlador extends MultiActionController{
     }
     
     
-    public List<Progress> getRecords(String lessonid,ServletContext servlet) throws SQLException
+    public List<Progress> getRecords(Lessons lesson,ServletContext servlet) throws SQLException
     {
         
         List<Progress> records = new ArrayList<>();
@@ -100,7 +104,7 @@ public class ProgressControlador extends MultiActionController{
              Statement st = this.cn.createStatement();
            
           
-            String consulta = "SELECT * FROM public.lesson_stud_att where lesson_id ="+lessonid;
+            String consulta = "SELECT * FROM public.lesson_stud_att where lesson_id ="+lesson.getId();
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
@@ -112,7 +116,9 @@ public class ProgressControlador extends MultiActionController{
             }
              for(Progress record : records)
             {
-            consulta = "SELECT rating FROM public.progress_report where student_id = "+record.getStudentid();
+                String[] ids = new String[1];
+                ids = lesson.getObjective().getId();
+            consulta = "SELECT rating FROM public.progress_report where student_id = "+record.getStudentid()+" & comment_date = (select max(comment_date)   from public.progress_report where student_id ="+record.getStudentid()+") & subject_id ="+ids[0];
             ResultSet rs3 = st.executeQuery(consulta);
             while (rs3.next())
             {
@@ -141,35 +147,35 @@ public class ProgressControlador extends MultiActionController{
     
     return records;
     }
-//    public ModelAndView saveAttendance(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-//        
-//        ModelAndView mv = new ModelAndView("lessonattendance");
-//         DriverManagerDataSource dataSource;
-//        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-//        this.cn = dataSource.getConnection();
-//     String lessonname = hsr.getParameter("seleccion4");
-//     DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-//Date lessondate = format.parse(hsr.getParameter("seleccion5"));
-//
-//    Statement st = this.cn.createStatement();
-//            
-//            String consulta = "SELECT id_lessons FROM public.lessons where nombre_lessons ='"+lessonname+ "' ";
-//            ResultSet rs = st.executeQuery(consulta);
-//          int lessonid = 0;
-//            while (rs.next())
-//            {
-//                lessonid = rs.getInt("id_lessons");
-//            }
-//           consulta = "SELECT id FROM public.lessons_time where lesson_id ="+lessonid+"and date = "+lessondate;//should include time as well as there might be more than 1 lesson in same day
-//            ResultSet rs1 = st.executeQuery(consulta);
-//          int lessontimeid = 0;
-//            while (rs1.next())
-//            {
-//                 lessontimeid = rs1.getInt("id_lessons");
-//            }
-//    List<Progress> records = this.getRecords(lessontimeid,hsr.getServletContext());
-//    mv.addObject("attendancelist", records);
-//        return mv;
-//        
-//    }
+    public ModelAndView saveRecords(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("lessonprogress");
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+     String lessonname = hsr.getParameter("seleccion4");
+     DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+Date lessondate = format.parse(hsr.getParameter("seleccion5"));
+
+    Statement st = this.cn.createStatement();
+            
+            String consulta = "SELECT id_lessons FROM public.lessons where nombre_lessons ='"+lessonname+ "' ";
+            ResultSet rs = st.executeQuery(consulta);
+          int lessonid = 0;
+            while (rs.next())
+            {
+                lessonid = rs.getInt("id_lessons");
+            }
+           consulta = "SELECT id FROM public.lessons_time where lesson_id ="+lessonid+"and date = "+lessondate;//should include time as well as there might be more than 1 lesson in same day
+            ResultSet rs1 = st.executeQuery(consulta);
+          int lessontimeid = 0;
+            while (rs1.next())
+            {
+                 lessontimeid = rs1.getInt("id_lessons");
+            }
+  //  List<Progress> records = this.getRecords(lessontimeid,hsr.getServletContext());
+ //   mv.addObject("attendancelist", records);
+        return mv;
+        
+    }
 }
