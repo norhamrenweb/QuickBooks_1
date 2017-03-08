@@ -50,22 +50,22 @@ public class Subject {
     { String subjectName = null ;
         try {
              DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",servlet);
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
         this.cn = dataSource.getConnection();
              Statement st = this.cn.createStatement();
              
-            String consulta = "SELECT nombre_subject FROM public.subject where id = "+id;
+            String consulta = "SELECT Title FROM AH_ZAF.dbo.Courses where CourseID = "+id;
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
             {
-                subjectName = rs.getString("nombre_subject");
+                subjectName = rs.getString("Title");
                 
             }
             //this.finalize();
             
         } catch (SQLException ex) {
-            System.out.println("Error leyendo Alumnos: " + ex);
+            System.out.println("Error : " + ex);
         }
        
         return subjectName;

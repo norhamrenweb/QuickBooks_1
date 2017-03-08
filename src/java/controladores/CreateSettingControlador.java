@@ -100,7 +100,7 @@ public class CreateSettingControlador extends MultiActionController{
         List<Subject> subjects = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         
         
@@ -111,7 +111,7 @@ public class CreateSettingControlador extends MultiActionController{
              st = this.cn.createStatement();
              levelid= hsr.getParameterValues("seleccion1");
 //             String namesubject= hsr.getParameter("namesubject");
-          ResultSet rs1 = st.executeQuery("select nombre_subject,id from subject where id_level="+levelid[0]);
+          ResultSet rs1 = st.executeQuery("select CourseID,Title from AH_ZAF.dbo.Courses where levelID ="+levelid[0]);
            Subject s = new Subject();
           s.setName("Select Subject");
           subjects.add(s);

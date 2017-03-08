@@ -65,14 +65,14 @@
     $(document).ready( function () {
         $('#table_id').DataTable();
         $('#table_datelessons').DataTable();
-//       
-//    $('#table_id tbody').on('click', 'tr', function () {
-//        table = $('#table_id').DataTable();
-//        data = table.row( this ).data();
-//        data1 = data[0];
-//        rowselect();
+       
+    $('#table_id tbody').on('click', 'tr', function () {
+        table = $('#table_id').DataTable();
+        data = table.row( this ).data();
+        data1 = data[0];
+        rowselect();
     } ); 
-//    } ); 
+} ); 
 //   
 //        
 //        function funcionCallBackEquipment()
@@ -86,28 +86,28 @@
 // 
 //
 //
-//   function rowselect()
-//    {
-//        var LessonsSelected = data1;
-//        //var LessonsSelected = $(data1).html();
-//        //var LessonsSelected = 565;
-//
+   function rowselect()
+    {
+        var LessonsSelected = data1;
+        //var LessonsSelected = $(data1).html();
+        //var LessonsSelected = 565;
+
+        
+        
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
 //        
-//        
-//        if (window.XMLHttpRequest) //mozilla
-//        {
-//            ajax = new XMLHttpRequest(); //No Internet explorer
-//        }
-//        else
-//        {
-//            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-//        }
-//        
-////        
-//        ajax.onreadystatechange=funcionCallBackEquipment;
-//        ajax.open("POST","homepage.htm?select3=loadLessonsTime&LessonsSelected="+LessonsSelected,true);
-//        ajax.send("");
-//  };
+      //  ajax.onreadystatechange=funcionCallBackEquipment;
+        ajax.open("POST","lessonprogress.htm?select6=loadRecords&LessonsSelected="+LessonsSelected,true);
+        ajax.send("");
+  };
 
     
       
@@ -119,7 +119,7 @@
         <a href="createlesson.htm?select=start">Create Lessons</a>--%>
         <div class="col-xs-12">
 
-
+            <a href="lessonprogress.htm?select6=loadRecords&LessonsSelected= 586">lessons</a>
             <div class="col-xs-6">
                 <div class="form-group">
                     <label class="control-label"></label>
