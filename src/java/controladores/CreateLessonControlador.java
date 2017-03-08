@@ -126,11 +126,11 @@ public class CreateLessonControlador extends MultiActionController{
 //                levelid = rs.getInt("GradeLevelID");
 //            }
 //            cn.close();
-            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
              this.cn = dataSource.getConnection();
              st = this.cn.createStatement();
              levelid= hsr.getParameterValues("seleccion1");
-          ResultSet rs1 = st.executeQuery("select nombre_subject,id from subject where id_level="+levelid[0]);
+          ResultSet rs1 = st.executeQuery("select CourseID,Title from subject where LevelID="+levelid[0]);
            Subject s = new Subject();
           s.setName("Select Subject");
           subjects.add(s);
@@ -139,9 +139,9 @@ public class CreateLessonControlador extends MultiActionController{
             {
              Subject sub = new Subject();
              String[] ids = new String[1];
-            ids[0]=""+rs1.getInt("id");
+            ids[0]=""+rs1.getInt("Course_ID");
              sub.setId(ids);
-             sub.setName(rs1.getString("nombre_subject"));
+             sub.setName(rs1.getString("Title"));
                 subjects.add(sub);
             }
             
@@ -387,13 +387,9 @@ public class CreateLessonControlador extends MultiActionController{
             
              Statement st = this.cn.createStatement();
              String subjectid = null;
-         //   String consulta = "SELECT id FROM public.subject where nombre_subject ='"+hsr.getParameter("seleccionTemplate")+"'";
-          //  ResultSet rs = st.executeQuery(consulta);
-          
-//            while (rs.next())
-//            {
+        
                 subjectid = hsr.getParameter("seleccionTemplate") ;
-            //}
+          
             
           ResultSet rs1 = st.executeQuery("select name,id from lesson_plan where subject_id= "+subjectid);
           Lessons l = new Lessons();
