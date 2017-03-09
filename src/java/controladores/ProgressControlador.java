@@ -69,7 +69,7 @@ public class ProgressControlador extends MultiActionController{
         Lessons lesson = new Lessons();
             while (rs1.next())
             {Objective obj = new Objective();
-            obj.setName(rs1.getString("objective"));
+            obj.setName(rs1.getString("objectivename"));
             String[] ids = new String[1];
             ids[0]= String.valueOf(rs1.getInt("objective_id"));
             obj.setId(ids);
@@ -77,9 +77,12 @@ public class ProgressControlador extends MultiActionController{
             Subject sub = new Subject();
             String name = sub.fetchName(rs1.getInt("subject_id"),hsr.getServletContext());
             sub.setName(name);
+            String[] subids = new String[1];
+            subids[0]= String.valueOf(rs1.getInt("subject_id"));
+            sub.setId(ids);
             lesson.setSubject(sub);
             lesson.setName(rs1.getString("name"));
-            lesson.setId(Integer.parseInt(lessonname));
+            lesson.setId(586);
             }
     List<Progress> records = this.getRecords(lesson,hsr.getServletContext());
     mv.addObject("attendancelist", records);
@@ -118,7 +121,7 @@ public class ProgressControlador extends MultiActionController{
             {
                 String[] ids = new String[1];
                 ids = lesson.getObjective().getId();
-            consulta = "SELECT rating FROM public.progress_report where student_id = "+record.getStudentid()+" & comment_date = (select max(comment_date)   from public.progress_report where student_id ="+record.getStudentid()+") & subject_id ="+ids[0];
+            consulta = "SELECT rating FROM public.progress_report where student_id = '"+record.getStudentid()+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+record.getStudentid()+") AND subject_id ="+ids[0];
             ResultSet rs3 = st.executeQuery(consulta);
             while (rs3.next())
             {
@@ -132,7 +135,7 @@ public class ProgressControlador extends MultiActionController{
         st = this.cn.createStatement();
             for(Progress record : records)
             {
-            consulta = "SELECT FirstName,LastName FROM AH_ZAF.dbo.Students where StudentID = "+record.getStudentid();
+            consulta = "SELECT FirstName,LastName FROM AH_ZAF.dbo.Students where StudentID = '"+record.getStudentid()+"'";
             ResultSet rs2 = st.executeQuery(consulta);
             while (rs2.next())
             {
