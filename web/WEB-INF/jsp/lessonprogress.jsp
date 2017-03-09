@@ -31,6 +31,42 @@
         <script src="recursos/js/es.js" type="text/javascript"></script>
         <script src="recursos/js/ar.js" type="text/javascript"></script>
         
+        <!--    <link href="recursos/css/dataTables/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>-->
+ <link href="recursos/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<!--    <link href="recursos/css/dataTables/dataTables.bootstrap4.css" rel="stylesheet" type="text/css"/>-->
+<!--    <link href="recursos/css/dataTables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>-->
+    <link href="recursos/css/dataTables/dataTables.foundation.css" rel="stylesheet" type="text/css"/>
+<!--    <link href="recursos/css/dataTables/dataTables.foundation.min.css" rel="stylesheet" type="text/css"/>-->
+    <link href="recursos/css/dataTables/dataTables.jqueryui.css" rel="stylesheet" type="text/css"/>
+<!--    <link href="recursos/css/dataTables/dataTables.jqueryui.min.css" rel="stylesheet" type="text/css"/>-->
+<!--    <link href="recursos/css/dataTables/dataTables.material.css" rel="stylesheet" type="text/css"/>-->
+<!--    <link href="recursos/css/dataTables/dataTables.material.min.css" rel="stylesheet" type="text/css"/>-->
+    <link href="recursos/css/dataTables/dataTables.semanticui.css" rel="stylesheet" type="text/css"/>
+<!--    <link href="recursos/css/dataTables/dataTables.semanticui.min.css" rel="stylesheet" type="text/css"/>-->
+<!--    <link href="recursos/css/dataTables/dataTables.uikit.css" rel="stylesheet" type="text/css"/>-->
+<!--    <link href="recursos/css/dataTables/dataTables.uikit.min.css" rel="stylesheet" type="text/css"/>-->
+<!--      <link href="recursos/css/dataTables/jquery.dataTables.css" rel="stylesheet" type="text/css"/>-->
+<link href="recursos/css/dataTables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="recursos/css/dataTables/jquery.dataTables_themeroller.css" rel="stylesheet" type="text/css"/>
+    
+    
+    <script src="recursos/js/dataTables/dataTables.bootstrap.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.bootstrap.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/dataTables.bootstrap4.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.bootstrap4.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/dataTables.foundation.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.foundation.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/dataTables.jqueryui.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.jqueryui.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/dataTables.material.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.material.min.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.semanticui.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.semanticui.min.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.uikit.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.uikit.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/jquery.dataTables.js"></script>
+<!--    <script src="recursos/js/dataTables/jquery.dataTables.min.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/jquery.js" type="text/javascript"></script>-->
 
         <script>
 
@@ -109,7 +145,17 @@
         
         var ajax;
 
-    
+   $(document).ready( function () {
+        $('#table_progress').DataTable(
+                {
+                   "columnDefs": [
+                { "width": "5%", "targets": 0 },
+                { "width": "10%", "targets": 1 },
+                { "width": "5%", "targets": 2 }
+                ] 
+                });
+
+    });
     
     
 $(function() {
@@ -132,25 +178,14 @@ $(function() {
 //    $("#NameLessons").attr("disabled", false);
     }
     });
-//    $('#LoadTemplates').change(function() {
-//         if (this.checked).{
-//    $("#lessons").attr("disabled", true);
-//    $('#divCrearLessons').removeClass('disabled');
-//    $('#divLoadLessons').addClass('disabled');
-////    $("#NameLessons").attr("disabled", true);
-//    } else {
-//    $("#lessons").attr("disabled", false);
-//    $('#divLoadLessons').removeClass('disabled');
-//    $('#divCrearLessons').addClass('disabled');
-////    $("#NameLessons").attr("disabled", false);
-//    }
-//    });
+
 })
         </script>
         <style>
             textarea 
             {
             resize: none;
+            width: 100%;
             }
         </style>
     </head>
@@ -159,47 +194,72 @@ $(function() {
         
         
         <div class="container">
-        <h1 class="text-center">Create Lessons</h1>
+        <h1 class="text-center">Progress Lessons</h1>
 
         
-        <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
+        <form:form id="formStudents" method ="post" action="lessonprogress.htm?select6=saveRecords" >
           
                 
             <fieldset>
                 <legend>Lessons details</legend>
-                
+
                 <div class="col-xs-3 center-block">
-                    <label class="control-label">Name lesson</label>
-                    <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="${lessondetailes.name}">
+                    Name lesson:<label class="control-label"> ${lessondetailes.name}</label>
                 </div>
-            
+
                 <div class="col-xs-3 center-block">
-                    <label class="control-label">Subject</label>
-                    <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="${lessondetailes.subject.name}">
+                    Subject:<label class="control-label"> ${lessondetailes.subject.name}</label>
                 </div>
-              <div class="col-xs-3 center-block">
-                    <label class="control-label">Objective</label>
-                    <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="${lessondetailes.objective.name}">
+                <div class="col-xs-3 center-block">
+                    Objective:<label class="control-label"> ${lessondetailes.objective.name}</label>
                 </div>  
-               
+            </fieldset>   
                 
                             <div class="col-xs-12">
-                <table id="table_id" class="display" >
+                <table id="table_progress" class="display" >
                     <thead>
                         <tr>
+                            <td>Student Id</td>
                             <td>Student Name</td>
                             <td>Rating</td>
                             <td>Comment</td>
-                         
+                            <td>Attendance Code</td>
                           
                         </tr>
                     </thead>
                     <tbody>
                     <c:forEach var="record" items="${attendancelist}" >
                         <tr>
+                            <td><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
                             <td>${record.studentname}</td>
-                            <td>${record.rating}</td>
-                            <td>${record.comment}</td>
+                            <td>
+                                
+                                <select name="TXTrating">
+                                    <c:if test="${empty record.rating}">
+                                        <option selected>N/A</option>
+                                    </c:if>
+                                    <c:if test="${not empty record.rating}">
+                                       <option selected>${record.rating}</option>
+                                    </c:if>
+                                    <%--<c:when test="${empty record.rating}">
+                                        <option selected>${record.rating}</option>
+                                    </c:when>--%>
+                                    
+                                    <option>Present</option>
+                                    <option>Attempted</option>
+                                    <option>Mastered</option>
+                                </select>
+                            </td>
+                            <td>
+                                <textarea >${record.comment}</textarea>
+                            </td>
+                            <td>
+                                <select>
+                                    <option>P</option>
+                                    <option>A</option>
+                                    <option>T</option>
+                                </select>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -207,20 +267,12 @@ $(function() {
            
             </div>
                         
-                <div class="hidden col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
-                   
-               
-           
-                        
-                
-              
-                
-            </fieldset>
-    
-            
-        </form:form>
+                <div class="col-xs-12">   
+                    <input type="submit" value="Save">
+                </div>  
+</form:form>
         
-        </div>
+        
 
 
 
