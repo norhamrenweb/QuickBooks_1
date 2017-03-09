@@ -204,14 +204,14 @@ $(function() {
                 <legend>Lessons details</legend>
 
                 <div class="col-xs-3 center-block">
-                    Name lesson:<label class="control-label"> ${lessondetailes.name}</label>
+                    Name lesson:<label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
                 </div>
 
                 <div class="col-xs-3 center-block">
                     Subject:<label class="control-label"> ${lessondetailes.subject.name}</label>
                 </div>
                 <div class="col-xs-3 center-block">
-                    Objective:<label class="control-label"> ${lessondetailes.objective.name}</label>
+                    Objective:<label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
                 </div>  
             </fieldset>   
                 
@@ -245,16 +245,17 @@ $(function() {
                                         <option selected>${record.rating}</option>
                                     </c:when>--%>
                                     
-                                    <option>Present</option>
+                                    <option>Presented</option>
                                     <option>Attempted</option>
                                     <option>Mastered</option>
                                 </select>
                             </td>
                             <td>
-                                <textarea >${record.comment}</textarea>
+                                <textarea name="TXTcomment" >${record.comment}</textarea>
                             </td>
                             <td>
-                                <select>
+                                <select name="TXTattendance">
+                                    <option></option>
                                     <option>P</option>
                                     <option>A</option>
                                     <option>T</option>

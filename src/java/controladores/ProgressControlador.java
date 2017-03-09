@@ -82,7 +82,7 @@ public class ProgressControlador extends MultiActionController{
             sub.setId(ids);
             lesson.setSubject(sub);
             lesson.setName(rs1.getString("name"));
-            lesson.setId(586);
+            lesson.setId(Integer.parseInt(lessonname));
             }
     List<Progress> records = this.getRecords(lesson,hsr.getServletContext());
     mv.addObject("attendancelist", records);
@@ -156,28 +156,27 @@ public class ProgressControlador extends MultiActionController{
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-     String lessonname = hsr.getParameter("seleccion4");
-     DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-Date lessondate = format.parse(hsr.getParameter("seleccion5"));
+        String[]lessonid=hsr.getParameterValues("TXTlessonid");
+        String[] objectiveid = hsr.getParameterValues("TXTobjectiveid");
+        String[] comments = hsr.getParameterValues("TXTcomment");
+        String[] ratings= hsr.getParameterValues("TXTrating");
+        String[] studentids= hsr.getParameterValues("TXTstudentid");
+        String[] att= hsr.getParameterValues("TXTattendance");
+      
 
     Statement st = this.cn.createStatement();
             
-            String consulta = "SELECT id_lessons FROM public.lessons where nombre_lessons ='"+lessonname+ "' ";
-            ResultSet rs = st.executeQuery(consulta);
-          int lessonid = 0;
-            while (rs.next())
-            {
-                lessonid = rs.getInt("id_lessons");
-            }
-           consulta = "SELECT id FROM public.lessons_time where lesson_id ="+lessonid+"and date = "+lessondate;//should include time as well as there might be more than 1 lesson in same day
-            ResultSet rs1 = st.executeQuery(consulta);
-          int lessontimeid = 0;
-            while (rs1.next())
-            {
-                 lessontimeid = rs1.getInt("id_lessons");
-            }
-  //  List<Progress> records = this.getRecords(lessontimeid,hsr.getServletContext());
- //   mv.addObject("attendancelist", records);
+    for(int i=0;i<studentids.length;i++)
+    {
+    st.executeUpdate("update lesson_stud_att set attendance = '"+att[i]+"',timestamp= now() where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
+    }
+      
+     for(int i=0;i<studentids.length;i++)
+    {
+        
+         st.executeUpdate("insert into progress_report(comment_date,comment,rating,lesson_id,student_id,subject_id) values (now(),'"+comments[i]+"','"+ratings[i]+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"')");
+       
+    } 
         return mv;
         
     }
