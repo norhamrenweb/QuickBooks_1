@@ -154,11 +154,36 @@
                 { "width": "5%", "targets": 2 }
                 ] 
                 });
-
+        $('[data-toggle="tooltip"]').tooltip();
+        
+        
     });
-    
-    
+
 $(function() {
+$('select').change(function() {
+    var itemsRating = []; // needs to be outside
+    var itemsAttendance = []; // needs to be outside
+var collectionRating = $(".rating");
+var collectionAttendance = $(".attendance");
+
+collectionRating.each(function() {
+    itemsRating.push($(this).val());   
+});
+collectionAttendance.each(function() {
+    itemsAttendance.push($(this).val());   
+});
+    var haynullRating = $.inArray('', itemsRating);
+    var haynullAttendance = $.inArray('', itemsAttendance);
+    
+    if( haynullRating !== -1 || haynullAttendance !== -1){
+        $('#buttonAchived').addClass('hidden');
+        
+    }else{
+        $('#buttonAchived').removeClass('hidden');
+    }
+});
+    
+
     $('#subject').change(function() {
 //        $('#LoadTemplates').parent().attr("disabled",false);
 //        $('#LoadTemplates').attr("disabled",false);
@@ -187,6 +212,8 @@ $(function() {
             resize: none;
             width: 100%;
             }
+            rating 
+            {}
         </style>
     </head>
     <%@ include file="menu.jsp" %>
@@ -194,85 +221,96 @@ $(function() {
         
         
         <div class="container">
-        <h1 class="text-center">Progress Lessons</h1>
+            <h1 class="text-center">Progress Lessons</h1>
+<p></p>
 
-        
-        <form:form id="formStudents" method ="post" action="lessonprogress.htm?select6=saveRecords" >
-          
-                
-            <fieldset>
-                <legend>Lessons details</legend>
+            <form:form id="formStudents" method ="post" action="lessonprogress.htm?select6=saveRecords" >
 
-                <div class="col-xs-3 center-block">
-                    Name lesson:<label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
+
+                <fieldset>
+                    <legend>Lessons details</legend>
+
+                    <div class="col-xs-3 center-block">
+                        Name lesson:<label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
+                    </div>
+
+                    <div class="col-xs-3 center-block">
+                        Subject:<label class="control-label"> ${lessondetailes.subject.name}</label>
+                    </div>
+                    <div class="col-xs-3 center-block">
+                        Objective:<label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
+                    </div>  
+                </fieldset>   
+
+                <div class="col-xs-12">
+                    
+                    <table id="table_progress" class="display" >
+                        <thead>
+                            <tr>
+                                <td>Student Id</td>
+                                <td>Student Name</td>
+                                <td>Rating</td>
+                                <td>Comment</td>
+                                <td>Attendance Code Fill: <select </td>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="record" items="${attendancelist}" >
+                                <tr class="rows">
+                                    <td><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
+                                    <td>${record.studentname}</td>
+                                    <td>
+
+                                        <select name="TXTrating" name="rating" class="rating">
+                                            <c:if test="${empty record.rating}">
+                                                <option selected></option>
+                                            </c:if>
+                                            <c:if test="${not empty record.rating}">
+                                                <option selected>${record.rating}</option>
+                                            </c:if>
+                                            <%--<c:when test="${empty record.rating}">
+                                                <option selected>${record.rating}</option>
+                                            </c:when>--%>
+                                            <option></option>
+                                            <option>N/A</option>
+                                            <option>Presented</option>
+                                            <option>Attempted</option>
+                                            <option>Mastered</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <textarea name="TXTcomment" >${record.comment}</textarea>
+                                    </td>
+                                    <td>
+                                        <select name="TXTattendance" class="attendance">
+                                            <%--<c:if test="${empty record.attendance}">
+                                                <option selected></option>
+                                            </c:if>
+                                            <c:if test="${not empty record.attendance}">
+                                                <option selected>${record.attendance}</option>
+                                            </c:if>--%>
+                                            <option></option>
+                                            <option>P</option>
+                                            <option>A</option>
+                                            <option>T</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+
                 </div>
 
-                <div class="col-xs-3 center-block">
-                    Subject:<label class="control-label"> ${lessondetailes.subject.name}</label>
-                </div>
-                <div class="col-xs-3 center-block">
-                    Objective:<label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
-                </div>  
-            </fieldset>   
-                
-                            <div class="col-xs-12">
-                <table id="table_progress" class="display" >
-                    <thead>
-                        <tr>
-                            <td>Student Id</td>
-                            <td>Student Name</td>
-                            <td>Rating</td>
-                            <td>Comment</td>
-                            <td>Attendance Code</td>
-                          
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="record" items="${attendancelist}" >
-                        <tr>
-                            <td><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
-                            <td>${record.studentname}</td>
-                            <td>
-                                
-                                <select name="TXTrating">
-                                    <c:if test="${empty record.rating}">
-                                        <option selected>N/A</option>
-                                    </c:if>
-                                    <c:if test="${not empty record.rating}">
-                                       <option selected>${record.rating}</option>
-                                    </c:if>
-                                    <%--<c:when test="${empty record.rating}">
-                                        <option selected>${record.rating}</option>
-                                    </c:when>--%>
-                                    
-                                    <option>Presented</option>
-                                    <option>Attempted</option>
-                                    <option>Mastered</option>
-                                </select>
-                            </td>
-                            <td>
-                                <textarea name="TXTcomment" >${record.comment}</textarea>
-                            </td>
-                            <td>
-                                <select name="TXTattendance">
-                                    <option></option>
-                                    <option>P</option>
-                                    <option>A</option>
-                                    <option>T</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-            </table>
-           
-            </div>
-                        
-                <div class="col-xs-12">   
+                <div class="col-xs-6">   
                     <input type="submit" value="Save">
-                </div>  
-</form:form>
-        
+                </div>
+                <div class="col-xs-6">   
+                    <input type="button" value="Archived" class="hidden" id="buttonAchived" data-toggle="tooltip" title="Completed all">
+                </div>
+            </form:form>
+        </div>
         
 
 
