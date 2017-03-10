@@ -115,17 +115,19 @@ public class ProgressControlador extends MultiActionController{
                 Progress att = new Progress();
              
                 att.setStudentid(rs.getInt("student_id"));
+                att.setAttendancecode(rs.getString("attendance"));
                 records.add(att);
             }
              for(Progress record : records)
             {
                 String[] ids = new String[1];
                 ids = lesson.getObjective().getId();
-            consulta = "SELECT rating FROM public.progress_report where student_id = '"+record.getStudentid()+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+record.getStudentid()+") AND subject_id ="+ids[0];
+            consulta = "SELECT rating,comment FROM public.progress_report where student_id = '"+record.getStudentid()+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+record.getStudentid()+") AND subject_id ="+ids[0];
             ResultSet rs3 = st.executeQuery(consulta);
             while (rs3.next())
             {
               record.setRating(rs3.getString("rating"));
+              record.setComment(rs3.getString("comment"));
             }
             }
             cn.close();
