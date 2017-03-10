@@ -15,6 +15,24 @@ public class Progress {
     private int studentid;
     private String rating;
     private String comment;
+    private String comment_date;
+
+    public String getComment_date() {
+        return comment_date;
+    }
+
+    public void setComment_date(String comment_date) {
+        this.comment_date = comment_date;
+    }
+
+    public String getLesson_name() {
+        return lesson_name;
+    }
+
+    public void setLesson_name(String lesson_name) {
+        this.lesson_name = lesson_name;
+    }
+    private String lesson_name;
     
     public int getStudentid() {
         return studentid;

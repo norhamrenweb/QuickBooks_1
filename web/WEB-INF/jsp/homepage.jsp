@@ -115,8 +115,8 @@
     </script>
     </head>
     <body>
-<%--        <h1><c:out value="${message}"/></h1>
-        <a href="createlesson.htm?select=start">Create Lessons</a>--%>
+       
+        <a href="progressbystudent.htm?option=start">Create Lessons</a>
         <div class="col-xs-12">
 
             <a href="lessonprogress.htm?select6=loadRecords&LessonsSelected= 586">lessons</a>

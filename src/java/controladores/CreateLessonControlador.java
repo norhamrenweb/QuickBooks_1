@@ -130,7 +130,7 @@ public class CreateLessonControlador extends MultiActionController{
              this.cn = dataSource.getConnection();
              st = this.cn.createStatement();
              levelid= hsr.getParameterValues("seleccion1");
-          ResultSet rs1 = st.executeQuery("select CourseID,Title from subject where LevelID="+levelid[0]);
+          ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
            Subject s = new Subject();
           s.setName("Select Subject");
           subjects.add(s);
@@ -139,11 +139,21 @@ public class CreateLessonControlador extends MultiActionController{
             {
              Subject sub = new Subject();
              String[] ids = new String[1];
-            ids[0]=""+rs1.getInt("Course_ID");
+            ids[0]=""+rs1.getInt("CourseID");
              sub.setId(ids);
-             sub.setName(rs1.getString("Title"));
+            
                 subjects.add(sub);
             }
+           for(Subject su:subjects.subList(1,subjects.size()))
+          {
+              String[] ids = new String[1];
+              ids=su.getId();
+           ResultSet rs2 = st.executeQuery("select Title from Courses where CourseID = "+ids[0]);
+           while(rs2.next())
+           {
+           su.setName(rs2.getString("Title"));
+           }
+          }
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
