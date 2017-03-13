@@ -250,7 +250,7 @@ public class ProgressbyStudent extends MultiActionController {
     }
     public ModelAndView generateReport(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     {
-          ModelAndView mv = new ModelAndView("studentpage_1");
+          ModelAndView mv = new ModelAndView("studentpage");
           String[] objectiveid = hsr.getParameterValues("seleccion3");
           String[] studentid = hsr.getParameterValues("seleccion");
             List<Progress> progress = new ArrayList<>();
@@ -301,7 +301,7 @@ while(rs2.next())
     public ModelAndView studentPage(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     {
          ModelAndView mv = new ModelAndView("studentpage");
-    String[] studentIds = hsr.getParameterValues("destino[]");
+    String[] studentIds = hsr.getParameterValues("origin[]");
      Students alumnos = new Students();
     try {
             
