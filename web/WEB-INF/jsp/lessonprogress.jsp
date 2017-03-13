@@ -151,7 +151,9 @@
                    "columnDefs": [
                 { "width": "5%", "targets": 0 },
                 { "width": "10%", "targets": 1 },
-                { "width": "5%", "targets": 2 }
+                { "width": "5%", "targets": 2 },
+                { "width": "55%", "targets": 3 },
+                { "width": "25%", "targets": 4, "orderable": false }
                 ] 
                 });
         $('[data-toggle="tooltip"]').tooltip();
@@ -182,8 +184,22 @@ collectionAttendance.each(function() {
         $('#buttonAchived').removeClass('hidden');
     }
 });
-    
+     $('#rellenarP').click(function() {
 
+       var rellenarPresent = $(".attendance");
+       rellenarPresent.each(function() {
+            $(this).val("P");
+        });
+       
+    });
+    $('#rellenar').click(function() {
+
+       var rellenarPresent = $(".attendance");
+       rellenarPresent.each(function() {
+            $(this).val("");
+        });
+       
+    });
     $('#subject').change(function() {
 //        $('#LoadTemplates').parent().attr("disabled",false);
 //        $('#LoadTemplates').attr("disabled",false);
@@ -251,7 +267,7 @@ collectionAttendance.each(function() {
                                 <td>Student Name</td>
                                 <td>Rating</td>
                                 <td>Comment</td>
-                                <td>Attendance Code Fill: <select </td>
+                                <td>Attendance Code <input type="button" id="rellenarP" value="Fill P"> <input type="button" id="rellenar" value="clear"></td>
 
                             </tr>
                         </thead>
@@ -269,9 +285,7 @@ collectionAttendance.each(function() {
                                             <c:if test="${not empty record.rating}">
                                                 <option selected>${record.rating}</option>
                                             </c:if>
-                                            <%--<c:when test="${empty record.rating}">
-                                                <option selected>${record.rating}</option>
-                                            </c:when>--%>
+                                         
                                             <option></option>
                                             <option>N/A</option>
                                             <option>Presented</option>
@@ -284,12 +298,12 @@ collectionAttendance.each(function() {
                                     </td>
                                     <td>
                                         <select name="TXTattendance" class="attendance">
-                                            <%--<c:if test="${empty record.attendance}">
+                                            <c:if test="${empty record.attendancecode}">
                                                 <option selected></option>
                                             </c:if>
-                                            <c:if test="${not empty record.attendance}">
-                                                <option selected>${record.attendance}</option>
-                                            </c:if>--%>
+                                            <c:if test="${not empty record.attendancecode}">
+                                                <option selected>${record.attendancecode}</option>
+                                            </c:if>
                                             <option></option>
                                             <option>P</option>
                                             <option>A</option>
