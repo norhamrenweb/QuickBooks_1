@@ -31,81 +31,53 @@
         <script src="recursos/js/es.js" type="text/javascript"></script>
         <script src="recursos/js/ar.js" type="text/javascript"></script>
         
+        
+
+ <link href="recursos/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+
+    <link href="recursos/css/dataTables/dataTables.foundation.css" rel="stylesheet" type="text/css"/>
+
+    <link href="recursos/css/dataTables/dataTables.jqueryui.css" rel="stylesheet" type="text/css"/>
+
+    <link href="recursos/css/dataTables/dataTables.semanticui.css" rel="stylesheet" type="text/css"/>
+
+<link href="recursos/css/dataTables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="recursos/css/dataTables/jquery.dataTables_themeroller.css" rel="stylesheet" type="text/css"/>
+    
+    
+    <script src="recursos/js/dataTables/dataTables.bootstrap.js" type="text/javascript"></script>
+
+    <script src="recursos/js/dataTables/dataTables.bootstrap4.js" type="text/javascript"></script>
+
+    <script src="recursos/js/dataTables/dataTables.foundation.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.foundation.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/dataTables.jqueryui.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.jqueryui.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/dataTables.material.js" type="text/javascript"></script>
+<!--    <script src="recursos/js/dataTables/dataTables.material.min.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.semanticui.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.semanticui.min.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.uikit.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/dataTables.uikit.min.js" type="text/javascript"></script>-->
+    <script src="recursos/js/dataTables/jquery.dataTables.js"></script>
+<!--    <script src="recursos/js/dataTables/jquery.dataTables.min.js" type="text/javascript"></script>-->
+<!--    <script src="recursos/js/dataTables/jquery.js" type="text/javascript"></script>-->
 
         <script>
 
 
 
  $(document).ready(function(){
-       var userLang = navigator.language || navigator.userLanguage;
-       var myDate = new Date();
-         //Muestra calendario
-         //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
-         var lessoncreate = '<%= request.getParameter("message") %>';
-         
-     if (lessoncreate === 'Lesson created' ){
-     $('#myModal').modal({
-        show: 'false'
-    });
-    }
- 
-         
-        $('#fecha').datetimepicker({
-            
-            format: 'YYYY-MM-DD',
-            locale: userLang.valueOf(),
-            daysOfWeekDisabled: [0, 6],
-            useCurrent: false//Important! See issue #1075
-            //defaultDate: '08:32:33',
-
-  
-        });
-        $('#horainicio').datetimepicker({
-            format: 'HH:mm',
-            locale: userLang.valueOf(),
-            useCurrent: false, //Important! See issue #1075
-            stepping: 5
-        });
-        $('#horafin').datetimepicker({
-            
-            format: 'HH:mm',
-            locale: userLang.valueOf(),
-            useCurrent: false, //Important! See issue #1075
-            stepping: 5
-        });
-        
-        $("#horainicio").on("dp.change", function (e) {
-            $('#horafin').data("DateTimePicker").minDate(e.date);
-        });
-        
-        $("#horafin").on("dp.change", function (e) {
-            $('#horainicio').data("DateTimePicker").maxDate(e.date);
-        });
-        
-
-//       //Menu lateral
-//        $('#nav-expander').on('click',function(e){
-//      		e.preventDefault();
-//      		$('body').toggleClass('nav-expanded');
-//      	});
-//      	$('#nav-close').on('click',function(e){
-//      		e.preventDefault();
-//      		$('body').removeClass('nav-expanded');
-//      	});
-//        $('#barralateral').mouseleave(function(o){
-//      		o.preventDefault();
-//      		$('body').removeClass('nav-expanded');
-//      	});
+              $('#table_students').DataTable(
+                      {
+                   "paging":   false,
+                        "ordering": false,
+                        "info":     false,
+                }
+                        );
     });            
             
-        $().ready(function() 
-	{
-		$('.pasar').click(function() { return !$('#origen option:selected').remove().appendTo('#destino'); });  
-		$('.quitar').click(function() { return !$('#destino option:selected').remove().appendTo('#origen'); });
-		$('.pasartodos').click(function() { $('#origen option').each(function() { $(this).remove().appendTo('#destino'); }); });
-		$('.quitartodos').click(function() { $('#destino option').each(function() { $(this).remove().appendTo('#origen'); }); });
-		$('.submit').click(function() { $('#destino option').prop('selected', 'selected'); });
-	});
+      
         
         var ajax;
 
@@ -230,32 +202,26 @@ $(function() {
                             </select>
                         </div>
                         <div class="col-xs-3">
-                            <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
+                            <select class="form-control" size="20" name="origen[]" id="origen" style="width: 100% !important;">
                                 <c:forEach var="alumnos" items="${listaAlumnos}">
                                     <option value="${alumnos.id_students}" >${alumnos.nombre_students}</option>
                                 </c:forEach>
                             </select>
                         </div>
-                        
-                        <div class="col-xs-2">
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn pasar" value="<spring:message code="etiq.txtadd"/> »">
-                            </div>
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn quitar" value="« <spring:message code="etiq.txtremove"/>">
-                            </div>
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
-                            </div>
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
-                            </div>
-                        </div>
-                
-                        <div class="col-xs-3">
-                            <select class="form-control submit" size="20" multiple name="destino[]" id="destino" style="width: 100% !important;"> 
-
-                            </select>
+                        <div class="col-xs-3 panel" style="overflow-y: scroll; height: 90%">
+                            <table id="table_students" class="display" >
+                               <thead>
+                        <tr>
+                            <td>Name students</td>
+                        </tr>
+                               </thead>
+                               <c:forEach var="alumnos" items="${listaAlumnos}" >
+                        <tr>
+                            <td><input type="hidden" value="${alumnos.id_students}">${alumnos.nombre_students}</td>
+                        </tr>
+                        </c:forEach>
+                            </table>
+                               
                         </div>
                     </div>
                 <div class="col-xs-2"></div>
