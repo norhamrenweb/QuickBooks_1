@@ -14,7 +14,7 @@
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Create Lessons</title>
+        <title>Settings</title>
         
         <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
       
@@ -31,38 +31,6 @@
         <script src="recursos/js/es.js" type="text/javascript"></script>
         <script src="recursos/js/ar.js" type="text/javascript"></script>
         
-        
-
- <link href="recursos/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
-
-    <link href="recursos/css/dataTables/dataTables.foundation.css" rel="stylesheet" type="text/css"/>
-
-    <link href="recursos/css/dataTables/dataTables.jqueryui.css" rel="stylesheet" type="text/css"/>
-
-    <link href="recursos/css/dataTables/dataTables.semanticui.css" rel="stylesheet" type="text/css"/>
-
-<link href="recursos/css/dataTables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="recursos/css/dataTables/jquery.dataTables_themeroller.css" rel="stylesheet" type="text/css"/>
-    
-    
-    <script src="recursos/js/dataTables/dataTables.bootstrap.js" type="text/javascript"></script>
-
-    <script src="recursos/js/dataTables/dataTables.bootstrap4.js" type="text/javascript"></script>
-
-    <script src="recursos/js/dataTables/dataTables.foundation.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.foundation.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.jqueryui.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.jqueryui.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.material.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.material.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.semanticui.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.semanticui.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.uikit.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.uikit.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/jquery.dataTables.js"></script>
-<!--    <script src="recursos/js/dataTables/jquery.dataTables.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/jquery.js" type="text/javascript"></script>-->
-
         <script>
       
         
@@ -175,12 +143,10 @@
                     </div>
                 <div class="col-xs-4"></div>
             </fieldset>
-        </form>
-
-<input type="checkbox" name="id" value="Java">Objectives<BR>
-<input type="checkbox" name="id" value=".NET">Contents<BR>
-<input type="checkbox" name="id" value="PHP">Methods<BR>
-<input type="button" value="Submit" onclick="drawtable()"/>
+            <input type="checkbox" name="id" value="Java">Objectives<BR>
+            <input type="checkbox" name="id" value="">Contents<BR>
+            <input type="checkbox" name="id" value="">Methods<BR>
+            <input type="button" value="Submit" onclick="drawtable()"/>
 
 
 
@@ -189,9 +155,7 @@
                     <thead>
                         <tr>
                             <td>Objective name</td>
-                            <td>Comment</td>
-                          
-                          
+                            <td>Description</td>  
                         </tr>
                     </thead>
                     <tbody>
@@ -207,7 +171,10 @@
             </table>
            
             </div> 
-        </div>
+        
+        </form>
+
+</div>
 
     </body>
 </html>
