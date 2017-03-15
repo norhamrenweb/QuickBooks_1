@@ -46,6 +46,13 @@
         </bean>
     </property> 
     </bean>
+     <bean class="controladores.SettingsControlador" id="settings">
+     <property name="methodNameResolver">
+        <bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+           <property name="paramName" value="option"/>
+        </bean>
+    </property> 
+    </bean>
     <bean class="controladores.MappingFamilies" id="map">
      <property name="methodNameResolver">
         <bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
@@ -110,6 +117,7 @@
                  <prop key="progressbystudent.htm">studentprog</prop>  
                  <prop key="studentpage.htm">studentprog</prop> 
                  <prop key="studentpage_1.htm">studentprog</prop> 
+                 <prop key="settings.htm">settings</prop> 
             </props>
         </property>
     </bean>

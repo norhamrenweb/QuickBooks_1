@@ -14,9 +14,9 @@
 <bean id="dataSource"
     class="org.springframework.jdbc.datasource.DriverManagerDataSource"
    p:driverClassName="org.postgresql.Driver"
-        p:url="jdbc:postgresql://192.168.1.192:5432/Lessons"
-         p:username="postgres"
-        p:password="rapunzel"/>
+        p:url="jdbc:postgresql://192.168.1.3:5432/Lessons"
+         p:username="eduweb"
+        p:password="Madrid2016"/>
 
 <bean id="dataSourceAH" class="org.springframework.jdbc.datasource.DriverManagerDataSource"
         p:driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"

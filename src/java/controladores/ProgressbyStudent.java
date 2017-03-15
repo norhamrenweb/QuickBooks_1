@@ -262,7 +262,7 @@ public class ProgressbyStudent extends MultiActionController {
         
              Statement st = this.cn.createStatement();
             
-          ResultSet rs1 = st.executeQuery("select comment,comment_date,rating,lessonname from public.progresslessonname where subject_id="+objectiveid[0]+" AND student_id = "+studentid[0]);
+          ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where subject_id="+objectiveid[0]+" AND student_id = "+studentid[0]);
           
            while (rs1.next())
             {
@@ -276,7 +276,7 @@ public class ProgressbyStudent extends MultiActionController {
              p.setComment_date(dateStr);
              progress.add(p);
             }
-        String consulta = "SELECT rating FROM public.progress_report where student_id = '"+studentid[0]+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+studentid[0]+") AND subject_id ="+objectiveid[0];
+        String consulta = "SELECT ratingname FROM public.progresslessonname where student_id = '"+studentid[0]+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+studentid[0]+") AND subject_id ="+objectiveid[0];
 ResultSet rs2 = st.executeQuery(consulta);
 while(rs2.next())
 {

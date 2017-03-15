@@ -11,6 +11,15 @@ public class Content {
     private String[] id;
     private String name;
 private String description;
+private Objective obj;
+
+    public Objective getObj() {
+        return obj;
+    }
+
+    public void setObj(Objective obj) {
+        this.obj = obj;
+    }
 
     public String getDescription() {
         return description;
