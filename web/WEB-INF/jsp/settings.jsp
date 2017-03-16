@@ -10,7 +10,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
-<html>
+
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -35,6 +35,7 @@
       
         
         var ajax;
+        
 
     function funcionCallBackSubject()
     {
@@ -44,14 +45,18 @@
                     }
                 }
             }
-             function funcionCallBack()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("table").innerHTML= ajax.responseText;
-                    }
-                }
-            }
+//             function funcionCallBacktable()
+//    {
+//           if (ajax.readyState===4){
+//                if (ajax.status===200){
+//                  
+//                    document.getElementById("table").innerHTML= ajax.responseText;
+//                   
+//                    }
+//                }
+//                    
+//                }
+//            
             
 
 
@@ -67,33 +72,24 @@
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
+          
 
-//        $('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackSubject;
         var seleccion1 = document.getElementById("level").value;
-        ajax.open("POST","settings.htm?option=subjectlistLevel&seleccion1="+seleccion1,true);
+        ajax.open("GET","settings.htm?option=subjectlistLevel&seleccion1="+seleccion1,true);
         
         ajax.send("");
        
     }
-    function drawtable()
+    function drawtable2()
     {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        ajax.onreadystatechange = funcionCallBack;
+      
         var seleccion2 = document.getElementById("origen").value;
-        ajax.open("POST","settings.htm?option=objectivelistSubject&seleccion2="+seleccion2,true);
-        
-        ajax.send("");
+
+    window.location.href = "settings.htm?option=objectivelistSubject&seleccion2="+seleccion2;
+
        
-    }
+    };
  
 
         </script>
@@ -106,13 +102,13 @@
     </head>
     <%@ include file="menu.jsp" %>
     <body>
- 
         
         <div class="container">
         <h1 class="text-center">Create Lessons</h1>
 
         
-        
+       
+
         <form>    
             <fieldset>
                     <legend>Select subject</legend>
@@ -146,32 +142,10 @@
             <input type="checkbox" name="id" value="Java">Objectives<BR>
             <input type="checkbox" name="id" value="">Contents<BR>
             <input type="checkbox" name="id" value="">Methods<BR>
-            <input type="button" value="Submit" onclick="drawtable()"/>
+            <input type="button" value="Submit" onclick="drawtable2()"/>
 
 
-
-    <div class="col-xs-12">
-                <table id="table" >
-                    <thead>
-                        <tr>
-                            <td>Objective name</td>
-                            <td>Description</td>  
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="objective" items="${objectives}" >
-                        <tr>
-                            <td>${objective.name}</td>
-                              
-                            <td>${objective.description}</td>
-                       
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-            </table>
-           
-            </div> 
-        
+   
         </form>
 
 </div>

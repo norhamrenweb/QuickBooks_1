@@ -118,6 +118,8 @@
                  <prop key="studentpage.htm">studentprog</prop> 
                  <prop key="studentpage_1.htm">studentprog</prop> 
                  <prop key="settings.htm">settings</prop> 
+                 <prop key="settingtable.htm">settings</prop> 
+                  <prop key="editsetting.htm">settings</prop> 
             </props>
         </property>
     </bean>

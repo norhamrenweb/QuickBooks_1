@@ -126,7 +126,7 @@ public class SettingsControlador extends MultiActionController{
     //depending on the subject selected loads the objects
        public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("settings");
+        ModelAndView mv = new ModelAndView("settingtable");
         List<Objective> objectives = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
@@ -261,7 +261,7 @@ public class SettingsControlador extends MultiActionController{
     //edit link open a form with the name & comments (we can use to edit anything)
      public ModelAndView editObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("settings");
+        ModelAndView mv = new ModelAndView("editsetting");
        Objective objective = new Objective();
         try {
          DriverManagerDataSource dataSource;
@@ -269,7 +269,7 @@ public class SettingsControlador extends MultiActionController{
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
         String[] id = new String[1];
-        id[0]= hsr.getParameter("seleccion");
+        id[0]= hsr.getParameter("id");
         ResultSet rs = st.executeQuery("select name,description from objective where id ="+id[0]);
         while(rs.next()){
             objective.setId(id);
@@ -291,14 +291,15 @@ public class SettingsControlador extends MultiActionController{
   //saving the edited objective should write in the same id
    public ModelAndView saveObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("settings");
+        ModelAndView mv = new ModelAndView("editsetting");
         String message = null;
         try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-        st.executeUpdate("update objective set name = '"+hsr.getParameter("TXTname")+"',description ='"+hsr.getParameter("TXTcomment")+"'where id ="+hsr.getParameter("seleccion"));
+        String consulta = "update objective set name = '"+hsr.getParameter("name")+"',description ='"+hsr.getParameter("description")+"'where id ="+hsr.getParameter("id"); 
+        st.executeUpdate(consulta);
         message = "Objective edited successfully";   
               
         } catch (SQLException ex) {
@@ -314,20 +315,21 @@ public class SettingsControlador extends MultiActionController{
     // delete will delete and confirm (what will happen to the lessons, not allowed if there are lessons with this item)
    public ModelAndView deleteObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("createsetting");
-       String[] id = hsr.getParameterValues("seleccion");
+        ModelAndView mv = new ModelAndView("settingtable");
+       String[] id = hsr.getParameterValues("id");
        String message =null;
        try {
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
          Statement st = this.cn.createStatement();
-          ResultSet rs = st.executeQuery("select name from lessons where objective_id = "+ id[0] );
-          if(!rs.next()){
+         String consulta = "select name from lessons where objective_id = "+ id[0];
+          ResultSet rs = st.executeQuery(consulta );
+          if(rs.next()){
             message="This objective is linked to lessons";  
           }
           else{
-        String consulta = "DELETE FROM public.objective WHERE id="+id[0];
+        consulta = "DELETE FROM public.objective WHERE id="+id[0];
            st.executeUpdate(consulta);
            // need to decide what to do with the contents
           }
@@ -335,7 +337,7 @@ public class SettingsControlador extends MultiActionController{
             System.out.println("Error : " + ex);
         }
        
-        
+        mv.addObject("message",message);
         return mv;
     }
     // create new objective-method-content
