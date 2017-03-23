@@ -14,7 +14,7 @@
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Create Lessons</title>
+        <title>Students</title>
         
         <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
       
@@ -68,20 +68,26 @@
 
 
  $(document).ready(function(){
-              $('#table_students').DataTable(
-                      {
+             table = $('#table_students').DataTable(
+                 {
                    "paging":   false,
                         "ordering": false,
-                        "info":     false,
-                }
-                        );
+                        "info":     false
+                });
+    $('#table_students tbody').on('click', 'tr', function () {
+        
+        data = table.row( this ).data();
+        data1 = data[0];
+        selectionStudent();
+    } ); 
+                
     });            
             
       
         
         var ajax;
 
-    function funcionCallBackLevelStudent()
+    function funcionCallBackStudent()
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
@@ -89,7 +95,15 @@
                     }
                 }
             }
-            
+    
+     function funcionCallBackSelectStudent()
+    {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                    document.getElementById("showinformation").innerHTML= ajax.responseText;
+                    }
+                }
+            }
 
     function comboSelectionLevelStudent()
     {
@@ -130,6 +144,26 @@
        
     }
  
+    function selectionStudent()
+    {
+        var selectStudent = data1;
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        //$('#createOnClick').attr('disabled', true);
+        ajax.onreadystatechange = funcionCallBackSelectStudent;
+        //var selectStudent = document.getElementsByClassName("informationStudent").value;
+        ajax.open("POST","progressbystudent.htm?option=studentPage&selectStudent="+selectStudent,true);
+        
+        ajax.send("");
+       
+    }
 $(function() {
     $('#subject').change(function() {
 //        $('#LoadTemplates').parent().attr("disabled",false);
@@ -185,10 +219,10 @@ $(function() {
             <fieldset>
                     <legend>Select students</legend>
                     <div class="col-xs-12">
-                        <div class="col-xs-2"></div>
-                        <div class="col-xs-3">
+                        <div class="col-xs-2">
                             <label>Filter</label>
-
+                        </div>
+                        <div class="col-xs-3">
                             
                         </div>
                     </div>
@@ -197,34 +231,73 @@ $(function() {
                             <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
 
                                 <c:forEach var="levels" items="${gradelevels}">
-                                    <option value="${levels.id[0]}" >${levels.name}</option>
+                                    <option value="${levels.id[0]}">${levels.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
-                        <div class="col-xs-3">
+<%--                        <div class="col-xs-3">
                             <select class="form-control" size="20" name="origen[]" id="origen" style="width: 100% !important;">
                                 <c:forEach var="alumnos" items="${listaAlumnos}">
                                     <option value="${alumnos.id_students}" >${alumnos.nombre_students}</option>
                                 </c:forEach>
                             </select>
-                        </div>
+                        </div>--%>
                         <div class="col-xs-3 panel" style="overflow-y: scroll; height: 90%">
                             <table id="table_students" class="display" >
                                <thead>
                         <tr>
+                            <td hidden=""></td>
                             <td>Name students</td>
                         </tr>
                                </thead>
-                               <c:forEach var="alumnos" items="${listaAlumnos}" >
+                        <c:forEach var="alumnos" items="${listaAlumnos}" >
                         <tr>
-                            <td><input type="hidden" value="${alumnos.id_students}">${alumnos.nombre_students}</td>
+                            <td hidden="">${alumnos.id_students}</td>
+                            <td >${alumnos.nombre_students}</td>
                         </tr>
                         </c:forEach>
                             </table>
                                
                         </div>
+                        <div class="col-xs-7" id="">
+                            <div class="col-xs-12 text-center">Information Student</div>
+                            <div class="col-xs-6">
+                            <img src="ruta">
+                            </div>
+                            <div class="col-xs-6 ">
+                                <table >
+                                    <tr>
+                                        <td>
+                                            <select id="showinformation">
+                                                <option>${student.nombre_students}</option>
+                                                <option>${student.fecha_nacimiento}</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <label class="label">Name</label>
+                                <input class="form-control" type="text" value="">
+                            
+                            <label>lastname</label>
+                            <input class="form-control" type="text" readonly="" value="lastname student">
+                            
+                            <label>Birthday</label>
+                            <input class="form-control" type="text" readonly="" value="Birthday student">
+                            
+                            <label>grade level</label>
+                            <input class="form-control" type="text" readonly="" value="grade student">
+                            
+                            <Label>Subjec</Label>
+                            <select class="form-control" >
+                                <option>Subject1</option>
+                                <option>Subject2</option>
+                                <option>Subject1</option>
+                            </select>
+                            </div>
+                        
+                        </div>
                     </div>
-                <div class="col-xs-2"></div>
+                        
             </fieldset>
             <div class="col-xs-12 text-center">
             <input type="submit" class="btn btn-success" id="createOnClick" value="<spring:message code="etiq.txtcreate"/>">
