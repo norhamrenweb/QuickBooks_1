@@ -43,6 +43,7 @@ public class ProgressbyStudent extends MultiActionController {
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
+    // loads the levels
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("progressbystudent");
@@ -102,6 +103,7 @@ public class ProgressbyStudent extends MultiActionController {
        
         return listaAlumnos;
     }
+    // loads the students based on the selected level
     public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("progressbystudent");
@@ -150,6 +152,7 @@ public class ProgressbyStudent extends MultiActionController {
         }
          return subjects;
     }
+    //need to remove??
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("studentpage");
@@ -165,7 +168,7 @@ public class ProgressbyStudent extends MultiActionController {
         
         return mv;
     }
-    
+    // loads the list of objectives based on the selected subject
     public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("studentpage");
@@ -301,7 +304,7 @@ while(rs2.next())
     public ModelAndView studentPage(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     {
          ModelAndView mv = new ModelAndView("studentpage");
-    String[] studentIds = hsr.getParameterValues("origin[]");
+    String[] studentIds = hsr.getParameterValues("selectStudent");
      Students alumnos = new Students();
     try {
             
