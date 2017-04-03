@@ -9,6 +9,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 <!DOCTYPE html>
 <html>
 
@@ -96,6 +97,26 @@
                     }
                 }
             }
+    function funcionCallBackloadGeneralcomments()
+    {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                   var json = JSON.parse(ajax.responseText);
+                   var i;
+  
+                          var table="<tr><th>Comment</th><th>Comment Date</th></tr>";
+//                          var x = xmlDoc.getElementsByTagName("CD");
+                          for (i = 0; i <json.length; i++) { 
+                            table += "<tr><td>" +
+                            json[i].comment +
+                            "</td><td>" +
+                            json[i].comment_date +
+                            "</td></tr>";
+                          }
+                          document.getElementById("demo").innerHTML = table;
+                    }
+                }
+            }
     
      function funcionCallBackSelectStudent()
     {
@@ -105,9 +126,11 @@
                      var info = JSON.parse(json.info);
                var subjects = JSON.parse(json.sub);
                     $('#BOD').val(info.fecha_nacimiento);
+                    $('#student').append(info.nombre_students);
+                    $('#studentid').val(info.id_students);
                    $('#subjects').empty();
                      $.each(subjects, function(i, item) {
-                         $('#subjects').append('<option>' + subjects[i].name + '</option>');
+                         $('#subjects').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
                    });
                     }
                 }
@@ -182,8 +205,22 @@
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-       var selectSubject = document.getElementsByClassName("subjects").value; 
-        ajax.open("POST","objGeneralcomments.htm?selectSubject="+selectSubject,true);
+//        var selectSubject = document.getElementById("subjects").value; 
+//       var selectStudent = document.getElementById("studentid").value;
+//        var d = { selectSubject:selectSubject, studentid:selectStudent};
+//                $.ajax({
+//            type: 'GET',
+//            url: 'objGeneralcomments.htm',
+//            contentType: 'application/json; charset=utf-8',
+//            data: JSON.stringify(d),
+//            dataType: 'json',
+//            success: funcionCallBackloadGeneralcomments
+//          
+//        });
+        ajax.onreadystatechange = funcionCallBackloadGeneralcomments;
+       var selectSubject = document.getElementById("subjects").value; 
+       var selectStudent = document.getElementById("studentid").value;
+        ajax.open("POST","objGeneralcomments.htm?selection="+selectSubject+","+selectStudent,true);
         ajax.send("");
         
     }
@@ -285,9 +322,10 @@ $(function() {
                             </table>      
                         </div>
                     </div>    
-                    <div class="col-xs-9" id="">
+                    <div class="col-xs-9">
                         <div class="col-xs-12 text-center nameStudent">
-                            <span>Jesús Aragón Gallego${student.nombre_students}</span>
+                            <span id="student"> </span>
+                            <input type="hidden" id="studentid" name="studentid">
                         </div>
                         <div class="col-xs-12 text-center">
                             <ul class="nav nav-tabs">
@@ -312,7 +350,7 @@ $(function() {
 
                                 <label>lastname</label>
                                 <input class="form-control" type="text" readonly="" value="lastname student">
-
+                                 
                                 <label>Birthday</label>
                                 <input class="form-control" type="text" readonly="" value="Birthday student" id="BOD">
 
@@ -334,6 +372,9 @@ $(function() {
                                     <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
                                         
                                     </select>
+                                    <br><br>
+                                        <table id="demo"></table>
+                                    
                                 </div>
                             </div>
                         </div>
