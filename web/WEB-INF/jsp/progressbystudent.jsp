@@ -16,50 +16,50 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Students</title>
         
-        <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <link href="/QuickBooks_1/recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
       
-        <link href="recursos/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
-        <link href="recursos/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
-        <link href="recursos/css/bootstrap-toggle.css" rel="stylesheet" type="text/css"/>
-        <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
+        <link href="/QuickBooks_1/recursos/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+        <link href="/QuickBooks_1/recursos/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
+        <link href="/QuickBooks_1/recursos/css/bootstrap-toggle.css" rel="stylesheet" type="text/css"/>
+        <script src="/QuickBooks_1/recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
         
-        <script src="recursos/js/bootstrap.js" type="text/javascript"></script>
-        <script src="recursos/js/bootstrap-toggle.js" type="text/javascript"></script>
+        <script src="/QuickBooks_1/recursos/js/bootstrap.js" type="text/javascript"></script>
+        <script src="/QuickBooks_1/recursos/js/bootstrap-toggle.js" type="text/javascript"></script>
 <!--        <script src="recursos/js/bootstrap-modal.js" type="text/javascript"></script>-->
-        <script src="recursos/js/moment.js" type="text/javascript"></script>
-        <script src="recursos/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
-        <script src="recursos/js/es.js" type="text/javascript"></script>
-        <script src="recursos/js/ar.js" type="text/javascript"></script>
+        <script src="/QuickBooks_1/recursos/js/moment.js" type="text/javascript"></script>
+        <script src="/QuickBooks_1/recursos/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+        <script src="/QuickBooks_1/recursos/js/es.js" type="text/javascript"></script>
+        <script src="/QuickBooks_1/recursos/js/ar.js" type="text/javascript"></script>
         
         
 
- <link href="recursos/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+ <link href="/QuickBooks_1/recursos/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
 
-    <link href="recursos/css/dataTables/dataTables.foundation.css" rel="stylesheet" type="text/css"/>
+    <link href="/QuickBooks_1/recursos/css/dataTables/dataTables.foundation.css" rel="stylesheet" type="text/css"/>
 
-    <link href="recursos/css/dataTables/dataTables.jqueryui.css" rel="stylesheet" type="text/css"/>
+    <link href="/QuickBooks_1/recursos/css/dataTables/dataTables.jqueryui.css" rel="stylesheet" type="text/css"/>
 
-    <link href="recursos/css/dataTables/dataTables.semanticui.css" rel="stylesheet" type="text/css"/>
+    <link href="/QuickBooks_1/recursos/css/dataTables/dataTables.semanticui.css" rel="stylesheet" type="text/css"/>
 
-<link href="recursos/css/dataTables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="recursos/css/dataTables/jquery.dataTables_themeroller.css" rel="stylesheet" type="text/css"/>
+<link href="/QuickBooks_1/recursos/css/dataTables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/QuickBooks_1/recursos/css/dataTables/jquery.dataTables_themeroller.css" rel="stylesheet" type="text/css"/>
     
     
-    <script src="recursos/js/dataTables/dataTables.bootstrap.js" type="text/javascript"></script>
+    <script src="/QuickBooks_1/recursos/js/dataTables/dataTables.bootstrap.js" type="text/javascript"></script>
 
-    <script src="recursos/js/dataTables/dataTables.bootstrap4.js" type="text/javascript"></script>
+    <script src="/QuickBooks_1/recursos/js/dataTables/dataTables.bootstrap4.js" type="text/javascript"></script>
 
-    <script src="recursos/js/dataTables/dataTables.foundation.js" type="text/javascript"></script>
+    <script src="/QuickBooks_1/recursos/js/dataTables/dataTables.foundation.js" type="text/javascript"></script>
 <!--    <script src="recursos/js/dataTables/dataTables.foundation.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.jqueryui.js" type="text/javascript"></script>
+    <script src="/QuickBooks_1/recursos/js/dataTables/dataTables.jqueryui.js" type="text/javascript"></script>
 <!--    <script src="recursos/js/dataTables/dataTables.jqueryui.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.material.js" type="text/javascript"></script>
+    <script src="/QuickBooks_1/recursos/js/dataTables/dataTables.material.js" type="text/javascript"></script>
 <!--    <script src="recursos/js/dataTables/dataTables.material.min.js" type="text/javascript"></script>-->
 <!--    <script src="recursos/js/dataTables/dataTables.semanticui.js" type="text/javascript"></script>-->
 <!--    <script src="recursos/js/dataTables/dataTables.semanticui.min.js" type="text/javascript"></script>-->
 <!--    <script src="recursos/js/dataTables/dataTables.uikit.js" type="text/javascript"></script>-->
 <!--    <script src="recursos/js/dataTables/dataTables.uikit.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/jquery.dataTables.js"></script>
+    <script src="/QuickBooks_1/recursos/js/dataTables/jquery.dataTables.js"></script>
 <!--    <script src="recursos/js/dataTables/jquery.dataTables.min.js" type="text/javascript"></script>-->
 <!--    <script src="recursos/js/dataTables/jquery.js" type="text/javascript"></script>-->
 
@@ -101,8 +101,14 @@
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                    document.getElementById("showinformation").innerHTML= ajax.responseText;
-                    //alert(ajax.responseText);
+                    var json = JSON.parse(ajax.responseText);
+                     var info = JSON.parse(json.info);
+               var subjects = JSON.parse(json.sub);
+                    $('#BOD').val(info.fecha_nacimiento);
+                   $('#subjects').empty();
+                     $.each(subjects, function(i, item) {
+                         $('#subjects').append('<option>' + subjects[i].name + '</option>');
+                   });
                     }
                 }
             }
@@ -160,11 +166,26 @@
 
         //$('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackSelectStudent;
-        //var selectStudent = document.getElementsByClassName("informationStudent").value;
-        ajax.open("POST","progressbystudent.htm?option=studentPage&selectStudent="+selectStudent,true);
+      //  var selectStudent = document.getElementsByClassName("nameStudent").value;
+        ajax.open("POST","studentPage.htm?selectStudent="+selectStudent,true);
         
         ajax.send("");
        
+    }
+    function loadobjGeneralcomments()
+    {  
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+       var selectSubject = document.getElementsByClassName("subjects").value; 
+        ajax.open("POST","objGeneralcomments.htm?selectSubject="+selectSubject,true);
+        ajax.send("");
+        
     }
 $(function() {
     $('#subject').change(function() {
@@ -293,27 +314,25 @@ $(function() {
                                 <input class="form-control" type="text" readonly="" value="lastname student">
 
                                 <label>Birthday</label>
-                                <input class="form-control" type="text" readonly="" value="Birthday student">
+                                <input class="form-control" type="text" readonly="" value="Birthday student" id="BOD">
 
                                 <label>grade level</label>
                                 <input class="form-control" type="text" readonly="" value="grade student">
                                 </div>
                             </div>
                             <div class="col-xs-12 tab-pane fade" id="gradebook">
-                                <div class="col-xs-6">
+<!--                                <div class="col-xs-6">
                                 <Label>Level</Label>
                                 <select class="form-control">
                                     <option>Level1</option>
                                     <option>Level2</option>
                                     <option>Level3</option>
                                 </select>
-                                </div>
-                                <div class="col-xs-6">
-                                    <Label>Subjec</Label>
-                                    <select class="form-control">
-                                        <option>Subject1</option>
-                                        <option>Subject2</option>
-                                        <option>Subject1</option>
+                                </div>-->
+                                <div class="col-xs-6" >
+                                    <Label>Subject</Label>
+                                    <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
+                                        
                                     </select>
                                 </div>
                             </div>

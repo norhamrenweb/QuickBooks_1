@@ -10,6 +10,8 @@ import Montessori.Method;
 import Montessori.Objective;
 import Montessori.Students;
 import Montessori.Subject;
+import atg.taglib.json.util.JSONObject;
+import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,6 +19,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import com.google.gson.*;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
@@ -32,7 +38,8 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
  *
  * @author nmohamed
  */
-public class ProgressbyStudent extends MultiActionController {
+@Controller
+public class ProgressbyStudent {
      Connection cn;
       
 //      private ServletContext servlet;
@@ -44,6 +51,7 @@ public class ProgressbyStudent extends MultiActionController {
         return beanobject;
     }
     // loads the levels
+    @RequestMapping("/progressbystudent/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("progressbystudent");
@@ -104,6 +112,7 @@ public class ProgressbyStudent extends MultiActionController {
         return listaAlumnos;
     }
     // loads the students based on the selected level
+    @RequestMapping("/progressbystudent/studentlistLevel.htm")
     public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("progressbystudent");
@@ -152,7 +161,8 @@ public class ProgressbyStudent extends MultiActionController {
         }
          return subjects;
     }
-    //need to remove??
+    //loads list of subjects based on selected level
+    @RequestMapping("/progressbystudent/subjectlistLevel.htm")
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("studentpage");
@@ -169,6 +179,7 @@ public class ProgressbyStudent extends MultiActionController {
         return mv;
     }
     // loads the list of objectives based on the selected subject
+    @RequestMapping("/progressbystudent/objectivelistSubject.htm")
     public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("studentpage");
@@ -211,6 +222,7 @@ public class ProgressbyStudent extends MultiActionController {
         
         return mv;
     }
+    
     public ArrayList<Students> getStudentslevel(String gradeid) throws SQLException
     {
 //        this.conectarOracle();
@@ -237,8 +249,8 @@ public class ProgressbyStudent extends MultiActionController {
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
-                alumnos.setPlacement("Placement");
-                alumnos.setSubstatus("Substatus");
+                alumnos.setPlacement(rs.getString("Placement"));
+                alumnos.setSubstatus(rs.getString("Substatus"));
                 listaAlumnos.add(alumnos);
             }
             //this.finalize();
@@ -251,9 +263,12 @@ public class ProgressbyStudent extends MultiActionController {
          
          
     }
-    public ModelAndView generateReport(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
+    //based on student selected and objective selected
+    @RequestMapping("/progressbystudent/loaddailyProgress.htm")
+    @ResponseBody
+    public String loaddailyProgress(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     {
-          ModelAndView mv = new ModelAndView("studentpage");
+      //    ModelAndView mv = new ModelAndView("studentpage");
           String[] objectiveid = hsr.getParameterValues("seleccion3");
           String[] studentid = hsr.getParameterValues("seleccion");
             List<Progress> progress = new ArrayList<>();
@@ -265,7 +280,7 @@ public class ProgressbyStudent extends MultiActionController {
         
              Statement st = this.cn.createStatement();
             
-          ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where subject_id="+objectiveid[0]+" AND student_id = "+studentid[0]);
+          ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id="+objectiveid[0]+" AND student_id = "+studentid[0]+" AND COALESCE(generalcomment, FALSE) = FALSE ");
           
            while (rs1.next())
             {
@@ -279,7 +294,8 @@ public class ProgressbyStudent extends MultiActionController {
              p.setComment_date(dateStr);
              progress.add(p);
             }
-        String consulta = "SELECT ratingname FROM public.progresslessonname where student_id = '"+studentid[0]+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+studentid[0]+") AND subject_id ="+objectiveid[0];
+           // select the latest rating to be presented as the final rating for this objective
+        String consulta = "SELECT ratingname FROM public.progresslessonname where student_id = '"+studentid[0]+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+studentid[0]+"AND objective_id ="+objectiveid[0]+"AND COALESCE(generalcomment, FALSE) = FALSE) AND objective_id ="+objectiveid[0]+"AND COALESCE(generalcomment, FALSE) = FALSE";
 ResultSet rs2 = st.executeQuery(consulta);
 while(rs2.next())
 {
@@ -297,17 +313,28 @@ while(rs2.next())
 //      mv.addObject("objectives",obj);
 //      mv.addObject("subjects",sub);
 
-        mv.addObject("progress", progress);
-        mv.addObject("finalrating",finalrating);
-          return mv;
+//        mv.addObject("progress", progress);
+//        mv.addObject("finalrating",finalrating);
+        String prog = new Gson().toJson(progress);
+        String rating = new Gson().toJson(finalrating);
+        JSONObject obj = new JSONObject();
+        obj.put("progress", prog);
+        obj.put("finalrating", rating);
+          return obj.toString();
     }
-    public ModelAndView studentPage(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
+    //load student demographics
+    @RequestMapping("/progressbystudent/studentPage.htm")
+    @ResponseBody
+    public String studentPage(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     {
-         ModelAndView mv = new ModelAndView("studentpage");
+     //    ModelAndView mv = new ModelAndView("progressbystudent");
     String[] studentIds = hsr.getParameterValues("selectStudent");
-     Students alumnos = new Students();
+     Students student = new Students();
+      JSONObject obj = new JSONObject();
     try {
-            
+            DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
              Statement st = this.cn.createStatement();
              
             String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentID = "+studentIds[0];
@@ -316,13 +343,13 @@ while(rs2.next())
             while (rs.next())
             {
                
-                alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
-                alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
-                alumnos.setFoto(rs.getString("PathToPicture"));
-                alumnos.setLevel_id(rs.getString("GradeLevel"));
-                alumnos.setPlacement("Placement");
-                alumnos.setSubstatus("Substatus");
+                student.setId_students(rs.getInt("StudentID"));
+                student.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
+                student.setFecha_nacimiento(rs.getString("Birthdate"));
+//                student.setFoto(rs.getString("PathToPicture"));
+                student.setLevel_id(rs.getString("GradeLevel"));
+//                student.setPlacement("Placement");
+//                student.setSubstatus("Substatus");
                
             }
             //this.finalize();
@@ -330,11 +357,53 @@ while(rs2.next())
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
         }
-    mv.addObject("student",alumnos);
+     List<Subject> subjects = new ArrayList<>();
+     subjects = this.getSubjects(student.getLevel_id());
+    String info = new Gson().toJson(student);
+    String sub = new Gson().toJson(subjects);
+    obj.put("info", info);
+    obj.put("sub",sub);
+//    mv.addObject("student",student);
     
-mv.addObject("subjects", this.getSubjects(alumnos.getLevel_id()));//Integer.parseInt(alumnos.getLevel_id())));
+//     mv.addObject("subjects", this.getSubjects(student.getLevel_id()));//Integer.parseInt(alumnos.getLevel_id())));
   
-         return mv;
+         return obj.toString();
         
     }
+    //loads list of objectives final rating & general comments based on the selected subject
+     @RequestMapping("/progressbystudent/objGeneralcomments.htm")
+    @ResponseBody
+    public String objGeneralcomments(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
+    {
+        String[] subjectid = hsr.getParameterValues("selection");
+        List<Progress> progress = new ArrayList<>();
+        List<Objective> objectives = new ArrayList<>();
+       try {
+            DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+             Statement st = this.cn.createStatement();
+             
+            String consulta = "SELECT * FROM objective where subject_id = "+subjectid[0];
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+            Objective o = new Objective();
+            o.setName(rs.getString("name"));
+           o.setDescription(rs.getString("description"));
+           String[] id = new String[1];
+           id[0] = ""+rs.getInt("id");
+            o.setId(id);
+            objectives.add(o);
+            }
+            
+            
+          } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+        }   
+       return subjectid[0];     
+       } 
+    
+    
 }
