@@ -101,6 +101,7 @@
            if (ajax.readyState===4){
                 if (ajax.status===200){
                     document.getElementById("showinformation").innerHTML= ajax.responseText;
+                    //alert(ajax.responseText);
                     }
                 }
             }
