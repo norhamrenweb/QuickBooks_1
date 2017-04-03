@@ -69,10 +69,11 @@
 
  $(document).ready(function(){
              table = $('#table_students').DataTable(
-                 {
-                   "paging":   false,
-                        "ordering": false,
-                        "info":     false
+                {
+                    "searching": false,
+                    "paging":   false,
+                    "ordering": false,
+                    "info":     false
                 });
     $('#table_students tbody').on('click', 'tr', function () {
         
@@ -185,25 +186,39 @@ $(function() {
 //    $("#NameLessons").attr("disabled", false);
     }
     });
-//    $('#LoadTemplates').change(function() {
-//         if (this.checked).{
-//    $("#lessons").attr("disabled", true);
-//    $('#divCrearLessons').removeClass('disabled');
-//    $('#divLoadLessons').addClass('disabled');
-////    $("#NameLessons").attr("disabled", true);
-//    } else {
-//    $("#lessons").attr("disabled", false);
-//    $('#divLoadLessons').removeClass('disabled');
-//    $('#divCrearLessons').addClass('disabled');
-////    $("#NameLessons").attr("disabled", false);
-//    }
-//    });
 })
-        </script>
+</script>
         <style>
             textarea 
             {
             resize: none;
+            }
+            .studentarea
+            {            
+            height: 500px;
+            width: 100%;
+            overflow-y: scroll;
+            }
+            .nameStudent
+            {
+            background-color: #D0D2D3;
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            }
+            .tab-pane
+            {
+                padding-top: 20px;
+            }
+            .sinpadding
+            {
+                padding: 0px;
+            }
+            .borderRight
+            {
+                border-right: 1px #D0D2D3 double;
             }
         </style>
     </head>
@@ -212,118 +227,102 @@ $(function() {
         
         
         <div class="container">
-        <h1 class="text-center">Create Lessons</h1>
+        <h1 class="text-center">Progress by Student</h1>
 
         
         <form:form id="formStudents" method ="post" action="studentpage.htm?option=studentPage" >
       
             <fieldset>
-                    <legend>Select students</legend>
-                    <div class="col-xs-12">
-                        <div class="col-xs-2">
+<!--                    <legend>Select student</legend>-->
+                    <div class="col-xs-3">
+                        <div class="col-xs-12">
                             <label>Filter</label>
-                        </div>
-                        <div class="col-xs-3">
-                            
-                        </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="col-xs-2">
                             <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
-
                                 <c:forEach var="levels" items="${gradelevels}">
                                     <option value="${levels.id[0]}">${levels.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
-<%--                        <div class="col-xs-3">
-                            <select class="form-control" size="20" name="origen[]" id="origen" style="width: 100% !important;">
-                                <c:forEach var="alumnos" items="${listaAlumnos}">
-                                    <option value="${alumnos.id_students}" >${alumnos.nombre_students}</option>
-                                </c:forEach>
-                            </select>
-                        </div>--%>
-                        <div class="col-xs-3 panel" style="overflow-y: scroll; height: 90%">
-                            <table id="table_students" class="display" >
-                               <thead>
-                        <tr>
-                            <td hidden=""></td>
-                            <td>Name students</td>
-                        </tr>
-                               </thead>
-                        <c:forEach var="alumnos" items="${listaAlumnos}" >
-                        <tr>
-                            <td hidden="">${alumnos.id_students}</td>
-                            <td >${alumnos.nombre_students}</td>
-                        </tr>
-                        </c:forEach>
-                            </table>
-                               
+                        <div class="col-xs-12">
+                            <label>By name</label>
+                            <input class="form-control" name="nameStudent" id="nameStudent" style="width: 100% !important;" onchange="comboSelectionnameStudent()">
                         </div>
-                        <div class="col-xs-7" id="">
-                            <div class="col-xs-12 text-center">Information Student</div>
-                            <div class="col-xs-6">
-                            <img src="ruta">
+                        <div class="col-xs-12 studentarea">
+                            <table id="table_students" class="display" >
+                                <thead>
+                                <tr>
+                                    <td hidden=""></td>
+                                    <td hidden="">Name students</td>
+                                </tr>
+                                </thead>
+                                <c:forEach var="alumnos" items="${listaAlumnos}" >
+                                <tr>
+                                    <td hidden="">${alumnos.id_students}</td>
+                                    <td >${alumnos.nombre_students}</td>
+                                </tr>
+                                </c:forEach>
+                            </table>      
+                        </div>
+                    </div>    
+                    <div class="col-xs-9" id="">
+                        <div class="col-xs-12 text-center nameStudent">
+                            <span>Jesús Aragón Gallego${student.nombre_students}</span>
+                        </div>
+                        <div class="col-xs-12 text-center">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#demographic">Demographic</a></li>
+                                <li><a data-toggle="tab" href="#gradebook">Gradebook</a></li>
+                                <li><a href="#">ReportCard</a></li>
+<!--                                <li><a href="#">Menu 3</a></li>-->
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="col-xs-12 tab-pane fade in active" id="demographic">
+                                <div class="col-xs-6 text-center borderRight">
+                                    <img src="recursos/img/Foto dibujo.jpg" alt='img' width="150px;"/>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="col-xs-12 sinpadding">
+                                        <div class="col-xs-12">Grade:</div>
+                                        <div class="col-xs-12">Grade4</div>
+                                    </div>         
+                                    <label class="label">Name</label>
+                                    <input class="form-control" type="text" value="">
+
+                                <label>lastname</label>
+                                <input class="form-control" type="text" readonly="" value="lastname student">
+
+                                <label>Birthday</label>
+                                <input class="form-control" type="text" readonly="" value="Birthday student">
+
+                                <label>grade level</label>
+                                <input class="form-control" type="text" readonly="" value="grade student">
+                                </div>
                             </div>
-                            <div class="col-xs-6 ">
-                                <table >
-                                    <tr>
-                                        <td>
-                                            <select id="showinformation">
-                                                <option>${student.nombre_students}</option>
-                                                <option>${student.fecha_nacimiento}</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <label class="label">Name</label>
-                                <input class="form-control" type="text" value="">
-                            
-                            <label>lastname</label>
-                            <input class="form-control" type="text" readonly="" value="lastname student">
-                            
-                            <label>Birthday</label>
-                            <input class="form-control" type="text" readonly="" value="Birthday student">
-                            
-                            <label>grade level</label>
-                            <input class="form-control" type="text" readonly="" value="grade student">
-                            
-                            <Label>Subjec</Label>
-                            <select class="form-control" >
-                                <option>Subject1</option>
-                                <option>Subject2</option>
-                                <option>Subject1</option>
-                            </select>
+                            <div class="col-xs-12 tab-pane fade" id="gradebook">
+                                <div class="col-xs-6">
+                                <Label>Level</Label>
+                                <select class="form-control">
+                                    <option>Level1</option>
+                                    <option>Level2</option>
+                                    <option>Level3</option>
+                                </select>
+                                </div>
+                                <div class="col-xs-6">
+                                    <Label>Subjec</Label>
+                                    <select class="form-control">
+                                        <option>Subject1</option>
+                                        <option>Subject2</option>
+                                        <option>Subject1</option>
+                                    </select>
+                                </div>
                             </div>
-                        
                         </div>
                     </div>
-                        
-            </fieldset>
-            <div class="col-xs-12 text-center">
-            <input type="submit" class="btn btn-success" id="createOnClick" value="<spring:message code="etiq.txtcreate"/>">
-        </div>
- <div class="col-xs-12">   
-                    <input type="submit" value="Save">
-                </div>  
-        </form:form>
-        
-        </div>
-<%--        <div class="col-xs-6">
-                <div class="form-group">
-                    <label class="control-label"></label>
-                        <div class='input-group' style="margin-top:19px;">
-                            <form:form id="formCreate" action="createsetting.htm?select=start">
-                               <button type="submit" id="crearLessons" value="Crear" class="btn btn-success">Create Settings</button>
-                            </form:form>
-                        </div>
-                </div>
-        </div>--%>
-<!--<div class="col-xs-12">
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
-</div>-->
+        </fieldset>
+    </form:form> 
+</div>
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
