@@ -4,31 +4,19 @@
     Author     : nmohamed
 --%>
 
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
+    <%@ include file="menu.jsp" %>
+    <%@ include file="infouser.jsp" %>
+        
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create Lessons</title>
-
-        <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-
-        <link href="recursos/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
-        <link href="recursos/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
-        <link href="recursos/css/bootstrap-toggle.css" rel="stylesheet" type="text/css"/>
-
-        <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
-
-        <script src="recursos/js/moment.js" type="text/javascript"></script>
-        <script src="recursos/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
-        <script src="recursos/js/es.js" type="text/javascript"></script>
-        <script src="recursos/js/ar.js" type="text/javascript"></script>
-        <script src="recursos/js/bootstrap-toggle.js" type="text/javascript"></script>
-
+    
         <script>
 
 

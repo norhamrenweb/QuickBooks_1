@@ -10,50 +10,13 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
+    <%@ include file="menu.jsp" %>
     <%@ include file="infouser.jsp" %>
-        <%@ include file="menu.jsp" %>
+        
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Home</title>
-    <script src="recursos/js/language/es-ES.js" type="text/javascript"></script>
-    <script src="recursos/js/language/ar-SA.js" type="text/javascript"></script>
   
-<!--    <link href="recursos/css/dataTables/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>-->
- <link href="recursos/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<!--    <link href="recursos/css/dataTables/dataTables.bootstrap4.css" rel="stylesheet" type="text/css"/>-->
-<!--    <link href="recursos/css/dataTables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>-->
-    <link href="recursos/css/dataTables/dataTables.foundation.css" rel="stylesheet" type="text/css"/>
-<!--    <link href="recursos/css/dataTables/dataTables.foundation.min.css" rel="stylesheet" type="text/css"/>-->
-    <link href="recursos/css/dataTables/dataTables.jqueryui.css" rel="stylesheet" type="text/css"/>
-<!--    <link href="recursos/css/dataTables/dataTables.jqueryui.min.css" rel="stylesheet" type="text/css"/>-->
-<!--    <link href="recursos/css/dataTables/dataTables.material.css" rel="stylesheet" type="text/css"/>-->
-<!--    <link href="recursos/css/dataTables/dataTables.material.min.css" rel="stylesheet" type="text/css"/>-->
-    <link href="recursos/css/dataTables/dataTables.semanticui.css" rel="stylesheet" type="text/css"/>
-<!--    <link href="recursos/css/dataTables/dataTables.semanticui.min.css" rel="stylesheet" type="text/css"/>-->
-<!--    <link href="recursos/css/dataTables/dataTables.uikit.css" rel="stylesheet" type="text/css"/>-->
-<!--    <link href="recursos/css/dataTables/dataTables.uikit.min.css" rel="stylesheet" type="text/css"/>-->
-<!--      <link href="recursos/css/dataTables/jquery.dataTables.css" rel="stylesheet" type="text/css"/>-->
-<link href="recursos/css/dataTables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="recursos/css/dataTables/jquery.dataTables_themeroller.css" rel="stylesheet" type="text/css"/>
-    
-    
-    <script src="recursos/js/dataTables/dataTables.bootstrap.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.bootstrap.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.bootstrap4.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.bootstrap4.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.foundation.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.foundation.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.jqueryui.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.jqueryui.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.material.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.material.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.semanticui.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.semanticui.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.uikit.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.uikit.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/jquery.dataTables.js"></script>
-<!--    <script src="recursos/js/dataTables/jquery.dataTables.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/jquery.js" type="text/javascript"></script>-->
 <style>
     .red{
         background-color: red !important;

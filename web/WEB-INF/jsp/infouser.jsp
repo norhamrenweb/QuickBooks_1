@@ -13,24 +13,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         
-        <link href="recursos/css/style.css" rel="stylesheet" type="text/css"/>
-        <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-        <link href="recursos/css/calendar.css" rel="stylesheet" type="text/css">
+       
         
-        <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
-        <script src="recursos/js/bootstrap.js" type="text/javascript"></script>
-        <script src="recursos/js/jquery-ui-1.11.4.custom/jquery-ui.js" type="text/javascript"></script>
-        
-        <script src="recursos/js/moment.min.js" type="text/javascript"></script>
-        <script src="recursos/js/transition.js" type="text/javascript"></script>
-        <script src="recursos/js/collapse.js" type="text/javascript"></script>
-        
-        <script src="recursos/js/es.js" type="text/javascript"></script>
-        <script src="recursos/js/ar.js" type="text/javascript"></script>
-        <style>
-            
-            
-        </style>
     </head>
         
         <div class="infousuario">

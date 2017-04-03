@@ -13,9 +13,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-        <link rel="stylesheet" href="estilotabla.css"/>
+        <title>Welcome</title>
+        <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap.css"/>" />
+        <link rel="stylesheet" type="text/css" href="<c:url value="/estilotabla.css"/>" />
     </head>
     <body>
            <div class="col-sm-12" style="margin-top: 10px;">
