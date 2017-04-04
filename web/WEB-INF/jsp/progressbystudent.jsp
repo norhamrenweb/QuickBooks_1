@@ -102,15 +102,22 @@
            if (ajax.readyState===4){
                 if (ajax.status===200){
                    var json = JSON.parse(ajax.responseText);
+                  
                    var i;
   
-                          var table="<tr><th>Comment</th><th>Comment Date</th></tr>";
+                          var table="<tr><th>Objective Name</th><th>Objective description</th><th>Comment</th><th>Comment Date</th></tr>";
 //                          var x = xmlDoc.getElementsByTagName("CD");
                           for (i = 0; i <json.length; i++) { 
                             table += "<tr><td>" +
-                            json[i].comment +
+                           json[i].col1 +
                             "</td><td>" +
-                            json[i].comment_date +
+                            json[i].col2 +
+                            "</td><td>" +
+                            json[i].col3 +
+                            "</td><td>" +
+                            json[i].col4 +
+                            "</td><td>" +
+                            json[i].col5 +
                             "</td></tr>";
                           }
                           document.getElementById("demo").innerHTML = table;
