@@ -221,10 +221,10 @@ public class CreateSettingControlador{
         
             
              Statement st = this.cn.createStatement();
-             String objectiveid = null;
+            //String objectiveid = null;
             
-                objectiveid= "1";
-            String tes = hsr.getParameter("seleccion3");
+                //objectiveid= "1";
+            String objectiveid = hsr.getParameter("seleccion3");
             
           ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id = "+objectiveid+")");
           String[] ids = new String[1];
@@ -257,7 +257,7 @@ public class CreateSettingControlador{
  //            hsr1.setCharacterEncoding("UTF-8");
 //              hsr1.getWriter().write(json);
           
-        String id = "1"; // hsr.getParameterValues("seleccion3");
+        String id = hsr.getParameter("seleccion3");
  
       
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
