@@ -20,6 +20,8 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import com.google.gson.*;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +30,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -136,7 +139,9 @@ public class ProgressbyStudent {
              Statement st = this.cn.createStatement();
             
           ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel= '"+levelname+"'");
-     
+          Subject first = new Subject();
+          first.setName("Select Subject");
+          subjects.add(first);
            while (rs1.next())
             {
              Subject sub = new Subject();
@@ -145,7 +150,8 @@ public class ProgressbyStudent {
              sub.setId(ids);
                 subjects.add(sub);
             }
-          for(Subject s:subjects)
+           //loop through subjects to get their names, skipping the first 
+          for(Subject s:subjects.subList(1,subjects.size()))
           {
               String[] ids = new String[1];
               ids=s.getId();
@@ -375,34 +381,84 @@ while(rs2.next())
     @ResponseBody
     public String objGeneralcomments(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     {
-        String[] subjectid = hsr.getParameterValues("selection");
-        List<Progress> progress = new ArrayList<>();
-        List<Objective> objectives = new ArrayList<>();
+        String selection = hsr.getParameter("selection");
+        String[] data = selection.split(",");
+        String subjectid = data[0];
+        String studentid = data[1];
+//        List<Progress> progress = new ArrayList<>();
+//        List<Objective> objectives = new ArrayList<>();
+//        List<String> objname = new ArrayList<>();
+//        List<String> objdscp = new ArrayList<>();
+//        List<String> comment = new ArrayList<>();
+//        List<Date> commentdate = new ArrayList<>();
+//        List<Integer> objid = new ArrayList<>();
+        List<DBRecords> result = new ArrayList<>();
        try {
             DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
              Statement st = this.cn.createStatement();
              
-            String consulta = "SELECT * FROM objective where subject_id = "+subjectid[0];
-            ResultSet rs = st.executeQuery(consulta);
-          
-            while (rs.next())
+//            String consulta = "SELECT * FROM objective where subject_id = "+subjectid;
+//            ResultSet rs = st.executeQuery(consulta);
+          String consulta = " SELECT objective.id,objective.name,objective.description,progress_report.comment,progress_report.comment_date FROM progress_report  INNER JOIN objective ON progress_report.objective_id = objective.id where generalcomment = TRUE AND student_id = "+studentid+" AND subject_id = "+subjectid;
+          ResultSet rs = st.executeQuery(consulta);
+          int i = 0;
+           while (rs.next())
             {
-            Objective o = new Objective();
-            o.setName(rs.getString("name"));
-           o.setDescription(rs.getString("description"));
-           String[] id = new String[1];
-           id[0] = ""+rs.getInt("id");
-            o.setId(id);
-            objectives.add(o);
-            }
-            
+                DBRecords r = new DBRecords();
+                r.setCol1(rs.getString("name"));
+                r.setCol2(rs.getString("description"));
+                r.setCol3(rs.getString("comment"));
+                r.setCol4(""+rs.getDate("comment_date"));
+                r.setCol5(""+rs.getInt("id"));
+                result.add(r);
+//                objname.add(rs.getString("name"));
+//                objdscp.add(rs.getString("description"));
+//                comment.add(rs.getString("comment"));
+//                commentdate.add(rs.getDate("comment_date"));
+//                objid.add(rs.getInt("id"));
+//            while (rs.next())
+//            {
+//            Objective o = new Objective();
+//            o.setName(rs.getString("name"));
+//           o.setDescription(rs.getString("description"));
+//           String[] id = new String[1];
+//           id[0] = ""+rs.getInt("id");
+//            o.setId(id);
+//            objectives.add(o);
+//            }
+//        for(Objective o:objectives)
+//        {
+//            String[] id = new String[1];
+//            id = o.getId();
+//            consulta = "SELECT * FROM progress_report where objective_id ="+id[0]+"AND generalcomment = TRUE AND student_id ="+studentid;
+//            ResultSet rs1 = st.executeQuery(consulta);
+//            while(rs1.next())
+//            {
+//            Progress p = new Progress();
+//            p.setComment(rs1.getString("comment"));
+//            p.setComment_date(rs1.getString("comment_date"));
+//            progress.add(p);
+//            }
+        }
             
           } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
-        }   
-       return subjectid[0];     
+        }  
+       
+//      String jname = new Gson().toJson(objname);
+//       String jdscp = new Gson().toJson(objdscp);
+//       String jcomm = new Gson().toJson(comment);
+//       String jcommd = new Gson().toJson(commentdate);
+//       JSONObject json = new JSONObject();
+//      json.put("objname",objname);
+//      json.put("dscp",objdscp);
+//      json.put("comment",comment);
+//      json.put("commentdate",commentdate);
+        String off = new Gson().toJson(result);
+       return off;  
+ //           return pjson;
        } 
     
     

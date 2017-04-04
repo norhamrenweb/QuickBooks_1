@@ -342,6 +342,29 @@ public class SettingsControlador extends MultiActionController{
     }
     // create new objective-method-content
    //
-    
+    public ModelAndView AddObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("settingtable");
+       String[] id = hsr.getParameterValues("id");
+       String message =null;
+       try {
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+         Statement st = this.cn.createStatement();
+         String consulta = "insert into objectives(name,description,subject_id) values('"+hsr.getParameter("name")+"','"+hsr.getParameter("description")+","+ id[0]+")";
+          st.executeUpdate(consulta );
+          
+            message="Objectived added";  
+          
+        
+       }catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+            message="Something went wrong";
+        }
+       
+        mv.addObject("message",message);
+        return mv;
+    }
     
 }
