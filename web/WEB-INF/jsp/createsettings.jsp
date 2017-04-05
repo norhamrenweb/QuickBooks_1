@@ -8,6 +8,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 <!DOCTYPE html>
 <html>
     <%@ include file="menu.jsp" %>
@@ -21,9 +22,7 @@
 
 
 
-            $(document).ready(function () {
-                
-                var userLang = navigator.language || navigator.userLanguage;
+          
           
 
             var ajax;
@@ -106,7 +105,8 @@
 
             }
 
-           
+           function funcionCallBackEditDone()
+           {}
 
              function funcionCallBackContent()
             {
@@ -156,6 +156,10 @@
                 //Mostramos los valores del objective seleccionado cuando editamos
                 $('#editNameObjective').val(objective.name);
                 $('#editDescriptionObjective').val(objective.description);
+                //Al seleccionar un objective activamos el boton del Content
+                if( objectiveValue !== null, objectiveValue !== ""){
+                   $('#delObjective').attr("disabled", false);
+                };
                 //Al seleccionar un objective activamos el boton add Content
                 if( objectiveValue !== null, objectiveValue !== ""){
                    $('#addContent').attr("disabled", false);
@@ -176,7 +180,7 @@
                 //Añadimos los content del objective
                 $('#content').empty();
                 $.each(content, function(i, item) { 
-                    $('#content').append('<option>' + content[i].name + '</option>');
+                    $('#content').append('<option value ="'+content[i].id+'">' + content[i].name + '</option>');
                 });
 	}
 }
@@ -227,7 +231,98 @@
                     $('#descriptionnewobjective').val('');
                     $('#content').empty();
                 });
-            })
+            });
+            function deleteObjective()
+            {
+                var seleccion = document.getElementById("objective").value;
+                 $.ajax({
+                    type: 'POST',
+                        url: 'delObjective.htm?id='+seleccion,
+                      data: seleccion,
+                        dataType: 'text' ,           
+                     
+                        success: function(data) {                          
+                           if(data==='success')  {           
+                               $('#objective option:selected').remove();
+           //         $('#objective').remove('option:selected');
+                }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });    
+            }
+            function saveaddObjective()
+            {
+
+     //   var seleccion = document.getElementById("objective").value;
+        var name = document.getElementById("namenewobjective").value;
+        var description = document.getElementById("descriptionnewobjective").value;
+        var subjectid = document.getElementById("subject").value;
+        var myObj = {};
+                myObj["name"] = name;
+                myObj["description"] = description;
+    //            myObj["id"] = seleccion;
+                myObj["subjectid"] = subjectid;
+                var json = JSON.stringify(myObj);
+            $.ajax({
+                    type: 'POST',
+                        url: 'addObjective.htm?data='+json,
+                        data: json,
+                        dataType: 'text' ,           
+                     
+                        success: function(data) {                          
+                            var json = JSON.parse(data);                               
+                    $('#objective').append('<option value = "'+json.id+'" >' + json.name + '</option>');
+                                       
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });    
+                }
+            
+            function saveeditObjective()
+            {
+
+        var seleccion = document.getElementById("objective").value;
+        var name = document.getElementById("editNameObjective").value;
+        var description = document.getElementById("editDescriptionObjective").value;
+        var subjectid = document.getElementById("subject").value;
+        var myObj = {};
+                myObj["name"] = name;
+                myObj["description"] = description;
+                myObj["id"] = seleccion;
+                myObj["subjectid"] = subjectid;
+                var json = JSON.stringify(myObj);
+            $.ajax({
+                    type: 'POST',
+                        url: 'editObjective.htm?data='+json,
+                        data: json,
+                        dataType: 'text' ,           
+                     
+                        success: function(data) {
+                            $('#objective').empty();
+                            var json = JSON.parse(data);                            
+                            $.each(json, function(i, item) { 
+                    $('#objective').append('<option value = "'+json[i].id+'" >' + json[i].name + '</option>');
+                });
+                           
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });    
+                }
         </script>
         <style>
             textarea 
@@ -275,13 +370,13 @@
                             </select>
                             <div class="col-xs-12" style="padding-top: 10px;">
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="add" id="addObjective">
+                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="add" id="addObjective"/>
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editObjective">
+                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editObjective"/>
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="del" id="delObjective">
+                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="del" id="delObjective" onclick="deleteObjective()"/>
                                 </div>
                             </div>
                         </div>
@@ -300,12 +395,14 @@
                                     <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editContent">
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="del" id="delContent">
+                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="del" id="delContent" >
                                 </div>
                             </div>
                         </div>
                     </div>
                 </fieldset>
+            </form:form>
+            <form:form id="formpepi" method ="post"  >
                 <fieldset class="hidden" id="formAddobjetive">
                     <legend>Add objective to <span id="objectiveSelectedForAdd"></span></legend>
                     <%--Add objective--%>
@@ -318,9 +415,7 @@
                             <textarea type="text" class="form-control" name="TXTnamenewobjective" id="descriptionnewobjective"  placeholder="Comments"></textarea>
                         </div>
                         <div class="col-xs-2 center-block form-inline">
-                            <button name="AddObjective" value="" class="btn btn-detalles" id="AddObjective" data-target=".bs-example-modal-lg" onclick="addObjective()">
-                                save
-                            </button> 
+                            <input type="button" name="AddObjective" value="save" class="btn btn-detalles" id="AddObjective" data-target=".bs-example-modal-lg" onclick="saveaddObjective()"/>
                         </div>
                 </fieldset>
                     <fieldset class="hidden" id="formEditobjetive">
@@ -335,9 +430,8 @@
                             <textarea type="text" class="form-control" name="TXTeditDescriptionObjective" id="editDescriptionObjective"  placeholder="Comments"></textarea>
                         </div>
                         <div class="col-xs-2 center-block form-inline">
-                            <button name="AddObjective" value="" class="btn btn-detalles" id="EditObjective" data-target=".bs-example-modal-lg" onclick="editObjective()">
-                                save
-                            </button> 
+                            <input type="button" name="AddObjective" value="Save" class="btn btn-detalles" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveeditObjective()"/>
+   
                         </div>
                 </fieldset>
                 <fieldset class="hidden" id="formAddcontent">
@@ -353,9 +447,9 @@
                             <input type="text" class="form-control" name="TXTnamenewcontent" id="commentsnewcontent"  placeholder="Comments">
                         </div>-->
                         <div class="col-xs-3 center-block form-inline">
-                            <button name="AddContent" value="" class="btn btn-detalles" id="AddContent" data-target=".bs-example-modal-lg" onclick="addContent()">
-                                save
-                            </button>
+                            <input type="button" name="AddContent" value="save" class="btn btn-detalles" id="AddContent" data-target=".bs-example-modal-lg" onclick="addContent()"/>
+                                
+                            
                         </div>
 
                     </div>

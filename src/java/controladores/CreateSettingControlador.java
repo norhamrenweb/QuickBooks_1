@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -293,104 +294,214 @@ public class CreateSettingControlador{
     
     
 
-     public ModelAndView createsettingObjective(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
-        
-         String message;
-         message = "Setting Created";
-         List<Objective> objectives = new ArrayList<>();
-        ModelAndView mv = new ModelAndView("redirect:/createsetting.htm?select=start", "message", message);
-      
-        HttpSession sesion = hsr.getSession();
-        User user = (User) sesion.getAttribute("user");
-       
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-     //   int level = Integer.parseInt( hsr.getParameter("TXTlevel"));
-     String[] subject = hsr.getParameterValues("namenewsubject");
-       
-        String nameobjective = hsr.getParameter("namenewobjective");
-        
-
-        String consulta = "insert into objective(subject_id,name) values ('"+subject[0]+"','"+nameobjective+"')";
-       Statement pst = this.cn.createStatement();
-       pst.executeUpdate(consulta);
-      
-//       ResultSet rs1 = pst.executeQuery("select name,id from public.objective where subject_id="+subject[0]);
-//          Objective s = new Objective();
-//          s.setName("Select Objective");
-//          objectives.add(s);
-//           
+//     public ModelAndView createsettingObjective(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+//        
+//         String message;
+//         message = "Setting Created";
+//         List<Objective> objectives = new ArrayList<>();
+//        ModelAndView mv = new ModelAndView("redirect:/createsetting.htm?select=start", "message", message);
+//      
+//        HttpSession sesion = hsr.getSession();
+//        User user = (User) sesion.getAttribute("user");
+//       
+//         DriverManagerDataSource dataSource;
+//        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+//        this.cn = dataSource.getConnection();
+//     //   int level = Integer.parseInt( hsr.getParameter("TXTlevel"));
+//     String[] subject = hsr.getParameterValues("namenewsubject");
+//       
+//        String nameobjective = hsr.getParameter("namenewobjective");
+//        
+//
+//        String consulta = "insert into objective(subject_id,name) values ('"+subject[0]+"','"+nameobjective+"')";
+//       Statement pst = this.cn.createStatement();
+//       pst.executeUpdate(consulta);
+//      
+////       ResultSet rs1 = pst.executeQuery("select name,id from public.objective where subject_id="+subject[0]);
+////          Objective s = new Objective();
+////          s.setName("Select Objective");
+////          objectives.add(s);
+////           
+////           while (rs1.next())
+////            {
+////             String[] ids = new String[1];
+////                Objective sub = new Objective();
+////            ids[0] = ""+rs1.getInt("id");
+////             sub.setId(ids);
+////             sub.setName(rs1.getString("name"));
+////                objectives.add(sub);
+////            }
+////          }
+////           catch (SQLException ex) {
+////            System.out.println("Error : " + ex);
+////        }
+////        
+////       mv.addObject("objectives",objectives);
+//   
+//        return mv;
+//    }
+// public ModelAndView showsettingMethod(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception
+// {ModelAndView mv = new ModelAndView("createsetting");
+// String[] id = hsr.getParameterValues("id");
+// Method method = new Method();
+//       try {
+//         DriverManagerDataSource dataSource;
+//        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+//        this.cn = dataSource.getConnection();
+//             Statement st = this.cn.createStatement();          
+//          ResultSet rs1 = st.executeQuery("SELECT name,description FROM public.method where id ="+ id[0]);
+//        
 //           while (rs1.next())
 //            {
-//             String[] ids = new String[1];
-//                Objective sub = new Objective();
-//            ids[0] = ""+rs1.getInt("id");
-//             sub.setId(ids);
-//             sub.setName(rs1.getString("name"));
-//                objectives.add(sub);
+//             method.setName(rs1.getString("name"));
+//             method.setDescription(rs1.getString("description"));
+//             method.setId(id);
 //            }
-//          }
-//           catch (SQLException ex) {
-//            System.out.println("Error : " + ex);
+//            
+//        } catch (SQLException ex) {
+//            System.out.println("Error leyendo contents: " + ex);
 //        }
 //        
-//       mv.addObject("objectives",objectives);
-   
-        return mv;
-    }
- public ModelAndView showsettingMethod(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception
- {ModelAndView mv = new ModelAndView("createsetting");
- String[] id = hsr.getParameterValues("id");
- Method method = new Method();
-       try {
+//      
+//         mv.addObject("methods", method);
+// return mv;
+// }
+//  public ModelAndView showsettingContent(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception
+// {ModelAndView mv = new ModelAndView("createsetting");
+// String[] id = hsr.getParameterValues("id");
+// Method method = new Method();
+//       try {
+//         DriverManagerDataSource dataSource;
+//        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+//        this.cn = dataSource.getConnection();
+//             Statement st = this.cn.createStatement();          
+//          ResultSet rs1 = st.executeQuery("SELECT name,description FROM public.method where id ="+ id[0]);
+//        
+//           while (rs1.next())
+//            {
+//             method.setName(rs1.getString("name"));
+//             method.setDescription(rs1.getString("description"));
+//             method.setId(id);
+//            }
+//            
+//        } catch (SQLException ex) {
+//            System.out.println("Error leyendo contents: " + ex);
+//        }
+//        
+//      
+//         mv.addObject("methods", method);
+// return mv;
+// }
+    @RequestMapping(value="/createsetting/editObjective.htm")
+    @ResponseBody
+    public String editObjective(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+        List<Objective> objectives = new ArrayList<>();
+   //   JSONObject obj = new JSONObject();
+       String[] hi = hsr.getParameterValues("data");
+       JSONObject jsonObj = new JSONObject(hi[0]);
+        String message = null;
+        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-             Statement st = this.cn.createStatement();          
-          ResultSet rs1 = st.executeQuery("SELECT name,description FROM public.method where id ="+ id[0]);
-        
-           while (rs1.next())
-            {
-             method.setName(rs1.getString("name"));
-             method.setDescription(rs1.getString("description"));
-             method.setId(id);
-            }
-            
+        Statement st = this.cn.createStatement();
+        String consulta = "update objective set name = '"+jsonObj.getString("name")+"',description ='"+jsonObj.getString("description")+"'where id ="+jsonObj.getString("id"); 
+        st.executeUpdate(consulta);
+        message = "Objective edited successfully";   
+        ResultSet rs = st.executeQuery("select * from objective where subject_id = "+jsonObj.getString("subjectid"));
+        while(rs.next()){
+        Objective o = new Objective();
+        o.setDescription(rs.getString("description"));
+        String[] id = new String[1];
+        id[0]=""+rs.getInt("id");
+        o.setId(id);
+        o.setName(rs.getString("name"));
+        objectives.add(o);
+        }
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
+            message ="Something went wrong";
         }
-        
+        String objjson = new Gson().toJson(objectives);
+              
+    //            obj.put("newobjs",objjson);
+  //              obj.put("message",message);
       
-         mv.addObject("methods", method);
- return mv;
- }
-  public ModelAndView showsettingContent(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception
- {ModelAndView mv = new ModelAndView("createsetting");
- String[] id = hsr.getParameterValues("id");
- Method method = new Method();
-       try {
+         return objjson;
+    }     
+    @RequestMapping(value="/createsetting/addObjective.htm")
+    @ResponseBody
+    public String addObjective(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+     
+       String[] hi = hsr.getParameterValues("data");
+       JSONObject jsonObj = new JSONObject(hi[0]);
+        String message = null;
+        Objective o = new Objective();
+        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-             Statement st = this.cn.createStatement();          
-          ResultSet rs1 = st.executeQuery("SELECT name,description FROM public.method where id ="+ id[0]);
+        Statement st = this.cn.createStatement();
+        String consulta = "insert into objective(name,description,subject_id) values('"+jsonObj.getString("name")+"','"+jsonObj.getString("description")+"','"+jsonObj.getString("subjectid")+"')"; 
+        st.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs = st.getGeneratedKeys();
+       
+        while(rs.next())
+        {
+         String[] id = new String[1];
+        id[0]=""+rs.getInt(1);
+        o.setId(id);
+        }
+        message = "Objective added successfully";   
+        o.setDescription(jsonObj.getString("description"));
+        o.setName(jsonObj.getString("name"));
+       
         
-           while (rs1.next())
-            {
-             method.setName(rs1.getString("name"));
-             method.setDescription(rs1.getString("description"));
-             method.setId(id);
-            }
-            
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
+            message ="Something went wrong";
         }
-        
+        String objjson = new Gson().toJson(o);
+              
+    //            obj.put("newobjs",objjson);
+  //              obj.put("message",message);
       
-         mv.addObject("methods", method);
- return mv;
- }
+         return objjson;
+    }  
+    @RequestMapping(value="/createsetting/delObjective.htm")
+    @ResponseBody
+    public String delObjective(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+     
+        String message = null;
+       String[] id = hsr.getParameterValues("id");
+     
+       try {
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+         Statement st = this.cn.createStatement();
+         String consulta = "select name from lessons where objective_id = "+ id[0];
+          ResultSet rs = st.executeQuery(consulta );
+          if(rs.next()){
+            message="This objective is linked to lessons";  
+          }
+          else{
+        consulta = "DELETE FROM public.objective WHERE id="+id[0];
+           st.executeUpdate(consulta);
+           message="success";
+           // need to decide what to do with the contents
+          }
+       }catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+        }
+     
+              
+    //            obj.put("newobjs",objjson);
+  //              obj.put("message",message);
+      
+         return message;
+    }  
+    
 }
 
 
