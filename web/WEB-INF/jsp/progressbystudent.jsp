@@ -210,7 +210,7 @@
         //$('#createOnClick').attr('disabled', true);
         //ajax.onreadystatechange = funcionCallBackSelectStudent;
       //  var selectStudent = document.getElementsByClassName("nameStudent").value;
-        window.location.href = "progressdetails.htm";
+        window.open('progressdetails.htm', '_blank');
         
         //ajax.send("");
        
