@@ -12,63 +12,20 @@
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 <!DOCTYPE html>
 <html>
-
+    <%@ include file="menu.jsp" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Students</title>
         
-        <link href="/QuickBooks_1/recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-      
-        <link href="/QuickBooks_1/recursos/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
-        <link href="/QuickBooks_1/recursos/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
-        <link href="/QuickBooks_1/recursos/css/bootstrap-toggle.css" rel="stylesheet" type="text/css"/>
-        <script src="/QuickBooks_1/recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
-        
-        <script src="/QuickBooks_1/recursos/js/bootstrap.js" type="text/javascript"></script>
-        <script src="/QuickBooks_1/recursos/js/bootstrap-toggle.js" type="text/javascript"></script>
-<!--        <script src="recursos/js/bootstrap-modal.js" type="text/javascript"></script>-->
-        <script src="/QuickBooks_1/recursos/js/moment.js" type="text/javascript"></script>
-        <script src="/QuickBooks_1/recursos/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
-        <script src="/QuickBooks_1/recursos/js/es.js" type="text/javascript"></script>
-        <script src="/QuickBooks_1/recursos/js/ar.js" type="text/javascript"></script>
-        
-        
+     
 
- <link href="/QuickBooks_1/recursos/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
-
-    <link href="/QuickBooks_1/recursos/css/dataTables/dataTables.foundation.css" rel="stylesheet" type="text/css"/>
-
-    <link href="/QuickBooks_1/recursos/css/dataTables/dataTables.jqueryui.css" rel="stylesheet" type="text/css"/>
-
-    <link href="/QuickBooks_1/recursos/css/dataTables/dataTables.semanticui.css" rel="stylesheet" type="text/css"/>
-
-<link href="/QuickBooks_1/recursos/css/dataTables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/QuickBooks_1/recursos/css/dataTables/jquery.dataTables_themeroller.css" rel="stylesheet" type="text/css"/>
-    
-    
-    <script src="/QuickBooks_1/recursos/js/dataTables/dataTables.bootstrap.js" type="text/javascript"></script>
-
-    <script src="/QuickBooks_1/recursos/js/dataTables/dataTables.bootstrap4.js" type="text/javascript"></script>
-
-    <script src="/QuickBooks_1/recursos/js/dataTables/dataTables.foundation.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.foundation.min.js" type="text/javascript"></script>-->
-    <script src="/QuickBooks_1/recursos/js/dataTables/dataTables.jqueryui.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.jqueryui.min.js" type="text/javascript"></script>-->
-    <script src="/QuickBooks_1/recursos/js/dataTables/dataTables.material.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.material.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.semanticui.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.semanticui.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.uikit.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.uikit.min.js" type="text/javascript"></script>-->
-    <script src="/QuickBooks_1/recursos/js/dataTables/jquery.dataTables.js"></script>
-<!--    <script src="recursos/js/dataTables/jquery.dataTables.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/jquery.js" type="text/javascript"></script>-->
 
         <script>
 
 
 
  $(document).ready(function(){
+            $('#tableobjective').DataTable();
              table = $('#table_students').DataTable(
                 {
                     "searching": false,
@@ -76,15 +33,15 @@
                     "ordering": false,
                     "info":     false
                 });
+                
     $('#table_students tbody').on('click', 'tr', function () {
         
         data = table.row( this ).data();
         data1 = data[0];
         selectionStudent();
     } ); 
-                
+      
     });            
-            
       
         
         var ajax;
@@ -103,24 +60,55 @@
                 if (ajax.status===200){
                    var json = JSON.parse(ajax.responseText);
                   
-                   var i;
-  
-                          var table="<tr><th>Objective Name</th><th>Objective description</th><th>Comment</th><th>Comment Date</th></tr>";
-//                          var x = xmlDoc.getElementsByTagName("CD");
-                          for (i = 0; i <json.length; i++) { 
-                            table += "<tr><td>" +
-                           json[i].col1 +
-                            "</td><td>" +
-                            json[i].col2 +
-                            "</td><td>" +
-                            json[i].col3 +
-                            "</td><td>" +
-                            json[i].col4 +
-                            "</td><td>" +
-                            json[i].col5 +
-                            "</td></tr>";
-                          }
-                          document.getElementById("demo").innerHTML = table;
+                   //var i;
+                    if(json.length === 0){
+                        $('#divTableObjective').addClass('hidden');
+                        $('#divNotObjective').removeClass('hidden');
+                        
+                    }else{
+                        $('#divNotObjective').addClass('hidden');
+                        $('#divTableObjective').removeClass('hidden');
+                    };
+                   $('#tableobjective').DataTable( {
+                        destroy: true,
+                        paging: true,
+                        searching: false,
+                        ordering: true,
+                        data: json,
+                        
+                        columns: [
+                        { data: 'col1' },
+                        { data: 'col2' },
+                        { data: 'col3' },
+                        { data: 'col4' },
+                        { data: 'col5' }
+                        ]
+                    
+                    } );
+                           var tableObjective = $('#tableobjective').DataTable();
+     $('#tableobjective tbody').on('click', 'tr', function () {
+        
+        var dataObjective = tableObjective.row( this ).data();
+        dataObjective1 = dataObjective['col5'];
+        selectionObjective();
+    } ); 
+//                          var table="<tr><th>Objective Name</th><th>Objective description</th><th>Comment</th><th>Comment Date</th><th>ID</th></tr>";
+////                          var x = xmlDoc.getElementsByTagName("CD");
+//                          for (i = 0; i <json.length; i++) { 
+//                            table += "<tr><td>" +
+//                           json[i].col1 +
+//                            "</td><td>" +
+//                            json[i].col2 +
+//                            "</td><td>" +
+//                            json[i].col3 +
+//                            "</td><td>" +
+//                            json[i].col4 +
+//                            "</td><td>" +
+//                            json[i].col5 +
+//                            "</td></tr>";
+//                          }
+                          //document.getElementById("tableobjective").innerHTML = table;
+                          //$('#tableobjective').DataTable(); 
                     }
                 }
             }
@@ -133,9 +121,14 @@
                      var info = JSON.parse(json.info);
                var subjects = JSON.parse(json.sub);
                     $('#BOD').val(info.fecha_nacimiento);
-                    $('#student').append(info.nombre_students);
+                    $('#student').text(info.nombre_students);
                     $('#studentid').val(info.id_students);
-                   $('#subjects').empty();
+                    if(typeof info.foto === 'undefined'){
+                        $('#foto').attr('src', '../recursos/img/NotPhoto.png');
+                    }else{
+                        $('#foto').attr('src', info.foto);
+                    }
+                    $('#subjects').empty();
                      $.each(subjects, function(i, item) {
                          $('#subjects').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
                    });
@@ -160,8 +153,7 @@
         ajax.open("POST","progressbystudent.htm?option=studentlistLevel&seleccion="+seleccion,true);
         ajax.send("");
     }
-    
-  
+     
     function comboSelectionLevel()
     {
         if (window.XMLHttpRequest) //mozilla
@@ -202,6 +194,28 @@
         ajax.send("");
        
     }
+    
+    function selectionObjective()
+    {
+        var selectObjective = dataObjective1;
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        //$('#createOnClick').attr('disabled', true);
+        ajax.onreadystatechange = funcionCallBackSelectStudent;
+      //  var selectStudent = document.getElementsByClassName("nameStudent").value;
+        ajax.open("POST","studentPage.htm?selectObjective="+selectObjective,true);
+        
+        ajax.send("");
+       
+    }
+    
     function loadobjGeneralcomments()
     {  
         if (window.XMLHttpRequest) //mozilla
@@ -225,6 +239,7 @@
 //          
 //        });
         ajax.onreadystatechange = funcionCallBackloadGeneralcomments;
+        
        var selectSubject = document.getElementById("subjects").value; 
        var selectStudent = document.getElementById("studentid").value;
         ajax.open("POST","objGeneralcomments.htm?selection="+selectSubject+","+selectStudent,true);
@@ -281,13 +296,23 @@ $(function() {
             {
                 padding: 0px;
             }
-            .borderRight
+            .containerPhoto
             {
+                display: table;
+                background-color: #d9edf7;
                 border-right: 1px #D0D2D3 double;
+                min-height: 300px;
+            }
+            .cell{
+                display: table-cell;
+                vertical-align: middle;
+            }
+            #divTableObjective{
+                margin-top: 20px;
             }
         </style>
     </head>
-    <%@ include file="menu.jsp" %>
+
     <body>
         
         
@@ -344,8 +369,10 @@ $(function() {
                         </div>
                         <div class="tab-content">
                             <div class="col-xs-12 tab-pane fade in active" id="demographic">
-                                <div class="col-xs-6 text-center borderRight">
-                                    <img src="recursos/img/Foto dibujo.jpg" alt='img' width="150px;"/>
+                                <div class="col-xs-6 text-center containerPhoto">
+                                    <div class="cell">
+                                        <img id="foto" src="../recursos/img/NotPhoto.png" alt='img' width="150px;"/>
+                                    </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="col-xs-12 sinpadding">
@@ -379,8 +406,22 @@ $(function() {
                                     <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
                                         
                                     </select>
-                                    <br><br>
-                                        <table id="demo"></table>
+                                </div>
+                                <div class="col-xs-12 hidden" id="divNotObjective">
+                                    This Subject have not objectives
+                                </div>
+                                <div class="col-xs-12 hidden" id="divTableObjective">
+                                    <table id="tableobjective" class="display">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Comment general</th>
+                                                <th>date</th>
+                                                <th>id</th>
+                                            </tr>
+                                        </thead> 
+                                    </table>
                                     
                                 </div>
                             </div>
