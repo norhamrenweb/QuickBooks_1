@@ -16,25 +16,29 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create Lessons</title>
         
-        <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+<!--        <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
       
         <link href="recursos/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
         <link href="recursos/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
-        <link href="recursos/css/bootstrap-toggle.css" rel="stylesheet" type="text/css"/>
-        <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
+        <link href="recursos/css/bootstrap-toggle.css" rel="stylesheet" type="text/css"/>-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+<!--        <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>-->
         
-        <script src="recursos/js/bootstrap.js" type="text/javascript"></script>
-        <script src="recursos/js/bootstrap-toggle.js" type="text/javascript"></script>
-<!--        <script src="recursos/js/bootstrap-modal.js" type="text/javascript"></script>-->
+        
+<!--        <script src="recursos/js/bootstrap.js" type="text/javascript"></script>-->
+<!--        <script src="recursos/js/bootstrap-toggle.js" type="text/javascript"></script>
+        <script src="recursos/js/bootstrap-modal.js" type="text/javascript"></script>
+        
         <script src="recursos/js/moment.js" type="text/javascript"></script>
         <script src="recursos/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
         <script src="recursos/js/es.js" type="text/javascript"></script>
-        <script src="recursos/js/ar.js" type="text/javascript"></script>
+        <script src="recursos/js/ar.js" type="text/javascript"></script>-->
         
 
         <script>
-
-
 
  $(document).ready(function(){
        var userLang = navigator.language || navigator.userLanguage;
@@ -42,13 +46,29 @@
          //Muestra calendario
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
          var lessoncreate = '<%= request.getParameter("message") %>';
-         
+    
      if (lessoncreate === 'Lesson created' ){
      $('#myModal').modal({
         show: 'false'
     });
     }
- 
+
+
+$("#method").on('mouseover', 'option' , function(e) {
+    
+        var $e = $(e.target);
+    
+    if ($e.is('option')) {
+        $('#method').popover('destroy');
+        $("#method").popover({
+            animation: 'true',
+            trigger: 'hover',
+            placement: 'right',
+            title: $e.attr("data-title"),
+            content: $e.attr("data-content")
+        }).popover('show');
+    }
+});
          
         $('#fecha').datetimepicker({
             
@@ -82,20 +102,6 @@
             $('#horainicio').data("DateTimePicker").maxDate(e.date);
         });
         
-
-//       //Menu lateral
-//        $('#nav-expander').on('click',function(e){
-//      		e.preventDefault();
-//      		$('body').toggleClass('nav-expanded');
-//      	});
-//      	$('#nav-close').on('click',function(e){
-//      		e.preventDefault();
-//      		$('body').removeClass('nav-expanded');
-//      	});
-//        $('#barralateral').mouseleave(function(o){
-//      		o.preventDefault();
-//      		$('body').removeClass('nav-expanded');
-//      	});
     });            
             
         $().ready(function() 
@@ -161,15 +167,7 @@
                     }
                 }
             }    
-            //FUNCIONA PERO SOLO PUEDO PINTAR Content
-//    function funcionCallBackTemplateLessons()
-//    {
-//           if (ajax.readyState===4){
-//                if (ajax.status===200){
-//                    document.getElementById("template").innerHTML= ajax.responseText;
-//                    }
-//                }
-//            }
+
     function funcionCallBackTemplateLessons()
     {
            if (ajax.readyState===4){
@@ -325,12 +323,13 @@ $(function() {
             {
             resize: none;
             }
+            .popover{
+                width: 500px;
+            }
         </style>
     </head>
     <%@ include file="menu.jsp" %>
     <body>
-        
-        
         <div class="container">
         <h1 class="text-center">Create Lessons</h1>
 
@@ -397,7 +396,7 @@ $(function() {
                     <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
                     
                        <c:forEach var="subject" items="${subjects}">
-                                <option value="${subject.id[0]}" >${subject.name}</option>
+                                <option value="${subject.id[0]}" data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
                             </c:forEach>
                     </select>
                 </div>
@@ -468,12 +467,12 @@ $(function() {
                 </div>    
                 <div class="col-xs-3 center-block form-group">
                     <label class="control-label">Method</label>
-                    <select class="form-control" name="method" id="method">
-                    
-                       <c:forEach var="method" items="${methods}">
-                                <option value="${method.id[0]}" >${method.name}</option>
-                            </c:forEach>
+                    <select class="form-control" size="2" id="method">                   
+                        <c:forEach var="method" items="${methods}">
+                            <option value="${method.id[0]}"  data-title="${method.description}" data-content="${method.description}">${method.name}</option>
+                        </c:forEach>
                     </select>
+                 
                 </div>
                 <div class="col-xs-3 center-block form-group">
                     <label class="control-label">Comments</label>

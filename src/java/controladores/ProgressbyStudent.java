@@ -352,7 +352,7 @@ while(rs2.next())
                 student.setId_students(rs.getInt("StudentID"));
                 student.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
                 student.setFecha_nacimiento(rs.getString("Birthdate"));
-//                student.setFoto(rs.getString("PathToPicture"));
+                student.setFoto(rs.getString("PathToPicture"));
                 student.setLevel_id(rs.getString("GradeLevel"));
 //                student.setPlacement("Placement");
 //                student.setSubstatus("Substatus");
