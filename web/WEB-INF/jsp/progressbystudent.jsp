@@ -198,21 +198,21 @@
     function selectionObjective()
     {
         var selectObjective = dataObjective1;
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
+//        if (window.XMLHttpRequest) //mozilla
+//        {
+//            ajax = new XMLHttpRequest(); //No Internet explorer
+//        }
+//        else
+//        {
+//            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+//        }
 
         //$('#createOnClick').attr('disabled', true);
-        ajax.onreadystatechange = funcionCallBackSelectStudent;
+        //ajax.onreadystatechange = funcionCallBackSelectStudent;
       //  var selectStudent = document.getElementsByClassName("nameStudent").value;
-        ajax.open("POST","studentPage.htm?selectObjective="+selectObjective,true);
+        window.location.href = "progressdetails.htm";
         
-        ajax.send("");
+        //ajax.send("");
        
     }
     
