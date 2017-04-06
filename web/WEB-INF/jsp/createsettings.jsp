@@ -105,8 +105,7 @@
 
             }
 
-           function funcionCallBackEditDone()
-           {}
+           
 
              function funcionCallBackContent()
             {
@@ -184,6 +183,10 @@
                 });
 	}
 }
+             function comboSelectionContent()
+             {
+                 
+             }
                 
             var contentValue = $('#content').select("selected").val();
             $(function () {
@@ -255,6 +258,29 @@
 
                     });    
             }
+            function deleteContent()
+            {
+                var seleccion = document.getElementById("content").value;
+                 $.ajax({
+                    type: 'POST',
+                        url: 'delContent.htm?id='+seleccion,
+                      data: seleccion,
+                        dataType: 'text' ,           
+                     
+                        success: function(data) {                          
+                           if(data==='success')  {           
+                               $('#content option:selected').remove();
+           //         $('#objective').remove('option:selected');
+                }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });    
+            }
             function saveaddObjective()
             {
 
@@ -276,7 +302,7 @@
                      
                         success: function(data) {                          
                             var json = JSON.parse(data);                               
-                    $('#objective').append('<option value = "'+json.id+'" >' + json.name + '</option>');
+                    $('#objective').append('<option value = "'+json.id[0]+'" >' + json.name + '</option>');
                                        
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
@@ -311,9 +337,76 @@
                             $('#objective').empty();
                             var json = JSON.parse(data);                            
                             $.each(json, function(i, item) { 
-                    $('#objective').append('<option value = "'+json[i].id+'" >' + json[i].name + '</option>');
+                    $('#objective').append('<option value = "'+json[i].id[0]+'" >' + json[i].name + '</option>');
                 });
                            
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });    
+                }
+                function saveeditContent()
+            {
+
+        var seleccion = document.getElementById("content").value;
+        var name = document.getElementById("editNameContent").value;
+        var description = document.getElementById("editCommentsContent").value;
+        var objid = document.getElementById("objective").value;
+        var myObj = {};
+                myObj["name"] = name;
+                myObj["description"] = description;
+                myObj["id"] = seleccion;
+                myObj["objid"] = objid;
+                var json = JSON.stringify(myObj);
+            $.ajax({
+                    type: 'POST',
+                        url: 'editContent.htm?data='+json,
+                        data: json,
+                        dataType: 'text' ,           
+                     
+                        success: function(data) {
+                            $('#content').empty();
+                            var json = JSON.parse(data);                            
+                            $.each(json, function(i, item) { 
+                    $('#content').append('<option value = "'+json[i].id[0]+'" >' + json[i].name + '</option>');
+                });
+                           
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });    
+                } 
+                function saveaddContent()
+            {
+
+     //   var seleccion = document.getElementById("objective").value;
+        var name = document.getElementById("namenewcontent").value;
+        var description = document.getElementById("commentsnewcontent").value;
+        var objid = document.getElementById("objective").value;
+        var myObj = {};
+                myObj["name"] = name;
+                myObj["description"] = description;
+    //            myObj["id"] = seleccion;
+                myObj["objid"] = objid;
+                var json = JSON.stringify(myObj);
+            $.ajax({
+                    type: 'POST',
+                        url: 'addContent.htm?data='+json,
+                        data: json,
+                        dataType: 'text' ,           
+                     
+                        success: function(data) {                          
+                            var json = JSON.parse(data);                               
+                    $('#content').append('<option value = "'+json.id[0]+'" >' + json.name + '</option>');
+                                       
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -382,7 +475,7 @@
                         </div>
                         <div class="col-xs-3 center-block">
                             <label class="control-label">Content</label>
-                            <select class="form-control" disabled="true" name="TXTcontent" id="content" multiple size="10">
+                            <select class="form-control" disabled="true" name="TXTcontent" id="content" multiple size="10" onclick="comboSelectionContent()">
                                 <c:forEach var="content" items="${contents}">
                                     <option value="${content.id[0]}" >${content.name}</option>
                                 </c:forEach>
@@ -395,7 +488,7 @@
                                     <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editContent">
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="del" id="delContent" >
+                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="del" id="delContent" onclick="deleteContent()" >
                                 </div>
                             </div>
                         </div>
@@ -442,12 +535,12 @@
                             <label class="control-label">Name new content</label>
                             <input type="text" class="form-control" name="TXTnamenewcontent" id="namenewcontent"  placeholder="Name new content">
                         </div>
-<!--                        <div class="col-xs-6 center-block form-group">
+                        <div class="col-xs-6 center-block form-group">
                             <label class="control-label">Comments</label>
                             <input type="text" class="form-control" name="TXTnamenewcontent" id="commentsnewcontent"  placeholder="Comments">
-                        </div>-->
+                        </div>
                         <div class="col-xs-3 center-block form-inline">
-                            <input type="button" name="AddContent" value="save" class="btn btn-detalles" id="AddContent" data-target=".bs-example-modal-lg" onclick="addContent()"/>
+                            <input type="button" name="AddContent" value="save" class="btn btn-detalles" id="AddContent" data-target=".bs-example-modal-lg" onclick="saveaddContent()"/>
                                 
                             
                         </div>
@@ -462,14 +555,14 @@
                             <label class="control-label">Edit content</label>
                             <input type="text" class="form-control" name="TXTnameeditcontent" id="editNameContent"  placeholder="Name new content">
                         </div>
-<!--                        <div class="col-xs-6 center-block form-group">
+                        <div class="col-xs-6 center-block form-group">
                             <label class="control-label">Comments</label>
                             <input type="text" class="form-control" name="TXTnameeditcontent" id="editCommentsContent"  placeholder="Comments">
-                        </div>-->
+                        </div>
                         <div class="col-xs-3 center-block form-inline">
-                            <button name="AddContent" value="" class="btn btn-detalles" id="EditContent" data-target=".bs-example-modal-lg" onclick="editContent()">
-                                save
-                            </button>
+                            <input type="button" name="EditContent" value="save" class="btn btn-detalles" id="EditContent" data-target=".bs-example-modal-lg" onclick="saveeditContent()"/>
+                                
+                           
                         </div>
 
                     </div>
