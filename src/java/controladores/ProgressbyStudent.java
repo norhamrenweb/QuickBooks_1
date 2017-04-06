@@ -270,15 +270,17 @@ public class ProgressbyStudent {
          
     }
     //based on student selected and objective selected
-    @RequestMapping("/progressbystudent/loaddailyProgress.htm")
+    @RequestMapping("/progressbystudent/progressdetails.htm")
     @ResponseBody
-    public String loaddailyProgress(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
+    public String progressdetails(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     {
-      //    ModelAndView mv = new ModelAndView("studentpage");
-          String[] objectiveid = hsr.getParameterValues("seleccion3");
-          String[] studentid = hsr.getParameterValues("seleccion");
+             String[] hi = hsr.getParameterValues("data");
+               JSONObject jsonObj = new JSONObject(hi[0]);
             List<Progress> progress = new ArrayList<>();
             String finalrating = null;
+            String presenteddate = null;
+            String attempteddate = null;
+            String mastereddate = null;
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -286,7 +288,7 @@ public class ProgressbyStudent {
         
              Statement st = this.cn.createStatement();
             
-          ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id="+objectiveid[0]+" AND student_id = "+studentid[0]+" AND COALESCE(generalcomment, FALSE) = FALSE ");
+          ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id="+jsonObj.getString("objectiveid")+" AND student_id = "+jsonObj.getString("studentid")+" AND COALESCE(generalcomment, FALSE) = FALSE ");
           
            while (rs1.next())
             {
@@ -301,31 +303,51 @@ public class ProgressbyStudent {
              progress.add(p);
             }
            // select the latest rating to be presented as the final rating for this objective
-        String consulta = "SELECT ratingname FROM public.progresslessonname where student_id = '"+studentid[0]+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+studentid[0]+"AND objective_id ="+objectiveid[0]+"AND COALESCE(generalcomment, FALSE) = FALSE) AND objective_id ="+objectiveid[0]+"AND COALESCE(generalcomment, FALSE) = FALSE";
+        String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '"+jsonObj.getString("studentid")+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+jsonObj.getString("studentid")+"AND objective_id ="+jsonObj.getString("objectiveid")+") AND objective_id ="+jsonObj.getString("objectiveid")+")";
 ResultSet rs2 = st.executeQuery(consulta);
 while(rs2.next())
 {
     finalrating= rs2.getString("rating");
 }
-            
+          consulta = "select min(comment_date) as date from progress_report where student_id ="+jsonObj.getString("studentid")+" and rating_id in (select id from rating where name = 'Presented') and objective_id ="+jsonObj.getString("objectiveid");  
+          ResultSet rs3 = st.executeQuery(consulta);
+while(rs3.next())
+{
+ Timestamp stamp = rs3.getTimestamp("date");
+               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+               presenteddate = sdfDate.format(stamp);
+    
+}
+consulta = "select min(comment_date) as date from progress_report where student_id ="+jsonObj.getString("studentid")+" and rating_id in (select id from rating where name = 'Attempted') and objective_id ="+jsonObj.getString("objectiveid");  
+          ResultSet rs4 = st.executeQuery(consulta);
+while(rs4.next())
+{
+    Timestamp stamp = rs4.getTimestamp("date");
+               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+               attempteddate = sdfDate.format(stamp);
+  
+}
+consulta = "select min(comment_date) as date from progress_report where student_id ="+jsonObj.getString("studentid")+" and rating_id in (select id from rating where name = 'Mastered') and objective_id ="+jsonObj.getString("objectiveid");  
+          ResultSet rs5 = st.executeQuery(consulta);
+while(rs5.next())
+{
+    Timestamp stamp = rs5.getTimestamp("date");
+               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+               mastereddate = sdfDate.format(stamp);
+  
+}
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);
         }
-//       Objective obj = new Objective();
-//       
-//       obj.setName( hsr.getParameter("seleccion3"));
-//       Subject sub = new Subject();
-//       sub.setName("test");
-//      mv.addObject("objectives",obj);
-//      mv.addObject("subjects",sub);
 
-//        mv.addObject("progress", progress);
-//        mv.addObject("finalrating",finalrating);
         String prog = new Gson().toJson(progress);
         String rating = new Gson().toJson(finalrating);
         JSONObject obj = new JSONObject();
         obj.put("progress", prog);
         obj.put("finalrating", rating);
+        obj.put("attempteddate",attempteddate);
+        obj.put("mastereddate",mastereddate);
+        obj.put("presenteddate",presenteddate);
           return obj.toString();
     }
     //load student demographics

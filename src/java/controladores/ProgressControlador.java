@@ -122,12 +122,13 @@ public class ProgressControlador extends MultiActionController{
             {
                 String[] ids = new String[1];
                 ids = lesson.getObjective().getId();
-            consulta = "SELECT ratingname,comment FROM public.progresslessonname where student_id = '"+record.getStudentid()+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+record.getStudentid()+") AND objective_id ="+ids[0];
+            consulta = "SELECT rating.name as ratingname,progress_report.comment FROM progress_report  INNER JOIN rating on progress_report.rating_id = rating.id where lesson_id ="+lesson.getId()+" AND student_id = '"+record.getStudentid()+"' ";
             ResultSet rs3 = st.executeQuery(consulta);
             while (rs3.next())
             {
-              record.setRating(rs3.getString("rating"));
+              record.setRating(rs3.getString("ratingname"));
               record.setComment(rs3.getString("comment"));
+              record.setComment_date("comment_date");
             }
             }
             cn.close();

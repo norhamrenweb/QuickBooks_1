@@ -198,19 +198,12 @@
     function selectionObjective()
     {
         var selectObjective = dataObjective1;
-//        if (window.XMLHttpRequest) //mozilla
-//        {
-//            ajax = new XMLHttpRequest(); //No Internet explorer
-//        }
-//        else
-//        {
-//            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-//        }
-
-        //$('#createOnClick').attr('disabled', true);
-        //ajax.onreadystatechange = funcionCallBackSelectStudent;
-      //  var selectStudent = document.getElementsByClassName("nameStudent").value;
-        window.open('progressdetails.htm', '_blank');
+       var selectStudent = document.getElementsByClassName("nameStudent").value;
+        var myObj = {};
+                myObj["objectiveid"] = selectObjective;
+                myObj["studentid"] = data1;
+                var json = JSON.stringify(myObj);
+        window.open('progressdetails.htm?data='+json, '_blank');
         
         //ajax.send("");
        

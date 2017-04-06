@@ -121,6 +121,7 @@
                 <prop key="homepage.htm">lessonsList</prop>
                  <prop key="lessonprogress.htm">lessonprogress</prop>
                  <prop key="progressbystudent.htm">studentprog</prop>  
+                 <prop key="progressdetails.htm">studentprog</prop>
                  <prop key="studentpage.htm">studentprog</prop> 
                  <prop key="studentpage_1.htm">studentprog</prop> 
              
