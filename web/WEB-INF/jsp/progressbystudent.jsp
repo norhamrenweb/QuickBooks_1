@@ -194,18 +194,44 @@
         ajax.send("");
        
     }
-    
+    function funcionCallBackLoadNewPage()
+    {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                   var json = JSON.parse(ajax.responseText);
+                  
+                   //var i;
+                    if(json.length === 0){
+                       $('#divNotObjective').addClass('hidden');
+                        $('#divTableObjective').removeClass('hidden');
+                        
+                    }else{
+                        
+                    var selectObjective = dataObjective1;   
+                    var myObj = {};
+                        myObj["objectiveid"] = selectObjective;
+                        myObj["studentid"] = data1;
+                        var json = JSON.stringify(myObj);
+                         window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
+                        
+                    };
+ 
+                    }
+                }
+            }
     function selectionObjective()
     {
         var selectObjective = dataObjective1;
-       var selectStudent = document.getElementsByClassName("nameStudent").value;
+        var selectStudent = document.getElementsByClassName("nameStudent").value;
         var myObj = {};
                 myObj["objectiveid"] = selectObjective;
                 myObj["studentid"] = data1;
                 var json = JSON.stringify(myObj);
-        window.open('progressdetails.htm?data='+json, '_blank');
+        ajax.onreadystatechange = funcionCallBackLoadNewPage;
+        //ajax.open("POST","progressdetails.htm?data="+json, true);
+         window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
         
-        //ajax.send("");
+        ajax.send("");
        
     }
     
@@ -421,7 +447,10 @@ $(function() {
                         </div>
                     </div>
         </fieldset>
-    </form:form> 
+    </form:form>
+        <div>
+            
+        </div>
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
