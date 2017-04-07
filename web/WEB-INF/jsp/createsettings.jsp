@@ -8,7 +8,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
+<%@taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 <!DOCTYPE html>
 <html>
     <%@ include file="menu.jsp" %>
@@ -19,7 +19,27 @@
         <title>Create Lessons</title>
     
         <script>
+$(document).ready(function(){
 
+
+
+$("#method").on('mouseover', 'option' , function(e) {
+    
+        var $e = $(e.target);
+    
+    if ($e.is('option')) {
+        $('#method').popover('destroy');
+        $("#method").popover({
+            animation: 'true',
+            trigger: 'hover',
+            placement: 'right',
+            title: $e.attr("data-title"),
+            content: $e.attr("data-content")
+        }).popover('show');
+    }
+});
+
+});
 
 
           
@@ -188,53 +208,8 @@
                  
              }
                 
-            var contentValue = $('#content').select("selected").val();
-            $(function () {
-                $('#addObjective').click(function () {
-                    $('#formAddobjetive').removeClass("hidden");
-                    $('#formcontent').addClass("hidden");
-                    $('#objectiveSelectedForAdd').text($('#subject option:selected').text());
-                });
-                
-                $('#editObjective').click(function () {
-                    $('#formAddobjetive').addClass("hidden");
-                    $('#formEditobjetive').removeClass("hidden");
-                    $('#formcontent').addClass("hidden");
-                    $('#objectiveSelectedForEdit').text($('#subject option:selected').text());
-                });
-                $('#content').click(function () {
-                    $('#formAddobjetive').addClass("hidden");
-                    $('#formEditobjetive').addClass("hidden");
-                    $('#formAddcontent').addClass("hidden");
-                    //$('#addContent').attr("disabled", false);
-                    $('#editContent').attr("disabled", false);
-                    
-                    //Al seleccionar un objective desactivamos el boton add
-                    if( contentValue !== null, contentValue !== ""){
-                       $('#addContent').attr("disabled", true);
-                    };
-                });
-                $('#addContent').click(function () {
-                    $('#formAddcontent').removeClass("hidden");
-                    $('#contentSelectedForAdd').text($('#objective option:selected').text());
-                });
-                $('#editContent').click(function () {
-                    $('#formAddcontent').addClass("hidden");
-                    $('#formEditcontent').removeClass("hidden");
-                    //Añadimos el nombre del content para editarlo
-                    $('#editNameContent').val($('#content option:selected').text());
-                    //Añadimos el nombre del objective para saber a que objective pertenece el content que estamos editando
-                    $('#contentSelectedForEdit').text($('#objective option:selected').text());
-                });
-                 $('#level').click(function () {
-                    
-                    //$('#subject').empty();
-                    $('#objective').empty();
-                    $('#namenewobjective').val('');
-                    $('#descriptionnewobjective').val('');
-                    $('#content').empty();
-                });
-            });
+
+            
             function deleteObjective()
             {
                 var seleccion = document.getElementById("objective").value;
@@ -248,7 +223,10 @@
                            if(data==='success')  {           
                                $('#objective option:selected').remove();
            //         $('#objective').remove('option:selected');
-                }
+                            }else{
+                                $('#buttomModalObjective').click();
+                                $('#modal-objectiveLinkLessons').replaceWith('<div class="col-xs-12 text-center"><h3>'+ data +'</h3></div>');
+                            }
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -264,14 +242,17 @@
                  $.ajax({
                     type: 'POST',
                         url: 'delContent.htm?id='+seleccion,
-                      data: seleccion,
+                        data: seleccion,
                         dataType: 'text' ,           
                      
                         success: function(data) {                          
-                           if(data==='success')  {           
-                               $('#content option:selected').remove();
+                            if(data==='success')  {
+                                $('#content option:selected').remove();
            //         $('#objective').remove('option:selected');
-                }
+                            }else{
+                                $('#buttomModalContent').click();
+                                $('#modal-contentLinkLessons').replaceWith('<div class="col-xs-12 text-center"><h3>'+ data +'</h3></div>');
+                            }
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -416,6 +397,66 @@
 
                     });    
                 }
+                $(function () {
+                $('#addObjective').click(function () {
+                    $('#formAddobjetive').removeClass("hidden");
+                    $('#formcontent').addClass("hidden");
+                    $('#objectiveSelectedForAdd').text($('#subject option:selected').text());
+                });
+                
+                $('#editObjective').click(function () {
+                    $('#formAddobjetive').addClass("hidden");
+                    $('#formEditobjetive').removeClass("hidden");
+                    $('#formcontent').addClass("hidden");
+                    $('#objectiveSelectedForEdit').text($('#subject option:selected').text());
+                });
+                $('#content').click(function () {
+                    $('#formAddobjetive').addClass("hidden");
+                    $('#formEditobjetive').addClass("hidden");
+                    $('#formAddcontent').addClass("hidden");
+                    //$('#addContent').attr("disabled", false);
+                    $('#editContent').attr("disabled", false);
+                    $('#delContent').attr("disabled", false);
+                    
+                    //Al seleccionar un objective desactivamos el boton add
+                    if( contentValue !== null, contentValue !== ""){
+                       $('#addContent').attr("disabled", true);
+                    };
+                });
+                $('#delContent').click(function () {
+                    $('#formAddobjetive').addClass("hidden");
+                    $('#formEditobjetive').addClass("hidden");
+                    $('#formAddcontent').addClass("hidden");
+                    //$('#addContent').attr("disabled", false);
+                    $('#editContent').attr("disabled", false);
+                    $('#delContent').attr("disabled", false);
+                    
+                    //Al seleccionar un objective desactivamos el boton add
+                    if( contentValue !== null, contentValue !== ""){
+                       $('#addContent').attr("disabled", true);
+                    };
+                });
+                $('#addContent').click(function () {
+                    $('#formAddcontent').removeClass("hidden");
+                    $('#contentSelectedForAdd').text($('#objective option:selected').text());
+                });
+                $('#editContent').click(function () {
+                    $('#formAddcontent').addClass("hidden");
+                    $('#formEditcontent').removeClass("hidden");
+                    //Añadimos el nombre del content para editarlo
+                    $('#editNameContent').val($('#content option:selected').text());
+                    //Añadimos el nombre del objective para saber a que objective pertenece el content que estamos editando
+                    $('#contentSelectedForEdit').text($('#objective option:selected').text());
+                });
+                 $('#level').click(function () {
+                    
+                    //$('#subject').empty();
+                    $('#objective').empty();
+                    $('#namenewobjective').val('');
+                    $('#descriptionnewobjective').val('');
+                    $('#content').empty();
+                });
+            });
         </script>
         <style>
             textarea 
@@ -469,7 +510,7 @@
                                     <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editObjective"/>
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="del" id="delObjective" onclick="deleteObjective()"/>
+                                    <input type="button" disabled data-toggle="modal" data-target="#confirmedDeleteObjective" data-placement="bottom" value="del" id="delObjective"/>
                                 </div>
                             </div>
                         </div>
@@ -488,7 +529,7 @@
                                     <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editContent">
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="del" id="delContent" onclick="deleteContent()" >
+                                    <input type="button" disabled data-toggle="modal" data-target="#confirmedDeleteContent" data-placement="bottom" value="del" id="delContent" >
                                 </div>
                             </div>
                         </div>
@@ -511,7 +552,7 @@
                             <input type="button" name="AddObjective" value="save" class="btn btn-detalles" id="AddObjective" data-target=".bs-example-modal-lg" onclick="saveaddObjective()"/>
                         </div>
                 </fieldset>
-                    <fieldset class="hidden" id="formEditobjetive">
+                <fieldset class="hidden" id="formEditobjetive">
                     <legend>Edit objective in <span id="objectiveSelectedForEdit"></span></legend>
                     <%--Edit objective--%>
                         <div class="col-xs-3 center-block form-group" id="addObjective">
@@ -574,16 +615,98 @@
                     <div class="col-xs-12">
                         <div class="col-xs-3 center-block form-group">
                     <label class="control-label">Method</label>
-                    <select class="form-control" name="method" id="method">
-                    
-                       <c:forEach var="method" items="${methods}">
-                                <option value="${method.id[0]}" >${method.name}</option>
-                            </c:forEach>
+                    <select class="form-control" size="2" name="method" id="method">
+                        <c:forEach var="method" items="${methods}">
+                            <option value="${method.id[0]}"  data-title="${method.description}" data-content="${method.description}">${method.name}</option>
+                        </c:forEach>
                     </select>
                 </div>
                     </div>
                 </fieldset>
         </div>
+        <div id="modalConfirmeDeleteObjective">
+            <!-- Modal -->
+            <div class="modal fade" id="confirmedDeleteObjective" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Are you sure you want to delete this objective?</h4>
+                        </div>
+                        <div class="modal-body">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="" onclick="deleteObjective()">Yes</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" >No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modalConfirmeDeleteContent">
+            <!-- Modal -->
+            <div class="modal fade" id="confirmedDeleteContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Are you sure you want to delete this content?</h4>
+                        </div>
+                        <div class="modal-body">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="" onclick="deleteContent()">Yes</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" >No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div id="modalObjective">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#myModal" id="buttomModalObjective">
+                Launch demo modal
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Modal Objective</h4>
+                        </div>
+                        <div class="modal-body" id="modal-objectiveLinkLessons">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modalContent">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#myModal" id="buttomModalContent">
+                Launch demo modal
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Modal Content</h4>
+                        </div>
+                        <div class="modal-body" id="modal-contentLinkLessons">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <%= request.getParameter("message")%>
     </body>
 </html>
