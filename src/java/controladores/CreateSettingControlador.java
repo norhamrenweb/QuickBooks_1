@@ -72,6 +72,9 @@ public class CreateSettingControlador{
         List <Level> grades = new ArrayList();
         Level l = new Level();
         l.setName("Select level");
+        String[] y = new String[1];
+             y[0]="";
+           l.setId(y);
         grades.add(l);
         while(rs.next())
         {
@@ -128,9 +131,9 @@ public class CreateSettingControlador{
              st = this.cn.createStatement();
              levelid= hsr.getParameterValues("seleccion1");
           ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
-           Subject s = new Subject();
-          s.setName("Select Subject");
-          subjects.add(s);
+//           Subject s = new Subject();
+//          s.setName("Select Subject");
+//          subjects.add(s);
            
            while (rs1.next())
             {
@@ -181,9 +184,9 @@ public class CreateSettingControlador{
             
             
           ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid);
-          Objective s = new Objective();
-          s.setName("Select Objective");
-          objectives.add(s);
+//          Objective s = new Objective();
+//          s.setName("Select Objective");
+//          objectives.add(s);
            
            while (rs1.next())
             {
