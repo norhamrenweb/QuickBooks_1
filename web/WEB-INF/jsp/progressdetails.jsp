@@ -73,7 +73,7 @@
     <body>
         <div class="container">
             <div class="col-xs-12 text-center">
-                <h2>${name}</h2>
+                <h2>${studentname}</h2>
             </div>
             
             <div class="col-xs-12" style="border-bottom: #08c solid 1px">
@@ -82,17 +82,17 @@
                 <div class="col-xs-4">Objective</div>
             </div>
             <div class="col-xs-12">
-                <div class="col-xs-4">JP</div>
-                <div class="col-xs-4">Math</div>
-                <div class="col-xs-4">Fractions</div>
+                <div class="col-xs-4">${gradelevel}</div>
+                <div class="col-xs-4">${subject}</div>
+                <div class="col-xs-4">${objective}</div>
             </div>
             
             <div class="col-xs-6" style="margin-top: 30px;">
                 <div class="col-xs-12 spacediv">
-                    <div class="col-xs-6">Presented</div><div class="col-xs-6">03/04/2017</div>
+                    <div class="col-xs-6">Presented</div><div class="col-xs-6">${presenteddate}</div>
                 </div>
                 <div class="col-xs-12 spacediv">
-                    <div class="col-xs-6">Attempted</div><div class="col-xs-6">20/04/2017
+                    <div class="col-xs-6">Attempted</div><div class="col-xs-6">${attempteddate}
                     <button class="" data-toggle="collapse" data-target="#contenedorAttempted" id="showAttempteds">
                         2<br><span class="glyphicon glyphicon-triangle-bottom"></span>
                     </button>
@@ -103,14 +103,14 @@
                     <div class="col-xs-6 attempted">Attempted</div><div class="col-xs-6 attempted">20/04/2017</div>
                 </div>    
                 <div class="col-xs-12 spacediv">
-                    <div class="col-xs-6">Mastered</div><div class="col-xs-6">03/05/2017</div>
+                    <div class="col-xs-6">Mastered</div><div class="col-xs-6">${mastereddate}</div>
                 </div>
             </div>
             <div class="col-xs-6 center-block">
                 <div class="col-xs-6 col-xs-offset-3 containerProgress">
                     <div class="cellProgress">
                         <div class="mastered">
-                            <div class="cellProgress text-center">MASTERED</div>
+                            <div class="cellProgress text-center">${finalrating}</div>
                         </div>
                     </div>
                 </div>
@@ -119,11 +119,24 @@
                 <table id="tablelessons" class="display">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Date</th>
-                            <th>Comment general</th>
+                            <th>Lesson Name</th>
+                            <th>Comment</th>
+                            <th>Comment Date</th>
+                            <th>Rating</th>
+                           
                         </tr>
                     </thead> 
+                    <select>
+                    <c:forEach var="p" items="${progress}" >
+                        <tr>
+                            <td>${p.lesson_name}</td>
+                            <td>${p.comment}</td>
+                            <td>${p.comment_date}</td> 
+                            <td>${p.rating}</td>
+                        </tr>
+                    </c:forEach>
+                    </select>
+
                 </table>
 
             </div>

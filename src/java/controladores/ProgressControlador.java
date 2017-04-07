@@ -168,17 +168,31 @@ public class ProgressControlador extends MultiActionController{
       
 
     Statement st = this.cn.createStatement();
-            
+          
     for(int i=0;i<studentids.length;i++)
-    {
-    st.executeUpdate("update lesson_stud_att set attendance = '"+att[i]+"',timestamp= now() where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
+    {  // if the teacher did not fill the attendance no update will be done to avoid null pointer exception
+        if(!att[i].isEmpty())
+    { String test = "update lesson_stud_att set attendance = '"+att[i]+"',timestamp= now() where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'";
+    st.executeUpdate(test);
     }
-      
+    }
+   
      for(int i=0;i<studentids.length;i++)
-    {
-        
-         st.executeUpdate("insert into progress_report(comment_date,comment,rating,lesson_id,student_id,subject_id) values (now(),'"+comments[i]+"','"+ratings[i]+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"')");
-       
+    {         ResultSet rs1 = st.executeQuery("select id from rating where name = '"+ratings[i]+"'");
+                int ratingid = 0;
+                while(rs1.next())
+                {
+               ratingid = rs1.getInt("id");
+                }
+                //check if there is already progress records for this lesson, if yes then will do update instead of insert
+              ResultSet rs = st.executeQuery("select * from progress_report where lesson_id ="+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
+              if(!rs.next()){
+                st.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment) values (now(),'"+comments[i]+"','"+ratingid+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false)");
+              }
+              else{
+                st.executeUpdate("update progress_report set comment_date = now(),comment = '"+comments[i]+"',rating_id ='"+ratingid+"' ,lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
+
+              }
     } 
         return mv;
         

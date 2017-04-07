@@ -86,7 +86,7 @@ public class CreateSettingControlador{
         dataSource2 = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource2.getConnection();
          Statement st2 = this.cn.createStatement();
-        ResultSet rs1 = st2.executeQuery("SELECT name,id FROM public.method");
+        ResultSet rs1 = st2.executeQuery("SELECT * FROM public.method");
         List <Method> methods = new ArrayList();
         Method m = new Method();
         m.setName("Select Method");
@@ -98,6 +98,7 @@ public class CreateSettingControlador{
              ids[0]=""+rs1.getInt("id");
             x.setId(ids);
             x.setName(rs1.getString("name"));
+            x.setDescription(rs1.getString("description"));
         methods.add(x);
         }
           
@@ -389,8 +390,10 @@ public class CreateSettingControlador{
           else{
         consulta = "DELETE FROM public.objective WHERE id="+id[0];
            st.executeUpdate(consulta);
+           consulta="delete from objective_content where objective_id= '"+id[0]+"'";
+           st.executeUpdate(consulta);
            message="success";
-           // need to decide what to do with the contents
+           // need to decide what to do with the contents also if the objective has a record in the progress_report
           }
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
@@ -496,7 +499,7 @@ public class CreateSettingControlador{
          String consulta = "select lesson_id from lesson_content where content_id = "+ id[0];
           ResultSet rs = st.executeQuery(consulta );
           if(rs.next()){
-            message="This objective is linked to lessons";  
+            message="This content is linked to lessons";  
           }
           else{
         consulta = "DELETE FROM objective_content WHERE content_id="+id[0];

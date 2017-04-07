@@ -121,6 +121,8 @@
                      var info = JSON.parse(json.info);
                var subjects = JSON.parse(json.sub);
                     $('#BOD').val(info.fecha_nacimiento);
+                    $('#gradelevel').val(info.level_id);
+                    
                     $('#student').text(info.nombre_students);
                     $('#studentid').val(info.id_students);
                     if(typeof info.foto === 'undefined'){
@@ -208,9 +210,11 @@
                     }else{
                         
                     var selectObjective = dataObjective1;   
+                
                     var myObj = {};
                         myObj["objectiveid"] = selectObjective;
                         myObj["studentid"] = data1;
+                        
                         var json = JSON.stringify(myObj);
                          window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
                         
@@ -222,10 +226,15 @@
     function selectionObjective()
     {
         var selectObjective = dataObjective1;
-        var selectStudent = document.getElementsByClassName("nameStudent").value;
+        var selectStudent = $("#student").text();
+        var gradelevel = $("#gradelevel").val();
+        var subject = $("#subjects :selected").text();
         var myObj = {};
                 myObj["objectiveid"] = selectObjective;
                 myObj["studentid"] = data1;
+                myObj["studentname"] = selectStudent;
+               myObj["gradelevel"] = gradelevel;
+               myObj["subject"] = subject;
                 var json = JSON.stringify(myObj);
         ajax.onreadystatechange = funcionCallBackLoadNewPage;
         //ajax.open("POST","progressdetails.htm?data="+json, true);
@@ -395,20 +404,20 @@ $(function() {
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="col-xs-12 sinpadding">
-                                        <div class="col-xs-12">Grade:</div>
-                                        <div class="col-xs-12">Grade4</div>
+<!--                                        <div class="col-xs-12">Grade:</div>
+                                        <div class="col-xs-12">Grade4</div>-->
                                     </div>         
                                     <label class="label">Name</label>
                                     <input class="form-control" type="text" value="">
 
                                 <label>lastname</label>
-                                <input class="form-control" type="text" readonly="" value="lastname student">
+                                <input class="form-control" type="text" readonly="" value="lastname student" id="lastname">
                                  
                                 <label>Birthday</label>
                                 <input class="form-control" type="text" readonly="" value="Birthday student" id="BOD">
 
                                 <label>grade level</label>
-                                <input class="form-control" type="text" readonly="" value="grade student">
+                                <input class="form-control" type="text" readonly="" value="grade student" id = "gradelevel">
                                 </div>
                             </div>
                             <div class="col-xs-12 tab-pane fade" id="gradebook">
