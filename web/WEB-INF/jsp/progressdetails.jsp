@@ -16,26 +16,16 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Progress Details</title>
         <script>
-//            var ajax;
-//             $(document).ready(function(){
-//                 
-//                var json = JSON.parse(ajax.responseText);
-//                     var info = JSON.parse(json.info);
-//               var subjects = JSON.parse(json.sub);
-//                    $('#BOD').val(info.fecha_nacimiento);
-//                    $('#student').text(info.nombre_students);
-//                    $('#studentid').val(info.id_students);
-//                    if(typeof info.foto === 'undefined'){
-//                        $('#foto').attr('src', '../recursos/img/NotPhoto.png');
-//                    }else{
-//                        $('#foto').attr('src', info.foto);
-//                    }
-//                    $('#subjects').empty();
-//                     $.each(subjects, function(i, item) {
-//                         $('#subjects').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
-//                   });
-//      
-//    }); 
+           $(document).ready(function(){
+                $('#tablelessons').DataTable();
+                
+                $("#contenedorAttempted").on("hide.bs.collapse", function(){
+                    $("#showAttempteds").html('2<br><span class="glyphicon glyphicon-triangle-bottom"></span>');
+                });
+                $("#contenedorAttempted").on("show.bs.collapse", function(){
+                  $("#showAttempteds").html('2<br><span class="glyphicon glyphicon-triangle-top"></span>');
+                });
+            });
         </script>
         <style>
             .attempted{
@@ -45,12 +35,13 @@
             {
                 display: table;
 /*                background-color: #d9edf7;*/
-                min-height: 300px;
+                min-height: 200px;
             }
             .cellProgress
             {
                 display: table-cell;
                 vertical-align: middle;
+                padding: 10px;
                 
             }
             .spacediv
@@ -61,13 +52,21 @@
             .mastered
             {
                 display: table;
-                width: 100%;
+                width: 50%;
                 min-height: 100px;
                 border-radius: 10px;
                 background-color: #08c;
                 color: white;
                 font-size: xx-large;
                 font-weight: bold;
+            }
+            #showAttempteds
+            {
+                background-color: transparent;
+                border-width: 0px;
+                border-style: none;
+                border-color: transparent;
+                border-image: initial;
             }
         </style>
     </head>
@@ -93,9 +92,13 @@
                     <div class="col-xs-6">Presented</div><div class="col-xs-6">03/04/2017</div>
                 </div>
                 <div class="col-xs-12 spacediv">
-                    <div class="col-xs-6">Attempted</div><div class="col-xs-6">20/04/2017<span class="glyphicon glyphicon-triangle-bottom"></span></div>
+                    <div class="col-xs-6">Attempted</div><div class="col-xs-6">20/04/2017
+                    <button class="" data-toggle="collapse" data-target="#contenedorAttempted" id="showAttempteds">
+                        2<br><span class="glyphicon glyphicon-triangle-bottom"></span>
+                    </button>
+                    </div>    
                 </div>
-                <div class="col-xs-12" id="contenedorAttempted">
+                <div class="col-xs-12 collapse" id="contenedorAttempted">
                     <div class="col-xs-6 attempted">Attempted</div><div class="col-xs-6 attempted">20/04/2017</div>
                     <div class="col-xs-6 attempted">Attempted</div><div class="col-xs-6 attempted">20/04/2017</div>
                 </div>    
@@ -103,8 +106,8 @@
                     <div class="col-xs-6">Mastered</div><div class="col-xs-6">03/05/2017</div>
                 </div>
             </div>
-            <div class="col-xs-6 text-center">
-                <div class="col-xs-6 text-center containerProgress">
+            <div class="col-xs-6 center-block">
+                <div class="col-xs-6 col-xs-offset-3 containerProgress">
                     <div class="cellProgress">
                         <div class="mastered">
                             <div class="cellProgress text-center">MASTERED</div>
@@ -112,10 +115,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 text-center">
-                <table class="display">
-                    
+            <div class="col-xs-12" id="divTableLessons">
+                <table id="tablelessons" class="display">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Comment general</th>
+                        </tr>
+                    </thead> 
                 </table>
+
             </div>
         </div>
         
