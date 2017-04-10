@@ -481,7 +481,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                             $('#method').empty();
                             var json = JSON.parse(data);                            
                             $.each(json, function(i, item) { 
-                            $('#method').append('<option value = "'+json[i].id[0]+'" >' + json[i].name + '</option>');
+                            $('#method').append('<option value="'+json[i].id[0]+'" data-title="' + json[i].name + '" data-content="'+json[i].description+'">' + json[i].name + '</option>');
                             $('#formEditmethod').addClass("hidden");
                         });
                            
@@ -567,7 +567,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     $('#formEditmethod').removeClass("hidden");
                     //Añadimos el nombre del method para editarlo
                     $('#editNameMethod').val($('#method option:selected').text());
-                     //Añadimos el comentario del method para editarlo
+                    //Añadimos el comentario del method para editarlo
                     $('#editCommentsMethod').val($('#method option:selected').attr('data-content'));
                     //Añadimos el nombre del method para saber que estamos editando
                     $('#methodSelectedForEdit').text($('#method option:selected').text());
@@ -584,6 +584,9 @@ $("#method").on('mouseover', 'option' , function(e) {
             textarea 
             {
                 resize: none;
+            }
+             .popover{
+                width: 500px;
             }
         </style>
     </head>
