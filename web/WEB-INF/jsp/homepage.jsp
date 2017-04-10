@@ -79,11 +79,7 @@
     </script>
     </head>
     <body>
-       
-        <a href="progressbystudent.htm?option=start">Create Lessons</a>
         <div class="col-xs-12">
-
-            <a href="lessonprogress.htm?select6=loadRecords&LessonsSelected= 586">lessons</a>
             <div class="col-xs-6">
                 <div class="form-group">
                     <label class="control-label"></label>
@@ -95,14 +91,7 @@
                 </div>
             </div>
             <div class="col-xs-6">
-                <%--<div class="form-group">
-                    <label class="control-label"></label>
-                        <div class='input-group' style="margin-top:19px;">
-                            <form:form id="formCreate" action="createlesson.htm?select=start">
-                                <button type="submit" id="crearLessons1" value="Crear" class="btn btn-success" disabled="true"><spring:message code="etiq.txtcreatestudent"/></button>
-                            </form:form>
-                        </div>
-                </div>--%>
+              
             </div>
             <div class="col-sm-12" id="maincontainer">
                 <div class="col-sm-12 center-block text-center">
@@ -119,7 +108,6 @@
                             <td>Grade Level</td>
                             <td>Subject</td>
                             <td>Objective</td>
-                            <%--<td><spring:message code="etiq.equipmentlessons"/></td>--%>
                             
                             <td>Date</td>
                             <td>Start Hour</td>
@@ -138,7 +126,6 @@
                             <td>${lecciones.date}</td>
                             <td>${lecciones.start}</td>
                             <td>${lecciones.finish}</td>
-<!--                            <td>equipment</td>-->
                             <td>
                                 <div class="col-xs-4">
                                     <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
