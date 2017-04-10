@@ -92,7 +92,7 @@
                         ]
                     } );
                     
-                        var tableObjective = $('#tableobjective').DataTable();
+                        //var tableObjective = $('#tableobjective').DataTable();
 
                         $.each(json, function(i, item) {
 //                         var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
@@ -103,19 +103,20 @@
 <button type='button' class='btn btn-default btn-xs' value='"+item.col5+"' onclick='saveGeneralComment("+item.col5+")'>save</button>\n\
 </span></div>");
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').empty();
-                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
+                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='button' class='btn-unbutton' value='"+item.col5+"' onclick='selectionObjective("+item.col5+")'>More details</button>");
+//                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
                         });
 //                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
 //                        $('#tableobjective tbody tr td:eq(2)').empty();
 //                        $('#tableobjective tbody tr td:eq(2)').append("<input value='"+commentgeneral+"'></input>");   
                            
-                             
-     $('#tableobjective tbody').on('click', 'td:eq(4)', function () {
-        
-        var dataObjective = tableObjective.row( this ).data();
-        dataObjective1 = dataObjective['col5'];
-        selectionObjective();
-    } ); 
+                         
+//     $('#tableobjective tbody tr td:eq(4)').on('click', 'tr', 'td:eq(4)', function () {
+//        
+//        var dataObjective = tableObjective.row( this ).data();
+//        dataObjective1 = dataObjective['col5'];
+//        selectionObjective();
+//    } ); 
                     }
                 }
             }
@@ -280,14 +281,14 @@
                         myObj["studentid"] = data1;
                         
                         var json = JSON.stringify(myObj);
-                         window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
+                        window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
                         
                     };
  
                     }
                 }
             }
-    function selectionObjective()
+    function selectionObjective(dataObjective1)
     {
         var selectObjective = dataObjective1;
         var selectStudent = $("#student").text();
@@ -302,9 +303,9 @@
                 var json = JSON.stringify(myObj);
         ajax.onreadystatechange = funcionCallBackLoadNewPage;
         //ajax.open("POST","progressdetails.htm?data="+json, true);
-         window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
+        window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
         
-        ajax.send("");
+        //ajax.send("");
        
     }
     
@@ -416,6 +417,14 @@ $(function() {
                 padding: 5px;
                 margin-bottom: 10px;
                 min-height: 32px;
+            }
+            .btn-unbutton{
+                background-color: Transparent;
+                background-repeat:no-repeat;
+                border: none;
+                cursor:pointer;
+                overflow: hidden;
+                outline:none;
             }
            
         </style>
