@@ -100,7 +100,7 @@
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').append("<div class='input-group'>\n\
                 <textarea rows='2' class='form-control'>"+item.col3+"</textarea>\n\
 <span class='input-group-btn'>\n\
-<button type='button' class='btn btn-default btn-xs'>save</button>\n\
+<button type='button' class='btn btn-default btn-xs' value='"+item.col5+"'>save</button>\n\
 </span></div>");
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').empty();
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
@@ -135,7 +135,7 @@
                     if(typeof info.foto === 'undefined'){
                         $('#foto').attr('src', '../recursos/img/NotPhoto.png');
                     }else{
-                        $('#foto').attr('src', info.foto);
+                        $('#foto').attr('src', 'ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/'+info.foto);
                     }
                     $('#subjects').empty();
                      $.each(subjects, function(i, item) {
