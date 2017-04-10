@@ -186,49 +186,49 @@ public class ProgressbyStudent {
         return mv;
     }
     // loads the list of objectives based on the selected subject
-    @RequestMapping("/progressbystudent/objectivelistSubject.htm")
-    public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
-        ModelAndView mv = new ModelAndView("studentpage");
-        List<Objective> objectives = new ArrayList<>();
-       try {
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-        
-            
-             Statement st = this.cn.createStatement();
-             String subjectid = null;
-          
-            
-                subjectid = hsr.getParameter("seleccion2");
-            
-            
-          ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid);
-         
-           
-           while (rs1.next())
-            {
-             String[] ids = new String[1];
-                Objective sub = new Objective();
-            ids[0] = ""+rs1.getInt("id");
-             sub.setId(ids);
-             sub.setName(rs1.getString("name"));
-                objectives.add(sub);
-            }
-          
-            
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Objectives: " + ex);
-        }
-        
-   
-        mv.addObject("objectives", objectives);
-        
-        
-        return mv;
-    }
+//    @RequestMapping("/progressbystudent/objectivelistSubject.htm")
+//    public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+//        
+//        ModelAndView mv = new ModelAndView("studentpage");
+//        List<Objective> objectives = new ArrayList<>();
+//       try {
+//         DriverManagerDataSource dataSource;
+//        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+//        this.cn = dataSource.getConnection();
+//        
+//        
+//            
+//             Statement st = this.cn.createStatement();
+//             String subjectid = null;
+//          
+//            
+//                subjectid = hsr.getParameter("seleccion2");
+//            
+//            
+//          ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid);
+//         
+//           
+//           while (rs1.next())
+//            {
+//             String[] ids = new String[1];
+//                Objective sub = new Objective();
+//            ids[0] = ""+rs1.getInt("id");
+//             sub.setId(ids);
+//             sub.setName(rs1.getString("name"));
+//                objectives.add(sub);
+//            }
+//          
+//            
+//        } catch (SQLException ex) {
+//            System.out.println("Error leyendo Objectives: " + ex);
+//        }
+//        
+//   
+//        mv.addObject("objectives", objectives);
+//        
+//        
+//        return mv;
+//    }
     
     public ArrayList<Students> getStudentslevel(String gradeid) throws SQLException
     {
@@ -521,47 +521,46 @@ while(rs5.next())
              
 //            String consulta = "SELECT * FROM objective where subject_id = "+subjectid;
 //            ResultSet rs = st.executeQuery(consulta);
-          String consulta = " SELECT objective.id,objective.name,objective.description,progress_report.comment,progress_report.comment_date FROM progress_report  INNER JOIN objective ON progress_report.objective_id = objective.id where generalcomment = TRUE AND student_id = "+studentid+" AND subject_id = "+subjectid;
-          ResultSet rs = st.executeQuery(consulta);
-          int i = 0;
-           while (rs.next())
-            {
-                DBRecords r = new DBRecords();
-                r.setCol1(rs.getString("name"));
-                r.setCol2(rs.getString("description"));
-                r.setCol3(rs.getString("comment"));
-                r.setCol4(""+rs.getDate("comment_date"));
-                r.setCol5(""+rs.getInt("id"));
-                result.add(r);
+//          String consulta = " SELECT objective.id,objective.name,objective.description,progress_report.comment,progress_report.comment_date FROM progress_report  INNER JOIN objective ON progress_report.objective_id = objective.id where generalcomment = TRUE AND student_id = "+studentid+" AND subject_id = "+subjectid;
+//          ResultSet rs = st.executeQuery(consulta);
+//          int i = 0;
+//           while (rs.next())
+//            {
+//                DBRecords r = new DBRecords();
+//                r.setCol1(rs.getString("name"));
+//                r.setCol2(rs.getString("description"));
+//                r.setCol3(rs.getString("comment"));
+//                r.setCol4(""+rs.getDate("comment_date"));
+//                r.setCol5(""+rs.getInt("id"));
+//                result.add(r);
 //                objname.add(rs.getString("name"));
 //                objdscp.add(rs.getString("description"));
 //                comment.add(rs.getString("comment"));
 //                commentdate.add(rs.getDate("comment_date"));
 //                objid.add(rs.getInt("id"));
-//            while (rs.next())
-//            {
-//            Objective o = new Objective();
-//            o.setName(rs.getString("name"));
-//           o.setDescription(rs.getString("description"));
-//           String[] id = new String[1];
-//           id[0] = ""+rs.getInt("id");
-//            o.setId(id);
-//            objectives.add(o);
-//            }
-//        for(Objective o:objectives)
-//        {
-//            String[] id = new String[1];
-//            id = o.getId();
-//            consulta = "SELECT * FROM progress_report where objective_id ="+id[0]+"AND generalcomment = TRUE AND student_id ="+studentid;
-//            ResultSet rs1 = st.executeQuery(consulta);
-//            while(rs1.next())
-//            {
-//            Progress p = new Progress();
-//            p.setComment(rs1.getString("comment"));
-//            p.setComment_date(rs1.getString("comment_date"));
-//            progress.add(p);
-//            }
-        }
+             String consulta = " SELECT id,name,description from objective where subject_id = "+subjectid;
+        ResultSet rs = st.executeQuery(consulta);
+            while (rs.next())
+           {
+                DBRecords r = new DBRecords();
+               r.setCol1(rs.getString("name"));
+               r.setCol2(rs.getString("description"));
+                 r.setCol5(""+rs.getInt("id"));
+                result.add(r);
+            }
+        for(DBRecords r:result)
+        {
+            
+            consulta = "SELECT * FROM progress_report where objective_id ="+r.getCol5()+"AND generalcomment = TRUE AND student_id ="+studentid;
+            ResultSet rs1 = st.executeQuery(consulta);
+            while(rs1.next())
+            {
+            r.setCol3(rs1.getString("comment"));
+            r.setCol4(""+rs1.getDate("comment_date"));
+         
+            }
+
+         }
             
           } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);

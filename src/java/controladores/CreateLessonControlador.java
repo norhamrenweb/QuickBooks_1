@@ -22,14 +22,28 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
-
+import org.springframework.web.servlet.mvc.*;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.google.gson.*;
+import org.springframework.ui.ModelMap;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import org.springframework.web.bind.annotation.ResponseBody;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Controller;
 /**
  *
  * @author nmohamed
  */
-public class CreateLessonControlador extends MultiActionController{
+@Controller
+public class CreateLessonControlador {
     
       Connection cn;
       
@@ -41,7 +55,7 @@ public class CreateLessonControlador extends MultiActionController{
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
-    
+    @RequestMapping("/createlesson/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
@@ -89,7 +103,7 @@ public class CreateLessonControlador extends MultiActionController{
         
         return mv;
     }
-
+@RequestMapping("/createlesson/studentlistLevel.htm")
     public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
@@ -105,6 +119,7 @@ public class CreateLessonControlador extends MultiActionController{
         
         return mv;
     }
+    @RequestMapping("/createlesson/subjectlistLevel.htm")
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
@@ -165,7 +180,7 @@ public class CreateLessonControlador extends MultiActionController{
         
         return mv;
     }
-    
+        @RequestMapping("/createlesson/objectivelistSubject.htm")
     public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
@@ -209,7 +224,7 @@ public class CreateLessonControlador extends MultiActionController{
         
         return mv;
     }
-    
+    @RequestMapping("/createlesson/contentlistObjective.htm")
     public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
@@ -327,6 +342,7 @@ public class CreateLessonControlador extends MultiActionController{
          
          
     }
+     @RequestMapping("/createlesson/createlesson.htm")
      public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String message = "Lesson created";
         ModelAndView mv = new ModelAndView("redirect:/createlesson.htm?select=start", "message", message);
@@ -384,6 +400,7 @@ public class CreateLessonControlador extends MultiActionController{
         return mv;
     }
 //coge la nombre de subject seleccionado y devuelve la lista de lessons que son templates 
+     @RequestMapping("/createlesson/namelistSubject.htm")
      public ModelAndView namelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
      {
      ModelAndView mv = new ModelAndView("createlesson");
@@ -423,6 +440,7 @@ public class CreateLessonControlador extends MultiActionController{
      
      return mv;
      }
+     @RequestMapping("/createlesson/loadLessonplan.htm")
          public ModelAndView loadLessonplan(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
          {
              ModelAndView mv = new ModelAndView("createlesson");

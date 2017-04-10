@@ -88,7 +88,7 @@
                 <div class="form-group">
                     <label class="control-label"></label>
                         <div class='input-group' style="margin-top:19px;">
-                            <form:form id="formCreate" action="createlesson.htm?select=start">
+                            <form:form id="formCreate" action="/createlesson/start.htm">
                                <button type="submit" id="crearLessons" value="Crear" class="btn btn-success"><spring:message code="etiq.txtcreatedate"/></button>
                             </form:form>
                         </div>
