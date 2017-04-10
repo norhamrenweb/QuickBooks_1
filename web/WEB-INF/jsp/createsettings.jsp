@@ -46,6 +46,7 @@ $("#method").on('mouseover', 'option' , function(e) {
           
 
             var ajax;
+            
             var subjectValue = $('#subject').select("selected").val();
             var objectiveValue = $('#objective').select("selected").val();
             var contentValue = $('#content').select("selected").val();
@@ -54,6 +55,13 @@ $("#method").on('mouseover', 'option' , function(e) {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
                         document.getElementById("subject").innerHTML = ajax.responseText;
+                        //Activamos el select de subject
+                        var levelValue = $('#level').select("selected").val();
+                        if( levelValue !== "?"){
+                          $('#subject').attr("disabled", false);
+                       }else{
+                          $('#subject').attr("disabled", true);
+                       };
                     }
                 }
             }
@@ -125,9 +133,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 
             }
 
-           
-
-             function funcionCallBackContent()
+            function funcionCallBackContent()
             {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
@@ -203,8 +209,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                 });
 	}
 }
-             function comboSelectionContent()
-             {
+            function comboSelectionContent()
+            {
                  
              }
                 
@@ -283,8 +289,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                      
                         success: function(data) {                          
                             var json = JSON.parse(data);                               
-                    $('#objective').append('<option value = "'+json.id[0]+'" >' + json.name + '</option>');
-                                       
+                        $('#objective').append('<option value = "'+json.id[0]+'" >' + json.name + '</option>');
+                        $('#formAddobjetive').addClass("hidden");               
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -318,9 +324,9 @@ $("#method").on('mouseover', 'option' , function(e) {
                             $('#objective').empty();
                             var json = JSON.parse(data);                            
                             $.each(json, function(i, item) { 
-                    $('#objective').append('<option value = "'+json[i].id[0]+'" >' + json[i].name + '</option>');
-                });
-                           
+                            $('#objective').append('<option value = "'+json[i].id[0]+'" >' + json[i].name + '</option>');
+                            });
+                           $('#formEditobjetive').addClass("hidden");
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -330,7 +336,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 
                     });    
                 }
-                function saveeditContent()
+            function saveeditContent()
             {
 
         var seleccion = document.getElementById("content").value;
@@ -353,8 +359,9 @@ $("#method").on('mouseover', 'option' , function(e) {
                             $('#content').empty();
                             var json = JSON.parse(data);                            
                             $.each(json, function(i, item) { 
-                    $('#content').append('<option value = "'+json[i].id[0]+'" >' + json[i].name + '</option>');
-                });
+                            $('#content').append('<option value = "'+json[i].id[0]+'" >' + json[i].name + '</option>');
+                            $('#formEditcontent').addClass("hidden");
+                        });
                            
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
@@ -365,7 +372,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 
                     });    
                 } 
-                function saveaddContent()
+            function saveaddContent()
             {
 
      //   var seleccion = document.getElementById("objective").value;
@@ -386,8 +393,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                      
                         success: function(data) {                          
                             var json = JSON.parse(data);                               
-                    $('#content').append('<option value = "'+json.id[0]+'" >' + json.name + '</option>');
-                                       
+                            $('#content').append('<option value = "'+json.id[0]+'" >' + json.name + '</option>');
+                            $('#formAddcontent').addClass("hidden");           
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -397,7 +404,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 
                     });    
                 }
-                $(function () {
+            $(function () {
                 $('#addObjective').click(function () {
                     $('#formAddobjetive').removeClass("hidden");
                     $('#formcontent').addClass("hidden");
@@ -449,8 +456,6 @@ $("#method").on('mouseover', 'option' , function(e) {
                     $('#contentSelectedForEdit').text($('#objective option:selected').text());
                 });
                  $('#level').click(function () {
-                    
-                    //$('#subject').empty();
                     $('#objective').empty();
                     $('#namenewobjective').val('');
                     $('#descriptionnewobjective').val('');
@@ -489,7 +494,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                         </div>
                         <div class="col-xs-3 center-block">
                             <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
-                            <select class="form-control" name="TXTsubject" id="subject" multiple size="10" onclick="comboSelectionSubject()">
+                            <select class="form-control" disabled="true" name="TXTsubject" id="subject" multiple size="10" onclick="comboSelectionSubject()">
                                 <c:forEach var="subject" items="${subjects}">
                                     <option value="${subject.id[0]}" >${subject.name}</option>
                                 </c:forEach>
