@@ -98,9 +98,9 @@
 //                         var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').empty();
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').append("<div class='input-group'>\n\
-                <textarea rows='2' class='form-control'>"+item.col3+"</textarea>\n\
+                <textarea rows='2' class='form-control commentGeneral' id='comment"+item.col5+"'>"+item.col3+"</textarea>\n\
 <span class='input-group-btn'>\n\
-<button type='button' class='btn btn-default btn-xs' value='"+item.col5+"'>save</button>\n\
+<button type='button' class='btn btn-default btn-xs' value='"+item.col5+"' onclick='saveGeneralComment()'>save</button>\n\
 </span></div>");
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').empty();
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
@@ -119,16 +119,62 @@
                     }
                 }
             }
-    
+            
+     function funcionCallBackSaveGeneralComent()
+    {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                    document.getElementById("comment").innerHTML= ajax.responseText;
+                    }
+                }
+            }
+    function saveGeneralComment()
+    {
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        var dataCommentGeneral;
+        $('#tableobjective tbody').on('click', 'tr', function () {
+        table = $('#tableobjective').DataTable();
+        data = table.row( this ).data();
+        dataCommentGeneral = data['col3']; 
+        } ); 
+        ajax.onreadystatechange=funcionCallBackSaveGeneralComent;
+        
+        var objectiveId = $('.btn-xs').val();
+        var studentId = $('#studentid').val();
+        
+        var myObj = {};
+                myObj["objectiveid"] = objectiveId;
+                myObj["studentid"] = studentId;
+                myObj["commentGeneral"] = dataCommentGeneral;
+                var json = JSON.stringify(myObj);
+        
+        ajax.open("POST","saveGeneralcomment?data="+json,true);
+        ajax.send("");
+    }
      function funcionCallBackSelectStudent()
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
                     var json = JSON.parse(ajax.responseText);
-                     var info = JSON.parse(json.info);
-               var subjects = JSON.parse(json.sub);
-                    $('#BOD').val(info.fecha_nacimiento);
-                    $('#gradelevel').val(info.level_id);
+                    var info = JSON.parse(json.info);
+                    var subjects = JSON.parse(json.sub);
+
+                    var birthday = info.fecha_nacimiento,
+                            separador = " ",
+                            limite = 1, 
+                            datebirthday = birthday.split(separador,limite);
+                    
+                    
+                    
+                    $('#BOD').text(datebirthday);
+                    $('#gradelevel').text(info.level_id);
                     
                     $('#student').text(info.nombre_students);
                     $('#studentid').val(info.id_students);
@@ -322,6 +368,7 @@ $(function() {
             margin-bottom: 20px;
             padding-top: 10px;
             padding-bottom: 10px;
+            min-height: 40px;
             }
             .tab-pane
             {
@@ -334,7 +381,7 @@ $(function() {
             .containerPhoto
             {
                 display: table;
-                background-color: #d9edf7;
+/*                background-color: lightgray;*/
                 border-right: 1px #D0D2D3 double;
                 min-height: 300px;
             }
@@ -345,16 +392,27 @@ $(function() {
             #divTableObjective{
                 margin-top: 20px;
             }
+            .label-demographic{
+                background-color: lightgray;
+                text-align: center;
+                padding: 5px;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                margin-bottom: 0px;
+            }
+            .demographic{
+                border: 1px solid lightgray;
+                padding: 5px;
+                margin-bottom: 10px;
+                min-height: 32px;
+            }
+           
         </style>
     </head>
 
     <body>
-        
-        
         <div class="container">
-        <h1 class="text-center">Progress by Student</h1>
-
-        
+            <h1 class="text-center">Progress by Student</h1>
         <form:form id="formStudents" method ="post" action="studentpage.htm?option=studentPage" >
       
             <fieldset>
@@ -406,36 +464,25 @@ $(function() {
                             <div class="col-xs-12 tab-pane fade in active" id="demographic">
                                 <div class="col-xs-6 text-center containerPhoto">
                                     <div class="cell">
-                                        <img id="foto" src="../recursos/img/NotPhoto.png" alt='img' width="150px;"/>
+                                        <img id="foto" src="../recursos/img/NotPhoto.png" alt='img' width="200px;"/>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
-                                    <div class="col-xs-12 sinpadding">
-<!--                                        <div class="col-xs-12">Grade:</div>
-                                        <div class="col-xs-12">Grade4</div>-->
-                                    </div>         
-                                    <label class="label">Name</label>
-                                    <input class="form-control" type="text" value="">
-
-                                <label>lastname</label>
-                                <input class="form-control" type="text" readonly="" value="lastname student" id="lastname">
-                                 
-                                <label>Birthday</label>
-                                <input class="form-control" type="text" readonly="" value="Birthday student" id="BOD">
-
-                                <label>grade level</label>
-                                <input class="form-control" type="text" readonly="" value="grade student" id = "gradelevel">
+                                    <div class="col-xs-12 sinpadding form-group">
+                                        <label class="col-xs-6 label-demographic" >Birthday</label>
+                                        <span class="col-xs-12 demographic" id="BOD"></span>
+                                    </div>
+                                    <div class="col-xs-12 sinpadding form-group">
+                                        <label class="col-xs-6 label-demographic" >Grade level</label>
+                                        <span class="col-xs-12 demographic" id="gradelevel"></span>
+                                    </div>
+                                    <div class="col-xs-12 sinpadding form-group">
+                                        <label class="col-xs-6 label-demographic" >Next level</label>
+                                        <span class="col-xs-12 demographic" id="nextlevel"></span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-xs-12 tab-pane fade" id="gradebook">
-<!--                                <div class="col-xs-6">
-                                <Label>Level</Label>
-                                <select class="form-control">
-                                    <option>Level1</option>
-                                    <option>Level2</option>
-                                    <option>Level3</option>
-                                </select>
-                                </div>-->
                                 <div class="col-xs-6" >
                                     <Label>Subject</Label>
                                     <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
