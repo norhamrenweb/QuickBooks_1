@@ -125,7 +125,7 @@
            if (ajax.readyState===4){
                 if (ajax.status===200){
                     
-                    document.getElementById('comment').innerHTML= ajax.responseText;
+                    var json = JSON.parse(ajax.responseText);
                     }
                 }
             }
