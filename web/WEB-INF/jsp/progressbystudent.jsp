@@ -100,7 +100,7 @@
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').append("<div class='input-group'>\n\
                 <textarea rows='2' class='form-control commentGeneral' id='comment"+item.col5+"'>"+item.col3+"</textarea>\n\
 <span class='input-group-btn'>\n\
-<button type='button' class='btn btn-default btn-xs' value='"+item.col5+"' onclick='saveGeneralComment()'>save</button>\n\
+<button type='button' class='btn btn-default btn-xs' value='"+item.col5+"' onclick='saveGeneralComment("+item.col5+")'>save</button>\n\
 </span></div>");
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').empty();
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
@@ -124,11 +124,12 @@
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                    document.getElementById("comment").innerHTML= ajax.responseText;
+                    
+                    document.getElementById('comment').innerHTML= ajax.responseText;
                     }
                 }
             }
-    function saveGeneralComment()
+    function saveGeneralComment(objectiveId)
     {
         if (window.XMLHttpRequest) //mozilla
         {
@@ -138,7 +139,7 @@
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-        var objectiveId = $('.btn-xs').val();
+        
         var studentId = $('#studentid').val();
         var dataCommentGeneral = $('#comment'+objectiveId).val();
         
