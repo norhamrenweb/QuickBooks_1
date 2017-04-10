@@ -73,7 +73,7 @@ public class CreateSettingControlador{
         Level l = new Level();
         l.setName("Select level");
         String[] y = new String[1];
-             y[0]="";
+             y[0]="?";
            l.setId(y);
         grades.add(l);
         while(rs.next())

@@ -13,6 +13,7 @@
 <!DOCTYPE html>
 <html>
     <%@ include file="menu.jsp" %>
+    <%@ include file="infouser.jsp" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Students</title>
@@ -60,7 +61,6 @@
                 if (ajax.status===200){
                    var json = JSON.parse(ajax.responseText);
                   
-                   //var i;
                     if(json.length === 0){
                         $('#divTableObjective').addClass('hidden');
                         $('#divNotObjective').removeClass('hidden');
@@ -73,7 +73,7 @@
                         destroy: true,
                         paging: true,
                         searching: false,
-                        ordering: true,
+                        ordering: false,
                         data: json,
                         
                         columns: [
@@ -82,33 +82,40 @@
                         { data: 'col3' },
                         { data: 'col4' },
                         { data: 'col5' }
+                        ],
+                        columnDefs: [
+                        { width: 90, targets: 0 },
+                        { width: 200, targets: 0 },
+                        { width: 200, targets: 0 },
+                        { width: 70, targets: 0 },
+                        { width: 100, targets: 0 }
                         ]
-                    
                     } );
-                           var tableObjective = $('#tableobjective').DataTable();
-     $('#tableobjective tbody').on('click', 'tr', function () {
+                    
+                        var tableObjective = $('#tableobjective').DataTable();
+
+                        $.each(json, function(i, item) {
+//                         var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
+                        $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').empty();
+                        $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').append("<div class='input-group'>\n\
+                <textarea rows='2' class='form-control'>"+item.col3+"</textarea>\n\
+<span class='input-group-btn'>\n\
+<button type='button' class='btn btn-default btn-xs'>save</button>\n\
+</span></div>");
+                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').empty();
+                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
+                        });
+//                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
+//                        $('#tableobjective tbody tr td:eq(2)').empty();
+//                        $('#tableobjective tbody tr td:eq(2)').append("<input value='"+commentgeneral+"'></input>");   
+                           
+                             
+     $('#tableobjective tbody').on('click', 'td:eq(4)', function () {
         
         var dataObjective = tableObjective.row( this ).data();
         dataObjective1 = dataObjective['col5'];
         selectionObjective();
     } ); 
-//                          var table="<tr><th>Objective Name</th><th>Objective description</th><th>Comment</th><th>Comment Date</th><th>ID</th></tr>";
-////                          var x = xmlDoc.getElementsByTagName("CD");
-//                          for (i = 0; i <json.length; i++) { 
-//                            table += "<tr><td>" +
-//                           json[i].col1 +
-//                            "</td><td>" +
-//                            json[i].col2 +
-//                            "</td><td>" +
-//                            json[i].col3 +
-//                            "</td><td>" +
-//                            json[i].col4 +
-//                            "</td><td>" +
-//                            json[i].col5 +
-//                            "</td></tr>";
-//                          }
-                          //document.getElementById("tableobjective").innerHTML = table;
-                          //$('#tableobjective').DataTable(); 
                     }
                 }
             }
@@ -446,7 +453,7 @@ $(function() {
                                                 <th>Description</th>
                                                 <th>Comment general</th>
                                                 <th>date</th>
-                                                <th>id</th>
+                                                <th></th>
                                             </tr>
                                         </thead> 
                                     </table>
