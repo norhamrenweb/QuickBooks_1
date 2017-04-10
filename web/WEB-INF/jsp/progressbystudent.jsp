@@ -138,24 +138,26 @@
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-        var dataCommentGeneral;
-        $('#tableobjective tbody').on('click', 'tr', function () {
-        table = $('#tableobjective').DataTable();
-        data = table.row( this ).data();
-        dataCommentGeneral = data['col3']; 
-        } ); 
-        ajax.onreadystatechange=funcionCallBackSaveGeneralComent;
-        
         var objectiveId = $('.btn-xs').val();
         var studentId = $('#studentid').val();
+        var dataCommentGeneral = $('#comment'+objectiveId).val();
+        
+//        $('#tableobjective tbody').on('click', 'tr', function () {
+//        table = $('#tableobjective').DataTable();
+//        data = table.row( this ).data();
+//        dataCommentGeneral = data['col3']; 
+//        } ); 
+        ajax.onreadystatechange=funcionCallBackSaveGeneralComent;
+        
+        
         
         var myObj = {};
                 myObj["objectiveid"] = objectiveId;
                 myObj["studentid"] = studentId;
-                myObj["commentGeneral"] = dataCommentGeneral;
+                myObj["comment"] = dataCommentGeneral;
                 var json = JSON.stringify(myObj);
         
-        ajax.open("POST","saveGeneralcomment?data="+json,true);
+        ajax.open("POST","saveGeneralcomment.htm?data="+json,true);
         ajax.send("");
     }
      function funcionCallBackSelectStudent()
