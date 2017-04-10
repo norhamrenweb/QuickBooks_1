@@ -126,6 +126,14 @@
                 if (ajax.status===200){
                     
                     var json = JSON.parse(ajax.responseText);
+                    var mensaje = json.message;
+                    if( mensaje === "Comment successfully updated"){
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                    }else{
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                    };
                     }
                 }
             }
@@ -537,6 +545,24 @@ $(function() {
   </div>
 </div>
 
+              
+    <div id="modalCommentGeneral">
+         <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#modalComment" id="showModalComment">
+                Launch demo modal
+            </button>   
+        <!-- Modal -->
+        <div class="modal fade" id="modalComment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="titleComment"></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     </body>
