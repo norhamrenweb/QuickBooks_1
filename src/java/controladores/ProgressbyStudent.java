@@ -27,6 +27,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,7 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
  * @author nmohamed
  */
 @Controller
+@Scope("session")
 public class ProgressbyStudent {
      Connection cn;
       
@@ -584,7 +586,8 @@ while(rs5.next())
     @ResponseBody
     public String saveGeneralcomment(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception 
     {
-    String message = null;
+    String message = "Comment was not saved";
+          JSONObject obj = new JSONObject();
     String[] hi = hsr.getParameterValues("data");
     JSONObject jsonObj = new JSONObject(hi[0]);
     String objectiveid = jsonObj.getString("objectiveid");
@@ -599,16 +602,21 @@ while(rs5.next())
              ResultSet rs = st.executeQuery(consulta);
              if(!rs.next()){
                 st.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment) values (now(),'"+comment+"','"+studentid+"','"+objectiveid+"',true)");
+                message = "Comment successfully updated";
+                
               }
               else{
                 st.executeUpdate("update progress_report set comment_date = now(),comment = '"+comment+"' where objective_id = "+objectiveid+" AND student_id = '"+studentid+"' and generalcomment = true");
-
+                message = "Comment successfully updated";
               }
+             obj.put("message",message);
+             obj.put("comment",comment);
+             obj.put("objectiveid",objectiveid);
     }
     catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
         }  
        
-    return message;
+    return obj.toString();
     }
 }

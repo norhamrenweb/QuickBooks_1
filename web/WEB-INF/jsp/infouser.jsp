@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page session="true" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -23,7 +24,7 @@
             <a class="btnBandera" href='datosIdioma.htm?lenguaje=es'>Español</a>
             <a class="btnBandera" href='datosIdioma.htm?lenguaje=ar'>Arabic</a>
         </div>
-            <h1 class="text-center">Hi, <c:out value="${message}"/></h1>
+            <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>
             
         </div>        
    
