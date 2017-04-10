@@ -91,9 +91,6 @@ public class CreateSettingControlador{
          Statement st2 = this.cn.createStatement();
         ResultSet rs1 = st2.executeQuery("SELECT * FROM public.method");
         List <Method> methods = new ArrayList();
-        Method m = new Method();
-        m.setName("Select Method");
-        methods.add(m);
         while(rs1.next())
         {
             Method x = new Method();
@@ -523,6 +520,118 @@ public class CreateSettingControlador{
       
          return message;
     } 
-            }
+    @RequestMapping(value="/createsetting/delMethod.htm")
+    @ResponseBody
+    public String delMethod(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+     
+        String message = null;
+       String[] id = hsr.getParameterValues("id");
+     
+       try {
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+         Statement st = this.cn.createStatement();
+         String consulta = "select id from lessons where method_id = "+ id[0];
+          ResultSet rs = st.executeQuery(consulta );
+          if(rs.next()){
+            message="This method is linked to lessons";  
+          }
+          else{
+        consulta = "DELETE FROM method WHERE id="+id[0];
+           st.executeUpdate(consulta);
+           message="success";
+          
+          }
+       }catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+            message = "Something went wrong";
+        }
+     
+              
+    //            obj.put("newobjs",objjson);
+  //              obj.put("message",message);
+      
+         return message;
+    } 
+        @RequestMapping(value="/createsetting/addMethod.htm")
+    @ResponseBody
+    public String addMethod(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+     
+       String[] input = hsr.getParameterValues("data");
+       JSONObject jsonObj = new JSONObject(input[0]);
+        String message = null;
+        Method m = new Method();
+        try {
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        Statement st = this.cn.createStatement();
+        String consulta = "insert into method(name,description) values('"+jsonObj.getString("name")+"','"+jsonObj.getString("description")+"')"; 
+        st.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs = st.getGeneratedKeys();
+       
+        while(rs.next())
+        {
+         String[] id = new String[1];
+        id[0]=""+rs.getInt(1);
+        m.setId(id);
+        }
+        message = "Method added successfully";   
+        m.setDescription(jsonObj.getString("description"));
+        m.setName(jsonObj.getString("name"));
+       
+        
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo contents: " + ex);
+            message ="Something went wrong";
+        }
+        String objjson = new Gson().toJson(m);
+              
+    //            obj.put("newobjs",objjson);
+  //              obj.put("message",message);
+      
+         return objjson;
+    }          
+@RequestMapping(value="/createsetting/editMethod.htm")
+    @ResponseBody
+    public String editMethod(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+        List<Method> methods = new ArrayList<>();
+   //   JSONObject obj = new JSONObject();
+       String[] hi = hsr.getParameterValues("data");
+       JSONObject jsonObj = new JSONObject(hi[0]);
+        String message = null;
+        try {
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        Statement st = this.cn.createStatement();
+        String consulta = "update method set name = '"+jsonObj.getString("name")+"',description ='"+jsonObj.getString("description")+"'where id ="+jsonObj.getString("id"); 
+        st.executeUpdate(consulta);
+        message = "Objective edited successfully";   
+        ResultSet rs = st.executeQuery("select * from method ");
+        while(rs.next()){
+        Method m = new Method();
+        m.setDescription(rs.getString("description"));
+        String[] id = new String[1];
+        id[0]=""+rs.getInt("id");
+        m.setId(id);
+        m.setName(rs.getString("name"));
+        methods.add(m);
+        }
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo contents: " + ex);
+            message ="Something went wrong";
+        }
+        String objjson = new Gson().toJson(methods);
+              
+    //            obj.put("newobjs",objjson);
+  //              obj.put("message",message);
+      
+         return objjson;
+    }     
+
+
+}
 
 

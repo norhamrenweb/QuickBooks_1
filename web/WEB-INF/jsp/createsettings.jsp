@@ -431,6 +431,69 @@ $("#method").on('mouseover', 'option' , function(e) {
 
                     });    
             }
+            function saveaddMethod()
+            {
+
+     //   var seleccion = document.getElementById("objective").value;
+        var name = document.getElementById("namenewmethod").value;
+        var description = document.getElementById("commentsnewmethod").value;
+        var myObj = {};
+                myObj["name"] = name;
+                myObj["description"] = description;
+                var json = JSON.stringify(myObj);
+            $.ajax({
+                    type: 'POST',
+                        url: 'addMethod.htm?data='+json,
+                        data: json,
+                        dataType: 'text' ,           
+                     
+                        success: function(data) {                          
+                            var json = JSON.parse(data);                               
+                        $('#method').append('<option value = "'+json.id[0]+'" >' + json.name + '</option>');
+                        $('#formAddmethod').addClass("hidden");               
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });    
+                }
+                function saveeditMethod()
+            {
+
+        var seleccion = document.getElementById("method").value;
+        var name = document.getElementById("editNameMethod").value;
+        var description = document.getElementById("editCommentsMethod").value;
+        var myObj = {};
+                myObj["name"] = name;
+                myObj["description"] = description;
+                myObj["id"] = seleccion;
+                var json = JSON.stringify(myObj);
+            $.ajax({
+                    type: 'POST',
+                        url: 'editMethod.htm?data='+json,
+                        data: json,
+                        dataType: 'text' ,           
+                     
+                        success: function(data) {
+                            $('#method').empty();
+                            var json = JSON.parse(data);                            
+                            $.each(json, function(i, item) { 
+                            $('#method').append('<option value = "'+json[i].id[0]+'" >' + json[i].name + '</option>');
+                            $('#formEditmethod').addClass("hidden");
+                        });
+                           
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });    
+                }
             $(function () {
                 $('#addObjective').click(function () {
                     $('#formAddobjetive').removeClass("hidden");
