@@ -563,7 +563,7 @@ while(rs5.next())
          }
             
           } catch (SQLException ex) {
-            System.out.println("Error leyendo Alumnos: " + ex);
+            System.out.println("Error : " + ex);
         }  
        
 //      String jname = new Gson().toJson(objname);
@@ -580,5 +580,35 @@ while(rs5.next())
  //           return pjson;
        } 
     
-    
+    @RequestMapping("/progressbystudent/saveGeneralcomment.htm")
+    @ResponseBody
+    public String saveGeneralcomment(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception 
+    {
+    String message = null;
+    String[] hi = hsr.getParameterValues("data");
+    JSONObject jsonObj = new JSONObject(hi[0]);
+    String objectiveid = jsonObj.getString("objectiveid");
+    String comment = jsonObj.getString("comment");
+    String studentid = jsonObj.getString("studentid");
+    try {
+            DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+             Statement st = this.cn.createStatement();
+             String consulta = "select id from progress_report where objective_id = "+objectiveid+" and generalcomment = TRUE";
+             ResultSet rs = st.executeQuery(consulta);
+             if(!rs.next()){
+                st.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment) values (now(),'"+comment+"','"+studentid+"','"+objectiveid+"',true)");
+              }
+              else{
+                st.executeUpdate("update progress_report set comment_date = now(),comment = '"+comment+"' where objective_id = "+objectiveid+" AND student_id = '"+studentid+"' and generalcomment = true");
+
+              }
+    }
+    catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+        }  
+       
+    return message;
+    }
 }
