@@ -139,7 +139,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.onreadystatechange=funcionCallBackLevelStudent;
         var seleccion = document.getElementById("levelStudent").value;
         var alumnos = document.getElementById("destino").innerHTML;
-        ajax.open("POST","createlesson.htm?select=studentlistLevel&seleccion="+seleccion,true);
+        ajax.open("POST","studentlistLevel.htm?seleccion="+seleccion,true);
         ajax.send("");
     }
     
@@ -200,7 +200,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         $('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackSubject;
         var seleccion1 = document.getElementById("level").value;
-        ajax.open("POST","createlesson.htm?select=subjectlistLevel&seleccion1="+seleccion1,true);
+        ajax.open("POST","subjectlistLevel.htm?seleccion1="+seleccion1,true);
         
         ajax.send("");
        
@@ -219,7 +219,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         
         ajax.onreadystatechange=funcionCallBackObjective;
         var seleccion2 = document.getElementById("subject").value;
-        ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccion2,true);
+        ajax.open("POST","objectivelistSubject.htm?seleccion2="+seleccion2,true);
 
         ajax.send("");
         
@@ -239,7 +239,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         
         ajax.onreadystatechange=funcionCallBackLoadTemplateLessons;
         var seleccionSubject = document.getElementById("subject").value;
-        ajax.open("POST","createlesson.htm?select=namelistSubject&seleccionTemplate="+seleccionSubject,true);
+        ajax.open("POST","namelistSubject.htm?seleccionTemplate="+seleccionSubject,true);
         ajax.send("");
     }
      function comboSelectionTemplateLessons()
@@ -257,7 +257,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.onreadystatechange=funcionCallBackTemplateLessons;
         var seleccionTemplate = document.getElementById("lessons").value;
         //ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccionTemplate,true);
-        ajax.open("POST","createlesson.htm?select=loadLessonplan&seleccionTemplate="+seleccionTemplate,true);
+        ajax.open("POST","loadLessonplan.htm?seleccionTemplate="+seleccionTemplate,true);
         ajax.send("");
     }
      function comboSelectionObjective()
@@ -278,45 +278,45 @@ $("#method").on('mouseover', 'option' , function(e) {
         }
         ajax.onreadystatechange=funcionCallBackContent;
         var seleccion3 = document.getElementById("objective").value;
-        ajax.open("POST","createlesson.htm?select=contentlistObjective&seleccion3="+seleccion3,true);
+        ajax.open("POST","contentlistObjective.htm?seleccion3="+seleccion3,true);
         ajax.send("");
     }
     
-    
-$(function() {
-    $('#subject').change(function() {
-//        $('#LoadTemplates').parent().attr("disabled",false);
-//        $('#LoadTemplates').attr("disabled",false);
-        $('#LoadTemplates').children().removeClass("disabled");
-    });
-    
-    $('#LoadTemplates').change(function() {
-         if ($("input:radio[name='options']:checked").val() === 'option1' ){
-    $("#lessons").attr("disabled", true);
-    $('#divCrearLessons').removeClass('hidden');
-    $('#divLoadLessons').addClass('hidden');
-//    $("#NameLessons").attr("disabled", true);
-    } else {
-    $("#lessons").attr("disabled", false);
-    $('#divLoadLessons').removeClass('hidden');
-    $('#divCrearLessons').addClass('hidden');
-//    $("#NameLessons").attr("disabled", false);
-    }
-    });
+//    
+//$(function() {
+//    $('#subject').change(function() {
+////        $('#LoadTemplates').parent().attr("disabled",false);
+////        $('#LoadTemplates').attr("disabled",false);
+//        $('#LoadTemplates').children().removeClass("disabled");
+//    });
+//    
 //    $('#LoadTemplates').change(function() {
-//         if (this.checked).{
+//         if ($("input:radio[name='options']:checked").val() === 'option1' ){
 //    $("#lessons").attr("disabled", true);
-//    $('#divCrearLessons').removeClass('disabled');
-//    $('#divLoadLessons').addClass('disabled');
+//    $('#divCrearLessons').removeClass('hidden');
+//    $('#divLoadLessons').addClass('hidden');
 ////    $("#NameLessons").attr("disabled", true);
 //    } else {
 //    $("#lessons").attr("disabled", false);
-//    $('#divLoadLessons').removeClass('disabled');
-//    $('#divCrearLessons').addClass('disabled');
+//    $('#divLoadLessons').removeClass('hidden');
+//    $('#divCrearLessons').addClass('hidden');
 ////    $("#NameLessons").attr("disabled", false);
 //    }
 //    });
-})
+////    $('#LoadTemplates').change(function() {
+////         if (this.checked).{
+////    $("#lessons").attr("disabled", true);
+////    $('#divCrearLessons').removeClass('disabled');
+////    $('#divLoadLessons').addClass('disabled');
+//////    $("#NameLessons").attr("disabled", true);
+////    } else {
+////    $("#lessons").attr("disabled", false);
+////    $('#divLoadLessons').removeClass('disabled');
+////    $('#divCrearLessons').addClass('disabled');
+//////    $("#NameLessons").attr("disabled", false);
+////    }
+////    });
+//})
         </script>
         <style>
             textarea 
@@ -400,7 +400,7 @@ $(function() {
                             </c:forEach>
                     </select>
                 </div>
-                <div class="col-xs-3 center-block text-center">
+<!--                <div class="col-xs-3 center-block text-center">
                     <label class="control-label">Select your option</label>
                     <div class="btn-group" data-toggle="buttons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">
                         <label class="btn btn-primary active disabled">
@@ -411,13 +411,13 @@ $(function() {
                         </label>
                     </div>
 <%--                    <input disabled="true" type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-on="Create Lessons" data-off="Load Lessons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">--%>
-                </div>
+                </div>-->
                 <div class="col-xs-3 center-block">
                     <label class="control-label">Name lesson</label>
                     <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
                 </div>
                 
-                <div class="hidden col-xs-12" id="divCrearLessons" style="padding-left: 0px;">
+                <div class="col-xs-12" id="divCrearLessons" style="padding-left: 0px;">
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Objective</label>
                         <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">

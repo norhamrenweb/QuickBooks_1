@@ -61,11 +61,17 @@ public class Createlesson {
             {
                 st.executeUpdate("insert into lesson_stud_att(lesson_id,student_id) values ('"+lessonid+"','"+studentIds[i]+"')");
             }
-            equipmentids=newlessons.getContentid();
+            //to avoid null pointer exception incase of lesson without content
+            if(newlessons.getContentid()!=null){
+                  equipmentids=newlessons.getContentid();
+            
              for( int i = 0; i <= equipmentids.length - 1; i++)
             {
+                
                 st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids[i]+"')");
             }
+            }
+          
             
   //          st.executeUpdate("insert into lessons_time(teacher_id,lesson_id,lesson_start,lesson_end) values (5,"+lessonid+",'"+newlessons.getStart()+"','"+newlessons.getFinish()+"')");
     }
