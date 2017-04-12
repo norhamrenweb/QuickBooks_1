@@ -81,7 +81,8 @@ table.dataTable thead .sorting_desc_disabled {
   background-position: center right;
 }
 table.dataTable thead .sorting {
-  background-image: url("../images/sort_both.png");
+/*  background-image: url("../images/sort_both.png");*/
+  background-image: url("recursos/img/datatable/sort_both.png");
 }
 table.dataTable thead .sorting_asc {
   background-image: url("../images/sort_asc.png");
