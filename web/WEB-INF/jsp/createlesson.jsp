@@ -11,33 +11,11 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
-
+    <%@ include file="menu.jsp" %>
+    <%@ include file="infouser.jsp" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create Lessons</title>
-        
-<!--        <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-      
-        <link href="recursos/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
-        <link href="recursos/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
-        <link href="recursos/css/bootstrap-toggle.css" rel="stylesheet" type="text/css"/>-->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
-<!--        <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>-->
-        
-        
-<!--        <script src="recursos/js/bootstrap.js" type="text/javascript"></script>-->
-<!--        <script src="recursos/js/bootstrap-toggle.js" type="text/javascript"></script>
-        <script src="recursos/js/bootstrap-modal.js" type="text/javascript"></script>
-        
-        <script src="recursos/js/moment.js" type="text/javascript"></script>
-        <script src="recursos/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
-        <script src="recursos/js/es.js" type="text/javascript"></script>
-        <script src="recursos/js/ar.js" type="text/javascript"></script>-->
-        
-
         <script>
 
  $(document).ready(function(){
@@ -52,6 +30,13 @@
         show: 'false'
     });
     }
+           
+                $("#contenedorPropiertys").on("hide.bs.collapse", function(){
+                    $("#showAttempteds").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
+                });
+                $("#contenedorAttempted").on("show.bs.collapse", function(){
+                  $("#showAttempteds").html('<span class="glyphicon glyphicon-triangle-top"></span>');
+                });
 
 
 $("#method").on('mouseover', 'option' , function(e) {
@@ -328,18 +313,27 @@ $("#method").on('mouseover', 'option' , function(e) {
             }
         </style>
     </head>
-    <%@ include file="menu.jsp" %>
     <body>
         <div class="container">
         <h1 class="text-center">Create Lessons</h1>
 
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
+            <fieldset id="">
+                <legend>Lessons propiertys</legend>
+                <div class="col-xs-6 center-block">
+                    <label class="control-label">Name lesson</label>
+                    <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
+                </div>
+                
+                <div class="col-xs-6 center-block form-group">
+                    <label class="control-label">Lesson description</label>
+                    <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"></textarea>
+                </div>
+            </fieldset>
             <fieldset>
-                <legend>Select Date</legend>
+                <legend>Select date</legend>
                 <div class="form-group">
-                    <div class="row">
-
                         <div class='col-xs-4'>
                             <div class="form-group">
                                 <label class="control-label" for="fecha">Date</label>
@@ -374,14 +368,10 @@ $("#method").on('mouseover', 'option' , function(e) {
                                 </div>
                             </div>
                         </div>
-                    </div>
- 
                 </div>
             </fieldset>
             <fieldset>
                 <legend>Lessons details</legend>
-                
-
                 <div class="col-xs-3 form-group">
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
@@ -412,12 +402,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                     </div>
 <%--                    <input disabled="true" type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-on="Create Lessons" data-off="Load Lessons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">--%>
                 </div>-->
-                <div class="col-xs-3 center-block">
-                    <label class="control-label">Name lesson</label>
-                    <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
-                </div>
                 
-                <div class="col-xs-12" id="divCrearLessons" style="padding-left: 0px;">
+                
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Objective</label>
                         <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
@@ -434,7 +420,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                                 </c:forEach>
                         </select>
                     </div>
-                </div>
+
                         
                 <div class="hidden col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
                     <div class="col-xs-3 center-block form-group">
@@ -474,10 +460,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     </select>
                  
                 </div>
-                <div class="col-xs-3 center-block form-group">
-                    <label class="control-label">Comments</label>
-                    <textarea class="form-control" name="TXTcomments" id="comments" placeholder="add comments" maxlength="200"></textarea>
-                </div>
+                
                 <div class="col-xs-12 center-block form-group">
                     <label class="control-label">Attachments</label>
                     <input type="file" class="form-control" name="TXTfile" id="file">
