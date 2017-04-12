@@ -27,7 +27,14 @@
 
     
     $(document).ready( function () {
-        $('#table_id').DataTable();
+        $('#table_id').DataTable({
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false,
+                "searchable": false
+            }]
+    });
         $('#table_datelessons').DataTable();
        
     $('#table_id tbody').on('click', 'tr', function () {
@@ -85,8 +92,7 @@
                     <h2><spring:message code="etiq.txtactivities"/></h2>
                 </div>
             </div>
-                
-            <div class="col-xs-12">
+            <div class="container">
                 <table id="table_id" class="display" >
                     <thead>
                         <tr>
