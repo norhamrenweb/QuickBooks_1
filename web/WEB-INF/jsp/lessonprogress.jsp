@@ -11,64 +11,11 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
-<%@ include file="menu.jsp" %>
+    <%@ include file="menu.jsp" %>
     <%@ include file="infouser.jsp" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Create Lessons</title>
-        
-        <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-      
-        <link href="recursos/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
-        <link href="recursos/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
-        <link href="recursos/css/bootstrap-toggle.css" rel="stylesheet" type="text/css"/>
-        <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
-        
-        <script src="recursos/js/bootstrap.js" type="text/javascript"></script>
-        <script src="recursos/js/bootstrap-toggle.js" type="text/javascript"></script>
-<!--        <script src="recursos/js/bootstrap-modal.js" type="text/javascript"></script>-->
-        <script src="recursos/js/moment.js" type="text/javascript"></script>
-        <script src="recursos/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
-        <script src="recursos/js/es.js" type="text/javascript"></script>
-        <script src="recursos/js/ar.js" type="text/javascript"></script>
-        
-        <!--    <link href="recursos/css/dataTables/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>-->
- <link href="recursos/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<!--    <link href="recursos/css/dataTables/dataTables.bootstrap4.css" rel="stylesheet" type="text/css"/>-->
-<!--    <link href="recursos/css/dataTables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>-->
-    <link href="recursos/css/dataTables/dataTables.foundation.css" rel="stylesheet" type="text/css"/>
-<!--    <link href="recursos/css/dataTables/dataTables.foundation.min.css" rel="stylesheet" type="text/css"/>-->
-    <link href="recursos/css/dataTables/dataTables.jqueryui.css" rel="stylesheet" type="text/css"/>
-<!--    <link href="recursos/css/dataTables/dataTables.jqueryui.min.css" rel="stylesheet" type="text/css"/>-->
-<!--    <link href="recursos/css/dataTables/dataTables.material.css" rel="stylesheet" type="text/css"/>-->
-<!--    <link href="recursos/css/dataTables/dataTables.material.min.css" rel="stylesheet" type="text/css"/>-->
-    <link href="recursos/css/dataTables/dataTables.semanticui.css" rel="stylesheet" type="text/css"/>
-<!--    <link href="recursos/css/dataTables/dataTables.semanticui.min.css" rel="stylesheet" type="text/css"/>-->
-<!--    <link href="recursos/css/dataTables/dataTables.uikit.css" rel="stylesheet" type="text/css"/>-->
-<!--    <link href="recursos/css/dataTables/dataTables.uikit.min.css" rel="stylesheet" type="text/css"/>-->
-<!--      <link href="recursos/css/dataTables/jquery.dataTables.css" rel="stylesheet" type="text/css"/>-->
-<link href="recursos/css/dataTables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="recursos/css/dataTables/jquery.dataTables_themeroller.css" rel="stylesheet" type="text/css"/>
-    
-    
-    <script src="recursos/js/dataTables/dataTables.bootstrap.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.bootstrap.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.bootstrap4.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.bootstrap4.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.foundation.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.foundation.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.jqueryui.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.jqueryui.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/dataTables.material.js" type="text/javascript"></script>
-<!--    <script src="recursos/js/dataTables/dataTables.material.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.semanticui.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.semanticui.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.uikit.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/dataTables.uikit.min.js" type="text/javascript"></script>-->
-    <script src="recursos/js/dataTables/jquery.dataTables.js"></script>
-<!--    <script src="recursos/js/dataTables/jquery.dataTables.min.js" type="text/javascript"></script>-->
-<!--    <script src="recursos/js/dataTables/jquery.js" type="text/javascript"></script>-->
-
+        <title>Lessons progress</title>
         <script>
 
 
@@ -120,46 +67,16 @@
         });
         
 
-//       //Menu lateral
-//        $('#nav-expander').on('click',function(e){
-//      		e.preventDefault();
-//      		$('body').toggleClass('nav-expanded');
-//      	});
-//      	$('#nav-close').on('click',function(e){
-//      		e.preventDefault();
-//      		$('body').removeClass('nav-expanded');
-//      	});
-//        $('#barralateral').mouseleave(function(o){
-//      		o.preventDefault();
-//      		$('body').removeClass('nav-expanded');
-//      	});
-    });            
-            
-        $().ready(function() 
-	{
-		$('.pasar').click(function() { return !$('#origen option:selected').remove().appendTo('#destino'); });  
-		$('.quitar').click(function() { return !$('#destino option:selected').remove().appendTo('#origen'); });
-		$('.pasartodos').click(function() { $('#origen option').each(function() { $(this).remove().appendTo('#destino'); }); });
-		$('.quitartodos').click(function() { $('#destino option').each(function() { $(this).remove().appendTo('#origen'); }); });
-		$('.submit').click(function() { $('#destino option').prop('selected', 'selected'); });
-	});
-        
-        var ajax;
-
-   $(document).ready( function () {
         $('#table_progress').DataTable(
                 {
                    "columnDefs": [
-                { "width": "5%", "targets": 0 },
+                { "width": "5%", "targets": 0, "visible": false },
                 { "width": "10%", "targets": 1 },
                 { "width": "5%", "targets": 2 },
                 { "width": "55%", "targets": 3 },
                 { "width": "25%", "targets": 4, "orderable": false }
                 ] 
-                });
-        $('[data-toggle="tooltip"]').tooltip();
-        
-        
+                });        
     });
 
 $(function() {
@@ -179,10 +96,12 @@ collectionAttendance.each(function() {
     var haynullAttendance = $.inArray('', itemsAttendance);
     
     if( haynullRating !== -1 || haynullAttendance !== -1){
-        $('#buttonAchived').addClass('hidden');
+        $('#buttonAchived').attr('disabled', true);
+        $('#buttonAchived').parent().attr('disabled', true);
         
     }else{
-        $('#buttonAchived').removeClass('hidden');
+        $('#buttonAchived').attr('disabled', false);
+        $('#buttonAchived').parent().removeAttr('disabled');
     }
 });
      $('#rellenarP').click(function() {
@@ -221,7 +140,7 @@ collectionAttendance.each(function() {
     }
     });
 
-})
+});
         </script>
         <style>
             textarea 
@@ -233,7 +152,6 @@ collectionAttendance.each(function() {
             {}
         </style>
     </head>
-    <%@ include file="menu.jsp" %>
     <body>
         
         
@@ -268,7 +186,7 @@ collectionAttendance.each(function() {
                                 <td>Student Name</td>
                                 <td>Rating</td>
                                 <td>Comment</td>
-                                <td>Attendance Code <input type="button" id="rellenarP" value="Fill P"> <input type="button" id="rellenar" value="clear"></td>
+                                <td>Attendance Code <input type="button" class="btn btn-xs btn-info" id="rellenarP" value="Fill P"> <input type="button" class="btn btn-xs btn-info" id="rellenar" value="clear"></td>
 
                             </tr>
                         </thead>
@@ -286,8 +204,6 @@ collectionAttendance.each(function() {
                                             <c:if test="${not empty record.rating}">
                                                 <option selected>${record.rating}</option>
                                             </c:if>
-                                         
-                                            <option></option>
                                             <option>N/A</option>
                                             <option>Presented</option>
                                             <option>Attempted</option>
@@ -305,7 +221,6 @@ collectionAttendance.each(function() {
                                             <c:if test="${not empty record.attendancecode}">
                                                 <option selected>${record.attendancecode}</option>
                                             </c:if>
-                                            <option></option>
                                             <option>P</option>
                                             <option>A</option>
                                             <option>T</option>
@@ -318,11 +233,11 @@ collectionAttendance.each(function() {
 
                 </div>
 
-                <div class="col-xs-6">   
-                    <input type="submit" value="Save">
+                <div class="col-xs-6 text-center">   
+                    <input type="submit" class="btn btn-success" value="Save">
                 </div>
-                <div class="col-xs-6">   
-                    <input type="button" value="Archived" class="hidden" id="buttonAchived" data-toggle="tooltip" title="Completed all">
+                <div class="col-xs-6 text-center">
+                    <input type="checkbox" disabled="true" data-width="200px" data-onstyle="success" data-offstyle="warning" data-toggle="toggle" data-on="Archived" data-off="Not Archived" name="buttonAchived" id="buttonAchived">
                 </div>
             </form:form>
         </div>

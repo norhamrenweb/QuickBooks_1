@@ -26,7 +26,7 @@ div {
     background-color: #D0D2D3 !important;
     background-image: none !important;
 }
-.btn-success{
+/*.btn-success{
     background-image: -webkit-linear-gradient(top,#F7931E 0,#e38d13 100%)!important;
     background-image: -o-linear-gradient(top,#F7931E 0,#e38d13 100%)!important;
     background-image: -webkit-gradient(linear,left top,left bottom,from(#F7931E),to(#e38d13))!important;
@@ -36,8 +36,8 @@ div {
     background-repeat: repeat-x;
     border-color: #F7931E !important;
     background-color: #F7931E !important;
-}
-.btn-success:hover :active{
+}*/
+/*.btn-success:hover :active{
     background-image: -webkit-linear-gradient(top,#F7931E 0,#e38d13 100%)!important;
     background-image: -o-linear-gradient(top,#F7931E 0,#e38d13 100%)!important;
     background-image: -webkit-gradient(linear,left top,left bottom,from(#F7931E),to(#e38d13))!important;
@@ -49,7 +49,7 @@ div {
     background-color: #F7931E !important;
     background-position-x: 0px;
     background-position-y: -1px;
-}
+}*/
 .chart {
   width: 100%; 
   height: 600px;

@@ -17,10 +17,6 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Students</title>
-        
-     
-
-
         <script>
 
 
@@ -46,7 +42,22 @@
       
         
         var ajax;
+        var d = new Date();
 
+        var month = d.getMonth()+1;
+        var day = d.getDate();
+        var hour = d.getHours();
+        var minute = d.getMinutes();
+        var second = d.getSeconds();
+
+        var currentTime = d.getFullYear() + '-' +
+            ((''+month).length<2 ? '0' : '') + month + '-' +
+            ((''+day).length<2 ? '0' : '') + day + ' ' +
+            ((''+hour).length<2 ? '0' :'') + hour + ':' 
+            +((''+minute).length<2 ? '0' :'') + minute;
+//           + ':' + ((''+second).length<2 ? '0' :'') + second;
+    
+    
     function funcionCallBackStudent()
     {
            if (ajax.readyState===4){
@@ -92,7 +103,7 @@
                         ]
                     } );
                     
-                        var tableObjective = $('#tableobjective').DataTable();
+                        //var tableObjective = $('#tableobjective').DataTable();
 
                         $.each(json, function(i, item) {
 //                         var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
@@ -102,20 +113,24 @@
 <span class='input-group-btn'>\n\
 <button type='button' class='btn btn-default btn-xs' value='"+item.col5+"' onclick='saveGeneralComment("+item.col5+")'>save</button>\n\
 </span></div>");
+//                        if(item.col4 === currentTime ){
+//                        $('#tableobjective tbody tr:eq('+ i +') td:eq(3)').append("<div class='input-group'>"+currentTime+"</div>");
+//                        }
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').empty();
-                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
+                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='button' class='btn-unbutton' value='"+item.col5+"' onclick='selectionObjective("+item.col5+")'>More details</button>");
+//                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
                         });
 //                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
 //                        $('#tableobjective tbody tr td:eq(2)').empty();
 //                        $('#tableobjective tbody tr td:eq(2)').append("<input value='"+commentgeneral+"'></input>");   
                            
-                             
-     $('#tableobjective tbody').on('click', 'td:eq(4)', function () {
-        
-        var dataObjective = tableObjective.row( this ).data();
-        dataObjective1 = dataObjective['col5'];
-        selectionObjective();
-    } ); 
+                         
+//     $('#tableobjective tbody tr td:eq(4)').on('click', 'tr', 'td:eq(4)', function () {
+//        
+//        var dataObjective = tableObjective.row( this ).data();
+//        dataObjective1 = dataObjective['col5'];
+//        selectionObjective();
+//    } ); 
                     }
                 }
             }
@@ -126,17 +141,20 @@
                 if (ajax.status===200){
                     
                     var json = JSON.parse(ajax.responseText);
+                    //console.log(json);
                     var mensaje = json.message;
                     if( mensaje === "Comment successfully updated"){
+                        $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
                         $('#showModalComment').click();
                         $('#titleComment').text(mensaje);
+                        
                     }else{
                         $('#showModalComment').click();
                         $('#titleComment').text(mensaje);
-                    };
                     }
                 }
             }
+        }
     function saveGeneralComment(objectiveId)
     {
         if (window.XMLHttpRequest) //mozilla
@@ -280,14 +298,14 @@
                         myObj["studentid"] = data1;
                         
                         var json = JSON.stringify(myObj);
-                         window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
+                        window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
                         
                     };
  
                     }
                 }
             }
-    function selectionObjective()
+    function selectionObjective(dataObjective1)
     {
         var selectObjective = dataObjective1;
         var selectStudent = $("#student").text();
@@ -302,9 +320,9 @@
                 var json = JSON.stringify(myObj);
         ajax.onreadystatechange = funcionCallBackLoadNewPage;
         //ajax.open("POST","progressdetails.htm?data="+json, true);
-         window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
+        window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
         
-        ajax.send("");
+        //ajax.send("");
        
     }
     
@@ -416,6 +434,14 @@ $(function() {
                 padding: 5px;
                 margin-bottom: 10px;
                 min-height: 32px;
+            }
+            .btn-unbutton{
+                background-color: Transparent;
+                background-repeat:no-repeat;
+                border: none;
+                cursor:pointer;
+                overflow: hidden;
+                outline:none;
             }
            
         </style>
