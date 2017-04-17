@@ -29,201 +29,184 @@ public class InvoiceSync {
     
     public void invoicesync(Config config){
             
-            try {
-       
-            //----------------------------------------------------------------------
-            UpdateLog logdb = new UpdateLog(config);
+        UpdateLog logdb = new UpdateLog(config);
+        List <RWCharge> allcharge= new ArrayList<>();
+        RetrieveInvoice x2 = new RetrieveInvoice();
+        allcharge = x2.retrieveCharge(config);
+        List <QBInvoice> allinvoice= new ArrayList<>();
+        allinvoice = x2.retrieveInvoice(config);
+        List <QBInvoice> addlist= new ArrayList<>();
+        List <QBInvoice> discountlist= new ArrayList<>();
+        List <QBInvoice> updatelist= new ArrayList<>();
+        List <QBInvoice> deletelist= new ArrayList<>();
+        if (allinvoice.isEmpty())// incase QB invoice table was empty then no need to check
+        {for(RWCharge u : allcharge){
+            QBInvoice n = new QBInvoice();
+            QBCustomer cust = new QBCustomer();
+            MappingTable family = new MappingTable(config);
+            cust.setId(family.checkmappingrw(u.getrwFamily().getId()));
+            Item item = new Item();
             
-            //Retrieve QB and RW transactions based on a start date (start date not done yet)
-            List <RWCharge> allcharge= new ArrayList<>();
-            RetrieveInvoice x2 = new RetrieveInvoice();
-            allcharge = x2.retrieveCharge(config);
-            List <QBInvoice> allinvoice= new ArrayList<>();
+            item.setitemQuantity(1);
+            n.setMemo(u.getDescription());
             
-            allinvoice = x2.retrieveInvoice(config);
-            //-------------------------------------------------------------------------
-            //Check QB transactions against RW to check for updates or deletion
-            List <QBInvoice> addlist= new ArrayList<>();
-            List <QBInvoice> discountlist= new ArrayList<>();
-            List <QBInvoice> updatelist= new ArrayList<>();
-            List <QBInvoice> deletelist= new ArrayList<>();
-            
-            
-            if (allinvoice.isEmpty())// incase QB invoice table was empty then no need to check
-            {for(RWCharge u : allcharge){
-                QBInvoice n = new QBInvoice();
-                QBCustomer cust = new QBCustomer();
-                MappingTable family = new MappingTable(config);
-                cust.setId(family.checkmappingrw(u.getrwFamily().getId()));
-                Item item = new Item();
-              
-                item.setitemQuantity(1);
-                n.setMemo(u.getDescription());
-              
-                n.setDate(u.getDate());
+            n.setDate(u.getDate());
+            n.setItem(item);
+            n.setQBCustomer(cust);
+            n.setcustomFields("<CustomField><Name>ChargeID</Name><Value>"+u.getchargeID()+"</Value></CustomField>");
+            n.setdueDate(u.getdueDate());
+            if(Math.signum(u.getAmount())== -1.0)
+            {
+                item.setitemName("Discount");// hard coded till we figurs out how it will get this input
                 n.setItem(item);
-                n.setQBCustomer(cust);
-                n.setcustomFields("<CustomField><Name>ChargeID</Name><Value>"+u.getchargeID()+"</Value></CustomField>");
-                n.setdueDate(u.getdueDate());
-                 if(Math.signum(u.getAmount())== -1.0)
-                        {
-                            item.setitemName("Discount");// hard coded till we figurs out how it will get this input
-                            n.setItem(item);
-                            n.setAmount(Math.abs(u.getAmount()));
-                            discountlist.add(n);
-                        }
-                        else
-                        {
-                            item.setitemName(config.getItemname());
-                            n.setItem(item);
-                            n.setAmount(u.getAmount());
-                            addlist.add(n);
-                        }
-                
-             
+                n.setAmount(Math.abs(u.getAmount()));
+                discountlist.add(n);
+            }
+            else            
+            {
+                item.setitemName(config.getItemname());
+                n.setItem(item);
+                n.setAmount(u.getAmount());
+                addlist.add(n);
             }
             
-            }
-            else{
-                //first check for deletion
-                for (QBInvoice y2 : allinvoice) {
-                    String result = "";
-                    String chargeid ;
-                    ParseChargeID xml = new ParseChargeID();
-                    chargeid = xml.parsechargeid(y2.getcustomFields());
+            
+        }
+        
+        }
+        else{
+            //first check for deletion
+            for (QBInvoice y2 : allinvoice) {
+                String result = "";
+                String chargeid ;
+                ParseChargeID xml = new ParseChargeID();
+                chargeid = xml.parsechargeid(y2.getcustomFields());
+                
+                if(chargeid != null)
+                {
                     
-                    if(chargeid != null)
+                    Integer cid =Integer.parseInt(chargeid);
+                    for(RWCharge z2 : allcharge)
                     {
-                       
-                       Integer cid =Integer.parseInt(chargeid);
-                        for(RWCharge z2 : allcharge)
+                        
+                        if(cid == z2.getchargeID())
+                            //match found¨
                         {
-                            
-                            if(cid == z2.getchargeID())
-                                //match found¨
-                            {
-                                result = "Match Found";
-                                break;
-                            }
-                            
+                            result = "Match Found";
+                            break;
                         }
-                    }
-                    if(!result.equals("Match Found"))// if chargeid is null it will be added to the delete list
-                    {
-                        QBInvoice n = new QBInvoice();
                         
-                        n.setinvoiceId(y2.getinvoiceId());
-                        n.setAmount(y2.getAmount());
-                        n.setQBCustomer(y2.getqbCustomer());
-                        n.setcustomFields(y2.getcustomFields());
-                        
-                        
-                        deletelist.add(n);
                     }
                 }
-                
-                DeleteInvoice delete = new DeleteInvoice();
-                 if(!deletelist.isEmpty())
+                if(!result.equals("Match Found"))// if chargeid is null it will be added to the delete list
+                {
+                    QBInvoice n = new QBInvoice();
+                    
+                    n.setinvoiceId(y2.getinvoiceId());
+                    n.setAmount(y2.getAmount());
+                    n.setQBCustomer(y2.getqbCustomer());
+                    n.setcustomFields(y2.getcustomFields());
+                    
+                    
+                    deletelist.add(n);
+                }
+            }
+            
+            DeleteInvoice delete = new DeleteInvoice();
+            if(!deletelist.isEmpty())
             {
-                 delete.deleteinvoice(deletelist,config);
+                delete.deleteinvoice(deletelist,config);
                 logdb.updateinvoicelog(deletelist,"delete");
             }
-               
-            allinvoice = x2.retrieveInvoice(config);// get the updated list of invoices after the deletion    
-                //----------------------------------------------------------------------
-                //Second: update the amount field and insert
-                
-                
-                
-                String compareresult = "Match";
-                for (RWCharge y3 : allcharge) {
-                    
-                    
-                    for(QBInvoice z3 : allinvoice)
-                    {
-                        ParseChargeID xml = new ParseChargeID();
-                        String m = z3.getcustomFields();
-                        if (!m.equals("0")){
-                            
-                            String compare = xml.parsechargeid(m);
-                            if(y3.getchargeID() == Integer.parseInt(compare))
-                            {
-                                //match is found
-                                // check if the amount field is the same
-                                double fixamount = z3.getAmount();//*100;
-                                if(!Objects.equals(fixamount, y3.getAmount()))
-                                { QBInvoice n = new QBInvoice();
-                                n.setId(z3.getId());
-                                n.setAmount(y3.getAmount());
-                                n.setQBCustomer(z3.getqbCustomer());
-                                n.setinvoiceId(z3.getinvoiceId());
-                                n.setcustomFields(z3.getcustomFields());
-                                updatelist.add(n);
-                                
-                                }
-                                break;
-                            }
-                             else   compareresult = "Match not found";
-                        }
-                       
-                    }
-                    if(compareresult.equals("Match not found"))
-                    {
-                        QBInvoice n = new QBInvoice();
-                        QBCustomer cust = new QBCustomer();
-                    MappingTable family = new MappingTable(config);
-                cust.setId(family.checkmappingrw(y3.getrwFamily().getId()));
-                        Item item = new Item();
-                        // hard coded till we figurs out how it will get this input
-                        n.setMemo(y3.getDescription());
-                        
-                        n.setDate(y3.getDate());
-                        n.setQBCustomer(cust);
-                        n.setcustomFields("<CustomField><Name>ChargeID</Name><Value>"+y3.getchargeID()+"</Value></CustomField>");
-                        n.setdueDate(y3.getdueDate());
-                        item.setitemQuantity(1);
-                        if(Math.signum(y3.getAmount())== -1.0)
-                        {
-                            item.setitemName("Discount");
-                            n.setItem(item);
-                            n.setAmount(Math.abs(y3.getAmount()));
-                            discountlist.add(n);
-                        }
-                        else
-                        {
-                            item.setitemName(config.getItemname());
-                            n.setItem(item);
-                            n.setAmount(y3.getAmount());
-                            addlist.add(n);
-                        }
-                        
-                    }
-                    
-                }}
-            UpdateInvoice update = new UpdateInvoice();
-            if (!updatelist.isEmpty())
-            {
-                update.updateInvoice(updatelist,config);
-                logdb.updateinvoicelog(updatelist,"update");
-            }
             
-            InsertInvoice add = new InsertInvoice();
-            if(!addlist.isEmpty())
-            {
-                add.insertInvoice(addlist,config);
-                logdb.updateinvoicelog(addlist,"addition");
-            }
-            AddDiscounts discount = new AddDiscounts();   
-            if(!discountlist.isEmpty())
-            {
+            allinvoice = x2.retrieveInvoice(config);// get the updated list of invoices after the deletion
+            //----------------------------------------------------------------------
+            //Second: update the amount field and insert
+            
+            
+            
+            String compareresult = "Match";
+            for (RWCharge y3 : allcharge) {
+                
+                
+                for(QBInvoice z3 : allinvoice)
+                {
+                    ParseChargeID xml = new ParseChargeID();
+                    String m = z3.getcustomFields();
+                    if (!m.equals("0")){
+                        
+                        String compare = xml.parsechargeid(m);
+                        if(y3.getchargeID() == Integer.parseInt(compare))
+                        {
+                            //match is found
+                            // check if the amount field is the same
+                            double fixamount = z3.getAmount();//*100;
+                            if(!Objects.equals(fixamount, y3.getAmount()))
+                            { QBInvoice n = new QBInvoice();
+                            n.setId(z3.getId());
+                            n.setAmount(y3.getAmount());
+                            n.setQBCustomer(z3.getqbCustomer());
+                            n.setinvoiceId(z3.getinvoiceId());
+                            n.setcustomFields(z3.getcustomFields());
+                            updatelist.add(n);
+                            
+                            }
+                            break;
+                        }
+                        else   compareresult = "Match not found";                       
+                    }
+                    
+                }
+                if(compareresult.equals("Match not found"))
+                {
+                    QBInvoice n = new QBInvoice();
+                    QBCustomer cust = new QBCustomer();
+                    MappingTable family = new MappingTable(config);
+                    cust.setId(family.checkmappingrw(y3.getrwFamily().getId()));
+                    Item item = new Item();
+                    // hard coded till we figurs out how it will get this input
+                    n.setMemo(y3.getDescription());
+                    
+                    n.setDate(y3.getDate());
+                    n.setQBCustomer(cust);
+                    n.setcustomFields("<CustomField><Name>ChargeID</Name><Value>"+y3.getchargeID()+"</Value></CustomField>");
+                    n.setdueDate(y3.getdueDate());
+                    item.setitemQuantity(1);
+                    if(Math.signum(y3.getAmount())== -1.0)
+                    {
+                        item.setitemName("Discount");
+                        n.setItem(item);
+                        n.setAmount(Math.abs(y3.getAmount()));
+                        discountlist.add(n);
+                    }
+                    else
+                    {
+                        item.setitemName(config.getItemname());
+                        n.setItem(item);
+                        n.setAmount(y3.getAmount());
+                        addlist.add(n);
+                    }
+                    
+                }
+                
+            }}
+        UpdateInvoice update = new UpdateInvoice();
+        if (!updatelist.isEmpty())
+        {
+            update.updateInvoice(updatelist,config);
+            logdb.updateinvoicelog(updatelist,"update");
+        }
+        InsertInvoice add = new InsertInvoice();
+        if(!addlist.isEmpty())
+        {
+            add.insertInvoice(addlist,config);
+            logdb.updateinvoicelog(addlist,"addition");
+        }
+        AddDiscounts discount = new AddDiscounts();
+        if(!discountlist.isEmpty())
+        {
             discount.addDiscounts(discountlist,config);
             logdb.updateinvoicelog(addlist,"addDiscount");
-            }
-        } catch (SQLException | ClassNotFoundException | ParserConfigurationException | TransformerException | SAXException | IOException ex) {
-            
-            StringWriter errors = new StringWriter();
-ex.printStackTrace(new PrintWriter(errors));
-log.error(ex+errors.toString());
         }
     
 }

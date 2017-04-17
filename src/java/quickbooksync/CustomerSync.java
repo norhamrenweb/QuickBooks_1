@@ -75,7 +75,7 @@ public class CustomerSync {
             map.updatemapping(newcustomer,custids);
             //----------------------------------------------------------------------
            
-        } catch (SQLException | ClassNotFoundException | ParserConfigurationException | TransformerException | SAXException | IOException ex) {
+        } catch (SQLException | ParserConfigurationException | TransformerException | SAXException | IOException ex) {
             
             StringWriter errors = new StringWriter();
 ex.printStackTrace(new PrintWriter(errors));
