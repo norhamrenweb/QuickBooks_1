@@ -79,6 +79,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 
   
         });
+        
         $('#horainicio').datetimepicker({
             format: 'HH:mm',
             locale: userLang.valueOf(),
@@ -95,8 +96,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         
         $("#horainicio").on("dp.change", function (e) {
             $('#horafin').data("DateTimePicker").minDate(e.date);
-        });
-        
+        });       
         $("#horafin").on("dp.change", function (e) {
             $('#horainicio').data("DateTimePicker").maxDate(e.date);
         });
