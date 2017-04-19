@@ -497,21 +497,23 @@ $("#method").on('mouseover', 'option' , function(e) {
             $(function () {
                 $('#addObjective').click(function () {
                     $('#formAddobjetive').removeClass("hidden");
-                    $('#formcontent').addClass("hidden");
+                    $('#formAddcontent').addClass("hidden");
+                    $('#formEditcontent').addClass("hidden");
                     $('#objectiveSelectedForAdd').text($('#subject option:selected').text());
                 });
                 
                 $('#editObjective').click(function () {
                     $('#formAddobjetive').addClass("hidden");
                     $('#formEditobjetive').removeClass("hidden");
-                    $('#formcontent').addClass("hidden");
+                    $('#formAddcontent').addClass("hidden");
+                    $('#formEditcontent').addClass("hidden");
                     $('#objectiveSelectedForEdit').text($('#subject option:selected').text());
                 });
                 $('#content').click(function () {
                     $('#formAddobjetive').addClass("hidden");
                     $('#formEditobjetive').addClass("hidden");
                     $('#formAddcontent').addClass("hidden");
-                    //$('#addContent').attr("disabled", false);
+                    $('#formEditcontent').addClass("hidden");;
                     $('#editContent').attr("disabled", false);
                     $('#delContent').attr("disabled", false);
                     
@@ -524,6 +526,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     $('#formAddobjetive').addClass("hidden");
                     $('#formEditobjetive').addClass("hidden");
                     $('#formAddcontent').addClass("hidden");
+                    $('#formEditcontent').addClass("hidden");
                     //$('#addContent').attr("disabled", false);
                     $('#editContent').attr("disabled", false);
                     $('#delContent').attr("disabled", false);
@@ -535,6 +538,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 });
                 $('#addContent').click(function () {
                     $('#formAddcontent').removeClass("hidden");
+                    $('#formEditobjetive').addClass("hidden");
                     $('#contentSelectedForAdd').text($('#objective option:selected').text());
                 });
                 $('#editContent').click(function () {
@@ -572,6 +576,10 @@ $("#method").on('mouseover', 'option' , function(e) {
                     //Añadimos el nombre del method para saber que estamos editando
                     $('#methodSelectedForEdit').text($('#method option:selected').text());
                 });
+                $('#delMethod').click(function () {
+                    $('#methodSelectForDelete').text($('#method option:selected').text());
+                });
+                
                  $('#level').click(function () {
                     $('#objective').empty();
                     $('#namenewobjective').val('');
@@ -629,13 +637,13 @@ $("#method").on('mouseover', 'option' , function(e) {
                             </select>
                             <div class="col-xs-12" style="padding-top: 10px;">
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="add" id="addObjective"/>
+                                    <input type="button" class="btn btn-success" disabled data-toggle="tooltip" data-placement="bottom" value="add" id="addObjective"/>
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editObjective"/>
+                                    <input type="button" class="btn btn-warning" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editObjective"/>
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="modal" data-target="#confirmedDeleteObjective" data-placement="bottom" value="del" id="delObjective"/>
+                                    <input type="button" class="btn btn-danger" disabled data-toggle="modal" data-target="#confirmedDeleteObjective" data-placement="bottom" value="del" id="delObjective"/>
                                 </div>
                             </div>
                         </div>
@@ -648,13 +656,13 @@ $("#method").on('mouseover', 'option' , function(e) {
                             </select>
                             <div class="col-xs-12" style="padding-top: 10px;">
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="add" id="addContent">
+                                    <input type="button" class="btn btn-success" disabled data-toggle="tooltip" data-placement="bottom" value="add" id="addContent">
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editContent">
+                                    <input type="button" class="btn btn-warning" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editContent">
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" disabled data-toggle="modal" data-target="#confirmedDeleteContent" data-placement="bottom" value="del" id="delContent" >
+                                    <input type="button" class="btn btn-danger" disabled data-toggle="modal" data-target="#confirmedDeleteContent" data-placement="bottom" value="del" id="delContent" >
                                 </div>
                             </div>
                         </div>
@@ -673,8 +681,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <label class="control-label">Comments</label>
                             <textarea type="text" class="form-control" name="TXTnamenewobjective" id="descriptionnewobjective"  placeholder="Comments"></textarea>
                         </div>
-                        <div class="col-xs-2 center-block form-inline">
-                            <input type="button" name="AddObjective" value="save" class="btn btn-detalles" id="AddObjective" data-target=".bs-example-modal-lg" onclick="saveaddObjective()"/>
+                        <div class="col-xs-2 text-center form-group paddingLabel">
+                            <input type="button" name="AddObjective" value="save" class="btn btn-success" id="AddObjective" data-target=".bs-example-modal-lg" onclick="saveaddObjective()"/>
                         </div>
                 </fieldset>
                 <fieldset class="hidden" id="formEditobjetive">
@@ -688,8 +696,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <label class="control-label">Comments</label>
                             <textarea type="text" class="form-control" name="TXTeditDescriptionObjective" id="editDescriptionObjective"  placeholder="Comments"></textarea>
                         </div>
-                        <div class="col-xs-2 center-block form-inline">
-                            <input type="button" name="AddObjective" value="Save" class="btn btn-detalles" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveeditObjective()"/>
+                        <div class="col-xs-2 center-block form-group paddingLabel">
+                            <input type="button" name="AddObjective" value="Save" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveeditObjective()"/>
    
                         </div>
                 </fieldset>
@@ -705,8 +713,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <label class="control-label">Comments</label>
                             <input type="text" class="form-control" name="TXTnamenewcontent" id="commentsnewcontent"  placeholder="Comments">
                         </div>
-                        <div class="col-xs-3 center-block form-inline">
-                            <input type="button" name="AddContent" value="save" class="btn btn-detalles" id="AddContent" data-target=".bs-example-modal-lg" onclick="saveaddContent()"/>
+                        <div class="col-xs-3 center-block form-group paddingLabel">
+                            <input type="button" name="AddContent" value="save" class="btn btn-success" id="AddContent" data-target=".bs-example-modal-lg" onclick="saveaddContent()"/>
                                 
                             
                         </div>
@@ -725,8 +733,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <label class="control-label">Comments</label>
                             <input type="text" class="form-control" name="TXTnameeditcontent" id="editCommentsContent"  placeholder="Comments">
                         </div>
-                        <div class="col-xs-3 center-block form-inline">
-                            <input type="button" name="EditContent" value="save" class="btn btn-detalles" id="EditContent" data-target=".bs-example-modal-lg" onclick="saveeditContent()"/> 
+                        <div class="col-xs-3 center-block form-group paddingLabel">
+                            <input type="button" name="EditContent" value="save" class="btn btn-success" id="EditContent" data-target=".bs-example-modal-lg" onclick="saveeditContent()"/> 
                         </div>
                     </div>
                 </fieldset>        
@@ -736,21 +744,21 @@ $("#method").on('mouseover', 'option' , function(e) {
                     <div class="col-xs-12">
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Method</label>
-                            <select class="form-control" size="2" name="method" id="method">
+                            <select class="form-control methodSelect" size="2" name="method" id="method">
                                 <c:forEach var="method" items="${methods}">
                                     <option value="${method.id[0]}"  data-title="${method.name}" data-content="${method.description}">${method.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
-                        <div class="col-xs-9" style="padding-top: 10px;">
-                            <div class="col-xs-4 text-center">
-                                <input type="button" data-toggle="tooltip" data-placement="bottom" value="add" id="addMethod">
+                        <div class="col-xs-9 form-group paddingLabel">
+                            <div class="col-xs-2 text-center ">
+                                <input type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" value="add" id="addMethod">
                             </div>
-                            <div class="col-xs-4 text-center">
-                                <input type="button" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editMethod">
+                            <div class="col-xs-2 text-center">
+                                <input type="button" class="btn btn-warning" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editMethod">
                             </div>
-                            <div class="col-xs-4 text-center">
-                                <input type="button" disabled data-toggle="modal" data-target="#confirmedDeleteMethod" data-placement="bottom" value="del" id="delMethod" >
+                            <div class="col-xs-2 text-center">
+                                <input type="button" class="btn btn-danger" disabled data-toggle="modal" data-target="#confirmedDeleteMethod" data-placement="bottom" value="del" id="delMethod" >
                             </div>
                         </div>
                     </div>
@@ -758,7 +766,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 </fieldset>
                 <fieldset class="hidden" id="formAddmethod">
                     <legend>Add method</legend>  
-                    <div class="col-xs-12" style="margin-top: 20px;">
+                    <div class="col-xs-12">
 
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Name new method</label>
@@ -768,14 +776,14 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <label class="control-label">Comments</label>
                             <input type="text" class="form-control" name="TXTnamenewmethod" id="commentsnewmethod"  placeholder="Comments">
                         </div>
-                        <div class="col-xs-3 center-block form-inline">
-                            <input type="button" name="Addmethod" value="save" class="btn btn-detalles" id="Addmethod" data-target=".bs-example-modal-lg" onclick="saveaddMethod()"/>
+                        <div class="col-xs-3 center-block form-group paddingLabel">
+                            <input type="button" name="Addmethod" value="save" class="btn btn-success" id="Addmethod" data-target=".bs-example-modal-lg" onclick="saveaddMethod()"/>
                         </div>
                     </div>
                 </fieldset>
                 <fieldset class="hidden" id="formEditmethod">
                     <legend>Edit method in <span id="methodSelectedForEdit"></span></legend>  
-                    <div class="col-xs-12" style="margin-top: 20px;">
+                    <div class="col-xs-12">
 
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Edit method</label>
@@ -785,8 +793,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <label class="control-label">Comments</label>
                             <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="Comments">
                         </div>
-                        <div class="col-xs-3 center-block form-inline">
-                            <input type="button" name="EditMethod" value="save" class="btn btn-detalles" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveeditMethod()"/> 
+                        <div class="col-xs-3 center-block form-group paddingLabel">
+                            <input type="button" name="EditMethod" value="save" class="btn btn-success" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveeditMethod()"/> 
                         </div>
                     </div>
                 </fieldset>        
@@ -835,6 +843,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="myModalLabel">Are you sure you want to delete this method?</h4>
+                            <h1 id="methodSelectForDelete"></h1>
                         </div>
                         <div class="modal-body">
                             <button type="button" class="btn btn-default" data-dismiss="modal" id="" onclick="deleteMethod()">Yes</button>

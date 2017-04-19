@@ -32,10 +32,24 @@
     }
            
                 $("#contenedorPropiertys").on("hide.bs.collapse", function(){
-                    $("#showAttempteds").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
+                    $("#showPropiertys").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
                 });
-                $("#contenedorAttempted").on("show.bs.collapse", function(){
-                  $("#showAttempteds").html('<span class="glyphicon glyphicon-triangle-top"></span>');
+                $("#contenedorPropiertys").on("show.bs.collapse", function(){
+                  $("#showPropiertys").html('<span class="glyphicon glyphicon-triangle-top"></span>');
+                });
+                
+                $("#contenedorDate").on("hide.bs.collapse", function(){
+                    $("#showDate").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
+                });
+                $("#contenedorDate").on("show.bs.collapse", function(){
+                  $("#showDate").html('<span class="glyphicon glyphicon-triangle-top"></span>');
+                });
+                
+                $("#contenedorDetails").on("hide.bs.collapse", function(){
+                    $("#showDetails").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
+                });
+                $("#contenedorDetails").on("show.bs.collapse", function(){
+                  $("#showDetails").html('<span class="glyphicon glyphicon-triangle-top"></span>');
                 });
 
 
@@ -95,7 +109,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 		$('.quitar').click(function() { return !$('#destino option:selected').remove().appendTo('#origen'); });
 		$('.pasartodos').click(function() { $('#origen option').each(function() { $(this).remove().appendTo('#destino'); }); });
 		$('.quitartodos').click(function() { $('#destino option').each(function() { $(this).remove().appendTo('#origen'); }); });
-		$('.submit').click(function() { $('#destino option').prop('selected', 'selected'); });
+		//$('.submit').click(function() { $('#destino option').prop('selected', 'selected'); });
 	});
         
         var ajax;
@@ -208,8 +222,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 
         ajax.send("");
         
-    }
-   
+    }  
     function comboSelectionLoadTemplateLessons()
     {
         if (window.XMLHttpRequest) //mozilla
@@ -311,6 +324,14 @@ $("#method").on('mouseover', 'option' , function(e) {
             .popover{
                 width: 500px;
             }
+            .unStyle
+            {
+                text-align: right;
+                background-color: transparent !important;
+                outline: none !important;
+                box-shadow: none;
+                border: none;
+            }
         </style>
     </head>
     <body>
@@ -319,21 +340,38 @@ $("#method").on('mouseover', 'option' , function(e) {
 
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
-            <fieldset id="">
-                <legend>Lessons propiertys</legend>
-                <div class="col-xs-6 center-block">
-                    <label class="control-label">Name lesson</label>
-                    <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
-                </div>
+            <fieldset>
+                <legend>
+                    Lessons propiertys
+                    <span class="col-xs-12 text-right">
+                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorPropiertys" id="showPropiertys">
+                            <span class="glyphicon glyphicon-triangle-bottom"></span>
+                        </button>
+                    </span>
+                </legend>
+                        
                 
-                <div class="col-xs-6 center-block form-group">
-                    <label class="control-label">Lesson description</label>
-                    <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"></textarea>
+                <div class="form-group collapse" id="contenedorPropiertys">
+                    <div class="col-xs-6 center-block">
+                        <label class="control-label">Name lesson</label>
+                        <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
+                    </div>               
+                    <div class="col-xs-6 center-block form-group">
+                        <label class="control-label">Lesson description</label>
+                        <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"></textarea>
+                    </div>
                 </div>
             </fieldset>
             <fieldset>
-                <legend>Select date</legend>
-                <div class="form-group">
+                <legend>
+                    Select date
+                    <span class="col-xs-12 text-right">
+                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDate" id="showDate">
+                            <span class="glyphicon glyphicon-triangle-bottom"></span>
+                        </button>
+                    </span>
+                </legend>
+                <div class="form-group collapse" id="contenedorDate">
                         <div class='col-xs-4'>
                             <div class="form-group">
                                 <label class="control-label" for="fecha">Date</label>
@@ -371,7 +409,15 @@ $("#method").on('mouseover', 'option' , function(e) {
                 </div>
             </fieldset>
             <fieldset>
-                <legend>Lessons details</legend>
+                <legend>
+                    Lessons details
+                    <span class="col-xs-12 text-right">
+                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" id="showDetails">
+                            <span class="glyphicon glyphicon-triangle-bottom"></span>
+                        </button>
+                    </span>
+                </legend>
+                <div class="form-group collapse" id="contenedorDetails">
                 <div class="col-xs-3 form-group">
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
@@ -412,6 +458,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                                 </c:forEach>
                         </select>
                     </div>
+
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Content</label>
                         <select class="form-control" name="TXTcontent" id="content" multiple>
@@ -420,50 +467,50 @@ $("#method").on('mouseover', 'option' , function(e) {
                                 </c:forEach>
                         </select>
                     </div>
+  
+                    <div class="hidden col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
+                        <div class="col-xs-3 center-block form-group">
+                            <label class="control-label">Select template lessons</label>
+                            <select class="form-control" name="lessons" id="lessons" onchange="comboSelectionTemplateLessons()">
+                                <c:forEach var="template" items="${lessons}">
+                                        <option value="${template.id}" >${template.name}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+    <%--                    <div class="col-xs-3 center-block">
+                            <label class="control-label"><spring:message code="etiq.txtobjective"/></label>
+                            <select class="form-control" name="TXTobjective" id="template">
+                                 <option value="${objective.name}" >${objective.name}</option>
 
-                        
-                <div class="hidden col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
+                            </select>
+                        </div>--%>
+                        <div class="col-xs-3 center-block form-group">
+                            <label class="control-label">Template</label>
+                            <select class="form-control" name="TXTcontent" id="template" multiple>
+                                <c:forEach var="allcontents" items="${allcontents}">
+                                    <option selected="true" value="${allcontents.id[0]}" >${allcontents.name}</option>
+                                </c:forEach><%--
+                                <c:forEach var="contents" items="${contents}">
+                                    <option value="${allcontents.id[0]}" >${allcontents.name}</option>
+                                </c:forEach>--%>
+                            </select>
+                        </div>
+
+                    </div>    
                     <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Select template lessons</label>
-                        <select class="form-control" name="lessons" id="lessons" onchange="comboSelectionTemplateLessons()">
-                            <c:forEach var="template" items="${lessons}">
-                                    <option value="${template.id}" >${template.name}</option>
+                        <label class="control-label">Method</label>
+                        <select class="form-control" size="2" id="method">                   
+                            <c:forEach var="method" items="${methods}">
+                                <option value="${method.id[0]}"  data-title="${method.description}" data-content="${method.description}">${method.name}</option>
                             </c:forEach>
                         </select>
-                    </div>
-<%--                    <div class="col-xs-3 center-block">
-                        <label class="control-label"><spring:message code="etiq.txtobjective"/></label>
-                        <select class="form-control" name="TXTobjective" id="template">
-                             <option value="${objective.name}" >${objective.name}</option>
 
-                        </select>
-                    </div>--%>
-                    <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Template</label>
-                        <select class="form-control" name="TXTcontent" id="template" multiple>
-                            <c:forEach var="allcontents" items="${allcontents}">
-                                <option selected="true" value="${allcontents.id[0]}" >${allcontents.name}</option>
-                            </c:forEach><%--
-                            <c:forEach var="contents" items="${contents}">
-                                <option value="${allcontents.id[0]}" >${allcontents.name}</option>
-                            </c:forEach>--%>
-                        </select>
                     </div>
-                        
-                </div>    
-                <div class="col-xs-3 center-block form-group">
-                    <label class="control-label">Method</label>
-                    <select class="form-control" size="2" id="method">                   
-                        <c:forEach var="method" items="${methods}">
-                            <option value="${method.id[0]}"  data-title="${method.description}" data-content="${method.description}">${method.name}</option>
-                        </c:forEach>
-                    </select>
-                 
-                </div>
-                
-                <div class="col-xs-12 center-block form-group">
-                    <label class="control-label">Attachments</label>
-                    <input type="file" class="form-control" name="TXTfile" id="file">
+
+                    <div class="col-xs-12 center-block form-group">
+                        <label class="control-label">Attachments</label>
+                        <input type="file" class="form-control" name="TXTfile" id="file">
+                    </div>
                 </div>
             </fieldset>
             <fieldset>
@@ -479,7 +526,6 @@ $("#method").on('mouseover', 'option' , function(e) {
                     <div class="col-xs-12">
                         <div class="col-xs-2">
                             <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
-
                                 <c:forEach var="levels" items="${gradelevels}">
                                     <option value="${levels.id[0]}" >${levels.name}</option>
                                 </c:forEach>
@@ -494,17 +540,17 @@ $("#method").on('mouseover', 'option' , function(e) {
                         </div>
                         
                         <div class="col-xs-2">
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn pasar" value="<spring:message code="etiq.txtadd"/> »">
+                            <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
+                                <input type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
                             </div>
                             <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn quitar" value="« <spring:message code="etiq.txtremove"/>">
+                                <input type="button" class="btn btn-danger btn-block quitar" value="« <spring:message code="etiq.txtremove"/>">
                             </div>
                             <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
+                                <input type="button" class="btn btn-success btn-block pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
                             </div>
                             <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
+                                <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
                             </div>
                         </div>
                 
@@ -518,7 +564,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             </fieldset>
             <div class="col-xs-12 text-center">
             <input type="submit" class="btn btn-success" id="createOnClick" disabled="True" value="<spring:message code="etiq.txtcreate"/>">
-        </div>
+            </div>
         </form:form>
         
         </div>
