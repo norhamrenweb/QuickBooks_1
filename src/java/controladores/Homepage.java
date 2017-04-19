@@ -354,8 +354,13 @@ config.setEdudbpswd(rs.getString("edudbpswd"));
 config.setStartdate(rs.getDate("startdate").toString());
 config.setItemname(rs.getString("itemname"));
 }
-                       
+ int checkpoint = 0;
+ if(config.getQbdburl()!= null && config.getQbdbuser()!=null && config.getQbdbpswd()!=null & config.getRwdburl()!=null && config.getRwdbuser()!= null && config.getRwdbpswd()!= null && config.getEdudburl()!= null && config.getEdudbuser()!= null && config.getEdudbpswd()!= null && config.getStartdate()!= null && config.getItemname()!= null)                       
+ {  checkpoint =1;
+ }
+
 mv.addObject("config", config);
+mv.addObject("check", checkpoint);
 return mv;
 
 }
