@@ -10,6 +10,8 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
+    <%@ include file="infouser.jsp" %>
+    <%@ include file="menu.jsp" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
@@ -32,7 +34,6 @@
                                                <option value="${family.familyName}" ></option>
                                            </jstl:forEach>
                                        </select>
-<!--                                   </c:otherwise>-->
   
                                <input type="hidden" class="btn btn-default" name='accion' id="comboEquipment" value="comboEquipment"/>
                            </div>
