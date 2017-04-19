@@ -345,7 +345,7 @@ public class CreateLessonControlador {
      @RequestMapping("/createlesson/createlesson.htm")
      public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String message = "Lesson created";
-        ModelAndView mv = new ModelAndView("redirect:/createlesson.htm?select=start", "message", message);
+        ModelAndView mv = new ModelAndView("redirect:/createlesson/start.htm", "message", message);
        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
          

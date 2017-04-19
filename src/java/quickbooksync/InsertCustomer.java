@@ -31,7 +31,7 @@ public class InsertCustomer {
         
       
         for (QBCustomer customer : addlist) {
-            connectQB.statementQB.executeUpdate("insert int Customers (Name) values ('"+ customer.getName()+"')");
+            connectQB.statementQB.executeUpdate("insert into Customers (Name) values ('"+ customer.getName()+"')");
             ResultSet rs = connectQB.statementQB.executeQuery("Select ID from Customers where Name = '"+ customer.getName() +"'");
             while(rs.next())
             {
