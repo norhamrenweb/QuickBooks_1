@@ -49,10 +49,10 @@
                     <input class="form-control" type="text" value="${config.qbdburl}" name="qbdburl"/>
 
                     <label>Quickbooks DB user:</label>
-                    <input class="form-control" type="text" name="qbdbuser"/>
+                    <input class="form-control" type="text" value="${config.qbdbuser}" name="qbdbuser"/>
 
                     <label>Quickbooks DB pswd:</label>
-                    <input class="form-control" type="text" name="qbdbpswd"/> 
+                    <input class="form-control" type="text" value="${config.qbdbpswd}" name="qbdbpswd"/> 
                 </div>
                 
                 <div class="col-xs-12 panel-heading">  
@@ -60,13 +60,13 @@
                 </div>
                 <div id="ConfigRenweb" class="col-xs-12 panel-collapse collapse form-group">
                     <label>Renweb DB URL:</label>
-                    <input class="form-control" type="text" name="rwdburl"/>
+                    <input class="form-control" type="text" value="${config.rwdburl}" name="rwdburl"/>
 
                     <label>Renweb DB user:</label>
-                    <input class="form-control" type="text" name="rwdbuser"/>
+                    <input class="form-control" type="text" value="${config.rwdbuser}" name="rwdbuser"/>
                 
                     <label>Renweb DB pswd:</label>
-                    <input class="form-control" type="text" name="rwdbpswd"/>
+                    <input class="form-control" type="text" value="${config.rwdbpswd}" name="rwdbpswd"/>
                 </div>
                 
                 <div class="col-xs-12 panel-heading">
@@ -74,10 +74,10 @@
                 </div>
                 <div id="ConfigTime" class="col-xs-12 panel-collapse collapse form-group">
                     <label>Sync Start Date:</label>
-                    <input class="form-control" type="text" name="startdate"/>
+                    <input class="form-control" type="text" value="${config.startdate}" name="startdate"/>
                 
                     <label>Item Name:</label>
-                    <input class="form-control" type="text" name="itemname"/>
+                    <input class="form-control" type="text" value="${config.itemname}" name="itemname"/>
                 </div>
                 
                 
@@ -87,13 +87,13 @@
                                 
                 <div id="ConfigEduweb" class="col-xs-12 panel-collapse collapse">
                     <label>Eduweb DB URL:</label>
-                    <input class="form-control" type="text" name="edudburl"/>
+                    <input class="form-control" type="text" value="${config.edudburl}" name="edudburl"/>
 
                     <Label>Eduweb DB user:</label>
-                    <input class="form-control" type="text" name="edudbuser"/>
+                    <input class="form-control" type="text" value="${config.edudbuser}" name="edudbuser"/>
 
                     <label>Eduweb DB pswd:</label>
-                    <input class="form-control" type="text" name="edudbpswd"/>
+                    <input class="form-control" type="text" value="${config.edudbpswd}" name="edudbpswd"/>
                 </div>
                 <div class="col-xs-12 panel-heading text-right">
                     <input class="btn btn-sm" type="submit" value="Save" opcion="save config"/>   
@@ -121,9 +121,13 @@
             </div>-->
          
             <a href="suhomepage.htm?opcion=custsync"> Customer Sync </a>
+            <br>
             <a href="suhomepage.htm?opcion=paysync"> Payment Sync </a>
+            <br>
             <a href="suhomepage.htm?opcion=invoicesync"> Invoice Sync </a>
+            <br>
             <a href="suhomepage.htm?opcion=runsync"> Sync All </a>
+            <br>
         </div>
          <br/>
         <jstl:out value="${message1}"/> 

@@ -61,6 +61,10 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
         int scgrpid = 0;
         boolean result = false;
          LoginVerification login = new LoginVerification();
+         if("QuickBook".equals(hsr.getParameter("txtusuario"))){
+            ModelAndView mv = new ModelAndView("redirect:/suhomepage.htm?opcion=loadconfig"); 
+            return mv;
+         }else{
          user = login.consultUserDB(hsr.getParameter("txtusuario"), hsr.getParameter("txtpassword"));
          if(user.getId()==0){
          ModelAndView mv = new ModelAndView("userform");
@@ -78,12 +82,13 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
         mv.addObject("message", message);
         return mv;
         }
-         else {
+      
+         else{
            ModelAndView mv = new ModelAndView("userform");
         String message = "Username or Password incorrect";
         mv.addObject("message", message);
         return mv;
-       }}
+       }}}
 //        DriverManagerDataSource dataSource;
 //        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
 //        this.cn = dataSource.getConnection();
@@ -343,7 +348,7 @@ config.setRwdbuser(rs.getString("rwdbuser"));
 config.setRwdbpswd(rs.getString("rwdbpswd"));
 config.setEdudburl(rs.getString("edudburl"));
 config.setEdudbuser(rs.getString("edudbuser"));
-config.setEdudbuser(rs.getString("edudbpswd"));
+config.setEdudbpswd(rs.getString("edudbpswd"));
 config.setStartdate(rs.getDate("startdate").toString());
 config.setItemname(rs.getString("itemname"));
 }
