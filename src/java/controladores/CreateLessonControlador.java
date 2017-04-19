@@ -289,7 +289,7 @@ public class CreateLessonControlador {
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
-                alumnos.setPlacement("Placement");
+                alumnos.setNextlevel("Placement");
                 alumnos.setSubstatus("Substatus");
                 listaAlumnos.add(alumnos);
             }
@@ -328,7 +328,7 @@ public class CreateLessonControlador {
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
-                alumnos.setPlacement("Placement");
+                alumnos.setNextlevel("Placement");
                 alumnos.setSubstatus("Substatus");
                 listaAlumnos.add(alumnos);
             }

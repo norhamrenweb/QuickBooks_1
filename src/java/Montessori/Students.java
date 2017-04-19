@@ -34,15 +34,15 @@ public class Students {
     private ServletContext servlet;
     private Connection cn;
     private CachedRowSet rs;
-    private String placement;//new
+    private String nextlevel;//new
     private String substatus;//new
     
-    public String getPlacement() {
-        return placement;
+    public String getNextlevel() {
+        return nextlevel;
     }
 
-    public void setPlacement(String placement) {
-        this.placement = placement;
+    public void setNextlevel(String nextlevel) {
+        this.nextlevel = nextlevel;
     }
 
     public String getSubstatus() {

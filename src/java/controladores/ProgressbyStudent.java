@@ -105,7 +105,7 @@ public class ProgressbyStudent {
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
-                alumnos.setPlacement("Placement");
+                alumnos.setNextlevel("Placement");
                 alumnos.setSubstatus("Substatus");
                 listaAlumnos.add(alumnos);
             }
@@ -258,7 +258,7 @@ public class ProgressbyStudent {
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
-                alumnos.setPlacement(rs.getString("Placement"));
+                alumnos.setNextlevel(rs.getString("Placement"));
                 alumnos.setSubstatus(rs.getString("Substatus"));
                 listaAlumnos.add(alumnos);
             }
@@ -277,7 +277,7 @@ public class ProgressbyStudent {
     @ResponseBody
     public ModelAndView newpage(HttpServletRequest hsr, HttpServletResponse hsr1, Model model) throws Exception
     {
-            ModelAndView mv = new ModelAndView("progressdetails");
+         ModelAndView mv = new ModelAndView("progressdetails");
             Objective o = new Objective();
                  String[] hi = hsr.getParameterValues("data");
                  servlet = hsr.getServletContext();
@@ -295,7 +295,11 @@ public class ProgressbyStudent {
              Statement st = this.cn.createStatement();
             
           ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id="+jsonObj.getString("objectiveid")+" AND student_id = "+jsonObj.getString("studentid"));
-          
+          if(!rs1.next())
+          { String message = "Student does not have lessons under the selected objective";
+              mv.addObject("message",message);
+          }
+          else{
            while (rs1.next())
             {
           Progress p = new Progress();
@@ -342,10 +346,6 @@ while(rs5.next())
                mastereddate = sdfDate.format(stamp);
   
 }
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex);
-        }
-
         String prog = new Gson().toJson(progress);
         String rating = new Gson().toJson(finalrating);
         JSONObject obj = new JSONObject();
@@ -364,8 +364,11 @@ while(rs5.next())
         mv.addObject("studentname", jsonObj.getString("studentname"));
         mv.addObject("gradelevel",jsonObj.getString("gradelevel"));
         mv.addObject("subject",jsonObj.getString("subject"));
-        mv.addObject("objective", o.fetchName(Integer.parseInt(jsonObj.getString("objectiveid")), servlet));
+        mv.addObject("objective", o.fetchName(Integer.parseInt(jsonObj.getString("objectiveid")), servlet));}
 //        mv.addObject(obj);
+} catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+        }
         return mv;
     }
     //based on student selected and objective selected
@@ -476,7 +479,7 @@ while(rs5.next())
                 student.setFecha_nacimiento(rs.getString("Birthdate"));
                 student.setFoto(rs.getString("PathToPicture"));
                 student.setLevel_id(rs.getString("GradeLevel"));
-//                student.setPlacement("Placement");
+                student.setNextlevel(rs.getString("NextGradeLevel"));
 //                student.setSubstatus("Substatus");
                
             }

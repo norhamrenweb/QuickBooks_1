@@ -155,11 +155,12 @@ public class ProgressControlador extends MultiActionController{
     }
     public ModelAndView saveRecords(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("redirect:/lessonprogress/start.htm");
+        String message="Records successfully saved"; 
+        String[]lessonid=hsr.getParameterValues("TXTlessonid");
+        ModelAndView mv = new ModelAndView("redirect:/lessonprogress.htm?select6=loadRecords&LessonsSelected="+lessonid[0],"message",message);
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-        String[]lessonid=hsr.getParameterValues("TXTlessonid");
         String[] objectiveid = hsr.getParameterValues("TXTobjectiveid");
         String[] comments = hsr.getParameterValues("TXTcomment");
         String[] ratings= hsr.getParameterValues("TXTrating");
@@ -194,6 +195,8 @@ public class ProgressControlador extends MultiActionController{
 
               }
     } 
+     
+  //   mv.addObject("message",message);
         return mv;
         
     }
