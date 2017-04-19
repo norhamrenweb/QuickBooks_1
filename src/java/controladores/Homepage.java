@@ -236,20 +236,22 @@ DriverManagerDataSource dataSource;
       ResultSet rs = ps.executeQuery("Select * from syncconfig");
 
 Config config = new Config();
-while(rs.next())
-{
-config.setQbdburl(rs.getString("qbdburl"));
-config.setQbdbuser(rs.getString("qbdbuser"));
-config.setQbdbpswd(rs.getString("qbdbpswd"));
-config.setRwdburl(rs.getString("rwdburl"));
-config.setRwdbuser(rs.getString("rwdbuser"));
-config.setRwdbpswd(rs.getString("rwdbpswd"));
-config.setEdudburl(rs.getString("edudburl"));
-config.setEdudbuser(rs.getString("edudbuser"));
-config.setEdudbuser(rs.getString("edudbpswd"));
-config.setStartdate(rs.getDate("startdate").toString());
-config.setItemname(rs.getString("itemname"));
-}
+GetConfig get = new GetConfig();
+config = get.getConfig();
+//while(rs.next())
+//{
+//config.setQbdburl(rs.getString("qbdburl"));
+//config.setQbdbuser(rs.getString("qbdbuser"));
+//config.setQbdbpswd(rs.getString("qbdbpswd"));
+//config.setRwdburl(rs.getString("rwdburl"));
+//config.setRwdbuser(rs.getString("rwdbuser"));
+//config.setRwdbpswd(rs.getString("rwdbpswd"));
+//config.setEdudburl(rs.getString("edudburl"));
+//config.setEdudbuser(rs.getString("edudbuser"));
+//config.setEdudbpswd(rs.getString("edudbpswd"));
+//config.setStartdate(rs.getDate("startdate").toString());
+//config.setItemname(rs.getString("itemname"));
+//}
                         
                       CustomerSync s = new CustomerSync();
                       s.customersync(config);
