@@ -25,7 +25,7 @@
         p:password="BravoJuggle+396"/>
 <bean id="dataSourceEDU" class="org.springframework.jdbc.datasource.DriverManagerDataSource"
         p:driverClassName="org.postgresql.Driver"
-        p:url="jdbc:postgresql://localhost:5432/postgres"
+        p:url="jdbc:postgresql://192.168.1.191:5432/postgres"
          p:username="postgres"
         p:password="rapunzel"/>
 
