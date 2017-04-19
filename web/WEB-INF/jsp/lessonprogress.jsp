@@ -70,7 +70,7 @@
         $('#table_progress').DataTable(
                 {
                    "columnDefs": [
-                { "width": "5%", "targets": 0, "visible": false },
+                { "width": "5%", "targets": 0 },
                 { "width": "10%", "targets": 1 },
                 { "width": "5%", "targets": 2 },
                 { "width": "55%", "targets": 3 },
@@ -182,7 +182,7 @@ collectionAttendance.each(function() {
                     <table id="table_progress" class="display" >
                         <thead>
                             <tr>
-                                <td>Student Id</td>
+                                <td hidden="true">Student Id</td>
                                 <td>Student Name</td>
                                 <td>Rating</td>
                                 <td>Comment</td>
@@ -193,7 +193,7 @@ collectionAttendance.each(function() {
                         <tbody>
                             <c:forEach var="record" items="${attendancelist}" >
                                 <tr class="rows">
-                                    <td><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
+                                    <td hidden="true"><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
                                     <td>${record.studentname}</td>
                                     <td>
 
