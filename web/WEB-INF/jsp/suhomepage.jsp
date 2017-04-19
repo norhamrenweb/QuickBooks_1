@@ -14,7 +14,7 @@
     <%@ include file="infouser.jsp" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>QuickBooks Sync</title>
        
         <link href="recursos/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         <script src="recursos/js/jquery-2.2.0.js" type="text/javascript"></script>
@@ -33,6 +33,11 @@
             i
             {
                 padding: 5px;
+            }
+            .divButtonSync
+            {
+                margin-top: 10px;
+                margin-bottom: 10px;
             }
         </style>
     </head>
@@ -83,8 +88,7 @@
                 
                 <div class="col-xs-12 panel-heading">
                     <i data-toggle="collapse" href="#ConfigEduweb" class="glyphicon glyphicon-plus-sign"></i>Config Eduweb
-                </div>    
-                                
+                </div>                                   
                 <div id="ConfigEduweb" class="col-xs-12 panel-collapse collapse">
                     <label>Eduweb DB URL:</label>
                     <input class="form-control" type="text" value="${config.edudburl}" name="edudburl"/>
@@ -95,13 +99,14 @@
                     <label>Eduweb DB pswd:</label>
                     <input class="form-control" type="text" value="${config.edudbpswd}" name="edudbpswd"/>
                 </div>
+                
                 <div class="col-xs-12 panel-heading text-right">
-                    <input class="btn btn-sm" type="submit" value="Save" opcion="save config"/>   
+                    <input class="btn btn-success btn-sm" type="submit" value="Save" opcion="save config"/>   
                 </div>
             </div>
         </form:form>
-            </div>
-        <div class="col-lg-4 col-md-4 col-xs-12 text-center">
+        
+            <div class="col-lg-4 col-md-4 col-xs-12 text-center" style="border-left: solid 2px lightgrey; border-right: solid 2px lightgrey;">
             <label>Syncronized Quickbooks with RenWeb</label>
             <input type="image" src="recursos/img/images_QB/Syncronized.gif" href="suhomepage.htm?opcion=runsync" class="form-group">
         <br/>
@@ -119,21 +124,25 @@
             <div class="col-lg-12 col-md-12 col-xs-12 text-center form-group">
                 <input class="btn btn-sm" type="submit" value="Sync All" opcion=""/> 
             </div>-->
-         
-            <a href="suhomepage.htm?opcion=custsync"> Customer Sync </a>
-            <br>
-            <a href="suhomepage.htm?opcion=paysync"> Payment Sync </a>
-            <br>
-            <a href="suhomepage.htm?opcion=invoicesync"> Invoice Sync </a>
-            <br>
-            <a href="suhomepage.htm?opcion=runsync"> Sync All </a>
-            <br>
+            <div class="col-xs-6 col-xs-offset-3 divButtonSync">
+                <a class="btn btn-success btn-block" href="suhomepage.htm?opcion=custsync"> Customer Sync </a>
+            </div>
+            <div class="col-xs-6 col-xs-offset-3 divButtonSync">
+                <a class="btn btn-success btn-block" href="suhomepage.htm?opcion=paysync"> Payment Sync </a>
+            </div>
+            
+            <div class="col-xs-6 col-xs-offset-3 divButtonSync">
+                <a class="btn btn-success btn-block" href="suhomepage.htm?opcion=invoicesync"> Invoice Sync </a>
+            </div>
+            <div class="col-xs-6 col-xs-offset-3 divButtonSync">
+                <a class="btn btn-success btn-block" href="suhomepage.htm?opcion=runsync"> Sync All </a>   
+            </div>
         </div>
          <br/>
         <jstl:out value="${message1}"/> 
         <br/>
         <div class="col-lg-4 col-md-4 col-xs-12">
-        <a href="familymap2.htm?select2=start"> Map Families </a>
+            <a class="btn btn-primary" href="familymap2.htm?select2=start"> Map Families </a>
         </div>
     </body>
 </html>
