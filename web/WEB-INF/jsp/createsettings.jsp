@@ -607,13 +607,13 @@ $("#method").on('mouseover', 'option' , function(e) {
 
 
         <div class="container">
-            <h1 class="text-center">Create Setting</h1>
+            <h1 class="text-center">Create Scheme of Work</h1>
 
 
             <form:form id="formSettings" method ="post" action="createsetting.htm?select=createsetting" >
 
                 <fieldset>
-                    <legend>Select setting</legend>
+                    <legend>Select an item to edit</legend>
 
                     <div class="col-xs-12">
                         <div class="col-xs-3 form-group">
@@ -745,7 +745,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 </fieldset>        
             </form:form>
                 <fieldset>
-                    <legend>Select Method</legend>
+                    <legend>Select a method to edit</legend>
                     <div class="col-xs-12">
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Method</label>

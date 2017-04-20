@@ -157,24 +157,24 @@ collectionAttendance.each(function() {
         
         
         <div class="container">
-            <h1 class="text-center">Progress Lessons</h1>
+            <h1 class="text-center">Lesson Progress</h1>
 <p></p>
 
             <form:form id="formStudents" method ="post" action="lessonprogress.htm?select6=saveRecords" >
 
 
                 <fieldset>
-                    <legend>Lessons details</legend>
+                    <legend>Lesson details</legend>
 
                     <div class="col-xs-3 center-block">
-                        Name lesson:<label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
+                        Lesson Name:  <label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
                     </div>
 
                     <div class="col-xs-3 center-block">
-                        Subject:<label class="control-label"> ${lessondetailes.subject.name}</label>
+                        Subject:  <label class="control-label"> ${lessondetailes.subject.name}</label>
                     </div>
                     <div class="col-xs-3 center-block">
-                        Objective:<label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
+                        Objective:  <label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
                     </div>  
                 </fieldset>   
 
@@ -187,7 +187,7 @@ collectionAttendance.each(function() {
                                 <td>Student Name</td>
                                 <td>Rating</td>
                                 <td>Comment</td>
-                                <td>Attendance Code <input type="button" class="btn btn-xs btn-info" id="rellenarP" value="Fill P"> <input type="button" class="btn btn-xs btn-info" id="rellenar" value="clear"></td>
+                                <td>Attendance Code <input type="button" class="btn btn-xs btn-info" id="rellenarP" value="Fill P"> <input type="button" class="btn btn-xs btn-info" id="rellenar" value="Clear"></td>
 
                             </tr>
                         </thead>

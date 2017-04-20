@@ -336,13 +336,13 @@ $("#method").on('mouseover', 'option' , function(e) {
     </head>
     <body>
         <div class="container">
-        <h1 class="text-center">Create Lessons</h1>
+        <h1 class="text-center">Create New Lesson</h1>
 
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
             <fieldset>
                 <legend>
-                    Lessons propiertys
+                    Lesson name and description
                     <span class="col-xs-12 text-right">
                         <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorPropiertys" id="showPropiertys">
                             <span class="glyphicon glyphicon-triangle-bottom"></span>
@@ -353,7 +353,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 
                 <div class="form-group collapse" id="contenedorPropiertys">
                     <div class="col-xs-6 center-block">
-                        <label class="control-label">Name lesson</label>
+                        <label class="control-label">Lesson Name</label>
                         <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
                     </div>               
                     <div class="col-xs-6 center-block form-group">
@@ -364,7 +364,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             </fieldset>
             <fieldset>
                 <legend>
-                    Select date
+                    Select date and time
                     <span class="col-xs-12 text-right">
                         <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDate" id="showDate">
                             <span class="glyphicon glyphicon-triangle-bottom"></span>
@@ -410,7 +410,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             </fieldset>
             <fieldset>
                 <legend>
-                    Lessons details
+                    Lesson details
                     <span class="col-xs-12 text-right">
                         <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" id="showDetails">
                             <span class="glyphicon glyphicon-triangle-bottom"></span>
