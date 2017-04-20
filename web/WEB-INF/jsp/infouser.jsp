@@ -61,11 +61,18 @@
 </head>
 
 <div class="infousuario">
-    <div class="panel-heading">
+    <div class="col-xs-3">
         <a class="btnBandera" href='datosIdioma.htm?lenguaje=en'>English</a>
         <a class="btnBandera" href='datosIdioma.htm?lenguaje=es'>Español</a>
         <a class="btnBandera" href='datosIdioma.htm?lenguaje=ar'>Arabic</a>
     </div>
-    <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>     
+    <div class="col-xs-7">
+        <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>
+    </div>
+    
+    <div class="col-xs-2 text-right">
+        <button class="btn btn-default"><a href="cerrarLogin.htm">Log out</a></button>
+    </div>
+    
 </div>           
 
