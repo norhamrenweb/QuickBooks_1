@@ -492,7 +492,7 @@ $(function() {
                         <div class="col-xs-12 text-center">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#demographic">Demographic</a></li>
-                                <li><a data-toggle="tab" href="#gradebook">Gradebook</a></li>
+                                <li><a data-toggle="tab" href="#gradebook">Academic Progress</a></li>
                                 <li><a href="#">ReportCard</a></li>
 <!--                                <li><a href="#">Menu 3</a></li>-->
                             </ul>
