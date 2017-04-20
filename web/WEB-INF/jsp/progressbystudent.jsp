@@ -204,7 +204,7 @@
                     
                     $('#BOD').text(datebirthday);
                     $('#gradelevel').text(info.level_id);
-                    
+                    $('#nextlevel').text(info.nextlevel);
                     $('#student').text(info.nombre_students);
                     $('#studentid').val(info.id_students);
                     if(typeof info.foto === 'undefined'){

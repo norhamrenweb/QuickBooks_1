@@ -26,9 +26,9 @@
        var myDate = new Date();
          //Muestra calendario
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
-         var lessoncreate = '<%= request.getParameter("message") %>';
+        var lessoncreate = '<%= request.getParameter("message") %>';
          
-     if (lessoncreate === 'Lesson created' ){
+     if (lessoncreate === 'Records successfully saved' ){
      $('#myModal').modal({
         show: 'false'
     });
@@ -242,7 +242,23 @@ collectionAttendance.each(function() {
                 </div>
             </form:form>
         </div>
-        
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+ <div class="modal-dialog" role="document">
+   <div class="modal-content">
+     <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
+     </div>
+     <div class="modal-body text-center">
+      <H1><%= request.getParameter("message") %></H1>
+     </div>
+<!--      <div class="modal-footer">
+       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+       <button type="button" class="btn btn-primary">Save changes</button>
+     </div>-->
+   </div>
+ </div>
+</div>
 
 
 
