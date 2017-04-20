@@ -68,7 +68,7 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
          user = login.consultUserDB(hsr.getParameter("txtusuario"), hsr.getParameter("txtpassword"));
          if(user.getId()==0){
          ModelAndView mv = new ModelAndView("userform");
-        String message = "No access rights defined";
+        String message = "Username or password incorrect";
         mv.addObject("message", message);
         return mv;
          }

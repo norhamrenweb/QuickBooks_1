@@ -179,8 +179,12 @@ public class ProgressControlador extends MultiActionController{
     }
    
      for(int i=0;i<studentids.length;i++)
-    {         ResultSet rs1 = st.executeQuery("select id from rating where name = '"+ratings[i]+"'");
+         
+    {   
+        if(!ratings[i].isEmpty()){ 
+        ResultSet rs1 = st.executeQuery("select id from rating where name = '"+ratings[i]+"'");
                 int ratingid = 0;
+                
                 while(rs1.next())
                 {
                ratingid = rs1.getInt("id");
@@ -194,9 +198,10 @@ public class ProgressControlador extends MultiActionController{
                 st.executeUpdate("update progress_report set comment_date = now(),comment = '"+comments[i]+"',rating_id ='"+ratingid+"' ,lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
 
               }
+    }
     } 
      
-  //   mv.addObject("message",message);
+//     mv.addObject("message",message);
         return mv;
         
     }
