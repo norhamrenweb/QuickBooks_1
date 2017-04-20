@@ -22,9 +22,7 @@
 
 
  $(document).ready(function(){
-       var userLang = navigator.language || navigator.userLanguage;
-       var myDate = new Date();
-         //Muestra calendario
+
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
         var lessoncreate = '<%= request.getParameter("message") %>';
          
@@ -33,48 +31,14 @@
         show: 'false'
     });
     }
- 
-         
-        $('#fecha').datetimepicker({
-            
-            format: 'YYYY-MM-DD',
-            locale: userLang.valueOf(),
-            daysOfWeekDisabled: [0, 6],
-            useCurrent: false//Important! See issue #1075
-            //defaultDate: '08:32:33',
-
-  
-        });
-        $('#horainicio').datetimepicker({
-            format: 'HH:mm',
-            locale: userLang.valueOf(),
-            useCurrent: false, //Important! See issue #1075
-            stepping: 5
-        });
-        $('#horafin').datetimepicker({
-            
-            format: 'HH:mm',
-            locale: userLang.valueOf(),
-            useCurrent: false, //Important! See issue #1075
-            stepping: 5
-        });
         
-        $("#horainicio").on("dp.change", function (e) {
-            $('#horafin').data("DateTimePicker").minDate(e.date);
-        });
-        
-        $("#horafin").on("dp.change", function (e) {
-            $('#horainicio').data("DateTimePicker").maxDate(e.date);
-        });
-        
-
         $('#table_progress').DataTable(
                 {
                    "columnDefs": [
                 { "width": "5%", "targets": 0 },
-                { "width": "10%", "targets": 1 },
+                { "width": "20%", "targets": 1 },
                 { "width": "5%", "targets": 2 },
-                { "width": "55%", "targets": 3 },
+                { "width": "45%", "targets": 3 },
                 { "width": "25%", "targets": 4, "orderable": false }
                 ] 
                 });        
@@ -177,7 +141,8 @@ collectionAttendance.each(function() {
                         Objective:  <label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
                     </div>  
                 </fieldset>   
-
+                <fieldset style="margin-top: 10px;">
+                    <legend></legend>
                 <div class="col-xs-12">
                     
                     <table id="table_progress" class="display" >
@@ -197,7 +162,6 @@ collectionAttendance.each(function() {
                                     <td hidden="true"><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
                                     <td>${record.studentname}</td>
                                     <td>
-
                                         <select name="TXTrating" name="rating" class="rating">
                                             <c:if test="${empty record.rating}">
                                                 <option selected></option>
@@ -205,6 +169,7 @@ collectionAttendance.each(function() {
                                             <c:if test="${not empty record.rating}">
                                                 <option selected>${record.rating}</option>
                                             </c:if>
+                                            <option></option>
                                             <option>N/A</option>
                                             <option>Presented</option>
                                             <option>Attempted</option>
@@ -233,7 +198,7 @@ collectionAttendance.each(function() {
                     </table>
 
                 </div>
-
+                </fieldset>
                 <div class="col-xs-6 text-center">   
                     <input type="submit" class="btn btn-success" value="Save">
                 </div>
@@ -242,23 +207,17 @@ collectionAttendance.each(function() {
                 </div>
             </form:form>
         </div>
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-<!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
-     </div>
-     <div class="modal-body text-center">
-      <H1><%= request.getParameter("message") %></H1>
-     </div>
-<!--      <div class="modal-footer">
-       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-       <button type="button" class="btn btn-primary">Save changes</button>
-     </div>-->
-   </div>
- </div>
-</div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="titleComment">%= request.getParameter("message") %></h4>
+                    </div>
+                </div>
+            </div>
+        </div>    
+
 
 
 
