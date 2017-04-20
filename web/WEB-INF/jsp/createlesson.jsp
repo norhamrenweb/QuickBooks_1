@@ -23,33 +23,44 @@
          //Muestra calendario
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
          var lessoncreate = '<%= request.getParameter("message") %>';
-       var alumnosSelected = $('#destino').children().length;
+    
      if (lessoncreate === 'Lesson created' ){
      $('#myModal').modal({
         show: 'false'
     });
     }
-           
-                $("#contenedorPropiertys").on("hide.bs.collapse", function(){
-                    $("#showPropiertys").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
-                });
-                $("#contenedorPropiertys").on("show.bs.collapse", function(){
-                  $("#showPropiertys").html('<span class="glyphicon glyphicon-triangle-top"></span>');
-                });
-                
-                $("#contenedorDate").on("hide.bs.collapse", function(){
-                    $("#showDate").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
-                });
-                $("#contenedorDate").on("show.bs.collapse", function(){
-                  $("#showDate").html('<span class="glyphicon glyphicon-triangle-top"></span>');
-                });
-                
-                $("#contenedorDetails").on("hide.bs.collapse", function(){
-                    $("#showDetails").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
-                });
-                $("#contenedorDetails").on("show.bs.collapse", function(){
-                  $("#showDetails").html('<span class="glyphicon glyphicon-triangle-top"></span>');
-                });
+            $( "#showPropiertys" ).click(function() {
+                    $("#contenedorPropiertys").toggleClass('in');
+                    //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
+            });
+            $( "#showDate" ).click(function() {
+                    $("#contenedorDate").toggleClass('in');
+                    //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
+            });
+            $( "#showDetails" ).click(function() {
+                    $("#contenedorDetails").toggleClass('in');
+                    //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
+            });
+//                $("#contenedorPropiertys").on("hide.bs.collapse", function(){
+//                    $("#showPropiertys").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
+////                });
+//                $("#contenedorPropiertys").on("show.bs.collapse", function(){
+//                  $("#showPropiertys").html('<span class="glyphicon glyphicon-triangle-top"></span>');
+//                });
+//                
+//                $("#contenedorDate").on("hide.bs.collapse", function(){
+//                    $("#showDate").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
+//                });
+//                $("#contenedorDate").on("show.bs.collapse", function(){
+//                  $("#showDate").html('<span class="glyphicon glyphicon-triangle-top"></span>');
+//                });
+//                
+//                $("#contenedorDetails").on("hide.bs.collapse", function(){
+//                    $("#showDetails").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
+//                });
+//                $("#contenedorDetails").on("show.bs.collapse", function(){
+//                  $("#showDetails").html('<span class="glyphicon glyphicon-triangle-top"></span>');
+//                });
 
 
 $("#method").on('mouseover', 'option' , function(e) {
@@ -85,6 +96,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             useCurrent: false, //Important! See issue #1075
             stepping: 5
         });
+        
         $('#horafin').datetimepicker({
             
             format: 'HH:mm',
@@ -102,28 +114,33 @@ $("#method").on('mouseover', 'option' , function(e) {
         });
         
     });            
-        var alumnosSelected = $('#destino').children().length;
-        var objectiveSelected = $('#objective').val();  
+        
         $().ready(function() 
 	{ 
-                
+                  
 		$('.pasar').click(function() {
-                   
-                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null){
+                    !$('#origen option:selected').remove().appendTo('#destino');
+                    var alumnosSelected = $('#destino').length;
+                    var objectiveSelected = $('#objective').val();
+                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== ''){
                         $('#createOnClick').attr('disabled', false);
                     }
-                    return !$('#origen option:selected').remove().appendTo('#destino'); 
+                    return;
                 });  
 		$('.quitar').click(function() {
-                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null){
-                        $('#createOnClick').attr('disabled', false);
+                    !$('#destino option:selected').remove().appendTo('#origen');
+                    var alumnosSelected = $('#destino').length;
+                    var objectiveSelected = $('#objective').val();
+                    if(alumnosSelected === 0 || ( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '')){
+                        $('#createOnClick').attr('disabled', true);
                     }
-                    return !$('#destino option:selected').remove().appendTo('#origen'); 
+                    return;  
                 });
 		$('.pasartodos').click(function() {
                     $('#origen option').each(function() { $(this).remove().appendTo('#destino'); });
-                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null){
-                        $('#createOnClick').attr('disabled', false);
+                    var objectiveSelected = $('#objective').val();
+                    if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === ''){
+                        $('#createOnClick').attr('disabled', true);
                     }
                 });
 		$('.quitartodos').click(function() {
@@ -289,7 +306,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
 
-        if(document.getElementById("objective").value === 0 && alumnosSelected !== 0 ){
+        if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("destino").length === 0 ){
             $('#createOnClick').attr('disabled', true);
         }else{
             $('#createOnClick').attr('disabled', false);
@@ -326,12 +343,12 @@ $("#method").on('mouseover', 'option' , function(e) {
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
             <fieldset>
-                <legend>
+                <legend id="showPropiertys">
                     Lesson name and description
-                    <span class="col-xs-12 text-right">
-                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorPropiertys" id="showPropiertys">
+                    <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
+<!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorPropiertys">
                             <span class="glyphicon glyphicon-triangle-bottom"></span>
-                        </button>
+                        </button>-->
                     </span>
                 </legend>
                         
@@ -348,12 +365,12 @@ $("#method").on('mouseover', 'option' , function(e) {
                 </div>
             </fieldset>
             <fieldset>
-                <legend>
+                <legend id="showDate">
                     Select date and time
-                    <span class="col-xs-12 text-right">
-                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDate" id="showDate">
+                    <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
+<!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDate" >
                             <span class="glyphicon glyphicon-triangle-bottom"></span>
-                        </button>
+                        </button>-->
                     </span>
                 </legend>
                 <div class="form-group collapse" id="contenedorDate">
@@ -394,12 +411,12 @@ $("#method").on('mouseover', 'option' , function(e) {
                 </div>
             </fieldset>
             <fieldset>
-                <legend>
+                <legend id="showDetails">
                     Lesson details
-                    <span class="col-xs-12 text-right">
-                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" id="showDetails">
+                    <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
+<!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" >
                             <span class="glyphicon glyphicon-triangle-bottom"></span>
-                        </button>
+                        </button>-->
                     </span>
                 </legend>
                 <div class="form-group collapse" id="contenedorDetails">
