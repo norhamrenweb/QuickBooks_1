@@ -18,13 +18,16 @@
         <title>Progress Details</title>
         <script>
            $(document).ready(function(){
+               var numberAttempted = $('#contenedorAttempted').children().length;
+               $("#showAttempteds").html(numberAttempted+'<br><span class="glyphicon glyphicon-triangle-bottom"></span>');
+               
                 $('#tablelessons').DataTable();
                 
                 $("#contenedorAttempted").on("hide.bs.collapse", function(){
-                    $("#showAttempteds").html('2<br><span class="glyphicon glyphicon-triangle-bottom"></span>');
+                    $("#showAttempteds").html(numberAttempted+'<br><span class="glyphicon glyphicon-triangle-bottom"></span>');
                 });
                 $("#contenedorAttempted").on("show.bs.collapse", function(){
-                  $("#showAttempteds").html('2<br><span class="glyphicon glyphicon-triangle-top"></span>');
+                  $("#showAttempteds").html(numberAttempted+'<br><span class="glyphicon glyphicon-triangle-top"></span>');
                 });
                 var message = '${message}';
     
@@ -103,13 +106,23 @@
                 <div class="col-xs-12 spacediv">
                     <div class="col-xs-6">Attempted</div><div class="col-xs-6">${attempteddate}
                     <button class="" data-toggle="collapse" data-target="#contenedorAttempted" id="showAttempteds">
-                        2<br><span class="glyphicon glyphicon-triangle-bottom"></span>
+                        
                     </button>
                     </div>    
                 </div>
                 <div class="col-xs-12 collapse" id="contenedorAttempted">
-                    <div class="col-xs-6 attempted">Attempted</div><div class="col-xs-6 attempted">20/04/2017</div>
-                    <div class="col-xs-6 attempted">Attempted</div><div class="col-xs-6 attempted">20/04/2017</div>
+                    <div class="col-xs-12 attempted">
+                        <div class="col-xs-6">Attempted 1</div>
+                        <div class="col-xs-6">20/04/2017</div>
+                    </div>
+                    <div class="col-xs-12 attempted">
+                        <div class="col-xs-6">Attempted 2</div>
+                        <div class="col-xs-6">21/04/2017</div>
+                    </div>
+                    <div class="col-xs-12 attempted">
+                        <div class="col-xs-6">Attempted 3</div>
+                        <div class="col-xs-6">22/04/2017</div>
+                    </div>
                 </div>    
                 <div class="col-xs-12 spacediv">
                     <div class="col-xs-6">Mastered</div><div class="col-xs-6">${mastereddate}</div>
@@ -135,7 +148,7 @@
                            
                         </tr>
                     </thead> 
-                    <select>
+                    
                     <c:forEach var="p" items="${progress}" >
                         <tr>
                             <td>${p.lesson_name}</td>
@@ -144,7 +157,7 @@
                             <td>${p.rating}</td>
                         </tr>
                     </c:forEach>
-                    </select>
+                    
 
                 </table>
 
