@@ -14,7 +14,6 @@
     <%@ include file="infouser.jsp" %>
     <%@ include file="menu.jsp" %>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create Lessons</title>
         <script>
 
@@ -24,7 +23,7 @@
          //Muestra calendario
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
          var lessoncreate = '<%= request.getParameter("message") %>';
-    
+       var alumnosSelected = $('#destino').children().length;
      if (lessoncreate === 'Lesson created' ){
      $('#myModal').modal({
         show: 'false'
@@ -97,23 +96,44 @@ $("#method").on('mouseover', 'option' , function(e) {
         $("#horainicio").on("dp.change", function (e) {
             $('#horafin').data("DateTimePicker").minDate(e.date);
         });       
+        
         $("#horafin").on("dp.change", function (e) {
             $('#horainicio').data("DateTimePicker").maxDate(e.date);
         });
         
     });            
-            
+        var alumnosSelected = $('#destino').children().length;
+        var objectiveSelected = $('#objective').val();  
         $().ready(function() 
-	{
-		$('.pasar').click(function() { return !$('#origen option:selected').remove().appendTo('#destino'); });  
-		$('.quitar').click(function() { return !$('#destino option:selected').remove().appendTo('#origen'); });
-		$('.pasartodos').click(function() { $('#origen option').each(function() { $(this).remove().appendTo('#destino'); }); });
-		$('.quitartodos').click(function() { $('#destino option').each(function() { $(this).remove().appendTo('#origen'); }); });
-		//$('.submit').click(function() { $('#destino option').prop('selected', 'selected'); });
+	{ 
+                
+		$('.pasar').click(function() {
+                   
+                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null){
+                        $('#createOnClick').attr('disabled', false);
+                    }
+                    return !$('#origen option:selected').remove().appendTo('#destino'); 
+                });  
+		$('.quitar').click(function() {
+                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null){
+                        $('#createOnClick').attr('disabled', false);
+                    }
+                    return !$('#destino option:selected').remove().appendTo('#origen'); 
+                });
+		$('.pasartodos').click(function() {
+                    $('#origen option').each(function() { $(this).remove().appendTo('#destino'); });
+                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null){
+                        $('#createOnClick').attr('disabled', false);
+                    }
+                });
+		$('.quitartodos').click(function() {
+                    $('#destino option').each(function() { $(this).remove().appendTo('#origen'); });
+                    $('#createOnClick').attr('disabled', true);
+                });
 	});
         
         var ajax;
-
+        
     function funcionCallBackLevelStudent()
     {
            if (ajax.readyState===4){
@@ -269,7 +289,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
 
-        if(document.getElementById("objective").value === 0){
+        if(document.getElementById("objective").value === 0 && alumnosSelected !== 0 ){
             $('#createOnClick').attr('disabled', true);
         }else{
             $('#createOnClick').attr('disabled', false);
@@ -280,41 +300,6 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.send("");
     }
     
-//    
-//$(function() {
-//    $('#subject').change(function() {
-////        $('#LoadTemplates').parent().attr("disabled",false);
-////        $('#LoadTemplates').attr("disabled",false);
-//        $('#LoadTemplates').children().removeClass("disabled");
-//    });
-//    
-//    $('#LoadTemplates').change(function() {
-//         if ($("input:radio[name='options']:checked").val() === 'option1' ){
-//    $("#lessons").attr("disabled", true);
-//    $('#divCrearLessons').removeClass('hidden');
-//    $('#divLoadLessons').addClass('hidden');
-////    $("#NameLessons").attr("disabled", true);
-//    } else {
-//    $("#lessons").attr("disabled", false);
-//    $('#divLoadLessons').removeClass('hidden');
-//    $('#divCrearLessons').addClass('hidden');
-////    $("#NameLessons").attr("disabled", false);
-//    }
-//    });
-////    $('#LoadTemplates').change(function() {
-////         if (this.checked).{
-////    $("#lessons").attr("disabled", true);
-////    $('#divCrearLessons').removeClass('disabled');
-////    $('#divLoadLessons').addClass('disabled');
-//////    $("#NameLessons").attr("disabled", true);
-////    } else {
-////    $("#lessons").attr("disabled", false);
-////    $('#divLoadLessons').removeClass('disabled');
-////    $('#divCrearLessons').addClass('disabled');
-//////    $("#NameLessons").attr("disabled", false);
-////    }
-////    });
-//})
         </script>
         <style>
             textarea 
