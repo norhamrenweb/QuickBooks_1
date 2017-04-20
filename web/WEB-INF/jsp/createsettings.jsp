@@ -198,10 +198,15 @@ $("#method").on('mouseover', 'option' , function(e) {
                 if( subjectValue !== null, subjectValue !== ""){
                    $('#addObjective').attr("disabled", true);
                 };
-                
+                //Al seleccionar un objective desactivamos el boton edit content
                 if( contentValue !== null, contentValue !== ""){
                     //$('#addContent').attr("disabled", true);
                     $('#editContent').attr("disabled", true);
+                };
+                //Al seleccionar un objective desactivamos el boton del content
+                if( contentValue !== null, contentValue !== ""){
+                    //$('#addContent').attr("disabled", true);
+                    $('#delContent').attr("disabled", true);
                 };
                 //Añadimos los content del objective
                 $('#content').empty();
