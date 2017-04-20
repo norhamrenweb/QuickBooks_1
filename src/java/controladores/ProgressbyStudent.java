@@ -287,6 +287,7 @@ public class ProgressbyStudent {
             String presenteddate = null;
             String attempteddate = null;
             String mastereddate = null;
+            List<String> attemptdates = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -312,6 +313,14 @@ public class ProgressbyStudent {
              p.setComment_date(dateStr);
              progress.add(p);
             }
+          // store an array of the attempted dates
+           for(Progress x:progress)
+           {
+               if(x.getRating().equals("Attempted"))
+               {
+                   attemptdates.add(x.getComment_date());
+               }
+           }
  //           select the latest rating to be presented as the final rating for this objective
         String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '"+jsonObj.getString("studentid")+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+jsonObj.getString("studentid")+"AND objective_id ="+jsonObj.getString("objectiveid")+") AND objective_id ="+jsonObj.getString("objectiveid")+")";
 ResultSet rs2 = st.executeQuery(consulta);
@@ -364,6 +373,7 @@ while(rs5.next())
         mv.addObject("studentname", jsonObj.getString("studentname"));
         mv.addObject("gradelevel",jsonObj.getString("gradelevel"));
         mv.addObject("subject",jsonObj.getString("subject"));
+        mv.addObject("attempteddates", attemptdates);
         mv.addObject("objective", o.fetchName(Integer.parseInt(jsonObj.getString("objectiveid")), servlet));}
 //        mv.addObject(obj);
 } catch (SQLException ex) {

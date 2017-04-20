@@ -111,18 +111,20 @@
                     </div>    
                 </div>
                 <div class="col-xs-12 collapse" id="contenedorAttempted">
+                    <c:forEach var="date" items="${attempteddates}">
                     <div class="col-xs-12 attempted">
-                        <div class="col-xs-6">Attempted 1</div>
-                        <div class="col-xs-6">20/04/2017</div>
+                        <div class="col-xs-6">Attempted </div>
+                        <div class="col-xs-6">${date}</div>
                     </div>
-                    <div class="col-xs-12 attempted">
+                    </c:forEach>
+<!--                    <div class="col-xs-12 attempted">
                         <div class="col-xs-6">Attempted 2</div>
                         <div class="col-xs-6">21/04/2017</div>
                     </div>
                     <div class="col-xs-12 attempted">
                         <div class="col-xs-6">Attempted 3</div>
                         <div class="col-xs-6">22/04/2017</div>
-                    </div>
+                    </div>-->
                 </div>    
                 <div class="col-xs-12 spacediv">
                     <div class="col-xs-6">Mastered</div><div class="col-xs-6">${mastereddate}</div>
