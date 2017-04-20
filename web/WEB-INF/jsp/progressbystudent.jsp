@@ -309,7 +309,7 @@
     {
         var selectObjective = dataObjective1;
         var selectStudent = $("#student").text();
-        var gradelevel = $("#gradelevel").val();
+        var gradelevel = $("#gradelevel").text();
         var subject = $("#subjects :selected").text();
         var myObj = {};
                 myObj["objectiveid"] = selectObjective;
