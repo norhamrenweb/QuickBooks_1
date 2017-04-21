@@ -12,9 +12,7 @@
 <!DOCTYPE html>
 <html>
     <%@ include file="infouser.jsp" %>
-    <%@ include file="menu.jsp" %>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Progress Details</title>
         <script>
            $(document).ready(function(){

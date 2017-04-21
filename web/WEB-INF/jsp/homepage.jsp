@@ -28,6 +28,8 @@
     
     $(document).ready( function () {
         $('#table_id').DataTable({
+        "aLengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
+        "iDisplayLength": 5,
         "columnDefs": [
             {
                 "targets": [ 0 ],
