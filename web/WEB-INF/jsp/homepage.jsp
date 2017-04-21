@@ -39,29 +39,86 @@
     });
         $('#table_datelessons').DataTable();
        
-    $('#table_id tbody').on('click', 'tr', function () {
-        table = $('#table_id').DataTable();
-        data = table.row( this ).data();
-        data1 = data[0];
-        rowselect();
-    } ); 
+//    $('#table_id tbody').on('click', 'tr', function () {
+//        table = $('#table_id').DataTable();
+//        data = table.row( this ).data();
+//        data1 = data[0];
+//        rowselect();
+//    } ); 
 } ); 
 //   
-//        
-//        function funcionCallBackLessonsprogress()
-//    {
-//           if (ajax.readyState===4){
-//                if (ajax.status===200){
-//                    load();
-//                    }
-//                }
-//            }
- 
-
-//
-   function rowselect()
+var ajax;
+ function funcionCallBackloadGeneralcomments()
     {
-        var LessonsSelected = data1;
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                   var json = JSON.parse(ajax.responseText);
+                  
+                    if(json.length === 0){
+                        $('#divTableObjective').addClass('hidden');
+                        $('#divNotObjective').removeClass('hidden');
+                        
+                    }else{
+                        $('#divNotObjective').addClass('hidden');
+                        $('#divTableObjective').removeClass('hidden');
+                    };
+                   $('#tableobjective').DataTable( {
+                        destroy: true,
+                        paging: true,
+                        searching: false,
+                        ordering: false,
+                        data: json,
+                        
+                        columns: [
+                        { data: 'col1' },
+                        { data: 'col2' },
+                        { data: 'col3' },
+                        { data: 'col4' },
+                        { data: 'col5' }
+                        ],
+                        columnDefs: [
+                        { width: 90, targets: 0 },
+                        { width: 200, targets: 0 },
+                        { width: 200, targets: 0 },
+                        { width: 70, targets: 0 },
+                        { width: 100, targets: 0 }
+                        ]
+                    } );
+                    
+                        //var tableObjective = $('#tableobjective').DataTable();
+
+                        $.each(json, function(i, item) {
+//                         var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
+                        $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').empty();
+                        $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').append("<div class='input-group'>\n\
+                <textarea rows='2' class='form-control commentGeneral' id='comment"+item.col5+"'>"+item.col3+"</textarea>\n\
+<span class='input-group-btn'>\n\
+<button type='button' class='btn btn-default btn-xs' value='"+item.col5+"' onclick='saveGeneralComment("+item.col5+")'>save</button>\n\
+</span></div>");
+//                        if(item.col4 === currentTime ){
+//                        $('#tableobjective tbody tr:eq('+ i +') td:eq(3)').append("<div class='input-group'>"+currentTime+"</div>");
+//                        }
+                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').empty();
+                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='button' class='btn-unbutton' value='"+item.col5+"' onclick='selectionObjective("+item.col5+")'>More details</button>");
+//                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
+                        });
+//                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
+//                        $('#tableobjective tbody tr td:eq(2)').empty();
+//                        $('#tableobjective tbody tr td:eq(2)').append("<input value='"+commentgeneral+"'></input>");   
+                           
+                         
+//     $('#tableobjective tbody tr td:eq(4)').on('click', 'tr', 'td:eq(4)', function () {
+//        
+//        var dataObjective = tableObjective.row( this ).data();
+//        dataObjective1 = dataObjective['col5'];
+//        selectionObjective();
+//    } ); 
+                    }
+                }
+            }
+   function rowselect(LessonsSelected)
+    {
+        //ESTO PARA PINCHAR EN LA FILAvar LessonsSelected = data1;
         //var LessonsSelected = $(data1).html();
         //var LessonsSelected = 565;
 
@@ -81,7 +138,20 @@
 //        ajax.open("POST","lessonprogress.htm?select6=loadRecords&LessonsSelected="+LessonsSelected,true);
 //        ajax.send("");
   };
-
+   function detailsSelect(LessonsSelected)
+    {
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        ajax.onreadystatechange = funcionCallBackloadGeneralcomments;
+        ajax.open("POST","lessonprogress.htm?select6=loadRecords&LessonsSelected="+LessonsSelected,true);
+        ajax.send("");
+  };
     
       
     
@@ -122,20 +192,23 @@
                             <td>${lecciones.start}</td>
                             <td>${lecciones.finish}</td>
                             <td>
-                                <div class="col-xs-4">
-                                    <button name="TXTid_lessons_detalles" value="" class="btn btn-detalles" id="details" data-target=".bs-example-modal-lg">
-                                        <span class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-placement="bottom" title="Detalles"></span>
+                                <div class="col-xs-3">
+                                    <button name="TXTid_lessons_attendance" value="${lecciones.id}" class="btn btn-detalles" id="attendance" onclick="rowselect(${lecciones.id})">
+                                        <span class="glyphicon glyphicon-list-alt" data-placement="bottom" title="Attendance"></span>
                                     </button>
                                 </div>
-                                <div class="col-xs-4">
-                                    <form id="form2" action='modify.htm'>
-                                        <button name="TXTid_lessons_modificar" type="submit" class="btn btn-modificar" id="modificarLessons" data-toggle="tooltip" data-placement="bottom" title="modify" >
+                                <div class="col-xs-3">
+                                    <button name="TXTid_lessons_detalles" value="${lecciones.id}" class="btn btn-detalles" id="details" onclick="detailsSelect(${lecciones.id})">
+                                        <span class="glyphicon glyphicon-list-alt" data-placement="bottom" title="Detalles" data-toggle="modal" data-target="#detailsLesson"></span>
+                                    </button>
+                                </div>
+                                <div class="col-xs-3">
+                                        <button name="TXTid_lessons_modificar" value="${lecciones.id}" class="btn btn-modificar" id="modificarLessons" data-toggle="tooltip" data-placement="bottom" title="modify" >
                                             <span class="glyphicon glyphicon-pencil"></span>
                                         </button>
-                                    </form>    
                                 </div>
-                                <div class="col-xs-4">
-                                    <button name="TXTid_lessons_eliminar" value="" class="btn btn-eliminar" data-toggle="tooltip" data-placement="bottom" title="Eliminar">
+                                <div class="col-xs-3">
+                                    <button name="TXTid_lessons_eliminar" value="${lecciones.id}" class="btn btn-eliminar" data-placement="bottom" title="Eliminar" data-toggle="modal" data-target="#deleteLesson">
                                         <span class="glyphicon glyphicon-trash"></span>
                                     </button>
                                 </div>
@@ -146,138 +219,46 @@
             </table>
            
             </div>
-
-            <%--<<div class="col-xs-6">
-                <div class="form-group">
-                    <label class="control-label"></label>
-                        <div class='input-group' style="margin-top:19px;">
-                            <form:form id="formCreate" action="create.htm?accion=inicio">
-                                <button type="submit" id="crearLessons" value="Crear" class="btn btn-naranja"><spring:message code="etiq.txtcreate"/></button>
-                            </form:form>
-                        </div>
-                </div>
-</div>--%>
-
         </div>
-        <%--<div class="col-xs-6">
-            <div class="col-xs-12" id="maincontainer">
-                <div class="col-xs-12 center-block text-center">
-                    <h2><spring:message code="etiq.txtactivities"/></h2>
-                </div>
-            </div>
-                <div class="col-xs-12">
-                <table id="table_datelessons" class="display">
-                    <thead>
-                        <tr>
-                            <td>Date</td>
-                            <td>Hour start</td>
-                            <td>Hour end</td>
-                            <td><spring:message code="etiq.namelessons"/></td>
-                            <td>Students</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2017-02-17</td>
-                            <td>8:00</td>
-                            <td>9:00</td>
-                            <td>Estudiantes2</td>
-                            <td>Pepe, Manolo, jaime</td>
-                        </tr>
-                        <tr>
-                            <td>2017-02-20</td>
-                            <td>8:00</td>
-                            <td>9:00</td>
-                            <td>Estudiantes2</td>
-                            <td>Manolo, jaime</td>
-                        </tr>
-                        <tr>
-                            <td>2017-02-20</td>
-                            <td>9:00</td>
-                            <td>10:00</td>
-                            <td>Estudiantes2</td>
-                            <td>Manolo, jaime</td>
-                        </tr>
-                        <c:forEach var="lecciones1" items="${lessonslist1}" >
-                        <tr>
-                            <td>fecha</td>
-                            <td>Hour start</td>
-                            <td>Hour end</td>
-                            <td>${lecciones1.name}</td>
-                            <td>students</td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-            </table>
-           
-            </div> --%>
-        
-<%--        <div class="page-header row">
-            <div class="col-xs-4">
-                <h3><spring:message code="etiq.txtcalendar"/> 2016-2017</h3>
-		<small><spring:message code="etiq.txtstudentlessons"/> ....... </small>
-            </div>
-            <div class="col-sm-8">
-                <div class="pull-right form-inline">
-                    <div class="btn-group">
-                            <button class="btn btn-primary" data-calendar-nav="prev"><< <spring:message code="etiq.txtprevious"/></button>
-                            <button class="btn" data-calendar-nav="today"><spring:message code="etiq.txttoday"/></button>
-                            <button class="btn btn-primary" data-calendar-nav="next"><spring:message code="etiq.txtnext"/> >></button>
-                    </div>
-                    <div class="btn-group">
-                            <button class="btn btn-warning" data-calendar-view="year"><spring:message code="etiq.txtyear"/></button>
-                            <button class="btn btn-warning active" data-calendar-view="month"><spring:message code="etiq.txtmonth"/></button>
-                            <button class="btn btn-warning" data-calendar-view="week"><spring:message code="etiq.txtweek"/></button>
-                            <button class="btn btn-warning" data-calendar-view="day"><spring:message code="etiq.txtday"/></button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12">
-                <select id="language" class="span12">
-					<option value="en-US" select>Seleccione el idioma (por : en-US)</option>
-					<option value="ar-SA">Arabe</option>
-					<option value="nl-NL">Dutch</option>
-					<option value="fr-FR">French</option>
-					<option value="de-DE">German</option>
-					<option value="el-GR">Greek</option>
-					<option value="hu-HU">Hungarian</option>
-					<option value="id-ID">Bahasa Indonesia</option>
-					<option value="it-IT">Italian</option>
-					<option value="pl-PL">Polish</option>
-					<option value="pt-BR">Portuguese (Brazil)</option>
-					<option value="ro-RO">Romania</option>
-					<option value="es-CO">Spanish (Colombia)</option>
-					<option value="es-MX">Spanish (Mexico)</option>
-					<option value="es-ES">Spanish (Spain)</option>
-					<option value="ru-RU">Russian</option>
-					<option value="sk-SR">Slovak</option>
-					<option value="sv-SE">Swedish</option>
-					<option value="zh-CN">简体中文</option>
-					<option value="zh-TW">繁體中文</option>
-					<option value="ko-KR">한국어</option>
-					<option value="th-TH">Thai (Thailand)</option>
-				</select>
-            </div>
-	</div>
-        <div class="col-xs-12">
-            <div id="calendar"></div>
-        </div>-->
-        
+<!-- Modal delete-->
+<div id="deleteLesson" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
     </div>
-<!--    <script type="text/javascript" src="recursos/js/vendor/underscore-min.js"></script>
-    <script type="text/javascript" src="recursos/js/calendar.js"></script>
-    <script type="text/javascript" src="recursos/js/app.js"></script>
-    <script type="text/javascript">
-        
-        var calendar = $("#calendar").calendar(
-            {
-                
-            });     
-            
-//            Clases de eventos
-//            importante: event-important
-//                        event-warning
-            
-    </script>--%>
+
+  </div>
+</div>
+<!-- Modal delete-->
+<div id="detailsLesson" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
     </body>
 </html>
