@@ -41,27 +41,19 @@
                     $("#contenedorDetails").toggleClass('in');
                     //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
             });
-//                $("#contenedorPropiertys").on("hide.bs.collapse", function(){
-//                    $("#showPropiertys").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
-////                });
-//                $("#contenedorPropiertys").on("show.bs.collapse", function(){
-//                  $("#showPropiertys").html('<span class="glyphicon glyphicon-triangle-top"></span>');
-//                });
-//                
-//                $("#contenedorDate").on("hide.bs.collapse", function(){
-//                    $("#showDate").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
-//                });
-//                $("#contenedorDate").on("show.bs.collapse", function(){
-//                  $("#showDate").html('<span class="glyphicon glyphicon-triangle-top"></span>');
-//                });
-//                
-//                $("#contenedorDetails").on("hide.bs.collapse", function(){
-//                    $("#showDetails").html('<span class="glyphicon glyphicon-triangle-bottom"></span>');
-//                });
-//                $("#contenedorDetails").on("show.bs.collapse", function(){
-//                  $("#showDetails").html('<span class="glyphicon glyphicon-triangle-top"></span>');
-//                });
 
+            $( "#ideaCheck" ).change(function() {
+                if($(this).is(":checked")) {
+                    $('#showDate').off('click').css('color', 'grey');
+                    $("#contenedorDate").removeClass('in');
+                    $("#fecha").attr('readonly');
+                    $('#horainicio').empty();
+                    $('#horafin').empty();
+                }else{
+                    $('#showDate').css('color', 'black').on('click');
+                }
+                
+            });
 
 $("#method").on('mouseover', 'option' , function(e) {
     
@@ -346,13 +338,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                 <legend id="showPropiertys">
                     Lesson name and description
                     <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
-<!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorPropiertys">
-                            <span class="glyphicon glyphicon-triangle-bottom"></span>
-                        </button>-->
                     </span>
                 </legend>
-                        
-                
                 <div class="form-group collapse" id="contenedorPropiertys">
                     <div class="col-xs-6 center-block">
                         <label class="control-label">Lesson Name</label>
@@ -361,6 +348,10 @@ $("#method").on('mouseover', 'option' , function(e) {
                     <div class="col-xs-6 center-block form-group">
                         <label class="control-label">Lesson description</label>
                         <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"></textarea>
+                    </div>
+                    <div class="col-xs-6 center-block form-group">
+                        <label class="control-label">Presentation idea</label>
+                        <input type="checkbox" id="ideaCheck" class="checkbox">
                     </div>
                 </div>
             </fieldset>
@@ -501,7 +492,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     </div>    
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Method</label>
-                        <select class="form-control" size="2" id="method">                   
+                        <select class="form-control" name="TXTmethod" size="2" id="method">                   
                             <c:forEach var="method" items="${methods}">
                                 <option value="${method.id[0]}"  data-title="${method.description}" data-content="${method.description}">${method.name}</option>
                             </c:forEach>
