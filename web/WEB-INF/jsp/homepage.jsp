@@ -14,14 +14,8 @@
     <%@ include file="menu.jsp" %>
         
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Home</title>
-  
-<style>
-    .red{
-        background-color: red !important;
-    }
-</style>
+
     <script type="text/javascript">
     
 
@@ -156,6 +150,15 @@ var ajax;
       
     
     </script>
+    <style>
+        .title
+        {
+            font-weight: bold;
+            color: gray;
+            margin-top: 5px;
+            padding-left: 5px;
+        }
+    </style>
     </head>
     <body>
         <div class="col-xs-12">
@@ -193,24 +196,16 @@ var ajax;
                             <td>${lecciones.finish}</td>
                             <td>
                                 <div class="col-xs-3">
-                                    <button name="TXTid_lessons_attendance" value="${lecciones.id}" class="btn btn-detalles" id="attendance" onclick="rowselect(${lecciones.id})">
-                                        <span class="glyphicon glyphicon-list-alt" data-placement="bottom" title="Attendance"></span>
-                                    </button>
+                                    <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="recursos/img/btn/btn_Attendance.svg" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Attendance">
                                 </div>
                                 <div class="col-xs-3">
-                                    <button name="TXTid_lessons_detalles" value="${lecciones.id}" class="btn btn-detalles" id="details" onclick="detailsSelect(${lecciones.id})">
-                                        <span class="glyphicon glyphicon-list-alt" data-placement="bottom" title="Detalles" data-toggle="modal" data-target="#detailsLesson"></span>
-                                    </button>
+                                    <input name="TXTid_lessons_detalles" type="image" src="recursos/img/btn/btn_details.svg" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" data-toggle="modal" data-target="#detailsLesson" width="40px" data-placement="bottom" title="Details">
                                 </div>
                                 <div class="col-xs-3">
-                                        <button name="TXTid_lessons_modificar" value="${lecciones.id}" class="btn btn-modificar" id="modificarLessons" data-toggle="tooltip" data-placement="bottom" title="modify" >
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                        </button>
+                                    <input name="TXTid_lessons_modificar" type="image" src="recursos/img/btn/btn_Edit.svg" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
                                 </div>
                                 <div class="col-xs-3">
-                                    <button name="TXTid_lessons_eliminar" value="${lecciones.id}" class="btn btn-eliminar" data-placement="bottom" title="Eliminar" data-toggle="modal" data-target="#deleteLesson">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </button>
+                                    <input name="TXTid_lessons_eliminar" type="image" src="recursos/img/btn/btn_delete.svg" value="${lecciones.id}" id="delete" onclick="delteSelect(${lecciones.id})" data-toggle="modal" data-target="#deleteLesson" width="40px" data-placement="bottom" title="Delete">
                                 </div>
                             </td>
                         </tr>
@@ -221,18 +216,158 @@ var ajax;
             </div>
         </div>
 <!-- Modal delete-->
-<div id="deleteLesson" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+<div id="detailsLesson" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
+        <h4 class="modal-title">Details {Name Lessons}</h4>
       </div>
-      <div class="modal-body">
-        <p>Some text in the modal.</p>
-      </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="col-xs-6">
+                    <div class="row">
+                        Students
+                    </div>
+                    <div class="row studentarea">
+                    <table class="table table-striped">
+                        <tr>
+                            <td>
+                                Amani,Moosajee
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Iman,Abrahams	
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Sadhvi,Dayaram
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Micah,Chingaya	
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Carla,Oloff
+                            </td>
+                        </tr>
+                    </table>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="row title">
+                        Method
+                    </div>
+                    <div class="row">
+                        {Method Lessons}
+                    </div>
+                    <div class="row title">
+                        Content 
+                    </div>
+                    <div class="row">
+                        {Content Lessons}
+                    </div>
+                    <div class="row title">
+                        Objective:   
+                    </div>
+                    <div class="row">
+                        Learn ryhtmes
+                    </div>
+                </div>
+            </div>
+        </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
@@ -241,7 +376,7 @@ var ajax;
   </div>
 </div>
 <!-- Modal delete-->
-<div id="detailsLesson" class="modal fade" role="dialog">
+<div id="deleteLesson" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
