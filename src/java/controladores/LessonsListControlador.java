@@ -19,18 +19,18 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 /**
  *
  * @author nmohamed
  */
-public class LessonsListControlador extends MultiActionController{
+@Controller
+public class LessonsListControlador{
     
       Connection cn;
       
@@ -42,7 +42,7 @@ public class LessonsListControlador extends MultiActionController{
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
-   
+   @RequestMapping("/homepage/loadLessons.htm")
     public ModelAndView loadLessons(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("homepage");
@@ -78,6 +78,7 @@ public class LessonsListControlador extends MultiActionController{
 //        
 //        return mv;
 //    }
+    
     public ArrayList<Lessons> getLessons(int userid,ServletContext servlet) throws SQLException
     {
 //        this.conectarOracle();
@@ -194,10 +195,12 @@ public class LessonsListControlador extends MultiActionController{
 //        return lessonslist;
 //     
 //     }
+    @RequestMapping("/homepage/deleteLesson.htm")
     public ModelAndView deleteLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("homepage");
-       String[] id = hsr.getParameterValues("seleccion");
+       String[] id = hsr.getParameterValues("LessonsSelected");
+       String message = null;
        try {
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -205,10 +208,31 @@ public class LessonsListControlador extends MultiActionController{
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
          Statement st = this.cn.createStatement();
-          
-        String consulta = "DELETE FROM public.lessons WHERE id="+id[0];
+         String consulta = "select attendance from lesson_stud_att where lesson_id = "+id[0];
+         ResultSet rs = st.executeQuery(consulta);
+         while(rs.next()){
+             if(!rs.getString("attendance").isEmpty()){
+                 message="Presentation has attendance records,it can not be deleted";
+                 break;
+             }
+         }
+         consulta = "select * from progress_Report where lesson_id ="+ id [0];
+         ResultSet rs1 = st.executeQuery(consulta);
+         if(rs1.next()){
+         message = "Presentation has progress records,it can not be deleted";
+         }
+         if(message.isEmpty())
+         {
+           consulta = "DELETE FROM lesson_content WHERE lesson_id="+id[0];
+          st.executeUpdate(consulta);
+          consulta = "DELETE FROM lesson_stud_att WHERE lesson_id="+id[0];
+          st.executeUpdate(consulta);
+        consulta = "DELETE FROM public.lessons WHERE id="+id[0];
            st.executeUpdate(consulta);
+           message = "Presentation deleted successfully";
+         }
         mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
+        mv.addObject("message",message);
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
         }
@@ -216,6 +240,7 @@ public class LessonsListControlador extends MultiActionController{
         
         return mv;
     }
+    @RequestMapping("/homepage/editLesson.htm")
       public ModelAndView editLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("homepage");
@@ -238,11 +263,11 @@ public class LessonsListControlador extends MultiActionController{
         
         return mv;
     }
- //     @RequestMapping("/homepage/detailsLesson.htm")
+    @RequestMapping("/homepage/detailsLesson.htm")
       @ResponseBody
         public String detailsLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("homepage");
+    //    ModelAndView mv = new ModelAndView("homepage");
         JSONObject jsonObj = new JSONObject();
        String[] id = hsr.getParameterValues("LessonsSelected");
         List<Progress> records = new ArrayList<>();
@@ -260,7 +285,6 @@ public class LessonsListControlador extends MultiActionController{
        while(rs.next())
        {
         Method m = new Method();
-        String test = m.fetchName(rs.getInt("method_id"),hsr.getServletContext());
        jsonObj.put("method",m.fetchName(rs.getInt("method_id"),hsr.getServletContext()));
        Timestamp date = rs.getTimestamp("date_created");
                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
