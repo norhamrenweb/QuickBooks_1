@@ -53,6 +53,7 @@
     <bean class="controladores.ProgressbyStudent" id="studentprog"/>
     <bean class="controladores.CreateSettingControlador" id="createsetting"/>
         <bean class="controladores.CreateLessonControlador" id="createlesson"/>
+         <bean class="controladores.LessonsListControlador" id="lessonsList"/>
         
 <bean class="controladores.CerrarLogin" id="cerrarLoginController"/>
 <!--     <bean class="controladores.SettingsControlador" id="settings">
@@ -92,13 +93,13 @@
         </bean>
     </property> 
     </bean>-->
-     <bean class="controladores.LessonsListControlador" id="lessonsList">
+<!--     <bean class="controladores.LessonsListControlador" id="lessonsList">
      <property name="methodNameResolver">
         <bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
            <property name="paramName" value="select3"/>
         </bean>
     </property> 
-    </bean>
+    </bean>-->
 
 
   

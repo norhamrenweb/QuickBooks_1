@@ -143,7 +143,7 @@ var ajax;
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
         ajax.onreadystatechange = funcionCallBackdetailsLesson;
-        ajax.open("POST","homepage.htm?select3=detailsLesson&LessonsSelected="+LessonsSelected,true);
+        ajax.open("POST","detailsLesson.htm?LessonsSelected="+LessonsSelected,true);
         ajax.send("");
   };
     
