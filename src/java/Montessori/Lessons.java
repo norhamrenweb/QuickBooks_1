@@ -25,6 +25,15 @@ public class Lessons {
     private Subject subject;
     private String[] contentid;
     private int teacherid;
+    private Method method;
+
+    public Method getMethod() {
+        return method;
+    }
+
+    public void setMethod(Method method) {
+        this.method = method;
+    }
 
     public String getComments() {
         return comments;

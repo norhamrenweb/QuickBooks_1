@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -237,12 +238,13 @@ public class LessonsListControlador extends MultiActionController{
         
         return mv;
     }
+ //     @RequestMapping("/homepage/detailsLesson.htm")
       @ResponseBody
         public String detailsLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("homepage");
         JSONObject jsonObj = new JSONObject();
-       String[] id = hsr.getParameterValues("seleccion");
+       String[] id = hsr.getParameterValues("LessonsSelected");
         List<Progress> records = new ArrayList<>();
        List<String> contents = new ArrayList<>();
        try {
@@ -258,6 +260,7 @@ public class LessonsListControlador extends MultiActionController{
        while(rs.next())
        {
         Method m = new Method();
+        String test = m.fetchName(rs.getInt("method_id"),hsr.getServletContext());
        jsonObj.put("method",m.fetchName(rs.getInt("method_id"),hsr.getServletContext()));
        Timestamp date = rs.getTimestamp("date_created");
                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
