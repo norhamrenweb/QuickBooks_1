@@ -218,6 +218,73 @@ div {
                 margin-top: 0px;
                 margin-bottom: 0px;
             }
+            /*TERMINA MENU LATERAL*/
+            /*PROGRESSBYSTUDENT*/
+            textarea 
+            {
+            resize: none;
+            }
+            .studentarea
+            {            
+            height: 500px;
+            width: 100%;
+            overflow-y: scroll;
+            }
+            .nameStudent
+            {
+            background-color: #D0D2D3;
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            min-height: 40px;
+            }
+            .tab-pane
+            {
+                padding-top: 20px;
+            }
+            .sinpadding
+            {
+                padding: 0px;
+            }
+            .containerPhoto
+            {
+                display: table;
+/*                background-color: lightgray;*/
+                border-right: 1px #D0D2D3 double;
+                min-height: 300px;
+            }
+            .cell{
+                display: table-cell;
+                vertical-align: middle;
+            }
+            #divTableObjective{
+                margin-top: 20px;
+            }
+            .label-demographic{
+                background-color: lightgray;
+                text-align: center;
+                padding: 5px;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                margin-bottom: 0px;
+            }
+            .demographic{
+                border: 1px solid lightgray;
+                padding: 5px;
+                margin-bottom: 10px;
+                min-height: 32px;
+            }
+            .btn-unbutton{
+                background-color: Transparent;
+                background-repeat:no-repeat;
+                border: none;
+                cursor:pointer;
+                overflow: hidden;
+                outline:none;
+            }
+            /*TERMINA PROGRESSBYSTUDENT*/
 /*.tooltip > .tooltip-arrow {
   top: 0;
   left: 50%;
