@@ -6,6 +6,7 @@
 package controladores;
 
 import Montessori.*;
+import atg.taglib.json.util.JSONObject;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -212,5 +215,94 @@ public class LessonsListControlador extends MultiActionController{
        
         
         return mv;
+    }
+      public ModelAndView editLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("homepage");
+       String[] id = hsr.getParameterValues("seleccion");
+       try {
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        HttpSession sesion = hsr.getSession();
+        User user = (User) sesion.getAttribute("user");
+         Statement st = this.cn.createStatement();
+          
+        String consulta = "DELETE FROM public.lessons WHERE id="+id[0];
+           st.executeUpdate(consulta);
+        mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
+       }catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+        }
+       
+        
+        return mv;
+    }
+ //     @RequestMapping("/homepage/detailsLesson.htm")
+      @ResponseBody
+        public String detailsLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("homepage");
+        JSONObject jsonObj = new JSONObject();
+       String[] id = hsr.getParameterValues("LessonsSelected");
+        List<Progress> records = new ArrayList<>();
+       List<String> contents = new ArrayList<>();
+       try {
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        HttpSession sesion = hsr.getSession();
+        User user = (User) sesion.getAttribute("user");
+         Statement st = this.cn.createStatement();
+          
+        String consulta = "select * FROM public.lessons WHERE id="+id[0];
+           ResultSet rs = st.executeQuery(consulta);
+       while(rs.next())
+       {
+        Method m = new Method();
+        String test = m.fetchName(rs.getInt("method_id"),hsr.getServletContext());
+       jsonObj.put("method",m.fetchName(rs.getInt("method_id"),hsr.getServletContext()));
+       Timestamp date = rs.getTimestamp("date_created");
+               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+               String dateStr = sdfDate.format(date);
+       jsonObj.put("datecreated",dateStr);
+       }
+       consulta = "select name from content where id in (select content_id from lesson_content where lesson_id = "+id[0]+")";
+       ResultSet rs1 = st.executeQuery(consulta);
+       while(rs1.next())
+       {
+           contents.add(rs1.getString("name"));
+       }
+       jsonObj.put("contents",contents);
+       consulta = "SELECT * FROM public.lesson_stud_att where lesson_id ="+id[0];
+       ResultSet rs2 = st.executeQuery(consulta);
+          
+            while (rs2.next())
+            {
+                Progress att = new Progress();
+             
+                att.setStudentid(rs2.getInt("student_id"));
+                records.add(att);
+            }
+            cn.close();
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        st = this.cn.createStatement();
+            for(Progress record : records)
+            {
+            consulta = "SELECT FirstName,LastName FROM AH_ZAF.dbo.Students where StudentID = '"+record.getStudentid()+"'";
+            ResultSet rs3 = st.executeQuery(consulta);
+            while (rs3.next())
+            {
+              record.setStudentname(rs3.getString("FirstName")+","+rs3.getString("LastName"));
+            }
+            }
+            jsonObj.put("students",records);
+       }catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+        }
+       
+        
+        return jsonObj.toString();
     }
 }

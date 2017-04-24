@@ -364,6 +364,10 @@ public class CreateLessonControlador {
        objective.setId(hsr.getParameterValues("TXTobjective"));
        contentids=hsr.getParameterValues("TXTcontent");
        newlesson.setComments(hsr.getParameter("TXTcomments"));
+       Method m = new Method();
+       m.setId(hsr.getParameterValues("TXTmethod"));
+       m.setName(hsr.getParameter("TXTmethod"));
+       newlesson.setMethod(m);
 
        java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorainicio")+":00.000");
      java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorafin")+":00.000");

@@ -42,7 +42,7 @@
 } ); 
 //   
 var ajax;
- function funcionCallBackloadGeneralcomments()
+ function funcionCallBackdetailsLesson()
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
@@ -142,8 +142,8 @@ var ajax;
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-        ajax.onreadystatechange = funcionCallBackloadGeneralcomments;
-        ajax.open("POST","lessonprogress.htm?select6=loadRecords&LessonsSelected="+LessonsSelected,true);
+        ajax.onreadystatechange = funcionCallBackdetailsLesson;
+        ajax.open("POST","homepage.htm?select3=detailsLesson&LessonsSelected="+LessonsSelected,true);
         ajax.send("");
   };
     
