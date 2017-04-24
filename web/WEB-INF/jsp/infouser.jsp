@@ -1,18 +1,14 @@
 <%-- 
     Document   : bannerinfo
     Created on : 12-jul-2016, 16:23:16
-    Author     : JesÃºs AragÃ³n
+    Author     : Jesús Aragón
 --%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page session="true" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!DOCTYPE html>
 
 <head>
-    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="<c:url value="/recursos/img/iconos/favicon.ico" />" >
     <link rel="apple-touch-icon" href="<c:url value="/recursos/img/iconos/favicon.ico"/>">
@@ -63,7 +59,7 @@
 <div class="infousuario">
     <div class="col-xs-3">
         <a class="btnBandera" href='datosIdioma.htm?lenguaje=en'>English</a>
-        <a class="btnBandera" href='datosIdioma.htm?lenguaje=es'>EspaÃ±ol</a>
+        <a class="btnBandera" href='datosIdioma.htm?lenguaje=es'>Español</a>
         <a class="btnBandera" href='datosIdioma.htm?lenguaje=ar'>Arabic</a>
     </div>
     <div class="col-xs-7">
@@ -71,8 +67,18 @@
     </div>
     
     <div class="col-xs-2 text-right">
-        <button class="btn btn-default"><a href="cerrarLogin.htm">Log out</a></button>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">-----</a></li>
+            <li><a href="#">-----</a></li>
+            <li><a href="#">-----</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">-----</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="cerrarLogin.htm">Log out</a></li>
+          </ul>
+        </li>
     </div>
-    
 </div>           
 
