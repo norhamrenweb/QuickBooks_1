@@ -41,20 +41,28 @@
                     $("#contenedorDetails").toggleClass('in');
                     //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
             });
+            $( "#showStudents" ).click(function() {
+                    $("#contenedorStudents").toggleClass('in');
+                    //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
+            });
 
-            $( "#ideaCheck" ).click(function() {
+            $( "#ideaCheck" ).change(function() {
                 if($(this).is(":checked")) {
-                    $('#showDate').off('click').css('color', 'grey');
+                    $('#showDate').addClass("desactivada");
+                    $('#showDate').off('click');
                     $("#contenedorDate").removeClass('in');
-                    $("#fecha").attr('readonly');
-                    $('#horainicio').empty();
-                    $('#horafin').empty();
-                }else($(this).is(":not(:checked)")) {
-                    $('#showDate').on('click').css('color', 'black');
-                    $("#contenedorDate").removeClass('in');
-                    $("#fecha").attr('readonly');
-                    $('#horainicio').empty();
-                    $('#horafin').empty();   
+                    $('#showStudents').addClass("desactivada");
+                    $('#showStudents').off('click');
+                    $("#contenedorStudents").removeClass('in');
+                    
+                }else if($("#ideaCheck :not(:checked)")) 
+                {
+                    $('#showDate').removeClass("desactivada");
+                    $('#showDate').on('click', function(){ $("#contenedorDate").toggleClass('in');} );
+//                    $("#contenedorDate").removeClass('in');
+                    $('#showStudents').removeClass("desactivada");
+                    $('#showStudents').on('click', function(){ $("#contenedorDate").toggleClass('in');} );
+                    $("#contenedorStudents").addClass('in');   
                     }
             });
             
@@ -331,6 +339,128 @@ $("#method").on('mouseover', 'option' , function(e) {
                 box-shadow: none;
                 border: none;
             }
+            .desactivada
+            {
+                color: grey;
+                text-decoration: line-through;
+            }
+            .btn span.glyphicon {    			
+	opacity: 0;				
+}
+.btn.active span.glyphicon {				
+	opacity: 1;				
+}
+/*STILOS CHECKBOX*/
+
+.checkbox {
+  padding-left: 20px; }
+.checkbox label {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+    padding-left: 5px; }
+.checkbox label::before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  left: 0;
+  margin-left: -20px;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  background-color: #fff;
+  -webkit-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+  -o-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+      transition: border 0.15s ease-in-out, color 0.15s ease-in-out; }
+.checkbox label::after {
+  display: inline-block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 0;
+  top: 0;
+  margin-left: -20px;
+  padding-left: 3px;
+  padding-top: 1px;
+  font-size: 11px;
+      color: #555555; }
+.checkbox input[type="checkbox"],
+.checkbox input[type="radio"] {
+  opacity: 0;
+  z-index: 1;
+  cursor: pointer;
+}
+.checkbox input[type="checkbox"]:focus + label::before,
+.checkbox input[type="radio"]:focus + label::before {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+      outline-offset: -2px; }
+.checkbox input[type="checkbox"]:checked + label::after,
+.checkbox input[type="radio"]:checked + label::after {
+  font-family: "fontprincipal";
+  content: '✔';}
+.checkbox input[type="checkbox"]:indeterminate + label::after,
+.checkbox input[type="radio"]:indeterminate + label::after {
+  display: block;
+  content: "";
+  width: 10px;
+  height: 3px;
+  background-color: #555555;
+  border-radius: 2px;
+  margin-left: -16.5px;
+  margin-top: 7px;
+}
+.checkbox input[type="checkbox"]:disabled,
+.checkbox input[type="radio"]:disabled {
+    cursor: not-allowed;
+}
+.checkbox input[type="checkbox"]:disabled + label,
+.checkbox input[type="radio"]:disabled + label {
+      opacity: 0.65; }
+.checkbox input[type="checkbox"]:disabled + label::before,
+.checkbox input[type="radio"]:disabled + label::before {
+  background-color: #eeeeee;
+        cursor: not-allowed; }
+.checkbox.checkbox-circle label::before {
+    border-radius: 50%; }
+.checkbox.checkbox-inline {
+    margin-top: 0; }
+
+
+.checkbox-success input[type="checkbox"]:checked + label::before,
+.checkbox-success input[type="radio"]:checked + label::before {
+  background-color: #99CC66;
+  border-color: #99CC66; }
+.checkbox-success input[type="checkbox"]:checked + label::after,
+.checkbox-success input[type="radio"]:checked + label::after {
+  color: #fff;}
+
+
+
+.checkbox-success input[type="checkbox"]:indeterminate + label::before,
+.checkbox-success input[type="radio"]:indeterminate + label::before {
+  background-color: #99CC66;
+  border-color: #99CC66;
+}
+
+.checkbox-success input[type="checkbox"]:indeterminate + label::after,
+.checkbox-success input[type="radio"]:indeterminate + label::after {
+  background-color: #fff;
+}
+
+
+input[type="checkbox"].styled:checked + label:after,
+input[type="radio"].styled:checked + label:after {
+  font-family: 'fontprincipal';
+  content: '✔'; }
+input[type="checkbox"] .styled:checked + label::before,
+input[type="radio"] .styled:checked + label::before {
+  color: #fff; }
+input[type="checkbox"] .styled:checked + label::after,
+input[type="radio"] .styled:checked + label::after {
+  color: #fff; }
+
         </style>
     </head>
     <body>
@@ -354,9 +484,12 @@ $("#method").on('mouseover', 'option' , function(e) {
                         <label class="control-label">Lesson description</label>
                         <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"></textarea>
                     </div>
-                    <div class="col-xs-6 center-block form-group">
-                        <label class="control-label">Presentation idea</label>
-                        <input type="checkbox" id="ideaCheck" class="checkbox">
+                    <div class="col-xs-6 center-block checkbox checkbox-success">
+                        <input class="styled" type="checkbox" id="ideaCheck">
+                        <label for="ideaCheck" >
+                            Presentation idea
+                        </label>
+                        
                     </div>
                 </div>
             </fieldset>
@@ -512,13 +645,15 @@ $("#method").on('mouseover', 'option' , function(e) {
                 </div>
             </fieldset>
             <fieldset>
-                    <legend>Select students</legend>
+                    <legend id="showStudents">
+                        Select students
+                        <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom"></span>
+                    </legend>
+                <div class="form-group collapse in" id="contenedorStudents">
                     <div class="col-xs-12">
                         <div class="col-xs-2"></div>
                         <div class="col-xs-3">
-                            <label>Filter</label>
-
-                            
+                            <label>Filter</label>     
                         </div>
                     </div>
                     <div class="col-xs-12">
@@ -558,7 +693,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                             </select>
                         </div>
                     </div>
-                <div class="col-xs-2"></div>
+                </div>
             </fieldset>
             <div class="col-xs-12 text-center">
             <input type="submit" class="btn btn-success" id="createOnClick" disabled="True" value="<spring:message code="etiq.txtcreate"/>">
