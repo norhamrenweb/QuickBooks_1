@@ -21,15 +21,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
 
 /**
  *
  * @author nmohamed
  */
-public class ProgressControlador extends MultiActionController{
+@Controller
+public class ProgressControlador {
     
     
       Connection cn;
@@ -43,7 +46,7 @@ public class ProgressControlador extends MultiActionController{
         return beanobject;
     }
    
-    
+    @RequestMapping("/lessonprogress/loadRecords.htm")
     public ModelAndView loadRecords(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("lessonprogress");
@@ -153,6 +156,7 @@ public class ProgressControlador extends MultiActionController{
     
     return records;
     }
+    @RequestMapping("/lessonprogress/saveRecords.htm")
     public ModelAndView saveRecords(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         String message="Records successfully saved"; 

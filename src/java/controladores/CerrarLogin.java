@@ -9,17 +9,21 @@ package controladores;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
+//import org.springframework.web.servlet.mvc.Controller;
 
 /**
  *
  * @author Jesús Aragón
  */
-public class CerrarLogin implements Controller{
+@Controller
+public class CerrarLogin {
     
-         @Override
-    public ModelAndView handleRequest(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    //     @Override
+    @RequestMapping(value="/cerrarLogin")
+    public ModelAndView cerrarLogin(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
             ModelAndView mv =  new ModelAndView("redirect:/userform.htm?opcion=inicio");
             
             HttpSession sesion = hsr.getSession();

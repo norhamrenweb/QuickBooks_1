@@ -76,7 +76,7 @@
             <li role="separator" class="divider"></li>
             <li><a href="#">-----</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="cerrarLogin.htm">Log out</a></li>
+            <li><a href="<c:url value="/cerrarLogin.htm"/>">Log out</a></li>
           </ul>
         </li>
     </div>

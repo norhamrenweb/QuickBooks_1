@@ -7,6 +7,7 @@ package controladores;
 
 import Montessori.*;
 import atg.taglib.json.util.JSONObject;
+import com.google.gson.Gson;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -270,8 +271,8 @@ public class LessonsListControlador{
     //    ModelAndView mv = new ModelAndView("homepage");
         JSONObject jsonObj = new JSONObject();
        String[] id = hsr.getParameterValues("LessonsSelected");
-        List<Progress> records = new ArrayList<>();
-       List<String> contents = new ArrayList<>();
+        ArrayList<Progress> records = new ArrayList<>();
+       ArrayList<String> contents = new ArrayList<>();
        try {
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -290,6 +291,7 @@ public class LessonsListControlador{
                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
                String dateStr = sdfDate.format(date);
        jsonObj.put("datecreated",dateStr);
+       jsonObj.put("comment",rs.getString("comments"));
        }
        consulta = "select name from content where id in (select content_id from lesson_content where lesson_id = "+id[0]+")";
        ResultSet rs1 = st.executeQuery(consulta);
@@ -297,7 +299,7 @@ public class LessonsListControlador{
        {
            contents.add(rs1.getString("name"));
        }
-       jsonObj.put("contents",contents);
+       jsonObj.put("contents",new Gson().toJson(contents));
        consulta = "SELECT * FROM public.lesson_stud_att where lesson_id ="+id[0];
        ResultSet rs2 = st.executeQuery(consulta);
           
@@ -321,7 +323,7 @@ public class LessonsListControlador{
               record.setStudentname(rs3.getString("FirstName")+","+rs3.getString("LastName"));
             }
             }
-            jsonObj.put("students",records);
+            jsonObj.put("students",new Gson().toJson(records));
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
         }

@@ -363,7 +363,7 @@ public class CreateLessonControlador {
        objective.setName(hsr.getParameter("TXTobjective"));
        objective.setId(hsr.getParameterValues("TXTobjective"));
        contentids=hsr.getParameterValues("TXTcontent");
-       newlesson.setComments(hsr.getParameter("TXTcomments"));
+       newlesson.setComments(hsr.getParameter("TXTdescription"));
        Method m = new Method();
        m.setId(hsr.getParameterValues("TXTmethod"));
        m.setName(hsr.getParameter("TXTmethod"));

@@ -47,21 +47,28 @@ var ajax;
            if (ajax.readyState===4){
                 if (ajax.status===200){
                    var object = JSON.parse(ajax.responseText);
-                   var Student = object.students[1];
-                   var cntContent = (object.contents).toString();
-                   var Contents = cntContent.substr(1,cntContent.length - 2);
-                   var r = Contents.split(",");
+                   var s = JSON.parse(object.students);
+                   var c =  JSON.parse(object.contents);
+              
+//                   var cntContent = (object.contents).toString();
+//                   var Contents = cntContent.substr(1,cntContent.length - 2);
+//                   var r = Contents.split(",");
                         //var tableObjective = $('#tableobjective').DataTable();
-                        $('#detailsStudents').empty();
-                        $.each(Student, function (i, students){
-                            $('#detailsStudents').append('<tr><td>'+students+'</td></tr>');
+                         $('#detailsStudents').empty();
+                        $.each(s, function (i,student){
+                          
+                            $('#detailsStudents').append('<tr><td>'+s[i].studentname+'</td></tr>');
                         });
                         $('#contentDetails').empty();
-                        $.each(r, function (i, items){
-                            $('#contentDetails').append('<li>'+items+'</li>');
+                        $.each(c, function (i, content){
+                            $('#contentDetails').append('<li>'+c[i]+'</li>');
                         });
+                        
+                        
                         $('#methodDetails').empty();
                         $('#methodDetails').append('<tr><td>'+object.method+'</td></tr>');
+                        $('#commentDetails').empty();
+                        $('#commentDetails').append('<tr><td>'+object.comment+'</td></tr>');
 //                        });
 //                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
 //                        $('#tableobjective tbody tr td:eq(2)').empty();
@@ -95,7 +102,8 @@ var ajax;
 //        }
         
 //ajax.onreadystatechange=funcionCallBackLessonsprogress;
-        window.location.href = "lessonprogress.htm?select6=loadRecords&LessonsSelected="+LessonsSelected;
+ //       window.location.href = "/lessonprogress/loadRecords.htm?LessonsSelected="+LessonsSelected;
+       window.open("<c:url value="/lessonprogress/loadRecords.htm?LessonsSelected="/>"+LessonsSelected, "_blank");
 //        ajax.open("POST","lessonprogress.htm?select6=loadRecords&LessonsSelected="+LessonsSelected,true);
 //        ajax.send("");
   };
@@ -112,6 +120,22 @@ var ajax;
         ajax.onreadystatechange = funcionCallBackdetailsLesson;
         ajax.open("POST","detailsLesson.htm?LessonsSelected="+LessonsSelected,true);
         ajax.send("");
+  };
+  function deleteSelect(LessonsSelected)
+  {
+       if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        ajax.onreadystatechange = funcionCallBackdetailsLesson;
+        ajax.open("POST","deleteLesson.htm?LessonsSelected="+LessonsSelected,true);
+        ajax.send("");
+      
+      
   };
     
       
@@ -172,7 +196,7 @@ var ajax;
                                     <input name="TXTid_lessons_modificar" type="image" src="<c:url value="/recursos/img/btn/btn_Edit.svg"/>" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
                                 </div>
                                 <div class="col-xs-3">
-                                    <input name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="delteSelect(${lecciones.id})" data-toggle="modal" data-target="#deleteLesson" width="40px" data-placement="bottom" title="Delete">
+                                    <input name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelect(${lecciones.id})" data-toggle="modal" data-target="#deleteLesson" width="40px" data-placement="bottom" title="Delete">
                                 </div>
                             </td>
                         </tr>
@@ -210,6 +234,12 @@ var ajax;
                     </div>
                     <div class="row" id="methodDetails">
                         {Method Lessons}
+                    </div>
+                    <div class="row title">
+                        Lesson Description
+                    </div>
+                    <div class="row" id="commentDetails">
+                        {Comment Lessons}
                     </div>
                     <div class="row title">
                         Content 
