@@ -46,56 +46,23 @@ var ajax;
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                   var json = JSON.parse(ajax.responseText);
-                  
-                    if(json.length === 0){
-                        $('#divTableObjective').addClass('hidden');
-                        $('#divNotObjective').removeClass('hidden');
-                        
-                    }else{
-                        $('#divNotObjective').addClass('hidden');
-                        $('#divTableObjective').removeClass('hidden');
-                    };
-                   $('#tableobjective').DataTable( {
-                        destroy: true,
-                        paging: true,
-                        searching: false,
-                        ordering: false,
-                        data: json,
-                        
-                        columns: [
-                        { data: 'col1' },
-                        { data: 'col2' },
-                        { data: 'col3' },
-                        { data: 'col4' },
-                        { data: 'col5' }
-                        ],
-                        columnDefs: [
-                        { width: 90, targets: 0 },
-                        { width: 200, targets: 0 },
-                        { width: 200, targets: 0 },
-                        { width: 70, targets: 0 },
-                        { width: 100, targets: 0 }
-                        ]
-                    } );
-                    
+                   var object = JSON.parse(ajax.responseText);
+                   var Student = object.students[1];
+                   var cntContent = (object.contents).toString();
+                   var Contents = cntContent.substr(1,cntContent.length - 2);
+                   var r = Contents.split(",");
                         //var tableObjective = $('#tableobjective').DataTable();
-
-                        $.each(json, function(i, item) {
-//                         var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
-                        $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').empty();
-                        $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').append("<div class='input-group'>\n\
-                <textarea rows='2' class='form-control commentGeneral' id='comment"+item.col5+"'>"+item.col3+"</textarea>\n\
-<span class='input-group-btn'>\n\
-<button type='button' class='btn btn-default btn-xs' value='"+item.col5+"' onclick='saveGeneralComment("+item.col5+")'>save</button>\n\
-</span></div>");
-//                        if(item.col4 === currentTime ){
-//                        $('#tableobjective tbody tr:eq('+ i +') td:eq(3)').append("<div class='input-group'>"+currentTime+"</div>");
-//                        }
-                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').empty();
-                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='button' class='btn-unbutton' value='"+item.col5+"' onclick='selectionObjective("+item.col5+")'>More details</button>");
-//                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
+                        $('#detailsStudents').empty();
+                        $.each(Student, function (i, students){
+                            $('#detailsStudents').append('<tr><td>'+students+'</td></tr>');
                         });
+                        $('#contentDetails').empty();
+                        $.each(r, function (i, items){
+                            $('#contentDetails').append('<li>'+items+'</li>');
+                        });
+                        $('#methodDetails').empty();
+                        $('#methodDetails').append('<tr><td>'+object.method+'</td></tr>');
+//                        });
 //                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
 //                        $('#tableobjective tbody tr td:eq(2)').empty();
 //                        $('#tableobjective tbody tr td:eq(2)').append("<input value='"+commentgeneral+"'></input>");   
@@ -196,16 +163,16 @@ var ajax;
                             <td>${lecciones.finish}</td>
                             <td>
                                 <div class="col-xs-3">
-                                    <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="recursos/img/btn/btn_Attendance.svg" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Attendance">
+                                    <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Attendance">
                                 </div>
                                 <div class="col-xs-3">
-                                    <input name="TXTid_lessons_detalles" type="image" src="recursos/img/btn/btn_details.svg" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" data-toggle="modal" data-target="#detailsLesson" width="40px" data-placement="bottom" title="Details">
+                                    <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" data-toggle="modal" data-target="#detailsLesson" width="40px" data-placement="bottom" title="Details">
                                 </div>
                                 <div class="col-xs-3">
-                                    <input name="TXTid_lessons_modificar" type="image" src="recursos/img/btn/btn_Edit.svg" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
+                                    <input name="TXTid_lessons_modificar" type="image" src="<c:url value="/recursos/img/btn/btn_Edit.svg"/>" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
                                 </div>
                                 <div class="col-xs-3">
-                                    <input name="TXTid_lessons_eliminar" type="image" src="recursos/img/btn/btn_delete.svg" value="${lecciones.id}" id="delete" onclick="delteSelect(${lecciones.id})" data-toggle="modal" data-target="#deleteLesson" width="40px" data-placement="bottom" title="Delete">
+                                    <input name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="delteSelect(${lecciones.id})" data-toggle="modal" data-target="#deleteLesson" width="40px" data-placement="bottom" title="Delete">
                                 </div>
                             </td>
                         </tr>
@@ -232,117 +199,8 @@ var ajax;
                         Students
                     </div>
                     <div class="row studentarea">
-                    <table class="table table-striped">
-                        <tr>
-                            <td>
-                                Amani,Moosajee
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Iman,Abrahams	
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Sadhvi,Dayaram
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Micah,Chingaya	
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>
-                                Carla,Oloff
-                            </td>
-                        </tr>
+                        <table id="detailsStudents" class="table table-striped">
+                        
                     </table>
                     </div>
                 </div>
@@ -350,14 +208,16 @@ var ajax;
                     <div class="row title">
                         Method
                     </div>
-                    <div class="row">
+                    <div class="row" id="methodDetails">
                         {Method Lessons}
                     </div>
                     <div class="row title">
                         Content 
                     </div>
                     <div class="row">
-                        {Content Lessons}
+                        <ul id="contentDetails">
+                            
+                        </ul>
                     </div>
                     <div class="row title">
                         Objective:   

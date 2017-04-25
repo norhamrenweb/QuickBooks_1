@@ -42,19 +42,24 @@
                     //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
             });
 
-            $( "#ideaCheck" ).change(function() {
+            $( "#ideaCheck" ).click(function() {
                 if($(this).is(":checked")) {
                     $('#showDate').off('click').css('color', 'grey');
                     $("#contenedorDate").removeClass('in');
                     $("#fecha").attr('readonly');
                     $('#horainicio').empty();
                     $('#horafin').empty();
-                }else{
-                    $('#showDate').css('color', 'black').on('click');
-                }
-                
+                }else($(this).is(":not(:checked)")) {
+                    $('#showDate').on('click').css('color', 'black');
+                    $("#contenedorDate").removeClass('in');
+                    $("#fecha").attr('readonly');
+                    $('#horainicio').empty();
+                    $('#horafin').empty();   
+                    }
             });
+            
 
+            
 $("#method").on('mouseover', 'option' , function(e) {
     
         var $e = $(e.target);
