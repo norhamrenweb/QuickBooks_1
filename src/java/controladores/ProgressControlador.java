@@ -50,11 +50,13 @@ public class ProgressControlador {
     public ModelAndView loadRecords(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("lessonprogress");
+        List<Students> instructors = new ArrayList<>();
+        Students teacher = new Students();
          try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-     String lessonname = hsr.getParameter("LessonsSelected");
+     String lessonid = hsr.getParameter("LessonsSelected");
 //     DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
 //Date lessondate = format.parse(hsr.getParameter("seleccion5"));
 
@@ -67,7 +69,7 @@ public class ProgressControlador {
 //            {
 //                lessonid = rs.getInt("id_lessons");
 //            }
-           String consulta = "SELECT * FROM public.lesson_detailes where id ="+lessonname;
+           String consulta = "SELECT * FROM public.lesson_detailes where id ="+lessonid;
             ResultSet rs1 = st.executeQuery(consulta);
         Lessons lesson = new Lessons();
             while (rs1.next())
@@ -85,11 +87,38 @@ public class ProgressControlador {
             sub.setId(ids);
             lesson.setSubject(sub);
             lesson.setName(rs1.getString("name"));
-            lesson.setId(Integer.parseInt(lessonname));
+            lesson.setId(Integer.parseInt(lessonid));
+            }
+            consulta ="select presentedby from lessons where id = "+ lessonid;
+            ResultSet rs = st.executeQuery(consulta);
+            while(rs.next())
+            {
+                
+                teacher.setId_students(rs.getInt("presentedby"));
             }
     List<Progress> records = this.getRecords(lesson,hsr.getServletContext());
     mv.addObject("attendancelist", records);
     mv.addObject("lessondetailes",lesson);
+    //load instructors names from renweb, persons with faculty flag (in staff field)
+    cn.close();
+    dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+    st = this.cn.createStatement();
+    consulta = "select LastName,FirstName,PersonID from Person where PersonID in (select PersonID from Staff where Faculty = 1)";
+    ResultSet rs2 = st.executeQuery(consulta);
+    while(rs2.next())
+    {
+        Students s = new Students();
+        s.setId_students(rs2.getInt("PersonID"));
+        s.setNombre_students(rs2.getString("FirstName")+" "+ rs2.getString("LastName"));
+        if(teacher.getId_students() == s.getId_students())
+        {
+        teacher.setNombre_students(s.getNombre_students());
+        }
+        instructors.add(s);
+    }
+    mv.addObject("instructors",instructors);
+    mv.addObject("selectedinst",teacher);
          } catch (SQLException ex) {
             System.out.println("Error: " + ex);
         }
@@ -161,7 +190,7 @@ public class ProgressControlador {
         
         String message="Records successfully saved"; 
         String[]lessonid=hsr.getParameterValues("TXTlessonid");
-        ModelAndView mv = new ModelAndView("redirect:/lessonprogress.htm?select6=loadRecords&LessonsSelected="+lessonid[0],"message",message);
+        ModelAndView mv = new ModelAndView("redirect:/lessonprogress/loadRecords.htm?LessonsSelected="+lessonid[0],"message",message);
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
@@ -170,10 +199,13 @@ public class ProgressControlador {
         String[] ratings= hsr.getParameterValues("TXTrating");
         String[] studentids= hsr.getParameterValues("TXTstudentid");
         String[] att= hsr.getParameterValues("TXTattendance");
-      
+        String[] teacher= hsr.getParameterValues("TXTinstructor");
 
     Statement st = this.cn.createStatement();
-          
+        if(!teacher[0].isEmpty())
+        {
+        st.executeUpdate("update lessons set presentedby = "+teacher[0]+" where id = "+lessonid[0]);
+        } 
     for(int i=0;i<studentids.length;i++)
     {  // if the teacher did not fill the attendance no update will be done to avoid null pointer exception
         if(!att[i].isEmpty())
