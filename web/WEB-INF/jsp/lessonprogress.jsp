@@ -124,7 +124,7 @@ collectionAttendance.each(function() {
             <h1 class="text-center">Lesson Progress</h1>
 <p></p>
 
-            <form:form id="formStudents" method ="post" action="lessonprogress.htm?select6=saveRecords" >
+            <form:form id="formStudents" method ="post" action="saveRecords.htm" >
 
 
                 <fieldset>
@@ -199,6 +199,17 @@ collectionAttendance.each(function() {
 
                 </div>
                 </fieldset>
+                    <select name="TXTinstructor"> 
+                        <c:if test="${empty selectedinst.nombre_students}">
+                                                <option selected></option>
+                                            </c:if>
+                                            <c:if test="${not empty selectedinst.nombre_students}">
+                                                <option value="${selectedinst.id_students}" selected>${selectedinst.nombre_students}</option>
+                                            </c:if>
+                        <c:forEach var="name" items="${instructors}" >
+                        <option value="${name.id_students}">${name.nombre_students}</option>
+                        </c:forEach>
+                    </select>
                 <div class="col-xs-6 text-center">   
                     <input type="submit" class="btn btn-success" value="Save">
                 </div>
