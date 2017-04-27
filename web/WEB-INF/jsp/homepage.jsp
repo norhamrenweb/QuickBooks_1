@@ -33,13 +33,21 @@
     });
         $('#table_datelessons').DataTable();
        
-//    $('#table_id tbody').on('click', 'tr', function () {
-//        table = $('#table_id').DataTable();
-//        data = table.row( this ).data();
-//        data1 = data[0];
-//        rowselect();
-//    } ); 
-} ); 
+    $('#table_id tbody').on('click', 'tr', function () {
+        table = $('#table_id').DataTable();
+        data = table.row( this ).data();
+        nameLessons = data[1];
+    } ); 
+    
+   
+} );
+function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
+
+        $('#lessonDelete').empty();
+        $('#lessonDelete').append(deleteLessonsName);
+        $('#buttonDelete').val(deleteLessonsSelected);
+        $('#deleteLesson').modal('show');
+}
 //   
 var ajax;
  function funcionCallBackdetailsLesson()
@@ -49,15 +57,20 @@ var ajax;
                    var object = JSON.parse(ajax.responseText);
                    var s = JSON.parse(object.students);
                    var c =  JSON.parse(object.contents);
-              
+                   
 //                   var cntContent = (object.contents).toString();
 //                   var Contents = cntContent.substr(1,cntContent.length - 2);
 //                   var r = Contents.split(",");
                         //var tableObjective = $('#tableobjective').DataTable();
-                         $('#detailsStudents').empty();
+                        $('#nameLessonDetails').empty();
+                        $('#nameLessonDetails').append('Details '+nameLessons);
+                        //$('#detailsStudents').empty();
+                        $('#studentarea').append('<table id="detailsStudents" class="table table-striped">');
                         $.each(s, function (i,student){
-                          
-                            $('#detailsStudents').append('<tr><td>'+s[i].studentname+'</td></tr>');
+                            $('#detailsStudents').append('<tr><td class="studentDetails">'+s[i].studentname+'</td></tr>');
+                            $("tr:odd").addClass("par");
+                            $("tr:even").addClass("impar");
+                        //    $("tr:odd").css("background-color", "lightgray");
                         });
                         $('#contentDetails').empty();
                         $.each(c, function (i, content){
@@ -69,6 +82,7 @@ var ajax;
                         $('#methodDetails').append('<tr><td>'+object.method+'</td></tr>');
                         $('#commentDetails').empty();
                         $('#commentDetails').append('<tr><td>'+object.comment+'</td></tr>');
+                        $('#detailsLesson').modal('show');
 //                        });
 //                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
 //                        $('#tableobjective tbody tr td:eq(2)').empty();
@@ -121,6 +135,38 @@ var ajax;
         ajax.open("POST","detailsLesson.htm?LessonsSelected="+LessonsSelected,true);
         ajax.send("");
   };
+   function funcionCallBackdeleteLesson()
+    {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                   var object = JSON.parse(ajax.responseText);
+                   var s = JSON.parse(object.students);
+                   var c =  JSON.parse(object.contents);
+                   
+                        $('#nameLessonDetails').empty();
+                        $('#nameLessonDetails').append('Details '+nameLessons);
+                        //$('#detailsStudents').empty();
+                        $('#studentarea').append('<table id="detailsStudents" class="table table-striped">');
+                        $.each(s, function (i,student){
+                            $('#detailsStudents').append('<tr><td class="studentDetails">'+s[i].studentname+'</td></tr>');
+                            $("tr:odd").addClass("par");
+                            $("tr:even").addClass("impar");
+                        });
+                        $('#contentDetails').empty();
+                        $.each(c, function (i, content){
+                            $('#contentDetails').append('<li>'+c[i]+'</li>');
+                        });
+                        
+                        
+                        $('#methodDetails').empty();
+                        $('#methodDetails').append('<tr><td>'+object.method+'</td></tr>');
+                        $('#commentDetails').empty();
+                        $('#commentDetails').append('<tr><td>'+object.comment+'</td></tr>');
+                        $('#detailsLesson').modal('show');
+
+                    }
+                }
+            }
   function deleteSelect(LessonsSelected)
   {
        if (window.XMLHttpRequest) //mozilla
@@ -131,7 +177,8 @@ var ajax;
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-        ajax.onreadystatechange = funcionCallBackdetailsLesson;
+        
+        ajax.onreadystatechange = funcionCallBackdeleteLesson;
         ajax.open("POST","deleteLesson.htm?LessonsSelected="+LessonsSelected,true);
         ajax.send("");
       
@@ -144,10 +191,33 @@ var ajax;
     <style>
         .title
         {
+            font-size: medium;
             font-weight: bold;
             color: gray;
             margin-top: 5px;
             padding-left: 5px;
+        }
+        .par
+        {
+            background-color: lightgrey;
+            
+        }
+        .impar
+        {
+           border-bottom: solid 1px grey;
+        }
+        .studentDetails{
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 10px;
+        }
+        .modal-header-details
+        {
+            background-color: #99CC66;
+        }
+        .modal-header-delete
+        {
+            background-color: #CC6666;
         }
     </style>
     </head>
@@ -177,8 +247,8 @@ var ajax;
                     <tbody>
                     <c:forEach var="lecciones" items="${lessonslist}" >
                         <tr>
-                            <td>${lecciones.id}</td>
-                            <td>${lecciones.name}</td>
+                            <td class="idLessons">${lecciones.id}</td>
+                            <td class="nameLessons">${lecciones.name}</td>
                             <td>${lecciones.level.name}</td>
                             <td>${lecciones.subject.name}</td>
                             <td>${lecciones.objective.name}</td>
@@ -190,13 +260,13 @@ var ajax;
                                     <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Attendance">
                                 </div>
                                 <div class="col-xs-3">
-                                    <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" data-toggle="modal" data-target="#detailsLesson" width="40px" data-placement="bottom" title="Details">
+                                    <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
                                 </div>
                                 <div class="col-xs-3">
                                     <input name="TXTid_lessons_modificar" type="image" src="<c:url value="/recursos/img/btn/btn_Edit.svg"/>" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
                                 </div>
                                 <div class="col-xs-3">
-                                    <input name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelect(${lecciones.id})" data-toggle="modal" data-target="#deleteLesson" width="40px" data-placement="bottom" title="Delete">
+                                    <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
                                 </div>
                             </td>
                         </tr>
@@ -212,20 +282,18 @@ var ajax;
 
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header modal-header-details">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Details {Name Lessons}</h4>
+        <h4 id="nameLessonDetails" class="modal-title">Details</h4>
       </div>
         <div class="modal-body">
             <div class="container-fluid">
                 <div class="col-xs-6">
-                    <div class="row">
+                    <div class="row title">
                         Students
                     </div>
-                    <div class="row studentarea">
-                        <table id="detailsStudents" class="table table-striped">
-                        
-                    </table>
+                    <div id="studentarea" class="row studentarea">
+         
                     </div>
                 </div>
                 <div class="col-xs-6">
@@ -233,13 +301,13 @@ var ajax;
                         Method
                     </div>
                     <div class="row" id="methodDetails">
-                        {Method Lessons}
+                        
                     </div>
                     <div class="row title">
                         Lesson Description
                     </div>
                     <div class="row" id="commentDetails">
-                        {Comment Lessons}
+                        
                     </div>
                     <div class="row title">
                         Content 
@@ -267,19 +335,20 @@ var ajax;
 </div>
 <!-- Modal delete-->
 <div id="deleteLesson" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header modal-header-delete">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
+        <h4 class="modal-title">are you sure you want to delete?</h4>
       </div>
-      <div class="modal-body">
-        <p>Some text in the modal.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <div id="lessonDelete" class="modal-body">
+            
+        </div>
+      <div class="modal-footer text-center">
+          <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect(${lecciones.id})">Yes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
       </div>
     </div>
 
