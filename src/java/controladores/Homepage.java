@@ -208,11 +208,11 @@ return mv;
 public ModelAndView custsync(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 ModelAndView mv = 
                 new ModelAndView("suhomepage");
-DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-      Statement ps = this.cn.createStatement(1004,1007);
-      ResultSet rs = ps.executeQuery("Select * from syncconfig");
+//DriverManagerDataSource dataSource;
+//        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
+//        this.cn = dataSource.getConnection();
+//      Statement ps = this.cn.createStatement(1004,1007);
+//      ResultSet rs = ps.executeQuery("Select * from syncconfig");
 
 Config config = new Config();
 GetConfig get = new GetConfig();
@@ -244,27 +244,29 @@ return mv;
 public ModelAndView paysync(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 ModelAndView mv = 
                 new ModelAndView("suhomepage");
-DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-      Statement ps = this.cn.createStatement(1004,1007);
-      ResultSet rs = ps.executeQuery("Select * from syncconfig");
+//DriverManagerDataSource dataSource;
+//        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
+//        this.cn = dataSource.getConnection();
+//      Statement ps = this.cn.createStatement(1004,1007);
+//      ResultSet rs = ps.executeQuery("Select * from syncconfig");
 
 Config config = new Config();
-while(rs.next())
-{
-config.setQbdburl(rs.getString("qbdburl"));
-config.setQbdbuser(rs.getString("qbdbuser"));
-config.setQbdbpswd(rs.getString("qbdbpswd"));
-config.setRwdburl(rs.getString("rwdburl"));
-config.setRwdbuser(rs.getString("rwdbuser"));
-config.setRwdbpswd(rs.getString("rwdbpswd"));
-config.setEdudburl(rs.getString("edudburl"));
-config.setEdudbuser(rs.getString("edudbuser"));
-config.setEdudbuser(rs.getString("edudbpswd"));
-config.setStartdate(rs.getDate("startdate").toString());
-config.setItemname(rs.getString("itemname"));
-}
+GetConfig get = new GetConfig();
+config = get.getConfig();
+//while(rs.next())
+//{
+//config.setQbdburl(rs.getString("qbdburl"));
+//config.setQbdbuser(rs.getString("qbdbuser"));
+//config.setQbdbpswd(rs.getString("qbdbpswd"));
+//config.setRwdburl(rs.getString("rwdburl"));
+//config.setRwdbuser(rs.getString("rwdbuser"));
+//config.setRwdbpswd(rs.getString("rwdbpswd"));
+//config.setEdudburl(rs.getString("edudburl"));
+//config.setEdudbuser(rs.getString("edudbuser"));
+//config.setEdudbuser(rs.getString("edudbpswd"));
+//config.setStartdate(rs.getDate("startdate").toString());
+//config.setItemname(rs.getString("itemname"));
+//}
                         
                       PaymentSync s = new PaymentSync();
                       s.paymentsync(config);
@@ -278,27 +280,29 @@ return mv;
 public ModelAndView invoicesync(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 ModelAndView mv = 
                 new ModelAndView("suhomepage");
-DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-      Statement ps = this.cn.createStatement(1004,1007);
-      ResultSet rs = ps.executeQuery("Select * from syncconfig");
+//DriverManagerDataSource dataSource;
+//        dataSource = (DriverManagerDataSource)this.getBean("dataSourceEDU",hsr.getServletContext());
+//        this.cn = dataSource.getConnection();
+//      Statement ps = this.cn.createStatement(1004,1007);
+//      ResultSet rs = ps.executeQuery("Select * from syncconfig");
 
 Config config = new Config();
-while(rs.next())
-{
-config.setQbdburl(rs.getString("qbdburl"));
-config.setQbdbuser(rs.getString("qbdbuser"));
-config.setQbdbpswd(rs.getString("qbdbpswd"));
-config.setRwdburl(rs.getString("rwdburl"));
-config.setRwdbuser(rs.getString("rwdbuser"));
-config.setRwdbpswd(rs.getString("rwdbpswd"));
-config.setEdudburl(rs.getString("edudburl"));
-config.setEdudbuser(rs.getString("edudbuser"));
-config.setEdudbuser(rs.getString("edudbpswd"));
-config.setStartdate(rs.getDate("startdate").toString());
-config.setItemname(rs.getString("itemname"));
-}
+GetConfig get = new GetConfig();
+config = get.getConfig();
+//while(rs.next())
+//{
+//config.setQbdburl(rs.getString("qbdburl"));
+//config.setQbdbuser(rs.getString("qbdbuser"));
+//config.setQbdbpswd(rs.getString("qbdbpswd"));
+//config.setRwdburl(rs.getString("rwdburl"));
+//config.setRwdbuser(rs.getString("rwdbuser"));
+//config.setRwdbpswd(rs.getString("rwdbpswd"));
+//config.setEdudburl(rs.getString("edudburl"));
+//config.setEdudbuser(rs.getString("edudbuser"));
+//config.setEdudbuser(rs.getString("edudbpswd"));
+//config.setStartdate(rs.getDate("startdate").toString());
+//config.setItemname(rs.getString("itemname"));
+//}
                         
                      InvoiceSync s = new InvoiceSync();
                       s.invoicesync(config);
