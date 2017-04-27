@@ -45,7 +45,7 @@ public class CustomerSync {
             for (RWFamily y : allfamily) {
                 String result = "";
                 
-                if(map.checkmappingrw(y.getId()) != null)
+                if(map.checkmappingrw(y.getId(),config) != null)
                     //match found¨
                 {
                     result = "Match Found";
@@ -68,11 +68,11 @@ public class CustomerSync {
             InsertCustomer insert = new InsertCustomer();
             List<String> custids = new ArrayList<String>();
             custids = insert.insertCustomer(newcustomer,config);// after inserting returns the customer ID created by QB
-            logdb.updatecustlog(newcustomer, "addition");
+            logdb.updatecustlog(newcustomer, "addition",config);
             //--------------------------------------------------------------------
             //Update the family ids mapping table
             
-            map.updatemapping(newcustomer,custids);
+            map.updatemapping(newcustomer,custids,config);
             //----------------------------------------------------------------------
            
         } catch (SQLException | ParserConfigurationException | TransformerException | SAXException | IOException ex) {

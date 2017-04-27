@@ -44,7 +44,7 @@ public class InvoiceSync {
             QBInvoice n = new QBInvoice();
             QBCustomer cust = new QBCustomer();
             MappingTable family = new MappingTable(config);
-            cust.setId(family.checkmappingrw(u.getrwFamily().getId()));
+            cust.setId(family.checkmappingrw(u.getrwFamily().getId(),config));
             Item item = new Item();
             
             item.setitemQuantity(1);
@@ -116,7 +116,7 @@ public class InvoiceSync {
             if(!deletelist.isEmpty())
             {
                 delete.deleteinvoice(deletelist,config);
-                logdb.updateinvoicelog(deletelist,"delete");
+                logdb.updateinvoicelog(deletelist,"delete",config);
             }
             
             allinvoice = x2.retrieveInvoice(config);// get the updated list of invoices after the deletion
@@ -162,7 +162,7 @@ public class InvoiceSync {
                     QBInvoice n = new QBInvoice();
                     QBCustomer cust = new QBCustomer();
                     MappingTable family = new MappingTable(config);
-                    cust.setId(family.checkmappingrw(y3.getrwFamily().getId()));
+                    cust.setId(family.checkmappingrw(y3.getrwFamily().getId(),config));
                     Item item = new Item();
                     // hard coded till we figurs out how it will get this input
                     n.setMemo(y3.getDescription());
@@ -194,19 +194,19 @@ public class InvoiceSync {
         if (!updatelist.isEmpty())
         {
             update.updateInvoice(updatelist,config);
-            logdb.updateinvoicelog(updatelist,"update");
+            logdb.updateinvoicelog(updatelist,"update",config);
         }
         InsertInvoice add = new InsertInvoice();
         if(!addlist.isEmpty())
         {
             add.insertInvoice(addlist,config);
-            logdb.updateinvoicelog(addlist,"addition");
+            logdb.updateinvoicelog(addlist,"addition",config);
         }
         AddDiscounts discount = new AddDiscounts();
         if(!discountlist.isEmpty())
         {
             discount.addDiscounts(discountlist,config);
-            logdb.updateinvoicelog(addlist,"addDiscount");
+            logdb.updateinvoicelog(addlist,"addDiscount",config);
         }
     
 }

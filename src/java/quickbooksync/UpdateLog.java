@@ -31,18 +31,19 @@ public class UpdateLog {
        
         private Connection conn = null;
         public UpdateLog(Config config) {
-            try{
-        this.conn = DriverManager.getConnection(config.getEdudburl(),config.getEdudbuser(),config.getEdudbpswd());//"jdbc:postgresql://localhost:5432/postgres","postgres","rapunzel");
-        }catch (SQLException ex) {
-            
-            StringWriter errors = new StringWriter();
-ex.printStackTrace(new PrintWriter(errors));
-log.error(ex+errors.toString());
-        }
+//            try{
+//        this.conn = DriverManager.getConnection(config.getEdudburl(),config.getEdudbuser(),config.getEdudbpswd());//"jdbc:postgresql://localhost:5432/postgres","postgres","rapunzel");
+//        }catch (SQLException ex) {
+//            
+//            StringWriter errors = new StringWriter();
+//ex.printStackTrace(new PrintWriter(errors));
+//log.error(ex+errors.toString());
+//        }
     }
-        public void updateinvoicelog (List<QBInvoice> invoices, String action )
+        public void updateinvoicelog (List<QBInvoice> invoices, String action, Config config )
         {
             try{
+                 this.conn = DriverManager.getConnection(config.getEdudburl(),config.getEdudbuser(),config.getEdudbpswd());
         statement = conn.createStatement();
         for(QBInvoice invoice : invoices)
         {ParseChargeID xml = new ParseChargeID();
@@ -57,9 +58,10 @@ ex.printStackTrace(new PrintWriter(errors));
 log.error(ex+errors.toString());
         }
 }
-         public void updatecustlog (List<QBCustomer> customers, String action ) throws SQLException, ParserConfigurationException, TransformerException, TransformerConfigurationException, SAXException, IOException
+         public void updatecustlog (List<QBCustomer> customers, String action,Config config ) throws SQLException, ParserConfigurationException, TransformerException, TransformerConfigurationException, SAXException, IOException
         {
             try{
+                 this.conn = DriverManager.getConnection(config.getEdudburl(),config.getEdudbuser(),config.getEdudbpswd());
         statement = conn.createStatement();
         for(QBCustomer customer : customers)
         {
@@ -72,9 +74,10 @@ ex.printStackTrace(new PrintWriter(errors));
 log.error(ex+errors.toString());
         }
         }
-          public void updatepaymentlog (List<QBPayment> payments, String action ) throws SQLException, ParserConfigurationException, TransformerException, TransformerConfigurationException, SAXException, IOException
+          public void updatepaymentlog (List<QBPayment> payments, String action, Config config ) throws SQLException, ParserConfigurationException, TransformerException, TransformerConfigurationException, SAXException, IOException
         {
             try{
+                 this.conn = DriverManager.getConnection(config.getEdudburl(),config.getEdudbuser(),config.getEdudbpswd());
         statement = conn.createStatement();
         for(QBPayment payment : payments)
         {/*ParseChargeID xml = new ParseChargeID();
