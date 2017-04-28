@@ -224,9 +224,13 @@ $("#method").on('mouseover', 'option' , function(e) {
                    var objectives = JSON.parse(json.objectiveslist);
                    var contents = JSON.parse(json.contentslist);
                    $('#subject').empty();
+                   var pos1 = subject[0].toString();
                      $.each(subjects, function(i, item) {
                         var test = subjects[i].id;
-                        if( test === subject){
+                        if (typeof test !== "undefined"){
+                        var test1 = test.toString();
+                    };
+                        if( test1 === pos1){
                              $('#subject').append('<option selected value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
                         }
                         else{
