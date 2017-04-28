@@ -88,7 +88,7 @@ public class LessonsListControlador{
             
              Statement st = this.cn.createStatement();
              
-            String consulta = "SELECT * FROM public.lessons where user_id = "+userid;
+            String consulta = "SELECT * FROM public.lessons where user_id = "+userid+" and COALESCE(idea, FALSE) = FALSE";
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())

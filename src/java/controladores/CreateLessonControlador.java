@@ -6,6 +6,7 @@
 package controladores;
 
 import Montessori.*;
+import atg.taglib.json.util.JSONObject;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class CreateLessonControlador {
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
-       
+       List <Lessons> ideas = new ArrayList();
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
@@ -100,7 +101,16 @@ public class CreateLessonControlador {
         }
             mv.addObject("gradelevels", grades);
             mv.addObject("methods",methods);
-        
+       //get lesson ideas
+       ResultSet rs2 = st2.executeQuery("SELECT * FROM public.lessons where idea = true");
+        while(rs2.next())
+        {
+         Lessons idea = new Lessons();   
+        idea.setId(rs2.getInt("id")); 
+        idea.setName(rs2.getString("name"));
+        ideas.add(idea);
+        }
+        mv.addObject("ideas",ideas);
         return mv;
     }
 @RequestMapping("/createlesson/studentlistLevel.htm")
@@ -123,60 +133,21 @@ public class CreateLessonControlador {
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
-        List<Subject> subjects = new ArrayList<>();
+        
        try {
          DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-        
-            
-             Statement st = this.cn.createStatement();
-             String[] levelid = new String[1];
-//             String test = hsr.getParameter("seleccion1");
-//            String consulta = "SELECT GradeLevelID FROM AH_ZAF.dbo.GradeLevels where GradeLevel ='"+hsr.getParameter("seleccion1")+"'";
-//            ResultSet rs = st.executeQuery(consulta);
-//          
-//            while (rs.next())
-//            {
-//                levelid = rs.getInt("GradeLevelID");
-//            }
-//            cn.close();
+       
+           
             dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
              this.cn = dataSource.getConnection();
-             st = this.cn.createStatement();
-             levelid= hsr.getParameterValues("seleccion1");
-          ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
-           Subject s = new Subject();
-          s.setName("Select Subject");
-          subjects.add(s);
-           
-           while (rs1.next())
-            {
-             Subject sub = new Subject();
-             String[] ids = new String[1];
-            ids[0]=""+rs1.getInt("CourseID");
-             sub.setId(ids);
             
-                subjects.add(sub);
-            }
-           for(Subject su:subjects.subList(1,subjects.size()))
-          {
-              String[] ids = new String[1];
-              ids=su.getId();
-           ResultSet rs2 = st.executeQuery("select Title from Courses where CourseID = "+ids[0]);
-           while(rs2.next())
-           {
-           su.setName(rs2.getString("Title"));
-           }
-          }
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
         }
         
         
-         mv.addObject("subjects", subjects);
+         mv.addObject("subjects",this.getSubjects(hsr.getParameterValues("seleccion1")));
         
         return mv;
     }
@@ -184,43 +155,12 @@ public class CreateLessonControlador {
     public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
-        List<Objective> objectives = new ArrayList<>();
-       try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         
-        
-            
-             Statement st = this.cn.createStatement();
-             String subjectid = null;
-          
-            
-                subjectid = hsr.getParameter("seleccion2");
-            
-            
-          ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid);
-          Objective s = new Objective();
-          s.setName("Select Objective");
-          objectives.add(s);
-           
-           while (rs1.next())
-            {
-             String[] ids = new String[1];
-                Objective sub = new Objective();
-            ids[0] = ""+rs1.getInt("id");
-             sub.setId(ids);
-             sub.setName(rs1.getString("name"));
-                objectives.add(sub);
-            }
-          
-            
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Objectives: " + ex);
-        }
-        
-        mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
-        mv.addObject("objectives", objectives);
+    //    mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
+        mv.addObject("objectives", this.getObjectives(hsr.getParameterValues("seleccion2")));
         
         return mv;
     }
@@ -228,44 +168,11 @@ public class CreateLessonControlador {
     public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
-        List<Content> contents = new ArrayList<>();
-       try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-        
-            
-             Statement st = this.cn.createStatement();
-             String objectiveid = null;
-            
-                objectiveid = hsr.getParameter("seleccion3");
-            
-            
-          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+objectiveid+")");
-          //String[] ids = new String[1];
-           while (rs1.next())
-            {
-//             Equipment eq = new Equipment();
-//            ids[0] = String.valueOf(rs1.getInt("id"));
-//             eq.setId(ids);
-//             eq.setName(rs1.getString("name"));
-//                equipments.add(eq);
-                Content eq = new Content();
-                String[] id= new String[1];
-               id[0]= ""+rs1.getInt("id");
-              
-                eq.setId(id);
-              eq.setName(rs1.getString("name"));
-               contents.add(eq);
-            }
-            
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo contents: " + ex);
-        }
-        
+        this.cn = dataSource.getConnection();    
       
-         mv.addObject("contents", contents);
+         mv.addObject("contents", this.getContent(hsr.getParameterValues("seleccion3")));
         
         return mv;
     }   
@@ -368,6 +275,7 @@ public class CreateLessonControlador {
        m.setId(hsr.getParameterValues("TXTmethod"));
        m.setName(hsr.getParameter("TXTmethod"));
        newlesson.setMethod(m);
+       String[] ideaCheck = hsr.getParameterValues("ideaCheck");
 
        java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorainicio")+":00.000");
      java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorafin")+":00.000");
@@ -397,8 +305,12 @@ public class CreateLessonControlador {
            
      //  }
        Createlesson c = new Createlesson(hsr.getServletContext());
+       if(ideaCheck[0].equals("on")){
+           c.newidea(newlesson);
+       }
+       else{
        c.newlesson(studentIds,newlesson);
-        
+       }
        
         
         return mv;
@@ -444,95 +356,167 @@ public class CreateLessonControlador {
      
      return mv;
      }
-     @RequestMapping("/createlesson/loadLessonplan.htm")
-         public ModelAndView loadLessonplan(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
+     @RequestMapping("/createlesson/copyfromIdea.htm")
+     @ResponseBody
+         public String copyfromIdea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
          {
              ModelAndView mv = new ModelAndView("createlesson");
-             String[] lessonplanid = hsr.getParameterValues("seleccionTemplate");
-              List<Content> allcontents = new ArrayList<>();
-               List<Content> subset = new ArrayList<>();
-               List<Content> contents = new ArrayList<>();
-               Objective sub = new Objective();
-             try {
-         DriverManagerDataSource dataSource;
+             JSONObject json = new JSONObject();
+             String[] lessonplanid = hsr.getParameterValues("seleccionidea");
+               Subject sub = new Subject();
+               Objective obj = new Objective();
+             Method meth = new Method();
+             Level lev = new Level();
+             int levelid = 0;
+             List<Content> contents = new ArrayList<>();
+              DriverManagerDataSource dataSource;
+               try {
+        
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         
-        
-            
              Statement st = this.cn.createStatement();
-             String description=null;
-             String[] objectiveid = new String[1];
-            String consulta = "SELECT objective_id FROM public.lessons where id ="+lessonplanid[0];
+            
+             String[] oid = new String[1];
+             String[] sid = new String[1];
+             String[] mid = new String[1];
+             String[] cid = new String[1];
+             
+            String consulta = "SELECT objective_id,subject_id,level_id,method_id FROM public.lessons where id ="+lessonplanid[0];
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
             {
-            //    description = rs.getString("comments");
-                objectiveid[0] = ""+rs.getInt("objective_id");
+                oid[0] = ""+rs.getInt("objective_id");
+                obj.setId(oid);
+                sid[0] = ""+rs.getInt("subject_id");
+                sub.setId(sid);
+                mid[0] = ""+rs.getInt("method_id");
+             meth.setId(mid);
+             levelid= rs.getInt("level_id");
             }
-            consulta = "select name from public.objective where id= "+objectiveid[0];
-          ResultSet rs1 = st.executeQuery(consulta);
-          
-           while (rs1.next())
-            {
-                
-                sub.setId(objectiveid);
-                sub.setName(rs1.getString("name"));
-            }
-        ResultSet rs2 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select content_id from public.objective_content where public.objective_content.objective_id = "+objectiveid[0]);
-        // must change latter
-        int i = 0;
+           
+        ResultSet rs2 = st.executeQuery("select content_id from public.lesson_content where lesson_id = "+lessonplanid[0]);
+              
    while (rs2.next())
             {
                 Content eq = new Content();
                 String[] ids = new String[1];
-               ids[0]= ""+rs2.getInt("id");
+               ids[0]= ""+rs2.getInt("content_id");
               
                 eq.setId(ids);
-              eq.setName(rs2.getString("name"));
-                allcontents.add(eq);
-            }
-    ResultSet rs3 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select content_id from public.lesson_content where public.lesson_content.lessonplan_id = "+lessonplanid[0]+")");
-       
-   while (rs3.next())
-            {
-                Content eq = new Content();
-             String[] ids = new String[1];
-             ids[0] = ""+rs3.getInt("id");
-                eq.setId(ids);
-                eq.setName(rs3.getString("name"));
+              
                 contents.add(eq);
             }
+         
+         json.put("level",""+levelid);
+         json.put("subject",new Gson().toJson(sub));
+         json.put("objective",new Gson().toJson(obj));
+         json.put("method",new Gson().toJson(meth));
+         json.put("content",new Gson().toJson(contents));
+         
         } catch (SQLException ex) {
             System.out.println("Error  " + ex);
         }
- 
-        mv.addObject("equipments",contents);
-        
-        for (Content e : allcontents)
-        {
-            String result = "";
-        for(Content e2 :contents)
-        {
-            if(e.getName().equals(e2.getName()))
+               String hi = json.toString();
+               String[] levelids= new String[1];
+               levelids[0]=""+levelid;
+                json.put("objectiveslist",new Gson().toJson(this.getObjectives(sub.getId())));
+                 json.put("contentslist",new Gson().toJson(this.getContent(obj.getId())));
+                 cn.close();
+                  dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+               json.put("subjectslist",new Gson().toJson(this.getSubjects(levelids)));
+               
+               return json.toString();
+      
+         } 
+       public ArrayList<Subject> getSubjects(String[] levelid) throws SQLException
+       {
+           
+        ArrayList<Subject> subjects = new ArrayList<>();
+           Statement st = this.cn.createStatement();
+             
+          ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
+           Subject s = new Subject();
+          s.setName("Select Subject");
+          subjects.add(s);
+           
+           while (rs1.next())
             {
-                result ="match found";
-               break;
+             Subject sub = new Subject();
+             String[] ids = new String[1];
+            ids[0]=""+rs1.getInt("CourseID");
+             sub.setId(ids);
+            
+                subjects.add(sub);
+            }
+           for(Subject su:subjects.subList(1,subjects.size()))
+          {
+              String[] ids = new String[1];
+              ids=su.getId();
+           ResultSet rs2 = st.executeQuery("select Title from Courses where CourseID = "+ids[0]);
+           while(rs2.next())
+           {
+           su.setName(rs2.getString("Title"));
+           }
+          }
+           return subjects;
+       }
+        public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException
+       {
+           ArrayList<Objective> objectives = new ArrayList<>();
+       try {
+        
+             Statement st = this.cn.createStatement();
+            
+          ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid[0]);
+          Objective s = new Objective();
+          s.setName("Select Objective");
+          objectives.add(s);
+           
+           while (rs1.next())
+            {
+             String[] ids = new String[1];
+                Objective sub = new Objective();
+            ids[0] = ""+rs1.getInt("id");
+             sub.setId(ids);
+             sub.setName(rs1.getString("name"));
+                objectives.add(sub);
+            }
+          
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Objectives: " + ex);
+        }
+       return objectives;
+       }
+        public ArrayList<Content> getContent(String[] objectiveid) throws SQLException
+       {
+           ArrayList<Content> contents = new ArrayList<>();
+       try {
+        
+             Statement st = this.cn.createStatement();
+            
+            
+          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+objectiveid[0]+")");
+         
+           while (rs1.next())
+            {
+                Content eq = new Content();
+                String[] id= new String[1];
+               id[0]= ""+rs1.getInt("id");
+              
+                eq.setId(id);
+              eq.setName(rs1.getString("name"));
+               contents.add(eq);
             }
             
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo contents: " + ex);
         }
-        if (!result.equals("match found")){
-        subset.add(e);
-        }
-        }
-      
- 
-        mv.addObject("objective", sub);
-               mv.addObject("allcontents",subset);
-             return mv;
-         
-         } 
+       return contents;
+       }
 }
 
 
