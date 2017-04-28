@@ -79,7 +79,7 @@ DBconnection connectQB = new DBconnection();
        MappingTable m = new MappingTable(config);
        String result = null;
        for (QBCustomer x : allcustomer) {
-       result = m.checkmappingqb(x.getId());
+       result = m.checkmappingqb(x.getId(),config);
        if(result==null) //no match found
        {
        unmappedcustomer.add(x);
@@ -139,7 +139,7 @@ DBconnection connectQB = new DBconnection();
        MappingTable m = new MappingTable(config);
        String result = null;
        for (RWFamily x : allfamily) {
-       result = m.checkmappingrw(x.getId());
+       result = m.checkmappingrw(x.getId(),config);
        if(result==null) //no match found
        {
        unmappedfamily.add(x);

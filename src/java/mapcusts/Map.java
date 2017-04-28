@@ -42,7 +42,7 @@ public class Map {
          ids.add(cust.getId());
          if(!ids.isEmpty())
          {
-             mapdb.updatemapping(newcustomer,ids);
+             mapdb.updatemapping(newcustomer,ids,config);
          }
       message = "Customer successfully mapped";
      

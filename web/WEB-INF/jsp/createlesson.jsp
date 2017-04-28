@@ -209,11 +209,30 @@ $("#method").on('mouseover', 'option' , function(e) {
                 }
             }    
 
-    function funcionCallBackTemplateLessons()
+    function funcionCallBackIdeaLessons()
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                    document.getElementById("template").innerHTML= ajax.responseText;
+                   var json = JSON.parse(ajax.responseText);
+                   var level = json.level;
+                   var subject =  JSON.parse(json.subject).id;
+                   
+                   var objective =  JSON.parse(json.objective).id;
+                   var method =  JSON.parse(json.method).id;
+                   var content =  JSON.parse(json.content);
+                   var subjects = JSON.parse(json.subjectslist);
+                   var objectives = JSON.parse(json.objectiveslist);
+                   var contents = JSON.parse(json.contentslist);
+                   $('#subject').empty();
+                     $.each(subjects, function(i, item) {
+                        var test = subjects[i].id;
+                        if( test === subject){
+                             $('#subject').append('<option selected value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
+                        }
+                        else{
+                         $('#subject').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
+                    }
+                   });
                     }
                 }
             }
@@ -282,7 +301,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.open("POST","namelistSubject.htm?seleccionTemplate="+seleccionSubject,true);
         ajax.send("");
     }
-     function comboSelectionTemplateLessons()
+     function comboSelectionIdeaLessons()
     {
         if (window.XMLHttpRequest) //mozilla
         {
@@ -294,10 +313,10 @@ $("#method").on('mouseover', 'option' , function(e) {
         }
         
         
-        ajax.onreadystatechange=funcionCallBackTemplateLessons;
-        var seleccionTemplate = document.getElementById("lessons").value;
+        ajax.onreadystatechange=funcionCallBackIdeaLessons;
+        var seleccionidea = document.getElementById("ideas").value;
         //ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccionTemplate,true);
-        ajax.open("POST","loadLessonplan.htm?seleccionTemplate="+seleccionTemplate,true);
+        ajax.open("POST","copyfromIdea.htm?seleccionidea="+seleccionidea,true);
         ajax.send("");
     }
      function comboSelectionObjective()
@@ -465,27 +484,27 @@ input[type="radio"] .styled:checked + label::after {
     </head>
     <body>
         <div class="container">
-        <h1 class="text-center">Create New Lesson</h1>
+        <h1 class="text-center">Create New Presentation</h1>
 
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
             <fieldset>
                 <legend id="showPropiertys">
-                    Lesson name and description
+                    Presentation name and description
                     <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
                     </span>
                 </legend>
                 <div class="form-group collapse" id="contenedorPropiertys">
                     <div class="col-xs-6 center-block">
-                        <label class="control-label">Lesson Name</label>
+                        <label class="control-label">Presentation Name</label>
                         <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
                     </div>               
                     <div class="col-xs-6 center-block form-group">
-                        <label class="control-label">Lesson description</label>
+                        <label class="control-label">Presentation description</label>
                         <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"></textarea>
                     </div>
                     <div class="col-xs-6 center-block checkbox checkbox-success">
-                        <input class="styled" type="checkbox" id="ideaCheck">
+                        <input class="styled" type="checkbox" id="ideaCheck" name="ideaCheck">
                         <label for="ideaCheck" >
                             Presentation idea
                         </label>
@@ -541,7 +560,7 @@ input[type="radio"] .styled:checked + label::after {
             </fieldset>
             <fieldset>
                 <legend id="showDetails">
-                    Lesson details
+                    Presentation details
                     <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
 <!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" >
                             <span class="glyphicon glyphicon-triangle-bottom"></span>
@@ -599,12 +618,13 @@ input[type="radio"] .styled:checked + label::after {
                         </select>
                     </div>
   
-                    <div class="hidden col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
+                    <div class="col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
                         <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Select template lessons</label>
-                            <select class="form-control" name="lessons" id="lessons" onchange="comboSelectionTemplateLessons()">
-                                <c:forEach var="template" items="${lessons}">
-                                        <option value="${template.id}" >${template.name}</option>
+                            <label class="control-label">Copy from idea</label>
+                            <select class="form-control" name="ideas" id="ideas" onchange="comboSelectionIdeaLessons()">
+                                <option>Select an idea</option>
+                                <c:forEach var="idea" items="${ideas}">
+                                        <option value="${idea.id}" >${idea.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -615,17 +635,17 @@ input[type="radio"] .styled:checked + label::after {
 
                             </select>
                         </div>--%>
-                        <div class="col-xs-3 center-block form-group">
+<%--                      <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Template</label>
                             <select class="form-control" name="TXTcontent" id="template" multiple>
                                 <c:forEach var="allcontents" items="${allcontents}">
                                     <option selected="true" value="${allcontents.id[0]}" >${allcontents.name}</option>
-                                </c:forEach><%--
+                                </c:forEach>
                                 <c:forEach var="contents" items="${contents}">
                                     <option value="${allcontents.id[0]}" >${allcontents.name}</option>
-                                </c:forEach>--%>
+                                </c:forEach>
                             </select>
-                        </div>
+                        </div>-->--%>
 
                     </div>    
                     <div class="col-xs-3 center-block form-group">
@@ -646,7 +666,7 @@ input[type="radio"] .styled:checked + label::after {
             </fieldset>
             <fieldset>
                     <legend id="showStudents">
-                        Select students
+                        Select Learners
                         <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom"></span>
                     </legend>
                 <div class="form-group collapse in" id="contenedorStudents">

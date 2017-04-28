@@ -59,7 +59,7 @@ public class PaymentSync {
                 QBPayment n = new QBPayment();
                 QBCustomer cust = new QBCustomer();
                 MappingTable family = new MappingTable(config);
-                cust.setId(family.checkmappingrw(u.getrwFamily().getId()));
+                cust.setId(family.checkmappingrw(u.getrwFamily().getId(),config));
                 n.setMemo(u.getDescription());
               n.setappliedTo(pc.getAppliedtoRefID(u.getpaymentId(),config));
               n.setappliedToAmount(pc.getAppliedtoAmount(u.getpaymentId(),config));
@@ -114,7 +114,7 @@ public class PaymentSync {
                  if(!deletelist.isEmpty())
             {
                  delete.deletepayment(deletelist,config);
-                logdb.updatepaymentlog(deletelist,"delete");
+                logdb.updatepaymentlog(deletelist,"delete",config);
             }
                 
              allpayment = x2.retrievePayment(config);// get the updated list of payments after the deletion  
@@ -161,7 +161,7 @@ public class PaymentSync {
                         QBPayment n = new QBPayment();
                         QBCustomer cust = new QBCustomer();
                     MappingTable family = new MappingTable(config);
-                cust.setId(family.checkmappingrw(y3.getrwFamily().getId()));
+                cust.setId(family.checkmappingrw(y3.getrwFamily().getId(),config));
                         //Item item = new Item();
                         // hard coded till we figurs out how it will get this input
                         n.setMemo(y3.getDescription());
@@ -185,14 +185,14 @@ public class PaymentSync {
             if (!updatelist.isEmpty())
             {
                 update.updatePayment(updatelist,config);
-                logdb.updatepaymentlog(updatelist,"update");
+                logdb.updatepaymentlog(updatelist,"update",config);
             }
             
             InsertPayment add = new InsertPayment();
             if(!addlist.isEmpty())
             {
                 add.insertPayment(addlist,config);
-                logdb.updatepaymentlog(addlist,"addition");
+                logdb.updatepaymentlog(addlist,"addition",config);
             }
            
         } catch (SQLException | ParserConfigurationException | TransformerException | SAXException | IOException ex) {
