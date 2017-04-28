@@ -21,15 +21,24 @@
 
     
     $(document).ready( function () {
-        $('#table_id').DataTable({
-        "aLengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
-        "iDisplayLength": 5,
-        "columnDefs": [
-            {
-                "targets": [ 0 ],
-                "visible": false,
-                "searchable": false
-            }]
+    
+        //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
+         var lessondelete = '<%= request.getParameter("messageDelete") %>';
+         
+    if (lessondelete === 'Presentation has progress records,it can not be deleted' ){
+     $('#deleteLessonMessage').modal({
+        show: 'false'
+    });
+     } ;   
+    $('#table_id').DataTable({
+    "aLengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
+    "iDisplayLength": 5,
+    "columnDefs": [
+        {
+            "targets": [ 0 ],
+            "visible": false,
+            "searchable": false
+        }]
     });
         $('#table_datelessons').DataTable();
        
@@ -37,10 +46,9 @@
         table = $('#table_id').DataTable();
         data = table.row( this ).data();
         nameLessons = data[1];
-    } ); 
-    
-   
-} );
+    } );
+
+    } );
 function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
 
         $('#lessonDelete').empty();
@@ -117,7 +125,7 @@ var ajax;
         
 //ajax.onreadystatechange=funcionCallBackLessonsprogress;
  //       window.location.href = "/lessonprogress/loadRecords.htm?LessonsSelected="+LessonsSelected;
-       window.open("<c:url value="/lessonprogress/loadRecords.htm?LessonsSelected="/>"+LessonsSelected, "_blank");
+       window.open("<c:url value="/lessonprogress/loadRecords.htm?LessonsSelected="/>"+LessonsSelected);
 //        ajax.open("POST","lessonprogress.htm?select6=loadRecords&LessonsSelected="+LessonsSelected,true);
 //        ajax.send("");
   };
@@ -135,38 +143,42 @@ var ajax;
         ajax.open("POST","detailsLesson.htm?LessonsSelected="+LessonsSelected,true);
         ajax.send("");
   };
-   function funcionCallBackdeleteLesson()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                   var object = JSON.parse(ajax.responseText);
-                   var s = JSON.parse(object.students);
-                   var c =  JSON.parse(object.contents);
-                   
-                        $('#nameLessonDetails').empty();
-                        $('#nameLessonDetails').append('Details '+nameLessons);
-                        //$('#detailsStudents').empty();
-                        $('#studentarea').append('<table id="detailsStudents" class="table table-striped">');
-                        $.each(s, function (i,student){
-                            $('#detailsStudents').append('<tr><td class="studentDetails">'+s[i].studentname+'</td></tr>');
-                            $("tr:odd").addClass("par");
-                            $("tr:even").addClass("impar");
-                        });
-                        $('#contentDetails').empty();
-                        $.each(c, function (i, content){
-                            $('#contentDetails').append('<li>'+c[i]+'</li>');
-                        });
-                        
-                        
-                        $('#methodDetails').empty();
-                        $('#methodDetails').append('<tr><td>'+object.method+'</td></tr>');
-                        $('#commentDetails').empty();
-                        $('#commentDetails').append('<tr><td>'+object.comment+'</td></tr>');
-                        $('#detailsLesson').modal('show');
-
-                    }
-                }
-            }
+//   function funcionCallBackdeleteLesson()
+//    {
+//           if (ajax.readyState===4){
+//                if (ajax.status===200){
+//                   
+////                   var object = JSON.parse(ajax.responseText);
+////                   var s = JSON.parse(object.students);
+////                   var c =  JSON.parse(object.contents);
+////                   
+////                        $('#nameLessonDetails').empty();
+////                        $('#nameLessonDetails').append('Details '+nameLessons);
+////                        //$('#detailsStudents').empty();
+////                        $('#studentarea').append('<table id="detailsStudents" class="table table-striped">');
+////                        $.each(s, function (i,student){
+////                            $('#detailsStudents').append('<tr><td class="studentDetails">'+s[i].studentname+'</td></tr>');
+////                            $("tr:odd").addClass("par");
+////                            $("tr:even").addClass("impar");
+////                        });
+////                        $('#contentDetails').empty();
+////                        $.each(c, function (i, content){
+////                            $('#contentDetails').append('<li>'+c[i]+'</li>');
+////                        });
+////                        
+////                        
+////                        $('#methodDetails').empty();
+////                        $('#methodDetails').append('<tr><td>'+object.method+'</td></tr>');
+////                        $('#commentDetails').empty();
+////                        $('#commentDetails').append('<tr><td>'+object.comment+'</td></tr>');
+////                         $('#lessonDeleteMessage').empty();
+////                         document.getElementById("lessonDeleteMessage").innerHTML = ajax.responseText;
+////                         $('#lessonDeleteMessage').append('<H1>'+messageDelete+'</H!>');
+//                         $('#deleteLessonMessage').modal('show');
+//
+//                    }
+//                }
+//            }
   function deleteSelect(LessonsSelected)
   {
        if (window.XMLHttpRequest) //mozilla
@@ -178,9 +190,10 @@ var ajax;
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
         
-        ajax.onreadystatechange = funcionCallBackdeleteLesson;
-        ajax.open("POST","deleteLesson.htm?LessonsSelected="+LessonsSelected,true);
-        ajax.send("");
+    //    ajax.onreadystatechange = funcionCallBackdeleteLesson;
+    //    ajax.open("POST","deleteLesson.htm?LessonsSelected="+LessonsSelected,true);
+        window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected);
+    //    ajax.send("");
       
       
   };
@@ -247,8 +260,8 @@ var ajax;
                     <tbody>
                     <c:forEach var="lecciones" items="${lessonslist}" >
                         <tr>
-                            <td class="idLessons">${lecciones.id}</td>
-                            <td class="nameLessons">${lecciones.name}</td>
+                            <td>${lecciones.id}</td>
+                            <td>${lecciones.name}</td>
                             <td>${lecciones.level.name}</td>
                             <td>${lecciones.subject.name}</td>
                             <td>${lecciones.objective.name}</td>
@@ -333,7 +346,7 @@ var ajax;
 
   </div>
 </div>
-<!-- Modal delete-->
+<!-- Modal confirm delete-->
 <div id="deleteLesson" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -347,8 +360,28 @@ var ajax;
             
         </div>
       <div class="modal-footer text-center">
-          <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect(${lecciones.id})">Yes</button>
+          <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect(value)">Yes</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- Modal lessons delete -->
+<div id="deleteLessonMessage" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header modal-header-delete">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+        <div id="lessonDeleteMessage" class="modal-body">
+            ${message}
+        </div>
+      <div class="modal-footer text-center">
+        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
       </div>
     </div>
 
