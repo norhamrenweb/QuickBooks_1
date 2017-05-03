@@ -23,13 +23,10 @@
     $(document).ready( function () {
     
         //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
-         var lessondelete = '<%= request.getParameter("messageDelete") %>';
+        
+   <%--      var lessondelete = '<%= request.getParameter("messageDelete") %>'; --%>
          
-    if (lessondelete === 'Presentation has progress records,it can not be deleted' ){
-     $('#deleteLessonMessage').modal({
-        show: 'false'
-    });
-     } ;   
+     
     $('#table_id').DataTable({
     "aLengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
     "iDisplayLength": 5,
@@ -143,42 +140,50 @@ var ajax;
         ajax.open("POST","detailsLesson.htm?LessonsSelected="+LessonsSelected,true);
         ajax.send("");
   };
-//   function funcionCallBackdeleteLesson()
-//    {
-//           if (ajax.readyState===4){
-//                if (ajax.status===200){
+   function funcionCallBackdeleteLesson()
+    {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                <%--    var lessondeleteconfirm = '<%= request.getParameter("messageDelete") %>'; --%>
+                    var lessondeleteconfirm = ""; 
+                var lessondeleteconfirm = JSON.parse(ajax.responseText);
+//                   var s = JSON.parse(object.students);
+//                   var c =  JSON.parse(object.contents);
 //                   
-////                   var object = JSON.parse(ajax.responseText);
-////                   var s = JSON.parse(object.students);
-////                   var c =  JSON.parse(object.contents);
-////                   
-////                        $('#nameLessonDetails').empty();
-////                        $('#nameLessonDetails').append('Details '+nameLessons);
-////                        //$('#detailsStudents').empty();
-////                        $('#studentarea').append('<table id="detailsStudents" class="table table-striped">');
-////                        $.each(s, function (i,student){
-////                            $('#detailsStudents').append('<tr><td class="studentDetails">'+s[i].studentname+'</td></tr>');
-////                            $("tr:odd").addClass("par");
-////                            $("tr:even").addClass("impar");
-////                        });
-////                        $('#contentDetails').empty();
-////                        $.each(c, function (i, content){
-////                            $('#contentDetails').append('<li>'+c[i]+'</li>');
-////                        });
-////                        
-////                        
-////                        $('#methodDetails').empty();
-////                        $('#methodDetails').append('<tr><td>'+object.method+'</td></tr>');
-////                        $('#commentDetails').empty();
-////                        $('#commentDetails').append('<tr><td>'+object.comment+'</td></tr>');
-////                         $('#lessonDeleteMessage').empty();
-////                         document.getElementById("lessonDeleteMessage").innerHTML = ajax.responseText;
-////                         $('#lessonDeleteMessage').append('<H1>'+messageDelete+'</H!>');
-//                         $('#deleteLessonMessage').modal('show');
-//
-//                    }
-//                }
-//            }
+//                        $('#nameLessonDetails').empty();
+//                        $('#nameLessonDetails').append('Details '+nameLessons);
+//                        //$('#detailsStudents').empty();
+//                        $('#studentarea').append('<table id="detailsStudents" class="table table-striped">');
+//                        $.each(s, function (i,student){
+//                            $('#detailsStudents').append('<tr><td class="studentDetails">'+s[i].studentname+'</td></tr>');
+//                            $("tr:odd").addClass("par");
+//                            $("tr:even").addClass("impar");
+//                        });
+//                        $('#contentDetails').empty();
+//                        $.each(c, function (i, content){
+//                            $('#contentDetails').append('<li>'+c[i]+'</li>');
+//                        });
+//                        
+//                        
+//                        $('#methodDetails').empty();
+//                        $('#methodDetails').append('<tr><td>'+object.method+'</td></tr>');
+//                        $('#commentDetails').empty();
+//                        $('#commentDetails').append('<tr><td>'+object.comment+'</td></tr>');
+//                         $('#lessonDeleteMessage').empty();
+//                         document.getElementById("lessonDeleteMessage").innerHTML = ajax.responseText;
+                       if (lessondeleteconfirm.message === 'Presentation has progress records,it can not be deleted' ){
+                            $('#lessonDeleteMessage').append('<H1>'+lessondeleteconfirm.message+'</H1>');
+                            $('#deleteLessonMessage').modal('show');
+                        }else {
+                            $('#lessonDeleteMessage').append('<H1>'+lessondeleteconfirm.message+'</H1>');
+                            $('#deleteLessonMessage').modal('show'); //  Presentation deleted successfully
+                        };  
+                        
+                        
+
+                    }
+                }
+            }
   function deleteSelect(LessonsSelected)
   {
        if (window.XMLHttpRequest) //mozilla
@@ -190,14 +195,17 @@ var ajax;
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
         
-    //    ajax.onreadystatechange = funcionCallBackdeleteLesson;
-    //    ajax.open("POST","deleteLesson.htm?LessonsSelected="+LessonsSelected,true);
-        window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected);
-    //    ajax.send("");
+        ajax.onreadystatechange = funcionCallBackdeleteLesson;
+        ajax.open("POST","deleteLesson.htm?LessonsSelected="+LessonsSelected,true);
+    <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
+        ajax.send("");
       
       
   };
-    
+    function refresh()
+    {
+         location.reload();
+    }
       
     
     </script>
@@ -378,10 +386,10 @@ var ajax;
         <h4 class="modal-title"></h4>
       </div>
         <div id="lessonDeleteMessage" class="modal-body">
-            ${message}
+            <c:out value='${messageDelete}'/>
         </div>
       <div class="modal-footer text-center">
-        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" onclick="refresh()">OK</button>
       </div>
     </div>
 

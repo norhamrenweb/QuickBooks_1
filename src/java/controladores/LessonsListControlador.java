@@ -197,9 +197,12 @@ public class LessonsListControlador{
 //     
 //     }
     @RequestMapping("/homepage/deleteLesson.htm")
-    public ModelAndView deleteLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+             @ResponseBody
+        public String deleteLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    //public ModelAndView deleteLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("homepage");
+        //ModelAndView mv = new ModelAndView("homepage");
+        JSONObject jsonObj = new JSONObject();
        String[] id = hsr.getParameterValues("LessonsSelected");
        String message = null;
        try {
@@ -211,8 +214,10 @@ public class LessonsListControlador{
          Statement st = this.cn.createStatement();
          String consulta = "select attendance from lesson_stud_att where lesson_id = "+id[0];
          ResultSet rs = st.executeQuery(consulta);
+        
          while(rs.next()){
-             if(!rs.getString("attendance").isEmpty()){
+             String text = rs.getString("attendance");
+             if(text != null){
                  message="Presentation has attendance records,it can not be deleted";
                  break;
              }
@@ -222,7 +227,7 @@ public class LessonsListControlador{
          if(rs1.next()){
          message = "Presentation has progress records,it can not be deleted";
          }
-         if(message.isEmpty())
+         if(message == null)
          {
            consulta = "DELETE FROM lesson_content WHERE lesson_id="+id[0];
           st.executeUpdate(consulta);
@@ -232,14 +237,15 @@ public class LessonsListControlador{
            st.executeUpdate(consulta);
            message = "Presentation deleted successfully";
          }
-        mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
-        mv.addObject("message",message);
+        //mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
+        //mv.addObject("messageDelete",message);
+        jsonObj.put("message", message);
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
         }
        
-        
-        return mv;
+        return jsonObj.toString();
+        //return mv;
     }
     @RequestMapping("/homepage/editLesson.htm")
       public ModelAndView editLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
