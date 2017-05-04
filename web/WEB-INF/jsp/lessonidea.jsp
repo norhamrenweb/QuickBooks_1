@@ -43,7 +43,7 @@
            if (ajax.readyState===4){
                 if (ajax.status===200){
                    var json = JSON.parse(ajax.responseText);
-                   var level = json.level;
+                   var level = json[0].col1;
                    var subject =  JSON.parse(json.subject).id;
                    
                    var objective =  JSON.parse(json.objective).id;

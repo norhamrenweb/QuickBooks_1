@@ -70,7 +70,7 @@ public class LessonIdeaControlador {
     public String loadtree(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
     ModelAndView mv = new ModelAndView("lessonidea");
      JSONObject json = new JSONObject();
-      ArrayList<Lessons> lessons = new ArrayList<>();
+      ArrayList<DBRecords> lessons = new ArrayList<>();
     try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -80,37 +80,41 @@ public class LessonIdeaControlador {
         Statement st = this.cn.createStatement();
         String[] lessonid = hsr.getParameterValues("seleccion1");
         ResultSet rs = st.executeQuery("SELECT lessons.id,lessons.subject_id,lessons.objective_id,objective.name as obj,lessons.name FROM lessons inner join objective on lessons.objective_id = objective.id where lessons.level_id= "+lessonid[0]+" and lessons.idea = true ");
-        
         while(rs.next())
         {
-            Lessons l = new Lessons();
-            l.setId(rs.getInt("id"));
-            l.setName(rs.getString("name"));
-            String[] sid = new String[1];
-            String[] oid = new String[1];
-            Subject s = new Subject();
-            sid[0] = ""+rs.getInt("subject_id");
-            s.setId(sid);
-            l.setSubject(s);
-            Objective o = new Objective();
-            oid[0] = ""+rs.getInt("objective_id");
-            o.setId(oid);
-            o.setName(rs.getString("obj"));
-            l.setObjective(o);
+            DBRecords l = new DBRecords();
+            l.setCol1(""+rs.getInt("id"));
+            l.setCol2(rs.getString("name"));
+            l.setCol4(rs.getString("obj"));
+            l.setCol3(""+rs.getInt("subject_id"));
+         //   l.setCol5(rs.getString("obj"));
+//            String[] sid = new String[1];
+//            String[] oid = new String[1];
+//            Subject s = new Subject();
+//            sid[0] = ""+rs.getInt("subject_id");
+            //s.setId(sid);
+//            l.setSubject(s);
+//            Objective o = new Objective();
+//            oid[0] = ""+rs.getInt("objective_id");
+//            o.setId(oid);
+//            o.setName(rs.getString("obj"));
+//            l.setObjective(o);
             lessons.add(l); 
+          
         }
-        for (Lessons x :lessons)
+        for (DBRecords x :lessons)
         {
-            Subject s = x.getSubject();
-            String[] id = new String[1];
-            id = s.getId();
-            s.setName(s.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
-            x.setSubject(s);
+            Subject s = new Subject();
+            String id = null;
+            id = x.getCol3();
+            x.setCol3(""+s.fetchName(Integer.parseInt(id), hsr.getServletContext()));
+            
         }
-  String test = new Gson().toJson(lessons);
+  
     }catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
         }
-    return new Gson().toJson(lessons);
+    String test = new Gson().toJson(lessons);
+    return test;
     }
 }
