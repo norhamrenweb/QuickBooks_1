@@ -37,59 +37,7 @@
         
         var ajax;
         
-    function funcionCallBackLevelStudent()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("origen").innerHTML= ajax.responseText;
-                    }
-                }
-            }
-            
-
-    function comboSelectionLevelStudent()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
-        ajax.onreadystatechange=funcionCallBackLevelStudent;
-        var seleccion = document.getElementById("levelStudent").value;
-        var alumnos = document.getElementById("destino").innerHTML;
-        ajax.open("POST","studentlistLevel.htm?seleccion="+seleccion,true);
-        ajax.send("");
-    }
-    
-     function funcionCallBackSubject()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("subject").innerHTML= ajax.responseText;
-                    }
-                }
-            }
-    function funcionCallBackObjective()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("objective").innerHTML= ajax.responseText;
-                    }
-                }
-            }
-    function funcionCallBackLoadTemplateLessons()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("lessons").innerHTML= ajax.responseText;
-                    }
-                }
-            }    
-
+   
     function funcionCallBackIdeaLessons()
     {
            if (ajax.readyState===4){
@@ -122,14 +70,7 @@
                 }
             }
             
-    function funcionCallBackContent()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("content").innerHTML= ajax.responseText;
-                    }
-                }
-            }
+   
 
     function comboSelectionLevel()
     {
@@ -145,33 +86,13 @@
         $('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackIdeaLessons;
         var seleccion1 = document.getElementById("level").value;
-        ajax.open("POST","subjectlistLevel.htm?seleccion1="+seleccion1,true);
+        ajax.open("POST","loadtree.htm?seleccion1="+seleccion1,true);
         
         ajax.send("");
        
     }
     
-     function comboSelectionObjective()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("destino").length === 0 ){
-            $('#createOnClick').attr('disabled', true);
-        }else{
-            $('#createOnClick').attr('disabled', false);
-        }
-        ajax.onreadystatechange=funcionCallBackContent;
-        var seleccion3 = document.getElementById("objective").value;
-        ajax.open("POST","contentlistObjective.htm?seleccion3="+seleccion3,true);
-        ajax.send("");
-    }
+    
     
         </script>
         <style>
@@ -333,8 +254,8 @@ input[type="radio"] .styled:checked + label::after {
                 <div class="col-xs-3 form-group">
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
-                        <c:forEach var="levels" items="${gradelevels}">
-                            <option value="${levels.id[0]}" >${levels.name}</option>
+                        <c:forEach var="level" items="${levels}">
+                            <option value="${level.id[0]}" >${level.name}</option>
                         </c:forEach>
                     </select>
                           
