@@ -113,6 +113,65 @@ public class CreateLessonControlador {
         mv.addObject("ideas",ideas);
         return mv;
     }
+    
+    @RequestMapping("/createlesson/startIdea.htm")
+    public ModelAndView startIdea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("lessonidea");
+       List <Lessons> ideas = new ArrayList();
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        mv.addObject("listaAlumnos", this.getStudents());
+        Statement st = this.cn.createStatement();
+        ResultSet rs = st.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        List <Level> grades = new ArrayList();
+        Level l = new Level();
+        l.setName("Select level");
+        grades.add(l);
+        while(rs.next())
+        {
+            Level x = new Level();
+             String[] ids = new String[1];
+             ids[0]=""+rs.getInt("GradeLevelID");
+            x.setId(ids);
+            x.setName(rs.getString("GradeLevel"));
+        grades.add(x);
+        }
+        DriverManagerDataSource dataSource2;
+        dataSource2 = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource2.getConnection();
+         Statement st2 = this.cn.createStatement();
+        ResultSet rs1 = st2.executeQuery("SELECT * FROM public.method");
+        List <Method> methods = new ArrayList();
+        Method m = new Method();
+        m.setName("Select Method");
+        methods.add(m);
+        while(rs1.next())
+        {
+            Method x = new Method();
+             String[] ids = new String[1];
+             ids[0]=""+rs1.getInt("id");
+            x.setId(ids);
+            x.setName(rs1.getString("name"));
+            x.setDescription(rs1.getString("description"));
+        methods.add(x);
+        }
+            mv.addObject("gradelevels", grades);
+            mv.addObject("methods",methods);
+       //get lesson ideas
+       ResultSet rs2 = st2.executeQuery("SELECT * FROM public.lessons where idea = true");
+        while(rs2.next())
+        {
+         Lessons idea = new Lessons();   
+        idea.setId(rs2.getInt("id")); 
+        idea.setName(rs2.getString("name"));
+        ideas.add(idea);
+        }
+        mv.addObject("ideas",ideas);
+        return mv;
+    }
+    
 @RequestMapping("/createlesson/studentlistLevel.htm")
     public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
@@ -257,7 +316,7 @@ public class CreateLessonControlador {
         User user = (User) sesion.getAttribute("user");
          
         
-       String[] studentIds = hsr.getParameterValues("destino[]");
+       
        Lessons newlesson = new Lessons();
        String[] contentids;
        Subject subject = new Subject();
@@ -277,12 +336,7 @@ public class CreateLessonControlador {
        newlesson.setMethod(m);
        String[] ideaCheck = hsr.getParameterValues("ideaCheck");
 
-       java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorainicio")+":00.000");
-     java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha")+" "+hsr.getParameter("TXThorafin")+":00.000");
-
-       
-       newlesson.setStart(""+timestampstart);
-     newlesson.setFinish(""+timestampend);
+      
      newlesson.setTeacherid(user.getId());
        
       newlesson.setLevel(level);
@@ -309,7 +363,13 @@ public class CreateLessonControlador {
            c.newidea(newlesson);
        }
        else{
-       c.newlesson(studentIds,newlesson);
+           java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorainicio") + ":00.000");
+           java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorafin") + ":00.000");
+           String[] studentIds = hsr.getParameterValues("destino[]");
+
+           newlesson.setStart("" + timestampstart);
+           newlesson.setFinish("" + timestampend);
+           c.newlesson(studentIds, newlesson);
        }
        
         

@@ -54,6 +54,11 @@
                     $('#showStudents').addClass("desactivada");
                     $('#showStudents').off('click');
                     $("#contenedorStudents").removeClass('in');
+                    if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === ''){
+                        $('#createOnClick').attr('disabled', true);
+                    }else{
+                        $('#createOnClick').attr('disabled', false);
+                    }
                     
                 }else if($("#ideaCheck :not(:checked)")) 
                 {
@@ -530,7 +535,7 @@ input[type="radio"] .styled:checked + label::after {
                             <div class="form-group">
                                 <label class="control-label" for="fecha">Date</label>
                                 <div class='input-group date' id='fecha'>
-                                    <input type='text' name="TXTfecha" class="form-control" id="fecha" required="required"/>
+                                    <input type='text' name="TXTfecha" class="form-control" id="fecha"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -542,7 +547,7 @@ input[type="radio"] .styled:checked + label::after {
                             <div class="form-group">
                                 <label class="control-label" for="horainicio">Start hour</label>
                                 <div class='input-group date' id='horainicio'>
-                                    <input type='text' name="TXThorainicio" class="form-control" required="required"/>
+                                    <input type='text' name="TXThorainicio" class="form-control"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -553,7 +558,7 @@ input[type="radio"] .styled:checked + label::after {
                             <div class="form-group">
                                 <label class="control-label" for="horafin">Finish hour</label>
                                 <div class='input-group date' id='horafin'>
-                                    <input type='text' name="TXThorafin" class="form-control" required="required"/>
+                                    <input type='text' name="TXThorafin" class="form-control"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
