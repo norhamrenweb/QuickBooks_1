@@ -27,6 +27,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Iterator;
+
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.Iterator;
+
 
 /**
  *
@@ -71,6 +84,8 @@ public class LessonIdeaControlador {
     ModelAndView mv = new ModelAndView("lessonidea");
      JSONObject json = new JSONObject();
       ArrayList<DBRecords> lessons = new ArrayList<>();
+      ArrayList<String> subjects = new ArrayList<>();
+      ArrayList<String> objectives = new ArrayList<>();
     try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -87,6 +102,7 @@ public class LessonIdeaControlador {
             l.setCol2(rs.getString("name"));
             l.setCol4(rs.getString("obj"));
             l.setCol3(""+rs.getInt("subject_id"));
+            objectives.add(rs.getString("obj"));
          //   l.setCol5(rs.getString("obj"));
 //            String[] sid = new String[1];
 //            String[] oid = new String[1];
@@ -107,7 +123,7 @@ public class LessonIdeaControlador {
             Subject s = new Subject();
             String id = null;
             id = x.getCol3();
-            x.setCol3(""+s.fetchName(Integer.parseInt(id), hsr.getServletContext()));
+            subjects.add(s.fetchName(Integer.parseInt(id), hsr.getServletContext()));
             
         }
   
@@ -115,6 +131,60 @@ public class LessonIdeaControlador {
             System.out.println("Error leyendo Alumnos: " + ex);
         }
     String test = new Gson().toJson(lessons);
-    return test;
+    Tree tree = new Tree();
+    Node<String> rootNode = null;
+    for(String x:subjects)
+    {
+        rootNode.addChild(new Node<String>(x)); 
+        
+    }
+    for(String y:objectives)
+    {
+    Node<String> nodeA = new Node<String>(y);
+    
+    rootNode.addChild(nodeA);
+    for (DBRecords l:lessons){
+        if(l.getCol4().equalsIgnoreCase(y)){
+         Node<String> nodeB = new Node<String>(l.getCol2()); 
+         nodeA.addChild(nodeB);
+         
+        }
+    }
+    }
+
+        tree.setRootElement(rootNode);
+        String test2 = this.generateJSONfromTree(tree);
+    return test2;
+    }
+    public String generateJSONfromTree(Tree tree) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonFactory factory = new JsonFactory();
+        ByteArrayOutputStream out = new ByteArrayOutputStream(); // buffer to write to string later
+        JsonGenerator generator = factory.createJsonGenerator(out, JsonEncoding.UTF8);
+
+        ObjectNode rootNode = generateJSON(tree.getRootElement(), mapper.createObjectNode());
+        mapper.writeTree(generator, rootNode);
+
+        return out.toString();
+    }
+
+    public ObjectNode generateJSON(Node<String> node, ObjectNode obN) {
+        if (node == null) {
+            return obN;
+        }
+
+        obN.put("text", node.getData());
+
+        ArrayNode childN = obN.arrayNode();
+        obN.set("children", childN);        
+        if (node.getChildren() == null || node.getChildren().isEmpty()) {
+            return obN;
+        }
+
+        Iterator<Node<String>> it = node.getChildren().iterator();
+        while (it.hasNext()) {  
+            childN.add(generateJSON(it.next(), new ObjectMapper().createObjectNode()));
+        }
+        return obN;
     }
 }

@@ -58,24 +58,7 @@
 // direct data
 $('#tree').jstree({
     'core' : {
-        'data' : [
-            {                   
-                'id' : '1',
-                'text' : node[0].col3,
-                'state' : { 'opened' : true, 'selected' : true },
-                'children' : [ { 'id' : '1', 'text' : node[0].col4 }],
-                '#' : [ { 'id' : node[0].col1, 'text' : node[0].col2  }]
-                
-            },
-            {                   
-                'id' : '2',
-                'text' : node[2].col3,
-                'state' : { 'opened' : true, 'selected' : true },
-                'children' : [ { 'id' : '2', 'text' : node[2].col4 }],
-                '#' : [ { 'id' : node[2].col1, 'text' : node[2].col2  }]
-                
-            }
-        ]
+        'data' : node
     }
 });
 //                   var level = node[0].col1;
