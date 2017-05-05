@@ -102,7 +102,9 @@ public class LessonIdeaControlador {
             l.setCol2(rs.getString("name"));
             l.setCol4(rs.getString("obj"));
             l.setCol3(""+rs.getInt("subject_id"));
+            if(!objectives.contains(rs.getString("obj"))){
             objectives.add(rs.getString("obj"));
+            }
          //   l.setCol5(rs.getString("obj"));
 //            String[] sid = new String[1];
 //            String[] oid = new String[1];
@@ -123,8 +125,10 @@ public class LessonIdeaControlador {
             Subject s = new Subject();
             String id = null;
             id = x.getCol3();
-            subjects.add(s.fetchName(Integer.parseInt(id), hsr.getServletContext()));
-            
+            x.setCol3(s.fetchName(Integer.parseInt(id), hsr.getServletContext()));
+            if(!subjects.contains(x.getCol3())){
+            subjects.add(x.getCol3());
+            }
         }
   
     }catch (SQLException ex) {
@@ -135,7 +139,9 @@ public class LessonIdeaControlador {
     Node<String> rootNode = new Node<String>("root");;
     for(String x:subjects)
     {
-        rootNode.addChild(new Node<String>(x)); 
+         Node<String> nodeC = new Node<String>(x);
+        rootNode.addChild(nodeC); 
+      
          for(String y:objectives)
     {
     
@@ -143,19 +149,22 @@ public class LessonIdeaControlador {
          if(l.getCol3().equalsIgnoreCase(x)&&l.getCol4().equalsIgnoreCase(y))
          {
             Node<String> nodeA = new Node<String>(y);
-             rootNode.addChild(nodeA);
-   
-       
-         Node<String> nodeB = new Node<String>(l.getCol2()); 
-         nodeA.addChild(nodeB);
-        
+             nodeC.addChild(nodeA);
          
+       for (DBRecords k:lessons){
+          if(k.getCol4().equalsIgnoreCase(y)){
+         Node<String> nodeB = new Node<String>(k.getCol2()); 
+         nodeA.addChild(nodeB);
+          }
+       }
+       break;
+         }
         }
     }
         
     }
    
-    }
+    
 
         tree.setRootElement(rootNode);
         String test2 = this.generateJSONfromTree(tree);
