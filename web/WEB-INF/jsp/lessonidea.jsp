@@ -29,7 +29,17 @@
         show: 'false'
     });
     }
-  
+   $('#html1').jstree({
+        "plugins" : [ "wholerow", "checkbox", 'search' ]
+    });
+           var to = false;
+  $('#findIdea').keyup(function () {
+    if(to) { clearTimeout(to); }
+    to = setTimeout(function () {
+      var v = $('#findIdea').val();
+      $('#html1').jstree(true).search(v);
+    }, 250);
+  }); 
         
     });            
         
@@ -42,30 +52,55 @@
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                   var json = JSON.parse(ajax.responseText);
-                   var level = json[0].col1;
-                   var subject =  JSON.parse(json.subject).id;
-                   
-                   var objective =  JSON.parse(json.objective).id;
-                   var method =  JSON.parse(json.method).id;
-                   var content =  JSON.parse(json.content);
-                   var subjects = JSON.parse(json.subjectslist);
-                   var objectives = JSON.parse(json.objectiveslist);
-                   var contents = JSON.parse(json.contentslist);
-                   $('#subject').empty();
-                   var pos1 = subject[0].toString();
-                     $.each(subjects, function(i, item) {
-                        var test = subjects[i].id;
-                        if (typeof test !== "undefined"){
-                        var test1 = test.toString();
-                    };
-                        if( test1 === pos1){
-                             $('#subject').append('<option selected value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
-                        }
-                        else{
-                         $('#subject').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
-                    }
-                   });
+                   var node = JSON.parse(ajax.responseText);
+                   var i = node.length;
+
+// direct data
+$('#tree').jstree({
+    'core' : {
+        'data' : [
+            {                   
+                'id' : '1',
+                'text' : node[0].col3,
+                'state' : { 'opened' : true, 'selected' : true },
+                'children' : [ { 'id' : '1', 'text' : node[0].col4 }],
+                '#' : [ { 'id' : node[0].col1, 'text' : node[0].col2  }]
+                
+            },
+            {                   
+                'id' : '2',
+                'text' : node[2].col3,
+                'state' : { 'opened' : true, 'selected' : true },
+                'children' : [ { 'id' : '2', 'text' : node[2].col4 }],
+                '#' : [ { 'id' : node[2].col1, 'text' : node[2].col2  }]
+                
+            }
+        ]
+    }
+});
+//                   var level = node[0].col1;
+//                   var subject =  JSON.parse(json.subject).id;
+//                   
+//                   var objective =  JSON.parse(json.objective).id;
+//                   var method =  JSON.parse(json.method).id;
+//                   var content =  JSON.parse(json.content);
+//                   var subjects = JSON.parse(json.subjectslist);
+//                   var objectives = JSON.parse(json.objectiveslist);
+//                   var contents = JSON.parse(json.contentslist);
+//                   $('#subject').empty();
+//                   var pos1 = subject[0].toString();
+//                     $.each(subjects, function(i, item) {
+//                        var test = subjects[i].id;
+//                        if (typeof test !== "undefined"){
+//                        var test1 = test.toString();
+//                    };
+//                        if( test1 === pos1){
+//                             $('#subject').append('<option selected value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
+//                        }
+//                        else{
+//                         $('#subject').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
+//                    }
+//                   });
                     }
                 }
             }
@@ -269,7 +304,25 @@ input[type="radio"] .styled:checked + label::after {
                             </c:forEach>
                     </select>
                 </div>
-  
+                </div>
+  <div class="col-xs-12 center-block">
+                            <input id="findIdea" value="" class="input" type="text">
+                        </div>
+                <div class="col-xs-12 center-block" id="tree">
+<!--                    <ul>
+                        <li>Root node 1
+                            <ul>
+                                <li>Child node 1
+                                    <ul>
+                                        <li>Idea</li>
+                                    </ul>
+                                    </li>
+                                <li><a href="#">Child node 2</a></li>
+                            </ul>
+                        </li>
+                        <li>Root node 2</li>
+                    </ul>-->
+                </div>
 
    
         </form:form>
