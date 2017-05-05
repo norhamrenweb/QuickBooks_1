@@ -29,17 +29,10 @@
         show: 'false'
     });
     }
-   $('#html1').jstree({
-        "plugins" : [ "wholerow", "checkbox", 'search' ]
-    });
-           var to = false;
-  $('#findIdea').keyup(function () {
-    if(to) { clearTimeout(to); }
-    to = setTimeout(function () {
-      var v = $('#findIdea').val();
-      $('#html1').jstree(true).search(v);
-    }, 250);
-  }); 
+//   $('#tree').jstree({
+//        "plugins" : [ "wholerow", "checkbox", 'search' ]
+//    });
+
         
     });            
         
@@ -52,38 +45,30 @@
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
+                   $("#tree").jstree('destroy');
                    var node = JSON.parse(ajax.responseText);
                    var i = node.length;
+                
+                // direct data
+                $('#tree').jstree({
+                    "core" : {
+                        "data" : node
+        
+                }, 
+                "plugins" : [ "wholerow", "checkbox", "search","state", "types" ]  
+                });
+                $('#j1_1').children(.jstree-checkbox).remove();
 
-// direct data
-$('#tree').jstree({
-    'core' : {
-        'data' : node
-    }
-});
-//                   var level = node[0].col1;
-//                   var subject =  JSON.parse(json.subject).id;
-//                   
-//                   var objective =  JSON.parse(json.objective).id;
-//                   var method =  JSON.parse(json.method).id;
-//                   var content =  JSON.parse(json.content);
-//                   var subjects = JSON.parse(json.subjectslist);
-//                   var objectives = JSON.parse(json.objectiveslist);
-//                   var contents = JSON.parse(json.contentslist);
-//                   $('#subject').empty();
-//                   var pos1 = subject[0].toString();
-//                     $.each(subjects, function(i, item) {
-//                        var test = subjects[i].id;
-//                        if (typeof test !== "undefined"){
-//                        var test1 = test.toString();
-//                    };
-//                        if( test1 === pos1){
-//                             $('#subject').append('<option selected value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
-//                        }
-//                        else{
-//                         $('#subject').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
-//                    }
-//                   });
+      //BUSCADOR LESSONS IDEA          
+var to = false;
+  $('#findIdea').keyup(function () {
+    if(to) { clearTimeout(to); }
+    to = setTimeout(function () {
+      var v = $('#findIdea').val();
+      $('#tree').jstree(true).search(v);
+    }, 250);
+  }); 
+
                     }
                 }
             }
@@ -278,19 +263,11 @@ input[type="radio"] .styled:checked + label::after {
                     </select>
                           
                 </div>
-                <div class="col-xs-3 center-block">
-                    <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
-                    <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
-                    
-                       <c:forEach var="subject" items="${subjects}">
-                                <option value="${subject.id[0]}" data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
-                            </c:forEach>
-                    </select>
                 </div>
+                <div class="col-xs-12 center-block">
+                    <label class="control-label" for="findIdea">Find Lessons Idea</label>
+                    <input id="findIdea" class="form-group" type="text">
                 </div>
-  <div class="col-xs-12 center-block">
-                            <input id="findIdea" value="" class="input" type="text">
-                        </div>
                 <div class="col-xs-12 center-block" id="tree">
 <!--                    <ul>
                         <li>Root node 1
