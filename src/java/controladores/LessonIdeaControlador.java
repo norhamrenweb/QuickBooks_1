@@ -7,6 +7,7 @@ package controladores;
 
 import Montessori.*;
 import Montessori.Level;
+import atg.taglib.json.util.JSONException;
 import atg.taglib.json.util.JSONObject;
 import com.google.gson.*;
 
@@ -136,10 +137,10 @@ public class LessonIdeaControlador {
         }
     String test = new Gson().toJson(lessons);
     Tree tree = new Tree();
-    Node<String> rootNode = new Node<String>("root");;
+    Node<String> rootNode = new Node<String>("root","0");;
     for(String x:subjects)
     {
-         Node<String> nodeC = new Node<String>(x);
+         Node<String> nodeC = new Node<String>(x,"1");
         rootNode.addChild(nodeC); 
       
          for(String y:objectives)
@@ -148,12 +149,12 @@ public class LessonIdeaControlador {
      for (DBRecords l:lessons){
          if(l.getCol3().equalsIgnoreCase(x)&&l.getCol4().equalsIgnoreCase(y))
          {
-            Node<String> nodeA = new Node<String>(y);
+            Node<String> nodeA = new Node<String>(y,"2");
              nodeC.addChild(nodeA);
          
        for (DBRecords k:lessons){
           if(k.getCol4().equalsIgnoreCase(y)){
-         Node<String> nodeB = new Node<String>(k.getCol2()); 
+         Node<String> nodeB = new Node<String>(k.getCol2(),k.getCol1()); 
          nodeA.addChild(nodeB);
           }
        }
@@ -170,7 +171,7 @@ public class LessonIdeaControlador {
         String test2 = this.generateJSONfromTree(tree);
     return test2;
     }
-    public String generateJSONfromTree(Tree tree) throws IOException {
+    public String generateJSONfromTree(Tree tree) throws IOException, JSONException {
         ObjectMapper mapper = new ObjectMapper();
         JsonFactory factory = new JsonFactory();
         ByteArrayOutputStream out = new ByteArrayOutputStream(); // buffer to write to string later
@@ -182,13 +183,17 @@ public class LessonIdeaControlador {
         return out.toString();
     }
 
-    public ObjectNode generateJSON(Node<String> node, ObjectNode obN) {
+    public ObjectNode generateJSON(Node<String> node, ObjectNode obN) throws JSONException {
         if (node == null) {
             return obN;
         }
 
         obN.put("text", node.getData());
-
+        obN.put("id", node.getId());
+        JSONObject j = new JSONObject();
+//        j.put("opened",true);
+//        j.put("disabled",false);
+//        obN.put("state",j.toString());
         ArrayNode childN = obN.arrayNode();
         obN.set("children", childN);        
         if (node.getChildren() == null || node.getChildren().isEmpty()) {
