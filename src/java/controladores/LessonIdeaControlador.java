@@ -132,24 +132,29 @@ public class LessonIdeaControlador {
         }
     String test = new Gson().toJson(lessons);
     Tree tree = new Tree();
-    Node<String> rootNode = null;
+    Node<String> rootNode = new Node<String>("root");;
     for(String x:subjects)
     {
         rootNode.addChild(new Node<String>(x)); 
-        
-    }
-    for(String y:objectives)
+         for(String y:objectives)
     {
-    Node<String> nodeA = new Node<String>(y);
     
-    rootNode.addChild(nodeA);
-    for (DBRecords l:lessons){
-        if(l.getCol4().equalsIgnoreCase(y)){
+     for (DBRecords l:lessons){
+         if(l.getCol3().equalsIgnoreCase(x)&&l.getCol4().equalsIgnoreCase(y))
+         {
+            Node<String> nodeA = new Node<String>(y);
+             rootNode.addChild(nodeA);
+   
+       
          Node<String> nodeB = new Node<String>(l.getCol2()); 
          nodeA.addChild(nodeB);
+        
          
         }
     }
+        
+    }
+   
     }
 
         tree.setRootElement(rootNode);
