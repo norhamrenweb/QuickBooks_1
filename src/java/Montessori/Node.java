@@ -16,6 +16,15 @@ public class Node<String> {
  
     public String data;
     public String id;
+    public String state;
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
     
 
 //    public String getState() {
@@ -46,10 +55,12 @@ public class Node<String> {
      * Convenience ctor to create a Node<T> with an instance of T.
      * @param data an instance of T.
      */
-    public Node(String data,String id) {
+    public Node(String data,String id,String state) {
         this();
         setData(data);
         setId(id);
+        setState(state);
+        
        
     }
      

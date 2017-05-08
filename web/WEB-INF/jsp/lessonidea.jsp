@@ -55,7 +55,7 @@
                         "data" : node
         
                 }, 
-//                "plugins" : [ "wholerow", "checkbox", "search","state", "types" ]  
+               "plugins" : [ "wholerow", "checkbox", "search","state", "types" ]  
                 });
            
              

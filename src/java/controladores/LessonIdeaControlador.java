@@ -137,24 +137,27 @@ public class LessonIdeaControlador {
         }
     String test = new Gson().toJson(lessons);
     Tree tree = new Tree();
-    Node<String> rootNode = new Node<String>("root","A");;
+    Node<String> rootNode = new Node<String>("root","A"," {\"disabled\":true}");
+    int i = 0;
+   int z = 0;
     for(String x:subjects)
     {
-         Node<String> nodeC = new Node<String>(x,"B");
+         
+        Node<String> nodeC = new Node<String>(x,"L"+i," {\"disabled\":true}");
         rootNode.addChild(nodeC); 
-      
+      i++;
          for(String y:objectives)
     {
     
      for (DBRecords l:lessons){
          if(l.getCol3().equalsIgnoreCase(x)&&l.getCol4().equalsIgnoreCase(y))
          {
-            Node<String> nodeA = new Node<String>(y,"C");
+            Node<String> nodeA = new Node<String>(y,"C"+z," {\"disabled\":true}");
              nodeC.addChild(nodeA);
-         
+         z++;
        for (DBRecords k:lessons){
           if(k.getCol4().equalsIgnoreCase(y)){
-         Node<String> nodeB = new Node<String>(k.getCol2(),k.getCol1()); 
+         Node<String> nodeB = new Node<String>(k.getCol2(),k.getCol1()," {\"disabled\":false}"); 
          nodeA.addChild(nodeB);
           }
        }
@@ -190,6 +193,7 @@ public class LessonIdeaControlador {
 
         obN.put("text", node.getData());
         obN.put("id", node.getId());
+        obN.put("state",node.getState());
         JSONObject j = new JSONObject();
 //        j.put("opened",true);
 //        j.put("disabled",false);
