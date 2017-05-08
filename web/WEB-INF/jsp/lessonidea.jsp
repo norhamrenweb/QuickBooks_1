@@ -33,9 +33,22 @@
 //        "plugins" : [ "wholerow", "checkbox", 'search' ]
 //    });
 
-        
-    });            
-        
+         //COMPROMBAR QUE EL ID DEL ARBOL ES NUMERICO Y ACTIVAR LOS BOTONES
+                $( "#tree" ).click(function() {
+                    var ideaSelect = $("#tree").jstree("get_selected");
+                    if($.isNumeric(ideaSelect[0])){
+                        $('#editIdea').attr('disabled', false);
+                        $('#delIdea').attr('disabled', false);
+                    }else{
+                        $('#editIdea').attr('disabled', true);
+                        $('#delIdea').attr('disabled', true);
+                    };
+                        
+                    
+                    //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
+            });      
+    });    
+ 
  
         
         var ajax;
@@ -55,11 +68,15 @@
                         "data" : node
         
                 }, 
-               "plugins" : [ "wholerow", "checkbox", "search","state", "types" ]  
+               "plugins" : [ "wholerow", "search","state", "types" ]  
                 });
            
-             
-
+//            formattree();
+    var to = false;
+        if(to) { clearTimeout(to); }
+    to = setTimeout(function () {
+      $('#tree').children().children().children('a').children('i').removeClass('jstree-checkbox');
+    }, 250); 
       //BUSCADOR LESSONS IDEA          
 //var to = false;
 //  $('#findIdea').keyup(function () {
@@ -74,6 +91,24 @@
                 }
             }
             
+    function editttree()
+    {
+       if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+       
+        ajax.onreadystatechange = funcionCallBackIdeaLessons;
+        var ideaSelect = $("#tree").jstree("get_selected");
+        ajax.open("POST","loadtree.htm?seleccion1="+ideaSelect,true);
+        
+        ajax.send("");
+    }        
    
 
     function comboSelectionLevel()
@@ -119,7 +154,10 @@
             {
                 display:none
             }
-
+            .red
+            {
+                color: red;
+            }
             .desactivada
             {
                 color: grey;
@@ -289,8 +327,15 @@ input[type="radio"] .styled:checked + label::after {
                         <li>Root node 2</li>
                     </ul>-->
                 </div>
-
-   
+                    <div class="col-xs-12 center-block" id="buttons">
+                        <div class="col-xs-6 center-block">
+                            <button type="button" class="btn btn-warning" onclick="editttree()" id="editIdea" disabled="true">Edit</button>
+                        </div>
+                        <div class="col-xs-6 center-block">
+                            <button type="button"  class="btn btn-danger" onclick="delttree()" id="delIdea" disabled="true">Delete</button>
+                        </div>
+                </div>
+                    
         </form:form>
         
         </div>
