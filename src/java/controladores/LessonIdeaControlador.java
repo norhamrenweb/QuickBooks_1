@@ -137,10 +137,10 @@ public class LessonIdeaControlador {
         }
     String test = new Gson().toJson(lessons);
     Tree tree = new Tree();
-    Node<String> rootNode = new Node<String>("root","0");;
+    Node<String> rootNode = new Node<String>("root","A");;
     for(String x:subjects)
     {
-         Node<String> nodeC = new Node<String>(x,"1");
+         Node<String> nodeC = new Node<String>(x,"B");
         rootNode.addChild(nodeC); 
       
          for(String y:objectives)
@@ -149,7 +149,7 @@ public class LessonIdeaControlador {
      for (DBRecords l:lessons){
          if(l.getCol3().equalsIgnoreCase(x)&&l.getCol4().equalsIgnoreCase(y))
          {
-            Node<String> nodeA = new Node<String>(y,"2");
+            Node<String> nodeA = new Node<String>(y,"C");
              nodeC.addChild(nodeA);
          
        for (DBRecords k:lessons){

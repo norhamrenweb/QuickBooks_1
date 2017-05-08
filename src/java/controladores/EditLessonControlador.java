@@ -71,7 +71,7 @@ public class EditLessonControlador {
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
          Statement st = this.cn.createStatement();
-         String lessonid = hsr.getParameter("selectedlesson");
+         String lessonid = hsr.getParameter("LessonsSelected");
          ResultSet rs = st.executeQuery("select * from lessons where id= "+lessonid);
          while(rs.next()){
              data.setComments(rs.getString("comments"));
@@ -86,23 +86,17 @@ public class EditLessonControlador {
                 data.setStart(timeStr);
                 data.setFinish(timeStr2);
                 data.setId(Integer.parseInt(lessonid));
-                id[0]=rs.getString("level_id");
-                l.setId(id);
-                
-                id[0]= rs.getString("method_id");
-                m.setId(id);
-                
+                l.setId(new String[] {""+rs.getInt("level_id")});
+                m.setId(new String[] {""+rs.getInt("method_id")});
                 data.setName(rs.getString("name"));
-                id[0]= rs.getString("objective_id");
-                o.setId(id);
-               
-                id[0]= rs.getString("subject_id");
-                s.setId(id);
+                o.setId(new String[] {""+rs.getInt("objective_id")});
+                s.setId(new String[] {""+rs.getInt("subject_id")});
                 
          }
          id = s.getId() ;
        s.setName(s.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
        data.setSubject(s);
+       id=null;
        id = m.getId();
        m.setName(m.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
        data.setMethod(m);
@@ -115,7 +109,7 @@ public class EditLessonControlador {
        ResultSet rs2 = st.executeQuery("select * from lesson_content where lesson_id = "+lessonid);
        while(rs2.next())
        {
-           id[0] = rs.getString("content_id");
+           id[0] = rs2.getString("content_id");
            Content eq = new Content();
            eq.setId(id);
            c.add(eq);
@@ -128,12 +122,12 @@ public class EditLessonControlador {
    while(rs3.next())
    {
    Students learner = new Students();
-   learner.setId_students(rs.getInt("student_id"));
+   learner.setId_students(rs3.getInt("student_id"));
    stud.add(learner);
   
    }
    cn.close();
-    dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+    dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
          Statement st2 = this.cn.createStatement();
          
@@ -147,6 +141,64 @@ public class EditLessonControlador {
        }
        
        cn.close();
+       mv.addObject("data",data);
+        mv.addObject("objectives",this.getObjectives(data.getSubject().getId()));
+                 mv.addObject("contents",this.getContent(data.getObjective().getId()));
+               
+                 cn.close();
+                  dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+               mv.addObject("subjects",this.getSubjects(data.getLevel().getId()));
+         List <Lessons> ideas = new ArrayList();
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        mv.addObject("listaAlumnos", this.getStudents());
+        Statement st4 = this.cn.createStatement();
+        ResultSet rs4 = st4.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        List <Level> grades = new ArrayList();
+        Level le = new Level();
+        le.setName("Select level");
+        grades.add(le);
+        while(rs4.next())
+        {
+            Level x = new Level();
+             String[] ids = new String[1];
+             ids[0]=""+rs4.getInt("GradeLevelID");
+            x.setId(ids);
+            x.setName(rs4.getString("GradeLevel"));
+        grades.add(x);
+        }
+        DriverManagerDataSource dataSource2;
+        dataSource2 = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource2.getConnection();
+         Statement st3 = this.cn.createStatement();
+        ResultSet rs1 = st3.executeQuery("SELECT * FROM public.method");
+        List <Method> methods = new ArrayList();
+        Method me = new Method();
+        me.setName("Select Method");
+        methods.add(me);
+        while(rs1.next())
+        {
+            Method x = new Method();
+             String[] ids = new String[1];
+             ids[0]=""+rs1.getInt("id");
+            x.setId(ids);
+            x.setName(rs1.getString("name"));
+            x.setDescription(rs1.getString("description"));
+        methods.add(x);
+        }
+            mv.addObject("gradelevels", grades);
+            mv.addObject("methods",methods);
+       //get lesson ideas
+       ResultSet rs5 = st3.executeQuery("SELECT * FROM public.lessons where idea = true");
+        while(rs5.next())
+        {
+         Lessons idea = new Lessons();   
+        idea.setId(rs5.getInt("id")); 
+        idea.setName(rs5.getString("name"));
+        ideas.add(idea);
+        }
+        mv.addObject("ideas",ideas);
        return mv;
        
     }
@@ -307,9 +359,10 @@ public class EditLessonControlador {
        
         return listaAlumnos;
     }
+         @RequestMapping("/editlesson/studentlistLevel.htm")
              public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("esitlesson");
+        ModelAndView mv = new ModelAndView("editlesson");
        
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
@@ -325,7 +378,7 @@ public class EditLessonControlador {
     @RequestMapping("/editlesson/subjectlistLevel.htm")
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("createlesson");
+        ModelAndView mv = new ModelAndView("editlesson");
         
        try {
          DriverManagerDataSource dataSource;
@@ -344,10 +397,10 @@ public class EditLessonControlador {
         
         return mv;
     }
-        @RequestMapping("/createlesson/objectivelistSubject.htm")
+        @RequestMapping("/editlesson/objectivelistSubject.htm")
     public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("createlesson");
+        ModelAndView mv = new ModelAndView("editlesson");
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
@@ -357,10 +410,10 @@ public class EditLessonControlador {
         
         return mv;
     }
-    @RequestMapping("/createlesson/contentlistObjective.htm")
+    @RequestMapping("/editlesson/contentlistObjective.htm")
     public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("createlesson");
+        ModelAndView mv = new ModelAndView("editlesson");
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();    

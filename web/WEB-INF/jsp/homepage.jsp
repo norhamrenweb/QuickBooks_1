@@ -140,6 +140,10 @@ var ajax;
         ajax.open("POST","detailsLesson.htm?LessonsSelected="+LessonsSelected,true);
         ajax.send("");
   };
+   function modifySelect(LessonsSelected)
+    {
+       window.open("<c:url value="/editlesson/start.htm?LessonsSelected="/>"+LessonsSelected);
+  };
    function funcionCallBackdeleteLesson()
     {
            if (ajax.readyState===4){

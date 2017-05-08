@@ -428,7 +428,7 @@ public class CreateLessonControlador {
              Method meth = new Method();
              Level lev = new Level();
              int levelid = 0;
-             List<Content> contents = new ArrayList<>();
+             List<String> contents = new ArrayList<>();
               DriverManagerDataSource dataSource;
                try {
         
@@ -460,13 +460,13 @@ public class CreateLessonControlador {
               
    while (rs2.next())
             {
-                Content eq = new Content();
-                String[] ids = new String[1];
-               ids[0]= ""+rs2.getInt("content_id");
+              //  Content eq = new Content();
+                String ids = null;
+               ids= ""+rs2.getInt("content_id");
               
-                eq.setId(ids);
+             //   eq.setId(ids);
               
-                contents.add(eq);
+                contents.add(ids);
             }
          
          json.put("level",""+levelid);
@@ -479,14 +479,17 @@ public class CreateLessonControlador {
             System.out.println("Error  " + ex);
         }
                String hi = json.toString();
-               String[] levelids= new String[1];
-               levelids[0]=""+levelid;
+               String[] ids= new String[1];
+               ids[0]=""+levelid;
                 json.put("objectiveslist",new Gson().toJson(this.getObjectives(sub.getId())));
                  json.put("contentslist",new Gson().toJson(this.getContent(obj.getId())));
+               
                  cn.close();
                   dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-               json.put("subjectslist",new Gson().toJson(this.getSubjects(levelids)));
+               json.put("subjectslist",new Gson().toJson(this.getSubjects(ids)));
+               
+               
                
                return json.toString();
       

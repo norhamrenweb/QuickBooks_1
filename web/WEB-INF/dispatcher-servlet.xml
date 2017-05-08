@@ -56,7 +56,7 @@
          <bean class="controladores.LessonsListControlador" id="lessonsList"/>
          <bean class="controladores.ProgressControlador" id="lessonprogress"/>
           <bean class="controladores.LessonIdeaControlador" id="lessonidea"/>
-        
+        <bean class="controladores.EditLessonControlador" id="editlesson"/>
 <bean class="controladores.CerrarLogin" id="cerrarLoginController"/>
 <!--     <bean class="controladores.SettingsControlador" id="settings">
      <property name="methodNameResolver">
@@ -131,6 +131,7 @@
                  <prop key="studentpage.htm">studentprog</prop> 
                  <prop key="studentpage_1.htm">studentprog</prop> 
              <prop key="lessonidea.htm">lessonidea</prop>
+             <prop key="editlesson.htm">editlesson</prop>
                 <prop key="cerrarLogin.htm">cerrarLoginController</prop>
             </props>
         </property>

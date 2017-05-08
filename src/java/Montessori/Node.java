@@ -12,10 +12,28 @@ import java.util.List;
  *
  * @author nmohamed
  */
-public class Node<T> {
+public class Node<String> {
  
-    public T data;
-    public List<Node<T>> children;
+    public String data;
+    public String id;
+    
+
+//    public String getState() {
+//        return state;
+//    }
+//
+//    public void setState(String state) {
+//        this.state = state;
+//    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    public List<Node<String>> children;
  
     /**
      * Default ctor.
@@ -28,9 +46,11 @@ public class Node<T> {
      * Convenience ctor to create a Node<T> with an instance of T.
      * @param data an instance of T.
      */
-    public Node(T data) {
+    public Node(String data,String id) {
         this();
         setData(data);
+        setId(id);
+       
     }
      
     /**
@@ -40,9 +60,9 @@ public class Node<T> {
      * method will return the children of a Node<T>.
      * @return the children of Node<T>
      */
-    public List<Node<T>> getChildren() {
+    public List<Node<String>> getChildren() {
         if (this.children == null) {
-            return new ArrayList<Node<T>>();
+            return new ArrayList<Node<String>>();
         }
         return this.children;
     }
@@ -52,7 +72,7 @@ public class Node<T> {
      * more information.
      * @param children the List<Node<T>> to set.
      */
-    public void setChildren(List<Node<T>> children) {
+    public void setChildren(List<Node<String>> children) {
         this.children = children;
     }
  
@@ -72,9 +92,9 @@ public class Node<T> {
      * the first child will create a new List<Node<T>>.
      * @param child a Node<T> object to set.
      */
-    public void addChild(Node<T> child) {
+    public void addChild(Node<String> child) {
         if (children == null) {
-            children = new ArrayList<Node<T>>();
+            children = new ArrayList<Node<String>>();
         }
         children.add(child);
     }
@@ -85,7 +105,7 @@ public class Node<T> {
      * @param child the Node<T> object to insert.
      * @throws IndexOutOfBoundsException if thrown.
      */
-    public void insertChildAt(int index, Node<T> child) throws IndexOutOfBoundsException {
+    public void insertChildAt(int index, Node<String> child) throws IndexOutOfBoundsException {
         if (index == getNumberOfChildren()) {
             // this is really an append
             addChild(child);
@@ -105,26 +125,26 @@ public class Node<T> {
         children.remove(index);
     }
  
-    public T getData() {
+    public String getData() {
         return this.data;
     }
  
-    public void setData(T data) {
+    public void setData(String data) {
         this.data = data;
     }
      
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{").append(getData().toString()).append(",[");
-        int i = 0;
-        for (Node<T> e : getChildren()) {
-            if (i > 0) {
-                sb.append(",");
-            }
-            sb.append(e.getData().toString());
-            i++;
-        }
-        sb.append("]").append("}");
-        return sb.toString();
-    }
+//    public String toString() {
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("{").append(getData().toString()).append(",[");
+//        int i = 0;
+//        for (Node<String> e : getChildren()) {
+//            if (i > 0) {
+//                sb.append(",");
+//            }
+//            sb.append(e.getData().toString());
+//            i++;
+//        }
+//        sb.append("]").append("}");
+//        return sb.toString();
+//    }
 }

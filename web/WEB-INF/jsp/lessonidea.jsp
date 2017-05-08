@@ -48,26 +48,27 @@
                    $("#tree").jstree('destroy');
                    var node = JSON.parse(ajax.responseText);
                    var i = node.length;
-                
+
                 // direct data
                 $('#tree').jstree({
                     "core" : {
                         "data" : node
         
                 }, 
-                "plugins" : [ "wholerow", "checkbox", "search","state", "types" ]  
+//                "plugins" : [ "wholerow", "checkbox", "search","state", "types" ]  
                 });
-                $('#j1_1').children(.jstree-checkbox).remove();
+           
+             
 
       //BUSCADOR LESSONS IDEA          
-var to = false;
-  $('#findIdea').keyup(function () {
-    if(to) { clearTimeout(to); }
-    to = setTimeout(function () {
-      var v = $('#findIdea').val();
-      $('#tree').jstree(true).search(v);
-    }, 250);
-  }); 
+//var to = false;
+//  $('#findIdea').keyup(function () {
+//    if(to) { clearTimeout(to); }
+//    to = setTimeout(function () {
+//      var v = $('#findIdea').val();
+//      $('#tree').jstree(true).search(v);
+//    }, 250);
+//  }); 
 
                     }
                 }
@@ -114,6 +115,11 @@ var to = false;
                 box-shadow: none;
                 border: none;
             }
+                .no_checkbox>i.jstree-checkbox
+            {
+                display:none
+            }
+
             .desactivada
             {
                 color: grey;

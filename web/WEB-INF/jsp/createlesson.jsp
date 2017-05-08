@@ -228,6 +228,9 @@ $("#method").on('mouseover', 'option' , function(e) {
                    var subjects = JSON.parse(json.subjectslist);
                    var objectives = JSON.parse(json.objectiveslist);
                    var contents = JSON.parse(json.contentslist);
+
+                  $('#level option[value="'+level+'"]').attr("selected", true);
+                  $('#method option[value="'+method+'"]').attr("selected", true);
                    $('#subject').empty();
                    var pos1 = subject[0].toString();
                      $.each(subjects, function(i, item) {
@@ -240,6 +243,34 @@ $("#method").on('mouseover', 'option' , function(e) {
                         }
                         else{
                          $('#subject').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
+                    }
+                   });
+                   $('#objective').empty();
+                   var pos1 = objective[0].toString();
+                     $.each(objectives, function(i, item) {
+                        var test = objectives[i].id;
+                        if (typeof test !== "undefined"){
+                        var test1 = test.toString();
+                    };
+                        if( test1 === pos1){
+                             $('#objective').append('<option selected value= "'+objectives[i].id+'">' + objectives[i].name + '</option>');
+                        }
+                        else{
+                         $('#objective').append('<option value= "'+objectives[i].id+'">' + objectives[i].name + '</option>');
+                    }
+                   });
+                   $('#content').empty();
+                   var pos1 = content.toString();
+                     $.each(contents, function(i, item) {
+                        var test =contents[i].id;
+                        if (typeof test !== "undefined"){
+                        var test1 = test.toString();
+                    };
+                        if( jQuery.inArray( test1, pos1 )!== -1){
+                             $('#content').append('<option selected value= "'+contents[i].id+'">' + contents[i].name + '</option>');
+                        }
+                        else{
+                         $('#content').append('<option value= "'+contents[i].id+'">' + contents[i].name + '</option>');
                     }
                    });
                     }
