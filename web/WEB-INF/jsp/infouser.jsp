@@ -41,7 +41,9 @@
     <script type="text/javascript" src="<c:url value="/recursos/js/es.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/ar.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/moment.js"/>"></script>
-
+    <!--        CKEDITOR-->
+    <script type="text/javascript" src="<c:url value="/recursos/js/ckeditor.js"/>"></script>
+    
     <!--        DATATABLES-->
     <%--        <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/dataTables/dataTables.bootstrap.css"/>" />--%>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/dataTables/dataTables.foundation.css"/>" />
