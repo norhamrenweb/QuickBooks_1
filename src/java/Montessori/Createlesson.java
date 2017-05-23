@@ -43,7 +43,7 @@ public class Createlesson {
         return beanobject;
     }
     public void newlesson(String[] studentIds,Lessons newlessons) throws SQLException
-    { int lessonid=0;
+    { String lessonid= null;
     String[] equipmentids;
     DriverManagerDataSource dataSource;
     try{
@@ -51,14 +51,13 @@ public class Createlesson {
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
         String test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,method_id,archive,presentedby,idea) values (' "+newlessons.getName()+"',"+newlessons.getLevel().getName()+","+newlessons.getSubject().getName()+","+newlessons.getObjective().getName()+",now(),"+newlessons.getTeacherid()+",'"+newlessons.getStart()+"','"+newlessons.getFinish()+"','"+newlessons.getComments()+"','"+newlessons.getMethod().getName()+"',false,0,false)";
-       st.executeUpdate(test);
-       
-            ResultSet rs = st.executeQuery("select id from lessons where name =' "+newlessons.getName()+"'");// this could be a problem if 2 lessons have the same name
-            while(rs.next())
-            {
-            lessonid = rs.getInt("id");
-                
-            }
+       st.executeUpdate(test,Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs = st.getGeneratedKeys();
+        while(rs.next())
+        {
+        lessonid=""+rs.getInt(1);
+        }
+            
             for( int i = 0; i <= studentIds.length - 1; i++)
             {
                 st.executeUpdate("insert into lesson_stud_att(lesson_id,student_id) values ('"+lessonid+"','"+studentIds[i]+"')");
