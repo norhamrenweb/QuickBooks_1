@@ -359,6 +359,8 @@ public class CreateLessonControlador {
            
      //  }
        Createlesson c = new Createlesson(hsr.getServletContext());
+       // gives a null pointer exception , need to fix  
+      
        if(ideaCheck[0].equals("on")){
            c.newidea(newlesson);
        }
