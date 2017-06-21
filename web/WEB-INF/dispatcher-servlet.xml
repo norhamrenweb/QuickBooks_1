@@ -57,7 +57,8 @@
          <bean class="controladores.ProgressControlador" id="lessonprogress"/>
           <bean class="controladores.LessonIdeaControlador" id="lessonidea"/>
         <bean class="controladores.EditLessonControlador" id="editlesson"/>
-<bean class="controladores.CerrarLogin" id="cerrarLoginController"/>
+        <bean class="controladores.CerrarLogin" id="cerrarLoginController"/>
+        <bean class="controladores.ResourcesControlador" id="resources"/>
 <!--     <bean class="controladores.SettingsControlador" id="settings">
      <property name="methodNameResolver">
         <bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
@@ -130,6 +131,7 @@
                  <prop key="progressdetails.htm">studentprog</prop>
                  <prop key="studentpage.htm">studentprog</prop> 
                  <prop key="studentpage_1.htm">studentprog</prop> 
+                 <prop key="resources.htm">resources</prop> 
              <prop key="lessonidea.htm">lessonidea</prop>
              <prop key="editlesson.htm">editlesson</prop>
                 <prop key="cerrarLogin.htm">cerrarLoginController</prop>
