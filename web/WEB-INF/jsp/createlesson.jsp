@@ -132,7 +132,18 @@ $("#method").on('mouseover', 'option' , function(e) {
                     !$('#origen option:selected').remove().appendTo('#destino');
                     var alumnosSelected = $('#destino').length;
                     var objectiveSelected = $('#objective').val();
-                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== ''){
+                    var contentSelected = $('#content').val();
+                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== '' && contentSelected !== null && contentSelected !== ''){
+                        $('#createOnClick').attr('disabled', false);
+                    }
+                    return;
+                });
+                $('#content').click(function() {
+                    !$('#origen option:selected').remove().appendTo('#destino');
+                    var alumnosSelected = $('#destino').length;
+                    var objectiveSelected = $('#objective').val();
+                    var contentSelected = $('#content').val();
+                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== '' && contentSelected !== null && contentSelected !== ''){
                         $('#createOnClick').attr('disabled', false);
                     }
                     return;
@@ -148,14 +159,12 @@ $("#method").on('mouseover', 'option' , function(e) {
                 });
 		$('.pasartodos').click(function() {
                     $('#origen option').each(function() { $(this).remove().appendTo('#destino'); });
+                    var contentSelected = $('#content').val();
                     var objectiveSelected = $('#objective').val();
-                    if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === ''){
+                    if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '' ||  contentSelected.length() === 0 || contentSelected === null || contentSelected === ''){
                         $('#createOnClick').attr('disabled', true);
                     }
-                        var contentSelected = $('#content').val();
-                    if( contentSelected.length() === 0 || contentSelected === null || contentSelected === ''){
-                        $('#createOnClick').attr('disabled', true);
-                    }
+ 
                 });
 		$('.quitartodos').click(function() {
                     $('#destino option').each(function() { $(this).remove().appendTo('#origen'); });
@@ -374,7 +383,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
 
-        if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("destino").length === 0 ){
+        if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("destino").length === 0 ||  document.getElementById("content").value === 0 || document.getElementById("content").value === null || document.getElementById("content").value === ''){
             $('#createOnClick').attr('disabled', true);
         }else{
             $('#createOnClick').attr('disabled', false);

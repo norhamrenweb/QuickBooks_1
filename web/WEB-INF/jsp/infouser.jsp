@@ -65,9 +65,9 @@
 
 <div class="infousuario">
     <div class="col-xs-3">
-        <a class="btnBandera" href='datosIdioma.htm?lenguaje=en'>English</a>
+<!--        <a class="btnBandera" href='datosIdioma.htm?lenguaje=en'>English</a>
         <a class="btnBandera" href='datosIdioma.htm?lenguaje=es'>Español</a>
-        <a class="btnBandera" href='datosIdioma.htm?lenguaje=ar'>Arabic</a>
+        <a class="btnBandera" href='datosIdioma.htm?lenguaje=ar'>Arabic</a>-->
     </div>
     <div class="col-xs-7">
         <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>
