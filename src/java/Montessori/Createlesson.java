@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
@@ -43,22 +44,21 @@ public class Createlesson {
         return beanobject;
     }
     public void newlesson(String[] studentIds,Lessons newlessons) throws SQLException
-    { int lessonid=0;
-    String[] equipmentids;
+    { String lessonid= null;
+    List<String> equipmentids;
     DriverManagerDataSource dataSource;
     try{
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
         String test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,method_id,archive,presentedby,idea) values (' "+newlessons.getName()+"',"+newlessons.getLevel().getName()+","+newlessons.getSubject().getName()+","+newlessons.getObjective().getName()+",now(),"+newlessons.getTeacherid()+",'"+newlessons.getStart()+"','"+newlessons.getFinish()+"','"+newlessons.getComments()+"','"+newlessons.getMethod().getName()+"',false,0,false)";
-       st.executeUpdate(test);
-       
-            ResultSet rs = st.executeQuery("select id from lessons where name =' "+newlessons.getName()+"'");// this could be a problem if 2 lessons have the same name
-            while(rs.next())
-            {
-            lessonid = rs.getInt("id");
-                
-            }
+       st.executeUpdate(test,Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs = st.getGeneratedKeys();
+        while(rs.next())
+        {
+        lessonid=""+rs.getInt(1);
+        }
+            
             for( int i = 0; i <= studentIds.length - 1; i++)
             {
                 st.executeUpdate("insert into lesson_stud_att(lesson_id,student_id) values ('"+lessonid+"','"+studentIds[i]+"')");
@@ -67,10 +67,10 @@ public class Createlesson {
             if(newlessons.getContentid()!=null){
                   equipmentids=newlessons.getContentid();
             
-             for( int i = 0; i <= equipmentids.length - 1; i++)
+             for( int i = 0; i <= equipmentids.size() - 1; i++)
             {
                 
-                st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids[i]+"')");
+                st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids.get(i)+"')");
             }
             }
           
@@ -83,7 +83,7 @@ public class Createlesson {
 
     public void newidea(Lessons newlessons) throws SQLException {
      int lessonid=0;
-    String[] equipmentids;
+    List<String> equipmentids;
     DriverManagerDataSource dataSource;
     try{
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
@@ -110,10 +110,10 @@ public class Createlesson {
             if(newlessons.getContentid()!=null){
                   equipmentids=newlessons.getContentid();
             
-             for( int i = 0; i <= equipmentids.length - 1; i++)
+             for( int i = 0; i <= equipmentids.size()- 1; i++)
             {
                 
-                st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids[i]+"')");
+                st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids.get(i)+"')");
             }
             }
           

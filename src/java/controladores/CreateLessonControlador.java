@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.*;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.*;
+import java.util.Arrays;
 import org.springframework.ui.ModelMap;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -318,7 +319,7 @@ public class CreateLessonControlador {
         
        
        Lessons newlesson = new Lessons();
-       String[] contentids;
+       List<String> contentids;
        Subject subject = new Subject();
        Objective objective = new Objective();
        Level level = new Level();
@@ -328,7 +329,7 @@ public class CreateLessonControlador {
        subject.setId(hsr.getParameterValues("TXTsubject"));
        objective.setName(hsr.getParameter("TXTobjective"));
        objective.setId(hsr.getParameterValues("TXTobjective"));
-       contentids=hsr.getParameterValues("TXTcontent");
+       contentids=Arrays.asList(hsr.getParameterValues("TXTcontent"));
        newlesson.setComments(hsr.getParameter("TXTdescription"));
        Method m = new Method();
        m.setId(hsr.getParameterValues("TXTmethod"));
@@ -359,9 +360,11 @@ public class CreateLessonControlador {
            
      //  }
        Createlesson c = new Createlesson(hsr.getServletContext());
+       // gives a null pointer exception , need to fix  
+     if(ideaCheck!= null){
        if(ideaCheck[0].equals("on")){
            c.newidea(newlesson);
-       }
+       }}
        else{
            java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorainicio") + ":00.000");
            java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorafin") + ":00.000");

@@ -100,24 +100,32 @@ public class EditLessonControlador {
        id = m.getId();
        m.setName(m.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
        data.setMethod(m);
+        id=null;
         id = o.getId();
        o.setName(o.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
         data.setObjective(o);
+         id=null;
         id = l.getId();
        l.setName(l.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
        data.setLevel(l);
+       id=null;
        ResultSet rs2 = st.executeQuery("select * from lesson_content where lesson_id = "+lessonid);
+      
+       List<String>cid =new ArrayList<>();
        while(rs2.next())
        {
-           id[0] = rs2.getString("content_id");
-           Content eq = new Content();
-           eq.setId(id);
-           c.add(eq);
+           cid.add(rs2.getString("content_id")); 
+          
        }
-       for(Content x:c)
-       {
-       x.setName(x.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
-       }
+      
+       data.setContentid(cid);
+//       for(Content x:c)
+//       {
+//        String[] cid = new String[c.size()];
+//        cid[i]=x.getId();
+//      // x.setName(x.fetchName(Integer.parseInt(cid[0]), hsr.getServletContext()));
+//       i=i+1;
+//       }
        ResultSet rs3 = st.executeQuery("select student_id from lesson_stud_att where lesson_id = "+lessonid);
    while(rs3.next())
    {
@@ -141,7 +149,10 @@ public class EditLessonControlador {
        }
        
        cn.close();
+       dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
        mv.addObject("data",data);
+       ArrayList<Objective> test = this.getObjectives(data.getSubject().getId());
         mv.addObject("objectives",this.getObjectives(data.getSubject().getId()));
                  mv.addObject("contents",this.getContent(data.getObjective().getId()));
                
@@ -242,9 +253,9 @@ public class EditLessonControlador {
              Statement st = this.cn.createStatement();
             
           ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid[0]);
-          Objective s = new Objective();
-          s.setName("Select Objective");
-          objectives.add(s);
+//          Objective s = new Objective();
+//          s.setName("Select Objective");
+//          objectives.add(s);
            
            while (rs1.next())
             {
