@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
@@ -44,7 +45,7 @@ public class Createlesson {
     }
     public void newlesson(String[] studentIds,Lessons newlessons) throws SQLException
     { String lessonid= null;
-    String[] equipmentids;
+    List<String> equipmentids;
     DriverManagerDataSource dataSource;
     try{
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
@@ -66,10 +67,10 @@ public class Createlesson {
             if(newlessons.getContentid()!=null){
                   equipmentids=newlessons.getContentid();
             
-             for( int i = 0; i <= equipmentids.length - 1; i++)
+             for( int i = 0; i <= equipmentids.size() - 1; i++)
             {
                 
-                st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids[i]+"')");
+                st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids.get(i)+"')");
             }
             }
           
@@ -82,7 +83,7 @@ public class Createlesson {
 
     public void newidea(Lessons newlessons) throws SQLException {
      int lessonid=0;
-    String[] equipmentids;
+    List<String> equipmentids;
     DriverManagerDataSource dataSource;
     try{
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
@@ -109,10 +110,10 @@ public class Createlesson {
             if(newlessons.getContentid()!=null){
                   equipmentids=newlessons.getContentid();
             
-             for( int i = 0; i <= equipmentids.length - 1; i++)
+             for( int i = 0; i <= equipmentids.size()- 1; i++)
             {
                 
-                st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids[i]+"')");
+                st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids.get(i)+"')");
             }
             }
           

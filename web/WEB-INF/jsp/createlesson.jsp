@@ -152,6 +152,10 @@ $("#method").on('mouseover', 'option' , function(e) {
                     if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === ''){
                         $('#createOnClick').attr('disabled', true);
                     }
+                        var contentSelected = $('#content').val();
+                    if( contentSelected.length() === 0 || contentSelected === null || contentSelected === ''){
+                        $('#createOnClick').attr('disabled', true);
+                    }
                 });
 		$('.quitartodos').click(function() {
                     $('#destino option').each(function() { $(this).remove().appendTo('#origen'); });
@@ -662,7 +666,7 @@ input[type="radio"] .styled:checked + label::after {
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Copy from idea</label>
                             <select class="form-control" name="ideas" id="ideas" onchange="comboSelectionIdeaLessons()">
-                                <option>Select an idea</option>
+                                <option></option>
                                 <c:forEach var="idea" items="${ideas}">
                                         <option value="${idea.id}" >${idea.name}</option>
                                 </c:forEach>
@@ -698,10 +702,10 @@ input[type="radio"] .styled:checked + label::after {
 
                     </div>
 
-                    <div class="col-xs-12 center-block form-group">
+<!--                    <div class="col-xs-12 center-block form-group">
                         <label class="control-label">Attachments</label>
                         <input type="file" class="form-control" name="TXTfile" id="file">
-                    </div>
+                    </div>-->
                 </div>
             </fieldset>
             <fieldset>

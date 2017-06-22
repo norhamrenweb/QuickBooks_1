@@ -6,6 +6,7 @@
 package Montessori;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class Lessons {
     private Level level;
     private Objective objective;
     private Subject subject;
-    private String[] contentid;
+    private List<String> contentid;
     private int teacherid;
     private Method method;
 
@@ -55,9 +56,7 @@ public class Lessons {
     private String date;
     private List<Students> students;
 
-    public String[] getContentid() {
-        return contentid;
-    }
+   
 
     public int getTeacherid() {
         return teacherid;
@@ -67,9 +66,15 @@ public class Lessons {
         this.teacherid = teacherid;
     }
 
-    public void setContentid(String[] equipmentid) {
-        this.contentid = equipmentid;
+    public List<String> getContentid() {
+        return contentid;
     }
+
+    public void setContentid(List<String> contentid) {
+        this.contentid = contentid;
+    }
+
+    
 
     public Level getLevel() {
         return level;

@@ -484,7 +484,7 @@ input[type="radio"] .styled:checked + label::after {
     </head>
     <body>
         <div class="container">
-        <h1 class="text-center">Create New Presentation</h1>
+        <h1 class="text-center">Edit Presentation</h1>
 
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
@@ -497,11 +497,11 @@ input[type="radio"] .styled:checked + label::after {
                 <div class="form-group collapse" id="contenedorPropiertys">
                     <div class="col-xs-6 center-block">
                         <label class="control-label">Presentation Name</label>
-                        <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
+                        <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>" value="${data.name}">
                     </div>               
                     <div class="col-xs-6 center-block form-group">
                         <label class="control-label">Presentation description</label>
-                        <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"></textarea>
+                        <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200">${data.comments}</textarea>
                     </div>
                     <div class="col-xs-6 center-block checkbox checkbox-success">
                         <input class="styled" type="checkbox" id="ideaCheck" name="ideaCheck">
@@ -572,6 +572,9 @@ input[type="radio"] .styled:checked + label::after {
                     <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="levels" items="${gradelevels}">
+                            <c:if test="${levels.id[0] == data.level.id[0]}">
+                             <option selected value="${data.level.id[0]}">${data.level.name}</option>
+                            </c:if>
                             <option value="${levels.id[0]}" >${levels.name}</option>
                         </c:forEach>
                     </select>
@@ -582,6 +585,9 @@ input[type="radio"] .styled:checked + label::after {
                     <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
                     
                        <c:forEach var="subject" items="${subjects}">
+                           <c:if test="${subject.id[0] == data.subject.id[0]}">
+                             <option selected value="${data.subject.id[0]}">${data.subject.name}</option>
+                            </c:if>
                                 <option value="${subject.id[0]}" data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
                             </c:forEach>
                     </select>
@@ -604,6 +610,9 @@ input[type="radio"] .styled:checked + label::after {
                         <label class="control-label">Objective</label>
                         <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
                            <c:forEach var="objective" items="${objectives}">
+                               <c:if test="${objective.id[0] == data.objective.id[0]}">
+                             <option selected value="${data.objective.id[0]}">${data.objective.name}</option>
+                            </c:if>
                                     <option value="${objective.id[0]}" >${objective.name}</option>
                                 </c:forEach>
                         </select>
@@ -613,6 +622,11 @@ input[type="radio"] .styled:checked + label::after {
                         <label class="control-label">Content</label>
                         <select class="form-control" name="TXTcontent" id="content" multiple>
                            <c:forEach var="content" items="${contents}">
+                                <c:forEach var="selcontent" items="${data.contentid}">
+                                 <c:if test="${content.id[0] == selcontent}">
+                             <option selected >${selcontent}</option>
+                            </c:if>
+                              </c:forEach>
                                     <option value="${content.id[0]}" >${content.name}</option>
                                 </c:forEach>
                         </select>
