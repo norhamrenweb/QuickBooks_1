@@ -199,23 +199,29 @@ collectionAttendance.each(function() {
 
                 </div>
                 </fieldset>
-                    <select name="TXTinstructor"> 
-                        <c:if test="${empty selectedinst.nombre_students}">
-                                                <option selected></option>
-                                            </c:if>
-                                            <c:if test="${not empty selectedinst.nombre_students}">
-                                                <option value="${selectedinst.id_students}" selected>${selectedinst.nombre_students}</option>
-                                            </c:if>
-                        <c:forEach var="name" items="${instructors}" >
-                        <option value="${name.id_students}">${name.nombre_students}</option>
-                        </c:forEach>
-                    </select>
-                <div class="col-xs-6 text-center">   
-                    <input type="submit" class="btn btn-success" value="Save">
-                </div>
-                <div class="col-xs-6 text-center">
-                    <input type="checkbox" disabled="true" data-width="200px" data-onstyle="success" data-offstyle="warning" data-toggle="toggle" data-on="Archived" data-off="Not Archived" name="buttonAchived" id="buttonAchived">
-                </div>
+                    <div class="col-xs-4 text-center">   
+                        <label class="control-label">
+                            presented by
+                        </label>
+
+                        <select name="TXTinstructor"> 
+                            <c:if test="${empty selectedinst.nombre_students}">
+                                                    <option selected></option>
+                                                </c:if>
+                                                <c:if test="${not empty selectedinst.nombre_students}">
+                                                    <option value="${selectedinst.id_students}" selected>${selectedinst.nombre_students}</option>
+                                                </c:if>
+                            <c:forEach var="name" items="${instructors}" >
+                            <option value="${name.id_students}">${name.nombre_students}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="col-xs-4 text-center">   
+                        <input type="submit" class="btn btn-success" value="Save">
+                    </div>
+                    <div class="col-xs-4 text-center">
+                        <input type="checkbox" disabled="true" data-width="200px" data-onstyle="success" data-offstyle="warning" data-toggle="toggle" data-on="Archived" data-off="Not Archived" name="buttonAchived" id="buttonAchived">
+                    </div>
             </form:form>
         </div>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

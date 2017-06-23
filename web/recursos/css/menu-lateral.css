@@ -7,6 +7,9 @@ and open the template in the editor.
     Created on : 03-jun-2016, 14:14:24
     Author     : Jesús Aragón
 */
+
+@media (max-width: 2000px) {
+ 
 /* SECTION 1 */
 a.nav-expander {
   background: none repeat scroll 0 0 grey;
@@ -171,4 +174,174 @@ body.nav-expanded {
   float: right;
   margin: 0.1em 0.8em -0.1em 0;
   opacity: 1;
+}
+}
+
+
+
+@media (min-width: 500px){
+a.nav-expander {
+  background: none repeat scroll 0 0 grey;
+  color: #D0D2D3;
+  border-radius: 15%; /*redondo*/
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  display: block;
+  font-size: 15px;
+  font-weight: 400;
+  
+  margin-top: 20%;
+  margin-right: 0;
+  padding: 6.5em 1.2em 1.2em 2em;
+  position: absolute;
+  left: -60px;  /* changed */
+  text-decoration: none;
+  text-transform: uppercase;
+  text-align: center;
+  vertical-align: middle;
+  top: 0;
+  transition: left 0.3s ease-in-out 0s;   /*changed */
+  
+  height: 130px;
+  width: 130px;
+  z-index: 12;
+ 
+  transition: left 0.3s ease-in-out 0s;   /*changed for this and the 3 lines below */
+  -webkit-transition: left 0.3s ease-in-out 0s;
+  -moz-transition: left 0.3s ease-in-out 0s;
+  -o-transition: left 0.3s ease-in-out 0s;
+/*  Rotacion 90 grados*/
+  -webkit-transform: rotate(-90deg); 
+  -moz-transform: rotate(-90deg);	
+ 
+}
+ 
+a.nav-expander:hover {
+  cursor: pointer;
+}
+ 
+a.nav-expander.fixed {
+  position: fixed;
+}
+ 
+.nav-expanded a.nav-expander.fixed {
+    left: 4em;   changed 
+}
+
+/* SECTION 2 */
+nav {
+  background: lightgray;
+  display: block;
+  height: 72%;
+  overflow: auto;
+  position: fixed;
+  left: -20em;
+  padding-top: 35px;      /*changed */
+  font-size: 15px;
+  top: 20%;
+  width: 10em;
+  z-index: 2000;
+ 
+  transition: left 0.3s ease-in-out 0s;   /*changed for this and the 3 lines below */
+  -webkit-transition: left 0.3s ease-in-out 0s;
+  -moz-transition: left 0.3s ease-in-out 0s;
+  -o-transition: left 0.3s ease-in-out 0s;
+ 
+}
+.nav-expanded nav {
+  left: 0;  /*changed */
+}
+ 
+body.nav-expanded {
+  margin-left: 0em;
+  transition: left 0.4s ease-in-out 0s;   /*changed for this and the 3 lines below */
+  -webkit-transition: left 0.4s ease-in-out 0s;
+  -moz-transition: left 0.4s ease-in-out 0s;
+  -o-transition: left 0.4s ease-in-out 0s;
+}
+
+
+/* SECTION 3 */
+.main-menu {
+  padding-top: 12px;
+}
+.iconosmenulateral{
+    padding-bottom: 20px;
+    text-align: center;
+}
+.main-menu li {
+  border-bottom: 1px solid #323949;
+  margin-left: 20px;
+  font-size: 18px;
+  padding: 12px;
+}
+ 
+.main-menu li a {
+  color: #6F7D8C;
+  text-decoration: none;
+}
+ 
+.main-menu li a:hover {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+ 
+.main-menu li .sub-nav {
+  border-bottom: 0px;
+  padding: 4px;
+}
+ 
+.main-menu a .caret {
+	width: 0;
+	height: 0;
+	display: inline-block;
+	vertical-align: top;
+	border-top: 4px solid #4f5963;
+	border-right: 4px solid transparent;
+	border-left: 4px solid transparent;
+	content: "";
+    margin-top: 8px;
+}
+ 
+.main-menu a:hover .caret {
+	border-top-color: #4f5963;
+}
+ 
+.main-menu li.open > a > .caret {
+	border-top: none;
+	border-bottom: 4px solid #4f5963;
+	border-right: 4px solid transparent;
+	border-left: 4px solid transparent;
+}
+ 
+.main-menu li.open > a:hover > .caret {
+	border-bottom-color: #4f5963;
+}
+ 
+.icon:before {
+  font-family: 'FontAwesome';
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  text-transform: none;
+  content: '\f105';
+}
+ 
+.main-menu li > a > span.icon {
+  float: right;
+  margin: 0.1em 1.7em -0.1em 0;
+  opacity: 0;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+ 
+}
+ 
+.main-menu li > a:hover > span.icon {
+  float: right;
+  margin: 0.1em 0.8em -0.1em 0;
+  opacity: 1;
+}
 }

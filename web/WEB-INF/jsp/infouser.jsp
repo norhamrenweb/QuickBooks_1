@@ -74,7 +74,8 @@
     </div>
     
     <div class="col-xs-2 text-right">
-        <li class="dropdown">
+        <a href="<c:url value="/cerrarLogin.htm"/>" role="button" aria-haspopup="true" aria-expanded="false"><img src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>
+<%--        <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>
           <ul class="dropdown-menu">
             <li><a href="#">-----</a></li>
@@ -85,7 +86,7 @@
             <li role="separator" class="divider"></li>
             <li><a href="<c:url value="/cerrarLogin.htm"/>">Log out</a></li>
           </ul>
-        </li>
+        </li>--%>
     </div>
 </div>           
 
