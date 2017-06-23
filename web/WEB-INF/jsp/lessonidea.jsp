@@ -103,14 +103,18 @@
         }
 
        
-        ajax.onreadystatechange = funcionCallBackIdeaLessons;
+    //    ajax.onreadystatechange = funcionCallBackEditIdea;
         var ideaSelect = $("#tree").jstree("get_selected");
-        ajax.open("POST","loadtree.htm?seleccion1="+ideaSelect,true);
+        ajax.open("POST","editlessonidea.htm?seleccion1="+ideaSelect,true);
         
         ajax.send("");
     }        
    
-
+   function funcionCallBackEditIdea()
+   {
+       
+       window.open("<c:url value="/lessonidea/editlessonidea.htm"/>", "_blank");
+   }
     function comboSelectionLevel()
     {
         if (window.XMLHttpRequest) //mozilla
