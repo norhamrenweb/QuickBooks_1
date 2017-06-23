@@ -14,7 +14,7 @@
     <%@ include file="infouser.jsp" %>
     <%@ include file="menu.jsp" %>
     <head>
-        <title>Create Lessons</title>
+        <title>Edit Lessons</title>
         <script>
 
  $(document).ready(function(){
@@ -621,13 +621,23 @@ input[type="radio"] .styled:checked + label::after {
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Content</label>
                         <select class="form-control" name="TXTcontent" id="content" multiple>
-                           <c:forEach var="content" items="${contents}">
-                                <c:forEach var="selcontent" items="${data.contentid}">
-                                 <c:if test="${content.id[0] == selcontent}">
-                             <option selected >${selcontent}</option>
-                            </c:if>
-                              </c:forEach>
-                                    <option value="${content.id[0]}" >${content.name}</option>
+                            <c:forEach var="content" items="${contents}">
+                                    <c:forEach var="selcontent" items="${data.contentid}">
+                            <c:choose>
+                                
+                                    <c:when test="${content.id[0] == selcontent}">
+                                        <option selected="" value="${content.id[0]}" >${content.name}</option>
+<%--                                        <option selected >${selcontent}</option>--%>
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <option value="${content.id[0]}" >${content.name}</option>
+                                    </c:otherwise>    
+                                    
+                                    
+                            </c:choose>
+                                        
+                                        </c:forEach>
                                 </c:forEach>
                         </select>
                     </div>
