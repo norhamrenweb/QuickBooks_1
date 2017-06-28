@@ -212,11 +212,11 @@ public class LessonIdeaControlador {
         }
         return obN;
     }
-     @RequestMapping("/lessonidea/editlessonidea.htm")
+     @RequestMapping("/editlessonidea.htm")
     public ModelAndView editlessonidea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     { 
        ModelAndView mv = new ModelAndView("editlessonidea");
-        String lessonid = hsr.getParameter("seleccion1");
+        String lessonid = hsr.getParameter("LessonsSelected");
         Lessons data = new Lessons();
        Level l = new Level();
        ArrayList<Content> c = new ArrayList<>();
@@ -325,7 +325,7 @@ public class LessonIdeaControlador {
     public ModelAndView deletetree(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     { 
        ModelAndView mv = new ModelAndView("redirect:/lessonidea/start.htm");
-        String lessonid = hsr.getParameter("seleccion1");
+        String lessonid = hsr.getParameter("selected");
         try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());

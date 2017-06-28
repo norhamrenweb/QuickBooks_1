@@ -484,7 +484,7 @@ input[type="radio"] .styled:checked + label::after {
     </head>
     <body>
         <div class="container">
-        <h1 class="text-center">Edit Presentation</h1>
+        <h1 class="text-center">Edit Presentation Idea</h1>
 
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
@@ -503,61 +503,10 @@ input[type="radio"] .styled:checked + label::after {
                         <label class="control-label">Presentation description</label>
                         <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200">${data.comments}</textarea>
                     </div>
-                    <div class="col-xs-6 center-block checkbox checkbox-success">
-                        <input class="styled" type="checkbox" id="ideaCheck" name="ideaCheck">
-                        <label for="ideaCheck" >
-                            Presentation idea
-                        </label>
-                        
-                    </div>
+                    
                 </div>
             </fieldset>
-            <fieldset>
-                <legend id="showDate">
-                    Select date and time
-                    <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
-<!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDate" >
-                            <span class="glyphicon glyphicon-triangle-bottom"></span>
-                        </button>-->
-                    </span>
-                </legend>
-                <div class="form-group collapse" id="contenedorDate">
-                        <div class='col-xs-4'>
-                            <div class="form-group">
-                                <label class="control-label" for="fecha">Date</label>
-                                <div class='input-group date' id='fecha'>
-                                    <input type='text' name="TXTfecha" class="form-control" id="fecha" required="required"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class='col-xs-4'>
-                            <div class="form-group">
-                                <label class="control-label" for="horainicio">Start hour</label>
-                                <div class='input-group date' id='horainicio'>
-                                    <input type='text' name="TXThorainicio" class="form-control" required="required"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-xs-4'>
-                            <div class="form-group">
-                                <label class="control-label" for="horafin">Finish hour</label>
-                                <div class='input-group date' id='horafin'>
-                                    <input type='text' name="TXThorafin" class="form-control" required="required"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-            </fieldset>
+            
             <fieldset>
                 <legend id="showDetails">
                     Presentation details
@@ -610,127 +559,76 @@ input[type="radio"] .styled:checked + label::after {
                         <label class="control-label">Objective</label>
                         <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
                            <c:forEach var="objective" items="${objectives}">
-                               <c:if test="${objective.id[0] == data.objective.id[0]}">
-                             <option selected value="${data.objective.id[0]}">${data.objective.name}</option>
-                            </c:if>
-                                    <option value="${objective.id[0]}" >${objective.name}</option>
+                                <c:choose>
+                                
+                                    <c:when test="${objective.id[0] == data.objective.id[0]}">
+                                        <option selected="" value="${objective.id[0]}" >${objective.name}</option>
+
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <option value="${objective.id[0]}" >${objective.name}</option>
+                                    </c:otherwise>    
+                                    
+                                    
+                            </c:choose>
                                 </c:forEach>
                         </select>
                     </div>
 
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Content</label>
-                        <select class="form-control" name="TXTcontent" id="content" multiple>
-                           <c:forEach var="content" items="${contents}">
-                                <c:forEach var="selcontent" items="${data.contentid}">
-                                 <c:if test="${content.id[0] == selcontent}">
-                             <option selected >${selcontent}</option>
-                            </c:if>
-                              </c:forEach>
-                                    <option value="${content.id[0]}" >${content.name}</option>
+                                     <select class="form-control" name="TXTcontent" id="content" multiple>
+                            <c:forEach var="content" items="${contents}">
+                                    <c:forEach var="selcontent" items="${data.contentid}">
+                            <c:choose>
+                                
+                                    <c:when test="${content.id[0] == selcontent}">
+                                        <option selected="" value="${content.id[0]}" >${content.name}</option>
+<%--                                        <option selected >${selcontent}</option>--%>
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <option value="${content.id[0]}" >${content.name}</option>
+                                    </c:otherwise>    
+                                    
+                                    
+                            </c:choose>
+                                        
+                                        </c:forEach>
                                 </c:forEach>
                         </select>
                     </div>
   
                     <div class="col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
-                        <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Copy from idea</label>
-                            <select class="form-control" name="ideas" id="ideas" onchange="comboSelectionIdeaLessons()">
-                                <option>Select an idea</option>
-                                <c:forEach var="idea" items="${ideas}">
-                                        <option value="${idea.id}" >${idea.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-    <%--                    <div class="col-xs-3 center-block">
-                            <label class="control-label"><spring:message code="etiq.txtobjective"/></label>
-                            <select class="form-control" name="TXTobjective" id="template">
-                                 <option value="${objective.name}" >${objective.name}</option>
-
-                            </select>
-                        </div>--%>
-<%--                      <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Template</label>
-                            <select class="form-control" name="TXTcontent" id="template" multiple>
-                                <c:forEach var="allcontents" items="${allcontents}">
-                                    <option selected="true" value="${allcontents.id[0]}" >${allcontents.name}</option>
-                                </c:forEach>
-                                <c:forEach var="contents" items="${contents}">
-                                    <option value="${allcontents.id[0]}" >${allcontents.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>-->--%>
-
+                      
                     </div>    
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Method</label>
-                        <select class="form-control" name="TXTmethod" size="2" id="method">                   
+                        <select class="form-control" name="TXTmethod" size="2" id="method">  
+                            
                             <c:forEach var="method" items="${methods}">
-                                <option value="${method.id[0]}"  data-title="${method.description}" data-content="${method.description}">${method.name}</option>
+                                 <c:choose>
+                                
+                                    <c:when test="${method.id[0] == data.method.id[0]}">
+                                        <option selected="" value="${method.id[0]}" >${method.name}</option>
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <option value="${method.id[0]}" >${method.name}</option>
+                                    </c:otherwise>    
+                                    
+                                    
+                            </c:choose>
                             </c:forEach>
                         </select>
 
                     </div>
-
-                    <div class="col-xs-12 center-block form-group">
-                        <label class="control-label">Attachments</label>
-                        <input type="file" class="form-control" name="TXTfile" id="file">
-                    </div>
                 </div>
             </fieldset>
-            <fieldset>
-                    <legend id="showStudents">
-                        Select Learners
-                        <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom"></span>
-                    </legend>
-                <div class="form-group collapse in" id="contenedorStudents">
-                    <div class="col-xs-12">
-                        <div class="col-xs-2"></div>
-                        <div class="col-xs-3">
-                            <label>Filter</label>     
-                        </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="col-xs-2">
-                            <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
-                                <c:forEach var="levels" items="${gradelevels}">
-                                    <option value="${levels.id[0]}" >${levels.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <div class="col-xs-3">
-                            <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
-                                <c:forEach var="alumnos" items="${listaAlumnos}">
-                                    <option value="${alumnos.id_students}" >${alumnos.nombre_students}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        
-                        <div class="col-xs-2">
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
-                                <input type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
-                            </div>
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn btn-danger btn-block quitar" value="« <spring:message code="etiq.txtremove"/>">
-                            </div>
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn btn-success btn-block pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
-                            </div>
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
-                            </div>
-                        </div>
-                
-                        <div class="col-xs-3">
-                            <select class="form-control submit" size="20" multiple name="destino[]" id="destino" style="width: 100% !important;"> 
-
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
+            
             <div class="col-xs-12 text-center">
-            <input type="submit" class="btn btn-success" id="createOnClick" disabled="True" value="<spring:message code="etiq.txtcreate"/>">
+            <input type="submit" class="btn btn-success" id="createOnClick" disabled="True" value="Save">
             </div>
         </form:form>
         
