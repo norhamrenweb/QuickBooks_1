@@ -34,6 +34,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.cglib.core.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,6 +64,8 @@ public class EditLessonControlador {
        Level l = new Level();
        ArrayList<Content> c = new ArrayList<>();
        ArrayList<Students> stud = new ArrayList<>();
+       ArrayList<Students> estudiantes = new ArrayList<>();
+       ArrayList<Students> estudiantesLibre = new ArrayList<>();
         Objective o = new Objective();
         Subject s = new Subject();
         Method m = new Method();
@@ -75,11 +78,11 @@ public class EditLessonControlador {
          ResultSet rs = st.executeQuery("select * from lessons where id= "+lessonid);
          while(rs.next()){
              data.setComments(rs.getString("comments"));
-            Timestamp stamp = rs.getTimestamp("start");
-               Timestamp finish = rs.getTimestamp("finish");
-               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-               SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm:ss a");
-               String dateStr = sdfDate.format(stamp);
+                Timestamp stamp = rs.getTimestamp("start");
+                Timestamp finish = rs.getTimestamp("finish");
+                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm:ss a");
+                String dateStr = sdfDate.format(stamp);
                 String timeStr = sdfTime.format(stamp);  
                 String timeStr2 = sdfTime.format(finish);
                 data.setDate(""+ dateStr);
@@ -147,7 +150,7 @@ public class EditLessonControlador {
            y.setNombre_students(rs4.getString("FirstName")+","+rs4.getString("LastName"));
            }
        }
-       
+       data.setStudents(stud);
        cn.close();
        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
@@ -162,8 +165,8 @@ public class EditLessonControlador {
                mv.addObject("subjects",this.getSubjects(data.getLevel().getId()));
          List <Lessons> ideas = new ArrayList();
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        mv.addObject("listaAlumnos", this.getStudents());
+        this.cn = dataSource.getConnection();      
+        mv.addObject("listaAlumnos", this.getStudents()); 
         Statement st4 = this.cn.createStatement();
         ResultSet rs4 = st4.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
         List <Level> grades = new ArrayList();
@@ -208,7 +211,7 @@ public class EditLessonControlador {
         idea.setId(rs5.getInt("id")); 
         idea.setName(rs5.getString("name"));
         ideas.add(idea);
-        }
+        }      
         mv.addObject("ideas",ideas);
        return mv;
        

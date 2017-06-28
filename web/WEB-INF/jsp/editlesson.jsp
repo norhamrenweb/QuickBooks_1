@@ -118,10 +118,23 @@ $("#method").on('mouseover', 'option' , function(e) {
             $('#horainicio').data("DateTimePicker").maxDate(e.date);
         });
         
+//        QUITAR ESTUDIANTES DUPLICADOS
+    var listStudentSelected = [];
+
+
+        $('#destino option').each(function() {
+            listStudentSelected.push($(this).val());
+        });
+        
+        jQuery.each( listStudentSelected, function( i, val ) {
+            $("#origen option[value='"+val+"']").remove();
+
+          });
     });            
         
         $().ready(function() 
 	{ 
+        
                   
 		$('.pasar').click(function() {
                     !$('#origen option:selected').remove().appendTo('#destino');
@@ -526,7 +539,7 @@ input[type="radio"] .styled:checked + label::after {
                             <div class="form-group">
                                 <label class="control-label" for="fecha">Date</label>
                                 <div class='input-group date' id='fecha'>
-                                    <input type='text' name="TXTfecha" class="form-control" id="fecha" required="required"/>
+                                    <input type='text' name="TXTfecha" class="form-control" id="fecha" required="required" value="${data.date}"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -538,7 +551,7 @@ input[type="radio"] .styled:checked + label::after {
                             <div class="form-group">
                                 <label class="control-label" for="horainicio">Start hour</label>
                                 <div class='input-group date' id='horainicio'>
-                                    <input type='text' name="TXThorainicio" class="form-control" required="required"/>
+                                    <input type='text' name="TXThorainicio" class="form-control" required="required"  value="${data.start}"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -549,7 +562,7 @@ input[type="radio"] .styled:checked + label::after {
                             <div class="form-group">
                                 <label class="control-label" for="horafin">Finish hour</label>
                                 <div class='input-group date' id='horafin'>
-                                    <input type='text' name="TXThorafin" class="form-control" required="required"/>
+                                    <input type='text' name="TXThorafin" class="form-control" required="required" value="${data.finish}"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -710,7 +723,7 @@ input[type="radio"] .styled:checked + label::after {
                         </div>
                         <div class="col-xs-3">
                             <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
-                                <c:forEach var="alumnos" items="${listaAlumnos}">
+                                <c:forEach var="alumnos" items="${listaAlumnos}" >
                                     <option value="${alumnos.id_students}" >${alumnos.nombre_students}</option>
                                 </c:forEach>
                             </select>
@@ -729,11 +742,16 @@ input[type="radio"] .styled:checked + label::after {
                             <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
                                 <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
                             </div>
+                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <input type="button" class="btn btn-danger btn-block test" value="test">
+                            </div>
                         </div>
                 
                         <div class="col-xs-3">
                             <select class="form-control submit" size="20" multiple name="destino[]" id="destino" style="width: 100% !important;"> 
-
+                                <c:forEach var="studentsSelected" items="${data.students}">
+                                    <option value="${studentsSelected.id_students}" >${studentsSelected.nombre_students}</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>

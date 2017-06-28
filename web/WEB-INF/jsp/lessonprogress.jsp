@@ -25,7 +25,28 @@
 
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
         var lessoncreate = '<%= request.getParameter("message") %>';
-         
+            var itemsRating = []; // needs to be outside
+    var itemsAttendance = []; // needs to be outside
+var collectionRating = $(".rating");
+var collectionAttendance = $(".attendance");
+
+collectionRating.each(function() {
+    itemsRating.push($(this).val());   
+});
+collectionAttendance.each(function() {
+    itemsAttendance.push($(this).val());   
+});
+    var haynullRating = $.inArray('', itemsRating);
+    var haynullAttendance = $.inArray('', itemsAttendance);
+    
+    if( haynullRating !== -1 || haynullAttendance !== -1){
+        $('#buttonAchived').attr('disabled', true);
+        $('#buttonAchived').parent().attr('disabled', true);
+        
+    }else{
+        $('#buttonAchived').attr('disabled', false);
+        $('#buttonAchived').parent().removeAttr('disabled');
+    } 
      if (lessoncreate === 'Records successfully saved' ){
      $('#myModal').modal({
         show: 'false'

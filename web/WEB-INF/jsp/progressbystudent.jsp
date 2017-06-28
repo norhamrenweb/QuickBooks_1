@@ -190,6 +190,7 @@
      function funcionCallBackSelectStudent()
     {
            if (ajax.readyState===4){
+               
                 if (ajax.status===200){
                     var json = JSON.parse(ajax.responseText);
                     var info = JSON.parse(json.info);
@@ -216,6 +217,7 @@
                      $.each(subjects, function(i, item) {
                          $('#subjects').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
                    });
+                   $('#loadingmessage').hide();  // hide the loading message.
                     }
                 }
             }
@@ -269,12 +271,12 @@
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-
+        $('#loadingmessage').show();  // show the loading message.
         //$('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackSelectStudent;
       //  var selectStudent = document.getElementsByClassName("nameStudent").value;
         ajax.open("POST","studentPage.htm?selectStudent="+selectStudent,true);
-        
+       
         ajax.send("");
        
     }
@@ -448,6 +450,7 @@ $(function() {
     </head>
 
     <body>
+        
         <div class="container">
             <h1 class="text-center">Progress by Student</h1>
         <form:form id="formStudents" method ="post" action="studentpage.htm?option=studentPage" >
@@ -551,6 +554,12 @@ $(function() {
         <div>
             
         </div>
+</div>
+        
+<div class="divLoadStudent" id="loadingmessage">
+    <div class="text-center"> 
+        <img src='../recursos/img/large_loading.gif'/>
+    </div>
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

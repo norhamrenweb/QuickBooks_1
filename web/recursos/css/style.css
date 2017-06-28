@@ -284,6 +284,19 @@ div {
                 overflow: hidden;
                 outline:none;
             }
+            .divLoadStudent{
+                background-color: Transparent;
+                position: fixed;
+                top: 20%;
+                right: 0;
+                bottom: 20%;
+                left: 0;
+                z-index: 1050;
+                display: none;
+                overflow: hidden;
+                -webkit-overflow-scrolling: touch;
+                outline: 0;
+            }
             /*TERMINA PROGRESSBYSTUDENT*/
 /*.tooltip > .tooltip-arrow {
   top: 0;
