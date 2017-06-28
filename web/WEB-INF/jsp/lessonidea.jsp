@@ -93,6 +93,26 @@
             
     function editttree()
     {
+//       if (window.XMLHttpRequest) //mozilla
+//        {
+//            ajax = new XMLHttpRequest(); //No Internet explorer
+//        }
+//        else
+//        {
+//            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+//        }
+//
+//       
+//    //    ajax.onreadystatechange = funcionCallBackEditIdea;
+//        var ideaSelect = $("#tree").jstree("get_selected");
+//        ajax.open("POST","editlessonidea.htm?seleccion1="+ideaSelect,true);
+//        
+//        ajax.send("");
+            var ideaSelect = $("#tree").jstree("get_selected");
+        window.open("<c:url value="/editlessonidea.htm?LessonsSelected="/>"+ideaSelect);
+    }        
+   function delttree()
+    {
        if (window.XMLHttpRequest) //mozilla
         {
             ajax = new XMLHttpRequest(); //No Internet explorer
@@ -103,17 +123,17 @@
         }
 
        
-    //    ajax.onreadystatechange = funcionCallBackEditIdea;
+    ajax.onreadystatechange = funcionCallBackDelIdea;
         var ideaSelect = $("#tree").jstree("get_selected");
-        ajax.open("POST","editlessonidea.htm?seleccion1="+ideaSelect,true);
+        ajax.open("POST","deletetree.htm?selected="+ideaSelect,true);
         
         ajax.send("");
-    }        
-   
-   function funcionCallBackEditIdea()
+        
+    }    
+   function funcionCallBackDelIdea()
    {
-       
-       window.open("<c:url value="/lessonidea/editlessonidea.htm"/>", "_blank");
+       window.location.reload(true);
+      
    }
     function comboSelectionLevel()
     {
@@ -293,17 +313,17 @@ input[type="radio"] .styled:checked + label::after {
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
 
-                <legend id="showDetails">
+<!--                <legend id="showDetails">
                     Presentation details
                     <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
-<!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" >
+                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" >
                             <span class="glyphicon glyphicon-triangle-bottom"></span>
-                        </button>-->
+                        </button>
                     </span>
-                </legend>
+                </legend>-->
                 <div class="form-group" id="contenedorDetails">
                 <div class="col-xs-3 form-group">
-                    <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
+                    <label class="control-label">Select Grade Level</label>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="level" items="${levels}">
                             <option value="${level.id[0]}" >${level.name}</option>

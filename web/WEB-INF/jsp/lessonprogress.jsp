@@ -222,7 +222,7 @@ collectionAttendance.each(function() {
                 </fieldset>
                     <div class="col-xs-4 text-center">   
                         <label class="control-label">
-                            presented by
+                            Presented by
                         </label>
 
                         <select name="TXTinstructor"> 

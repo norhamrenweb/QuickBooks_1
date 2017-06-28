@@ -59,6 +59,7 @@
         <bean class="controladores.EditLessonControlador" id="editlesson"/>
         <bean class="controladores.CerrarLogin" id="cerrarLoginController"/>
         <bean class="controladores.ResourcesControlador" id="resources"/>
+        <bean class="controladores.LessonArchiveControlador" id="archive"/>
         
 <!--     <bean class="controladores.SettingsControlador" id="settings">
      <property name="methodNameResolver">
@@ -137,6 +138,7 @@
              <prop key="editlessonidea.htm">lessonidea</prop>
              <prop key="editlesson.htm">editlesson</prop>
                 <prop key="cerrarLogin.htm">cerrarLoginController</prop>
+                <prop key="lessonarchive.htm">archive</prop>
             </props>
         </property>
     </bean>
