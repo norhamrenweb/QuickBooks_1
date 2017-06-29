@@ -180,6 +180,6 @@
    </div>
  </div>
 </div>
-
+<input type="submit" value="print" onClick="window.print()"/>
     </body>
 </html>

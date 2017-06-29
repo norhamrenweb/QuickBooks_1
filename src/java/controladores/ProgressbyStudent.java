@@ -187,55 +187,10 @@ public class ProgressbyStudent {
         
         return mv;
     }
-    // loads the list of objectives based on the selected subject
-//    @RequestMapping("/progressbystudent/objectivelistSubject.htm")
-//    public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-//        
-//        ModelAndView mv = new ModelAndView("studentpage");
-//        List<Objective> objectives = new ArrayList<>();
-//       try {
-//         DriverManagerDataSource dataSource;
-//        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-//        this.cn = dataSource.getConnection();
-//        
-//        
-//            
-//             Statement st = this.cn.createStatement();
-//             String subjectid = null;
-//          
-//            
-//                subjectid = hsr.getParameter("seleccion2");
-//            
-//            
-//          ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid);
-//         
-//           
-//           while (rs1.next())
-//            {
-//             String[] ids = new String[1];
-//                Objective sub = new Objective();
-//            ids[0] = ""+rs1.getInt("id");
-//             sub.setId(ids);
-//             sub.setName(rs1.getString("name"));
-//                objectives.add(sub);
-//            }
-//          
-//            
-//        } catch (SQLException ex) {
-//            System.out.println("Error leyendo Objectives: " + ex);
-//        }
-//        
-//   
-//        mv.addObject("objectives", objectives);
-//        
-//        
-//        return mv;
-//    }
+   
     
     public ArrayList<Students> getStudentslevel(String gradeid) throws SQLException
-    {
-//        this.conectarOracle();
-         
+    {         
         ArrayList<Students> listaAlumnos = new ArrayList<>();
         String gradelevel = null;
         try {
@@ -396,88 +351,7 @@ while(rs5.next())
         }
         return mv;
     }
-    //based on student selected and objective selected
-//    @RequestMapping("/progressbystudent/progressdetails.htm")
-//    @ResponseBody
-//    public String progressdetails(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
-//    {
-//             String[] hi = hsr.getParameterValues("data");
-//               JSONObject jsonObj = new JSONObject(hi[0]);
-//            List<Progress> progress = new ArrayList<>();
-//            String finalrating = null;
-//            String presenteddate = null;
-//            String attempteddate = null;
-//            String mastereddate = null;
-//       try {
-//         DriverManagerDataSource dataSource;
-//        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-//        this.cn = dataSource.getConnection();
-//        
-//             Statement st = this.cn.createStatement();
-//            
-//          ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id="+jsonObj.getString("objectiveid")+" AND student_id = "+jsonObj.getString("studentid")+" AND COALESCE(generalcomment, FALSE) = FALSE ");
-//          
-//           while (rs1.next())
-//            {
-//          Progress p = new Progress();
-//          p.setComment(rs1.getString("comment"));
-//          p.setRating(rs1.getString("rating"));
-//          p.setLesson_name(rs1.getString("lessonname"));
-//           Timestamp stamp = rs1.getTimestamp("comment_date");
-//               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-//               String dateStr = sdfDate.format(stamp);
-//             p.setComment_date(dateStr);
-//             progress.add(p);
-//            }
-//           // select the latest rating to be presented as the final rating for this objective
-//        String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '"+jsonObj.getString("studentid")+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+jsonObj.getString("studentid")+"AND objective_id ="+jsonObj.getString("objectiveid")+") AND objective_id ="+jsonObj.getString("objectiveid")+")";
-//ResultSet rs2 = st.executeQuery(consulta);
-//while(rs2.next())
-//{
-//    finalrating= rs2.getString("rating");
-//}
-//          consulta = "select min(comment_date) as date from progress_report where student_id ="+jsonObj.getString("studentid")+" and rating_id in (select id from rating where name = 'Presented') and objective_id ="+jsonObj.getString("objectiveid");  
-//          ResultSet rs3 = st.executeQuery(consulta);
-//while(rs3.next())
-//{
-// Timestamp stamp = rs3.getTimestamp("date");
-//               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-//               presenteddate = sdfDate.format(stamp);
-//    
-//}
-//consulta = "select min(comment_date) as date from progress_report where student_id ="+jsonObj.getString("studentid")+" and rating_id in (select id from rating where name = 'Attempted') and objective_id ="+jsonObj.getString("objectiveid");  
-//          ResultSet rs4 = st.executeQuery(consulta);
-//while(rs4.next())
-//{
-//    Timestamp stamp = rs4.getTimestamp("date");
-//               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-//               attempteddate = sdfDate.format(stamp);
-//  
-//}
-//consulta = "select min(comment_date) as date from progress_report where student_id ="+jsonObj.getString("studentid")+" and rating_id in (select id from rating where name = 'Mastered') and objective_id ="+jsonObj.getString("objectiveid");  
-//          ResultSet rs5 = st.executeQuery(consulta);
-//while(rs5.next())
-//{
-//    Timestamp stamp = rs5.getTimestamp("date");
-//               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-//               mastereddate = sdfDate.format(stamp);
-//  
-//}
-//        } catch (SQLException ex) {
-//            System.out.println("Error: " + ex);
-//        }
-//
-//        String prog = new Gson().toJson(progress);
-//        String rating = new Gson().toJson(finalrating);
-//        JSONObject obj = new JSONObject();
-//        obj.put("progress", prog);
-//        obj.put("finalrating", rating);
-//        obj.put("attempteddate",attempteddate);
-//        obj.put("mastereddate",mastereddate);
-//        obj.put("presenteddate",presenteddate);
-//         return obj.toString();
-//         
-//    }
+   
     //load student demographics
     @RequestMapping("/progressbystudent/studentPage.htm")
     @ResponseBody
@@ -626,7 +500,7 @@ while(rs5.next())
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
              Statement st = this.cn.createStatement();
-             String consulta = "select id from progress_report where objective_id = "+objectiveid+" and generalcomment = TRUE";
+             String consulta = "select id from progress_report where objective_id = "+objectiveid+" and generalcomment = TRUE and student_id ='"+studentid+"'";
              ResultSet rs = st.executeQuery(consulta);
              if(!rs.next()){
                 st.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment) values (now(),'"+comment+"','"+studentid+"','"+objectiveid+"',true)");

@@ -200,8 +200,10 @@ public class ProgressControlador {
         String[] studentids= hsr.getParameterValues("TXTstudentid");
         String[] att= hsr.getParameterValues("TXTattendance");
         String[] teacher= hsr.getParameterValues("TXTinstructor");
+        String archived = hsr.getParameter("buttonAchived");// is equal to on or null
 
     Statement st = this.cn.createStatement();
+    
         if(!teacher[0].isEmpty())
         {
         st.executeUpdate("update lessons set presentedby = "+teacher[0]+" where id = "+lessonid[0]);
@@ -236,7 +238,10 @@ public class ProgressControlador {
               }
     }
     } 
-     
+     if(archived.equals("on"))
+     {
+         st.executeUpdate("update lessons set archive = TRUE where id = '"+lessonid[0]+"'");
+     }
 //     mv.addObject("message",message);
         return mv;
         

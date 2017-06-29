@@ -42,6 +42,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -322,21 +323,30 @@ public class LessonIdeaControlador {
        return mv;
     }
       @RequestMapping("/lessonidea/deletetree.htm")
-    public ModelAndView deletetree(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
+      @ResponseBody
+    public String deletetree(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     { 
        ModelAndView mv = new ModelAndView("redirect:/lessonidea/start.htm");
         String lessonid = hsr.getParameter("selected");
+        JSONObject jsonObj = new JSONObject();
         try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-       st.executeUpdate("delete from lessons where id='"+lessonid+"'");
+       String message = null;
+        HttpSession sesion = hsr.getSession();
+        User user = (User) sesion.getAttribute("user");
+          String consulta = "DELETE FROM lesson_content WHERE lesson_id="+lessonid;
+          st.executeUpdate(consulta);
+        consulta = "DELETE FROM public.lessons WHERE id="+lessonid;
+           st.executeUpdate(consulta);
+           message = "Presentation deleted successfully";
+        jsonObj.put("message", message);
         }catch (SQLException ex) {
             System.out.println("Error: " + ex);
         }
-        
-       return mv;
+        return jsonObj.toString();
     }
     public ArrayList<Subject> getSubjects(String[] levelid) throws SQLException
        {

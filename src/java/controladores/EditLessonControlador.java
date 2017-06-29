@@ -64,8 +64,8 @@ public class EditLessonControlador {
        Level l = new Level();
        ArrayList<Content> c = new ArrayList<>();
        ArrayList<Students> stud = new ArrayList<>();
-       ArrayList<Students> estudiantes = new ArrayList<>();
-       ArrayList<Students> estudiantesLibre = new ArrayList<>();
+//       ArrayList<Students> estudiantes = new ArrayList<>();
+//       ArrayList<Students> estudiantesLibre = new ArrayList<>();
         Objective o = new Objective();
         Subject s = new Subject();
         Method m = new Method();
@@ -213,6 +213,7 @@ public class EditLessonControlador {
         ideas.add(idea);
         }      
         mv.addObject("ideas",ideas);
+        mv.addObject("id",lessonid);
        return mv;
        
     }
@@ -433,6 +434,18 @@ public class EditLessonControlador {
         this.cn = dataSource.getConnection();    
       
          mv.addObject("contents", this.getContent(hsr.getParameterValues("seleccion3")));
+        
+        return mv;
+    }
+    @RequestMapping("/editlesson/save.htm")
+    public ModelAndView save(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("editlesson");
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();    
+      String id = hsr.getParameter("id");
+      
         
         return mv;
     }

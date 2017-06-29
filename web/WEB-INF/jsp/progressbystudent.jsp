@@ -90,8 +90,11 @@
                         columns: [
                         { data: 'col1' },
                         { data: 'col2' },
-                        { data: 'col3' },
-                        { data: 'col4' },
+                        { data: 'col3',
+                         defaultContent: '' },
+                        { data: 'col4',
+                         defaultContent: ''
+                        },
                         { data: 'col5' }
                         ],
                         columnDefs: [
@@ -192,6 +195,9 @@
            if (ajax.readyState===4){
                
                 if (ajax.status===200){
+                    
+                    $('#divTableObjective').addClass('hidden');//to avoid having the general comments of the previous selected student
+                        $('#divNotObjective').addClass('hidden');
                     var json = JSON.parse(ajax.responseText);
                     var info = JSON.parse(json.info);
                     var subjects = JSON.parse(json.sub);
@@ -530,7 +536,7 @@ $(function() {
                                     </select>
                                 </div>
                                 <div class="col-xs-12 hidden" id="divNotObjective">
-                                    This Subject have not objectives
+                                  The selected subject does not have objectives
                                 </div>
                                 <div class="col-xs-12 hidden" id="divTableObjective">
                                     <table id="tableobjective" class="display">
@@ -539,7 +545,7 @@ $(function() {
                                                 <th>Name</th>
                                                 <th>Description</th>
                                                 <th>Comment general</th>
-                                                <th>date</th>
+                                                <th>Last update date</th>
                                                 <th></th>
                                             </tr>
                                         </thead> 
