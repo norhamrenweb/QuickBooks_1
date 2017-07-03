@@ -42,29 +42,39 @@ public class ResourcesControlador {
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
-   @RequestMapping("/resources/loadResources.htm")
+   @RequestMapping("/lessonresources/loadResources.htm")
     public ModelAndView loadResources(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("resources");
+        ModelAndView mv = new ModelAndView("lessonresources");
        
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-             String lessonid = hsr.getParameter("lessonid");
+             String lessonid = hsr.getParameter("LessonsSelected");
             String consulta = "SELECT * FROM public.resources where lesson_id = "+lessonid;
             ResultSet rs = st.executeQuery(consulta);
-            ArrayList<Resource> rsrcs = new ArrayList<>(); 
+            ArrayList<Resource> filersrcs = new ArrayList<>(); 
+            ArrayList<Resource> otherrsrcs = new ArrayList<>(); 
        while(rs.next())
        {
            Resource r = new Resource();
            r.setId(""+rs.getInt("id"));
            r.setName(rs.getString("name"));
            r.setLink(rs.getString("link"));
-           rsrcs.add(r);
+           String type = rs.getString("type");
+           r.setType(type);
+           if(type.equals("File"))
+           {
+           filersrcs.add(r);
+           }
+           else{
+               otherrsrcs.add(r);
+           }
        }
         
-        mv.addObject("resources",rsrcs);
+        mv.addObject("files",filersrcs);
+        mv.addObject("others",otherrsrcs);
         return mv;
     }
 }

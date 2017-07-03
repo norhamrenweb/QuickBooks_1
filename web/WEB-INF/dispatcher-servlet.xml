@@ -133,7 +133,7 @@
                  <prop key="progressdetails.htm">studentprog</prop>
                  <prop key="studentpage.htm">studentprog</prop> 
                  <prop key="studentpage_1.htm">studentprog</prop> 
-                 <prop key="resources.htm">resources</prop> 
+                 <prop key="lessonresources.htm">resources</prop> 
              <prop key="lessonidea.htm">lessonidea</prop>
              <prop key="editlessonidea.htm">lessonidea</prop>
              <prop key="editlesson.htm">editlesson</prop>
