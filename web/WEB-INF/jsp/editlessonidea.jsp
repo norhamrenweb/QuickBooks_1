@@ -487,7 +487,7 @@ input[type="radio"] .styled:checked + label::after {
         <h1 class="text-center">Edit Presentation Idea</h1>
 
         
-        <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
+        <form:form id="formStudents" method ="post" action="savelessonidea.htm" >
             <fieldset>
                 <legend id="showPropiertys">
                     Presentation name and description
@@ -628,7 +628,7 @@ input[type="radio"] .styled:checked + label::after {
             </fieldset>
             
             <div class="col-xs-12 text-center">
-            <input type="submit" class="btn btn-success" id="createOnClick" disabled="True" value="Save">
+            <input type="submit" class="btn btn-success" id="createOnClick" value="Save">
             </div>
         </form:form>
         

@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.*;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.*;
+import java.util.Arrays;
 import org.springframework.ui.ModelMap;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -439,14 +440,70 @@ public class EditLessonControlador {
     }
     @RequestMapping("/editlesson/save.htm")
     public ModelAndView save(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
-        ModelAndView mv = new ModelAndView("editlesson");
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();    
+           
       String id = hsr.getParameter("id");
+       String message = "Lesson created";
+        ModelAndView mv = new ModelAndView("redirect:/createlesson/start.htm", "message", message);
+       HttpSession sesion = hsr.getSession();
+        User user = (User) sesion.getAttribute("user");
+       Lessons newlesson = new Lessons();
+       List<String> contentids;
+       Subject subject = new Subject();
+       Objective objective = new Objective();
+       Level level = new Level();
+       level.setName(hsr.getParameter("TXTlevel"));
+       level.setId(hsr.getParameterValues("TXTlevel"));
+       subject.setName(hsr.getParameter("TXTsubject"));
+       subject.setId(hsr.getParameterValues("TXTsubject"));
+       objective.setName(hsr.getParameter("TXTobjective"));
+       objective.setId(hsr.getParameterValues("TXTobjective"));
+       contentids=Arrays.asList(hsr.getParameterValues("TXTcontent"));
+       newlesson.setComments(hsr.getParameter("TXTdescription"));
+       Method m = new Method();
+       m.setId(hsr.getParameterValues("TXTmethod"));
+       m.setName(hsr.getParameter("TXTmethod"));
+       newlesson.setMethod(m);
+       String[] ideaCheck = hsr.getParameterValues("ideaCheck");
+
       
+     newlesson.setTeacherid(user.getId());
+       newlesson.setId(Integer.parseInt(id));
+      newlesson.setLevel(level);
+      newlesson.setSubject(subject);
+      newlesson.setObjective(objective);
+       newlesson.setContentid(contentids);
+       
+//       String test = hsr.getParameter("TXTloadtemplates");
+//       if(test != null)
+//       {        
+//       newlesson.setName(hsr.getParameter("lessons"));
+//       newlesson.setTemplate(true);
+//       String x = hsr.getParameter("lessons");
+//       newlesson.setId(Integer.parseInt(hsr.getParameter("lessons")));
+//       }
+//       else
+//       {
+           newlesson.setName(hsr.getParameter("TXTnombreLessons"));
+        
+     //  }
+       Updatelesson c = new Updatelesson(hsr.getServletContext());
+       // gives a null pointer exception , need to fix  
+     if(ideaCheck!= null){
+       if(ideaCheck[0].equals("on")){
+           c.updateidea(newlesson);
+       }}
+       else{
+           java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorainicio") + ":00.000");
+           java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorafin") + ":00.000");
+           String[] studentIds = hsr.getParameterValues("destino[]");
+
+           newlesson.setStart("" + timestampstart);
+           newlesson.setFinish("" + timestampend);
+           c.updatelesson(studentIds, newlesson);
+       }
+       
         
         return mv;
+    
     }
     }

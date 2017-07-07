@@ -41,6 +41,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Iterator;
 import javax.servlet.http.HttpSession;
 
@@ -434,6 +435,40 @@ public class LessonIdeaControlador {
         }
        return contents;
        }
-       
+   @RequestMapping("/savelessonidea.htm")
+    public ModelAndView savelessonidea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception  
+    {
+        ModelAndView mv = new ModelAndView("redirect:/editlessonidea/start.htm");
+        String id = hsr.getParameter("id");
+       String message = "Lesson created";
+       HttpSession sesion = hsr.getSession();
+        User user = (User) sesion.getAttribute("user");
+       Lessons newlesson = new Lessons();
+       List<String> contentids;
+       Subject subject = new Subject();
+       Objective objective = new Objective();
+       Level level = new Level();
+       level.setName(hsr.getParameter("TXTlevel"));
+       level.setId(hsr.getParameterValues("TXTlevel"));
+       subject.setName(hsr.getParameter("TXTsubject"));
+       subject.setId(hsr.getParameterValues("TXTsubject"));
+       objective.setName(hsr.getParameter("TXTobjective"));
+       objective.setId(hsr.getParameterValues("TXTobjective"));
+       contentids=Arrays.asList(hsr.getParameterValues("TXTcontent"));
+       newlesson.setComments(hsr.getParameter("TXTdescription"));
+       Method m = new Method();
+       m.setId(hsr.getParameterValues("TXTmethod"));
+       m.setName(hsr.getParameter("TXTmethod"));
+       newlesson.setMethod(m);
+        newlesson.setId(Integer.parseInt(id));
+      newlesson.setLevel(level);
+      newlesson.setSubject(subject);
+      newlesson.setObjective(objective);
+       newlesson.setContentid(contentids);
+       newlesson.setName(hsr.getParameter("TXTnombreLessons"));
+        Updatelesson c = new Updatelesson(hsr.getServletContext());
+        c.updateidea(newlesson);
+        return mv;
+    }
 }    
 
