@@ -38,9 +38,11 @@
                     var ideaSelect = $("#tree").jstree("get_selected");
                     if($.isNumeric(ideaSelect[0])){
                         $('#editIdea').attr('disabled', false);
+                        $('#editIdearsrc').attr('disabled', false);
                         $('#delIdea').attr('disabled', false);
                     }else{
                         $('#editIdea').attr('disabled', true);
+                        $('#editIdearsrc').attr('disabled', true);
                         $('#delIdea').attr('disabled', true);
                     };
                         
@@ -110,7 +112,12 @@
 //        ajax.send("");
             var ideaSelect = $("#tree").jstree("get_selected");
         window.open("<c:url value="/editlessonidea.htm?LessonsSelected="/>"+ideaSelect);
-    }        
+    }   
+        function editrsrctree()
+    {
+            var ideaSelect = $("#tree").jstree("get_selected");
+        window.open("<c:url value="/lessonresources/loadResources.htm?LessonsSelected="/>"+ideaSelect);
+    }   
    function delttree()
     {
        if (window.XMLHttpRequest) //mozilla
@@ -352,10 +359,13 @@ input[type="radio"] .styled:checked + label::after {
                     </ul>-->
                 </div>
                     <div class="col-xs-12 center-block" id="buttons">
-                        <div class="col-xs-6 center-block">
-                            <button type="button" class="btn btn-warning" onclick="editttree()" id="editIdea" disabled="true">Edit</button>
+                        <div class="col-xs-4 center-block">
+                            <button type="button" class="btn btn-warning" onclick="editttree()" id="editIdea" disabled="true">View/Edit</button>
                         </div>
-                        <div class="col-xs-6 center-block">
+                        <div class="col-xs-4 center-block">
+                            <button type="button" class="btn btn-warning" onclick="editrsrctree()" id="editIdearsrc" disabled="true">View/Edit Resources</button>
+                        </div>
+                        <div class="col-xs-4 center-block">
                             <button type="button"  class="btn btn-danger" onclick="delttree()" id="delIdea" disabled="true">Delete</button>
                         </div>
                 </div>

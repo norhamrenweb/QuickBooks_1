@@ -51,6 +51,7 @@ public class ProgressControlador {
         
         ModelAndView mv = new ModelAndView("lessonprogress");
         List<Students> instructors = new ArrayList<>();
+        String disable = hsr.getParameter("disable");
         Students teacher = new Students();
          try {
          DriverManagerDataSource dataSource;
