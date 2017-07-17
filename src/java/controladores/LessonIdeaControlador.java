@@ -470,5 +470,52 @@ public class LessonIdeaControlador {
         c.updateidea(newlesson);
         return mv;
     }
+     @RequestMapping("/editlessonidea/subjectlistLevel.htm")
+    public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("editlessonidea");
+        
+       try {
+         DriverManagerDataSource dataSource;
+       
+           
+            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+             this.cn = dataSource.getConnection();
+            
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Subjects: " + ex);
+        }
+        
+        
+         mv.addObject("subjects",this.getSubjects(hsr.getParameterValues("seleccion1")));
+        
+        return mv;
+    }
+        @RequestMapping("/editlessonidea/objectivelistSubject.htm")
+    public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("editlessonidea");
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        
+    //    mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
+        mv.addObject("objectives", this.getObjectives(hsr.getParameterValues("seleccion2")));
+        
+        return mv;
+    }
+    @RequestMapping("/editlessonidea/contentlistObjective.htm")
+    public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        ModelAndView mv = new ModelAndView("editlessonidea");
+         DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();    
+      
+         mv.addObject("contents", this.getContent(hsr.getParameterValues("seleccion3")));
+        
+        return mv;
+    }   
 }    
 
