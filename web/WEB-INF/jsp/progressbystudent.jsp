@@ -294,7 +294,7 @@
                   
                    //var i;
                     if(json.length === 0){
-                       $('#divNotObjective').addClass('hidden');
+                        $('#divNotObjective').addClass('hidden');
                         $('#divTableObjective').removeClass('hidden');
                         
                     }else{

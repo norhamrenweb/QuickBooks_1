@@ -66,7 +66,7 @@
                 min-height: 100px;
                 border-radius: 10px;
                 background-color: #08c;
-                color: white;
+                color: #000000 !important;
                 font-size: xx-large;
                 font-weight: bold;
             }
@@ -78,6 +78,28 @@
                 border-color: transparent;
                 border-image: initial;
             }
+            @media print{
+                
+                .noPrint{
+                    display: none;
+                }
+                .dataTables_filter, .dataTables_length, .dataTables_info, .dataTables_paginate{
+                    display: none;
+                }
+                .mastered
+                {
+                    display: table;
+                    width: 50%;
+                    min-height: 100px;
+                    border-radius: 10px;
+                    background-color: #08c !important;
+                    color: #000000 !important;
+                    font-size: xx-large;
+                    font-weight: bold;
+                }
+                
+            }
+            
         </style>
     </head>
     <body>
@@ -111,7 +133,7 @@
                 <div class="col-xs-12 collapse" id="contenedorAttempted">
                     <c:forEach var="date" items="${attempteddates}">
                     <div class="col-xs-12 attempted">
-                        <div class="col-xs-6">Attempted </div>
+                        <div class="col-xs-6">Attempted</div>
                         <div class="col-xs-6">${date}</div>
                     </div>
                     </c:forEach>
@@ -162,8 +184,11 @@
                 </table>
 
             </div>
+            <div class="col-xs-12 text-center" >
+                <input type="submit" value="print" onClick="window.print()" class="btn btn-info noPrint"/> 
+            </div>
         </div>
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
  <div class="modal-dialog" role="document">
    <div class="modal-content">
      <div class="modal-header">
@@ -180,6 +205,6 @@
    </div>
  </div>
 </div>
-<input type="submit" value="print" onClick="window.print()"/>
+
     </body>
 </html>
