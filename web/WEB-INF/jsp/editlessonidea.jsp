@@ -156,34 +156,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         
         var ajax;
         
-    function funcionCallBackLevelStudent()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("origen").innerHTML= ajax.responseText;
-                    }
-                }
-            }
-            
-
-    function comboSelectionLevelStudent()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
-        ajax.onreadystatechange=funcionCallBackLevelStudent;
-        var seleccion = document.getElementById("levelStudent").value;
-        var alumnos = document.getElementById("destino").innerHTML;
-        ajax.open("POST","studentlistLevel.htm?seleccion="+seleccion,true);
-        ajax.send("");
-    }
-    
+           
      function funcionCallBackSubject()
     {
            if (ajax.readyState===4){
@@ -200,43 +173,9 @@ $("#method").on('mouseover', 'option' , function(e) {
                     }
                 }
             }
-    function funcionCallBackLoadTemplateLessons()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("lessons").innerHTML= ajax.responseText;
-                    }
-                }
-            }    
+       
 
-    function funcionCallBackIdeaLessons()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                   var json = JSON.parse(ajax.responseText);
-                   var level = json.level;
-                   var subject =  JSON.parse(json.subject).id;
-                   
-                   var objective =  JSON.parse(json.objective).id;
-                   var method =  JSON.parse(json.method).id;
-                   var content =  JSON.parse(json.content);
-                   var subjects = JSON.parse(json.subjectslist);
-                   var objectives = JSON.parse(json.objectiveslist);
-                   var contents = JSON.parse(json.contentslist);
-                   $('#subject').empty();
-                     $.each(subjects, function(i, item) {
-                        var test = subjects[i].id;
-                        if( test === subject){
-                             $('#subject').append('<option selected value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
-                        }
-                        else{
-                         $('#subject').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
-                    }
-                   });
-                    }
-                }
-            }
-            
+    
     function funcionCallBackContent()
     {
            if (ajax.readyState===4){
@@ -260,7 +199,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         $('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackSubject;
         var seleccion1 = document.getElementById("level").value;
-        ajax.open("POST","subjectlistLevel.htm?seleccion1="+seleccion1,true);
+        ajax.open("POST","editlessonidea/subjectlistLevel.htm?seleccion1="+seleccion1,true);
         
         ajax.send("");
        
@@ -279,46 +218,12 @@ $("#method").on('mouseover', 'option' , function(e) {
         
         ajax.onreadystatechange=funcionCallBackObjective;
         var seleccion2 = document.getElementById("subject").value;
-        ajax.open("POST","objectivelistSubject.htm?seleccion2="+seleccion2,true);
+        ajax.open("POST","editlessonidea/objectivelistSubject.htm?seleccion2="+seleccion2,true);
 
         ajax.send("");
         
     }  
-    function comboSelectionLoadTemplateLessons()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
         
-        
-        ajax.onreadystatechange=funcionCallBackLoadTemplateLessons;
-        var seleccionSubject = document.getElementById("subject").value;
-        ajax.open("POST","namelistSubject.htm?seleccionTemplate="+seleccionSubject,true);
-        ajax.send("");
-    }
-     function comboSelectionIdeaLessons()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
-        
-        ajax.onreadystatechange=funcionCallBackIdeaLessons;
-        var seleccionidea = document.getElementById("ideas").value;
-        //ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccionTemplate,true);
-        ajax.open("POST","copyfromIdea.htm?seleccionidea="+seleccionidea,true);
-        ajax.send("");
-    }
      function comboSelectionObjective()
     {
         if (window.XMLHttpRequest) //mozilla
@@ -330,14 +235,14 @@ $("#method").on('mouseover', 'option' , function(e) {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
 
-        if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("destino").length === 0 ){
-            $('#createOnClick').attr('disabled', true);
-        }else{
-            $('#createOnClick').attr('disabled', false);
-        }
+//        if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("destino").length === 0 ){
+//            $('#createOnClick').attr('disabled', true);
+//        }else{
+//            $('#createOnClick').attr('disabled', false);
+//        }
         ajax.onreadystatechange=funcionCallBackContent;
         var seleccion3 = document.getElementById("objective").value;
-        ajax.open("POST","contentlistObjective.htm?seleccion3="+seleccion3,true);
+        ajax.open("POST","editlessonidea/contentlistObjective.htm?seleccion3="+seleccion3,true);
         ajax.send("");
     }
     
@@ -595,7 +500,7 @@ input[type="radio"] .styled:checked + label::after {
                                     
                                     
                             </c:choose>
-                                        
+                                     </c:forEach>   
                                         
                                 </c:forEach>
                         </select>

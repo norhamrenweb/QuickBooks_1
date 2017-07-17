@@ -63,7 +63,7 @@ collectionAttendance.each(function() {
                 { "width": "25%", "targets": 4, "orderable": false }
                 ] 
                 }); 
-                var disable = $(".disable");
+                var disable = ${disable};
                 if(disable === 't')
                 {
                     $('hi').prop('disabled', 'disabled');
