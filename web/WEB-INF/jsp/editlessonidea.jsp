@@ -488,6 +488,7 @@ input[type="radio"] .styled:checked + label::after {
 
         
         <form:form id="formStudents" method ="post" action="savelessonidea.htm" >
+             <input type="hidden" id="lessonid" name="lessonid" value="${data.id}">
             <fieldset>
                 <legend id="showPropiertys">
                     Presentation name and description
@@ -595,7 +596,7 @@ input[type="radio"] .styled:checked + label::after {
                                     
                             </c:choose>
                                         
-                                        </c:forEach>
+                                        
                                 </c:forEach>
                         </select>
                     </div>

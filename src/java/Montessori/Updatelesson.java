@@ -75,10 +75,11 @@ public class Updatelesson {
             // get the studs tp be deleted
             delstuds = oldstuds;
             delstuds.removeAll(newList);
+            //delete the old content list and add the new one
             //to avoid null pointer exception incase of lesson without content
             if(newlessons.getContentid()!=null){
                   equipmentids=newlessons.getContentid();
-            
+                        st.executeUpdate("delete from lesson_content where lesson_id = '"+newlessons.getId()+"'");
              for( int i = 0; i <= equipmentids.size() - 1; i++)
             {
                 
@@ -94,7 +95,7 @@ public class Updatelesson {
     }
 
     public void updateidea(Lessons newlessons) throws SQLException {
-     int lessonid=0;
+    
     List<String> equipmentids;
     DriverManagerDataSource dataSource;
     try{
@@ -106,15 +107,14 @@ public class Updatelesson {
     //   st.executeUpdate(test);
        st.executeUpdate(test);
 
-          //need to do like in students, compare old list with new one
+          //delete the old content list and add the new one
             //to avoid null pointer exception incase of lesson without content
             if(newlessons.getContentid()!=null){
                   equipmentids=newlessons.getContentid();
-            
+            st.executeUpdate("delete from lesson_content where lesson_id = '"+newlessons.getId()+"'");
              for( int i = 0; i <= equipmentids.size()- 1; i++)
             {
-                
-                st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids.get(i)+"')");
+                st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+newlessons.getId()+"','"+equipmentids.get(i)+"')");
             }
             }
           

@@ -222,7 +222,7 @@ public class LessonIdeaControlador {
         Lessons data = new Lessons();
        Level l = new Level();
        ArrayList<Content> c = new ArrayList<>();
-       ArrayList<Students> stud = new ArrayList<>();
+    //   ArrayList<Students> stud = new ArrayList<>();
         Objective o = new Objective();
         Subject s = new Subject();
         Method m = new Method();
@@ -438,8 +438,8 @@ public class LessonIdeaControlador {
    @RequestMapping("/savelessonidea.htm")
     public ModelAndView savelessonidea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception  
     {
-        ModelAndView mv = new ModelAndView("redirect:/editlessonidea/start.htm");
-        String id = hsr.getParameter("id");
+        String id = hsr.getParameter("lessonid");
+        ModelAndView mv = new ModelAndView("redirect:/editlessonidea.htm?LessonsSelected="+id);
        String message = "Lesson created";
        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
