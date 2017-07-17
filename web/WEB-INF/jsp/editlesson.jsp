@@ -695,10 +695,10 @@ input[type="radio"] .styled:checked + label::after {
 
                     </div>
 
-                    <div class="col-xs-12 center-block form-group">
+<!--                    <div class="col-xs-12 center-block form-group">
                         <label class="control-label">Attachments</label>
                         <input type="file" class="form-control" name="TXTfile" id="file">
-                    </div>
+                    </div>-->
                 </div>
             </fieldset>
             <fieldset>

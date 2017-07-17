@@ -62,7 +62,13 @@ collectionAttendance.each(function() {
                 { "width": "45%", "targets": 3 },
                 { "width": "25%", "targets": 4, "orderable": false }
                 ] 
-                });        
+                }); 
+                var disable = $(".disable");
+                if(disable === 't')
+                {
+                    $('hi').prop('disabled', 'disabled');
+                    
+                }
     });
 
 $(function() {
@@ -183,7 +189,7 @@ collectionAttendance.each(function() {
                                     <td hidden="true"><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
                                     <td>${record.studentname}</td>
                                     <td>
-                                        <select name="TXTrating" name="rating" class="rating">
+                                        <select name="TXTrating" id="hi" class="rating">
                                             <c:if test="${empty record.rating}">
                                                 <option selected></option>
                                             </c:if>

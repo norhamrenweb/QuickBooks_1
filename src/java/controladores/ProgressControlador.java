@@ -51,6 +51,7 @@ public class ProgressControlador {
         
         ModelAndView mv = new ModelAndView("lessonprogress");
         List<Students> instructors = new ArrayList<>();
+        String disable = hsr.getParameter("disable");
         Students teacher = new Students();
          try {
          DriverManagerDataSource dataSource;
@@ -99,6 +100,7 @@ public class ProgressControlador {
     List<Progress> records = this.getRecords(lesson,hsr.getServletContext());
     mv.addObject("attendancelist", records);
     mv.addObject("lessondetailes",lesson);
+    mv.addObject("disable", disable);
     //load instructors names from renweb, persons with faculty flag (in staff field)
     cn.close();
     dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
