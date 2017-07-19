@@ -337,11 +337,11 @@
                         success: function(data) {                          
                         var win = window.open('about:blank');
                          with(win.document)
-    {
-      open();
-      write(data);
-      close();
-    }
+                            {
+                              open();
+                              write(data);
+                              close();
+                            }
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
