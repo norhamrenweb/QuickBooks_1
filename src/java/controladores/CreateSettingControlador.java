@@ -296,21 +296,22 @@ public class CreateSettingControlador{
     
     @RequestMapping(value="/createsetting/editObjective.htm")
     @ResponseBody
-    public String editObjective(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+    public String editObjective(@RequestBody Objective obj,HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
         List<Objective> objectives = new ArrayList<>();
    //   JSONObject obj = new JSONObject();
-       String[] hi = hsr.getParameterValues("data");
-       JSONObject jsonObj = new JSONObject(hi[0]);
+      String[] sid = hsr.getParameterValues("sid");
+//       JSONObject jsonObj = new JSONObject(hi[0]);
         String message = null;
         try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-        String consulta = "update objective set name = '"+jsonObj.getString("name")+"',description ='"+jsonObj.getString("description")+"'where id ="+jsonObj.getString("id"); 
+        String[] obid = obj.getId();
+        String consulta = "update objective set name = '"+obj.getName()+"',description ='"+obj.getDescription()+"'where id ="+obid[0]; 
         st.executeUpdate(consulta);
         message = "Objective edited successfully";   
-        ResultSet rs = st.executeQuery("select * from objective where subject_id = "+jsonObj.getString("subjectid"));
+        ResultSet rs = st.executeQuery("select * from objective where subject_id = "+sid[0]);
         while(rs.next()){
         Objective o = new Objective();
         o.setDescription(rs.getString("description"));
@@ -333,10 +334,10 @@ public class CreateSettingControlador{
     }     
     @RequestMapping(value="/createsetting/addObjective.htm")
     @ResponseBody
-    public String addObjective(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+    public String addObjective(@RequestBody Objective ob,HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
      
-       String[] input = hsr.getParameterValues("data");
-       JSONObject jsonObj = new JSONObject(input[0]);
+      // String[] input = hsr.getParameterValues("data");
+      // JSONObject jsonObj = new JSONObject(input[0]);
         String message = null;
         Objective o = new Objective();
         try {
@@ -344,7 +345,8 @@ public class CreateSettingControlador{
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-        String consulta = "insert into objective(name,description,subject_id) values('"+jsonObj.getString("name")+"','"+jsonObj.getString("description")+"','"+jsonObj.getString("subjectid")+"')"; 
+        String[] subid = ob.getId();
+        String consulta = "insert into objective(name,description,subject_id) values('"+ob.getName()+"','"+ob.getDescription()+"','"+subid[0]+"')"; 
         st.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS);
         ResultSet rs = st.getGeneratedKeys();
        
@@ -355,8 +357,8 @@ public class CreateSettingControlador{
         o.setId(id);
         }
         message = "Objective added successfully";   
-        o.setDescription(jsonObj.getString("description"));
-        o.setName(jsonObj.getString("name"));
+        o.setDescription(ob.getDescription());
+        o.setName(ob.getName());
        
         
         } catch (SQLException ex) {
@@ -407,10 +409,10 @@ public class CreateSettingControlador{
     }  
     @RequestMapping(value="/createsetting/addContent.htm")
     @ResponseBody
-    public String addContent(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception 
+    public String addContent(@RequestBody Content cont,HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception 
 {
-    String[] input = hsr.getParameterValues("data");
-       JSONObject jsonObj = new JSONObject(input[0]);
+    String[] oid = cont.getId();
+    //   JSONObject jsonObj = new JSONObject(input[0]);
         String message = null;
         Content c = new Content();
         try {
@@ -418,7 +420,7 @@ public class CreateSettingControlador{
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-        String consulta = "insert into content(name,description) values('"+jsonObj.getString("name")+"','"+jsonObj.getString("description")+"')"; 
+        String consulta = "insert into content(name,description) values('"+cont.getName()+"','"+cont.getDescription()+"')"; 
         st.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS);
         ResultSet rs = st.getGeneratedKeys();
         String[] id = new String[1];
@@ -429,9 +431,9 @@ public class CreateSettingControlador{
         c.setId(id);
         }
            
-        c.setDescription(jsonObj.getString("description"));
-        c.setName(jsonObj.getString("name"));
-        consulta = "insert into objective_content(content_id,objective_id) values('"+id[0]+"','"+jsonObj.getString("objid")+"')"; 
+        c.setDescription(cont.getDescription());
+        c.setName(cont.getName());
+        consulta = "insert into objective_content(content_id,objective_id) values('"+id[0]+"','"+oid[0]+"')"; 
         st.executeUpdate(consulta);
         message = "Content added successfully";
         } catch (SQLException ex) {
@@ -447,22 +449,23 @@ public class CreateSettingControlador{
 }
              @RequestMapping(value="/createsetting/editContent.htm")
     @ResponseBody
-    public String editContent(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception 
+    public String editContent(@RequestBody Content cont,HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception 
 {
      List<Content> contents = new ArrayList<>();
    //   JSONObject obj = new JSONObject();
-       String[] hi = hsr.getParameterValues("data");
-       JSONObject jsonObj = new JSONObject(hi[0]);
+       String[] oid = hsr.getParameterValues("oid");
+    //   JSONObject jsonObj = new JSONObject(hi[0]);
         String message = null;
         try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-        String consulta = "update content set name = '"+jsonObj.getString("name")+"',description ='"+jsonObj.getString("description")+"'where id ="+jsonObj.getString("id"); 
+        String[] cid = cont.getId();
+        String consulta = "update content set name = '"+cont.getName()+"',description ='"+cont.getDescription()+"'where id ="+cid[0]; 
         st.executeUpdate(consulta);
         message = "Content edited successfully";   
-          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id = "+jsonObj.getString("objid")+")");
+          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id = "+oid[0]+")");
           
            while (rs1.next())
             {
@@ -556,10 +559,10 @@ public class CreateSettingControlador{
     } 
         @RequestMapping(value="/createsetting/addMethod.htm")
     @ResponseBody
-    public String addMethod(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+    public String addMethod(@RequestBody Method met,HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
      
-       String[] input = hsr.getParameterValues("data");
-       JSONObject jsonObj = new JSONObject(input[0]);
+//       String[] input = hsr.getParameterValues("data");
+//       JSONObject jsonObj = new JSONObject(input[0]);
         String message = null;
         Method m = new Method();
         try {
@@ -567,7 +570,7 @@ public class CreateSettingControlador{
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-        String consulta = "insert into method(name,description) values('"+jsonObj.getString("name")+"','"+jsonObj.getString("description")+"')"; 
+        String consulta = "insert into method(name,description) values('"+met.getName()+"','"+met.getDescription()+"')"; 
         st.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS);
         ResultSet rs = st.getGeneratedKeys();
        
@@ -578,8 +581,8 @@ public class CreateSettingControlador{
         m.setId(id);
         }
         message = "Method added successfully";   
-        m.setDescription(jsonObj.getString("description"));
-        m.setName(jsonObj.getString("name"));
+        m.setDescription(met.getDescription());
+        m.setName(met.getName());
        
         
         } catch (SQLException ex) {

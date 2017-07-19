@@ -120,8 +120,9 @@
 //                        $('#tableobjective tbody tr:eq('+ i +') td:eq(3)').append("<div class='input-group'>"+currentTime+"</div>");
 //                        }
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').empty();
-                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='button' class='btn-unbutton' value='"+item.col5+"' onclick='selectionObjective("+item.col5+")'>More details</button>");
-//                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
+               //         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='button' class='btn-unbutton' value='"+item.col5+"' onclick='selectionObjective("+item.col5+")'>More details</button>");
+              $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='submit' class='btn-unbutton' value='"+item.col5+"'>More details</button>");
+//                                 $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
                         });
 //                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
 //                        $('#tableobjective tbody tr td:eq(2)').empty();
@@ -280,6 +281,7 @@
         $('#loadingmessage').show();  // show the loading message.
         //$('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackSelectStudent;
+        
       //  var selectStudent = document.getElementsByClassName("nameStudent").value;
         ajax.open("POST","studentPage.htm?selectStudent="+selectStudent,true);
        
@@ -306,7 +308,7 @@
                         myObj["studentid"] = data1;
                         
                         var json = JSON.stringify(myObj);
-                        window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
+                        window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json);
                         
                     };
  
@@ -320,17 +322,28 @@
         var gradelevel = $("#gradelevel").text();
         var subject = $("#subjects :selected").text();
         var myObj = {};
-                myObj["objectiveid"] = selectObjective;
-                myObj["studentid"] = data1;
-                myObj["studentname"] = selectStudent;
-               myObj["gradelevel"] = gradelevel;
-               myObj["subject"] = subject;
+                myObj["col1"] = selectObjective;//objectiveid
+                myObj["col2"] = data1;//studentid
+                myObj["col3"] = selectStudent;//studentname
+               myObj["col4"] = gradelevel;//gradelevel
+               myObj["col5"] = subject;//subject
                 var json = JSON.stringify(myObj);
-        ajax.onreadystatechange = funcionCallBackLoadNewPage;
-        //ajax.open("POST","progressdetails.htm?data="+json, true);
-        window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json, "_blank");
-        
-        //ajax.send("");
+        $.ajax({
+                    type: 'POST',
+                        url: '<c:url value="/progressdetails.htm"/>',
+                      data: json,
+                        datatype: "json2",           
+                     contentType: "application/json",
+                        success: function(data) {                          
+                        
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });    
        
     }
     
@@ -492,7 +505,12 @@ $(function() {
                                 </c:forEach>
                             </table>      
                         </div>
-                    </div>    
+                    </div> 
+</fieldset>
+    </form:form>
+            <form:form id="formStudentPage" method ="post" action="progressdetails.htm" >
+      
+            <fieldset>
                     <div class="col-xs-9">
                         <div class="col-xs-12 text-center nameStudent">
                             <span id="student"> </span>

@@ -285,13 +285,15 @@ $("#method").on('mouseover', 'option' , function(e) {
                 myObj["name"] = name;
                 myObj["description"] = description;
     //            myObj["id"] = seleccion;
-                myObj["subjectid"] = subjectid;
+                var id = [subjectid]; 
+                myObj["id"] = id;
                 var json = JSON.stringify(myObj);
             $.ajax({
                     type: 'POST',
-                        url: 'addObjective.htm?data='+json,
+                        url: 'addObjective.htm',
                         data: json,
-                        dataType: 'text' ,           
+                         datatype:"json",
+                        contentType: "application/json",           
                      
                         success: function(data) {                          
                             var json = JSON.parse(data);                               
@@ -317,14 +319,15 @@ $("#method").on('mouseover', 'option' , function(e) {
         var myObj = {};
                 myObj["name"] = name;
                 myObj["description"] = description;
-                myObj["id"] = seleccion;
-                myObj["subjectid"] = subjectid;
+                myObj["id"] = [seleccion];
+             //   myObj["subjectid"] = subjectid;
                 var json = JSON.stringify(myObj);
             $.ajax({
                     type: 'POST',
-                        url: 'editObjective.htm?data='+json,
+                        url: 'editObjective.htm?sid='+subjectid,
                         data: json,
-                        dataType: 'text' ,           
+                       datatype:"json",
+                        contentType: "application/json",           
                      
                         success: function(data) {
                             $('#objective').empty();
@@ -352,14 +355,15 @@ $("#method").on('mouseover', 'option' , function(e) {
         var myObj = {};
                 myObj["name"] = name;
                 myObj["description"] = description;
-                myObj["id"] = seleccion;
-                myObj["objid"] = objid;
+                myObj["id"] = [seleccion];
+          //      myObj["objid"] = objid;
                 var json = JSON.stringify(myObj);
             $.ajax({
                     type: 'POST',
-                        url: 'editContent.htm?data='+json,
+                        url: 'editContent.htm?oid='+objid,
                         data: json,
-                        dataType: 'text' ,           
+                        datatype:"json",
+                        contentType: "application/json",           
                      
                         success: function(data) {
                             $('#content').empty();
@@ -389,13 +393,14 @@ $("#method").on('mouseover', 'option' , function(e) {
                 myObj["name"] = name;
                 myObj["description"] = description;
     //            myObj["id"] = seleccion;
-                myObj["objid"] = objid;
+                myObj["id"] = [objid];
                 var json = JSON.stringify(myObj);
             $.ajax({
                     type: 'POST',
-                        url: 'addContent.htm?data='+json,
+                        url: 'addContent.htm',
                         data: json,
-                        dataType: 'text' ,           
+                        datatype:"json",
+                        contentType: "application/json",           
                      
                         success: function(data) {                          
                             var json = JSON.parse(data);                               
@@ -448,10 +453,10 @@ $("#method").on('mouseover', 'option' , function(e) {
                 var json = JSON.stringify(myObj);
             $.ajax({
                     type: 'POST',
-                        url: 'addMethod.htm?data='+json,
+                        url: 'addMethod.htm',
                         data: json,
-                        dataType: 'text' ,           
-                     
+                        datatype:"json",
+                        contentType: "application/json",
                         success: function(data) {                          
                             var json = JSON.parse(data);                               
                         $('#method').append('<option value = "'+json.id[0]+'" >' + json.name + '</option>');
