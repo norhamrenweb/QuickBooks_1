@@ -230,13 +230,13 @@ public class ProgressbyStudent {
     //OTEHER PAGINE
     @RequestMapping("/progressdetails.htm")
     @ResponseBody
-    public ModelAndView progressdetails(@RequestBody DBRecords y, HttpServletRequest hsr, HttpServletResponse hsr1, Model model) throws Exception
+    public ModelAndView progressdetails(@RequestBody DBRecords d, HttpServletRequest hsr, HttpServletResponse hsr1, Model model) throws Exception
     {
          ModelAndView mv = new ModelAndView("progressdetails");
             Objective o = new Objective();
-                 String[] hi = hsr.getParameterValues("data");
+            //     String[] hi = hsr.getParameterValues("data");
                  servlet = hsr.getServletContext();
-               JSONObject jsonObj = new JSONObject(hi[0]);
+              // JSONObject jsonObj = new JSONObject(hi[0]);
             List<Progress> progress = new ArrayList<>();
             String finalrating = null;
             String presenteddate = null;
@@ -250,7 +250,7 @@ public class ProgressbyStudent {
         
              Statement st = this.cn.createStatement(1004,1007);
             
-          ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id="+jsonObj.getString("objectiveid")+" AND student_id = "+jsonObj.getString("studentid"));
+          ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id="+d.getCol1()+" AND student_id = "+d.getCol2());
           if(!rs1.next())
           { String message = "Student does not have lessons under the selected objective";
               mv.addObject("message",message);
@@ -278,13 +278,13 @@ public class ProgressbyStudent {
                }
            }
  //           select the latest rating to be presented as the final rating for this objective
-        String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '"+jsonObj.getString("studentid")+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+jsonObj.getString("studentid")+" AND objective_id ="+jsonObj.getString("objectiveid")+" and generalcomment = false) AND objective_id ="+jsonObj.getString("objectiveid")+"and generalcomment = false )";
+        String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '"+d.getCol2()+"' AND comment_date = (select max(comment_date)   from public.progress_report where student_id ="+d.getCol2()+" AND objective_id ="+d.getCol1()+" and generalcomment = false) AND objective_id ="+d.getCol1()+"and generalcomment = false )";
 ResultSet rs2 = st.executeQuery(consulta);
 while(rs2.next())
 {
     finalrating= rs2.getString("name");
 }
-          consulta = "select min(comment_date) as date from progress_report where student_id ="+jsonObj.getString("studentid")+" and rating_id in (select id from rating where name = 'Presented') and objective_id ="+jsonObj.getString("objectiveid");  
+          consulta = "select min(comment_date) as date from progress_report where student_id ="+d.getCol2()+" and rating_id in (select id from rating where name = 'Presented') and objective_id ="+d.getCol1();  
           ResultSet rs3 = st.executeQuery(consulta);
           if(rs3.next()){
               rs3.beforeFirst();
@@ -298,7 +298,7 @@ while(rs3.next())
     
 }
           }
-consulta = "select min(comment_date) as date from progress_report where student_id ="+jsonObj.getString("studentid")+" and rating_id in (select id from rating where name = 'Attempted') and objective_id ="+jsonObj.getString("objectiveid");  
+consulta = "select min(comment_date) as date from progress_report where student_id ="+d.getCol2()+" and rating_id in (select id from rating where name = 'Attempted') and objective_id ="+d.getCol1();  
           ResultSet rs4 = st.executeQuery(consulta);
            if(rs4.next()){
               rs4.beforeFirst();
@@ -311,7 +311,7 @@ while(rs4.next())
                }
 }
            }
-consulta = "select min(comment_date) as date from progress_report where student_id ="+jsonObj.getString("studentid")+" and rating_id in (select id from rating where name = 'Mastered') and objective_id ="+jsonObj.getString("objectiveid");  
+consulta = "select min(comment_date) as date from progress_report where student_id ="+d.getCol2()+" and rating_id in (select id from rating where name = 'Mastered') and objective_id ="+d.getCol1();  
           ResultSet rs5 = st.executeQuery(consulta);
             if(rs5.next()){
               rs5.beforeFirst();
@@ -340,11 +340,11 @@ while(rs5.next())
        mv.addObject("attempteddate",attempteddate);
        mv.addObject("mastereddate",mastereddate);
       mv.addObject("presenteddate",presenteddate);
-        mv.addObject("studentname", jsonObj.getString("studentname"));
-        mv.addObject("gradelevel",jsonObj.getString("gradelevel"));
-        mv.addObject("subject",jsonObj.getString("subject"));
+        mv.addObject("studentname", d.getCol3());
+        mv.addObject("gradelevel",d.getCol4());
+        mv.addObject("subject",d.getCol5());
         mv.addObject("attempteddates", attemptdates);
-        mv.addObject("objective", o.fetchName(Integer.parseInt(jsonObj.getString("objectiveid")), servlet));}
+        mv.addObject("objective", o.fetchName(Integer.parseInt(d.getCol1()), servlet));}
 //        mv.addObject(obj);
 } catch (SQLException ex) {
             System.out.println("Error: " + ex);
