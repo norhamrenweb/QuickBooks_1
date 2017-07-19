@@ -598,18 +598,18 @@ public class CreateSettingControlador{
     }          
 @RequestMapping(value="/createsetting/editMethod.htm")
     @ResponseBody
-    public String editMethod(HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+    public String editMethod(@RequestBody Method met,HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
         List<Method> methods = new ArrayList<>();
    //   JSONObject obj = new JSONObject();
-       String[] hi = hsr.getParameterValues("data");
-       JSONObject jsonObj = new JSONObject(hi[0]);
+      String[] mid =met.getId();
+//       JSONObject jsonObj = new JSONObject(hi[0]);
         String message = null;
         try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-        String consulta = "update method set name = '"+jsonObj.getString("name")+"',description ='"+jsonObj.getString("description")+"'where id ="+jsonObj.getString("id"); 
+        String consulta = "update method set name = '"+met.getName()+"',description ='"+met.getDescription()+"'where id ="+mid[0]; 
         st.executeUpdate(consulta);
         message = "Objective edited successfully";   
         ResultSet rs = st.executeQuery("select * from method ");
