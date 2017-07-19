@@ -331,11 +331,17 @@
         $.ajax({
                     type: 'POST',
                         url: '<c:url value="/progressdetails.htm"/>',
-                      data: json,
+                        data: json,
                         datatype: "json",           
-                     contentType: "application/json",
+                        contentType: "application/json",
                         success: function(data) {                          
-                        
+                        var win = window.open('about:blank');
+                         with(win.document)
+    {
+      open();
+      write(data);
+      close();
+    }
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -506,11 +512,7 @@ $(function() {
                             </table>      
                         </div>
                     </div> 
-</fieldset>
-    </form:form>
-            <form:form id="formStudentPage" method ="post" action="progressdetails.htm" >
-      
-            <fieldset>
+
                     <div class="col-xs-9">
                         <div class="col-xs-12 text-center nameStudent">
                             <span id="student"> </span>
