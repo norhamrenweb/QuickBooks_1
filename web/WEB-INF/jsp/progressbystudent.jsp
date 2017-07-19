@@ -120,8 +120,8 @@
 //                        $('#tableobjective tbody tr:eq('+ i +') td:eq(3)').append("<div class='input-group'>"+currentTime+"</div>");
 //                        }
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').empty();
-               //         $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='button' class='btn-unbutton' value='"+item.col5+"' onclick='selectionObjective("+item.col5+")'>More details</button>");
-              $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='submit' class='btn-unbutton' value='"+item.col5+"'>More details</button>");
+                        $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='button' class='btn-unbutton' value='"+item.col5+"' onclick='selectionObjective("+item.col5+")'>More details</button>");
+                        //$('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='submit' class='btn-unbutton' value='"+item.col5+"'>More details</button>");
 //                                 $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
                         });
 //                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
@@ -314,33 +314,7 @@
         ajax.send("");
        
     }
-    function funcionCallBackLoadNewPage()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                   var json = JSON.parse(ajax.responseText);
-                  
-                   //var i;
-                    if(json.length === 0){
-                        $('#divNotObjective').addClass('hidden');
-                        $('#divTableObjective').removeClass('hidden');
-                        
-                    }else{
-                        
-                    var selectObjective = dataObjective1;   
-                
-                    var myObj = {};
-                        myObj["objectiveid"] = selectObjective;
-                        myObj["studentid"] = data1;
-                        
-                        var json = JSON.stringify(myObj);
-                        window.open("<c:url value="/progressbystudent/newpage.htm?data="/>"+json);
-                        
-                    };
- 
-                    }
-                }
-            }
+
     function selectionObjective(dataObjective1)
     {
         var selectObjective = dataObjective1;

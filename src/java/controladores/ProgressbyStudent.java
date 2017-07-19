@@ -228,9 +228,9 @@ public class ProgressbyStudent {
          
     }
     //OTEHER PAGINE
-    @RequestMapping("/progressbystudent/newpage.htm")
+    @RequestMapping("/progressdetails.htm")
     @ResponseBody
-    public ModelAndView newpage(HttpServletRequest hsr, HttpServletResponse hsr1, Model model) throws Exception
+    public ModelAndView progressdetails(@RequestBody DBRecords y, HttpServletRequest hsr, HttpServletResponse hsr1, Model model) throws Exception
     {
          ModelAndView mv = new ModelAndView("progressdetails");
             Objective o = new Objective();
