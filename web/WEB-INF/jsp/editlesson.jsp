@@ -213,14 +213,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     }
                 }
             }
-    function funcionCallBackLoadTemplateLessons()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("lessons").innerHTML= ajax.responseText;
-                    }
-                }
-            }    
+ 
 
     function funcionCallBackIdeaLessons()
     {
@@ -297,23 +290,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.send("");
         
     }  
-    function comboSelectionLoadTemplateLessons()
-    {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
-        
-        ajax.onreadystatechange=funcionCallBackLoadTemplateLessons;
-        var seleccionSubject = document.getElementById("subject").value;
-        ajax.open("POST","namelistSubject.htm?seleccionTemplate="+seleccionSubject,true);
-        ajax.send("");
-    }
+
      function comboSelectionIdeaLessons()
     {
         if (window.XMLHttpRequest) //mozilla

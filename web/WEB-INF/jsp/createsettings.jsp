@@ -479,13 +479,14 @@ $("#method").on('mouseover', 'option' , function(e) {
         var myObj = {};
                 myObj["name"] = name;
                 myObj["description"] = description;
-                myObj["id"] = seleccion;
+                myObj["id"] = [seleccion];
                 var json = JSON.stringify(myObj);
             $.ajax({
                     type: 'POST',
-                        url: 'editMethod.htm?data='+json,
+                        url: 'editMethod.htm',
                         data: json,
-                        dataType: 'text' ,           
+                       datatype:"json",
+                        contentType: "application/json",         
                      
                         success: function(data) {
                             $('#method').empty();

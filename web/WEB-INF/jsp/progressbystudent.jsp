@@ -178,18 +178,44 @@
 //        data = table.row( this ).data();
 //        dataCommentGeneral = data['col3']; 
 //        } ); 
-        ajax.onreadystatechange=funcionCallBackSaveGeneralComent;
+    //    ajax.onreadystatechange=funcionCallBackSaveGeneralComent;
         
         
         
         var myObj = {};
-                myObj["objectiveid"] = objectiveId;
-                myObj["studentid"] = studentId;
-                myObj["comment"] = dataCommentGeneral;
+                myObj["col1"] = objectiveId;
+                myObj["col2"] = studentId;
+                myObj["col3"] = dataCommentGeneral;
                 var json = JSON.stringify(myObj);
-        
-        ajax.open("POST","saveGeneralcomment.htm?data="+json,true);
-        ajax.send("");
+        $.ajax({
+                    type: 'POST',
+                        url: 'saveGeneralcomment.htm',
+                        data: json,
+                         datatype:"json",
+                        contentType: "application/json",           
+                     
+                        success: function(data) {                          
+                          var j = JSON.parse(data);
+                          var mensaje = j.message;
+                    if( mensaje === "Comment successfully updated"){
+                        $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                        
+                    }else{
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                    }           
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });
+//        ajax.open("POST","saveGeneralcomment.htm?data="+json,true);
+//        ajax.send("");
     }
      function funcionCallBackSelectStudent()
     {
@@ -332,7 +358,7 @@
                     type: 'POST',
                         url: '<c:url value="/progressdetails.htm"/>',
                       data: json,
-                        datatype: "json2",           
+                        datatype: "json",           
                      contentType: "application/json",
                         success: function(data) {                          
                         

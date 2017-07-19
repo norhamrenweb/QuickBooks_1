@@ -486,15 +486,15 @@ while(rs5.next())
     
     @RequestMapping("/progressbystudent/saveGeneralcomment.htm")
     @ResponseBody
-    public String saveGeneralcomment(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception 
+    public String saveGeneralcomment(@RequestBody DBRecords data,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception 
     {
     String message = "Comment was not saved";
           JSONObject obj = new JSONObject();
-    String[] hi = hsr.getParameterValues("data");
-    JSONObject jsonObj = new JSONObject(hi[0]);
-    String objectiveid = jsonObj.getString("objectiveid");
-    String comment = jsonObj.getString("comment");
-    String studentid = jsonObj.getString("studentid");
+//    String[] hi = hsr.getParameterValues("data");
+   // JSONObject jsonObj = new JSONObject(hi[0]);
+    String objectiveid = data.getCol1();
+    String comment = data.getCol3();
+    String studentid = data.getCol2();
     try {
             DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
