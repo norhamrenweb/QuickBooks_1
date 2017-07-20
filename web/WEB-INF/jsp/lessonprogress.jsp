@@ -52,7 +52,11 @@ collectionAttendance.each(function() {
         show: 'false'
     });
     }
-        
+    var disable = "${disable}";
+    if(disable === 't')
+    {
+        $('#buttonAchived').bootstrapToggle('on')
+    }    
         $('#table_progress').DataTable(
                 {
                    "columnDefs": [
@@ -63,12 +67,7 @@ collectionAttendance.each(function() {
                 { "width": "25%", "targets": 4, "orderable": false }
                 ] 
                 }); 
-                var disable = ${disable};
-                if(disable === 't')
-                {
-                    $('hi').prop('disabled', 'disabled');
-                    
-                }
+              
     });
 
 $(function() {

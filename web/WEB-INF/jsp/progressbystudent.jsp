@@ -244,7 +244,7 @@
                     if(typeof info.foto === 'undefined'){
                         $('#foto').attr('src', '../recursos/img/NotPhoto.png');
                     }else{
-                        $('#foto').attr('src', 'ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/'+info.foto);
+                        $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/"+info.foto);
                     }
                     $('#subjects').empty();
                      $.each(subjects, function(i, item) {

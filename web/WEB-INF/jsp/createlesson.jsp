@@ -24,11 +24,18 @@
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
          var lessoncreate = '<%= request.getParameter("message") %>';
     
-     if (lessoncreate === 'Presentation created' ){
-     $('#myModal').modal({
-        show: 'false'
-    });
-    }
+        if (lessoncreate === 'Lesson idea created' ){
+        $('#lessonIdeaCreated').modal({
+           show: 'false'
+        });
+        }
+        
+        if (lessoncreate === 'Lesson created' ){
+        $('#lessonCreated').modal({
+           show: 'false'
+        });
+        }
+        
             $( "#showPropiertys" ).click(function() {
                     $("#contenedorPropiertys").toggleClass('in');
                     //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
@@ -789,7 +796,7 @@ input[type="radio"] .styled:checked + label::after {
   Launch demo modal
 </button>
 </div>-->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="lessonIdeaCreated" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -806,7 +813,23 @@ input[type="radio"] .styled:checked + label::after {
     </div>
   </div>
 </div>
-
+<div class="modal fade" id="lessonCreated" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
+      </div>
+      <div class="modal-body text-center">
+       <H1><%= request.getParameter("message") %></H1>
+      </div>
+<!--      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>-->
+    </div>
+  </div>
+</div>
 
 
     </body>
