@@ -221,8 +221,10 @@ var ajax;
     <style>
         .sinpadding
         {
-            padding-left: 10px;
-            padding-right: 10px;
+            padding-left: 4px;
+            padding-right: 4px;
+            display: inline-block;
+            width: 18%;
         }
         .title
         {
@@ -291,21 +293,23 @@ var ajax;
                             <td>${lecciones.start}</td>
                             <td>${lecciones.finish}</td>
                             <td>
-                                <div class="col-xs-2 sinpadding text-center">
+
+                                <div class="sinpadding text-center">
                                     <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Attendance">
                                 </div>
-                                <div class="col-xs-2 sinpadding text-center">
+                                <div class="sinpadding text-center">
                                     <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
                                 </div>
-                                <div class="col-xs-2 sinpadding text-center">
+                                <div class="sinpadding text-center">
                                     <input name="TXTid_lessons_modificar" type="image" src="<c:url value="/recursos/img/btn/btn_Edit.svg"/>" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
                                 </div>
-                                <div class="col-xs-2 sinpadding text-center">
+                                <div class="sinpadding text-center">
                                     <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
                                 </div>
-                                <div class="col-xs-2 sinpadding text-center">
+                                <div class="sinpadding text-center">
                                     <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id})" width="40px" data-placement="bottom" title="Resources">
                                 </div>
+
                             </td>
                         </tr>
                     </c:forEach>
