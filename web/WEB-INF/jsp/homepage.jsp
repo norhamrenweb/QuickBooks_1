@@ -30,12 +30,21 @@
     $('#table_id').DataTable({
     "aLengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
     "iDisplayLength": 5,
+    
     "columnDefs": [
-        {
-            "targets": [ 0 ],
-            "visible": false,
-            "searchable": false
-        }]
+            { "width": "10%",  "targets": [ 0 ],
+                "visible": false,
+                "searchable": false},
+            { "width": "20%",   "targets": [ 1 ]},
+            { "width": "5%",    "targets": [ 2 ] },
+            { "width": "10%",   "targets": [ 3 ] },
+            { "width": "10%",   "targets": [ 4 ] },
+            { "width": "10%",   "targets": [ 5 ] },
+            { "width": "10%",   "targets": [ 6 ] },
+            { "width": "10%",   "targets": [ 7 ] },
+            { "width": "25%", "targets": [ 8 ] }
+            
+        ]
     });
         $('#table_datelessons').DataTable();
        
