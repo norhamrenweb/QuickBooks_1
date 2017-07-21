@@ -311,8 +311,8 @@ public class CreateLessonControlador {
     }
      @RequestMapping("/createlesson/createlesson.htm")
      public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        String message = "Lesson created";
-        ModelAndView mv = new ModelAndView("redirect:/createlesson/start.htm", "message", message);
+        String message = new String();
+       
        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
          
@@ -364,6 +364,7 @@ public class CreateLessonControlador {
      if(ideaCheck!= null){
        if(ideaCheck[0].equals("on")){
            c.newidea(newlesson);
+           message = "Lesson idea created";
        }}
        else{
            java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorainicio") + ":00.000");
@@ -372,10 +373,11 @@ public class CreateLessonControlador {
 
            newlesson.setStart("" + timestampstart);
            newlesson.setFinish("" + timestampend);
-           c.newlesson(studentIds, newlesson);
+           c.newlesson(studentIds, newlesson); 
+           message = "Lesson created";
        }
        
-        
+        ModelAndView mv = new ModelAndView("redirect:/createlesson/start.htm", "message", message);
         return mv;
     }
 //coge la nombre de subject seleccionado y devuelve la lista de lessons que son templates 
