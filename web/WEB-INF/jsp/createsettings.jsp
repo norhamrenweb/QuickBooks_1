@@ -689,8 +689,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name">
                         </div>
                         <div class="col-xs-7 center-block form-group">
-                            <label class="control-label">Comments</label>
-                            <textarea type="text" class="form-control" name="TXTnamenewobjective" id="descriptionnewobjective"  placeholder="Comments"></textarea>
+                            <label class="control-label">Description</label>
+                            <textarea type="text" class="form-control" name="TXTnamenewobjective" id="descriptionnewobjective"  placeholder="Description"></textarea>
                         </div>
                         <div class="col-xs-2 text-center form-group paddingLabel">
                             <input type="button" name="AddObjective" value="save" class="btn btn-success" id="AddObjective" data-target=".bs-example-modal-lg" onclick="saveaddObjective()"/>
@@ -704,8 +704,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <input type="text" class="form-control" name="TXTeditNameObjective" id="editNameObjective"  placeholder="Name">
                         </div>
                         <div class="col-xs-7 center-block form-group">
-                            <label class="control-label">Comments</label>
-                            <textarea type="text" class="form-control" name="TXTeditDescriptionObjective" id="editDescriptionObjective"  placeholder="Comments"></textarea>
+                            <label class="control-label">Description</label>
+                            <textarea type="text" class="form-control" name="TXTeditDescriptionObjective" id="editDescriptionObjective"  placeholder="Description"></textarea>
                         </div>
                         <div class="col-xs-2 center-block form-group paddingLabel">
                             <input type="button" name="AddObjective" value="Save" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveeditObjective()"/>
@@ -721,8 +721,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <input type="text" class="form-control" name="TXTnamenewcontent" id="namenewcontent"  placeholder="Name new content">
                         </div>
                         <div class="col-xs-6 center-block form-group">
-                            <label class="control-label">Comments</label>
-                            <input type="text" class="form-control" name="TXTnamenewcontent" id="commentsnewcontent"  placeholder="Comments">
+                            <label class="control-label">Description</label>
+                            <input type="text" class="form-control" name="TXTnamenewcontent" id="commentsnewcontent"  placeholder="Description">
                         </div>
                         <div class="col-xs-3 center-block form-group paddingLabel">
                             <input type="button" name="AddContent" value="save" class="btn btn-success" id="AddContent" data-target=".bs-example-modal-lg" onclick="saveaddContent()"/>
@@ -741,8 +741,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <input type="text" class="form-control" name="TXTnameeditcontent" id="editNameContent"  placeholder="Name new content">
                         </div>
                         <div class="col-xs-6 center-block form-group">
-                            <label class="control-label">Comments</label>
-                            <input type="text" class="form-control" name="TXTnameeditcontent" id="editCommentsContent"  placeholder="Comments">
+                            <label class="control-label">Description</label>
+                            <input type="text" class="form-control" name="TXTnameeditcontent" id="editCommentsContent"  placeholder="Description">
                         </div>
                         <div class="col-xs-3 center-block form-group paddingLabel">
                             <input type="button" name="EditContent" value="save" class="btn btn-success" id="EditContent" data-target=".bs-example-modal-lg" onclick="saveeditContent()"/> 
@@ -784,8 +784,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <input type="text" class="form-control" name="TXTnamenewmethod" id="namenewmethod"  placeholder="Name new method">
                         </div>
                         <div class="col-xs-6 center-block form-group">
-                            <label class="control-label">Comments</label>
-                            <input type="text" class="form-control" name="TXTnamenewmethod" id="commentsnewmethod"  placeholder="Comments">
+                            <label class="control-label">Description</label>
+                            <input type="text" class="form-control" name="TXTnamenewmethod" id="commentsnewmethod"  placeholder="Description">
                         </div>
                         <div class="col-xs-3 center-block form-group paddingLabel">
                             <input type="button" name="Addmethod" value="save" class="btn btn-success" id="Addmethod" data-target=".bs-example-modal-lg" onclick="saveaddMethod()"/>
@@ -801,8 +801,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <input type="text" class="form-control" name="TXTnameeditethod" id="editNameMethod"  placeholder="Name new method">
                         </div>
                         <div class="col-xs-6 center-block form-group">
-                            <label class="control-label">Comments</label>
-                            <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="Comments">
+                            <label class="control-label">Description</label>
+                            <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="Description">
                         </div>
                         <div class="col-xs-3 center-block form-group paddingLabel">
                             <input type="button" name="EditMethod" value="save" class="btn btn-success" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveeditMethod()"/> 
