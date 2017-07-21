@@ -180,7 +180,7 @@ public class CreateSettingControlador{
                 subjectid = hsr.getParameter("seleccion2");
             
             
-          ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid);
+          ResultSet rs1 = st.executeQuery("select name,id,description from public.objective where subject_id="+subjectid);
 //          Objective s = new Objective();
 //          s.setName("Select Objective");
 //          objectives.add(s);
@@ -192,6 +192,7 @@ public class CreateSettingControlador{
             ids[0] = ""+rs1.getInt("id");
              sub.setId(ids);
              sub.setName(rs1.getString("name"));
+             sub.setDescription(rs1.getString("description"));
                 objectives.add(sub);
             }
           
@@ -228,7 +229,7 @@ public class CreateSettingControlador{
                 //objectiveid= "1";
             String objectiveid = hsr.getParameter("seleccion3");
             
-          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id = "+objectiveid+")");
+          ResultSet rs1 = st.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id = "+objectiveid+")");
          
            while (rs1.next())
             {
@@ -237,6 +238,7 @@ public class CreateSettingControlador{
             ids[0] = String.valueOf(rs1.getInt("id"));
              eq.setId(ids);
              eq.setName(rs1.getString("name"));
+             eq.setDescription(rs1.getString("description"));
           
  //    obj.put("name", rs1.getString("name"));
 //       list.add(obj);
@@ -465,7 +467,7 @@ public class CreateSettingControlador{
         String consulta = "update content set name = '"+cont.getName()+"',description ='"+cont.getDescription()+"'where id ="+cid[0]; 
         st.executeUpdate(consulta);
         message = "Content edited successfully";   
-          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id = "+oid[0]+")");
+          ResultSet rs1 = st.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id = "+oid[0]+")");
           
            while (rs1.next())
             {
@@ -474,6 +476,7 @@ public class CreateSettingControlador{
             ids[0] = String.valueOf(rs1.getInt("id"));
              eq.setId(ids);
              eq.setName(rs1.getString("name"));
+             eq.setDescription(rs1.getString("description"));
                contents.add(eq);
             }
         } catch (SQLException ex) {

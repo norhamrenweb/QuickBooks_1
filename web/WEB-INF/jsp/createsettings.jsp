@@ -211,7 +211,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 //Añadimos los content del objective
                 $('#content').empty();
                 $.each(content, function(i, item) { 
-                    $('#content').append('<option value ="'+content[i].id+'">' + content[i].name + '</option>');
+                    $('#content').append('<option value ="'+content[i].id+'" title ="'+content[i].description+'">' + content[i].name + '</option>');
                 });
 	}
 }
@@ -369,7 +369,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                             $('#content').empty();
                             var json = JSON.parse(data);                            
                             $.each(json, function(i, item) { 
-                            $('#content').append('<option value = "'+json[i].id[0]+'" >' + json[i].name + '</option>');
+                            $('#content').append('<option value = "'+json[i].id[0]+'" title ="'+json[i].description+'">' + json[i].name + '</option>');
                             $('#formEditcontent').addClass("hidden");
                         });
                            
@@ -404,7 +404,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                      
                         success: function(data) {                          
                             var json = JSON.parse(data);                               
-                            $('#content').append('<option value = "'+json.id[0]+'" >' + json.name + '</option>');
+                            $('#content').append('<option value = "'+json.id[0]+'" title ="'+json.description+'" >' + json.name + '</option>');
                             $('#formAddcontent').addClass("hidden");           
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
@@ -557,6 +557,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     $('#formEditcontent').removeClass("hidden");
                     //Añadimos el nombre del content para editarlo
                     $('#editNameContent').val($('#content option:selected').text());
+                    $('#editCommentsContent').val($('#content option:selected').attr("title"));
                     //Añadimos el nombre del objective para saber a que objective pertenece el content que estamos editando
                     $('#contentSelectedForEdit').text($('#objective option:selected').text());
                 });
@@ -643,7 +644,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <label class="control-label">Objective</label>
                             <select class="form-control" disabled="true" name="TXTobjective" id="objective" multiple size="10" onclick="comboSelectionObjective()">
                                 <c:forEach var="objective" items="${objectives}">
-                                    <option value="${objective.id[0]}" >${objective.name}</option>
+                                    <option value="${objective.id[0]}" title ="${objective.description}" >${objective.name}</option>
                                 </c:forEach>
                             </select>
                             <div class="col-xs-12" style="padding-top: 10px;">
@@ -662,7 +663,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <label class="control-label">Content</label>
                             <select class="form-control" disabled="true" name="TXTcontent" id="content" multiple size="10" onclick="comboSelectionContent()">
                                 <c:forEach var="content" items="${contents}">
-                                    <option value="${content.id[0]}" >${content.name}</option>
+                                    <option value="${content.id[0]}" title="${content.description}" >${content.name}</option>
                                 </c:forEach>
                             </select>
                             <div class="col-xs-12" style="padding-top: 10px;">
