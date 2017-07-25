@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
@@ -55,7 +57,13 @@ public class Updatelesson {
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-        String test = "update lessons set name = '"+newlessons.getName()+"',level_id = '"+newlessons.getLevel().getName()+"' ,subject_id = '"+newlessons.getSubject().getName()+"',objective_id= '"+newlessons.getObjective().getName()+"',start ='"+newlessons.getStart()+"',finish='"+newlessons.getFinish()+"',comments='"+newlessons.getComments()+"',method_id='"+newlessons.getMethod().getName()+"' where id ='"+newlessons.getId()+"'";
+        String test = null;
+        if(newlessons.getMethod().getName() != ""){
+        test = "update lessons set name = '"+newlessons.getName()+"',level_id = '"+newlessons.getLevel().getName()+"' ,subject_id = '"+newlessons.getSubject().getName()+"',objective_id= '"+newlessons.getObjective().getName()+"',start ='"+newlessons.getStart()+"',finish='"+newlessons.getFinish()+"',comments='"+newlessons.getComments()+"',method_id='"+newlessons.getMethod().getName()+"' where id ='"+newlessons.getId()+"'";
+        }
+        else{
+          test = "update lessons set name = '"+newlessons.getName()+"',level_id = '"+newlessons.getLevel().getName()+"' ,subject_id = '"+newlessons.getSubject().getName()+"',objective_id= '"+newlessons.getObjective().getName()+"',start ='"+newlessons.getStart()+"',finish='"+newlessons.getFinish()+"',comments='"+newlessons.getComments()+"' where id ='"+newlessons.getId()+"'";;  
+        }
                    st.executeUpdate(test);
                    //extract array of original studentids
                    String consulta = "select student_id from lesson_stud_att where lesson_id ='"+newlessons.getId()+"'";
@@ -64,17 +72,32 @@ public class Updatelesson {
                    {
                        oldstuds.add(""+rs.getInt("student_id"));
                    }
+                    List<String> newList = new LinkedList<String>(Arrays.asList(studentIds));
+                   //check if the students were unchanged inorder to skip all the code below
+                   //test if the old list and the new list were exactly the same length but different values
+                   if(!oldstuds.equals(newList))
+                   {
                    //get the new students to be added
-                   List<String> newList = Arrays.asList(studentIds);
+                  
                   addstuds = newList;
-                   addstuds.removeAll(oldstuds);
-            for( String x:addstuds)
+                  for(String v:oldstuds)
+                  {
+                   boolean prueba = addstuds.removeAll(Collections.singleton(v));
+                  }
+                   for( String x:addstuds)
             {
-                st.executeUpdate("insert into lesson_stud_att(lesson_id,student_id) values ('"+lessonid+"','"+x+"')");
+                st.executeUpdate("insert into lesson_stud_att(lesson_id,student_id) values ('"+newlessons.getId()+"','"+x+"')");
             }
+               newList = new LinkedList<String>(Arrays.asList(studentIds));    
             // get the studs tp be deleted
-            delstuds = oldstuds;
-            delstuds.removeAll(newList);
+            delstuds = newList;
+            
+            oldstuds.removeAll(delstuds);
+            for( String y:oldstuds)
+            {
+                st.executeUpdate("delete from lesson_stud_att where lesson_id = '"+newlessons.getId()+"'and student_id = '"+y+"'");
+            }
+                   }
             //delete the old content list and add the new one
             //to avoid null pointer exception incase of lesson without content
             if(newlessons.getContentid()!=null){

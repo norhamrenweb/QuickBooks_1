@@ -386,7 +386,7 @@ input[type="radio"] .styled:checked + label::after {
 <!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
       </div>
       <div class="modal-body text-center">
-       <H1>Lessons Idea ha sido borrado</H1>
+       <H1>Presentation idea deleted</H1>
       </div>
 <!--      <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

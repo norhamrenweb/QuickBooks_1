@@ -428,9 +428,10 @@ input[type="radio"] .styled:checked + label::after {
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="levels" items="${gradelevels}">
                             <c:if test="${levels.id[0] == data.level.id[0]}">
-                             <option selected value="${data.level.id[0]}">${data.level.name}</option>
+                              <c:set var="mySelectVar" value="selected"></c:set>
                             </c:if>
-                            <option value="${levels.id[0]}" >${levels.name}</option>
+                            <option value="${levels.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''}>${levels.name}</option>
+                            <c:set var="mySelectVar" value=""></c:set>
                         </c:forEach>
                     </select>
                           
@@ -439,71 +440,51 @@ input[type="radio"] .styled:checked + label::after {
                     <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
                     <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
                     
-                       <c:forEach var="subject" items="${subjects}">
+                        <c:forEach var="subject" items="${subjects}">
                            <c:if test="${subject.id[0] == data.subject.id[0]}">
-                             <option selected value="${data.subject.id[0]}">${data.subject.name}</option>
+                            <c:set var="mySelectVar" value="selected"></c:set>
                             </c:if>
-                                <option value="${subject.id[0]}" data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
-                            </c:forEach>
+                                <option value="${subject.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''} data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
+                       <c:set var="mySelectVar" value=""></c:set>     
+                       </c:forEach>
                     </select>
                 </div>
-<!--                <div class="col-xs-3 center-block text-center">
-                    <label class="control-label">Select your option</label>
-                    <div class="btn-group" data-toggle="buttons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">
-                        <label class="btn btn-primary active disabled">
-                            <input type="radio" name="options" id="option1" autocomplete="off" value="option1">Create Lessons
-                        </label>
-                        <label class="btn btn-success disabled">
-                            <input type="radio" name="options" id="option2" autocomplete="off" value="option2">Load Lessons
-                        </label>
-                    </div>
-<%--                    <input disabled="true" type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-on="Create Lessons" data-off="Load Lessons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">--%>
-                </div>-->
-                
-                
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Objective</label>
                         <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
                            <c:forEach var="objective" items="${objectives}">
-                                <c:choose>
-                                
-                                    <c:when test="${objective.id[0] == data.objective.id[0]}">
-                                        <option selected="" value="${objective.id[0]}" >${objective.name}</option>
-
-                                    </c:when>
-
-                                    <c:otherwise>
-                                        <option value="${objective.id[0]}" >${objective.name}</option>
-                                    </c:otherwise>    
-                                    
-                                    
-                            </c:choose>
-                                </c:forEach>
+                               <c:if test="${objective.id[0] == data.objective.id[0]}">
+                              <c:set var="mySelectVar" value="selected"></c:set>
+                            </c:if>
+                                    <option value="${objective.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''} >${objective.name}</option>
+                           <c:set var="mySelectVar" value=""></c:set>     
+                           </c:forEach>
                         </select>
                     </div>
 
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Content</label>
-                                     <select class="form-control" name="TXTcontent" id="content" multiple>
-                            <c:forEach var="content" items="${contents}">
-                                    <c:forEach var="selcontent" items="${data.contentid}">
-                            <c:choose>
-                                
-                                    <c:when test="${content.id[0] == selcontent}">
-                                        <option selected="" value="${content.id[0]}" >${content.name}</option>
-<%--                                        <option selected >${selcontent}</option>--%>
-                                    </c:when>
-
-                                    <c:otherwise>
-                                        <option value="${content.id[0]}" >${content.name}</option>
-                                    </c:otherwise>    
-                                    
-                                    
-                            </c:choose>
-                                     </c:forEach>   
-                                        
-                                </c:forEach>
+                                     <c:if test="${not empty data.contentid}">
+                        <select class="form-control" name="TXTcontent" id="content" multiple>
+        <c:forEach var="content" items="${contents}">   
+            <c:set var="mySelectVar" value=""></c:set>
+            <c:forEach var="selcontent" items="${data.contentid}" varStatus="i">
+                <c:if test="${content.id[0] == data.contentid[i.count-1]}">                             
+                        <c:set var="mySelectVar" value="selected"></c:set>
+                </c:if>
+            </c:forEach>                      
+            <option value="${content.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''}>${content.name}</option>
+              <c:set var="mySelectVar" value=""></c:set>
+       </c:forEach>
                         </select>
+                         </c:if>
+                        <c:if test="${empty data.contentid}">
+                            <select class="form-control" name="TXTcontent" id="content" multiple>
+                                 <c:forEach var="content" items="${contents}">
+                             <option value="${content.id[0]}" >${content.name}</option>
+                                 </c:forEach>
+                            </select>
+                            </c:if>
                     </div>
   
                     <div class="col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
@@ -514,18 +495,11 @@ input[type="radio"] .styled:checked + label::after {
                         <select class="form-control" name="TXTmethod" size="2" id="method">  
                             
                             <c:forEach var="method" items="${methods}">
-                                 <c:choose>
-                                
-                                    <c:when test="${method.id[0] == data.method.id[0]}">
-                                        <option selected="" value="${method.id[0]}" >${method.name}</option>
-                                    </c:when>
-
-                                    <c:otherwise>
-                                        <option value="${method.id[0]}" >${method.name}</option>
-                                    </c:otherwise>    
-                                    
-                                    
-                            </c:choose>
+                              <c:if test="${method.id[0] == data.method.id[0]}">
+                              <c:set var="mySelectVar" value="selected"></c:set>
+                            </c:if>
+                                <option value="${method.id[0]}"  data-title="${method.description}"  ${(mySelectVar eq 'selected')?'selected' : ''} data-content="${method.description}">${method.name}</option>
+                                <c:set var="mySelectVar" value=""></c:set>
                             </c:forEach>
                         </select>
 

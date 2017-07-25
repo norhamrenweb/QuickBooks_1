@@ -104,6 +104,9 @@ public class CreateLessonControlador {
             mv.addObject("methods",methods);
        //get lesson ideas
        ResultSet rs2 = st2.executeQuery("SELECT * FROM public.lessons where idea = true");
+        Lessons d = new Lessons();
+       d.setName("Select an idea");
+       ideas.add(d);
         while(rs2.next())
         {
          Lessons idea = new Lessons();   
@@ -311,13 +314,9 @@ public class CreateLessonControlador {
     }
      @RequestMapping("/createlesson/createlesson.htm")
      public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        String message = new String();
-       
+        String message = new String();    
        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-         
-        
-       
        Lessons newlesson = new Lessons();
        List<String> contentids;
        Subject subject = new Subject();
@@ -329,12 +328,25 @@ public class CreateLessonControlador {
        subject.setId(hsr.getParameterValues("TXTsubject"));
        objective.setName(hsr.getParameter("TXTobjective"));
        objective.setId(hsr.getParameterValues("TXTobjective"));
+       String[] test = hsr.getParameterValues("TXTcontent");
+       //optional field, avoid null pointer exception
+       if(test!=null && test.length>0){
        contentids=Arrays.asList(hsr.getParameterValues("TXTcontent"));
+       newlesson.setContentid(contentids);
+       }
        newlesson.setComments(hsr.getParameter("TXTdescription"));
        Method m = new Method();
+       String[] test2 = hsr.getParameterValues("TXTmethod");
+       //optional field, avoid null pointer exception
+       if(test2!=null && test2.length>0){
        m.setId(hsr.getParameterValues("TXTmethod"));
        m.setName(hsr.getParameter("TXTmethod"));
        newlesson.setMethod(m);
+       }
+       else{
+       m.setName("");
+       newlesson.setMethod(m);
+       }
        String[] ideaCheck = hsr.getParameterValues("ideaCheck");
 
       
@@ -343,28 +355,17 @@ public class CreateLessonControlador {
       newlesson.setLevel(level);
       newlesson.setSubject(subject);
       newlesson.setObjective(objective);
-       newlesson.setContentid(contentids);
        
-//       String test = hsr.getParameter("TXTloadtemplates");
-//       if(test != null)
-//       {        
-//       newlesson.setName(hsr.getParameter("lessons"));
-//       newlesson.setTemplate(true);
-//       String x = hsr.getParameter("lessons");
-//       newlesson.setId(Integer.parseInt(hsr.getParameter("lessons")));
-//       }
-//       else
-//       {
+
            newlesson.setName(hsr.getParameter("TXTnombreLessons"));
            newlesson.setTemplate(false);
-           
-     //  }
+
        Createlesson c = new Createlesson(hsr.getServletContext());
        // gives a null pointer exception , need to fix  
      if(ideaCheck!= null){
        if(ideaCheck[0].equals("on")){
            c.newidea(newlesson);
-           message = "Lesson idea created";
+           message = "Presentation idea created";
        }}
        else{
            java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorainicio") + ":00.000");
@@ -374,7 +375,7 @@ public class CreateLessonControlador {
            newlesson.setStart("" + timestampstart);
            newlesson.setFinish("" + timestampend);
            c.newlesson(studentIds, newlesson); 
-           message = "Lesson created";
+           message = "Presentation created";
        }
        
         ModelAndView mv = new ModelAndView("redirect:/createlesson/start.htm", "message", message);

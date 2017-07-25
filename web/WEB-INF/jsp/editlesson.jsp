@@ -24,7 +24,7 @@
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
          var lessoncreate = '<%= request.getParameter("message") %>';
     
-     if (lessoncreate === 'Lesson created' ){
+     if (lessoncreate === 'Presentation updated' ){
      $('#myModal').modal({
         show: 'false'
     });
@@ -147,6 +147,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 });  
 		$('.quitar').click(function() {
                     !$('#destino option:selected').remove().appendTo('#origen');
+                    $('#destino option').prop('selected',true);
                     var alumnosSelected = $('#destino').length;
                     var objectiveSelected = $('#objective').val();
                     if(alumnosSelected === 0 || ( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '')){
@@ -219,7 +220,7 @@ $("#method").on('mouseover', 'option' , function(e) {
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                   var json = JSON.parse(ajax.responseText);
+             var json = JSON.parse(ajax.responseText);
                    var level = json.level;
                    var subject =  JSON.parse(json.subject).id;
                    
@@ -229,14 +230,49 @@ $("#method").on('mouseover', 'option' , function(e) {
                    var subjects = JSON.parse(json.subjectslist);
                    var objectives = JSON.parse(json.objectiveslist);
                    var contents = JSON.parse(json.contentslist);
+
+                  $('#level option[value="'+level+'"]').attr("selected", true);
+                  $('#method option[value="'+method+'"]').attr("selected", true);
                    $('#subject').empty();
+                   var pos1 = subject[0].toString();
                      $.each(subjects, function(i, item) {
                         var test = subjects[i].id;
-                        if( test === subject){
+                        if (typeof test !== "undefined"){
+                        var test1 = test.toString();
+                    };
+                        if( test1 === pos1){
                              $('#subject').append('<option selected value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
                         }
                         else{
                          $('#subject').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
+                    }
+                   });
+                   $('#objective').empty();
+                   var pos1 = objective[0].toString();
+                     $.each(objectives, function(i, item) {
+                        var test = objectives[i].id;
+                        if (typeof test !== "undefined"){
+                        var test1 = test.toString();
+                    };
+                        if( test1 === pos1){
+                             $('#objective').append('<option selected value= "'+objectives[i].id+'">' + objectives[i].name + '</option>');
+                        }
+                        else{
+                         $('#objective').append('<option value= "'+objectives[i].id+'">' + objectives[i].name + '</option>');
+                    }
+                   });
+                   $('#content').empty();
+                   var pos1 = content.toString();
+                     $.each(contents, function(i, item) {
+                        var test =contents[i].id;
+                        if (typeof test !== "undefined"){
+                        var test1 = test.toString();
+                    };
+                        if( jQuery.inArray( test1, pos1 )!== -1){
+                             $('#content').append('<option selected value= "'+contents[i].id+'">' + contents[i].name + '</option>');
+                        }
+                        else{
+                         $('#content').append('<option value= "'+contents[i].id+'">' + contents[i].name + '</option>');
                     }
                    });
                     }
@@ -563,110 +599,86 @@ input[type="radio"] .styled:checked + label::after {
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="levels" items="${gradelevels}">
                             <c:if test="${levels.id[0] == data.level.id[0]}">
-                             <option selected value="${data.level.id[0]}">${data.level.name}</option>
+                              <c:set var="mySelectVar" value="selected"></c:set>
                             </c:if>
-                            <option value="${levels.id[0]}" >${levels.name}</option>
+                            <option value="${levels.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''}>${levels.name}</option>
+                            <c:set var="mySelectVar" value=""></c:set>
                         </c:forEach>
                     </select>
-                          
-                </div>
+                    </div>
                 <div class="col-xs-3 center-block">
                     <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
                     <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
                     
                        <c:forEach var="subject" items="${subjects}">
                            <c:if test="${subject.id[0] == data.subject.id[0]}">
-                             <option selected value="${data.subject.id[0]}">${data.subject.name}</option>
+                            <c:set var="mySelectVar" value="selected"></c:set>
                             </c:if>
-                                <option value="${subject.id[0]}" data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
-                            </c:forEach>
+                                <option value="${subject.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''} data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
+                       <c:set var="mySelectVar" value=""></c:set>     
+                       </c:forEach>
+                                
                     </select>
-                </div>
-<!--                <div class="col-xs-3 center-block text-center">
-                    <label class="control-label">Select your option</label>
-                    <div class="btn-group" data-toggle="buttons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">
-                        <label class="btn btn-primary active disabled">
-                            <input type="radio" name="options" id="option1" autocomplete="off" value="option1">Create Lessons
-                        </label>
-                        <label class="btn btn-success disabled">
-                            <input type="radio" name="options" id="option2" autocomplete="off" value="option2">Load Lessons
-                        </label>
-                    </div>
-<%--                    <input disabled="true" type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-on="Create Lessons" data-off="Load Lessons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">--%>
-                </div>-->
-                
+                </div>          
                 
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Objective</label>
                         <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
                            <c:forEach var="objective" items="${objectives}">
                                <c:if test="${objective.id[0] == data.objective.id[0]}">
-                             <option selected value="${data.objective.id[0]}">${data.objective.name}</option>
+                              <c:set var="mySelectVar" value="selected"></c:set>
                             </c:if>
-                                    <option value="${objective.id[0]}" >${objective.name}</option>
-                                </c:forEach>
+                                    <option value="${objective.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''} >${objective.name}</option>
+                           <c:set var="mySelectVar" value=""></c:set>     
+                           </c:forEach>
                         </select>
                     </div>
 
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Content</label>
+                        <c:if test="${not empty data.contentid}">
                         <select class="form-control" name="TXTcontent" id="content" multiple>
-                            <c:forEach var="content" items="${contents}">
-                                    <c:forEach var="selcontent" items="${data.contentid}">
-                            <c:choose>
-                                
-                                    <c:when test="${content.id[0] == selcontent}">
-                                        <option selected="" value="${content.id[0]}" >${content.name}</option>
-<%--                                        <option selected >${selcontent}</option>--%>
-                                    </c:when>
-
-                                    <c:otherwise>
-                                        <option value="${content.id[0]}" >${content.name}</option>
-                                    </c:otherwise>    
-                                    
-                                    
-                            </c:choose>
-                                        
-                                        </c:forEach>
-                                </c:forEach>
+        <c:forEach var="content" items="${contents}">   
+            <c:set var="mySelectVar" value=""></c:set>
+            <c:forEach var="selcontent" items="${data.contentid}" varStatus="i">
+                <c:if test="${content.id[0] == data.contentid[i.count-1]}">                             
+                        <c:set var="mySelectVar" value="selected"></c:set>
+                </c:if>
+            </c:forEach>                      
+            <option value="${content.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''}>${content.name}</option>
+              <c:set var="mySelectVar" value=""></c:set>
+       </c:forEach>
                         </select>
+                         </c:if>
+                        <c:if test="${empty data.contentid}">
+                            <select class="form-control" name="TXTcontent" id="content" multiple>
+                                 <c:forEach var="content" items="${contents}">
+                             <option value="${content.id[0]}" >${content.name}</option>
+                                 </c:forEach>
+                            </select>
+                            </c:if>
                     </div>
   
                     <div class="col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Copy from idea</label>
-                            <select class="form-control" name="ideas" id="ideas" onchange="comboSelectionIdeaLessons()">
-                                <option>Select an idea</option>
+                            <select class="form-control" name="ideas" id="ideas" onchange="comboSelectionIdeaLessons()">  
                                 <c:forEach var="idea" items="${ideas}">
                                         <option value="${idea.id}" >${idea.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
-    <%--                    <div class="col-xs-3 center-block">
-                            <label class="control-label"><spring:message code="etiq.txtobjective"/></label>
-                            <select class="form-control" name="TXTobjective" id="template">
-                                 <option value="${objective.name}" >${objective.name}</option>
-
-                            </select>
-                        </div>--%>
-<%--                      <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Template</label>
-                            <select class="form-control" name="TXTcontent" id="template" multiple>
-                                <c:forEach var="allcontents" items="${allcontents}">
-                                    <option selected="true" value="${allcontents.id[0]}" >${allcontents.name}</option>
-                                </c:forEach>
-                                <c:forEach var="contents" items="${contents}">
-                                    <option value="${allcontents.id[0]}" >${allcontents.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>-->--%>
 
                     </div>    
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Method</label>
-                        <select class="form-control" name="TXTmethod" size="2" id="method">                   
+                        <select class="form-control" name="TXTmethod" size="2" id="method"> 
                             <c:forEach var="method" items="${methods}">
-                                <option value="${method.id[0]}"  data-title="${method.description}" data-content="${method.description}">${method.name}</option>
+                              <c:if test="${method.id[0] == data.method.id[0]}">
+                              <c:set var="mySelectVar" value="selected"></c:set>
+                            </c:if>
+                                <option value="${method.id[0]}"  data-title="${method.description}"  ${(mySelectVar eq 'selected')?'selected' : ''} data-content="${method.description}">${method.name}</option>
+                                <c:set var="mySelectVar" value=""></c:set>
                             </c:forEach>
                         </select>
 
@@ -725,9 +737,9 @@ input[type="radio"] .styled:checked + label::after {
                         </div>
                 
                         <div class="col-xs-3">
-                            <select class="form-control submit" size="20" multiple name="destino[]" id="destino" style="width: 100% !important;"> 
-                                <c:forEach var="studentsSelected" items="${data.students}">
-                                    <option value="${studentsSelected.id_students}" >${studentsSelected.nombre_students}</option>
+                            <select class="form-control" size="20" multiple name="destino[]" id="destino" style="width: 100% !important;"> 
+                               <c:forEach var="studentsSelected" items="${data.students}">
+                                    <option value="${studentsSelected.id_students}" selected="" >${studentsSelected.nombre_students}</option>
                                 </c:forEach>
                             </select>
                         </div>

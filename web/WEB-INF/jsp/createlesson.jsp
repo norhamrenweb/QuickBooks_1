@@ -24,13 +24,13 @@
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
          var lessoncreate = '<%= request.getParameter("message") %>';
     
-        if (lessoncreate === 'Lesson idea created' ){
+        if (lessoncreate === 'Presentation idea created' ){
         $('#lessonIdeaCreated').modal({
            show: 'false'
         });
         }
         
-        if (lessoncreate === 'Lesson created' ){
+        if (lessoncreate === 'Presentation created' ){
         $('#lessonCreated').modal({
            show: 'false'
         });
@@ -139,8 +139,9 @@ $("#method").on('mouseover', 'option' , function(e) {
                     !$('#origen option:selected').remove().appendTo('#destino');
                     var alumnosSelected = $('#destino').length;
                     var objectiveSelected = $('#objective').val();
-                    var contentSelected = $('#content').val();
-                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== '' && contentSelected !== null && contentSelected !== ''){
+//                    var contentSelected = $('#content').val();
+                   // if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== '' && contentSelected !== null && contentSelected !== ''){
+                         if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== ''){
                         $('#createOnClick').attr('disabled', false);
                     }
                     return;
@@ -150,9 +151,9 @@ $("#method").on('mouseover', 'option' , function(e) {
                     var alumnosSelected = $('#destino').length;
                     var objectiveSelected = $('#objective').val();
                     var contentSelected = $('#content').val();
-                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== '' && contentSelected !== null && contentSelected !== ''){
-                        $('#createOnClick').attr('disabled', false);
-                    }
+//                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== '' && contentSelected !== null && contentSelected !== ''){
+//                        $('#createOnClick').attr('disabled', false);
+//                    }
                     return;
                 });  
 		$('.quitar').click(function() {
@@ -166,9 +167,10 @@ $("#method").on('mouseover', 'option' , function(e) {
                 });
 		$('.pasartodos').click(function() {
                     $('#origen option').each(function() { $(this).remove().appendTo('#destino'); });
-                    var contentSelected = $('#content').val();
+//                    var contentSelected = $('#content').val();
                     var objectiveSelected = $('#objective').val();
-                    if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '' ||  contentSelected.length() === 0 || contentSelected === null || contentSelected === ''){
+ //                   if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '' ||  contentSelected.length() === 0 || contentSelected === null || contentSelected === ''){
+                        if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === ''){
                         $('#createOnClick').attr('disabled', true);
                     }
  
@@ -682,7 +684,6 @@ input[type="radio"] .styled:checked + label::after {
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Copy from idea</label>
                             <select class="form-control" name="ideas" id="ideas" onchange="comboSelectionIdeaLessons()">
-                                <option></option>
                                 <c:forEach var="idea" items="${ideas}">
                                         <option value="${idea.id}" >${idea.name}</option>
                                 </c:forEach>

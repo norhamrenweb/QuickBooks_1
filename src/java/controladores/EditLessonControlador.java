@@ -206,6 +206,9 @@ public class EditLessonControlador {
             mv.addObject("methods",methods);
        //get lesson ideas
        ResultSet rs5 = st3.executeQuery("SELECT * FROM public.lessons where idea = true");
+       Lessons d = new Lessons();
+       d.setName("Select an idea");
+       ideas.add(d);
         while(rs5.next())
         {
          Lessons idea = new Lessons();   
@@ -442,8 +445,7 @@ public class EditLessonControlador {
     public ModelAndView save(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
            
       String id = hsr.getParameter("id");
-       String message = "Lesson created";
-        ModelAndView mv = new ModelAndView("redirect:/createlesson/start.htm", "message", message);
+       
        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
        Lessons newlesson = new Lessons();
@@ -457,12 +459,25 @@ public class EditLessonControlador {
        subject.setId(hsr.getParameterValues("TXTsubject"));
        objective.setName(hsr.getParameter("TXTobjective"));
        objective.setId(hsr.getParameterValues("TXTobjective"));
+       String[] test = hsr.getParameterValues("TXTcontent");
+       //optional field, avoid null pointer exception
+       if(test!=null && test.length>0){
        contentids=Arrays.asList(hsr.getParameterValues("TXTcontent"));
+       newlesson.setContentid(contentids);
+       }
        newlesson.setComments(hsr.getParameter("TXTdescription"));
        Method m = new Method();
+       String[] test2 = hsr.getParameterValues("TXTmethod");
+       //optional field, avoid null pointer exception
+       if(test2!=null && test2.length>0){
        m.setId(hsr.getParameterValues("TXTmethod"));
        m.setName(hsr.getParameter("TXTmethod"));
        newlesson.setMethod(m);
+       }
+       else{
+       m.setName("");
+       newlesson.setMethod(m);
+       }
        String[] ideaCheck = hsr.getParameterValues("ideaCheck");
 
       
@@ -471,7 +486,7 @@ public class EditLessonControlador {
       newlesson.setLevel(level);
       newlesson.setSubject(subject);
       newlesson.setObjective(objective);
-       newlesson.setContentid(contentids);
+       
        
 //       String test = hsr.getParameter("TXTloadtemplates");
 //       if(test != null)
@@ -501,9 +516,88 @@ public class EditLessonControlador {
            newlesson.setFinish("" + timestampend);
            c.updatelesson(studentIds, newlesson);
        }
-       
+       String message = "Presentation updated";
+        ModelAndView mv = new ModelAndView("redirect:/editlesson/start.htm?LessonsSelected="+newlesson.getId(), "message", message);
         
         return mv;
     
     }
-    }
+    @RequestMapping("/editlesson/copyfromIdea.htm")
+     @ResponseBody
+ public String copyfromIdea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
+         {
+             ModelAndView mv = new ModelAndView("editlesson");
+             JSONObject json = new JSONObject();
+             String[] lessonplanid = hsr.getParameterValues("seleccionidea");
+               Subject sub = new Subject();
+               Objective obj = new Objective();
+             Method meth = new Method();
+             Level lev = new Level();
+             int levelid = 0;
+             List<String> contents = new ArrayList<>();
+              DriverManagerDataSource dataSource;
+               try {
+        
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        
+             Statement st = this.cn.createStatement();
+            
+             String[] oid = new String[1];
+             String[] sid = new String[1];
+             String[] mid = new String[1];
+             String[] cid = new String[1];
+             
+            String consulta = "SELECT objective_id,subject_id,level_id,method_id FROM public.lessons where id ="+lessonplanid[0];
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                oid[0] = ""+rs.getInt("objective_id");
+                obj.setId(oid);
+                sid[0] = ""+rs.getInt("subject_id");
+                sub.setId(sid);
+                mid[0] = ""+rs.getInt("method_id");
+             meth.setId(mid);
+             levelid= rs.getInt("level_id");
+            }
+           
+        ResultSet rs2 = st.executeQuery("select content_id from public.lesson_content where lesson_id = "+lessonplanid[0]);
+              
+   while (rs2.next())
+            {
+              //  Content eq = new Content();
+                String ids = null;
+               ids= ""+rs2.getInt("content_id");
+              
+             //   eq.setId(ids);
+              
+                contents.add(ids);
+            }
+         
+         json.put("level",""+levelid);
+         json.put("subject",new Gson().toJson(sub));
+         json.put("objective",new Gson().toJson(obj));
+         json.put("method",new Gson().toJson(meth));
+         json.put("content",new Gson().toJson(contents));
+         
+        } catch (SQLException ex) {
+            System.out.println("Error  " + ex);
+        }
+               String hi = json.toString();
+               String[] ids= new String[1];
+               ids[0]=""+levelid;
+                json.put("objectiveslist",new Gson().toJson(this.getObjectives(sub.getId())));
+                 json.put("contentslist",new Gson().toJson(this.getContent(obj.getId())));
+               
+                 cn.close();
+                  dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+               json.put("subjectslist",new Gson().toJson(this.getSubjects(ids)));
+               
+               
+               
+               return json.toString();
+      
+         }     
+}
