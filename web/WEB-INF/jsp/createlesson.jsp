@@ -391,8 +391,12 @@ $("#method").on('mouseover', 'option' , function(e) {
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-
-        if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("destino").length === 0 ||  document.getElementById("content").value === 0 || document.getElementById("content").value === null || document.getElementById("content").value === ''){
+        var test = document.getElementById("NameLessons").value;
+        var test2 = document.getElementById("comments").checked;
+        if(document.getElementById("ideaCheck").value === 'on' && test !== '' && test2 !== '' ){
+             $('#createOnClick').attr('disabled', false);
+        }
+       else if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("destino").length === 0){
             $('#createOnClick').attr('disabled', true);
         }else{
             $('#createOnClick').attr('disabled', false);

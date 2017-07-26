@@ -439,8 +439,9 @@ public class LessonIdeaControlador {
     public ModelAndView savelessonidea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception  
     {
         String id = hsr.getParameter("lessonid");
-        ModelAndView mv = new ModelAndView("redirect:/editlessonidea.htm?LessonsSelected="+id);
-       String message = "Lesson created";
+        String message = "Idea Updated";
+        ModelAndView mv = new ModelAndView("redirect:/editlessonidea.htm?LessonsSelected="+id,"message",message);
+ 
        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
        Lessons newlesson = new Lessons();
@@ -454,17 +455,31 @@ public class LessonIdeaControlador {
        subject.setId(hsr.getParameterValues("TXTsubject"));
        objective.setName(hsr.getParameter("TXTobjective"));
        objective.setId(hsr.getParameterValues("TXTobjective"));
+       String[] test = hsr.getParameterValues("TXTcontent");
+       //optional field, avoid null pointer exception
+       if(test!=null && test.length>0){
        contentids=Arrays.asList(hsr.getParameterValues("TXTcontent"));
+       newlesson.setContentid(contentids);
+       }
+      
        newlesson.setComments(hsr.getParameter("TXTdescription"));
        Method m = new Method();
+       String[] test2 = hsr.getParameterValues("TXTmethod");
+       //optional field, avoid null pointer exception
+       if(test2!=null && test2.length>0){
        m.setId(hsr.getParameterValues("TXTmethod"));
        m.setName(hsr.getParameter("TXTmethod"));
        newlesson.setMethod(m);
+       }
+       else{
+       m.setName("");
+       newlesson.setMethod(m);
+       }
         newlesson.setId(Integer.parseInt(id));
       newlesson.setLevel(level);
       newlesson.setSubject(subject);
       newlesson.setObjective(objective);
-       newlesson.setContentid(contentids);
+    
        newlesson.setName(hsr.getParameter("TXTnombreLessons"));
         Updatelesson c = new Updatelesson(hsr.getServletContext());
         c.updateidea(newlesson);

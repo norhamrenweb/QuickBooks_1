@@ -478,7 +478,7 @@ public class EditLessonControlador {
        m.setName("");
        newlesson.setMethod(m);
        }
-       String[] ideaCheck = hsr.getParameterValues("ideaCheck");
+      // String[] ideaCheck = hsr.getParameterValues("ideaCheck");
 
       
      newlesson.setTeacherid(user.getId());
@@ -503,11 +503,11 @@ public class EditLessonControlador {
      //  }
        Updatelesson c = new Updatelesson(hsr.getServletContext());
        // gives a null pointer exception , need to fix  
-     if(ideaCheck!= null){
-       if(ideaCheck[0].equals("on")){
-           c.updateidea(newlesson);
-       }}
-       else{
+//     if(ideaCheck!= null){
+//       if(ideaCheck[0].equals("on")){
+//           c.updateidea(newlesson);
+//       }}
+//       else{
            java.sql.Timestamp timestampstart = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorainicio") + ":00.000");
            java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorafin") + ":00.000");
            String[] studentIds = hsr.getParameterValues("destino[]");
@@ -515,7 +515,7 @@ public class EditLessonControlador {
            newlesson.setStart("" + timestampstart);
            newlesson.setFinish("" + timestampend);
            c.updatelesson(studentIds, newlesson);
-       }
+//       }
        String message = "Presentation updated";
         ModelAndView mv = new ModelAndView("redirect:/editlesson/start.htm?LessonsSelected="+newlesson.getId(), "message", message);
         

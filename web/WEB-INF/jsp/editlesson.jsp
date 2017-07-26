@@ -14,7 +14,7 @@
     <%@ include file="infouser.jsp" %>
     <%@ include file="menu.jsp" %>
     <head>
-        <title>Edit Lessons</title>
+        <title>Edit Lesson</title>
         <script>
 
  $(document).ready(function(){
@@ -529,13 +529,13 @@ input[type="radio"] .styled:checked + label::after {
                         <label class="control-label">Presentation description</label>
                         <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200">${data.comments}</textarea>
                     </div>
-                    <div class="col-xs-6 center-block checkbox checkbox-success">
+<!--                    <div class="col-xs-6 center-block checkbox checkbox-success">
                         <input class="styled" type="checkbox" id="ideaCheck" name="ideaCheck">
                         <label for="ideaCheck" >
                             Presentation idea
                         </label>
                         
-                    </div>
+                    </div>-->
                 </div>
             </fieldset>
             <fieldset>

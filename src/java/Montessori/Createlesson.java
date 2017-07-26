@@ -95,9 +95,14 @@ public class Createlesson {
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-       
-        String test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,method_id,archive,presentedby,idea) values (' "+newlessons.getName()+"',"+newlessons.getLevel().getName()+","+newlessons.getSubject().getName()+","+newlessons.getObjective().getName()+",now(),"+newlessons.getTeacherid()+",'"+newlessons.getComments()+"','"+newlessons.getMethod().getName()+"',false,0,true)";
-    //   st.executeUpdate(test);
+         String test = null;
+         //to avoid null pointer exception when there is no method
+       if(newlessons.getMethod().getName() != ""){
+        test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,method_id,archive,presentedby,idea) values (' "+newlessons.getName()+"',"+newlessons.getLevel().getName()+","+newlessons.getSubject().getName()+","+newlessons.getObjective().getName()+",now(),"+newlessons.getTeacherid()+",'"+newlessons.getComments()+"','"+newlessons.getMethod().getName()+"',false,0,true)";
+       }
+       else{
+           test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,archive,presentedby,idea) values (' "+newlessons.getName()+"',"+newlessons.getLevel().getName()+","+newlessons.getSubject().getName()+","+newlessons.getObjective().getName()+",now(),"+newlessons.getTeacherid()+",'"+newlessons.getComments()+"',false,0,true)";
+       }
        st.executeUpdate(test,Statement.RETURN_GENERATED_KEYS);
         ResultSet rs = st.getGeneratedKeys();
         while(rs.next())
