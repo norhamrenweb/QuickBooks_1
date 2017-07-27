@@ -61,7 +61,7 @@
                     $('#showStudents').addClass("desactivada");
                     $('#showStudents').off('click');
                     $("#contenedorStudents").removeClass('in');
-                    if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === ''){
+                    if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("NameLessons").value === '' || document.getElementById("comments").value === ''){
                         $('#createOnClick').attr('disabled', true);
                     }else{
                         $('#createOnClick').attr('disabled', false);
@@ -77,8 +77,20 @@
                     $("#contenedorStudents").addClass('in');   
                     }
             });
-            
-
+            $( "#NameLessons" ).change(function() {
+               if(document.getElementById("ideaCheck").value === 'on' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' ){
+                    $('#createOnClick').attr('disabled', false);
+                }else{
+                    $('#createOnClick').attr('disabled', true);
+                }
+            });
+            $( "#comments" ).change(function() {
+               if(document.getElementById("ideaCheck").value === 'on' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' ){
+                    $('#createOnClick').attr('disabled', false);
+                }else{
+                    $('#createOnClick').attr('disabled', true);
+                } 
+            });
             
 $("#method").on('mouseover', 'option' , function(e) {
     
