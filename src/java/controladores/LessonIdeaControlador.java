@@ -360,6 +360,7 @@ public class LessonIdeaControlador {
        {
            
         ArrayList<Subject> subjects = new ArrayList<>();
+        ArrayList<Subject> activesubjects = new ArrayList<>();
         try{
            Statement st = this.cn.createStatement();
              
@@ -381,10 +382,14 @@ public class LessonIdeaControlador {
           {
               String[] ids = new String[1];
               ids=su.getId();
-           ResultSet rs2 = st.executeQuery("select Title from Courses where CourseID = "+ids[0]);
+           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
            while(rs2.next())
            {
-           su.setName(rs2.getString("Title"));
+            if(rs2.getBoolean("Active")== true)
+               {
+                   su.setName(rs2.getString("Title"));
+                   activesubjects.add(su);
+               }
            }
           }
         }catch(SQLException ex){
@@ -392,7 +397,7 @@ public class LessonIdeaControlador {
         ex.printStackTrace(new PrintWriter(errors));
         log.error(ex+errors.toString());
         }
-           return subjects;
+           return activesubjects;
        }
         public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException
        {

@@ -540,6 +540,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
        {
            
         ArrayList<Subject> subjects = new ArrayList<>();
+        ArrayList<Subject> activesubjects = new ArrayList<>();
            Statement st = this.cn.createStatement();
              
           ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
@@ -560,13 +561,17 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
           {
               String[] ids = new String[1];
               ids=su.getId();
-           ResultSet rs2 = st.executeQuery("select Title from Courses where CourseID = "+ids[0]);
+           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
            while(rs2.next())
            {
-           su.setName(rs2.getString("Title"));
+            if(rs2.getBoolean("Active")== true)
+               {
+                   su.setName(rs2.getString("Title"));
+                   activesubjects.add(su);
+               }
            }
           }
-           return subjects;
+           return activesubjects;
        }
         public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException
        {

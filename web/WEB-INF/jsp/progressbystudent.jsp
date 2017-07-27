@@ -254,7 +254,15 @@
                     }
                 }
             }
-
+function funcionCallBackLevelStudent()
+    {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                    document.getElementById("origen").innerHTML= ajax.responseText;
+                    }
+                }
+            }
+            
     function comboSelectionLevelStudent()
     {
         if (window.XMLHttpRequest) //mozilla
@@ -269,7 +277,7 @@
         ajax.onreadystatechange=funcionCallBackLevelStudent;
         var seleccion = document.getElementById("levelStudent").value;
         var alumnos = document.getElementById("destino").innerHTML;
-        ajax.open("POST","progressbystudent.htm?option=studentlistLevel&seleccion="+seleccion,true);
+        ajax.open("POST","studentlistLevel.htm?seleccion="+seleccion,true);
         ajax.send("");
     }
      

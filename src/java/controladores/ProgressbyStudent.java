@@ -148,6 +148,7 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
     public List<Subject> getSubjects(String levelname) throws SQLException
     {
         List<Subject> subjects = new ArrayList<>();
+        List<Subject> activesubjects = new ArrayList<>();
          try {
             
              Statement st = this.cn.createStatement();
@@ -169,10 +170,14 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
           {
               String[] ids = new String[1];
               ids=s.getId();
-           ResultSet rs2 = st.executeQuery("select Title from Courses where CourseID = "+ids[0]);
+           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
            while(rs2.next())
            {
-           s.setName(rs2.getString("Title"));
+           if(rs2.getBoolean("Active")== true)
+               {
+                   s.setName(rs2.getString("Title"));
+                   activesubjects.add(s);
+               }
            }
           }
             
@@ -182,7 +187,7 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex+errors.toString());
         }
-         return subjects;
+         return activesubjects;
     }
     //loads list of subjects based on selected level
     @RequestMapping("/progressbystudent/subjectlistLevel.htm")

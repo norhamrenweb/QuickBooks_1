@@ -76,6 +76,7 @@ public class SettingsControlador extends MultiActionController{
         
         ModelAndView mv = new ModelAndView("settings");
         List<Subject> subjects = new ArrayList<>();
+         List<Subject> activesubjects = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
@@ -107,10 +108,14 @@ public class SettingsControlador extends MultiActionController{
           {
               String[] ids = new String[1];
               ids=su.getId();
-           ResultSet rs2 = st.executeQuery("select Title from Courses where CourseID = "+ids[0]);
+           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
            while(rs2.next())
            {
-           su.setName(rs2.getString("Title"));
+           if(rs2.getBoolean("Active")== true)
+               {
+                   s.setName(rs2.getString("Title"));
+                   activesubjects.add(s);
+               }
            }
           }
             
@@ -119,7 +124,7 @@ public class SettingsControlador extends MultiActionController{
         }
         
         
-         mv.addObject("subjects", subjects);
+         mv.addObject("subjects", activesubjects);
         
         return mv;
     }
