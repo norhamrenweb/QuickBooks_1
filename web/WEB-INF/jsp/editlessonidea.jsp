@@ -14,7 +14,7 @@
     <%@ include file="infouser.jsp" %>
     <%@ include file="menu.jsp" %>
     <head>
-        <title>Create Lessons</title>
+        <title>Edit Presentation Idea</title>
         <script>
 
  $(document).ready(function(){
@@ -24,7 +24,7 @@
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
          var lessoncreate = '<%= request.getParameter("message") %>';
     
-     if (lessoncreate === 'Lesson created' ){
+     if (lessoncreate === 'Idea Updated' ){
      $('#myModal').modal({
         show: 'false'
     });

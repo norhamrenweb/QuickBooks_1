@@ -125,9 +125,13 @@ public class Updatelesson {
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-       
-        String test = "update lessons set name = '"+newlessons.getName()+"',level_id = '"+newlessons.getLevel().getName()+"' ,subject_id = '"+newlessons.getSubject().getName()+"',objective_id= '"+newlessons.getObjective().getName()+"',comments='"+newlessons.getComments()+"',method_id='"+newlessons.getMethod().getName()+"' where id ='"+newlessons.getId()+"'";
-    //   st.executeUpdate(test);
+        String test = null;
+        if(newlessons.getMethod().getName() != ""){
+        test = "update lessons set name = '"+newlessons.getName()+"',level_id = '"+newlessons.getLevel().getName()+"' ,subject_id = '"+newlessons.getSubject().getName()+"',objective_id= '"+newlessons.getObjective().getName()+"',comments='"+newlessons.getComments()+"',method_id='"+newlessons.getMethod().getName()+"' where id ='"+newlessons.getId()+"'";
+        }
+        else{
+          test = "update lessons set name = '"+newlessons.getName()+"',level_id = '"+newlessons.getLevel().getName()+"' ,subject_id = '"+newlessons.getSubject().getName()+"',objective_id= '"+newlessons.getObjective().getName()+"',comments='"+newlessons.getComments()+"' where id ='"+newlessons.getId()+"'";;  
+        }
        st.executeUpdate(test);
 
           //delete the old content list and add the new one
