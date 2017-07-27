@@ -12,6 +12,8 @@ package controladores;
 import Montessori.*;
 import atg.taglib.json.util.JSONObject;
 import com.google.gson.Gson;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,10 +23,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -33,7 +37,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ResourcesControlador {
      Connection cn;
-      
+      static Logger log = Logger.getLogger(ResourcesControlador.class.getName());
+
 //      private ServletContext servlet;
     
     private Object getBean(String nombrebean, ServletContext servlet)
@@ -46,7 +51,7 @@ public class ResourcesControlador {
     public ModelAndView loadResources(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("lessonresources");
-       
+       try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
@@ -75,6 +80,19 @@ public class ResourcesControlador {
         
         mv.addObject("files",filersrcs);
         mv.addObject("others",otherrsrcs);
+       }catch(SQLException ex){
+           StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+       }
+        return mv;
+    }
+    
+   @RequestMapping("/lessonresources/addResources.htm")
+    public ModelAndView addResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
+        
+        ModelAndView mv = new ModelAndView("lessonresources");
+        
         return mv;
     }
 }

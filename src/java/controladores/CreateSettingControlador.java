@@ -31,12 +31,15 @@ import org.springframework.web.servlet.mvc.*;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import org.springframework.ui.ModelMap;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +53,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class CreateSettingControlador{
     
       Connection cn;
-      
+      static Logger log = Logger.getLogger(CreateSettingControlador.class.getName());
 //      private ServletContext servlet;
     
     private Object getBean(String nombrebean, ServletContext servlet)
@@ -63,7 +66,7 @@ public class CreateSettingControlador{
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createsettings");
-       
+       try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
@@ -104,7 +107,12 @@ public class CreateSettingControlador{
           
             mv.addObject("methods",methods);
             mv.addObject("gradelevels", grades);
-        
+       }catch(SQLException ex){
+           StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+       }
+      
         return mv;
     }
 
@@ -114,6 +122,7 @@ public class CreateSettingControlador{
         
         ModelAndView mv = new ModelAndView("createsettings");
         List<Subject> subjects = new ArrayList<>();
+        List<Subject> activesubjects = new ArrayList<>();
        try {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
@@ -145,19 +154,27 @@ public class CreateSettingControlador{
           {
               String[] ids = new String[1];
               ids=su.getId();
-           ResultSet rs2 = st.executeQuery("select Title from Courses where CourseID = "+ids[0]);
+           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
            while(rs2.next())
            {
-           su.setName(rs2.getString("Title"));
+               if(rs2.getBoolean("Active")== true)
+               {
+                   su.setName(rs2.getString("Title"));
+                   activesubjects.add(su);
+               }
+           
            }
           }
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         
         
-         mv.addObject("subjects", subjects);
+         mv.addObject("subjects", activesubjects);
         
         return mv;
     }
@@ -199,6 +216,9 @@ public class CreateSettingControlador{
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Objectives: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         
         mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
@@ -279,6 +299,9 @@ public class CreateSettingControlador{
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         
 //      
@@ -326,6 +349,9 @@ public class CreateSettingControlador{
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
             message ="Something went wrong";
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         String objjson = new Gson().toJson(objectives);
               
@@ -366,6 +392,9 @@ public class CreateSettingControlador{
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
             message ="Something went wrong";
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         String objjson = new Gson().toJson(o);
               
@@ -401,6 +430,9 @@ public class CreateSettingControlador{
           }
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
      
               
@@ -441,6 +473,9 @@ public class CreateSettingControlador{
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
             message ="Something went wrong";
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         String cjson = new Gson().toJson(c);
               
@@ -482,6 +517,9 @@ public class CreateSettingControlador{
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
             message ="Something went wrong";
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         String cjson = new Gson().toJson(contents);
               
@@ -518,6 +556,9 @@ public class CreateSettingControlador{
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
             message = "Something went wrong";
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
      
               
@@ -552,6 +593,9 @@ public class CreateSettingControlador{
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
             message = "Something went wrong";
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
      
               
@@ -591,6 +635,9 @@ public class CreateSettingControlador{
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
             message ="Something went wrong";
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         String objjson = new Gson().toJson(m);
               
@@ -628,6 +675,9 @@ public class CreateSettingControlador{
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
             message ="Something went wrong";
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         String objjson = new Gson().toJson(methods);
               

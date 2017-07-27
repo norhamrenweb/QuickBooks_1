@@ -39,11 +39,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Iterator;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -53,6 +56,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class LessonIdeaControlador {
      Connection cn;
+     static Logger log = Logger.getLogger(LessonIdeaControlador.class.getName());
      private Object getBean(String nombrebean, ServletContext servlet)
     {
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
@@ -62,6 +66,7 @@ public class LessonIdeaControlador {
     @RequestMapping("/lessonidea/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
     ModelAndView mv = new ModelAndView("lessonidea");
+    try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
@@ -81,6 +86,11 @@ public class LessonIdeaControlador {
         grades.add(x);
         }
     mv.addObject("levels", grades);
+    }catch(SQLException ex){
+        StringWriter errors = new StringWriter();
+        ex.printStackTrace(new PrintWriter(errors));
+        log.error(ex+errors.toString());
+    }
     return mv;
     }
     @RequestMapping("/lessonidea/loadtree.htm")
@@ -110,18 +120,6 @@ public class LessonIdeaControlador {
             if(!objectives.contains(rs.getString("obj"))){
             objectives.add(rs.getString("obj"));
             }
-         //   l.setCol5(rs.getString("obj"));
-//            String[] sid = new String[1];
-//            String[] oid = new String[1];
-//            Subject s = new Subject();
-//            sid[0] = ""+rs.getInt("subject_id");
-            //s.setId(sid);
-//            l.setSubject(s);
-//            Objective o = new Objective();
-//            oid[0] = ""+rs.getInt("objective_id");
-//            o.setId(oid);
-//            o.setName(rs.getString("obj"));
-//            l.setObjective(o);
             lessons.add(l); 
           
         }
@@ -138,6 +136,9 @@ public class LessonIdeaControlador {
   
     }catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
     String test = new Gson().toJson(lessons);
     Tree tree = new Tree();
@@ -319,6 +320,9 @@ public class LessonIdeaControlador {
             mv.addObject("methods",methods);
         }catch (SQLException ex) {
             System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         
        return mv;
@@ -346,6 +350,9 @@ public class LessonIdeaControlador {
         jsonObj.put("message", message);
         }catch (SQLException ex) {
             System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         return jsonObj.toString();
     }
@@ -353,6 +360,7 @@ public class LessonIdeaControlador {
        {
            
         ArrayList<Subject> subjects = new ArrayList<>();
+        try{
            Statement st = this.cn.createStatement();
              
           ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
@@ -379,6 +387,11 @@ public class LessonIdeaControlador {
            su.setName(rs2.getString("Title"));
            }
           }
+        }catch(SQLException ex){
+        StringWriter errors = new StringWriter();
+        ex.printStackTrace(new PrintWriter(errors));
+        log.error(ex+errors.toString());
+        }
            return subjects;
        }
         public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException
@@ -406,6 +419,9 @@ public class LessonIdeaControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Objectives: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
        return objectives;
        }
@@ -432,6 +448,9 @@ public class LessonIdeaControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
        return contents;
        }
@@ -441,7 +460,7 @@ public class LessonIdeaControlador {
         String id = hsr.getParameter("lessonid");
         String message = "Idea Updated";
         ModelAndView mv = new ModelAndView("redirect:/editlessonidea.htm?LessonsSelected="+id,"message",message);
- 
+        try{
        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
        Lessons newlesson = new Lessons();
@@ -483,6 +502,12 @@ public class LessonIdeaControlador {
        newlesson.setName(hsr.getParameter("TXTnombreLessons"));
         Updatelesson c = new Updatelesson(hsr.getServletContext());
         c.updateidea(newlesson);
+        }catch(Exception ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+       
         return mv;
     }
      @RequestMapping("/editlessonidea/subjectlistLevel.htm")
@@ -500,6 +525,9 @@ public class LessonIdeaControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         
         

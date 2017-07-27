@@ -8,6 +8,8 @@ package controladores;
 import Montessori.*;
 import atg.taglib.json.util.JSONObject;
 import com.google.gson.Gson;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -34,7 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class LessonsListControlador{
     
       Connection cn;
-      
+      static Logger log = Logger.getLogger(LessonsListControlador.class.getName());
 //      private ServletContext servlet;
     
     private Object getBean(String nombrebean, ServletContext servlet)
@@ -109,6 +112,9 @@ public class LessonsListControlador{
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
        
         return lessonslist;
@@ -158,6 +164,9 @@ public class LessonsListControlador{
         jsonObj.put("message", message);
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
        
         return jsonObj.toString();
@@ -181,9 +190,11 @@ public class LessonsListControlador{
         mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
        
-        
         return mv;
     }
     @RequestMapping("/homepage/detailsLesson.htm")
@@ -248,6 +259,9 @@ public class LessonsListControlador{
             jsonObj.put("students",new Gson().toJson(records));
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
        
         

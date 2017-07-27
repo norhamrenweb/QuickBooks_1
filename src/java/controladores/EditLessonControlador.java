@@ -28,6 +28,8 @@ import org.springframework.web.servlet.mvc.*;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import org.springframework.ui.ModelMap;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.cglib.core.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,7 +52,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class EditLessonControlador {
      Connection cn;
-      
+      static Logger log = Logger.getLogger(EditLessonControlador.class.getName());
 //      private ServletContext servlet;
     
     private Object getBean(String nombrebean, ServletContext servlet)
@@ -61,12 +64,11 @@ public class EditLessonControlador {
     @RequestMapping("/editlesson/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
        ModelAndView mv = new ModelAndView("editlesson");
+       try{
        Lessons data = new Lessons();
        Level l = new Level();
        ArrayList<Content> c = new ArrayList<>();
        ArrayList<Students> stud = new ArrayList<>();
-//       ArrayList<Students> estudiantes = new ArrayList<>();
-//       ArrayList<Students> estudiantesLibre = new ArrayList<>();
         Objective o = new Objective();
         Subject s = new Subject();
         Method m = new Method();
@@ -123,13 +125,7 @@ public class EditLessonControlador {
        }
       
        data.setContentid(cid);
-//       for(Content x:c)
-//       {
-//        String[] cid = new String[c.size()];
-//        cid[i]=x.getId();
-//      // x.setName(x.fetchName(Integer.parseInt(cid[0]), hsr.getServletContext()));
-//       i=i+1;
-//       }
+
        ResultSet rs3 = st.executeQuery("select student_id from lesson_stud_att where lesson_id = "+lessonid);
    while(rs3.next())
    {
@@ -218,6 +214,11 @@ public class EditLessonControlador {
         }      
         mv.addObject("ideas",ideas);
         mv.addObject("id",lessonid);
+       }catch(SQLException ex){
+           StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+       }
        return mv;
        
     }
@@ -225,6 +226,7 @@ public class EditLessonControlador {
        {
            
         ArrayList<Subject> subjects = new ArrayList<>();
+        try{
            Statement st = this.cn.createStatement();
              
           ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
@@ -250,6 +252,10 @@ public class EditLessonControlador {
            {
            su.setName(rs2.getString("Title"));
            }
+          }}catch(SQLException ex){
+              StringWriter errors = new StringWriter();
+                ex.printStackTrace(new PrintWriter(errors));
+                log.error(ex+errors.toString());
           }
            return subjects;
        }
@@ -278,6 +284,9 @@ public class EditLessonControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Objectives: " + ex);
+            StringWriter errors = new StringWriter();
+                ex.printStackTrace(new PrintWriter(errors));
+                log.error(ex+errors.toString());
         }
        return objectives;
        }
@@ -304,6 +313,9 @@ public class EditLessonControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
+            StringWriter errors = new StringWriter();
+                ex.printStackTrace(new PrintWriter(errors));
+                log.error(ex+errors.toString());
         }
        return contents;
        }
@@ -341,6 +353,9 @@ public class EditLessonControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+                ex.printStackTrace(new PrintWriter(errors));
+                log.error(ex+errors.toString());
         }
        
         return listaAlumnos;
@@ -374,6 +389,9 @@ public class EditLessonControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+                ex.printStackTrace(new PrintWriter(errors));
+                log.error(ex+errors.toString());
         }
        
         return listaAlumnos;
@@ -409,6 +427,9 @@ public class EditLessonControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
+            StringWriter errors = new StringWriter();
+                ex.printStackTrace(new PrintWriter(errors));
+                log.error(ex+errors.toString());
         }
         
         
@@ -423,8 +444,6 @@ public class EditLessonControlador {
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-        
-    //    mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
         mv.addObject("objectives", this.getObjectives(hsr.getParameterValues("seleccion2")));
         
         return mv;
@@ -443,12 +462,11 @@ public class EditLessonControlador {
     }
     @RequestMapping("/editlesson/save.htm")
     public ModelAndView save(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-           
+        Lessons newlesson = new Lessons();  
+        try{
       String id = hsr.getParameter("id");
-       
        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-       Lessons newlesson = new Lessons();
        List<String> contentids;
        Subject subject = new Subject();
        Objective objective = new Objective();
@@ -516,7 +534,13 @@ public class EditLessonControlador {
            newlesson.setFinish("" + timestampend);
            c.updatelesson(studentIds, newlesson);
 //       }
+           }catch(SQLException ex){
+               StringWriter errors = new StringWriter();
+                ex.printStackTrace(new PrintWriter(errors));
+                log.error(ex+errors.toString());
+           }
        String message = "Presentation updated";
+           
         ModelAndView mv = new ModelAndView("redirect:/editlesson/start.htm?LessonsSelected="+newlesson.getId(), "message", message);
         
         return mv;
@@ -527,6 +551,7 @@ public class EditLessonControlador {
  public String copyfromIdea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
          {
              ModelAndView mv = new ModelAndView("editlesson");
+             
              JSONObject json = new JSONObject();
              String[] lessonplanid = hsr.getParameterValues("seleccionidea");
                Subject sub = new Subject();
@@ -583,6 +608,9 @@ public class EditLessonControlador {
          
         } catch (SQLException ex) {
             System.out.println("Error  " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
                String hi = json.toString();
                String[] ids= new String[1];
