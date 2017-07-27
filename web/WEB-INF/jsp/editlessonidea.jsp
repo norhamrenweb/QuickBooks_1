@@ -45,7 +45,15 @@
                     $("#contenedorStudents").toggleClass('in');
                     //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
             });
-
+            //DESELECCIONA CONTENT
+            $( "#deselectContent" ).click(function() {
+                    $("#content option:selected").prop("selected", false);
+            });
+            //DESELECCIONA Method
+            $( "#deselectMethod" ).click(function() {
+                    $("#method option:selected").prop("selected", false);
+            });
+            
             $( "#ideaCheck" ).change(function() {
                 if($(this).is(":checked")) {
                     $('#showDate').addClass("desactivada");
@@ -485,6 +493,9 @@ input[type="radio"] .styled:checked + label::after {
                                  </c:forEach>
                             </select>
                             </c:if>
+                        <div class="col-xs-12 text-right">
+                            <input type="button" class="btn btn-info" id="deselectContent" Title="deselect content" value="x">
+            </div>
                     </div>
   
                     <div class="col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
@@ -502,8 +513,11 @@ input[type="radio"] .styled:checked + label::after {
                                 <c:set var="mySelectVar" value=""></c:set>
                             </c:forEach>
                         </select>
-
+                    <div class="col-xs-12 text-right">
+                            <input type="button" class="btn btn-info" id="deselectMethod" Title="deselect Method" value="x">
                     </div>
+                    </div>
+                    
                 </div>
             </fieldset>
             
