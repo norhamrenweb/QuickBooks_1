@@ -254,41 +254,41 @@
                     }
                 }
             }
-function funcionCallBackLevelStudent()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                   
-                    }
-                }
-          }
-            
-    function comboSelectionLevelStudent()
-    {
-        var seleccion =  document.getElementById("levelStudent").value;
-         $.ajax({
-                    type: "POST",
-                        url: "studentlistLevel.htm?seleccion="+seleccion,
-                        data: seleccion,
-                        dataType: 'text' ,           
-                     
-                        success: function(data) {
-                        var json = JSON.parse(data);
-                    var table = $('#table_students').DataTable();
-                    table.clear();
-                    $.each(json, function(i, item) { 
-                    table.row.add(json[i].nombre_students).draw();
-                })
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                                console.log(xhr.status);
-                                   console.log(xhr.responseText);
-                                   console.log(thrownError);
-                               }
-
-                    });
-
-    }
+//function funcionCallBackLevelStudent()
+//    {
+//           if (ajax.readyState===4){
+//                if (ajax.status===200){
+//                   
+//                    }
+//                }
+//          }
+//            
+//    function comboSelectionLevelStudent()
+//    {
+//        var seleccion =  document.getElementById("levelStudent").value;
+//         $.ajax({
+//                    type: "POST",
+//                        url: "studentlistLevel.htm?seleccion="+seleccion,
+//                        data: seleccion,
+//                        dataType: 'text' ,           
+//                     
+//                        success: function(data) {
+//                        var json = JSON.parse(data);
+//                    var table = $('#table_students').DataTable();
+//                    table.clear();
+//                    $.each(json, function(i, item) { 
+//                    table.row.add(json[i].nombre_students).draw();
+//                })
+//                        },
+//                        error: function (xhr, ajaxOptions, thrownError) {
+//                                console.log(xhr.status);
+//                                   console.log(xhr.responseText);
+//                                   console.log(thrownError);
+//                               }
+//
+//                    });
+//
+//    }
      
     function comboSelectionLevel()
     {
