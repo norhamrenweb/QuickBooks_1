@@ -14,7 +14,7 @@
     <%@ include file="menu.jsp" %>
         
     <head>
-        <title>Home</title>
+        <title>Archive</title>
 
     <script type="text/javascript">
     

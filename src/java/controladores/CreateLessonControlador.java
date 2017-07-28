@@ -203,7 +203,13 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
         List <Students> studentsgrades = new ArrayList();
         String[] levelid = hsr.getParameterValues("seleccion");
         String test = hsr.getParameter("levelStudent");
+        if(levelid[0]!="")
+        {
         studentsgrades =this.getStudentslevel(levelid[0]);
+        }
+        else{
+            studentsgrades = this.getStudents();
+        }
         mv.addObject("listaAlumnos",studentsgrades );
         
         return mv;

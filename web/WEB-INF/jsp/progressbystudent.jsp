@@ -254,14 +254,14 @@
                     }
                 }
             }
-function funcionCallBackLevelStudent()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("origen").innerHTML= ajax.responseText;
-                    }
-                }
-            }
+//function funcionCallBackLevelStudent()
+//    {
+//           if (ajax.readyState===4){
+//                if (ajax.status===200){
+//                    document.getElementById("table_students").innerHTML= ajax.responseText;
+//                    }
+//                }
+//            }
             
     function comboSelectionLevelStudent()
     {
@@ -275,8 +275,10 @@ function funcionCallBackLevelStudent()
         }
         
         ajax.onreadystatechange=funcionCallBackLevelStudent;
-        var seleccion = document.getElementById("levelStudent").value;
-        var alumnos = document.getElementById("destino").innerHTML;
+       
+       // var seleccion =  $('#levelStudent').val();
+        var seleccion =  document.getElementById("levelStudent").value;
+     
         ajax.open("POST","studentlistLevel.htm?seleccion="+seleccion,true);
         ajax.send("");
     }

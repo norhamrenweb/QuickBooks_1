@@ -92,7 +92,57 @@ public class ResourcesControlador {
     public ModelAndView addResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
         
         ModelAndView mv = new ModelAndView("lessonresources");
+        try{
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        Statement st = this.cn.createStatement();
+             String lessonid = hsr.getParameter("LessonsSelected");
+             String consulta = "insert into public.resources(lesson_id) values('"+lessonid+"','')";
+            ResultSet rs = st.executeQuery(consulta);
+            }catch(SQLException ex){
+           StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+       }
+        return mv;
+    }
+    @RequestMapping("/lessonresources/updateResources.htm")
+    public ModelAndView updateResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
         
+        ModelAndView mv = new ModelAndView("lessonresources");
+        try{
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        Statement st = this.cn.createStatement();
+             String lessonid = hsr.getParameter("LessonsSelected");
+             String consulta = "insert into public.resources(lesson_id) values('"+lessonid+"','')";
+            ResultSet rs = st.executeQuery(consulta);
+            }catch(SQLException ex){
+           StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+       }
+        return mv;
+    }
+    @RequestMapping("/lessonresources/delResources.htm")
+    public ModelAndView delResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
+        
+        ModelAndView mv = new ModelAndView("lessonresources");
+        try{
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        Statement st = this.cn.createStatement();
+             String lessonid = hsr.getParameter("LessonsSelected");
+             String consulta = "insert into public.resources(lesson_id) values('"+lessonid+"','')";
+            ResultSet rs = st.executeQuery(consulta);
+            }catch(SQLException ex){
+           StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+       }
         return mv;
     }
 }
