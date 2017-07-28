@@ -130,7 +130,8 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
     }
     // loads the students based on the selected level
     @RequestMapping("/progressbystudent/studentlistLevel.htm")
-    public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    @ResponseBody
+    public String studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("progressbystudent");
        
@@ -141,9 +142,10 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
         String[] levelid = hsr.getParameterValues("seleccion");
         String test = hsr.getParameter("levelStudent");
         studentsgrades =this.getStudentslevel(levelid[0]);
-        mv.addObject("listaAlumnos",studentsgrades );
+        String data=new Gson().toJson(studentsgrades);
+//        mv.addObject("listaAlumnos",data );
         
-        return mv;
+        return data;
     }
     public List<Subject> getSubjects(String levelname) throws SQLException
     {

@@ -254,33 +254,40 @@
                     }
                 }
             }
-//function funcionCallBackLevelStudent()
-//    {
-//           if (ajax.readyState===4){
-//                if (ajax.status===200){
-//                    document.getElementById("table_students").innerHTML= ajax.responseText;
-//                    }
-//                }
-//            }
+function funcionCallBackLevelStudent()
+    {
+           if (ajax.readyState===4){
+                if (ajax.status===200){
+                   
+                    }
+                }
+          }
             
     function comboSelectionLevelStudent()
     {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
-        ajax.onreadystatechange=funcionCallBackLevelStudent;
-       
-       // var seleccion =  $('#levelStudent').val();
         var seleccion =  document.getElementById("levelStudent").value;
-     
-        ajax.open("POST","studentlistLevel.htm?seleccion="+seleccion,true);
-        ajax.send("");
+         $.ajax({
+                    type: "POST",
+                        url: "studentlistLevel.htm?seleccion="+seleccion,
+                        data: seleccion,
+                        dataType: 'text' ,           
+                     
+                        success: function(data) {
+                        var json = JSON.parse(data);
+                    var table = $('#table_students').DataTable();
+                    table.clear();
+                    $.each(json, function(i, item) { 
+                    table.row.add(json[i].nombre_students).draw();
+                })
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });
+
     }
      
     function comboSelectionLevel()
