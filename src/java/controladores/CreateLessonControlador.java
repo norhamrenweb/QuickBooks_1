@@ -248,7 +248,7 @@ public class CreateLessonControlador {
             
              Statement st = this.cn.createStatement();
              
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled'";
+            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' order by LastName";
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
