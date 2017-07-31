@@ -315,7 +315,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
              gradelevel = rs1.getString("GradeLevel");
              }
            
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel = '"+gradelevel+"'";
+            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel = '"+gradelevel+"' order by LastName";
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
