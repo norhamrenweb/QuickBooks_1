@@ -14,7 +14,7 @@
     <%@ include file="infouser.jsp" %>
     <%@ include file="menu.jsp" %>
     <head>
-        <title>Edit Lesson</title>
+        <title>Edit Presentation</title>
         <script>
 
  $(document).ready(function(){

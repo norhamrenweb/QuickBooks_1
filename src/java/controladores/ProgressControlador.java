@@ -6,6 +6,8 @@
 package controladores;
 
 import Montessori.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,6 +21,7 @@ import java.util.Locale;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
@@ -36,7 +39,7 @@ public class ProgressControlador {
     
     
       Connection cn;
-      
+      static Logger log = Logger.getLogger(ProgressControlador.class.getName());
 //      private ServletContext servlet;
     
     private Object getBean(String nombrebean, ServletContext servlet)
@@ -124,6 +127,9 @@ public class ProgressControlador {
     mv.addObject("selectedinst",teacher);
          } catch (SQLException ex) {
             System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         return mv;
         
@@ -184,6 +190,9 @@ public class ProgressControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error  " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
     
     return records;
@@ -192,8 +201,10 @@ public class ProgressControlador {
     public ModelAndView saveRecords(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         String message="Records successfully saved"; 
+       
         String[]lessonid=hsr.getParameterValues("TXTlessonid");
         ModelAndView mv = new ModelAndView("redirect:/lessonprogress/loadRecords.htm?LessonsSelected="+lessonid[0],"message",message);
+        try{
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
@@ -246,6 +257,12 @@ public class ProgressControlador {
          st.executeUpdate("update lessons set archive = TRUE where id = '"+lessonid[0]+"'");
      }
 //     mv.addObject("message",message);
+        }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+        
         return mv;
         
     }

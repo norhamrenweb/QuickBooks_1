@@ -28,6 +28,8 @@ import org.springframework.web.servlet.mvc.*;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import org.springframework.ui.ModelMap;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -35,6 +37,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,7 +51,7 @@ import org.springframework.stereotype.Controller;
 public class CreateLessonControlador {
     
       Connection cn;
-      
+static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());      
 //      private ServletContext servlet;
     
     private Object getBean(String nombrebean, ServletContext servlet)
@@ -61,6 +64,7 @@ public class CreateLessonControlador {
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("createlesson");
+        try{
        List <Lessons> ideas = new ArrayList();
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
@@ -115,6 +119,11 @@ public class CreateLessonControlador {
         ideas.add(idea);
         }
         mv.addObject("ideas",ideas);
+        }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
         return mv;
     }
     
@@ -122,6 +131,7 @@ public class CreateLessonControlador {
     public ModelAndView startIdea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
         ModelAndView mv = new ModelAndView("lessonidea");
+        try{
        List <Lessons> ideas = new ArrayList();
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
@@ -173,6 +183,12 @@ public class CreateLessonControlador {
         ideas.add(idea);
         }
         mv.addObject("ideas",ideas);
+        }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+      
         return mv;
     }
     
@@ -187,7 +203,13 @@ public class CreateLessonControlador {
         List <Students> studentsgrades = new ArrayList();
         String[] levelid = hsr.getParameterValues("seleccion");
         String test = hsr.getParameter("levelStudent");
+        if(levelid[0]!="")
+        {
         studentsgrades =this.getStudentslevel(levelid[0]);
+        }
+        else{
+            studentsgrades = this.getStudents();
+        }
         mv.addObject("listaAlumnos",studentsgrades );
         
         return mv;
@@ -207,6 +229,9 @@ public class CreateLessonControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         
         
@@ -267,6 +292,9 @@ public class CreateLessonControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
        
         return listaAlumnos;
@@ -306,6 +334,9 @@ public class CreateLessonControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
        
         return listaAlumnos;
@@ -315,6 +346,7 @@ public class CreateLessonControlador {
      @RequestMapping("/createlesson/createlesson.htm")
      public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String message = new String();    
+        try{
        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
        Lessons newlesson = new Lessons();
@@ -377,7 +409,11 @@ public class CreateLessonControlador {
            c.newlesson(studentIds, newlesson); 
            message = "Presentation created";
        }
-       
+        }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
         ModelAndView mv = new ModelAndView("redirect:/createlesson/start.htm", "message", message);
         return mv;
     }
@@ -415,6 +451,9 @@ public class CreateLessonControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo lessons: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
         
       
@@ -483,6 +522,9 @@ public class CreateLessonControlador {
          
         } catch (SQLException ex) {
             System.out.println("Error  " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
                String hi = json.toString();
                String[] ids= new String[1];
@@ -504,6 +546,7 @@ public class CreateLessonControlador {
        {
            
         ArrayList<Subject> subjects = new ArrayList<>();
+        ArrayList<Subject> activesubjects = new ArrayList<>();
            Statement st = this.cn.createStatement();
              
           ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
@@ -524,13 +567,17 @@ public class CreateLessonControlador {
           {
               String[] ids = new String[1];
               ids=su.getId();
-           ResultSet rs2 = st.executeQuery("select Title from Courses where CourseID = "+ids[0]);
+           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
            while(rs2.next())
            {
-           su.setName(rs2.getString("Title"));
+            if(rs2.getBoolean("Active")== true)
+               {
+                   su.setName(rs2.getString("Title"));
+                   activesubjects.add(su);
+               }
            }
           }
-           return subjects;
+           return activesubjects;
        }
         public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException
        {
@@ -557,6 +604,9 @@ public class CreateLessonControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo Objectives: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
        return objectives;
        }
@@ -583,6 +633,9 @@ public class CreateLessonControlador {
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
         }
        return contents;
        }

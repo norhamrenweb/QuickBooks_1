@@ -510,6 +510,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                     $('#formAddobjetive').removeClass("hidden");
                     $('#formAddcontent').addClass("hidden");
                     $('#formEditcontent').addClass("hidden");
+                    $('#namenewobjective').val('');
+                    $('#descriptionnewobjective').val('');
                     $('#objectiveSelectedForAdd').text($('#subject option:selected').text());
                 });
                 
@@ -550,6 +552,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                 $('#addContent').click(function () {
                     $('#formAddcontent').removeClass("hidden");
                     $('#formEditobjetive').addClass("hidden");
+                    $('#namenewcontent').val('');
+                    $('#commentsnewcontent').val('');
                     $('#contentSelectedForAdd').text($('#objective option:selected').text());
                 });
                 $('#editContent').click(function () {
