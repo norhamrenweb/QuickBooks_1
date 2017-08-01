@@ -179,6 +179,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 });
 		$('.pasartodos').click(function() {
                     $('#origen option').each(function() { $(this).remove().appendTo('#destino'); });
+                    $('#destino option').prop('selected', true);
 //                    var contentSelected = $('#content').val();
                     var objectiveSelected = $('#objective').val();
  //                   if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '' ||  contentSelected.length() === 0 || contentSelected === null || contentSelected === ''){
@@ -188,7 +189,7 @@ $("#method").on('mouseover', 'option' , function(e) {
  
                 });
 		$('.quitartodos').click(function() {
-                    $('#destino option').each(function() { $(this).remove().appendTo('#origen'); });
+                    $('#destino option').each(function() { $(this).remove().appendTo('#origen'); }); 
                     $('#createOnClick').attr('disabled', true);
                 });
 	});

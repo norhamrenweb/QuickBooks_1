@@ -280,7 +280,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
             {
                 Students alumnos = new Students();
                 alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
+                alumnos.setNombre_students(rs.getString("FirstName")+", "+rs.getString("LastName"));
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
@@ -322,7 +322,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
             {
                 Students alumnos = new Students();
                 alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
+                alumnos.setNombre_students(rs.getString("FirstName")+", "+rs.getString("LastName"));
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));

@@ -102,14 +102,14 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
             
              Statement st = this.cn.createStatement();
              
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled'";
+            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' order by lastname";
             ResultSet rs = st.executeQuery(consulta);
           
             while (rs.next())
             {
                 Students alumnos = new Students();
                 alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
+                alumnos.setNombre_students(rs.getString("FirstName")+", "+rs.getString("LastName"));
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
@@ -230,7 +230,7 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
             {
                 Students alumnos = new Students();
                 alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
+                alumnos.setNombre_students(rs.getString("FirstName")+", "+rs.getString("LastName"));
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));

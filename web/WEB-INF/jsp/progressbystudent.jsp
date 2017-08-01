@@ -25,10 +25,15 @@
             $('#tableobjective').DataTable();
              table = $('#table_students').DataTable(
                 {
-                    "searching": false,
+                    "searching": true,
                     "paging":   false,
                     "ordering": false,
-                    "info":     false
+                    "info":     false,
+                    columns: [
+                        {   data: 'id',
+                            visible: false},
+                        { data: 'name' }
+                        ]
                 });
                 
     $('#table_students tbody').on('click', 'tr', function () {
@@ -263,32 +268,36 @@
 //                }
 //          }
 //            
-//    function comboSelectionLevelStudent()
-//    {
-//        var seleccion =  document.getElementById("levelStudent").value;
-//         $.ajax({
-//                    type: "POST",
-//                        url: "studentlistLevel.htm?seleccion="+seleccion,
-//                        data: seleccion,
-//                        dataType: 'text' ,           
-//                     
-//                        success: function(data) {
-//                        var json = JSON.parse(data);
-//                    var table = $('#table_students').DataTable();
-//                    table.clear();
-//                    $.each(json, function(i, item) { 
-//                    table.row.add(json[i].nombre_students).draw();
-//                })
-//                        },
-//                        error: function (xhr, ajaxOptions, thrownError) {
-//                                console.log(xhr.status);
-//                                   console.log(xhr.responseText);
-//                                   console.log(thrownError);
-//                               }
-//
-//                    });
-//
-//    }
+    function comboSelectionLevelStudent()
+    {
+        
+        var seleccion =  document.getElementById("levelStudent").value;
+         $.ajax({
+                    type: "POST",
+                        url: "studentlistLevel.htm?seleccion="+seleccion,
+                        data: seleccion,
+                        dataType: 'text' ,           
+                     
+                        success: function(data) {
+                        var json = JSON.parse(data);
+                    //var table = $('#table_students').DataTable();
+                    table.clear();
+                    
+                    $.each(json, function(i) {
+                        table.row.add({'id': json[i].id_students, 'name': json[i].nombre_students}).draw();
+                        
+                    });
+                    
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });
+
+    }
      
     function comboSelectionLevel()
     {
@@ -487,6 +496,35 @@ $(function() {
                 overflow: hidden;
                 outline:none;
             }
+            .dataTables_length select {
+                
+            }
+            .dataTables_filter {
+                display: block !important;
+                float: left !important;
+                text-align: left !important;
+                padding-left: 16px;
+            }
+            .dataTables_filter input {
+                display: block;
+                float: left;
+                width: 100%;
+                height: 34px;
+                padding: 6px 12px;
+                margin-left: 0px !important;
+                font-size: 14px;
+                line-height: 1.42857143;
+                color: #555;
+                background-color: #fff;
+                background-image: none;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+                -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+                -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            }
            
         </style>
     </head>
@@ -508,21 +546,21 @@ $(function() {
                                 </c:forEach>
                             </select>
                         </div>
-                        <div class="col-xs-12">
+<!--                        <div class="col-xs-12">
                             <label>By name</label>
                             <input class="form-control" name="nameStudent" id="nameStudent" style="width: 100% !important;" onchange="comboSelectionnameStudent()">
-                        </div>
+                        </div>-->
                         <div class="col-xs-12 studentarea">
                             <table id="table_students" class="display" >
                                 <thead>
                                 <tr>
-                                    <td hidden=""></td>
-                                    <td hidden="">Name students</td>
+                                    <td>ID</td>
+                                    <td>Name students</td>
                                 </tr>
                                 </thead>
                                 <c:forEach var="alumnos" items="${listaAlumnos}" >
                                 <tr>
-                                    <td hidden="">${alumnos.id_students}</td>
+                                    <td >${alumnos.id_students}</td>
                                     <td >${alumnos.nombre_students}</td>
                                 </tr>
                                 </c:forEach>
