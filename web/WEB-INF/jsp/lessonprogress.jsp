@@ -55,18 +55,20 @@ collectionAttendance.each(function() {
     var disable = "${disable}";
     if(disable === 't')
     {
-        $('#buttonAchived').bootstrapToggle('on')
+        $('#buttonAchived').bootstrapToggle('on');
     }    
         $('#table_progress').DataTable(
                 {
-                   "columnDefs": [
+                "aaSorting": [[ 1, "asc" ]],
+                "columnDefs": [
                 { "width": "5%", "targets": 0 },
                 { "width": "20%", "targets": 1 },
                 { "width": "5%", "targets": 2 },
                 { "width": "45%", "targets": 3 },
                 { "width": "25%", "targets": 4, "orderable": false }
-                ] 
-                }); 
+                ]
+                
+            }); 
               
     });
 

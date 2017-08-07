@@ -109,7 +109,7 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
             {
                 Students alumnos = new Students();
                 alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("FirstName")+", "+rs.getString("LastName"));
+                alumnos.setNombre_students(rs.getString("LastName")+", "+ rs.getString("FirstName")+" "+ rs.getString("MiddleName"));
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
@@ -230,7 +230,7 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
             {
                 Students alumnos = new Students();
                 alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("FirstName")+", "+rs.getString("LastName"));
+                alumnos.setNombre_students(rs.getString("LastName")+", "+ rs.getString("FirstName")+" "+ rs.getString("MiddleName"));
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
@@ -401,7 +401,7 @@ while(rs5.next())
             {
                
                 student.setId_students(rs.getInt("StudentID"));
-                student.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
+                student.setNombre_students(rs.getString("LastName")+", "+ rs.getString("FirstName")+" "+ rs.getString("MiddleName"));
                 student.setFecha_nacimiento(rs.getString("Birthdate"));
                 student.setFoto(rs.getString("PathToPicture"));
                 student.setLevel_id(rs.getString("GradeLevel"));

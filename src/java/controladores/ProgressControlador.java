@@ -110,13 +110,13 @@ public class ProgressControlador {
     dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
             this.cn = dataSource.getConnection();
     st = this.cn.createStatement();
-    consulta = "select LastName,FirstName,PersonID from Person where PersonID in (select PersonID from Staff where Faculty = 1)";
+    consulta = "select LastName,FirstName,MiddleName,PersonID from Person where PersonID in (select PersonID from Staff where Faculty = 1) order by LastName";
     ResultSet rs2 = st.executeQuery(consulta);
     while(rs2.next())
     {
         Students s = new Students();
         s.setId_students(rs2.getInt("PersonID"));
-        s.setNombre_students(rs2.getString("FirstName")+" "+ rs2.getString("LastName"));
+        s.setNombre_students(rs2.getString("LastName")+", "+ rs2.getString("FirstName")+" "+ rs2.getString("MiddleName"));
         if(teacher.getId_students() == s.getId_students())
         {
         teacher.setNombre_students(s.getNombre_students());
@@ -179,11 +179,11 @@ public class ProgressControlador {
         st = this.cn.createStatement();
             for(Progress record : records)
             {
-            consulta = "SELECT FirstName,LastName FROM AH_ZAF.dbo.Students where StudentID = '"+record.getStudentid()+"'";
+            consulta = "SELECT FirstName,LastName,MiddleName FROM AH_ZAF.dbo.Students where StudentID = '"+record.getStudentid()+"' order by LastName";
             ResultSet rs2 = st.executeQuery(consulta);
             while (rs2.next())
             {
-              record.setStudentname(rs2.getString("FirstName")+","+rs2.getString("LastName"));
+              record.setStudentname(rs2.getString("LastName")+", "+ rs2.getString("FirstName")+" "+ rs2.getString("MiddleName"));
             }
             }
         
@@ -252,9 +252,11 @@ public class ProgressControlador {
               }
     }
     } 
-     if(archived.equals("on"))
+     if ("on".equals(archived))
      {
          st.executeUpdate("update lessons set archive = TRUE where id = '"+lessonid[0]+"'");
+     }else{
+         st.executeUpdate("update lessons set archive = FALSE where id = '"+lessonid[0]+"'");
      }
 //     mv.addObject("message",message);
         }catch(SQLException ex){
