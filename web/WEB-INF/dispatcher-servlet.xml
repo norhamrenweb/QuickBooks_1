@@ -60,6 +60,7 @@
         <bean class="controladores.CerrarLogin" id="cerrarLoginController"/>
         <bean class="controladores.ResourcesControlador" id="resources"/>
         <bean class="controladores.LessonArchiveControlador" id="archive"/>
+        <bean class="controladores.SOWTreeControlador" id="sow"/>
         
 <!--     <bean class="controladores.SettingsControlador" id="settings">
      <property name="methodNameResolver">
@@ -125,7 +126,7 @@
                  
                 <prop key="createlesson.htm">createlesson</prop>
                 <prop key="createsetting.htm">createsetting</prop>
-                
+                <prop key="sowdisplay.htm">sow</prop>
                 <prop key="datosIdioma.htm">ControladorIdioma</prop>
                 <prop key="homepage.htm">lessonsList</prop>
                  <prop key="lessonprogress.htm">lessonprogress</prop>

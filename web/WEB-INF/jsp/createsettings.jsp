@@ -22,6 +22,19 @@
 $(document).ready(function(){
 
 
+  var i=1;
+     $("#add_row").click(function(){
+      $('#addr'+i).html("<td>"+ (i+1) +"</td><td><input  name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
+
+      $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
+      i++; 
+  });
+     $("#delete_row").click(function(){
+         if(i>1){
+         $("#addr"+(i-1)).html('');
+         i--;
+         }
+     });
 
 $("#method").on('mouseover', 'option' , function(e) {
     
@@ -470,6 +483,9 @@ $("#method").on('mouseover', 'option' , function(e) {
 
                     });    
                 }
+                function steps(){
+                $('#addsteps').modal('show');
+                }
                 function saveeditMethod()
             {
 
@@ -716,6 +732,10 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <input type="button" name="AddObjective" value="Save" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveeditObjective()"/>
    
                         </div>
+                    <div class="col-xs-2 center-block form-group paddingLabel">
+                            <input type="button" name="AddObjectiveSteps" value="Add Steps" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="steps()"/>
+   
+                        </div>
                 </fieldset>
                 <fieldset class="hidden" id="formAddcontent">
                     <legend>Add content to <span id="contentSelectedForAdd"></span></legend>  
@@ -941,7 +961,49 @@ $("#method").on('mouseover', 'option' , function(e) {
                 </div>
             </div>
         </div>
-        
+        <div id="addsteps" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header modal-header-details">
+        <button type="button" class="close" data-dismiss="modal">save</button>
+        <h4 id="nameLessonDetails" class="modal-title">Details</h4>
+      </div>
+       <div class="modal-body">
+            <table class="table table-bordered table-hover" id="tab_logic">
+                <thead>
+                    <tr >
+                        <th class="text-center">
+                            Add the work that needs to be accomplished
+                        </th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id='addr0'>
+                         <td>
+                        1
+                        </td>
+                        <td>
+                         <input type="text" name='country0' placeholder='Step' class="form-control"/>
+                  
+                    </tr>
+                    <tr id='addr1'></tr>
+                </tbody>
+            </table>
+           <div>
+         <a id="add_row" class="btn btn-default pull-left">Add Row</a><a id='delete_row' class="pull-right btn btn-default">Delete Row</a>
+   </div>
+       </div>
+   
+</div>
+    </div>
+<!--      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>-->
+</div>
     <%---    <%= request.getParameter("message")%>---%>
+   <a href="<c:url value="/sowdisplay/start.htm"/>">hi</a> 
     </body>
 </html>
