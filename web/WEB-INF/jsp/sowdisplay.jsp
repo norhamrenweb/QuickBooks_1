@@ -14,8 +14,7 @@
     <%@ include file="infouser.jsp" %>
     <%@ include file="menu.jsp" %>
     <head>
-        
-        <title>Presentation Ideas</title>
+        <title>View Scheme of work</title>
         <script>
 
  $(document).ready(function(){
@@ -61,12 +60,12 @@
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
-                   $("#tree").tree('destroy');
+                   $("#tree").jstree('destroy');
                    var node = JSON.parse(ajax.responseText);
                    var i = node.length;
 
                 // direct data
-                $('#tree').tree({
+                $('#tree').jstree({
                     "core" : {
                         "data" : node
         
@@ -80,11 +79,74 @@
     to = setTimeout(function () {
       $('#tree').children().children().children('a').children('i').removeClass('jstree-checkbox');
     }, 250); 
+      //BUSCADOR LESSONS IDEA          
+//var to = false;
+//  $('#findIdea').keyup(function () {
+//    if(to) { clearTimeout(to); }
+//    to = setTimeout(function () {
+//      var v = $('#findIdea').val();
+//      $('#tree').jstree(true).search(v);
+//    }, 250);
+//  }); 
+
                     }
                 }
             }
             
+    function editttree()
+    {
+//       if (window.XMLHttpRequest) //mozilla
+//        {
+//            ajax = new XMLHttpRequest(); //No Internet explorer
+//        }
+//        else
+//        {
+//            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+//        }
+//
+//       
+//    //    ajax.onreadystatechange = funcionCallBackEditIdea;
+//        var ideaSelect = $("#tree").jstree("get_selected");
+//        ajax.open("POST","editlessonidea.htm?seleccion1="+ideaSelect,true);
+//        
+//        ajax.send("");
+            var ideaSelect = $("#tree").jstree("get_selected");
+        window.open("<c:url value="/editlessonidea.htm?LessonsSelected="/>"+ideaSelect);
+    }   
+        function editrsrctree()
+    {
+            var ideaSelect = $("#tree").jstree("get_selected");
+        window.open("<c:url value="/lessonresources/loadResources.htm?LessonsSelected="/>"+ideaSelect);
+    }   
+   function delttree()
+    {
+       if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
 
+       
+    ajax.onreadystatechange = funcionCallBackDelIdea;
+        var ideaSelect = $("#tree").jstree("get_selected");
+        ajax.open("POST","deletetree.htm?selected="+ideaSelect,true);
+        
+        ajax.send("");
+        
+    }    
+   function funcionCallBackDelIdea()
+   {
+//       if (lessoncreate === 'Presentation created' ){
+     $('#deleteLessonIdea').modal({
+        show: 'false'
+        });
+//    }
+       window.location.reload(true);
+      
+   }
     function comboSelectionLevel()
     {
         if (window.XMLHttpRequest) //mozilla
@@ -255,16 +317,22 @@ input[type="radio"] .styled:checked + label::after {
   color: #fff; }
 
         </style>
-        
     </head>
     <body>
         <div class="container">
         <h1 class="text-center">Scheme of work display</h1>
 
         
-        <form:form id="formStudents" method ="post" >
+        <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
 
-
+<!--                <legend id="showDetails">
+                    Presentation details
+                    <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
+                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" >
+                            <span class="glyphicon glyphicon-triangle-bottom"></span>
+                        </button>
+                    </span>
+                </legend>-->
                 <div class="form-group" id="contenedorDetails">
                 <div class="col-xs-3 form-group">
                     <label class="control-label">Select Grade Level</label>
@@ -277,34 +345,56 @@ input[type="radio"] .styled:checked + label::after {
                 </div>
                 </div>
                 <div class="col-xs-12 center-block">
-                    <label class="control-label" for="findIdea">Find Objective</label>
+                    <label class="control-label" for="findIdea">Find Objectives</label>
                     <input id="findIdea" class="form-group" type="text">
                 </div>
                 <div class="col-xs-12 center-block" id="tree">
-                        <ul>
-                        <c:forEach items="${countriesList}" var="country"> 
-                           <li>${country.name}
-                              <ul>
-                                 <c:forEach items="${country.stateList}" var="state">
-                                    <li>${state.name}
-                                        <ul>
-                                           <c:forEach items="${state.addressLines}" var="addressLine">
-                                              <li>${addressLine.addressString}</li>
-                                           </c:forEach>
-                                        </ul>
+<!--                    <ul>
+                        <li>Root node 1
+                            <ul>
+                                <li>Child node 1
+                                    <ul>
+                                        <li>Idea</li>
+                                    </ul>
                                     </li>
-                                 </c:forEach>
-                              </ul>
-                           </li>
-                        </c:forEach>
-                        </ul>
+                                <li><a href="#">Child node 2</a></li>
+                            </ul>
+                        </li>
+                        <li>Root node 2</li>
+                    </ul>-->
                 </div>
-     
+<!--                <div class="col-xs-12 center-block" id="buttons">
+                        <div class="col-xs-4 center-block">
+                            <button type="button" class="btn btn-warning" onclick="editttree()" id="editIdea" disabled="true">View/Edit</button>
+                        </div>
+                        <div class="col-xs-4 center-block">
+                            <button type="button" class="btn btn-warning" onclick="editrsrctree()" id="editIdearsrc" disabled="true">View/Edit Resources</button>
+                        </div>
+                        <div class="col-xs-4 center-block">
+                            <button type="button"  class="btn btn-danger" onclick="delttree()" id="delIdea" disabled="true">Delete</button>
+                        </div>
+                </div>-->
                     
         </form:form>
         
         </div>
-
+<div class="modal fade" id="deleteLessonIdea" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
+      </div>
+      <div class="modal-body text-center">
+       <H1>Presentation idea deleted</H1>
+      </div>
+<!--      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>-->
+    </div>
+  </div>
+</div>
         
     </body>
 </html>

@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/style.css" />"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/menu-lateral.css"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap.min.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/calendar.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap-theme.min.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap-datetimepicker.css"/>"/>
@@ -67,9 +67,6 @@
 
 <div class="infousuario noPrint">
     <div class="col-xs-3">
-<!--        <a class="btnBandera" href='datosIdioma.htm?lenguaje=en'>English</a>
-        <a class="btnBandera" href='datosIdioma.htm?lenguaje=es'>Español</a>
-        <a class="btnBandera" href='datosIdioma.htm?lenguaje=ar'>Arabic</a>-->
     </div>
     <div class="col-xs-7">
         <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>
@@ -77,18 +74,6 @@
     
     <div class="col-xs-2 text-right">
         <a href="<c:url value="/cerrarLogin.htm"/>" role="button" aria-haspopup="true" aria-expanded="false"><img src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>
-<%--        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">-----</a></li>
-            <li><a href="#">-----</a></li>
-            <li><a href="#">-----</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">-----</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="<c:url value="/cerrarLogin.htm"/>">Log out</a></li>
-          </ul>
-        </li>--%>
     </div>
 </div>           
 

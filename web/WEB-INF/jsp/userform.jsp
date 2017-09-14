@@ -18,22 +18,16 @@
         <link rel="stylesheet" type="text/css" href="<c:url value="/estilotabla.css"/>" />
     </head>
     <body>
-           <div class="col-sm-12" style="margin-top: 10px;">
-
-        <div class="panel panel-success">
-
-            <div class="panel-body"align="center">
-
-                <div class="container " style="margin-top: 10%; margin-bottom: 10%;">
+        <div class="col-sm-12" style="margin-top: 10px;">
+            <div class="panel panel-success">
+                <div class="panel-body"align="center">
+                    <div class="container " style="margin-top: 10%; margin-bottom: 10%;">
 
                     <div class="panel panel-success" style="max-width: 35%;" align="left">
-
                         <div class="panel-heading form-group fondoGris">
                             <img class="img-responsive center-block" src="recursos/img/logoeduweb.png" alt="logo"/>
                         </div>
-
                         <div class="panel-body" >
-
                             <form name ="form1" action="userform.htm?opcion=login" method="post" >
                                 <div
                                     <c:if test="${message != null}">
@@ -66,28 +60,6 @@
             </div>
             <div class="panel-footer" align="center"><font style="color: #111">Copyright @2016, EduWeb Group, All Rights Reserved. </font></div>
         </div>
-    </div>
-                
-                                <%--<form:form id="form1" method ="post" action="userform.htm?opcion=login" >
-            <table border="1">
-                <tr>
-                    <th>Nombre:</th>
-                    <td>
-                        <input type="text" name="txtusuario"/>
-                    </td>
-                </tr>
-             
-             
-                <tr>
-                    <td colspan="2">
-                        <input type="submit" value="login"/>            
-                    </td>
-                </tr>
-            </table>
-        </form:form>
-
-<jstl:out value="${message}"/>  --%>      
-      
-        
+    </div>                   
     </body>
 </html>

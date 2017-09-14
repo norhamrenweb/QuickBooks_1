@@ -24,7 +24,10 @@ $(document).ready(function(){
 
   var i=1;
      $("#add_row").click(function(){
-      $('#addr'+i).html("<td>"+ (i+1) +"</td><td><input  name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
+         
+      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
+      var NameStep = $('input[name=country'+(i-1)+']').val();
+      $('#steps').append("<li id="+i+">"+ NameStep +"<li>");
 
       $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
       i++; 
@@ -32,6 +35,7 @@ $(document).ready(function(){
      $("#delete_row").click(function(){
          if(i>1){
          $("#addr"+(i-1)).html('');
+         $('#steps li#'+i+'').remove();
          i--;
          }
      });
@@ -724,17 +728,23 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <label class="control-label">Edit objective</label>
                             <input type="text" class="form-control" name="TXTeditNameObjective" id="editNameObjective"  placeholder="Name">
                         </div>
-                        <div class="col-xs-7 center-block form-group">
+                        <div class="col-xs-4 center-block form-group">
                             <label class="control-label">Description</label>
-                            <textarea type="text" class="form-control" name="TXTeditDescriptionObjective" id="editDescriptionObjective"  placeholder="Description"></textarea>
+                            <textarea type="text" class="form-control" rows="5" name="TXTeditDescriptionObjective" id="editDescriptionObjective"  placeholder="Description"></textarea>
+                        </div>
+                        <div class="col-xs-2 center-block form-group">
+                            <label class="control-label">Steps</label>
+                            <ol id="steps">
+                                
+                            </ol>
                         </div>
                         <div class="col-xs-2 center-block form-group paddingLabel">
-                            <input type="button" name="AddObjective" value="Save" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveeditObjective()"/>
-   
-                        </div>
-                    <div class="col-xs-2 center-block form-group paddingLabel">
-                            <input type="button" name="AddObjectiveSteps" value="Add Steps" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="steps()"/>
-   
+                            <div class="col-xs-8 center-block form-group paddingLabel">
+                                <input type="button" name="AddObjectiveSteps" value="Add Steps" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="steps()"/>
+                            </div>
+                            <div class="col-xs-4 center-block form-group paddingLabel">
+                                <input type="button" name="AddObjective" value="Save" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveeditObjective()"/>
+                            </div>
                         </div>
                 </fieldset>
                 <fieldset class="hidden" id="formAddcontent">
@@ -833,9 +843,15 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <input type="button" name="EditMethod" value="save" class="btn btn-success" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveeditMethod()"/> 
                         </div>
                     </div>
-                </fieldset>        
+                </fieldset>
+            <fieldset>
+                <div class="col-xs-12 text-center">
+                    <a class="btn btn-default" href="<c:url value="/sowdisplay/start.htm"/>">View Scheme of Work</a>  
+                </div>
+            </fieldset>
+            
         </div>
-        
+       
         <div id="modalConfirmeDeleteObjective">
             <!-- Modal -->
             <div class="modal fade" id="confirmedDeleteObjective" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -962,48 +978,45 @@ $("#method").on('mouseover', 'option' , function(e) {
             </div>
         </div>
         <div id="addsteps" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-lg">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header modal-header-details">
-        <button type="button" class="close" data-dismiss="modal">save</button>
-        <h4 id="nameLessonDetails" class="modal-title">Details</h4>
-      </div>
-       <div class="modal-body">
-            <table class="table table-bordered table-hover" id="tab_logic">
-                <thead>
-                    <tr >
-                        <th class="text-center">
-                            Add the work that needs to be accomplished
-                        </th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr id='addr0'>
-                         <td>
-                        1
-                        </td>
-                        <td>
-                         <input type="text" name='country0' placeholder='Step' class="form-control"/>
-                  
-                    </tr>
-                    <tr id='addr1'></tr>
-                </tbody>
-            </table>
-           <div>
-         <a id="add_row" class="btn btn-default pull-left">Add Row</a><a id='delete_row' class="pull-right btn btn-default">Delete Row</a>
-   </div>
-       </div>
-   
-</div>
-    </div>
-<!--      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>-->
-</div>
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header modal-header-details">
+                <button type="button" class="close" data-dismiss="modal">save</button>
+                <h4 id="nameLessonDetails" class="modal-title"> Add the work that needs to be accomplished</h4>
+              </div>
+              <div class="modal-body">
+                  <div class="container-fluid">
+                  <div class="col-xs-12">
+                      <table class="table table-bordered table-hover" id="tab_logic">
+                        <tbody>
+                            <tr id='addr0'>
+                                <td class="text-center" style="width: 20%; vertical-align: middle;">
+                                1
+                                </td>
+                                <td>
+                                 <input type="text" name='country0' placeholder='Step' class="form-control"/>
+                                </td>
+                            </tr>
+                            <tr id='addr1'>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                  </div>
+                    <div class="col-xs-12">
+                    <a id="add_row" class="btn btn-default pull-left">Add Row</a><a id='delete_row' class="pull-right btn btn-default">Delete Row</a>
+                    </div>
+               </div>
+              </div>
+<!--    <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>-->
+                </div>
+            </div>
+        </div>
     <%---    <%= request.getParameter("message")%>---%>
-   <a href="<c:url value="/sowdisplay/start.htm"/>">hi</a> 
+     
     </body>
 </html>

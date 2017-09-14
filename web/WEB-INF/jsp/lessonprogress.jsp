@@ -61,11 +61,12 @@ collectionAttendance.each(function() {
                 {
                 "aaSorting": [[ 1, "asc" ]],
                 "columnDefs": [
-                { "width": "5%", "targets": 0 },
+                { "width": "4%", "targets": 0 },
                 { "width": "20%", "targets": 1 },
-                { "width": "5%", "targets": 2 },
-                { "width": "45%", "targets": 3 },
-                { "width": "25%", "targets": 4, "orderable": false }
+                { "width": "4%", "targets": 2 },
+                { "width": "40%", "targets": 3 },
+                { "width": "10%", "targets": 4, "orderable": false },
+                { "width": "22%", "targets": 5, "orderable": false }
                 ]
                 
             }); 
@@ -143,6 +144,11 @@ collectionAttendance.each(function() {
             }
             rating 
             {}
+/*            .progress-bar
+            {
+                background-image: linear-gradient(to bottom,#ddd 0,#ddd 100%);
+            }*/
+
         </style>
     </head>
     <body>
@@ -167,7 +173,22 @@ collectionAttendance.each(function() {
                     </div>
                     <div class="col-xs-3 center-block">
                         Objective:  <label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
-                    </div>  
+                    </div>
+                    <div class="col-xs-3 center-block">
+                        <div class="col-xs-12 center-block">
+                            Step1: <label class="control-label">to make a hole</label>
+                        </div>
+                        <div class="col-xs-12 center-block">
+                            Step2: <label class="control-label">Plant the tree</label>
+                        </div>
+                        <div class="col-xs-12 center-block">
+                            Step3: <label class="control-label">To water the tree</label>
+                        </div>
+                        <div class="col-xs-12 center-block">
+                            Step4: <label class="control-label">Prune the tree</label>
+                        </div>
+                    </div>
+                      
                 </fieldset>   
                 <fieldset style="margin-top: 10px;">
                     <legend></legend>
@@ -180,12 +201,18 @@ collectionAttendance.each(function() {
                                 <td>Student Name</td>
                                 <td>Rating</td>
                                 <td>Comment</td>
-                                <td>Attendance Code <input type="button" class="btn btn-xs btn-info" id="rellenarP" value="Fill P"> <input type="button" class="btn btn-xs btn-info" id="rellenar" value="Clear"></td>
-
+                                <td>Attendance Code<br> 
+                                    <input type="button" class="btn btn-xs btn-info" id="rellenarP" value="Fill P"> 
+                                    <input type="button" class="btn btn-xs btn-info" id="rellenar" value="Clear">
+                                </td>
+                                <td>
+                                    Step Objective
+                                </td>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach var="record" items="${attendancelist}" >
+                               
                                 <tr class="rows">
                                     <td hidden="true"><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
                                     <td>${record.studentname}</td>
@@ -219,6 +246,54 @@ collectionAttendance.each(function() {
                                             <option>A</option>
                                             <option>T</option>
                                         </select>
+                                    </td>
+                                    <td>
+                                            <script>
+                                            $(document).ready(function(){
+                                                $('#${record.studentid}').children('.step1').on('click',function(){
+                                                    if ($(this).hasClass("progress-bar-success")) {
+                                                            $(this).removeClass('progress-bar-success');
+                                                        }else{
+                                                            $(this).addClass('progress-bar-success');
+                                                        }       
+                                                });
+                                                $('#${record.studentid}').children('.step2').on('click',function(){
+                                                    if ($(this).hasClass("progress-bar-info")) {
+                                                            $(this).removeClass('progress-bar-info');
+                                                        }else{
+                                                            $(this).addClass('progress-bar-info');
+                                                        }       
+                                                });
+                                                $('#${record.studentid}').children('.step3').on('click',function(){
+                                                    if ($(this).hasClass("progress-bar-danger")) {
+                                                            $(this).removeClass('progress-bar-danger');
+                                                        }else{
+                                                            $(this).addClass('progress-bar-danger');
+                                                        }       
+                                                });
+                                                $('#${record.studentid}').children('.step4').on('click',function(){
+                                                    if ($(this).hasClass("progress-bar-warning")) {
+                                                            $(this).removeClass('progress-bar-warning');
+                                                        }else{
+                                                            $(this).addClass('progress-bar-warning');
+                                                        }       
+                                                });
+                                            });
+                                            </script>
+                                        <div class="progress" id="${record.studentid}">
+                                            <div class="progress-bar step1" role="progressbar" style="width:25%">
+                                              1
+                                            </div>
+                                            <div class="progress-bar step2" role="progressbar" style="width:25%">
+                                              2
+                                            </div>
+                                            <div class="progress-bar step3" role="progressbar" style="width:25%">
+                                              3
+                                            </div>
+                                            <div class="progress-bar step4" role="progressbar" style="width:25%">
+                                              4
+                                            </div>
+                                          </div> 
                                     </td>
                                 </tr>
                             </c:forEach>
