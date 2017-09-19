@@ -176,16 +176,16 @@ collectionAttendance.each(function() {
                     </div>
                     <div class="col-xs-3 center-block">
                         <div class="col-xs-12 center-block">
-                            Step1: <label class="control-label">to make a hole</label>
+                            Step1: <label class="control-label">Counting and Slow Tempo</label>
                         </div>
                         <div class="col-xs-12 center-block">
-                            Step2: <label class="control-label">Plant the tree</label>
+                            Step2: <label class="control-label">Record and Play Back</label>
                         </div>
                         <div class="col-xs-12 center-block">
-                            Step3: <label class="control-label">To water the tree</label>
+                            Step3: <label class="control-label">Divide the Beat</label>
                         </div>
                         <div class="col-xs-12 center-block">
-                            Step4: <label class="control-label">Prune the tree</label>
+                            Step4: <label class="control-label"> Practice rhythm and timing on different instruments</label>
                         </div>
                     </div>
                       

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -21,7 +22,27 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class Objective {
     private String[] id;
     private String name;
+    private ArrayList<Step> steps;
+    private int nooflessons;
  Connection cn;
+
+    public int getNooflessons() {
+        return nooflessons;
+    }
+
+    public void setNooflessons(int nooflessons) {
+        this.nooflessons = nooflessons;
+    }
+
+    public ArrayList<Step> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(ArrayList<Step> steps) {
+        this.steps = steps;
+    }
+
+
 
     public String getDescription() {
         return description;

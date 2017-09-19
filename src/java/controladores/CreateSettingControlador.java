@@ -240,13 +240,7 @@ public class CreateSettingControlador{
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-        
-        
-            
              Statement st = this.cn.createStatement();
-            //String objectiveid = null;
-            
-                //objectiveid= "1";
             String objectiveid = hsr.getParameter("seleccion3");
             
           ResultSet rs1 = st.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id = "+objectiveid+")");
@@ -296,7 +290,27 @@ public class CreateSettingControlador{
              objective.setDescription(rs2.getString("description"));
  //            objective.setId(id);
             }
-            
+           
+            ResultSet rs3 = st.executeQuery("SELECT count(id) as nooflessons FROM public.lessons where objective_id ="+ id);
+        
+           while (rs3.next())
+            {
+             objective.setNooflessons(rs3.getInt("nooflessons"));
+            }
+           ArrayList<Step> steps = new ArrayList<>();
+            ResultSet rs4 = st.executeQuery("SELECT name,id,storder FROM public.obj_steps where obj_id ="+ id);
+        
+           while (rs4.next())
+            {
+             Step step = new Step();
+             step.setName(rs4.getString("name"));
+             String[] stid = new String[1];
+             stid[0]=""+rs4.getInt("id");
+             step.setId(stid);
+             step.setOrder(rs4.getInt("storder"));
+             steps.add(step);
+            }
+           objective.setSteps(steps);
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
             StringWriter errors = new StringWriter();
@@ -335,6 +349,15 @@ public class CreateSettingControlador{
         String[] obid = obj.getId();
         String consulta = "update objective set name = '"+obj.getName()+"',description ='"+obj.getDescription()+"'where id ="+obid[0]; 
         st.executeUpdate(consulta);
+        consulta ="select id from obj_steps where obj_id ='"+obid[0]+"'";
+        ResultSet rs1 =st.executeQuery(consulta);
+//        if(rs1.next())
+//        {
+//           st.executeUpdate("update ")
+//        }
+//        else{
+//            
+//        }
         message = "Objective edited successfully";   
         ResultSet rs = st.executeQuery("select * from objective where subject_id = "+sid[0]);
         while(rs.next()){

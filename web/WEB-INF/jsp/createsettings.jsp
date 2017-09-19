@@ -186,7 +186,14 @@ $("#method").on('mouseover', 'option' , function(e) {
 		var json = JSON.parse(data);
                 var objective = JSON.parse(json.objective);
                 var content = JSON.parse(json.content);
-                
+                if(objective.nooflessons !== 'NaN'){
+                $('#nooflessons').text("This objective is currently linked to "+objective.nooflessons+" lessons");
+            };
+            var steps = objective.steps;
+            $.each(steps, function(i, item) {
+                var id = item.id;
+          $('#steps').append("<li id="+id[0]+">"+item.name +"<li>");
+          });
                 //$('#editObjective').removeClass("disabled");
                 //Ocultamos el div add objective
                 $('#formAddobjetive').addClass("hidden");
@@ -734,17 +741,20 @@ $("#method").on('mouseover', 'option' , function(e) {
                         </div>
                         <div class="col-xs-2 center-block form-group">
                             <label class="control-label">Steps</label>
-                            <ol id="steps">
-                                
+                            <ol id="steps">   
                             </ol>
                         </div>
                         <div class="col-xs-2 center-block form-group paddingLabel">
                             <div class="col-xs-8 center-block form-group paddingLabel">
-                                <input type="button" name="AddObjectiveSteps" value="Add Steps" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="steps()"/>
+                                <input type="button" name="EditObjectiveSteps" value="Add Steps" class="btn btn-success" id="editObjectiveSteps" data-target=".bs-example-modal-lg" onclick="steps()"/>
                             </div>
                             <div class="col-xs-4 center-block form-group paddingLabel">
                                 <input type="button" name="AddObjective" value="Save" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveeditObjective()"/>
                             </div>
+                        </div>
+                     <div class="col-xs-3 center-block form-group" id="addObjective">
+                            <span id="nooflessons"></span>
+                     
                         </div>
                 </fieldset>
                 <fieldset class="hidden" id="formAddcontent">
