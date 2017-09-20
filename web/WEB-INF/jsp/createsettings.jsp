@@ -23,11 +23,12 @@ $(document).ready(function(){
 
 
   var i=1;
+  
      $("#add_row").click(function(){
          
-      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
+      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input id='country"+i+"' name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
       var NameStep = $('input[name=country'+(i-1)+']').val();
-      $('#steps').append("<li id="+i+">"+ NameStep +"<li>");
+      $('#steps').append("<li id="+i+">"+ NameStep +"</li>");
 
       $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
       i++; 
@@ -60,7 +61,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 
 
           
-          
+            
 
             var ajax;
             
@@ -68,6 +69,31 @@ $("#method").on('mouseover', 'option' , function(e) {
             var objectiveValue = $('#objective').select("selected").val();
             var contentValue = $('#content').select("selected").val();
             var editValue = $('#method').select("selected").val();
+            
+            function stepsEdit()
+            {
+                $('#addsteps').modal('show');
+                
+                if($('#steps').children().length !== 0)
+                {
+                    alert('tiene pasos');
+                    $.each(steps, function(i, item){
+                        //var paso = $('#step'+item.name).text();
+//                        $('#country'+i).val(paso);
+                        $('#tab_logic').append("<tr>\n\
+                        <td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td>\n\
+                        <td>\n\
+                            <input id='country"+(i+1)+"' name='country"+(i+1)+"' value='"+item.name+"' type='text' placeholder='Pass' class='form-control input-md'>\n\
+                        </td>\n\
+                        </tr>");
+                    });
+                }
+                else
+                {
+                    alert('No tiene pasos');
+                }
+            }
+            
             function funcionCallBackSubject()
             {
                 if (ajax.readyState === 4) {
@@ -163,6 +189,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             {
 //              
                     var seleccion3 = document.getElementById("objective").value;
+                    
                     //var p = "&seleccion3"
                     $.ajax({
                     type: "GET",
@@ -189,10 +216,11 @@ $("#method").on('mouseover', 'option' , function(e) {
                 if(objective.nooflessons !== 'NaN'){
                     $('#nooflessons').text("This objective is currently linked to "+objective.nooflessons+" lessons");
                 };
-                var steps = objective.steps;
+                $('#steps').children().remove();
+                steps = objective.steps;
                 $.each(steps, function(i, item) {
     //                var id = item.id;
-                    $('#steps').append("<li id="+item.id[i]+">"+item.name +"</li>");
+                    $('#steps').append("<li id=step"+item.id[i]+">"+item.name +"</li>");
                 });
                 //$('#editObjective').removeClass("disabled");
                 //Ocultamos el div add objective
@@ -494,10 +522,8 @@ $("#method").on('mouseover', 'option' , function(e) {
 
                     });    
                 }
-                function steps(){
-                $('#addsteps').modal('show');
-                }
-                function saveeditMethod()
+                
+            function saveeditMethod()
             {
 
         var seleccion = document.getElementById("method").value;
@@ -726,7 +752,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                         </div>
                         <div class="col-xs-2 text-center form-group paddingLabel">
                             <div class="col-xs-8 center-block form-group paddingLabel">
-                                <input type="button" name="addObjectiveSteps" value="Add Steps" class="btn btn-success" id="addObjectiveSteps" data-target=".bs-example-modal-lg" onclick="steps()"/>
+                                <input type="button" name="addObjectiveSteps" value="Add Steps" class="btn btn-success" id="addObjectiveSteps" data-target=".bs-example-modal-lg" onclick="stepsAdd()"/>
                             </div>
                             <div class="col-xs-4 center-block form-group paddingLabel">
                                 <input type="button" name="AddObjective" value="save" class="btn btn-success" id="AddObjective" data-target=".bs-example-modal-lg" onclick="saveaddObjective()"/> 
@@ -752,7 +778,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                         </div>
                         <div class="col-xs-2 center-block form-group paddingLabel">
                             <div class="col-xs-8 center-block form-group paddingLabel">
-                                <input type="button" name="EditObjectiveSteps" value="Add Steps" class="btn btn-success" id="editObjectiveSteps" data-target=".bs-example-modal-lg" onclick="steps()"/>
+                                <input type="button" name="EditObjectiveSteps" value="Add Steps" class="btn btn-success" id="editObjectiveSteps" data-target=".bs-example-modal-lg" onclick="stepsEdit()"/>
                             </div>
                             <div class="col-xs-4 center-block form-group paddingLabel">
                                 <input type="button" name="AddObjective" value="Save" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveeditObjective()"/>
@@ -1007,17 +1033,17 @@ $("#method").on('mouseover', 'option' , function(e) {
                   <div class="col-xs-12">
                       <table class="table table-bordered table-hover" id="tab_logic">
                         <tbody>
-                            <tr id='addr0'>
+<!--                        <tr id='addr0'>
                                 <td class="text-center" style="width: 20%; vertical-align: middle;">
                                 1
                                 </td>
                                 <td>
-                                 <input type="text" name='country0' placeholder='Step' class="form-control"/>
+                                    <input type="text" id="country0" name='country0' placeholder='pass' class="form-control"/>
                                 </td>
                             </tr>
                             <tr id='addr1'>
                                 
-                            </tr>
+                            </tr>-->
                         </tbody>
                     </table>
                   </div>
