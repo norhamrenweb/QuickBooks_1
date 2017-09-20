@@ -98,18 +98,29 @@ public class SOWTreeControlador {
     public String loadtree(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
     ModelAndView mv = new ModelAndView("sowdisplay");
      JSONObject json = new JSONObject();
-      ArrayList<DBRecords> lessons = new ArrayList<>();
+      ArrayList<DBRecords> steps = new ArrayList<>();
       ArrayList<String> subjects = new ArrayList<>();
       ArrayList<String> objectives = new ArrayList<>();
+       Tree tree = new Tree();
+       Node<String> rootNode = new Node<String>("Subjects","A"," {\"disabled\":true}");
     try{
         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
        
        
         Statement st = this.cn.createStatement();
-        String[] lessonid = hsr.getParameterValues("seleccion1");
-        ResultSet rs = st.executeQuery("SELECT lessons.id,lessons.subject_id,lessons.objective_id,objective.name as obj,lessons.name FROM lessons inner join objective on lessons.objective_id = objective.id where lessons.level_id= "+lessonid[0]+" and lessons.idea = true ");
+        String[] levelid = hsr.getParameterValues("seleccion1");
+        ArrayList<Subject> subs = this.getSubjects(levelid);
+         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+       
+       
+        st = this.cn.createStatement();
+        for(Subject sub:subs){
+            String[] sid = sub.getId();
+        ResultSet rs = st.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '"+sid[0]+"'");
+        
         while(rs.next())
         {
             DBRecords l = new DBRecords();
@@ -120,10 +131,11 @@ public class SOWTreeControlador {
             if(!objectives.contains(rs.getString("obj"))){
             objectives.add(rs.getString("obj"));
             }
-            lessons.add(l); 
+            steps.add(l); 
           
         }
-        for (DBRecords x :lessons)
+        }
+        for (DBRecords x :steps)
         {
             Subject s = new Subject();
             String id = null;
@@ -134,50 +146,58 @@ public class SOWTreeControlador {
             }
         }
   
-    }catch (SQLException ex) {
-            System.out.println("Error: " + ex);
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
-        }
-    String test = new Gson().toJson(lessons);
-    Tree tree = new Tree();
-    Node<String> rootNode = new Node<String>("root","A"," {\"disabled\":true}");
+   
+    String test = new Gson().toJson(steps);
+   
+    
     int i = 0;
    int z = 0;
-    for(String x:subjects)
+    for(Subject x:subs)//subjects)
     {
          
-        Node<String> nodeC = new Node<String>(x,"L"+i," {\"disabled\":true}");
+        Node<String> nodeC = new Node<String>(x.getName(),"L"+i," {\"disabled\":true}");
         rootNode.addChild(nodeC); 
       i++;
-         for(String y:objectives)
+      ArrayList<Objective> obj = this.getObjectives(x.getId());
+         for(Objective y:obj)
     {
     
-     for (DBRecords l:lessons){
-         if(l.getCol3().equalsIgnoreCase(x)&&l.getCol4().equalsIgnoreCase(y))
-         {
-            Node<String> nodeA = new Node<String>(y,"C"+z," {\"disabled\":true}");
+    Node<String> nodeA = new Node<String>(y.getName(),"C"+z," {\"disabled\":true}");
              nodeC.addChild(nodeA);
          z++;
-       for (DBRecords k:lessons){
-          if(k.getCol4().equalsIgnoreCase(y)){
-       //  Node<String> nodeB = new Node<String>(k.getCol2(),k.getCol1()," {\"disabled\":false}");
-       Node<String> nodeB = new Node<String>("Step",k.getCol1()," {\"disabled\":false}");
+     for (DBRecords l:steps){
+         
+         //match the subject with the objective
+         if(l.getCol3().equalsIgnoreCase(x.getName())&&l.getCol4().equalsIgnoreCase(y.getName()))
+         {
+           
+         //match the objective with the step
+       for (DBRecords k:steps){
+          if(k.getCol4().equalsIgnoreCase(y.getName())){
+        Node<String> nodeB = new Node<String>(k.getCol2(),k.getCol1()," {\"disabled\":false}");
+      
          nodeA.addChild(nodeB);
           }
        }
        break;
          }
+        
         }
     }
         
     }
    
-    
+     }catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
 
         tree.setRootElement(rootNode);
         String test2 = this.generateJSONfromTree(tree);
+    
+    
     return test2;
     }
     public String generateJSONfromTree(Tree tree) throws IOException, JSONException {

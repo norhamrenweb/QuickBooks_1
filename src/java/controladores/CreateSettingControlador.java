@@ -332,14 +332,12 @@ public class CreateSettingControlador{
 //            mv.addObject(json);
         return obj.toString();
     }   
-    
+    //saving the edited objective and loading the new objectives list
     @RequestMapping(value="/createsetting/editObjective.htm")
     @ResponseBody
     public String editObjective(@RequestBody Objective obj,HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
         List<Objective> objectives = new ArrayList<>();
-   //   JSONObject obj = new JSONObject();
       String[] sid = hsr.getParameterValues("sid");
-//       JSONObject jsonObj = new JSONObject(hi[0]);
         String message = null;
         try {
          DriverManagerDataSource dataSource;
@@ -349,15 +347,9 @@ public class CreateSettingControlador{
         String[] obid = obj.getId();
         String consulta = "update objective set name = '"+obj.getName()+"',description ='"+obj.getDescription()+"'where id ="+obid[0]; 
         st.executeUpdate(consulta);
-        consulta ="select id from obj_steps where obj_id ='"+obid[0]+"'";
-        ResultSet rs1 =st.executeQuery(consulta);
-//        if(rs1.next())
-//        {
-//           st.executeUpdate("update ")
-//        }
-//        else{
-//            
-//        }
+        // we need here to update the edited steps and delete the deleted and add the new
+//        consulta ="select id from obj_steps where obj_id ='"+obid[0]+"'";
+//        ResultSet rs1 =st.executeQuery(consulta);
         message = "Objective edited successfully";   
         ResultSet rs = st.executeQuery("select * from objective where subject_id = "+sid[0]);
         while(rs.next()){
@@ -400,16 +392,22 @@ public class CreateSettingControlador{
         String consulta = "insert into objective(name,description,subject_id) values('"+ob.getName()+"','"+ob.getDescription()+"','"+subid[0]+"')"; 
         st.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS);
         ResultSet rs = st.getGeneratedKeys();
-       
+       String[] id = new String[1];
         while(rs.next())
         {
-         String[] id = new String[1];
+         
         id[0]=""+rs.getInt(1);
         o.setId(id);
+        }
+        ArrayList<Step> steps = ob.getSteps();
+        for(Step s:steps)
+        {
+        st.executeUpdate("insert into obj_steps(name,weight,storder,obj_id) values('"+s.getName()+"',0,"+s.getOrder()+",'"+id[0]+"')");
         }
         message = "Objective added successfully";   
         o.setDescription(ob.getDescription());
         o.setName(ob.getName());
+        o.setSteps(ob.getSteps());
        
         
         } catch (SQLException ex) {
