@@ -18,7 +18,7 @@
         <script>
 
  $(document).ready(function(){
-     
+     $("#tg").treegrid();
   
       
     });    
@@ -34,18 +34,20 @@
                 if (ajax.status===200){
                     var data = JSON.parse(ajax.responseText);
                         $('#tg').treegrid({
+                    view: myview,        
+                    data:data.children,
         idField:'id',
-        treeField:'text',
+        treeField:'name',
         columns:[[
-            {title:'Task Name',field:'name',width:180},
-            {field:'begin',title:'Persons',width:60,align:'right'},
-            {field:'end',title:'Begin Date',width:80},
-          {field:'progress',title:'End Date',width:80}
-         
-            
+                {title:'Name',field:'name',width:180},
+                {title:'No.of lessons planned',field:'noofplannedlessons',width:60},
+                {title:'No.of lessons done',field:'noofarchivedlessons',width:60},
+                {title:'Progress',field:'progress',width:80,formatter:formatProgress},
+                {title:'Final rating',field:'rating',width:80}
         ]]
+            
     });
-    $('#tg').treegrid('loadData', data);
+  //  $('#tg').treegrid('loadData', data);
    //myLoadFilter(data);
                 }
             }
@@ -82,41 +84,94 @@
         ajax.send("");
        
     }
-        function myLoadFilter(data){
-        function setData(data){
-            var todo = [];
-            for(var i=0; i<data.length; i++){
-                todo.push(data[i]);
-            }
-            while(todo.length){
-                var node = todo.shift();
-                if (node.children && node.children.length){
-                    node.state = 'closed';
-                    node.children1 = node.children;
-                    node.children = undefined;
-                    todo = todo.concat(node.children1);
-                }
+//        function myLoadFilter(data){
+//        function setData(data){
+//            var todo = [];
+//            for(var i=0; i<data.length; i++){
+//                todo.push(data[i]);
+//            }
+//            while(todo.length){
+//                var node = todo.shift();
+//                if (node.children && node.children.length){
+//                    node.state = 'closed';
+//                    node.children1 = node.children;
+//                    node.children = undefined;
+//                    todo = todo.concat(node.children1);
+//                }
+//            }
+//        }
+//        
+//        setData(data);
+//        var tg = $(this);
+//        var opts = tg.treegrid('options');
+//        opts.onBeforeExpand = function(row){
+//            if (row.children1){
+//                tg.treegrid('append',{
+//                    parent: row[opts.idField],
+//                    data: row.children1
+//                });
+//                row.children1 = undefined;
+//                tg.treegrid('expand', row[opts.idField]);
+//            }
+//            return row.children1 == undefined;
+//        };
+//        return data;
+//    }
+var myview = $.extend({},$.fn.treegrid.defaults.view,{
+	onBeforeRender:function(target, parentId, data){
+		$.fn.treegrid.defaults.view.onBeforeRender.call(this,target,parentId,data);
+		
+		var data = $(target).treegrid('getData');
+		
+		function setData(){  
+			var todo = [];  
+			for(var i=0; i<data.length; i++){ 
+				var node = data[i];
+				if (!node.setted){
+					node.setted = true;
+					todo.push(node); 
+				}				
+			}  
+			while(todo.length){  
+				var node = todo.shift();  
+				if (node.children){  
+					node.state = 'closed';  
+					node.children1 = node.children;  
+					node.children = undefined;  
+					todo = todo.concat(node.children1);  
+				}  
+			}  
+		}  
+		  
+		setData(data);  
+		var tg = $(target);  
+		var opts = tg.treegrid('options');  
+		opts.onBeforeExpand = function(row){  
+			if (row.children1){  
+				tg.treegrid('append',{  
+					parent: row[opts.idField],  
+					data: row.children1  
+				});  
+				row.children1 = undefined;  
+				tg.treegrid('expand', row[opts.idField]);  
+			}  
+			return row.children1 == undefined;  
+		};  
+	}
+});
+    
+       
+        function formatProgress(value){
+            if (value){
+                var s = '<div style="width:100%;border:1px solid #ccc">' +
+                        '<div style="width:' + value + '%;background:#cc0000;color:#fff">' + value + '%' + '</div>'
+                        '</div>';
+                return s;
+            } else {
+                return '';
             }
         }
         
-        setData(data);
-        var tg = $(this);
-        var opts = tg.treegrid('options');
-        opts.onBeforeExpand = function(row){
-            if (row.children1){
-                tg.treegrid('append',{
-                    parent: row[opts.idField],
-                    data: row.children1
-                });
-                row.children1 = undefined;
-                tg.treegrid('expand', row[opts.idField]);
-            }
-            return row.children1 == undefined;
-        };
-        return data;
-    }
-    
-    
         </script>
         <style>
             textarea 
@@ -283,7 +338,7 @@ input[type="radio"] .styled:checked + label::after {
                 </div>
 
   
-    <table id="tg" style="width:600px;height:400px"></table>
+    <table id="tg" class="easyui-treegrid" style="width:600px;height:400px"></table>
         
         </div>
 

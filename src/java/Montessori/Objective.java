@@ -20,18 +20,47 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author nmohamed
  */
 public class Objective {
+        private ServletContext servlet;
+    private String description;
+    private String finalrating;
+    private int progress;
     private String[] id;
     private String name;
     private ArrayList<Step> steps;
-    private int nooflessons;
+    private int nooflessonsplanned;
+    private int nooflessonsdone;
  Connection cn;
 
-    public int getNooflessons() {
-        return nooflessons;
+    public String getFinalrating() {
+        return finalrating;
     }
 
-    public void setNooflessons(int nooflessons) {
-        this.nooflessons = nooflessons;
+    public void setFinalrating(String finalrating) {
+        this.finalrating = finalrating;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
+
+    public int getNooflessonsplanned() {
+        return nooflessonsplanned;
+    }
+
+    public void setNooflessonsplanned(int nooflessonsplanned) {
+        this.nooflessonsplanned = nooflessonsplanned;
+    }
+
+    public int getNooflessonsdone() {
+        return nooflessonsdone;
+    }
+
+    public void setNooflessonsdone(int nooflessonsdone) {
+        this.nooflessonsdone = nooflessonsdone;
     }
 
     public ArrayList<Step> getSteps() {
@@ -51,8 +80,7 @@ public class Objective {
     public void setDescription(String description) {
         this.description = description;
     }
-    private ServletContext servlet;
-    private String description;
+
       
 //      private ServletContext servlet;
     

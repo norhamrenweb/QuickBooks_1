@@ -18,17 +18,17 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/style.css" />"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/menu-lateral.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap.min.css"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/calendar.css"/>"/>
+<%--    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/calendar.css"/>"/>--%>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap-theme.min.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap-datetimepicker.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap-toggle.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/treeJs/default/style.min.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/treeGrid/default/tree.css"/>"/>
-    <link rel="stylesheet" type="text/css" href="/recursos/css/treeGrid/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="/recursos/css/treeGrid/default/icon.css">
-    <link rel="stylesheet" type="text/css" href="/recursos/css/treeGrid/default/demo.css">
-    <link rel="stylesheet" type="text/css" href="/recursos/css/treeGrid/bootstrap/datagrid.css">
-    <link rel="stylesheet" type="text/css" href="/recursos/css/treeGrid/bootstrap/tree.css">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/treeGrid/default/easyui.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/treeGrid/default/icon.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/treeGrid/default/demo.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/treeGrid/bootstrap/datagrid.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/treeGrid/bootstrap/tree.css"/>"/>
     
     <script type="text/javascript" src="<c:url value="/recursos/js/jquery-2.2.0.js" />"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/treeGrid/jquery.easyui.min.js" />"></script>

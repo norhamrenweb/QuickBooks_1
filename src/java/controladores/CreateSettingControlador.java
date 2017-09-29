@@ -295,7 +295,7 @@ public class CreateSettingControlador{
         
            while (rs3.next())
             {
-             objective.setNooflessons(rs3.getInt("nooflessons"));
+             objective.setNooflessonsplanned(rs3.getInt("nooflessons"));
             }
            ArrayList<Step> steps = new ArrayList<>();
             ResultSet rs4 = st.executeQuery("SELECT name,id,storder FROM public.obj_steps where obj_id ="+ id);
@@ -335,7 +335,7 @@ public class CreateSettingControlador{
     //saving the edited objective and loading the new objectives list
     @RequestMapping(value="/createsetting/editObjective.htm")
     @ResponseBody
-    public String editObjective(@RequestBody Objective obj,HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+    public String editObjective(@RequestBody Objective obj,@RequestBody HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
         List<Objective> objectives = new ArrayList<>();
       String[] sid = hsr.getParameterValues("sid");
         String message = null;
@@ -350,6 +350,7 @@ public class CreateSettingControlador{
         // we need here to update the edited steps and delete the deleted and add the new
 //        consulta ="select id from obj_steps where obj_id ='"+obid[0]+"'";
 //        ResultSet rs1 =st.executeQuery(consulta);
+
         message = "Objective edited successfully";   
         ResultSet rs = st.executeQuery("select * from objective where subject_id = "+sid[0]);
         while(rs.next()){
