@@ -26,17 +26,29 @@ $(document).ready(function(){
   
      $("#add_row").click(function(){
          
-      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input id='country"+i+"' name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
-      var NameStep = $('input[name=country'+(i-1)+']').val();
-      $('#steps').append("<li id="+i+">"+ NameStep +"</li>");
-
-      $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
-      i++; 
+//      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input id='country"+i+"' name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
+//      var NameStep = $('input[id='+(i-1)+']').val();
+      var table = document.getElementById("tab_logic");
+        var rowCount = table.rows.length;
+//      $('#steps').append("<li id="+(rowCount+1)+">"+ NameStep +"</li>");
+//del step ,if the id is empty will not add to the del array,because it was a step that was added and removed while editing
+      $('#tab_logic').append("<tr>\n\
+                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(rowCount+1)+"</td>\n\
+                        <td>\n\
+                            <input id='' name='' value='' type='text' placeholder='Step name' class='form-control input-md'>\n\
+                        </td>\n\
+\n\                     <td>\n\
+                          <a id='delete_row' class='pull-right btn btn-default' onclick='delstep("")'>Del</a>\n\
+                        </td>\n\
+                        </tr>");
+//      i++; 
   });
      $("#delete_row").click(function(){
-         if(i>1){
-         $("#addr"+(i-1)).html('');
-         $('#steps li#'+i+'').remove();
+         var table = document.getElementById("tab_logic");
+        var rowCount = table.rows.length;
+         if(rowCount>1){
+         $("#addr"+(rowCount-1)).html('');
+//         $('#steps li#'+i+'').remove();
          i--;
          }
      });
@@ -76,14 +88,17 @@ $("#method").on('mouseover', 'option' , function(e) {
                 
                 if($('#steps').children().length !== 0)
                 {
-                    alert('tiene pasos');
+                   
                     $.each(steps, function(i, item){
                         //var paso = $('#step'+item.name).text();
 //                        $('#country'+i).val(paso);
                         $('#tab_logic').append("<tr>\n\
-                        <td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td>\n\
+                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(i+1) +"</td>\n\
                         <td>\n\
-                            <input id='country"+(i+1)+"' name='country"+(i+1)+"' value='"+item.name+"' type='text' placeholder='Pass' class='form-control input-md'>\n\
+                            <input id='"+item.id+"' name='"+item.name+"' value='"+item.name+"' type='text' placeholder='Pass' class='form-control input-md'>\n\
+                        </td>\n\
+\n\                     <td>\n\
+                           <a id='edit_row' class='btn btn-default pull-left' onclick='eidtstep("+item.id+")'>Save</a><a id='delete_row' class='pull-right btn btn-default' onclick='delstep("+item.id+")'>Del</a>\n\
                         </td>\n\
                         </tr>");
                     });
@@ -214,7 +229,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 var objective = JSON.parse(json.objective);
                 var content = JSON.parse(json.content);
                 if(objective.nooflessons !== 'NaN'){
-                    $('#nooflessons').text("This objective is currently linked to "+objective.nooflessons+" lessons");
+                    $('#nooflessons').text("This objective is currently linked to "+objective.nooflessonsplanned+" lessons");
                 };
                 $('#steps').children().remove();
                 steps = objective.steps;
@@ -522,7 +537,15 @@ $("#method").on('mouseover', 'option' , function(e) {
 
                     });    
                 }
-                
+                function paintsteps()
+                {
+                    $('#steps').empty();
+                    
+                    var table = document.getElementById("tab_logic");
+                    for (var i = 0, row; row = table.rows[i]; i++) {
+  $('#steps').append("<li id="+row.cells[0]+">"+ row.cells[1].firstElementChild.value+"</li>")
+   }  
+                }
             function saveeditMethod()
             {
 
@@ -1025,7 +1048,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             <!-- Modal content-->
             <div class="modal-content">
               <div class="modal-header modal-header-details">
-                <button type="button" class="close" data-dismiss="modal">save</button>
+                  <button type="button" class="close" data-dismiss="modal" onclick="paintsteps()">save</button>
                 <h4 id="nameLessonDetails" class="modal-title"> Add the work that needs to be accomplished</h4>
               </div>
               <div class="modal-body">
@@ -1048,7 +1071,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     </table>
                   </div>
                     <div class="col-xs-12">
-                    <a id="add_row" class="btn btn-default pull-left">Add Row</a><a id='delete_row' class="pull-right btn btn-default">Delete Row</a>
+                    <a id="add_row" class="btn btn-default pull-left">Add Row</a>
                     </div>
                </div>
               </div>

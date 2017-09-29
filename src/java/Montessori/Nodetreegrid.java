@@ -14,11 +14,12 @@ import java.util.List;
  */
 public class Nodetreegrid<String> {
  
-    public String data;
+    public String progress;
     public String id;
     public String name;
-    public String hi;
-    public String hi2;
+    public String noofplannedlessons;
+    public String noofarchivedlessons;
+    public String finalrating;
 
     public String getName() {
         return name;
@@ -28,32 +29,31 @@ public class Nodetreegrid<String> {
         this.name = name;
     }
 
-    public String getHi() {
-        return hi;
+    public String getNoofplannedlessons() {
+        return noofplannedlessons;
     }
 
-    public void setHi(String hi) {
-        this.hi = hi;
+    public void setNoofplannedlessons(String noofplannedlessons) {
+        this.noofplannedlessons = noofplannedlessons;
     }
 
-    public String getHi2() {
-        return hi2;
+    public String getNoofarchivedlessons() {
+        return noofarchivedlessons;
     }
 
-    public void setHi2(String hi2) {
-        this.hi2 = hi2;
+    public void setNoofarchivedlessons(String noofarchivedlessons) {
+        this.noofarchivedlessons = noofarchivedlessons;
+    }
+
+    public String getFinalrating() {
+        return finalrating;
+    }
+
+    public void setFinalrating(String finalrating) {
+        this.finalrating = finalrating;
     }
 
     
-    
-
-//    public String getState() {
-//        return state;
-//    }
-//
-//    public void setState(String state) {
-//        this.state = state;
-//    }
 
     public String getId() {
         return id;
@@ -75,15 +75,16 @@ public class Nodetreegrid<String> {
      * Convenience ctor to create a Node<T> with an instance of T.
      * @param data an instance of T.
      */
-    public Nodetreegrid(String data,String id,String name,String hi,String hi2) {
+    public Nodetreegrid(String id,String name,String finalrating,String noofplannedlessons,String noofarchivedlessons,String progress) {
         this();
-        setData(data);
+        
         setId(id);
         setName(name);
-        setHi(hi);
-        setHi2(hi2);
-        
-       
+        setFinalrating(finalrating);
+        setNoofplannedlessons(noofplannedlessons);
+        setNoofarchivedlessons(noofarchivedlessons);
+        setProgress(progress);
+
     }
      
     /**
@@ -158,13 +159,7 @@ public class Nodetreegrid<String> {
         children.remove(index);
     }
  
-    public String getData() {
-        return this.data;
-    }
- 
-    public void setData(String data) {
-        this.data = data;
-    }
+    
      
 //    public String toString() {
 //        StringBuilder sb = new StringBuilder();
@@ -180,4 +175,12 @@ public class Nodetreegrid<String> {
 //        sb.append("]").append("}");
 //        return sb.toString();
 //    }
+
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
 }

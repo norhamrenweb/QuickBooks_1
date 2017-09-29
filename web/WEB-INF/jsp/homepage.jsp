@@ -428,5 +428,8 @@ var ajax;
          <div class="col-xs-12 text-center">
                     <a class="btn btn-default" href="<c:url value="/tree_gridtest/start.htm"/>">View progress</a>  
                 </div>
+                <div class="col-xs-12 text-center">
+                    <a class="btn btn-default" href="<c:url value="/testcomment/start.htm"/>">Classroom Observation</a>  
+                </div>
     </body>
 </html>

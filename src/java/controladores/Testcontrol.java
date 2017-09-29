@@ -102,7 +102,7 @@ public class Testcontrol {
       ArrayList<String> subjects = new ArrayList<>();
       ArrayList<String> objectives = new ArrayList<>();
        TreeGrid tree = new TreeGrid();
-       Nodetreegrid<String> rootNode = new Nodetreegrid<String>("Subjects","A","hi","hi2","hi3");
+       Nodetreegrid<String> rootNode = new Nodetreegrid<String>("Subjects","A","","","","");
     try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
@@ -119,7 +119,7 @@ public class Testcontrol {
         st = this.cn.createStatement();
         for(Subject sub:subs){
             String[] sid = sub.getId();
-        ResultSet rs = st.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '"+sid[0]+"'");
+        ResultSet rs = st.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.id as objid,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '"+sid[0]+"'");
         
         while(rs.next())
         {
@@ -128,6 +128,7 @@ public class Testcontrol {
             l.setCol2(rs.getString("name"));
             l.setCol4(rs.getString("obj"));
             l.setCol3(""+rs.getInt("subject_id"));
+            l.setCol6(""+rs.getInt("objid"));//will only be used to get other data,then later will be the progress 100% of the objective
             if(!objectives.contains(rs.getString("obj"))){
             objectives.add(rs.getString("obj"));
             }
@@ -144,9 +145,24 @@ public class Testcontrol {
             if(!subjects.contains(x.getCol3())){
             subjects.add(x.getCol3());
             }
+            //get the student progress for student 10101,getting the last step the student in, with the latest date
+            ResultSet rs5 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='"+x.getCol6()+"' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '10101' AND objective_id = '"+x.getCol6()+"' and generalcomment = false) and generalcomment = false");
+            if(rs5.next()){
+                String stsdone = rs5.getString("step_id");
+                if(stsdone!= null){
+                List<String> ste = Arrays.asList(stsdone.split(","));
+               
+                if(ste.contains(x.getCol1())){
+                x.setCol5("100");}
+                else
+                {x.setCol5("0");}
+                
+                }
+            }
         }
   
-   
+  
+
     String test = new Gson().toJson(steps);
    
     
@@ -155,14 +171,14 @@ public class Testcontrol {
     for(Subject x:subs)//subjects)
     {
          
-        Nodetreegrid<String> nodeC = new Nodetreegrid<String>(x.getName(),"L"+i," hi","hi2","hi3");
+        Nodetreegrid<String> nodeC = new Nodetreegrid<String>("L"+i,x.getName(),"","","","");
         rootNode.addChild(nodeC); 
       i++;
       ArrayList<Objective> obj = this.getObjectives(x.getId());
          for(Objective y:obj)
     {
     
-    Nodetreegrid<String> nodeA = new Nodetreegrid<String>(y.getName(),"C"+z,"hi","hi2","hi3");
+    Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C"+z,y.getName(),this.getfinalrating("26","10101"),this.getnoofplannedlessons("26","10101"),this.getnoofarchivedlessons("26","10101"),this.getpercent("26","10101"));
              nodeC.addChild(nodeA);
          z++;
      for (DBRecords l:steps){
@@ -174,7 +190,7 @@ public class Testcontrol {
          //match the objective with the step
        for (DBRecords k:steps){
           if(k.getCol4().equalsIgnoreCase(y.getName())){
-        Nodetreegrid<String> nodeB = new Nodetreegrid<String>(k.getCol2(),k.getCol1()," hi","hi2","hi3");
+        Nodetreegrid<String> nodeB = new Nodetreegrid<String>(k.getCol1(),k.getCol2(),"","","",k.getCol5());
       
          nodeA.addChild(nodeB);
           }
@@ -195,80 +211,7 @@ public class Testcontrol {
         }
 
         tree.setRootElement(rootNode);
-        String test2 = "[{\n" +
-"	\"id\":1,\n" +
-"	\"name\":\"C\",\n" +
-"	\"size\":\"\",\n" +
-"	\"date\":\"02/19/2010\",\n" +
-"	\"children\":[{\n" +
-"		\"id\":2,\n" +
-"		\"name\":\"Program Files\",\n" +
-"		\"size\":\"120 MB\",\n" +
-"		\"date\":\"03/20/2010\",\n" +
-"		\"children\":[{\n" +
-"			\"id\":21,\n" +
-"			\"name\":\"Java\",\n" +
-"			\"size\":\"\",\n" +
-"			\"date\":\"01/13/2010\",\n" +
-"			\"state\":\"closed\",\n" +
-"			\"children\":[{\n" +
-"				\"id\":211,\n" +
-"				\"name\":\"java.exe\",\n" +
-"				\"size\":\"142 KB\",\n" +
-"				\"date\":\"01/13/2010\"\n" +
-"			},{\n" +
-"				\"id\":212,\n" +
-"				\"name\":\"jawt.dll\",\n" +
-"				\"size\":\"5 KB\",\n" +
-"				\"date\":\"01/13/2010\"\n" +
-"			}]\n" +
-"		},{\n" +
-"			\"id\":22,\n" +
-"			\"name\":\"MySQL\",\n" +
-"			\"size\":\"\",\n" +
-"			\"date\":\"01/13/2010\",\n" +
-"			\"state\":\"closed\",\n" +
-"			\"children\":[{\n" +
-"				\"id\":221,\n" +
-"				\"name\":\"my.ini\",\n" +
-"				\"size\":\"10 KB\",\n" +
-"				\"date\":\"02/26/2009\"\n" +
-"			},{\n" +
-"				\"id\":222,\n" +
-"				\"name\":\"my-huge.ini\",\n" +
-"				\"size\":\"5 KB\",\n" +
-"				\"date\":\"02/26/2009\"\n" +
-"			},{\n" +
-"				\"id\":223,\n" +
-"				\"name\":\"my-large.ini\",\n" +
-"				\"size\":\"5 KB\",\n" +
-"				\"date\":\"02/26/2009\"\n" +
-"			}]\n" +
-"		}]\n" +
-"	},{\n" +
-"		\"id\":3,\n" +
-"		\"name\":\"eclipse\",\n" +
-"		\"size\":\"\",\n" +
-"		\"date\":\"01/20/2010\",\n" +
-"		\"children\":[{\n" +
-"			\"id\":31,\n" +
-"			\"name\":\"eclipse.exe\",\n" +
-"			\"size\":\"56 KB\",\n" +
-"			\"date\":\"05/19/2009\"\n" +
-"		},{\n" +
-"			\"id\":32,\n" +
-"			\"name\":\"eclipse.ini\",\n" +
-"			\"size\":\"1 KB\",\n" +
-"			\"date\":\"04/20/2010\"\n" +
-"		},{\n" +
-"			\"id\":33,\n" +
-"			\"name\":\"notice.html\",\n" +
-"			\"size\":\"7 KB\",\n" +
-"			\"date\":\"03/17/2005\"\n" +
-"		}]\n" +
-"	}]\n" +
-"}]";// = this.generateJSONfromTree(tree);
-    
+        String test2 = this.generateJSONfromTree(tree);    
     
     return test2;
     }
@@ -289,11 +232,13 @@ public class Testcontrol {
             return obN;
         }
 
-        obN.put("text", node.getData());
         obN.put("id", node.getId());
         obN.put("name",node.getName());
-        obN.put("hi",node.getHi());
-        obN.put("hi2",node.getHi2());
+        obN.put("noofplannedlessons",node.getNoofplannedlessons());
+        obN.put("noofarchivedlessons",node.getNoofarchivedlessons());
+        obN.put("progress",node.getProgress());
+        obN.put("rating",node.getFinalrating());
+        
         JSONObject j = new JSONObject();
 //        j.put("opened",true);
 //        j.put("disabled",false);
@@ -385,8 +330,94 @@ public class Testcontrol {
         }
        return objectives;
        }
-       
-
-    
+       public String getnoofplannedlessons(String objid,String studid) throws SQLException
+       {String result = "";
+         try {
+        
+             Statement st = this.cn.createStatement();
+            
+          ResultSet rs1 = st.executeQuery("select count(id) from lesson_stud_att where student_id = '10101' and lesson_id in (select id from lessons where objective_id ='26' and COALESCE(archive, FALSE) = FALSE);");   
+          
+          while(rs1.next())
+          {
+              result=""+rs1.getInt("count");
+          }
+       }catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+    return result;
 }    
+        public String getnoofarchivedlessons(String objid,String studid) throws SQLException
+       {String result = "";
+         try {
+        
+             Statement st = this.cn.createStatement();
+            
+          ResultSet rs1 = st.executeQuery("select count(id) from lesson_stud_att where student_id = '10101' and lesson_id in (select id from lessons where objective_id ='26' and archive = TRUE);");   
+          
+          while(rs1.next())
+          {
+              result=""+rs1.getInt("count");
+          }
+       }catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+    return result;
+}    
+        public String getfinalrating(String objid,String studid) throws SQLException
+       {String result = "";
+         try {
+        
+             Statement st = this.cn.createStatement();
+            
+          String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '10101' AND comment_date = (select max(comment_date)   from public.progress_report where student_id = '10101' AND objective_id = '26' and generalcomment = false) AND objective_id ='26'and generalcomment = false )";
+ResultSet rs2 = st.executeQuery(consulta);
+while(rs2.next())
+{
+    result= rs2.getString("name");
+}
+       }catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+    return result;
+}  
+        public String getpercent(String objid,String studid) throws SQLException{
+            String result = "";
+            int count = 0;
+         try {
+        
+             Statement st = this.cn.createStatement(); 
+             
+             ResultSet rs1 = st.executeQuery("select count(id) from obj_steps where obj_id = '26'");
+             while(rs1.next()){
+                 count = rs1.getInt("count");
+             }
+            
+            ResultSet rs2 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='26' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '10101' AND objective_id = '26' and generalcomment = false) and generalcomment = false");
+            if(rs2.next()){
+                String stsdone = rs2.getString("step_id");
+                if(stsdone!= null){
+                List<String> ste = Arrays.asList(stsdone.split(","));
+                double percent = (ste.size()*100)/count;
+              result=""+percent;
+                }
+            }
+            }catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+         return result;
+        }
+}
 

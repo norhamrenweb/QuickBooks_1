@@ -62,6 +62,7 @@
         <bean class="controladores.LessonArchiveControlador" id="archive"/>
         <bean class="controladores.SOWTreeControlador" id="sow"/>
         <bean class="controladores.Testcontrol" id="test"/>
+        <bean class="controladores.TestCommentControl" id="testcomment"/>
         
 <!--     <bean class="controladores.SettingsControlador" id="settings">
      <property name="methodNameResolver">
@@ -142,6 +143,8 @@
              <prop key="editlesson.htm">editlesson</prop>
                 <prop key="cerrarLogin.htm">cerrarLoginController</prop>
                 <prop key="lessonarchive.htm">archive</prop>
+                <prop key="testcomment.htm">testcomment</prop>
+                <prop key="calendar.htm">testcomment</prop>
             </props>
         </property>
     </bean>
