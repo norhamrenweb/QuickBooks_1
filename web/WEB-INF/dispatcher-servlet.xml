@@ -61,7 +61,7 @@
         <bean class="controladores.ResourcesControlador" id="resources"/>
         <bean class="controladores.LessonArchiveControlador" id="archive"/>
         <bean class="controladores.SOWTreeControlador" id="sow"/>
-        <bean class="controladores.Testcontrol" id="test"/>
+<!--        <bean class="controladores.Testcontrol" id="test"/>-->
         <bean class="controladores.TestCommentControl" id="testcomment"/>
         
 <!--     <bean class="controladores.SettingsControlador" id="settings">
@@ -137,10 +137,10 @@
                  <prop key="studentpage.htm">studentprog</prop> 
                  <prop key="studentpage_1.htm">studentprog</prop> 
                  <prop key="lessonresources.htm">resources</prop> 
-                 <prop key="tree_gridtest.htm">test</prop>
-             <prop key="lessonidea.htm">lessonidea</prop>
-             <prop key="editlessonidea.htm">lessonidea</prop>
-             <prop key="editlesson.htm">editlesson</prop>
+<!--                 <prop key="tree_gridtest.htm">test</prop>-->
+                <prop key="lessonidea.htm">lessonidea</prop>
+                <prop key="editlessonidea.htm">lessonidea</prop>
+                <prop key="editlesson.htm">editlesson</prop>
                 <prop key="cerrarLogin.htm">cerrarLoginController</prop>
                 <prop key="lessonarchive.htm">archive</prop>
                 <prop key="testcomment.htm">testcomment</prop>

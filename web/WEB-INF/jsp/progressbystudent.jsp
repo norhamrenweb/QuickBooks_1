@@ -42,7 +42,9 @@
         data1 = data[0];
         selectionStudent();
     } ); 
-      
+    
+    $("#tg").treegrid();
+    
     });            
       
         
@@ -233,15 +235,15 @@
                     var json = JSON.parse(ajax.responseText);
                     var info = JSON.parse(json.info);
                     var subjects = JSON.parse(json.sub);
-
-                    var birthday = info.fecha_nacimiento,
-                            separador = " ",
-                            limite = 1, 
-                            datebirthday = birthday.split(separador,limite);
-                    
-                    
-                    
-                    $('#BOD').text(datebirthday);
+                    var data = JSON.parse(json.prog);
+//                    var birthday = info.fecha_nacimiento,
+//                            separador = " ",
+//                            limite = 1, 
+//                            datebirthday = birthday.split(separador,limite);
+//                    
+//                    
+//                    
+//                    $('#BOD').text(datebirthday);
                     $('#gradelevel').text(info.level_id);
                     $('#nextlevel').text(info.nextlevel);
                     $('#student').text(info.nombre_students);
@@ -256,18 +258,80 @@
                          $('#subjects').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
                    });
                    $('#loadingmessage').hide();  // hide the loading message.
-                    }
+                   
+                   
+                   $('#tg').treegrid({
+//                    view: myview,        
+                    data:data.children,
+        idField:'id',
+        treeField:'name',
+        columns:[[
+                {title:'Name',field:'name',width:180},
+                {title:'No.of lessons planned',field:'noofplannedlessons',width:60},
+                {title:'No.of lessons done',field:'noofarchivedlessons',width:60},
+                {title:'Progress',field:'progress',width:80,formatter:formatProgress},
+                {title:'Final rating',field:'rating',width:80}
+        ]]
+            
+    });     
+                  
                 }
             }
-//function funcionCallBackLevelStudent()
-//    {
-//           if (ajax.readyState===4){
-//                if (ajax.status===200){
-//                   
-//                    }
-//                }
-//          }
-//            
+        };
+//        var myview = $.extend({},$.fn.treegrid.defaults.view,{
+//	onBeforeRender:function(target, parentId, data){
+//		$.fn.treegrid.defaults.view.onBeforeRender.call(this,target,parentId,data);
+//		
+//		var data = $(target).treegrid('getData');
+//		
+//		function setData(){  
+//			var todo = [];  
+//			for(var i=0; i<data.length; i++){ 
+//				var node = data[i];
+//				if (!node.setted){
+//					node.setted = true;
+//					todo.push(node); 
+//				}				
+//			}  
+//			while(todo.length){  
+//				var node = todo.shift();  
+//				if (node.children){  
+//					node.state = 'closed';  
+//					node.children1 = node.children;  
+//					node.children = undefined;  
+//					todo = todo.concat(node.children1);  
+//				}  
+//			}  
+//		}  
+//		  
+//		setData(data);  
+//		var tg = $(target);  
+//		var opts = tg.treegrid('options');  
+//		opts.onBeforeExpand = function(row){  
+//			if (row.children1){  
+//				tg.treegrid('append',{  
+//					parent: row[opts.idField],  
+//					data: row.children1  
+//				});  
+//				row.children1 = undefined;  
+//				tg.treegrid('expand', row[opts.idField]);  
+//			}  
+//			return row.children1 == undefined;  
+//		};  
+//	}
+//});
+    
+       
+        function formatProgress(value){
+            if (value){
+                var s = '<div style="width:100%;border:1px solid #ccc">' +
+                        '<div style="width:' + value + '%;background:#cc0000;color:#fff">' + value + '%' + '</div></div>';
+                return s;
+            } else {
+                return '';
+            }
+        }
+       
     function comboSelectionLevelStudent()
     {
         
@@ -429,8 +493,9 @@ $(function() {
 //    $("#NameLessons").attr("disabled", false);
     }
     });
-})
+});
 </script>
+
         <style>
             textarea 
             {
@@ -575,10 +640,10 @@ $(function() {
                         </div>
                         <div class="col-xs-12 text-center">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#demographic">Demographic</a></li>
+                                <li class="active"><a data-toggle="tab" href="#progress">Progress</a></li>
+                                <li ><a data-toggle="tab" href="#demographic">Demographic</a></li>
                                 <li><a data-toggle="tab" href="#gradebook">Academic Progress</a></li>
-<!--                                <li><a href="#">ReportCard</a></li>-->
-<!--                                <li><a href="#">Menu 3</a></li>-->
+                                <li><a href="#">Menu 3</a></li>
                             </ul>
                         </div>
                         <div class="tab-content">
@@ -603,6 +668,7 @@ $(function() {
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="col-xs-12 tab-pane fade" id="gradebook">
                                 <div class="col-xs-6" >
                                     <Label>Subject</Label>
@@ -627,6 +693,23 @@ $(function() {
                                     </table>
                                     
                                 </div>
+                            </div>
+                            
+                            <div class="col-xs-12 tab-pane fade" id="progress">
+                                
+<%--                                <div class="form-group" id="contenedorDetails">
+                                <div class="col-xs-3 form-group">
+                                    <label class="control-label">Select Grade Level</label>
+                                    <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
+                                        <c:forEach var="level" items="${levels}">
+                                            <option value="${level.id[0]}" >${level.name}</option>
+                                        </c:forEach>
+                                    </select>
+
+                                </div>
+                                </div>--%>
+  
+                            <table id="tg" class="easyui-treegrid" style="width:600px;height:400px"></table>
                             </div>
                         </div>
                     </div>

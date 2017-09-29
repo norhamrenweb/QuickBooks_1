@@ -38,7 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import static controladores.Testcontrol.log;
+//import static controladores.Testcontrol.log;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Timestamp;
