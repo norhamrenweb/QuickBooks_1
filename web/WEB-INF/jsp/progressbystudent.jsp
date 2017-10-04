@@ -22,6 +22,7 @@
 
 
  $(document).ready(function(){
+     $("#tg").treegrid();
             $('#tableobjective').DataTable();
              table = $('#table_students').DataTable(
                 {
@@ -39,11 +40,11 @@
     $('#table_students tbody').on('click', 'tr', function () {
         
         data = table.row( this ).data();
-        data1 = data[0];
+        data1 = data.id;
         selectionStudent();
     } ); 
     
-    $("#tg").treegrid();
+    
     
     });            
       
@@ -65,14 +66,7 @@
 //           + ':' + ((''+second).length<2 ? '0' :'') + second;
     
     
-    function funcionCallBackStudent()
-    {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("origen").innerHTML= ajax.responseText;
-                    }
-                }
-            }
+    
     function funcionCallBackloadGeneralcomments()
     {
            if (ajax.readyState===4){
@@ -180,15 +174,6 @@
         var studentId = $('#studentid').val();
         var dataCommentGeneral = $('#comment'+objectiveId).val();
         
-//        $('#tableobjective tbody').on('click', 'tr', function () {
-//        table = $('#tableobjective').DataTable();
-//        data = table.row( this ).data();
-//        dataCommentGeneral = data['col3']; 
-//        } ); 
-    //    ajax.onreadystatechange=funcionCallBackSaveGeneralComent;
-        
-        
-        
         var myObj = {};
                 myObj["col1"] = objectiveId;
                 myObj["col2"] = studentId;
@@ -221,8 +206,7 @@
                                }
 
                     });
-//        ajax.open("POST","saveGeneralcomment.htm?data="+json,true);
-//        ajax.send("");
+
     }
      function funcionCallBackSelectStudent()
     {
@@ -231,11 +215,11 @@
                 if (ajax.status===200){
                     
                     $('#divTableObjective').addClass('hidden');//to avoid having the general comments of the previous selected student
-                        $('#divNotObjective').addClass('hidden');
+                    $('#divNotObjective').addClass('hidden');
                     var json = JSON.parse(ajax.responseText);
                     var info = JSON.parse(json.info);
                     var subjects = JSON.parse(json.sub);
-                    var data = JSON.parse(json.prog);
+                    var prog = JSON.parse(json.prog);
 //                    var birthday = info.fecha_nacimiento,
 //                            separador = " ",
 //                            limite = 1, 
@@ -262,15 +246,15 @@
                    
                    $('#tg').treegrid({
 //                    view: myview,        
-                    data:data.children,
-        idField:'id',
-        treeField:'name',
-        columns:[[
-                {title:'Name',field:'name',width:180},
-                {title:'No.of lessons planned',field:'noofplannedlessons',width:60},
-                {title:'No.of lessons done',field:'noofarchivedlessons',width:60},
-                {title:'Progress',field:'progress',width:80,formatter:formatProgress},
-                {title:'Final rating',field:'rating',width:80}
+                    data:prog.children,
+                    idField:'id',
+                    treeField:'name',
+                    columns:[[
+                {title:'Name',field:'name'},
+                {title:'No.of lessons planned',field:'noofplannedlessons'},
+                {title:'No.of lessons done',field:'noofarchivedlessons'},
+                {title:'Progress',field:'progress',formatter:formatProgress},
+                {title:'Final rating',field:'rating'}
         ]]
             
     });     
@@ -709,7 +693,7 @@ $(function() {
                                 </div>
                                 </div>--%>
   
-                            <table id="tg" class="easyui-treegrid" style="width:600px;height:400px"></table>
+                            <table id="tg" class="easyui-treegrid"></table>
                             </div>
                         </div>
                     </div>
