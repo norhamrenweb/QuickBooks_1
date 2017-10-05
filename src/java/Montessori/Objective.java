@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -26,7 +27,7 @@ public class Objective {
     private int progress;
     private String[] id;
     private String name;
-    private ArrayList<Step> steps;
+    private List<Step> steps;
     private int nooflessonsplanned;
     private int nooflessonsdone;
  Connection cn;
@@ -63,11 +64,11 @@ public class Objective {
         this.nooflessonsdone = nooflessonsdone;
     }
 
-    public ArrayList<Step> getSteps() {
+    public List<Step> getSteps() {
         return steps;
     }
 
-    public void setSteps(ArrayList<Step> steps) {
+    public void setSteps(List<Step> steps) {
         this.steps = steps;
     }
 

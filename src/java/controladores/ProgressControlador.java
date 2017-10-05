@@ -101,10 +101,21 @@ public class ProgressControlador {
                 
                 teacher.setId_students(rs.getInt("presentedby"));
             }
+            List<Step> steps = new ArrayList<>();
+            String[]objid=lesson.getObjective().getId();
+            ResultSet rs3 = st.executeQuery("select name,id,storder from obj_steps where obj_id ="+objid[0]);
+            while(rs3.next()){
+                Step s = new Step();
+                s.setName(rs3.getString("name"));
+                s.setId(""+rs3.getInt("id"));
+                s.setOrder(rs3.getInt("storder"));
+                steps.add(s);
+            }
     List<Progress> records = this.getRecords(lesson,hsr.getServletContext());
     mv.addObject("attendancelist", records);
     mv.addObject("lessondetailes",lesson);
     mv.addObject("disable", disable);
+    mv.addObject("steps",steps);
     //load instructors names from renweb, persons with faculty flag (in staff field)
     cn.close();
     dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
@@ -141,13 +152,7 @@ public class ProgressControlador {
         
         List<Progress> records = new ArrayList<>();
          try {
-       
-        
-        
-            
              Statement st = this.cn.createStatement();
-           
-          
             String consulta = "SELECT * FROM public.lesson_stud_att where lesson_id ="+lesson.getId();
             ResultSet rs = st.executeQuery(consulta);
           
@@ -163,13 +168,14 @@ public class ProgressControlador {
             {
                 String[] ids = new String[1];
                 ids = lesson.getObjective().getId();
-            consulta = "SELECT rating.name as ratingname,progress_report.comment FROM progress_report  INNER JOIN rating on progress_report.rating_id = rating.id where lesson_id ="+lesson.getId()+" AND student_id = '"+record.getStudentid()+"' ";
+            consulta = "SELECT rating.name as ratingname,progress_report.comment,progress_report.step_id FROM progress_report  INNER JOIN rating on progress_report.rating_id = rating.id where lesson_id ="+lesson.getId()+" AND student_id = '"+record.getStudentid()+"' ";
             ResultSet rs3 = st.executeQuery(consulta);
             while (rs3.next())
             {
               record.setRating(rs3.getString("ratingname"));
               record.setComment(rs3.getString("comment"));
               record.setComment_date("comment_date");
+              record.setSteps(rs3.getString("step_id"));
             }
             }
             cn.close();

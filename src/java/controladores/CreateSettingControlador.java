@@ -298,15 +298,15 @@ public class CreateSettingControlador{
              objective.setNooflessonsplanned(rs3.getInt("nooflessons"));
             }
            ArrayList<Step> steps = new ArrayList<>();
-            ResultSet rs4 = st.executeQuery("SELECT name,id,storder FROM public.obj_steps where obj_id ="+ id);
+            ResultSet rs4 = st.executeQuery("SELECT name,id,storder FROM public.obj_steps where obj_id ='"+id+"' order by storder");
         
            while (rs4.next())
             {
              Step step = new Step();
              step.setName(rs4.getString("name"));
              String[] stid = new String[1];
-             stid[0]=""+rs4.getInt("id");
-             step.setId(stid);
+            // stid[0]=""+rs4.getInt("id");
+             step.setId(""+rs4.getInt("id"));
              step.setOrder(rs4.getInt("storder"));
              steps.add(step);
             }
@@ -335,7 +335,7 @@ public class CreateSettingControlador{
     //saving the edited objective and loading the new objectives list
     @RequestMapping(value="/createsetting/editObjective.htm")
     @ResponseBody
-    public String editObjective(@RequestBody Objective obj,@RequestBody HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
+    public String editObjective(@RequestBody Objective obj,HttpServletRequest hsr,HttpServletResponse hsr1) throws Exception {
         List<Objective> objectives = new ArrayList<>();
       String[] sid = hsr.getParameterValues("sid");
         String message = null;
@@ -351,7 +351,9 @@ public class CreateSettingControlador{
 //        consulta ="select id from obj_steps where obj_id ='"+obid[0]+"'";
 //        ResultSet rs1 =st.executeQuery(consulta);
 
-        message = "Objective edited successfully";   
+        message = "Objective edited successfully";  
+        Step s = new Step();
+        s.compareandupdate(obj.getSteps(),obj.getId(),hsr.getServletContext());
         ResultSet rs = st.executeQuery("select * from objective where subject_id = "+sid[0]);
         while(rs.next()){
         Objective o = new Objective();
@@ -362,6 +364,7 @@ public class CreateSettingControlador{
         o.setName(rs.getString("name"));
         objectives.add(o);
         }
+        
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
             message ="Something went wrong";
@@ -400,7 +403,7 @@ public class CreateSettingControlador{
         id[0]=""+rs.getInt(1);
         o.setId(id);
         }
-        ArrayList<Step> steps = ob.getSteps();
+        List<Step> steps = ob.getSteps();
         for(Step s:steps)
         {
         st.executeUpdate("insert into obj_steps(name,weight,storder,obj_id) values('"+s.getName()+"',0,"+s.getOrder()+",'"+id[0]+"')");

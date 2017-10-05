@@ -175,7 +175,7 @@ collectionAttendance.each(function() {
                         Objective:  <label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
                     </div>
                     <div class="col-xs-3 center-block">
-                        <div class="col-xs-12 center-block">
+<!--                        <div class="col-xs-12 center-block">
                             Step1: <label class="control-label">Counting and Slow Tempo</label>
                         </div>
                         <div class="col-xs-12 center-block">
@@ -186,7 +186,10 @@ collectionAttendance.each(function() {
                         </div>
                         <div class="col-xs-12 center-block">
                             Step4: <label class="control-label"> Practice rhythm and timing on different instruments</label>
-                        </div>
+                        </div>-->
+                            <c:forEach var="step" items="${steps}" varStatus="i">
+                                Step${(i.index +1)}: <label class="control-label">${step.name}</label><br>
+                                </c:forEach> 
                     </div>
                       
                 </fieldset>   
@@ -276,12 +279,14 @@ collectionAttendance.each(function() {
                                                             $(this).removeClass('progress-bar-warning');
                                                         }else{
                                                             $(this).addClass('progress-bar-warning');
+                                                            
                                                         }       
                                                 });
                                             });
+                                            
                                             </script>
                                         <div class="progress" id="${record.studentid}">
-                                            <div class="progress-bar step1" role="progressbar" style="width:25%">
+<!--                                            <div class="progress-bar step1" role="progressbar" style="width:25%">
                                               1
                                             </div>
                                             <div class="progress-bar step2" role="progressbar" style="width:25%">
@@ -292,7 +297,13 @@ collectionAttendance.each(function() {
                                             </div>
                                             <div class="progress-bar step4" role="progressbar" style="width:25%">
                                               4
+                                            </div>-->
+<input type="hidden" id="stepsids" name="stepsids"value="${record.steps}">
+  <c:forEach var="step" items="${steps}" varStatus="i">
+                             <div class="progress-bar step4" id="${step.id}" role="progressbar" style="width:25%" onclick="addstep">
+                                              ${(i.index+1)}
                                             </div>
+                                </c:forEach> 
                                           </div> 
                                     </td>
                                 </tr>

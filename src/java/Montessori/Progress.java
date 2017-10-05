@@ -16,7 +16,16 @@ public class Progress {
     private String rating;
     private String comment;
     private String comment_date;
+    private String steps;
 
+    public String getSteps() {
+        return steps;
+    }
+
+    public void setSteps(String steps) {
+        this.steps = steps;
+    }
+    
     public String getComment_date() {
         return comment_date;
     }

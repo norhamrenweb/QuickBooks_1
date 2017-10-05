@@ -228,23 +228,7 @@
 //                    
 //                    
 //                    $('#BOD').text(datebirthday);
-                    $('#gradelevel').text(info.level_id);
-                    $('#nextlevel').text(info.nextlevel);
-                    $('#student').text(info.nombre_students);
-                    $('#studentid').val(info.id_students);
-                    if(typeof info.foto === 'undefined'){
-                        $('#foto').attr('src', '../recursos/img/NotPhoto.png');
-                    }else{
-                        $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/"+info.foto);
-                    }
-                    $('#subjects').empty();
-                     $.each(subjects, function(i, item) {
-                         $('#subjects').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
-                   });
-                   $('#loadingmessage').hide();  // hide the loading message.
-                   
-                   
-                   $('#tg').treegrid({
+ $('#tg').treegrid({
 //                    view: myview,        
                     data:prog.children,
                     idField:'id',
@@ -258,7 +242,21 @@
         ]]
             
     });     
+                    $('#gradelevel').text(info.level_id);
+                    $('#nextlevel').text(info.nextlevel);
+                    $('#student').text(info.nombre_students);
+                    $('#studentid').val(info.id_students);
+                    if(typeof info.foto === 'undefined'){
+                        $('#foto').attr('src', '../recursos/img/NotPhoto.png');
+                    }else{
+                        $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/"+info.foto);
+                    }
+                    $('#subjects').empty();
+                     $.each(subjects, function(i, item) {
+                         $('#subjects').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
+                   });
                   
+                  $('#loadingmessage').hide();  // hide the loading message.
                 }
             }
         };
@@ -626,11 +624,26 @@ $(function() {
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#progress">Progress</a></li>
                                 <li ><a data-toggle="tab" href="#demographic">Demographic</a></li>
-                                <li><a data-toggle="tab" href="#gradebook">Academic Progress</a></li>
-                                <li><a href="#">Menu 3</a></li>
+                                <li><a data-toggle="tab" href="#gradebook">Academic Progress</a></li>                
                             </ul>
                         </div>
                         <div class="tab-content">
+                               <div class="col-xs-12 tab-pane fade" id="progress">
+                                
+<%--                                <div class="form-group" id="contenedorDetails">
+                                <div class="col-xs-3 form-group">
+                                    <label class="control-label">Select Grade Level</label>
+                                    <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
+                                        <c:forEach var="level" items="${levels}">
+                                            <option value="${level.id[0]}" >${level.name}</option>
+                                        </c:forEach>
+                                    </select>
+
+                                </div>
+                                </div>--%>
+  
+                            <table id="tg" class="easyui-treegrid"></table>
+                            </div>
                             <div class="col-xs-12 tab-pane fade in active" id="demographic">
                                 <div class="col-xs-6 text-center containerPhoto">
                                     <div class="cell">
@@ -679,22 +692,7 @@ $(function() {
                                 </div>
                             </div>
                             
-                            <div class="col-xs-12 tab-pane fade" id="progress">
-                                
-<%--                                <div class="form-group" id="contenedorDetails">
-                                <div class="col-xs-3 form-group">
-                                    <label class="control-label">Select Grade Level</label>
-                                    <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
-                                        <c:forEach var="level" items="${levels}">
-                                            <option value="${level.id[0]}" >${level.name}</option>
-                                        </c:forEach>
-                                    </select>
-
-                                </div>
-                                </div>--%>
-  
-                            <table id="tg" class="easyui-treegrid"></table>
-                            </div>
+                         
                         </div>
                     </div>
         </fieldset>

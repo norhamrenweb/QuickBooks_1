@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -16,8 +18,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 
 public class Step {
-    
-    private String[] id;
+    private ServletContext servlet;
+    private String id;
     private String name;
 private int order;
 private int weight;
@@ -48,11 +50,11 @@ Connection cn;
         this.obj = obj;
     }
 
-    public String[] getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(String[] id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -94,5 +96,71 @@ Connection cn;
 //        return name;
 //    
 //    }   
+
+    public void compareandupdate(List<Step> newsteps, String[] objid,ServletContext servlet) {
+       
+        try {
+             DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",servlet);
+        this.cn = dataSource.getConnection();
+             Statement st = this.cn.createStatement();
+             
+            String consulta = "SELECT * FROM obj_steps where obj_id = "+objid[0];
+            ResultSet rs = st.executeQuery(consulta);
+          List<Step> old = new ArrayList<>();
+            while (rs.next())
+            {
+                Step s = new Step();
+                s.setId(""+rs.getInt("id"));
+             s.setName(rs.getString("name"));
+             s.setOrder(rs.getInt("storder"));
+             old.add(s);
+            }
+            int found= 0;
+            
+           for(Step y:old)
+        {
+             for(Step x:newsteps)
+            {
+               if(y.getId().equals(x.getId()))
+                {
+                    found=1;
+                    break;
+                }  
+            }
+             if(found==0)
+             {
+                 //delete step
+                 st.executeUpdate("delete from obj_steps where id ="+y.getId());
+                 
+             }
+        } 
+       
+        for(Step x:newsteps)
+        {
+        if(x.getId().equals("0")){
+            //add new step
+            st.executeUpdate("insert into obj_steps(name,storder,obj_id) values('"+x.getName()+"','"+x.getOrder()+"','"+objid[0]+"')");
+        }
+        else{
+            for(Step y:old)
+            {
+                if(y.getId().equals(x.getId()))
+                {
+                    //update step
+                   st.executeUpdate("update obj_steps set name = '"+x.getName()+"',storder= '"+x.getOrder()+"' where id = "+x.getId());
+                    break;
+                }
+            }
+            
+        }
+        
+        }
+            
+        } catch (SQLException ex) {
+            System.out.println("Error updating steps: " + ex);
+        }
+
+    }
    
 }

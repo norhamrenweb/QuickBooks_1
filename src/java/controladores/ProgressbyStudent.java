@@ -438,7 +438,7 @@ while(rs5.next())
 //    mv.addObject("student",student);
     
 //     mv.addObject("subjects", this.getSubjects(student.getLevel_id()));//Integer.parseInt(alumnos.getLevel_id())));
-  obj.put("prog",this.loadtree(student.getLevel_id(), hsr.getServletContext()));
+  obj.put("prog",this.loadtree(student.getLevel_id(),student.getId_students(), hsr.getServletContext()));
          return obj.toString();
         
     }
@@ -572,7 +572,7 @@ while(rs5.next())
     
 //        @RequestMapping("/progressbystudent/loadtree.htm")
 //    @ResponseBody
-    public String loadtree(String levelid,ServletContext hsr) throws Exception {
+    public String loadtree(String levelid,int studentid,ServletContext hsr) throws Exception {
     ModelAndView mv = new ModelAndView("progressbystudent");
      JSONObject json = new JSONObject();
       ArrayList<DBRecords> steps = new ArrayList<>();
@@ -623,7 +623,7 @@ while(rs5.next())
             subjects.add(x.getCol3());
             }
             //get the student progress for student 10101,getting the last step the student in, with the latest date
-            ResultSet rs5 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='"+x.getCol6()+"' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '10101' AND objective_id = '"+x.getCol6()+"' and generalcomment = false) and generalcomment = false");
+            ResultSet rs5 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='"+x.getCol6()+"' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '"+studentid+"' AND objective_id = '"+x.getCol6()+"' and generalcomment = false) and generalcomment = false and student_id ='"+studentid+"'");
             if(rs5.next()){
                 String stsdone = rs5.getString("step_id");
                 if(stsdone!= null){
@@ -654,8 +654,8 @@ while(rs5.next())
       ArrayList<Objective> obj = this.getObjectives(x.getId());
          for(Objective y:obj)
     {
-    
-    Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C"+z,y.getName(),this.getfinalrating("26","10101"),this.getnoofplannedlessons("26","10101"),this.getnoofarchivedlessons("26","10101"),this.getpercent("26","10101"));
+    String[] id = y.getId(); 
+    Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C"+z,y.getName(),this.getfinalrating(id[0],""+studentid),this.getnoofplannedlessons(id[0],""+studentid),this.getnoofarchivedlessons(id[0],""+studentid),this.getpercent(id[0],""+studentid));
              nodeC.addChild(nodeA);
          z++;
      for (DBRecords l:steps){
@@ -813,7 +813,7 @@ while(rs5.next())
         
              Statement st = this.cn.createStatement();
             
-          ResultSet rs1 = st.executeQuery("select count(id) from lesson_stud_att where student_id = '10101' and lesson_id in (select id from lessons where objective_id ='26' and COALESCE(archive, FALSE) = FALSE);");   
+          ResultSet rs1 = st.executeQuery("select count(id) from lesson_stud_att where student_id = '"+studid+"' and lesson_id in (select id from lessons where objective_id ='"+objid+"' and COALESCE(archive, FALSE) = FALSE);");   
           
           while(rs1.next())
           {
@@ -833,7 +833,7 @@ while(rs5.next())
         
              Statement st = this.cn.createStatement();
             
-          ResultSet rs1 = st.executeQuery("select count(id) from lesson_stud_att where student_id = '10101' and lesson_id in (select id from lessons where objective_id ='26' and archive = TRUE);");   
+          ResultSet rs1 = st.executeQuery("select count(id) from lesson_stud_att where student_id = '"+studid+"' and lesson_id in (select id from lessons where objective_id ='"+objid+"' and archive = TRUE);");   
           
           while(rs1.next())
           {
@@ -874,12 +874,12 @@ while(rs2.next())
         
              Statement st = this.cn.createStatement(); 
              
-             ResultSet rs1 = st.executeQuery("select count(id) from obj_steps where obj_id = '26'");
+             ResultSet rs1 = st.executeQuery("select count(id) from obj_steps where obj_id = '"+objid+"'");
              while(rs1.next()){
                  count = rs1.getInt("count");
              }
             
-            ResultSet rs2 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='26' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '10101' AND objective_id = '26' and generalcomment = false) and generalcomment = false");
+            ResultSet rs2 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='"+objid+"' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '"+studid+"' AND objective_id = '"+objid+"' and generalcomment = false) and generalcomment = false");
             if(rs2.next()){
                 String stsdone = rs2.getString("step_id");
                 if(stsdone!= null){
