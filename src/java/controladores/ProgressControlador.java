@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -175,7 +176,9 @@ public class ProgressControlador {
               record.setRating(rs3.getString("ratingname"));
               record.setComment(rs3.getString("comment"));
               record.setComment_date("comment_date");
-              record.setSteps(rs3.getString("step_id"));
+              String steps = rs3.getString("step_id");
+              List<String> comma = Arrays.asList(steps.split(","));
+              record.setSteps(""+comma.size());
             }
             }
             cn.close();
@@ -220,10 +223,11 @@ public class ProgressControlador {
         String[] studentids= hsr.getParameterValues("TXTstudentid");
         String[] att= hsr.getParameterValues("TXTattendance");
         String[] teacher= hsr.getParameterValues("TXTinstructor");
+        String[] steps= hsr.getParameterValues("your_awesome_parameter");
         String archived = hsr.getParameter("buttonAchived");// is equal to on or null
 
     Statement st = this.cn.createStatement();
-    
+    //update presented by
         if(!teacher[0].isEmpty())
         {
         st.executeUpdate("update lessons set presentedby = "+teacher[0]+" where id = "+lessonid[0]);
@@ -235,7 +239,34 @@ public class ProgressControlador {
     st.executeUpdate(test);
     }
     }
-   
+    //update steps
+    ResultSet rs2 = st.executeQuery("select id from obj_steps where obj_id = '"+objectiveid[0]+"' order by storder");
+//             List<Step> allsteps = new ArrayList();
+             ArrayList<String> allsteps = new ArrayList();
+             while(rs2.next()){
+//                 Step s = new Step();
+//                 s.setId(""+rs1.getInt("id"));
+//                 s.setOrder(rs1.getInt("storder"));
+//                 allsteps.add(s);
+                allsteps.add(""+rs2.getInt("id"));
+     for(int i=0;i<studentids.length;i++)
+         
+    {
+        // need to see if an objective does not have a steps how it will act, also if the user erased the steps done by
+        // the student, need to update the DB
+        if(!steps[i].isEmpty()){
+             
+            ArrayList<String> al2 = new ArrayList<String>(allsteps.subList(1,(Integer.parseInt(steps[i])+1)));
+            StringBuilder rString = new StringBuilder();
+
+            String sep = ",";
+            for (String each : al2) {
+                rString.append(sep).append(each);
+}
+        }
+        }
+    }
+   //update rating
      for(int i=0;i<studentids.length;i++)
          
     {   
@@ -258,6 +289,7 @@ public class ProgressControlador {
               }
     }
     } 
+     //archive lesson
      if ("on".equals(archived))
      {
          st.executeUpdate("update lessons set archive = TRUE where id = '"+lessonid[0]+"'");

@@ -142,7 +142,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                             <input id='"+item.id+"' name='"+item.name+"' value='"+item.name+"' type='text' placeholder='Pass' class='form-control input-md'>\n\
                         </td>\n\
 \n\                     <td>\n\
-                           <a id='edit_row' class='btn btn-default pull-left' onclick='eidtstep("+item.id+")'>Save</a><a id='delete_row' class='pull-right btn btn-default' onclick='delstep2()'>Del</a>\n\
+                           <a id='delete_row' class='pull-right btn btn-default' onclick='delstep2()'>Del</a>\n\
                         </td>\n\
                         </tr>");
                     });

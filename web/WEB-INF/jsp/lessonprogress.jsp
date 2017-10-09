@@ -9,6 +9,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
     <%@ include file="infouser.jsp" %>
@@ -175,6 +176,7 @@ collectionAttendance.each(function() {
                         Objective:  <label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
                     </div>
                     <div class="col-xs-3 center-block">
+                        
 <!--                        <div class="col-xs-12 center-block">
                             Step1: <label class="control-label">Counting and Slow Tempo</label>
                         </div>
@@ -298,12 +300,8 @@ collectionAttendance.each(function() {
                                             <div class="progress-bar step4" role="progressbar" style="width:25%">
                                               4
                                             </div>-->
-<input type="hidden" id="stepsids" name="stepsids"value="${record.steps}">
-  <c:forEach var="step" items="${steps}" varStatus="i">
-                             <div class="progress-bar step4" id="${step.id}" role="progressbar" style="width:25%" onclick="addstep">
-                                              ${(i.index+1)}
-                                            </div>
-                                </c:forEach> 
+ 
+  <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
                                           </div> 
                                     </td>
                                 </tr>
