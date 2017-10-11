@@ -40,10 +40,7 @@
         ajax.open("POST","savecomment.htm",true);
         ajax.send("");
   }
-  function showcalendar()
-    {
-     window.open("<c:url value="/calendar.htm?student=10101"/>");      
-  }
+
   function funcionCallBacksavecomment(){
         if (ajax.readyState===4){
                 if (ajax.status===200){

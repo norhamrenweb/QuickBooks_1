@@ -94,21 +94,21 @@ public class TestCommentControl {
     }
     return mv;
     }
-     @RequestMapping("/calendar.htm")
-    public ModelAndView calendar(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-         ModelAndView mv = new ModelAndView("calendar");
-    try{
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
-     
-           }catch(SQLException ex){
-        StringWriter errors = new StringWriter();
-        ex.printStackTrace(new PrintWriter(errors));
-        log.error(ex+errors.toString());
-    }
-    mv.addObject("message","works");
-    return mv;
-    }
+//     @RequestMapping("/calendar.htm")
+//    public ModelAndView calendar(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+//         ModelAndView mv = new ModelAndView("calendar");
+//    try{
+//        DriverManagerDataSource dataSource;
+//        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+//        this.cn = dataSource.getConnection();
+//        Statement st = this.cn.createStatement();
+//     
+//           }catch(SQLException ex){
+//        StringWriter errors = new StringWriter();
+//        ex.printStackTrace(new PrintWriter(errors));
+//        log.error(ex+errors.toString());
+//    }
+//    mv.addObject("message","works");
+//    return mv;
+//    }
 }

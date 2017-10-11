@@ -144,7 +144,7 @@
                 <prop key="cerrarLogin.htm">cerrarLoginController</prop>
                 <prop key="lessonarchive.htm">archive</prop>
                 <prop key="testcomment.htm">testcomment</prop>
-                <prop key="calendar.htm">testcomment</prop>
+                <prop key="calendar.htm">studentprog</prop>
             </props>
         </property>
     </bean>

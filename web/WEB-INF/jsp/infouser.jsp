@@ -29,7 +29,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/treeGrid/default/demo.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/treeGrid/bootstrap/datagrid.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/treeGrid/bootstrap/tree.css"/>"/>
-    
+    <link rel="stylesheet" href="<c:url value="/recursos/fullcalendar/fullcalendar.css"/>"/>
     <script type="text/javascript" src="<c:url value="/recursos/js/jquery-2.2.0.js" />"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/treeGrid/jquery.easyui.min.js" />"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/treeGrid/jquery.datagrid.js" />"></script>
@@ -52,6 +52,7 @@
     <script type="text/javascript" src="<c:url value="/recursos/js/es.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/ar.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/moment.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/recursos/fullcalendar/fullcalendar.js"/>"></script>
     <!--        CKEDITOR-->
     <script type="text/javascript" src="<c:url value="/recursos/js/ckeditor.js"/>"></script>
     

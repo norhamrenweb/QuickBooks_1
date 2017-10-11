@@ -27,7 +27,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import com.google.gson.*;
-//import static controladores.Testcontrol.log;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,6 +39,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -59,7 +59,7 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
  * @author nmohamed
  */
 @Controller
-@Scope("session")
+//@Scope("session")
 public class ProgressbyStudent {
      Connection cn;
 static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
@@ -776,6 +776,42 @@ while(rs5.next())
 //        }
 //           return activesubjects;
 //       }
+    @RequestMapping("/progressbystudent/savecomment.htm")
+    public ModelAndView savecomment(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+         ModelAndView mv = new ModelAndView("progressbystudent");
+    try{
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        Statement st = this.cn.createStatement();
+        HttpSession sesion = hsr.getSession();
+        User user = (User) sesion.getAttribute("user");
+        st.executeUpdate("insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('"+user.getId()+"',now(),'hi','general','10101','2017-09-22')");
+           }catch(SQLException ex){
+        StringWriter errors = new StringWriter();
+        ex.printStackTrace(new PrintWriter(errors));
+        log.error(ex+errors.toString());
+    }
+    return mv;
+    }
+   
+     @RequestMapping("/calendar.htm")
+    public ModelAndView calendar(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+         ModelAndView mv = new ModelAndView("calendar");
+    try{
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        Statement st = this.cn.createStatement();
+     
+           }catch(SQLException ex){
+        StringWriter errors = new StringWriter();
+        ex.printStackTrace(new PrintWriter(errors));
+        log.error(ex+errors.toString());
+    }
+    mv.addObject("message","works");
+    return mv;
+    }
         public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException
        {
            ArrayList<Objective> objectives = new ArrayList<>();

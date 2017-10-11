@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -169,16 +170,21 @@ public class ProgressControlador {
             {
                 String[] ids = new String[1];
                 ids = lesson.getObjective().getId();
-            consulta = "SELECT rating.name as ratingname,progress_report.comment,progress_report.step_id FROM progress_report  INNER JOIN rating on progress_report.rating_id = rating.id where lesson_id ="+lesson.getId()+" AND student_id = '"+record.getStudentid()+"' ";
+            consulta = "SELECT rating.name as ratingname,progress_report.comment,progress_report.step_id,progress_report.comment_date FROM progress_report  left JOIN rating on progress_report.rating_id = rating.id where lesson_id ="+lesson.getId()+" AND student_id = '"+record.getStudentid()+"' ";
             ResultSet rs3 = st.executeQuery(consulta);
             while (rs3.next())
             {
               record.setRating(rs3.getString("ratingname"));
               record.setComment(rs3.getString("comment"));
-              record.setComment_date("comment_date");
+              record.setComment_date(""+rs3.getDate("comment_date"));
               String steps = rs3.getString("step_id");
+              if(steps.equals("null") || steps.equals("")){
+                  record.setSteps("");
+              }
+              else{
               List<String> comma = Arrays.asList(steps.split(","));
               record.setSteps(""+comma.size());
+              }
             }
             }
             cn.close();
@@ -249,45 +255,58 @@ public class ProgressControlador {
 //                 s.setOrder(rs1.getInt("storder"));
 //                 allsteps.add(s);
                 allsteps.add(""+rs2.getInt("id"));
+             }
+                
      for(int i=0;i<studentids.length;i++)
          
-    {
+    {   String step=null;
         // need to see if an objective does not have a steps how it will act, also if the user erased the steps done by
         // the student, need to update the DB
-        if(!steps[i].isEmpty()){
+        if(!steps[i].isEmpty() && !steps[i].equals("0")){
              
-            ArrayList<String> al2 = new ArrayList<String>(allsteps.subList(1,(Integer.parseInt(steps[i])+1)));
+            ArrayList<String> al2 = new ArrayList<String>(allsteps.subList(0,(Integer.parseInt(steps[i]))));
             StringBuilder rString = new StringBuilder();
-
+           
             String sep = ",";
             for (String each : al2) {
-                rString.append(sep).append(each);
+                rString.append(each).append(sep);
 }
+            step = rString.toString();
+            step = step.substring(0, step.length()-1);
         }
-        }
-    }
+        
+    
    //update rating
-     for(int i=0;i<studentids.length;i++)
+//     for(int i=0;i<studentids.length;i++)
          
-    {   
-        if(!ratings[i].isEmpty()){ 
+       String ratingid = null;
+      //  if(!ratings[i].isEmpty()){ 
         ResultSet rs1 = st.executeQuery("select id from rating where name = '"+ratings[i]+"'");
-                int ratingid = 0;
+                
                 
                 while(rs1.next())
                 {
-               ratingid = rs1.getInt("id");
+               ratingid = ""+rs1.getInt("id");
                 }
                 //check if there is already progress records for this lesson, if yes then will do update instead of insert
               ResultSet rs = st.executeQuery("select * from progress_report where lesson_id ="+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
               if(!rs.next()){
-                st.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment) values (now(),'"+comments[i]+"','"+ratingid+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false)");
+                  if(ratingid != null){
+                st.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment,step_id) values (now(),'"+comments[i]+"','"+ratingid+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false,'"+step+"')");
+              }
+                  else {
+                     st.executeUpdate("insert into progress_report(comment_date,comment,lesson_id,student_id,objective_id,generalcomment,step_id) values (now(),'"+comments[i]+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false,'"+step+"')"); 
+                  }
               }
               else{
-                st.executeUpdate("update progress_report set comment_date = now(),comment = '"+comments[i]+"',rating_id ='"+ratingid+"' ,lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
-
+                    if(ratingid != null){
+                st.executeUpdate("update progress_report set comment_date = now(),comment = '"+comments[i]+"',rating_id ='"+ratingid+"' ,lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false ,step_id = '"+step+"' where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
+                    }
+                    else {
+                        st.executeUpdate("update progress_report set comment_date = now(),comment = '"+comments[i]+"',lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false ,step_id = '"+step+"' where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
+                    }
               }
-    }
+    //}
     } 
      //archive lesson
      if ("on".equals(archived))

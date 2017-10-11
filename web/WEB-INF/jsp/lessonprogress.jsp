@@ -211,7 +211,7 @@ collectionAttendance.each(function() {
                                     <input type="button" class="btn btn-xs btn-info" id="rellenar" value="Clear">
                                 </td>
                                 <td>
-                                    Step Objective
+                                    Work accomplished
                                 </td>
                             </tr>
                         </thead>
@@ -287,7 +287,7 @@ collectionAttendance.each(function() {
                                             });
                                             
                                             </script>
-                                        <div class="progress" id="${record.studentid}">
+                                        <div class="" id="${record.studentid}">
 <!--                                            <div class="progress-bar step1" role="progressbar" style="width:25%">
                                               1
                                             </div>
@@ -301,7 +301,7 @@ collectionAttendance.each(function() {
                                               4
                                             </div>-->
  
-  <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
+  <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="erase" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
                                           </div> 
                                     </td>
                                 </tr>
