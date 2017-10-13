@@ -134,6 +134,7 @@
                  <prop key="lessonprogress.htm">lessonprogress</prop>
                  <prop key="progressbystudent.htm">studentprog</prop>  
                  <prop key="progressdetails.htm">studentprog</prop>
+                 <prop key="progcal.htm">studentprog</prop>
                  <prop key="studentpage.htm">studentprog</prop> 
                  <prop key="studentpage_1.htm">studentprog</prop> 
                  <prop key="lessonresources.htm">resources</prop> 
@@ -144,7 +145,7 @@
                 <prop key="cerrarLogin.htm">cerrarLoginController</prop>
                 <prop key="lessonarchive.htm">archive</prop>
                 <prop key="testcomment.htm">testcomment</prop>
-                <prop key="calendar.htm">studentprog</prop>
+                
             </props>
         </property>
     </bean>

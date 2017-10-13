@@ -795,9 +795,9 @@ while(rs5.next())
     return mv;
     }
    
-     @RequestMapping("/calendar.htm")
-    public ModelAndView calendar(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-         ModelAndView mv = new ModelAndView("calendar");
+     @RequestMapping("/progcal.htm")
+    public ModelAndView progcal(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+         ModelAndView mv = new ModelAndView("progcal");
     try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());

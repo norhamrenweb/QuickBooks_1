@@ -478,9 +478,28 @@
         ajax.open("POST","savecomment.htm",true);
         ajax.send("");
   }
-  function showcalendar()
+  function showmierdacalendar()
     {
-      window.open("<c:url value="/calendar.htm?student=10101"/>"); 
+     $.ajax({
+                    type: 'POST',
+                        url: '<c:url value="/progcal.htm"/>',
+                      
+                        success: function(data) {                          
+                        var win = window.open('about:blank');
+                         with(win.document)
+                            {
+                              open();
+                              write(data);
+                              close();
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });    
   }
   function funcionCallBacksavecomment(){
         if (ajax.readyState===4){
@@ -753,7 +772,7 @@ $(function() {
             <input type="submit" class="btn btn-success" id="savecomment"  value="Save" onclick="savecomment()">
             </div>
         <div class="col-xs-12 text-center">
-            <input type="submit" class="btn btn-success" id="showcalendar"  value="View all comments" onclick="showcalendar()">
+            <input type="submit" class="btn btn-success" id="showcalendar"  value="View all comments" onclick="showmierdacalendar()">
             </div>
         <div id="confirmsave" class="modal fade" role="dialog">
   <div class="modal-dialog">
