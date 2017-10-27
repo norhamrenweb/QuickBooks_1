@@ -219,12 +219,14 @@ public class LessonsListControlador{
        while(rs.next())
        {
         Method m = new Method();
+        Objective o = new Objective();
        jsonObj.put("method",m.fetchName(rs.getInt("method_id"),hsr.getServletContext()));
        Timestamp date = rs.getTimestamp("date_created");
                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
                String dateStr = sdfDate.format(date);
        jsonObj.put("datecreated",dateStr);
        jsonObj.put("comment",rs.getString("comments"));
+       jsonObj.put("objective",o.fetchName(rs.getInt("objective_id"),hsr.getServletContext()));
        }
        consulta = "select name from content where id in (select content_id from lesson_content where lesson_id = "+id[0]+")";
        ResultSet rs1 = st.executeQuery(consulta);

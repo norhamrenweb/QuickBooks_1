@@ -320,7 +320,7 @@ input[type="radio"] .styled:checked + label::after {
     </head>
     <body>
         <div class="container">
-        <h1 class="text-center">Lessons Idea</h1>
+        <h1 class="text-center">Presentation Ideas</h1>
 
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
@@ -345,7 +345,7 @@ input[type="radio"] .styled:checked + label::after {
                 </div>
                 </div>
                 <div class="col-xs-12 center-block">
-                    <label class="control-label" for="findIdea">Find Lessons Idea</label>
+                    <label class="control-label" for="findIdea">Find Presentation Idea</label>
                     <input id="findIdea" class="form-group" type="text">
                 </div>
                 <div class="col-xs-12 center-block" id="tree">

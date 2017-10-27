@@ -17,7 +17,7 @@
     
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Presentations progress</title>
+        <title>Presentation progress</title>
         <script>
 
 
@@ -156,17 +156,17 @@ collectionAttendance.each(function() {
         
         
         <div class="container">
-            <h1 class="text-center">Lesson Progress</h1>
+            <h1 class="text-center">Presentation progress</h1>
 <p></p>
 
             <form:form id="formStudents" method ="post" action="saveRecords.htm" >
 
 
                 <fieldset>
-                    <legend>Lesson details</legend>
+                    <legend>Presentation details</legend>
 
                     <div class="col-xs-3 center-block">
-                        Lesson Name:  <label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
+                        Presentation Title:  <label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
                     </div>
 
                     <div class="col-xs-3 center-block">

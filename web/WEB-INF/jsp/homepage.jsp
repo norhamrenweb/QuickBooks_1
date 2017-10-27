@@ -96,6 +96,8 @@ var ajax;
                         $('#methodDetails').append('<tr><td>'+object.method+'</td></tr>');
                         $('#commentDetails').empty();
                         $('#commentDetails').append('<tr><td>'+object.comment+'</td></tr>');
+                        $('#objectivedetails').empty();
+                        $('#objectivedetails').append('<tr><td>'+object.objective+'</td></tr>');
                         $('#detailsLesson').modal('show');
 //                        });
 //                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
@@ -279,7 +281,7 @@ var ajax;
                     <thead>
                         <tr>
                             <td>id</td>
-                            <td>Lesson Name</td>
+                            <td>Presentation Title</td>
                             <td>Grade Level</td>
                             <td>Subject</td>
                             <td>Objective</td>
@@ -304,7 +306,7 @@ var ajax;
                             <td>
 
                                 <div class="sinpadding text-center">
-                                    <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Attendance">
+                                    <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Progress">
                                 </div>
                                 <div class="sinpadding text-center">
                                     <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
@@ -349,15 +351,21 @@ var ajax;
                 </div>
                 <div class="col-xs-6">
                     <div class="row title">
-                        Method
+                        Description
                     </div>
-                    <div class="row" id="methodDetails">
+                     <div class="row" id="commentDetails">
                         
                     </div>
                     <div class="row title">
-                        Lesson Description
+                        Objective   
                     </div>
-                    <div class="row" id="commentDetails">
+                    <div class="row" id ="objectivedetails">
+                       
+                    </div>
+                     <div class="row title">
+                        Method
+                    </div>
+                    <div class="row" id="methodDetails">
                         
                     </div>
                     <div class="row title">
@@ -368,12 +376,7 @@ var ajax;
                             
                         </ul>
                     </div>
-                    <div class="row title">
-                        Objective:   
-                    </div>
-                    <div class="row">
-                        Learn ryhtmes
-                    </div>
+                    
                 </div>
             </div>
         </div>
