@@ -207,7 +207,7 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
     @RequestMapping("/progressbystudent/subjectlistLevel.htm")
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
-        ModelAndView mv = new ModelAndView("studentpage");
+        ModelAndView mv = new ModelAndView("progressdetails");
         
         String[] levelid = new String[1];
          levelid= hsr.getParameterValues("seleccion1");
@@ -795,9 +795,10 @@ while(rs5.next())
     return mv;
     }
    
-     @RequestMapping("/calendar.htm")
-    public ModelAndView calendar(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-         ModelAndView mv = new ModelAndView("calendar");
+     @RequestMapping("/progcal.htm")
+     @ResponseBody
+    public ModelAndView progcal(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+         ModelAndView mv = new ModelAndView("progcal");
     try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
@@ -809,7 +810,8 @@ while(rs5.next())
         ex.printStackTrace(new PrintWriter(errors));
         log.error(ex+errors.toString());
     }
-    mv.addObject("message","works");
+//    mv.addObject("message","works");
+String message = "works";
     return mv;
     }
         public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException

@@ -178,9 +178,11 @@ public class ProgressControlador {
               record.setComment(rs3.getString("comment"));
               record.setComment_date(""+rs3.getDate("comment_date"));
               String steps = rs3.getString("step_id");
-              if(steps.equals("null") || steps.equals("")){
+              if(steps == null || steps == ""){
+             
                   record.setSteps("");
-              }
+              
+            }
               else{
               List<String> comma = Arrays.asList(steps.split(","));
               record.setSteps(""+comma.size());

@@ -244,8 +244,8 @@
                     treeField:'name',
                     columns:[[
                 {title:'Name',field:'name'},
-                {title:'No.of lessons planned',field:'noofplannedlessons'},
-                {title:'No.of lessons done',field:'noofarchivedlessons'},
+                {title:'No.of presentations planned',field:'noofplannedlessons'},
+                {title:'No.of presentations done',field:'noofarchivedlessons'},
                 {title:'Progress',field:'progress',formatter:formatProgress},
                 {title:'Final rating',field:'rating'}
         ]]
@@ -478,9 +478,10 @@
         ajax.open("POST","savecomment.htm",true);
         ajax.send("");
   }
-  function showcalendar()
+  function showmierdacalendar()
     {
-      window.open("<c:url value="/calendar.htm?student=10101"/>"); 
+ window.open("<c:url value="/progcal.htm"/>"); 
+
   }
   function funcionCallBacksavecomment(){
         if (ajax.readyState===4){
@@ -615,7 +616,7 @@ $(function() {
         
         <div class="container">
             <h1 class="text-center">Progress by Student</h1>
-        <form:form id="formStudents" method ="post" action="studentpage.htm?option=studentPage" >
+        <form:form id="formStudents" >
       
             <fieldset>
 <!--                    <legend>Select student</legend>-->
@@ -658,7 +659,7 @@ $(function() {
                         <div class="col-xs-12 text-center">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#demographic">Demographic</a></li>
-                                <li><a data-toggle="tab" href="#progress">Progress</a></li>
+                                <li><a data-toggle="tab" href="#progress">Objectives tracking</a></li>
                                 <li><a data-toggle="tab" href="#gradebook">Academic Progress</a></li>
                                 <li><a data-toggle="tab" href="#observations">Classroom Observation</a></li>
                             </ul>
@@ -748,12 +749,22 @@ $(function() {
                         <label class="control-label">Observation</label>
                         <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add comment" maxlength="200"></textarea>
                     </div>
+            <div class="col-xs-6 center-block form-group">
+                        <label class="control-label">Observation type</label>
+                        <select class="form-control" name="observationtype" id="observationtype" >
+                            <option value="Physical">Physical</option>
+                             <option value="Intellectual">Intellectual</option>
+                              <option value="Literacy">Literacy</option>
+                               <option value="Emotional">Emotional</option>
+                               <option value="Social">Social</option>
+                        </select>
+                    </div>
          </div>  
          <div class="col-xs-12 text-center">
             <input type="submit" class="btn btn-success" id="savecomment"  value="Save" onclick="savecomment()">
             </div>
         <div class="col-xs-12 text-center">
-            <input type="submit" class="btn btn-success" id="showcalendar"  value="View all comments" onclick="showcalendar()">
+            <button type='button' class='btn-unbutton' id="showcalendar"  value="View all comments" onclick="showmierdacalendar()">View all commentss</button>
             </div>
         <div id="confirmsave" class="modal fade" role="dialog">
   <div class="modal-dialog">
