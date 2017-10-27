@@ -138,13 +138,9 @@ $("#method").on('mouseover', 'option' , function(e) {
 //                        $('#country'+i).val(paso);
                         $('#tab_logic2').append("<tr>\n\
                         <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(i+1) +"</td>\n\
-                        <td>\n\
-                            <input id='"+item.id+"' name='"+item.name+"' value='"+item.name+"' type='text' placeholder='Pass' class='form-control input-md'>\n\
-                        </td>\n\
-\n\                     <td>\n\
-                           <a id='delete_row' class='pull-right btn btn-default' onclick='delstep2()'>Del</a>\n\
-                        </td>\n\
-                        </tr>");
+                        <td><input id='"+item.id+"' name='"+item.name+"' value='"+item.name+"' type='text' placeholder='Pass' class='form-control input-md'></td>\n\
+<td><button id='up_row' class='pull-right btn btn-default' onclick='upstep2()'><span class='glyphicon glyphicon-chevron-up'></span></button></td>\n\
+<td><button id='down_row' class='pull-right btn btn-default' onclick='upstep2()'><span class='glyphicon glyphicon-chevron-down'></span></button></td><td><button id='delete_row' class='pull-right btn btn-default' onclick='delstep2()'><span class='glyphicon glyphicon-remove'></span></button></td></tr>");
                     });
                 }
                 else
@@ -983,7 +979,69 @@ $("#method").on('mouseover', 'option' , function(e) {
             </fieldset>
             
         </div>
-       
+                <script>
+                    
+
+    var contador = 0;
+    var plantillaFila =
+     "<tr>" 
+       + "<td>$1</td>" 
+       + "<td><button class='subir'>&uarr;</button></td>"
+       + "<td><button class='bajar'>&darr;</button></td>"
+       + "<td><button class='eliminar'>-</button></td>" 
+     + "</tr>";
+
+    var fNuevo = function (data) {
+        contador++;
+        var filaNueva = 
+            $(plantillaFila.replace("$1", contador));
+        $("table").append(filaNueva);
+    };
+    var fMover = function () {
+        var $tr = $(this).parents("tr:first");
+        if ($(this).is(".subir")) {
+            $tr.insertBefore($tr.prev());
+        } else {
+            $tr.insertAfter($tr.next());
+        }
+    };
+    var fEliminar = function () {
+        $(this).parents("tr:first").remove();
+    };
+
+    $(document).ready(function () {
+
+        $(".nuevo").on("click", fNuevo);
+
+        $("table")
+            .on("click", ".subir", fMover)
+            .on("click", ".bajar", fMover)
+            .on("click", ".eliminar", fEliminar);
+    });
+
+                </script>
+        <div class="col-xs-12 text-center">
+            TABLA TEST<br>
+            <table>
+    <thead>
+        <tr>
+            <td>Nombre</td>
+            <td>Subir</td>
+            <td>Bajar</td>
+            <td>Eliminar</td>
+        </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4">
+                <button class="nuevo">+</button>
+            </td>
+        </tr>
+    </tfoot>
+  </table>
+                     
+        </div>
         <div id="modalConfirmeDeleteObjective">
             <!-- Modal -->
             <div class="modal fade" id="confirmedDeleteObjective" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
