@@ -17,6 +17,8 @@
     
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.css"/>"/>
         <title>Presentation progress</title>
         <script>
 
@@ -138,13 +140,23 @@ collectionAttendance.each(function() {
 });
         </script>
         <style>
-            textarea 
+            .textarea 
             {
             resize: none;
             width: 100%;
             }
-            rating 
-            {}
+            i.rating
+            {
+                 font-size: 20px;
+            }
+            i.rating-input
+            {
+                 height:30px;
+            }
+            .iconsAragon
+            {
+                 font-size: 50px;
+            }
 /*            .progress-bar
             {
                 background-image: linear-gradient(to bottom,#ddd 0,#ddd 100%);
@@ -287,7 +299,7 @@ collectionAttendance.each(function() {
                                             });
                                             
                                             </script>
-                                        <div class="" id="${record.studentid}">
+                                        <div class="rating" id="${record.studentid}">
 <!--                                            <div class="progress-bar step1" role="progressbar" style="width:25%">
                                               1
                                             </div>
@@ -301,8 +313,10 @@ collectionAttendance.each(function() {
                                               4
                                             </div>-->
  
-  <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="erase" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
-                                          </div> 
+  <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="remove" data-icon-lib="fa" data-active-icon="fa-heart" data-inactive-icon="fa-heart-o" data-clearable-icon="fa-trash-o" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
+  <br><input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="remove" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieDchSelect" data-inactive-icon="icon-Pie_PieDchUnSelect" data-clearable-icon="fa-trash-o" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
+                                        
+                                        </div> 
                                     </td>
                                 </tr>
                             </c:forEach>

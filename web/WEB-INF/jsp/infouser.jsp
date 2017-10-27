@@ -13,8 +13,12 @@
     <link rel="icon" type="image/png" href="<c:url value="/recursos/img/iconos/favicon.ico" />" >
     <link rel="apple-touch-icon" href="<c:url value="/recursos/img/iconos/favicon.ico"/>">
     <link rel="shortcut icon" href="<c:url value="/recursos/img/iconos/favicon.ico"/>">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat">   
-
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.ttf"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.svg"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.eot"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.wott"/>">
+    
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/style.css" />"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/menu-lateral.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap.min.css"/>"/>

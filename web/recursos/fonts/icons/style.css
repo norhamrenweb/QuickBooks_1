@@ -1,17 +1,17 @@
 @font-face {
-  font-family: 'iconsAragon';
-  src:  url('iconsAragon.eot?usdfpk');
-  src:  url('iconsAragon.eot?usdfpk#iefix') format('embedded-opentype'),
-    url('iconsAragon.ttf?usdfpk') format('truetype'),
-    url('iconsAragon.woff?usdfpk') format('woff'),
-    url('iconsAragon.svg?usdfpk#iconsAragon') format('svg');
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?usdfpk');
+  src:  url('fonts/icomoon.eot?usdfpk#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?usdfpk') format('truetype'),
+    url('fonts/icomoon.woff?usdfpk') format('woff'),
+    url('fonts/icomoon.svg?usdfpk#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'iconsAragon' !important;
+  font-family: 'icomoon' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
