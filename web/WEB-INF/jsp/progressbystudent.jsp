@@ -464,33 +464,59 @@
         ajax.send("");
         
     }
-    function savecomment()
+    function saveobservation()
     {
-        if (window.XMLHttpRequest) //mozilla
+        var observation = $("#observationcomments").val();
+        var date = $("#observationfecha").val();
+        var type = $("#observationtype :selected").text();
+        var studentId = $('#studentid').val();
+        if(observation === "" || date === "" || type === "" || studentId ==="" || type==="Select type" )
         {
-            ajax = new XMLHttpRequest(); //No Internet explorer
+         if(studentId ===""){
+             $('#error1').removeClass('hidden');
+         }   
+           else{
+               $('#error2').removeClass('hidden');
+           }
         }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        ajax.onreadystatechange = funcionCallBacksavecomment;
-        ajax.open("POST","savecomment.htm",true);
-        ajax.send("");
+        else{
+         var myObj = {};
+                myObj["observation"] = observation;
+                myObj["date"] = date;
+                myObj["type"] = type;
+                myObj["studentid"] = studentId;
+                var json = JSON.stringify(myObj);
+  $.ajax({
+                    type: 'POST',
+                        url: "savecomment.htm",
+                        data: json,
+                        datatype: "json",           
+                        contentType: "application/json",
+                        success: function(data) {                          
+                        $('#confirmsave').modal('show');
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });    
+                }
   }
   function showmierdacalendar()
     {
  window.open("<c:url value="/progcal.htm"/>"); 
 
   }
-  function funcionCallBacksavecomment(){
-        if (ajax.readyState===4){
-                if (ajax.status===200){
-                    
-                   $('#confirmsave').modal('show');
-                }
-        }
-        }
+//  function funcionCallBacksavecomment(){
+//        if (ajax.readyState===4){
+//                if (ajax.status===200){
+//                    
+//                   $('#confirmsave').modal('show');
+//                }
+//        }
+//        }
 $(function() {
     $('#subject').change(function() {
 //        $('#LoadTemplates').parent().attr("disabled",false);
@@ -738,7 +764,7 @@ $(function() {
                             <div class="form-group">
                                 <label class="control-label" for="fecha">Date</label>
                                 <div class='input-group date' id='fecha'>
-                                    <input type='text' name="TXTfecha" class="form-control" id="fecha"/>
+                                    <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -747,11 +773,12 @@ $(function() {
                         </div>
             <div class="col-xs-6 center-block form-group">
                         <label class="control-label">Observation</label>
-                        <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add comment" maxlength="200"></textarea>
+                        <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="200"></textarea>
                     </div>
             <div class="col-xs-6 center-block form-group">
                         <label class="control-label">Observation type</label>
                         <select class="form-control" name="observationtype" id="observationtype" >
+                            <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
                             <option value="Physical">Physical</option>
                              <option value="Intellectual">Intellectual</option>
                               <option value="Literacy">Literacy</option>
@@ -761,11 +788,19 @@ $(function() {
                     </div>
          </div>  
          <div class="col-xs-12 text-center">
-            <input type="submit" class="btn btn-success" id="savecomment"  value="Save" onclick="savecomment()">
+            <input type="submit" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">
             </div>
-        <div class="col-xs-12 text-center">
-            <button type='button' class='btn-unbutton' id="showcalendar"  value="View all comments" onclick="showmierdacalendar()">View all commentss</button>
-            </div>
+           <div class="col-xs-12 text-center hidden" id="error1">
+           <label>Please select a student first</label>
+           </div>
+          <div class="col-xs-12 text-center hidden" id="error2">
+           <label>Please make sure to fill all data</label>
+           </div>
+<!--        <div class="col-xs-12 text-center">
+            <button type='button' class='btn-unbutton' id="showcalendar"  value="View all 
+
+" onclick="showmierdacalendar()">View all comments</button>
+            </div>-->
         <div id="confirmsave" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -834,6 +869,8 @@ $(function() {
             </div>
         </div>
     </div>
+      
+      
 
 
     </body>

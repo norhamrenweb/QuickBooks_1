@@ -776,8 +776,9 @@ while(rs5.next())
 //        }
 //           return activesubjects;
 //       }
+    //classroom observations
     @RequestMapping("/progressbystudent/savecomment.htm")
-    public ModelAndView savecomment(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    public ModelAndView savecomment(@RequestBody Observation obs,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
          ModelAndView mv = new ModelAndView("progressbystudent");
     try{
         DriverManagerDataSource dataSource;
@@ -786,7 +787,7 @@ while(rs5.next())
         Statement st = this.cn.createStatement();
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-        st.executeUpdate("insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('"+user.getId()+"',now(),'hi','general','10101','2017-09-22')");
+        st.executeUpdate("insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('"+user.getId()+"',now(),'"+obs.getObservation()+"','"+obs.getType()+"','"+obs.getStudentid()+"','"+obs.getDate()+"')");
            }catch(SQLException ex){
         StringWriter errors = new StringWriter();
         ex.printStackTrace(new PrintWriter(errors));
