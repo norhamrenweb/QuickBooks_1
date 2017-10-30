@@ -313,8 +313,9 @@ collectionAttendance.each(function() {
                                               4
                                             </div>-->
  
-  <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="remove" data-icon-lib="fa" data-active-icon="fa-heart" data-inactive-icon="fa-heart-o" data-clearable-icon="fa-trash-o" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
-  <br><input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="remove" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieDchSelect" data-inactive-icon="icon-Pie_PieDchUnSelect" data-clearable-icon="fa-trash-o" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
+<%--  <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="remove" data-icon-lib="fa" data-active-icon="fa-heart" data-inactive-icon="fa-heart-o" data-clearable-icon="fa-trash-o" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
+  <br><input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="remove" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieDchSelect" data-inactive-icon="icon-Pie_PieDchUnSelect" data-clearable-icon="fa-trash-o" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />--%>
+<input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="remove" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}"/>
                                         
                                         </div> 
                                     </td>

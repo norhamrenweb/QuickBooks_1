@@ -178,9 +178,9 @@ public class ProgressControlador {
               record.setComment(rs3.getString("comment"));
               record.setComment_date(""+rs3.getDate("comment_date"));
               String steps = rs3.getString("step_id");
-              if(steps == null || steps == ""){
+              if(steps.equals("null")){
              
-                  record.setSteps("");
+                  record.setSteps("0");
               
             }
               else{
@@ -264,7 +264,7 @@ public class ProgressControlador {
     {   String step=null;
         // need to see if an objective does not have a steps how it will act, also if the user erased the steps done by
         // the student, need to update the DB
-        if(!steps[i].isEmpty() && !steps[i].equals("0")){
+        if(!steps[i].equals("0")){
              
             ArrayList<String> al2 = new ArrayList<String>(allsteps.subList(0,(Integer.parseInt(steps[i]))));
             StringBuilder rString = new StringBuilder();
@@ -302,6 +302,7 @@ public class ProgressControlador {
               }
               else{
                     if(ratingid != null){
+                        String test = "update progress_report set comment_date = now(),comment = '"+comments[i]+"',rating_id ='"+ratingid+"' ,lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false ,step_id = '"+step+"' where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'";
                 st.executeUpdate("update progress_report set comment_date = now(),comment = '"+comments[i]+"',rating_id ='"+ratingid+"' ,lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false ,step_id = '"+step+"' where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
                     }
                     else {

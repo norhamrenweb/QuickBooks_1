@@ -222,22 +222,23 @@
            if (ajax.readyState===4){
                
                 if (ajax.status===200){
-                    
-                    $('#divTableObjective').addClass('hidden');//to avoid having the general comments of the previous selected student
-                    $('#divNotObjective').addClass('hidden');
+                    //data
                     var json = JSON.parse(ajax.responseText);
                     var info = JSON.parse(json.info);
                     var subjects = JSON.parse(json.sub);
                     var prog = JSON.parse(json.prog);
-//                    var birthday = info.fecha_nacimiento,
-//                            separador = " ",
-//                            limite = 1, 
-//                            datebirthday = birthday.split(separador,limite);
-//                    
-//                    
-//                    
-//                    $('#BOD').text(datebirthday);
- $('#tg').treegrid({
+                    //first load the demographics
+                     $('#gradelevel').text(info.level_id);
+                    $('#nextlevel').text(info.nextlevel);
+                    $('#student').text(info.nombre_students);
+                    $('#studentid').val(info.id_students);
+                    if(typeof info.foto === 'undefined'){
+                        $('#foto').attr('src', '../recursos/img/NotPhoto.png');
+                    }else{
+                        $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/"+info.foto);
+                    }
+                    //load the objectives tracking tree
+                    $('#tg').treegrid({
 //                    view: myview,        
                     data:prog.children,
                     idField:'id',
@@ -251,20 +252,22 @@
         ]]
             
     });     
-                    $('#gradelevel').text(info.level_id);
-                    $('#nextlevel').text(info.nextlevel);
-                    $('#student').text(info.nombre_students);
-                    $('#studentid').val(info.id_students);
-                    if(typeof info.foto === 'undefined'){
-                        $('#foto').attr('src', '../recursos/img/NotPhoto.png');
-                    }else{
-                        $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/"+info.foto);
-                    }
-                    $('#subjects').empty();
-                     $.each(subjects, function(i, item) {
+                    //hide the objectives in case a previous student was selected
+                    $('#divTableObjective').addClass('hidden');//to avoid having the general comments of the previous selected student
+                    $('#divNotObjective').addClass('hidden');
+                    $('#subjects').empty();
+                    $.each(subjects, function(i, item) {
                          $('#subjects').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
                    });
-                  
+//                    var birthday = info.fecha_nacimiento,
+//                            separador = " ",
+//                            limite = 1, 
+//                            datebirthday = birthday.split(separador,limite);
+//                    
+//                    
+//                    
+//                    $('#BOD').text(datebirthday);
+
                   $('#loadingmessage').hide();  // hide the loading message.
                 }
             }
@@ -682,17 +685,17 @@ $(function() {
                             <span id="student"> </span>
                             <input type="hidden" id="studentid" name="studentid">
                         </div>
-                        <div class="col-xs-12 text-center">
+                        <div class="col-xs-12 text-center" id="myTab">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#demographic">Demographic</a></li>
-                                <li><a data-toggle="tab" href="#progress">Objectives tracking</a></li>
-                                <li><a data-toggle="tab" href="#gradebook">Academic Progress</a></li>
-                                <li><a data-toggle="tab" href="#observations">Classroom Observation</a></li>
+                                <li class="active"><a data-toggle="tab" href="#demographic" role="tab">Demographic</a></li>
+                                <li><a data-toggle="tab" href="#progress" role="tab">Objectives tracking</a></li>
+                                <li><a data-toggle="tab" href="#gradebook" role="tab">Academic Progress</a></li>
+                                <li><a data-toggle="tab" href="#observations" role="tab">Classroom Observation</a></li>
                             </ul>
                         </div>
                         <div class="tab-content">
                         
-                            <div class="col-xs-12 tab-pane fade in active" id="demographic">
+                            <div role="tabpanel" class="col-xs-12 tab-pane in active" id="demographic">
                                 <div class="col-xs-6 text-center containerPhoto">
                                     <div class="cell">
                                         <img id="foto" src="../recursos/img/NotPhoto.png" alt='img' width="200px;"/>
@@ -713,7 +716,7 @@ $(function() {
                                     </div>
                                 </div>
                             </div>
-                                   <div class="col-xs-12 tab-pane fade" id="progress">
+                                   <div role="tabpanel" class="col-xs-12 tab-pane" id="progress">
                                 
 <%--                                <div class="form-group" id="contenedorDetails">
                                 <div class="col-xs-3 form-group">
@@ -726,12 +729,12 @@ $(function() {
 
                                 </div>
                                 </div>--%>
-                         
+                         <div class="col-xs-12">
   
                             <table id="tg" class="easyui-treegrid"></table>
-                                
+                         </div>     
                             </div>
-                            <div class="col-xs-12 tab-pane fade" id="gradebook">
+                            <div role="tabpanel" class="col-xs-12 tab-pane" id="gradebook">
                                 <div class="col-xs-6" >
                                     <Label>Subject</Label>
                                     <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
@@ -756,8 +759,8 @@ $(function() {
                                     
                                 </div>
                             </div>
-                            <div class="col-xs-12 tab-pane fade" id="observations">
-                               <h2>Class Observations</h2>
+                            <div role="tabpanel" class="col-xs-12 tab-pane" id="observations">
+                               <h2>Enter a classroom observation</h2>
        
         <div id="contenedorDate">
                         <div class='col-xs-4'>
