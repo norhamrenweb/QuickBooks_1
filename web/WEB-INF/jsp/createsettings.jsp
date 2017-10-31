@@ -22,64 +22,47 @@
 $(document).ready(function(){
 
 
-  var i=1;
-  
-     $("#add_row").click(function(){
-         
-//      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input id='country"+i+"' name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
-//      var NameStep = $('input[id='+(i-1)+']').val();
-      var table = document.getElementById("tab_logic");
-        var rowCount = table.rows.length;
-//      $('#steps').append("<li id="+(rowCount+1)+">"+ NameStep +"</li>");
-//del step ,if the id is zero will not add to the del array or the updated array, always will be only in the new array,because it was a step that was added and removed while editing
-      $('#tab_logic').append("<tr>\n\
-                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(rowCount+1) +"</td>\n\
-                        <td>\n\
-                            <input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'>\n\
-                        </td>\n\
-\n\                     <td>\n\
-                          <a id='delete_row' class='pull-right btn btn-default' onclick='delstep()'>Del</a>\n\
-                        </td>\n\
-                        </tr>");
-//      i++; 
- });
- $("#add_row2").click(function(){
-         
-//      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input id='country"+i+"' name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
-//      var NameStep = $('input[id='+(i-1)+']').val();
-      var table = document.getElementById("tab_logic2");
-        var rowCount = table.rows.length;
-//      $('#steps').append("<li id="+(rowCount+1)+">"+ NameStep +"</li>");
-//del step ,if the id is zero will not add to the del array or the updated array, always will be only in the new array,because it was a step that was added and removed while editing
-      $('#tab_logic2').append("<tr>\n\
-                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(rowCount+1) +"</td>\n\
-                        <td>\n\
-                            <input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'>\n\
-                        </td>\n\
-\n\                     <td>\n\
-                          <a id='delete_row' class='pull-right btn btn-default' onclick='delstep2()'>Del</a>\n\
-                        </td>\n\
-                        </tr>");
-//      i++; 
- });
-//     $("#delstep").click(function(){
-//         var table = document.getElementById("tab_logic");
+//  var i=1;
+//  
+// $("#add_row").click(function(){
+//         
+////      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input id='country"+i+"' name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
+////      var NameStep = $('input[id='+(i-1)+']').val();
+//      var table = document.getElementById("tab_logic");
 //        var rowCount = table.rows.length;
-//         if(rowCount>1){
-//         $(""+(rowCount-1)).html('');
-////         $('#steps li#'+i+'').remove();
-////         i--;
-//         }
-//     });
-//     $("#delstep2").click(function(){
-//         var table = document.getElementById("tab_logic2");
+////      $('#steps').append("<li id="+(rowCount+1)+">"+ NameStep +"</li>");
+////del step ,if the id is zero will not add to the del array or the updated array, always will be only in the new array,because it was a step that was added and removed while editing
+//      $('#tab_logic').append("<tr>\n\
+//                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(rowCount+1) +"</td>\n\
+//                        <td>\n\
+//                            <input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'>\n\
+//                        </td>\n\
+//\n\                     <td>\n\
+//                          <a id='delete_row' class='pull-right btn btn-default' onclick='delstep()'>Del</a>\n\
+//                        </td>\n\
+//                        </tr>");
+////      i++; 
+// });
+// $("#add_row2").click(function(){
+//         
+////      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input id='country"+i+"' name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
+////      var NameStep = $('input[id='+(i-1)+']').val();
+//      var table = document.getElementById("tab_logic2");
 //        var rowCount = table.rows.length;
-//         if(rowCount>1){
-//         $(""+(rowCount-1)).html('');
-////         $('#steps li#'+i+'').remove();
-////         i--;
-//         }
-//     });
+////      $('#steps').append("<li id="+(rowCount+1)+">"+ NameStep +"</li>");
+////del step ,if the id is zero will not add to the del array or the updated array, always will be only in the new array,because it was a step that was added and removed while editing
+//      $('#tab_logic2').append("<tr>\n\
+//                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(rowCount+1) +"</td>\n\
+//                        <td>\n\
+//                            <input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'>\n\
+//                        </td>\n\
+//\n\                     <td>\n\
+//                          <a id='delete_row' class='pull-right btn btn-default' onclick='delstep2()'>Del</a>\n\
+//                        </td>\n\
+//                        </tr>");
+////      i++; 
+// });
+
 
 $("#method").on('mouseover', 'option' , function(e) {
     
@@ -109,50 +92,50 @@ $("#method").on('mouseover', 'option' , function(e) {
             var objectiveValue = $('#objective').select("selected").val();
             var contentValue = $('#content').select("selected").val();
             var editValue = $('#method').select("selected").val();
-            function delstep(){
-                 var table = document.getElementById("tab_logic");
-       var rowCount = table.rows.length;
-         if(rowCount>1)
-         {
-      $("#tab_logic tr:eq("+(rowCount-1)+")").html('');
-        }
-            }
-              function delstep2(){
-                 var table = document.getElementById("tab_logic2");
-       var rowCount = table.rows.length;
-         if(rowCount>1)
-         {
-             $("#tab_logic2 tr:eq("+(rowCount-1)+")").html('');
-        }
-            }
-            function stepsEdit()
-            {
-                
-                $('#editsteps').modal('show');
-                
-                if($('#steps').children().length !== 0)
-                {
-                    $('#tab_logic2').empty();
-                    $.each(steps, function(i, item){
-                        //var paso = $('#step'+item.name).text();
-//                        $('#country'+i).val(paso);
-                        $('#tab_logic2').append("<tr>\n\
-                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(i+1) +"</td>\n\
-                        <td><input id='"+item.id+"' name='"+item.name+"' value='"+item.name+"' type='text' placeholder='Pass' class='form-control input-md'></td>\n\
-<td><button id='up_row' class='pull-right btn btn-default' onclick='upstep2()'><span class='glyphicon glyphicon-chevron-up'></span></button></td>\n\
-<td><button id='down_row' class='pull-right btn btn-default' onclick='upstep2()'><span class='glyphicon glyphicon-chevron-down'></span></button></td><td><button id='delete_row' class='pull-right btn btn-default' onclick='delstep2()'><span class='glyphicon glyphicon-remove'></span></button></td></tr>");
-                    });
-                }
-                else
-                {
-                    alert('No tiene pasos');
-                }
-            }
-            function stepsAdd()
-            {
-                
-                $('#addsteps').modal('show');
-            }
+//            function delstep(){
+//                 var table = document.getElementById("tab_logic");
+//       var rowCount = table.rows.length;
+//         if(rowCount>1)
+//         {
+//      $("#tab_logic tr:eq("+(rowCount-1)+")").html('');
+//        }
+//            }
+//            function delstep2(){
+//                 var table = document.getElementById("tab_logic2");
+//       var rowCount = table.rows.length;
+//         if(rowCount>1)
+//         {
+//             $("#tab_logic2 tr:eq("+(rowCount-1)+")").html('');
+//        }
+//            }
+//            function stepsEdit()
+//            {
+//                
+//                $('#editsteps').modal('show');
+//                
+//                if($('#steps').children().length !== 0)
+//                {
+//                    $('#tab_logic2').empty();
+//                    $.each(steps, function(i, item){
+//                        //var paso = $('#step'+item.name).text();
+////                        $('#country'+i).val(paso);
+//                        $('#tab_logic2').append("<tr>\n\
+//                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(i+1) +"</td>\n\
+//                        <td><input id='"+item.id+"' name='"+item.name+"' value='"+item.name+"' type='text' placeholder='Pass' class='form-control input-md'></td>\n\
+//<td><button id='up_row' class='pull-right btn btn-default' onclick='upstep2()'><span class='glyphicon glyphicon-chevron-up'></span></button></td>\n\
+//<td><button id='down_row' class='pull-right btn btn-default' onclick='upstep2()'><span class='glyphicon glyphicon-chevron-down'></span></button></td><td><button id='delete_row' class='pull-right btn btn-default' onclick='delstep2()'><span class='glyphicon glyphicon-remove'></span></button></td></tr>");
+//                    });
+//                }
+//                else
+//                {
+//                    alert('No tiene pasos');
+//                }
+//            }
+//            function stepsAdd()
+//            {
+//                
+//                $('#addsteps').modal('show');
+//            }
             
             function funcionCallBackSubject()
             {
@@ -979,67 +962,9 @@ $("#method").on('mouseover', 'option' , function(e) {
             </fieldset>
             
         </div>
-                <script>
-                    
-
-    var contador = 0;
-    var plantillaFila =
-     "<tr>" 
-       + "<td>$1</td>" 
-       + "<td><button class='subir'>&uarr;</button></td>"
-       + "<td><button class='bajar'>&darr;</button></td>"
-       + "<td><button class='eliminar'>-</button></td>" 
-     + "</tr>";
-
-    var fNuevo = function (data) {
-        contador++;
-        var filaNueva = 
-            $(plantillaFila.replace("$1", contador));
-        $("table").append(filaNueva);
-    };
-    var fMover = function () {
-        var $tr = $(this).parents("tr:first");
-        if ($(this).is(".subir")) {
-            $tr.insertBefore($tr.prev());
-        } else {
-            $tr.insertAfter($tr.next());
-        }
-    };
-    var fEliminar = function () {
-        $(this).parents("tr:first").remove();
-    };
-
-    $(document).ready(function () {
-
-        $(".nuevo").on("click", fNuevo);
-
-        $("table")
-            .on("click", ".subir", fMover)
-            .on("click", ".bajar", fMover)
-            .on("click", ".eliminar", fEliminar);
-    });
-
-                </script>
+               
         <div class="col-xs-12 text-center">
-            TABLA TEST<br>
-            <table>
-    <thead>
-        <tr>
-            <td>Nombre</td>
-            <td>Subir</td>
-            <td>Bajar</td>
-            <td>Eliminar</td>
-        </tr>
-    </thead>
-    <tbody></tbody>
-    <tfoot>
-        <tr>
-            <td colspan="4">
-                <button class="nuevo">+</button>
-            </td>
-        </tr>
-    </tfoot>
-  </table>
+            
                      
         </div>
         <div id="modalConfirmeDeleteObjective">
@@ -1167,6 +1092,145 @@ $("#method").on('mouseover', 'option' , function(e) {
                 </div>
             </div>
         </div>
+         <script>
+                    
+                    
+        $(document).ready(function(){
+
+
+  var i=1;
+  
+ $("#add_row").click(function(){
+         
+//      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input id='country"+i+"' name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
+//      var NameStep = $('input[id='+(i-1)+']').val();
+      var table = document.getElementById("tab_logic");
+        var rowCount = table.rows.length;
+//      $('#steps').append("<li id="+(rowCount+1)+">"+ NameStep +"</li>");
+//del step ,if the id is zero will not add to the del array or the updated array, always will be only in the new array,because it was a step that was added and removed while editing
+      $('#tab_logic').append("<tr>\n\
+                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(rowCount+1) +"</td>\n\
+                        <td>\n\
+                            <input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'>\n\
+                        </td>\n\
+\n\                     <td>\n\
+                          <a id='delete_row' class='pull-right btn btn-default' onclick='delstep()'>Del</a>\n\
+                        </td>\n\
+                        </tr>");
+//      i++; 
+ });
+ $("#add_row2").click(function(){
+         
+//      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input id='country"+i+"' name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
+//      var NameStep = $('input[id='+(i-1)+']').val();
+      var table = document.getElementById("tab_logic2");
+        var rowCount = table.rows.length;
+//      $('#steps').append("<li id="+(rowCount+1)+">"+ NameStep +"</li>");
+//del step ,if the id is zero will not add to the del array or the updated array, always will be only in the new array,because it was a step that was added and removed while editing
+      $('#tab_logic2').append("<tr>\n\
+                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(rowCount+1) +"</td>\n\
+                        <td>\n\
+                            <input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'>\n\
+                        </td>\n\
+\n\                     <td>\n\
+                          <a id='delete_row' class='pull-right btn btn-default' onclick='delstep2()'>Del</a>\n\
+                        </td>\n\
+                        </tr>");
+//      i++; 
+ });
+
+
+
+});
+                function delstep(){
+                 var table = document.getElementById("tab_logic");
+       var rowCount = table.rows.length;
+         if(rowCount>1)
+         {
+      $("#tab_logic tr:eq("+(rowCount-1)+")").html('');
+        }
+            }
+//            function delstep2(){
+//                 var row = $(this).parent().parent();
+//       var rowCount = table.rows.length;
+//         if(rowCount>1)
+//         {
+//             $("#tab_logic2 tr:eq("+(rowCount-1)+")").html('');
+//        }
+//            }
+            function stepsEdit()
+            {
+                
+                $('#editsteps').modal('show');
+                
+                if($('#steps').children().length !== 0)
+                {
+                    $('#tab_logic2').empty();
+                    $.each(steps, function(i, item){
+                        //var paso = $('#step'+item.name).text();
+//                        $('#country'+i).val(paso);
+                        $('#tab_logic2').append("<tr>\n\
+                        <td class='text-center' style='width:10%;'>"+(i+1) +"</td>\n\
+                        <td style='width:75%;'><input id='"+item.id+"' name='"+item.name+"' value='"+item.name+"' type='text' placeholder='Pass' class='form-control input-md'></td>\n\
+<td class='text-center' style='width:5%;'><button id='up_row' class='btn btn-default subir'><span class='glyphicon glyphicon-chevron-up'></span></button></td>\n\
+<td class='text-center' style='width:5%;'><button id='down_row' class='btn btn-default bajar'><span class='glyphicon glyphicon-chevron-down'></span></button></td>\n\
+<td class='text-center' style='width:5%;'><button id='delete_row' class='btn btn-default eliminar' ><span class='glyphicon glyphicon-remove'></span></button></td></tr>");
+                    });
+                }
+                else
+                {
+                    alert('No tiene pasos');
+                }
+            }
+            function stepsAdd()
+            {
+                
+                $('#addsteps').modal('show');
+            }
+            
+            
+
+
+
+    var fNuevo = function (data) {
+        $("table").append(filaNueva);
+    };
+    var fMover = function () {
+        var $tr = $(this).parents("tr:first");
+        var $td = $(this).parents().parents().children("td:first");
+        if ($(this).is(".subir")) {
+            $tr.insertBefore($tr.prev());
+            $('td:first-child').each(function() {
+                $(this).html($(this).parent().index()+1);
+            });
+        } else {
+            $tr.insertAfter($tr.next());
+            $('td:first-child').each(function() {
+                $(this).html($(this).parent().index()+1);
+            });
+        }
+    };
+    var fEliminar = function () {
+        var $tr = $(this).parents("tr:first");
+        $tr.remove();
+         $('td:first-child').each(function() {
+                $(this).html($(this).parent().index()+1);
+            });
+    };
+
+
+    $(document).ready(function () {
+
+        $(".nuevo").on("click", fNuevo);
+
+        $("table")
+            .on("click", ".subir", fMover)
+            .on("click", ".bajar", fMover)
+            .on("click", ".eliminar", fEliminar)
+    });
+
+                </script>        
+                
         <div id="addsteps" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
 
@@ -1179,7 +1243,8 @@ $("#method").on('mouseover', 'option' , function(e) {
               <div class="modal-body">
                   <div class="container-fluid">
                   <div class="col-xs-12">
-                      <table class="table table-bordered table-hover" id="tab_logic">
+              
+                     <table class="table table-bordered table-hover" id="tab_logic">
                         <tbody>
                         </tbody>
                     </table>
@@ -1193,7 +1258,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 </div>
             </div>
         </div>
-                <div id="editsteps" class="modal fade" role="dialog">
+        <div id="editsteps" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
 
             <!-- Modal content-->
@@ -1204,8 +1269,9 @@ $("#method").on('mouseover', 'option' , function(e) {
               </div>
               <div class="modal-body">
                   <div class="container-fluid">
+                      
                   <div class="col-xs-12">
-                      <table class="table table-bordered table-hover" id="tab_logic2">
+                      <table class="table table-bordered" id="tab_logic2">
                         <tbody>
 <!--                        <tr id='addr0'>
                                 <td class="text-center" style="width: 20%; vertical-align: middle;">
