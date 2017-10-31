@@ -178,8 +178,12 @@ public class ProgressControlador {
               record.setComment(rs3.getString("comment"));
               record.setComment_date(""+rs3.getDate("comment_date"));
               String steps = rs3.getString("step_id");
-              if(steps.equals("null")){
-             
+              if(rs3.wasNull())
+              {
+                  record.setSteps("0");
+              }
+              else if(steps.isEmpty()||steps.equals("null") || steps == null || steps.equals(""))
+                      {            
                   record.setSteps("0");
               
             }
