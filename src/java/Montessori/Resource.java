@@ -14,6 +14,7 @@ public class Resource {
     private String name;
     private String link;
     private String type;
+    private String lesson_id;
 
     public String getType() {
         return type;

@@ -184,6 +184,57 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.send("");
     }
     
+     function saveEditMethod(){
+        
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+        var nameResource = $('#editNameMethod').val();
+        var linkResource = $('#editNameMethod').val();
+        var type = "link";
+        var lessonId =  $('#lessonid').val();
+        
+        var myObj = {};
+                myObj["name"] = nameResource;
+                myObj["link"] = linkResource;
+                myObj["type"] = type;
+                myObj[""]
+                var json = JSON.stringify(myObj);
+        $.ajax({
+                    type: 'POST',
+                        url: 'addResources.htm',
+                        data: json,
+                         datatype:"json",
+                        contentType: "application/json",           
+                     
+                        success: function(data) {                          
+                          var j = JSON.parse(data);
+                          var mensaje = j.message;
+                    if( mensaje === "Resource successfully updated"){
+                        $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                        
+                    }else{
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                    }           
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });
+        
+     }
      function funcionCallBackSubject()
     {
            if (ajax.readyState===4){
@@ -491,9 +542,11 @@ input[type="radio"] .styled:checked + label::after {
         </style>
     </head>
     <body>
+        <input type="hidden" id="lessonid" name="lessonid" value ="${lessonId}">
         <div class="container">
         <h1 class="text-center">Presentation Resources</h1>
             <fieldset>
+                
                 <legend id="showPropiertys">
                     External links and videos
                     <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
