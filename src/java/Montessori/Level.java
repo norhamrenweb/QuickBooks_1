@@ -54,8 +54,8 @@ public class Level {
     { String levelName = null ;
         try {
              DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
-        this.cn = dataSource.getConnection();
+            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
+            this.cn = dataSource.getConnection();
              Statement st = this.cn.createStatement();
              
             String consulta = "SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels where GradeLevelID = "+id;

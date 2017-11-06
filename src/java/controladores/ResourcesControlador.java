@@ -80,6 +80,7 @@ public class ResourcesControlador {
         
         mv.addObject("files",filersrcs);
         mv.addObject("others",otherrsrcs);
+        mv.addObject("lessonId",lessonid);
        }catch(SQLException ex){
            StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
