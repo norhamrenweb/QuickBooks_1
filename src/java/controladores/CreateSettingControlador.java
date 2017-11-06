@@ -64,7 +64,8 @@ public class CreateSettingControlador{
     }
     @RequestMapping("/createsetting/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createsettings");
        try{
         DriverManagerDataSource dataSource;
@@ -119,24 +120,22 @@ public class CreateSettingControlador{
    @RequestMapping("/createsetting/subjectlistLevel.htm")
    
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createsettings");
         List<Subject> subjects = new ArrayList<>();
         List<Subject> activesubjects = new ArrayList<>();
-       try {
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-        
-            
-             Statement st = this.cn.createStatement();
-             String[] levelid = new String[1];
+        try {
+            DriverManagerDataSource dataSource;
             dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-             this.cn = dataSource.getConnection();
-             st = this.cn.createStatement();
-             levelid= hsr.getParameterValues("seleccion1");
-          ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
+            this.cn = dataSource.getConnection();
+            Statement st = this.cn.createStatement();
+            String[] levelid = new String[1];
+            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+            st = this.cn.createStatement();
+            levelid= hsr.getParameterValues("seleccion1");
+            ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
 //           Subject s = new Subject();
 //          s.setName("Select Subject");
 //          subjects.add(s);
@@ -180,7 +179,8 @@ public class CreateSettingControlador{
     }
     @RequestMapping("/createsetting/objectivelistSubject.htm")
     public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+     if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
      ModelAndView mv = new ModelAndView("createsettings");
         List<Objective> objectives = new ArrayList<>();
        try {
@@ -230,7 +230,6 @@ public class CreateSettingControlador{
     @RequestMapping(value="/createsetting/contentlistObjective.htm")
     @ResponseBody
     public String contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
 //       ModelAndView mv = new ModelAndView("createsettings");
        List<Content> contents = new ArrayList<>();
 

@@ -75,12 +75,12 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
          else{
          scgrpid=login.getSecurityGroupID("MontesoriTest");
          result = login.fromGroup(scgrpid, user.getId());
-         if (result == true){
-        ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
-     String  message = "welcome user";
-       session.setAttribute("user", user);
-        mv.addObject("message", message);
-        return mv;
+        if (result == true){
+            ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
+            String  message = "welcome user";
+            session.setAttribute("user", user);
+            mv.addObject("message", message);
+            return mv;
         }
       
          else{

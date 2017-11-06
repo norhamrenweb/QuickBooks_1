@@ -74,7 +74,8 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
     // loads the levels
     @RequestMapping("/progressbystudent/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("progressbystudent");
         List <Level> grades = new ArrayList();
        try{
@@ -206,7 +207,8 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
     //loads list of subjects based on selected level
     @RequestMapping("/progressbystudent/subjectlistLevel.htm")
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("progressdetails");
         
         String[] levelid = new String[1];
@@ -268,6 +270,8 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
     @ResponseBody
     public ModelAndView progressdetails(@RequestBody DBRecords d, HttpServletRequest hsr, HttpServletResponse hsr1, Model model) throws Exception
     {
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
          ModelAndView mv = new ModelAndView("progressdetails");
             Objective o = new Objective();
             //     String[] hi = hsr.getParameterValues("data");
@@ -779,7 +783,9 @@ while(rs5.next())
     //classroom observations
     @RequestMapping("/progressbystudent/savecomment.htm")
     public ModelAndView savecomment(@RequestBody Observation obs,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-         ModelAndView mv = new ModelAndView("progressbystudent");
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        ModelAndView mv = new ModelAndView("progressbystudent");
     try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -799,7 +805,9 @@ while(rs5.next())
      @RequestMapping("/progcal.htm")
      @ResponseBody
     public ModelAndView progcal(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-         ModelAndView mv = new ModelAndView("progcal");
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        ModelAndView mv = new ModelAndView("progcal");
     try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());

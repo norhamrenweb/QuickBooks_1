@@ -65,7 +65,9 @@ public class SOWTreeControlador {
     }
     @RequestMapping("/sowdisplay/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-    ModelAndView mv = new ModelAndView("sowdisplay");
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        ModelAndView mv = new ModelAndView("sowdisplay");
     try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());

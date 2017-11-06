@@ -80,14 +80,14 @@
       $('#tree').children().children().children('a').children('i').removeClass('jstree-checkbox');
     }, 250); 
       //BUSCADOR LESSONS IDEA          
-//var to = false;
-//  $('#findIdea').keyup(function () {
-//    if(to) { clearTimeout(to); }
-//    to = setTimeout(function () {
-//      var v = $('#findIdea').val();
-//      $('#tree').jstree(true).search(v);
-//    }, 250);
-//  }); 
+var to = false;
+  $('#findIdea').keyup(function () {
+    if(to) { clearTimeout(to); }
+    to = setTimeout(function () {
+      var v = $('#findIdea').val();
+      $('#tree').jstree(true).search(v);
+    }, 250);
+  }); 
 
                     }
                 }
@@ -323,8 +323,6 @@ input[type="radio"] .styled:checked + label::after {
         <h1 class="text-center">Presentation Ideas</h1>
 
         
-        <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
-
 <!--                <legend id="showDetails">
                     Presentation details
                     <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
@@ -374,9 +372,6 @@ input[type="radio"] .styled:checked + label::after {
                             <button type="button"  class="btn btn-danger" onclick="delttree()" id="delIdea" disabled="true">Delete</button>
                         </div>
                 </div>
-                    
-        </form:form>
-        
         </div>
 <div class="modal fade" id="deleteLessonIdea" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">

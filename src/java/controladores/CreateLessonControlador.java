@@ -62,7 +62,8 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
     }
     @RequestMapping("/createlesson/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createlesson");
         try{
        List <Lessons> ideas = new ArrayList();
@@ -129,7 +130,8 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
     
     @RequestMapping("/createlesson/startIdea.htm")
     public ModelAndView startIdea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonidea");
         try{
        List <Lessons> ideas = new ArrayList();
@@ -194,7 +196,8 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
     
 @RequestMapping("/createlesson/studentlistLevel.htm")
     public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createlesson");
        
          DriverManagerDataSource dataSource;
@@ -216,7 +219,8 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
     }
     @RequestMapping("/createlesson/subjectlistLevel.htm")
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createlesson");
         
        try {
@@ -241,7 +245,8 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
     }
         @RequestMapping("/createlesson/objectivelistSubject.htm")
     public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createlesson");
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -254,7 +259,8 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
     }
     @RequestMapping("/createlesson/contentlistObjective.htm")
     public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createlesson");
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -345,6 +351,8 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
     }
      @RequestMapping("/createlesson/createlesson.htm")
      public ModelAndView createlesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         String message = new String();    
         try{
        HttpSession sesion = hsr.getSession();
@@ -421,6 +429,8 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
      @RequestMapping("/createlesson/namelistSubject.htm")
      public ModelAndView namelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
      {
+      if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
      ModelAndView mv = new ModelAndView("createlesson");
      List<Lessons> lessons = new ArrayList<>();
      
@@ -464,7 +474,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
      @RequestMapping("/createlesson/copyfromIdea.htm")
      @ResponseBody
          public String copyfromIdea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
-         {
+         {              
              ModelAndView mv = new ModelAndView("createlesson");
              JSONObject json = new JSONObject();
              String[] lessonplanid = hsr.getParameterValues("seleccionidea");

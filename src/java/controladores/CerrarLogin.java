@@ -26,7 +26,7 @@ public class CerrarLogin {
     public ModelAndView cerrarLogin(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
             ModelAndView mv =  new ModelAndView("redirect:/userform.htm?opcion=inicio");
             
-            HttpSession sesion = hsr.getSession();
+            HttpSession sesion = hsr.getSession(false);
             
             sesion.invalidate();
             

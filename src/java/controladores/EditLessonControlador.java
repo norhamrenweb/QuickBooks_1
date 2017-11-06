@@ -61,10 +61,15 @@ public class EditLessonControlador {
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
+    
+    
     @RequestMapping("/editlesson/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
        ModelAndView mv = new ModelAndView("editlesson");
-       try{
+      if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+      
+    try{
        Lessons data = new Lessons();
        Level l = new Level();
        ArrayList<Content> c = new ArrayList<>();
@@ -403,7 +408,8 @@ public class EditLessonControlador {
     }
          @RequestMapping("/editlesson/studentlistLevel.htm")
              public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("editlesson");
        
          DriverManagerDataSource dataSource;
@@ -419,7 +425,8 @@ public class EditLessonControlador {
     }
     @RequestMapping("/editlesson/subjectlistLevel.htm")
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("editlesson");
         
        try {
@@ -444,7 +451,8 @@ public class EditLessonControlador {
     }
         @RequestMapping("/editlesson/objectivelistSubject.htm")
     public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("editlesson");
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -455,7 +463,8 @@ public class EditLessonControlador {
     }
     @RequestMapping("/editlesson/contentlistObjective.htm")
     public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("editlesson");
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -467,6 +476,8 @@ public class EditLessonControlador {
     }
     @RequestMapping("/editlesson/save.htm")
     public ModelAndView save(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         Lessons newlesson = new Lessons();  
         try{
       String id = hsr.getParameter("id");

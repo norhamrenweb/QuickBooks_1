@@ -48,7 +48,8 @@ public class LessonArchiveControlador{
     }
    @RequestMapping("/lessonarchive/loadLessons.htm")
     public ModelAndView loadLessons(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonarchive");
        
         DriverManagerDataSource dataSource;

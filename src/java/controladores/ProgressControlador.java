@@ -53,7 +53,8 @@ public class ProgressControlador {
    
     @RequestMapping("/lessonprogress/loadRecords.htm")
     public ModelAndView loadRecords(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonprogress");
         List<Students> instructors = new ArrayList<>();
 //        String disable = hsr.getParameter("disable");
@@ -220,7 +221,8 @@ public class ProgressControlador {
     }
     @RequestMapping("/lessonprogress/saveRecords.htm")
     public ModelAndView saveRecords(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         String message="Records successfully saved"; 
        
         String[]lessonid=hsr.getParameterValues("TXTlessonid");
@@ -262,22 +264,21 @@ public class ProgressControlador {
 //                 allsteps.add(s);
                 allsteps.add(""+rs2.getInt("id"));
              }
-   
+                
      for(int i=0;i<studentids.length;i++)
          
-    {   
-        String step="";
+    {   String step=null;
         // need to see if an objective does not have a steps how it will act, also if the user erased the steps done by
         // the student, need to update the DB
-        if(allsteps.size()!= 0 && !steps[i].equals("0") ){
-            
+        if(!steps[i].equals("0")){
+             
             ArrayList<String> al2 = new ArrayList<String>(allsteps.subList(0,(Integer.parseInt(steps[i]))));
             StringBuilder rString = new StringBuilder();
            
             String sep = ",";
             for (String each : al2) {
                 rString.append(each).append(sep);
-            }
+}
             step = rString.toString();
             step = step.substring(0, step.length()-1);
         }

@@ -49,7 +49,8 @@ public class ResourcesControlador {
     }
    @RequestMapping("/lessonresources/loadResources.htm")
     public ModelAndView loadResources(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonresources");
        try{
         DriverManagerDataSource dataSource;
@@ -80,7 +81,6 @@ public class ResourcesControlador {
         
         mv.addObject("files",filersrcs);
         mv.addObject("others",otherrsrcs);
-        mv.addObject("lessonId",lessonid);
        }catch(SQLException ex){
            StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
@@ -91,7 +91,8 @@ public class ResourcesControlador {
     
    @RequestMapping("/lessonresources/addResources.htm")
     public ModelAndView addResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonresources");
         try{
         DriverManagerDataSource dataSource;
@@ -110,7 +111,8 @@ public class ResourcesControlador {
     }
     @RequestMapping("/lessonresources/updateResources.htm")
     public ModelAndView updateResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonresources");
         try{
         DriverManagerDataSource dataSource;
@@ -129,7 +131,8 @@ public class ResourcesControlador {
     }
     @RequestMapping("/lessonresources/delResources.htm")
     public ModelAndView delResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonresources");
         try{
         DriverManagerDataSource dataSource;

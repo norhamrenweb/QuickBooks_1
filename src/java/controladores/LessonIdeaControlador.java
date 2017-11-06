@@ -65,7 +65,9 @@ public class LessonIdeaControlador {
     }
     @RequestMapping("/lessonidea/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-    ModelAndView mv = new ModelAndView("lessonidea");
+        if((new SessionCheck()).checkSession(hsr))
+               return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        ModelAndView mv = new ModelAndView("lessonidea");
     try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
@@ -218,11 +220,13 @@ public class LessonIdeaControlador {
      @RequestMapping("/editlessonidea.htm")
     public ModelAndView editlessonidea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     { 
-       ModelAndView mv = new ModelAndView("editlessonidea");
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        ModelAndView mv = new ModelAndView("editlessonidea");
         String lessonid = hsr.getParameter("LessonsSelected");
         Lessons data = new Lessons();
-       Level l = new Level();
-       ArrayList<Content> c = new ArrayList<>();
+        Level l = new Level();
+        ArrayList<Content> c = new ArrayList<>();
     //   ArrayList<Students> stud = new ArrayList<>();
         Objective o = new Objective();
         Subject s = new Subject();
@@ -331,7 +335,7 @@ public class LessonIdeaControlador {
       @ResponseBody
     public String deletetree(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
     { 
-       ModelAndView mv = new ModelAndView("redirect:/lessonidea/start.htm");
+        ModelAndView mv = new ModelAndView("redirect:/lessonidea/start.htm");
         String lessonid = hsr.getParameter("selected");
         JSONObject jsonObj = new JSONObject();
         try{
@@ -462,6 +466,8 @@ public class LessonIdeaControlador {
    @RequestMapping("/savelessonidea.htm")
     public ModelAndView savelessonidea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception  
     {
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         String id = hsr.getParameter("lessonid");
         String message = "Idea Updated";
         ModelAndView mv = new ModelAndView("redirect:/editlessonidea.htm?LessonsSelected="+id,"message",message);
@@ -517,7 +523,8 @@ public class LessonIdeaControlador {
     }
      @RequestMapping("/editlessonidea/subjectlistLevel.htm")
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("editlessonidea");
         
        try {
@@ -542,7 +549,8 @@ public class LessonIdeaControlador {
     }
         @RequestMapping("/editlessonidea/objectivelistSubject.htm")
     public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("editlessonidea");
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -555,7 +563,8 @@ public class LessonIdeaControlador {
     }
     @RequestMapping("/editlessonidea/contentlistObjective.htm")
     public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("editlessonidea");
          DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());

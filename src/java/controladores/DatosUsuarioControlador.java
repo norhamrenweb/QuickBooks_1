@@ -26,7 +26,6 @@ public class DatosUsuarioControlador implements Controller
     @Override
   public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
- 
         try {
             RequestContextUtils.getLocaleResolver(request).setLocale(request, response, new Locale(request.getParameter("lenguaje")));
         } catch (Exception ex) {

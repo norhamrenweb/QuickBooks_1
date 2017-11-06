@@ -19,10 +19,9 @@ public class Content {
     
     private String[] id;
     private String name;
-    private String description;
-    private Objective obj;
-    Connection cn;
-    
+private String description;
+private Objective obj;
+Connection cn;
     public Objective getObj() {
         return obj;
     }

@@ -63,7 +63,9 @@ public class TestCommentControl {
     }
      @RequestMapping("/testcomment/savecomment.htm")
     public ModelAndView savecomment(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-         ModelAndView mv = new ModelAndView("testcomment");
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio"); 
+        ModelAndView mv = new ModelAndView("testcomment");
     try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -81,7 +83,9 @@ public class TestCommentControl {
     }
      @RequestMapping("/testcomment/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-         ModelAndView mv = new ModelAndView("testcomment");
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        ModelAndView mv = new ModelAndView("testcomment");
     try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());

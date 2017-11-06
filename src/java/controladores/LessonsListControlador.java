@@ -48,7 +48,8 @@ public class LessonsListControlador{
     }
    @RequestMapping("/homepage/loadLessons.htm")
     public ModelAndView loadLessons(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("homepage");
        
         DriverManagerDataSource dataSource;
@@ -174,7 +175,8 @@ public class LessonsListControlador{
     }
     @RequestMapping("/homepage/editLesson.htm")
       public ModelAndView editLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("homepage");
        String[] id = hsr.getParameterValues("seleccion");
        try {
