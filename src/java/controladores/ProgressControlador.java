@@ -270,7 +270,7 @@ public class ProgressControlador {
     {   String step=null;
         // need to see if an objective does not have a steps how it will act, also if the user erased the steps done by
         // the student, need to update the DB
-        if(!steps[i].equals("0")){
+        if(!steps[i].equals("0") && !allsteps.isEmpty() && !steps[i].equals("")){
              
             ArrayList<String> al2 = new ArrayList<String>(allsteps.subList(0,(Integer.parseInt(steps[i]))));
             StringBuilder rString = new StringBuilder();
