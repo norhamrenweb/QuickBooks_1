@@ -184,6 +184,153 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.send("");
     }
     
+    function deleteLink(){
+        }
+    function loadInfResource(id){
+            if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+        var idResource = id;
+        
+        var myObj = {};
+                myObj["id"] = idResource;
+                myObj["name"] = "recurso1";
+                var json = JSON.stringify(myObj);
+        $.ajax({
+                    type: 'POST',
+                        url: 'loadInfResource.htm',
+                        data: json,
+                        datatype:"json",
+                        contentType: "application/json",           
+                     
+                        success: function(data) {                          
+                          var j = JSON.parse(data);
+                          var mensaje = j.message;
+                    if( mensaje === "Resource successfully updated"){
+                        $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                        
+                    }else{
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                    }           
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });
+    }
+     function saveEditLink(){
+          if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+        var nameResource = $('#editLinkName').val();
+        var linkResource = $('#editLinkComments').val();
+        var type = $('#selectLinkTipo').val();
+        var idResource = $('#resourceId').val();
+        
+        var myObj = {};
+                myObj["name"] = nameResource;
+                myObj["link"] = linkResource;
+                myObj["type"] = type;
+                myObj["id"] = idResource;
+                var json = JSON.stringify(myObj);
+        $.ajax({
+                    type: 'POST',
+                        url: 'updateResources.htm',
+                        data: json,
+                        datatype:"json",
+                        contentType: "application/json",           
+                     
+                        success: function(data) {                          
+                          var j = JSON.parse(data);
+                          var mensaje = j.message;
+                    if( mensaje === "Resource successfully updated"){
+                        $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                        
+                    }else{
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                    }           
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });
+     }
+     
+     function saveEditMethod(){
+        
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+        var nameResource = $('#editNameMethod').val();
+        var linkResource = $('#editCommentsMethod').val();
+        var type = $('#selectTipo').val();
+        var lessonId =  $('#lessonid').val();
+      
+        var myObj = {};
+                myObj["name"] = nameResource;
+                myObj["link"] = linkResource;
+                myObj["type"] = type;
+                myObj["lesson_id"] = lessonId;
+                var json = JSON.stringify(myObj);
+        $.ajax({
+                    type: 'POST',
+                        url: 'addResources.htm',
+                        data: json,
+                        datatype:"json",
+                        contentType: "application/json",           
+                     
+                        success: function(data) {                          
+                          var j = JSON.parse(data);
+                          var mensaje = j.message;
+                    if( mensaje === "Resource successfully updated"){
+                        $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                        
+                    }else{
+                        $('#showModalComment').click();
+                        $('#titleComment').text(mensaje);
+                    }           
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });
+        
+     }
      function funcionCallBackSubject()
     {
            if (ajax.readyState===4){
@@ -213,6 +360,7 @@ $("#method").on('mouseover', 'option' , function(e) {
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
+                    
                    var json = JSON.parse(ajax.responseText);
                    var level = json.level;
                    var subject =  JSON.parse(json.subject).id;
@@ -347,6 +495,9 @@ $("#method").on('mouseover', 'option' , function(e) {
         $('#addFile').click(function () {
                    $('#addnewFile').modal('show');
                 });
+        $('.editResource').click(function () {
+                  $('#editnewLink').modal('show');
+               });
             })
             
         </script>
@@ -491,6 +642,8 @@ input[type="radio"] .styled:checked + label::after {
         </style>
     </head>
     <body>
+        <input type="hidden" id="lessonid" name="lessonid" value = ${lessonid}>
+        
         <div class="container">
         <h1 class="text-center">Presentation Resources</h1>
             <fieldset>
@@ -512,26 +665,31 @@ input[type="radio"] .styled:checked + label::after {
                         <label class="control-label">Type</label>
                         <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200">${data.comments}</textarea>
                     </div>-->
-                        <div class="list-group">
-                            <c:forEach var="item" items="${others}">
-                                <c:choose>
-                                <c:when test="${item.type =='Video'}">
-                  <a href="${item.link}" class="list-group-item" >${item.name}          <span class="label label-primary">${item.type}</span>
-                  <div class="col-xs-4 text-center">
-                        <input type="button" class="btn btn-warning"  data-toggle="tooltip" data-placement="bottom" value="add" id="addLink"/>
-                    </div>
-                  
-                  </a>
-                 
-                  </c:when>
-                                    <c:otherwise>
-                                       <a href="${item.link}" class="list-group-item">${item.name}           <span class="label label-success">${item.type}</span></a>
-                                    </c:otherwise>    
-                                    
-                                    
+                    <div class="list-group col-xs-12">
+                        <c:forEach var="item" items="${others}">
+                            <c:choose>
+                               
+                               <c:when test="${item.type =='Video'}">
+                                   <div class="list-group col-xs-12">
+                                   <div class="col-xs-8 text-center"><a href="${item.link}"  data-id="${item.id}" class="list-group-item link" >${item.name}<span class="label label-primary">${item.type}</span> </a></div> 
+                                   <div class="col-xs-4 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>  
+                                   </div>
+                                </c:when>
+                                
+                                <c:otherwise> 
+                                   <div class="list-group col-xs-12">
+                                   <div class="col-xs-8 text-center">
+                                       <a href="${item.link}" data-id="${item.id}" id ="link" class="list-group-item link">${item.name}
+                                       <span class="label label-success">${item.type}</span></a>
+                                   </div>
+                                   <div class="col-xs-4 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>
+                                   </div>
+                                </c:otherwise> 
+     
                             </c:choose>
-                            </c:forEach>
-                </div>
+                           
+                        </c:forEach>
+                    </div>
                     <div class="col-xs-4 text-center">
                         <input type="button" class="btn btn-warning"  data-toggle="tooltip" data-placement="bottom" value="add" id="addLink"/>
                     </div>
@@ -561,6 +719,53 @@ input[type="radio"] .styled:checked + label::after {
                 
                  </fieldset>
         </div>
+                    
+  <div id="editnewLink" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+      
+    <input type="hidden" id="resourceId" name="resourceId" value = ${item.id}>
+    
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header modal-header-details">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 id="nameLessonDetails" class="modal-title">Edit a link or video</h4>
+      </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="col-xs-12">
+
+                        <div class="col-xs-3 center-block form-group">
+                            <label class="control-label">Title</label>
+                            <input type="text" class="form-control" name="TXTnameeditethod" id="editLinkName"  placeholder="Title">
+                        </div>
+                        <div class="col-xs-6 center-block form-group">
+                            <label class="control-label">Link</label>
+                            <input type="text" class="form-control" name="TXTcommenteditmethod" id="editLinkComments"  placeholder="Link">
+                        </div>   
+                    <div class="col-xs-3 center-block form-group">
+                        <label class="control-label">Tipo</label>
+                        <select class="form-control" name="selectTipo" id="selectLinkTipo" placeholder="Tipo">placeholder="Link"
+                            <option>Link</option>
+                            <option>Video</option>
+ 
+                        </select>
+                    </div>
+                        <div class="col-xs-3 center-block form-group paddingLabel">
+                            <input type="button" name="EditMethod" value="save changes" class="btn btn-success" id="EditLink" data-target=".bs-example-modal-lg" onclick="saveEditLink()"/> 
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+<!--      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+      </div>-->
+    </div>
+
+  </div>
+</div>
+                    
 <div id="addnewLink" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
 
@@ -581,9 +786,17 @@ input[type="radio"] .styled:checked + label::after {
                         <div class="col-xs-6 center-block form-group">
                             <label class="control-label">Link</label>
                             <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="Link">
-                        </div>
+                        </div>   
+                    <div class="col-xs-3 center-block form-group">
+                        <label class="control-label">Tipo</label>
+                        <select class="form-control" name="selectTipo" id="selectTipo" placeholder="Tipo">placeholder="Link"
+                            <option>Link</option>
+                            <option>Video</option>
+ 
+                        </select>
+                    </div>
                         <div class="col-xs-3 center-block form-group paddingLabel">
-                            <input type="button" name="EditMethod" value="save" class="btn btn-success" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveeditMethod()"/> 
+                            <input type="button" name="EditMethod" value="save" class="btn btn-success" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveEditMethod()"/> 
                         </div>
                     </div>
                 

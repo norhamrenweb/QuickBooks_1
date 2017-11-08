@@ -14,6 +14,15 @@ public class Resource {
     private String name;
     private String link;
     private String type;
+    private String lesson_id;
+
+    public String getLesson_id() {
+        return lesson_id;
+    }
+
+    public void setLesson_id(String lesson_id) {
+        this.lesson_id = lesson_id;
+    }
 
     public String getType() {
         return type;

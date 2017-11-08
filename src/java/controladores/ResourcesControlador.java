@@ -47,6 +47,37 @@ public class ResourcesControlador {
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
+    
+   @RequestMapping("/lessonresources/loadInfResource.htm")
+    public ModelAndView loadInfResource(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+
+        ModelAndView mv = new ModelAndView("lessonresources");
+       try{
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+            Statement st = this.cn.createStatement();
+            String resourceId = r.getId();
+            String name, link, type;
+            String consulta = "SELECT name,link,type FROM public.resources where id = "+resourceId;
+            ResultSet rs = st.executeQuery(consulta);
+
+            name = rs.getString("name");
+            link = rs.getString("link");
+            type = rs.getString("type");
+
+            mv.addObject("resourceId",resourceId);
+            mv.addObject("name",name);
+            mv.addObject("link",link);
+            mv.addObject("type",type);
+       }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+       }
+        return mv;
+    }
+    
    @RequestMapping("/lessonresources/loadResources.htm")
     public ModelAndView loadResources(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         if((new SessionCheck()).checkSession(hsr))
@@ -57,7 +88,7 @@ public class ResourcesControlador {
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
-             String lessonid = hsr.getParameter("LessonsSelected");
+            String lessonid = hsr.getParameter("LessonsSelected");
             String consulta = "SELECT * FROM public.resources where lesson_id = "+lessonid;
             ResultSet rs = st.executeQuery(consulta);
             ArrayList<Resource> filersrcs = new ArrayList<>(); 
@@ -78,7 +109,7 @@ public class ResourcesControlador {
                otherrsrcs.add(r);
            }
        }
-        
+        mv.addObject("lessonid",lessonid);
         mv.addObject("files",filersrcs);
         mv.addObject("others",otherrsrcs);
        }catch(SQLException ex){
@@ -94,16 +125,22 @@ public class ResourcesControlador {
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonresources");
+       
+        String name = r.getName();
+        String link =r.getLink() ;
+        String type = r.getType();
+        String lessonId = r.getLesson_id();
         try{
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
-             String lessonid = hsr.getParameter("LessonsSelected");
-             String consulta = "insert into public.resources(lesson_id) values('"+lessonid+"','')";
-            ResultSet rs = st.executeQuery(consulta);
-            }catch(SQLException ex){
-           StringWriter errors = new StringWriter();
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+            Statement st = this.cn.createStatement();
+            //String lessonid = hsr.getParameter("LessonsSelected");
+            String consulta = "insert into resources(name,link,type,lesson_id) values('"+name+"','"+link+"','"+type+"','"+lessonId+"')";
+            st.executeQuery(consulta);  
+        }
+        catch(SQLException ex){
+            StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex+errors.toString());
        }
@@ -111,22 +148,27 @@ public class ResourcesControlador {
     }
     @RequestMapping("/lessonresources/updateResources.htm")
     public ModelAndView updateResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
-        if((new SessionCheck()).checkSession(hsr))
-           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        
         ModelAndView mv = new ModelAndView("lessonresources");
+        String Idresource =r.getId();
+        String name = r.getName();
+        String link =r.getLink() ;
+        String type = r.getType();
+
         try{
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
-             String lessonid = hsr.getParameter("LessonsSelected");
-             String consulta = "insert into public.resources(lesson_id) values('"+lessonid+"','')";
-            ResultSet rs = st.executeQuery(consulta);
-            }catch(SQLException ex){
-           StringWriter errors = new StringWriter();
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+            Statement st = this.cn.createStatement();
+           // String lessonid = hsr.getParameter("LessonsSelected");
+            //String consulta = "insert into resources(lesson_id) values('"+lessonid+"','')";
+            String consulta = "update resources set name='"+name+"',link='"+link+"',type='"+type+"' where id = "+Idresource;
+            st.executeQuery(consulta);
+        }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex+errors.toString());
-       }
+        }
         return mv;
     }
     @RequestMapping("/lessonresources/delResources.htm")
