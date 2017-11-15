@@ -10,6 +10,7 @@ package Montessori;
  * @author nmohamed
  */
 public class Resource {
+    public static final String RUTA_FTP = "C:/Users/nmoha/Documents/Files/";
     private String id;
     private String name;
     private String link;

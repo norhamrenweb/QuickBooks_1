@@ -417,6 +417,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
            c.newlesson(studentIds, newlesson); 
            message = "Presentation created";
        }
+        
         }catch(SQLException ex){
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));

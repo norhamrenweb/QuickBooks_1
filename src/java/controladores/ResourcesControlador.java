@@ -12,17 +12,25 @@ package controladores;
 import Montessori.*;
 import atg.taglib.json.util.JSONObject;
 import com.google.gson.Gson;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import org.apache.log4j.Logger;
 
 import org.springframework.context.ApplicationContext;
@@ -35,7 +43,9 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@MultipartConfig
 public class ResourcesControlador {
+    
      Connection cn;
       static Logger log = Logger.getLogger(ResourcesControlador.class.getName());
 
@@ -49,33 +59,89 @@ public class ResourcesControlador {
     }
     
    @RequestMapping("/lessonresources/loadInfResource.htm")
-    public ModelAndView loadInfResource(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-
-        ModelAndView mv = new ModelAndView("lessonresources");
+   @ResponseBody
+    public String loadInfResource(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        Resource resourceLoad = new Resource();
+        //ModelAndView mv = new ModelAndView("lessonresources");
        try{
             DriverManagerDataSource dataSource;
             dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
             this.cn = dataSource.getConnection();
             Statement st = this.cn.createStatement();
             String resourceId = r.getId();
-            String name, link, type;
-            String consulta = "SELECT name,link,type FROM public.resources where id = "+resourceId;
+           // String name="", link="", type="";
+
+            String consulta = "SELECT * FROM resources WHERE id = "+resourceId;
             ResultSet rs = st.executeQuery(consulta);
-
-            name = rs.getString("name");
-            link = rs.getString("link");
-            type = rs.getString("type");
-
-            mv.addObject("resourceId",resourceId);
-            mv.addObject("name",name);
-            mv.addObject("link",link);
-            mv.addObject("type",type);
+            resourceLoad.setId(resourceId);
+            
+            while (rs.next()) {        
+                resourceLoad.setName(rs.getString("name"));
+                resourceLoad.setLink(rs.getString("link"));
+                resourceLoad.setType(rs.getString("type"));
+                resourceLoad.setLesson_id(rs.getString("lesson_id"));
+            }
+            resourceLoad.setId(resourceId);
        }catch(SQLException ex){
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex+errors.toString());
        }
-        return mv;
+       return new Gson().toJson(resourceLoad);
+    }
+    
+    private Resource loadResource(String id, Statement st) throws Exception {
+        Resource resourceLoad = new Resource();
+        //ModelAndView mv = new ModelAndView("lessonresources");
+       try{
+            String resourceId = id;
+
+            String consulta = "SELECT * FROM resources WHERE id = "+resourceId;
+            ResultSet rs = st.executeQuery(consulta);
+            resourceLoad.setId(resourceId);
+            
+            while (rs.next()) {        
+                resourceLoad.setName(rs.getString("name"));
+                resourceLoad.setLink(rs.getString("link"));
+                resourceLoad.setType(rs.getString("type"));
+                resourceLoad.setLesson_id(rs.getString("lesson_id"));
+            }
+            resourceLoad.setId(resourceId);
+       }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+       }
+       return resourceLoad;
+    }
+    
+    public Resource loadResource(String id, HttpServletRequest hsr) throws Exception {
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        Statement st = this.cn.createStatement();
+        Resource resourceLoad = new Resource();
+        //ModelAndView mv = new ModelAndView("lessonresources");
+       try{
+            String resourceId = id;
+
+            String consulta = "SELECT * FROM resources WHERE id = "+resourceId;
+            ResultSet rs = st.executeQuery(consulta);
+            resourceLoad.setId(resourceId);
+            
+            while (rs.next()) {        
+                resourceLoad.setName(rs.getString("name"));
+                resourceLoad.setLink(rs.getString("link"));
+                resourceLoad.setType(rs.getString("type"));
+                resourceLoad.setLesson_id(rs.getString("lesson_id"));
+            }
+            resourceLoad.setId(resourceId);
+       }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+       }
+       return resourceLoad;
     }
     
    @RequestMapping("/lessonresources/loadResources.htm")
@@ -119,17 +185,16 @@ public class ResourcesControlador {
        }
         return mv;
     }
-    
-   @RequestMapping("/lessonresources/addResources.htm")
-    public ModelAndView addResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
-        if((new SessionCheck()).checkSession(hsr))
-           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-        ModelAndView mv = new ModelAndView("lessonresources");
+   
+    @RequestMapping("/lessonresources/addResources.htm")
+    @ResponseBody
+    public String addResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
        
         String name = r.getName();
         String link =r.getLink() ;
         String type = r.getType();
         String lessonId = r.getLesson_id();
+        String id="";
         try{
             DriverManagerDataSource dataSource;
             dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
@@ -137,15 +202,20 @@ public class ResourcesControlador {
             Statement st = this.cn.createStatement();
             //String lessonid = hsr.getParameter("LessonsSelected");
             String consulta = "insert into resources(name,link,type,lesson_id) values('"+name+"','"+link+"','"+type+"','"+lessonId+"')";
-            st.executeQuery(consulta);  
+            st.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS); 
+            ResultSet rs = st.getGeneratedKeys();
+            
+            while(rs.next())  id = ""+rs.getInt(1);
         }
         catch(SQLException ex){
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex+errors.toString());
        }
-        return mv;
+        
+        return id;
     }
+    
     @RequestMapping("/lessonresources/updateResources.htm")
     public ModelAndView updateResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
         
@@ -171,24 +241,52 @@ public class ResourcesControlador {
         }
         return mv;
     }
+   
     @RequestMapping("/lessonresources/delResources.htm")
     public ModelAndView delResources(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonresources");
         try{
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
-             String lessonid = hsr.getParameter("LessonsSelected");
-             String consulta = "insert into public.resources(lesson_id) values('"+lessonid+"','')";
-            ResultSet rs = st.executeQuery(consulta);
-            }catch(SQLException ex){
-           StringWriter errors = new StringWriter();
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+            Statement st = this.cn.createStatement();
+            String resourceId = r.getId();
+            Resource resourceLoad = loadResource(resourceId,st);
+            
+            if(resourceLoad.getType().equals("File")){
+                File fileToDelete = new File(resourceLoad.getLink());
+                Files.delete(fileToDelete.toPath());
+            }
+            
+            String consulta = "delete from resources where id = "+resourceId;
+            st.executeQuery(consulta);
+        }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex+errors.toString());
-       }
+        }
         return mv;
+    }
+
+    @RequestMapping("/lessonresources/downloadFile.htm")
+    public String downloadFile(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
+        
+        try{
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+            Statement st = this.cn.createStatement();
+            String resourceId = r.getId();
+            Resource resourceLoad = loadResource(resourceId,st);
+           
+            
+        }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+        return "mv";
     }
 }

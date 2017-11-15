@@ -183,8 +183,71 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.open("POST","studentlistLevel.htm?seleccion="+seleccion,true);
         ajax.send("");
     }
-    
-    function deleteLink(){
+    function downloadFile(id){
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+        var myObj = {};
+                myObj["id"] = id;
+                var json = JSON.stringify(myObj);
+        $.ajax({
+                        type: 'POST',
+                        url: 'downloadFile.htm',
+                        data: json,
+                        datatype:"json",
+                        contentType: "application/json",           
+                     
+                        success: function(data) {                          
+                          
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+                            
+                               
+                    });
+    }
+    function deleteLink(id){
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+        var idResource = id;
+        var myObj = {};
+                myObj["id"] = idResource;
+                var json = JSON.stringify(myObj);
+        $.ajax({
+                    type: 'POST',
+                        url: 'delResources.htm',
+                        data: json,
+                        datatype:"json",
+                        contentType: "application/json",           
+                     
+                        success: function(data) {                          
+                          //var j = JSON.parse(data);    
+                           $('#divRecurso'+id).remove(); 
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+                            
+                               
+                    });
         }
     function loadInfResource(id){
             if (window.XMLHttpRequest) //mozilla
@@ -200,7 +263,6 @@ $("#method").on('mouseover', 'option' , function(e) {
         
         var myObj = {};
                 myObj["id"] = idResource;
-                myObj["name"] = "recurso1";
                 var json = JSON.stringify(myObj);
         $.ajax({
                     type: 'POST',
@@ -211,16 +273,25 @@ $("#method").on('mouseover', 'option' , function(e) {
                      
                         success: function(data) {                          
                           var j = JSON.parse(data);
-                          var mensaje = j.message;
-                    if( mensaje === "Resource successfully updated"){
-                        $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
-                        $('#showModalComment').click();
-                        $('#titleComment').text(mensaje);
-                        
-                    }else{
-                        $('#showModalComment').click();
-                        $('#titleComment').text(mensaje);
-                    }           
+                          var title = j.name;
+                          var link = j.link;
+                          var type = j.type;
+                          var id  = j.id;
+                         // $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
+                         // $('#showModalComment').click();
+                          $('#editnewLink').modal('show');
+                          $('#editLinkName').val(title);
+                          $('#editLinkComments').val(link);
+                          $('#resourceId').val(id);
+                          //$('#resourceId').val(id);
+                          
+                          if(type === "Link"){
+                            $("#selectLinkTipo :selected").text("Link");
+                          }else{
+                            $("#selectLinkTipo :selected").text("Video");
+                          }
+                       
+                          $('editnewLink').click();
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -243,7 +314,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         var nameResource = $('#editLinkName').val();
         var linkResource = $('#editLinkComments').val();
         var type = $('#selectLinkTipo').val();
-        var idResource = $('#resourceId').val();
+        var idResource =  $('#resourceId').val();
         
         var myObj = {};
                 myObj["name"] = nameResource;
@@ -257,29 +328,38 @@ $("#method").on('mouseover', 'option' , function(e) {
                         data: json,
                         datatype:"json",
                         contentType: "application/json",           
-                     
+                  
+                        //$("#contenedorPropiertys").load(" #contenedorPropiertys");
                         success: function(data) {                          
-                          var j = JSON.parse(data);
-                          var mensaje = j.message;
-                    if( mensaje === "Resource successfully updated"){
-                        $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
-                        $('#showModalComment').click();
-                        $('#titleComment').text(mensaje);
-                        
-                    }else{
-                        $('#showModalComment').click();
-                        $('#titleComment').text(mensaje);
-                    }           
+                         // var j = JSON.parse(data);
+                          var id = idResource;
+                           var claseTipo = "label-success";
+                            if(type === "Video"){ claseTipo = "label-primary"}
+                            
+                            //MODIFICAR EL JSON PARA QUE DEVUELVA EL ID OBTENIDO
+                            $('#listResources').append("<div id = 'divRecurso"+id+"' class='list-group col-xs-12'>\n\
+                                                    <div class='col-xs-10 text-center'>\n\
+                                                         <a href="+linkResource+" class='list-group-item link'>\n\
+                                                             "+nameResource+"<span class='label "+claseTipo+"'>"+type+"</span>\n\
+                                                 </a>\n\
+                                            </div>\n\
+                                         <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning editResource'  onclick='loadInfResource("+id+")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editResource"+id+" '/></div>\n\
+                                         <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning '  onclick='deleteLink("+id+")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteLink("+id+")'/></div></div>");   
+                            $('#divRecurso'+id).remove();
                         },
+                        
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
                                    console.log(xhr.responseText);
                                    console.log(thrownError);
                                }
+                    }); 
+                        
 
-                    });
      }
      
+     
+      
      function saveEditMethod(){
         
         if (window.XMLHttpRequest) //mozilla
@@ -295,7 +375,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         var linkResource = $('#editCommentsMethod').val();
         var type = $('#selectTipo').val();
         var lessonId =  $('#lessonid').val();
-      
+        var id;
         var myObj = {};
                 myObj["name"] = nameResource;
                 myObj["link"] = linkResource;
@@ -309,18 +389,20 @@ $("#method").on('mouseover', 'option' , function(e) {
                         datatype:"json",
                         contentType: "application/json",           
                      
-                        success: function(data) {                          
-                          var j = JSON.parse(data);
-                          var mensaje = j.message;
-                    if( mensaje === "Resource successfully updated"){
-                        $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
-                        $('#showModalComment').click();
-                        $('#titleComment').text(mensaje);
-                        
-                    }else{
-                        $('#showModalComment').click();
-                        $('#titleComment').text(mensaje);
-                    }           
+                        success: function(data) {   //NO ENTRA A SUCCESS                       
+                          //var j = JSON.parse(data);
+                          id = data; 
+                           var claseTipo = "label-success";
+                            if(type === "Video"){ claseTipo = "label-primary"}
+                            //MODIFICAR EL JSON PARA QUE DEVUELVA EL ID OBTENIDO
+                            $('#listResources').append("<div id = 'divRecurso"+id+"' class='list-group col-xs-12'>\n\
+                                                    <div class='col-xs-10 text-center'>\n\
+                                                         <a href="+linkResource+" class='list-group-item link'>\n\
+                                                             "+nameResource+"<span class='label "+claseTipo+"'>"+type+"</span>\n\
+                                                 </a>\n\
+                                            </div>\n\
+                                         <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning editResource'  onclick='loadInfResource("+id+")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editResource"+id+" '/></div>\n\
+                                         <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning '  onclick='deleteLink("+id+")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteLink("+id+")'/></div></div>");   
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -329,8 +411,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                                }
 
                     });
-        
-     }
+                    }
      function funcionCallBackSubject()
     {
            if (ajax.readyState===4){
@@ -495,9 +576,12 @@ $("#method").on('mouseover', 'option' , function(e) {
         $('#addFile').click(function () {
                    $('#addnewFile').modal('show');
                 });
-        $('.editResource').click(function () {
+        /*$('.editResource').click(function () {
                   $('#editnewLink').modal('show');
                });
+        $('.editResource2').click(function () {
+                
+               });*/
             })
             
         </script>
@@ -665,24 +749,25 @@ input[type="radio"] .styled:checked + label::after {
                         <label class="control-label">Type</label>
                         <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200">${data.comments}</textarea>
                     </div>-->
-                    <div class="list-group col-xs-12">
+                    <div  id = "listResources" class="list-group col-xs-12 link">
                         <c:forEach var="item" items="${others}">
                             <c:choose>
                                
                                <c:when test="${item.type =='Video'}">
-                                   <div class="list-group col-xs-12">
-                                   <div class="col-xs-8 text-center"><a href="${item.link}"  data-id="${item.id}" class="list-group-item link" >${item.name}<span class="label label-primary">${item.type}</span> </a></div> 
-                                   <div class="col-xs-4 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>  
+                                   <div id = "divRecurso${item.id}" class="list-group col-xs-12">
+                                   <div class="col-xs-10 text-center"><a href="${item.link}"  data-id="${item.id}" class="list-group-item link" >${item.name}<span class="label label-primary">${item.type}</span> </a></div> 
+                                   <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>  
+                                   <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
+
                                    </div>
                                 </c:when>
                                 
                                 <c:otherwise> 
-                                   <div class="list-group col-xs-12">
-                                   <div class="col-xs-8 text-center">
-                                       <a href="${item.link}" data-id="${item.id}" id ="link" class="list-group-item link">${item.name}
-                                       <span class="label label-success">${item.type}</span></a>
-                                   </div>
-                                   <div class="col-xs-4 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>
+                                   <div id = "divRecurso${item.id}" class="list-group col-xs-12">
+                                   <div class="col-xs-10 text-center"> <a href="${item.link}" data-id="${item.id}"  class="list-group-item link">${item.name}<span class="label label-success">${item.type}</span></a></div>
+                                   <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>
+                                   <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
+
                                    </div>
                                 </c:otherwise> 
      
@@ -706,11 +791,30 @@ input[type="radio"] .styled:checked + label::after {
                     </span>
                 </legend>
                 <div class="form-group collapse" id="contenedorDetails">
-
                 <div class="list-group">
-                  <a href="https://en.wikipedia.org/wiki/Montessori_education" class="list-group-item">Montessori Wiki</a>
-                  <a href="#" class="list-group-item">Second item</a>
-                  <a href="#" class="list-group-item">Third item</a>
+                    <c:forEach var="item" items="${files}">  
+                                   <div id = "divRecurso${item.id}" class="list-group col-xs-12">        
+                                        <c:url var="post_url"  value="/upload" />    
+                                        <form class="col-xs-11 center-block form-group" action="${post_url}" method="GET" enctype="multipart/form-data">      
+                                       
+                                                   <div class="col-xs-10 center-block form-group">
+                                                       
+                                                       <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>                
+                                                       <div class="col-xs-10 text-center" >
+                                                           <a href="${item.link}"  data-id="${item.id}" class="list-group-item link" >${item.name} 
+                                                             <span class="label label-primary">${item.type}</span> 
+                                                           </a>
+                                                       </div> 
+                                                   </div>
+
+                                                   <input type="submit" value="Download" class="col-xs-1 center-block form-group paddingLabel btn btn-success">     
+                                       </form>
+
+                                        <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
+
+                                   </div>
+                           
+                    </c:forEach>
                 </div>
                     <div class="col-xs-4 text-center">
                         <input type="button" class="btn btn-warning"  data-toggle="tooltip" data-placement="bottom" value="add" id="addFile"/>
@@ -723,32 +827,32 @@ input[type="radio"] .styled:checked + label::after {
   <div id="editnewLink" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
       
-    <input type="hidden" id="resourceId" name="resourceId" value = ${item.id}>
+    <input type="hidden" id="resourceId" name="resourceId" >
     
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header modal-header-details">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 id="nameLessonDetails" class="modal-title">Edit a link or video</h4>
+        <h4 id="nameEditNewLink" class="modal-title">Edit a link or video</h4>
       </div>
         <div class="modal-body">
             <div class="container-fluid">
-                <div class="col-xs-12">
+                <div id="divLinks" class="col-xs-12">
 
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Title</label>
-                            <input type="text" class="form-control" name="TXTnameeditethod" id="editLinkName"  placeholder="Title">
+                            <input type="text" class="form-control" name="TXTnameeditethod" id="editLinkName" >
                         </div>
                         <div class="col-xs-6 center-block form-group">
                             <label class="control-label">Link</label>
-                            <input type="text" class="form-control" name="TXTcommenteditmethod" id="editLinkComments"  placeholder="Link">
+                            <input type="text" class="form-control" name="TXTcommenteditmethod" id="editLinkComments">
                         </div>   
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Tipo</label>
-                        <select class="form-control" name="selectTipo" id="selectLinkTipo" placeholder="Tipo">placeholder="Link"
-                            <option>Link</option>
-                            <option>Video</option>
- 
+                        <select class="form-control" name="selectTipo" id="selectLinkTipo" placeholder="Type">
+                            <option></option>
+                            <option value ="Link">Link</option>
+                            <option value ="Video">Video</option>
                         </select>
                     </div>
                         <div class="col-xs-3 center-block form-group paddingLabel">
@@ -773,7 +877,7 @@ input[type="radio"] .styled:checked + label::after {
     <div class="modal-content">
       <div class="modal-header modal-header-details">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 id="nameLessonDetails" class="modal-title">Add new link</h4>
+        <h4 id="nameNewLink" class="modal-title">Add new link</h4>
       </div>
         <div class="modal-body">
             <div class="container-fluid">
@@ -788,9 +892,9 @@ input[type="radio"] .styled:checked + label::after {
                             <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="Link">
                         </div>   
                     <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Tipo</label>
+                        <label class="control-label">Type</label>
                         <select class="form-control" name="selectTipo" id="selectTipo" placeholder="Tipo">placeholder="Link"
-                            <option>Link</option>
+                            <option >Link</option>
                             <option>Video</option>
  
                         </select>
@@ -809,9 +913,9 @@ input[type="radio"] .styled:checked + label::after {
 
   </div>
 </div>
-            <div id="addnewFile" class="modal fade" role="dialog">
+<div id="addnewFile" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
-
+    
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header modal-header-details">
@@ -820,12 +924,21 @@ input[type="radio"] .styled:checked + label::after {
       </div>
         <div class="modal-body">
             <div class="container-fluid">
-                <div class="col-xs-12">
-             <div class="col-xs-12 center-block form-group">
-                        <label class="control-label">Attachments</label>
-                        <input type="file" class="form-control" name="TXTfile" id="file">
-                    </div>
-                    </div>
+              
+             <c:url var="post_url"  value="/upload" />    
+             <form class="col-xs-12 center-block form-group" action="${post_url}" method="POST" enctype="multipart/form-data">      
+             <!--<form class="col-xs-12 center-block form-group" action="saveFile.htm" method="POST" enctype="multipart/form-data">-->
+                        <div class="col-xs-10 center-block form-group">
+                            <label class="control-label">Name</label>
+                            
+                            <input type="hidden" id="lessonid" name="lessonid" value = ${lessonid}>                
+                            <input type="text" class=" col-xs-3 form-control" name="idNameFile" id="idNameFile"  placeholder="Name">
+                            <input type="file" class=" col-xs-7 center-block form-control" name="fileToUpload" id="file">
+                        
+                        </div>
+			
+                        <input type="submit" value="save" class="col-xs-2 center-block form-group paddingLabel btn btn-success">     
+            </form>
                 
             </div>
         </div>

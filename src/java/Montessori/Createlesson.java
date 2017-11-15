@@ -5,6 +5,8 @@
  */
 package Montessori;
 
+import static Montessori.Resource.RUTA_FTP;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -79,6 +81,8 @@ public class Createlesson {
                 st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids.get(i)+"')");
             }
             }
+            File directorio=new File(RUTA_FTP+lessonid);
+            directorio.mkdir(); 
           
     }
     catch (SQLException ex) {
