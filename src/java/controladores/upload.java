@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,38 +94,40 @@ public class upload extends HttpServlet {
    {
             //get the file chosen by the user
             Part filePart = request.getPart("fileToUpload");
-		
+            ResourcesControlador rCont = new ResourcesControlador();
 		//get the InputStream to store the file somewhere
 	    InputStream fileInputStream = filePart.getInputStream();
 	    String name  = request.getParameter("idNameFile");
             String lessonId = request.getParameter("lessonid");
             String url =  "http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected="+lessonId;
-	    //for example, you can copy the uploaded file to the server
-	    //note that you probably don't want to do this in real life!
-	    //upload it to a file host like S3 or GCS instead
-	    File fileToSave = new File(RUTA_FTP +lessonId+"/"+ filePart.getSubmittedFileName());
-            Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);   
-            //GET VALUES FOR SAVE IN BBDD
+           
+         
+            try {
+                //if(!rCont.existe(name+"-"+ filePart.getSubmittedFileName(), request)){
+                    File fileToSave = new File(RUTA_FTP +lessonId+"/"+name+"-"+ filePart.getSubmittedFileName());
+                    Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);   
+                    //GET VALUES FOR SAVE IN BBDD
 
-            String path = fileToSave.toPath().toString();
-            
-            Resource r = new Resource();
-          
-            r.setLesson_id(lessonId);
-            r.setLink(path);
-            r.setName(name);
-            r.setType("File");
-            ResourcesControlador rCont = new ResourcesControlador();
-       try {
-           String idResource = rCont.addResources(r,request,response);
-       } catch (Exception ex) {
-           Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
-       }
+                    String path = fileToSave.toPath().toString();
+
+                    Resource r = new Resource();
+
+                    r.setLesson_id(lessonId);
+                    r.setLink(path);
+                    r.setName(name);
+                    r.setType("File");
+                    String idResource = rCont.addResources(r,request,response);
+               // }
+               
+            } catch (Exception ex) {
+                Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
+            }
             //create output HTML that uses the 
             //response.reset(); 
             //response.encodeRedirectURL("http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected=19");
+            
             response.sendRedirect(url);
- 
+            
   }
   @Override
    protected void doGet(HttpServletRequest request, HttpServletResponse response)

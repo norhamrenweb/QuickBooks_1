@@ -115,7 +115,7 @@ public class ResourcesControlador {
        return resourceLoad;
     }
     
-    public Resource loadResource(String id, HttpServletRequest hsr) throws Exception {
+    protected Resource loadResource(String id, HttpServletRequest hsr) throws Exception {
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
@@ -288,5 +288,34 @@ public class ResourcesControlador {
             log.error(ex+errors.toString());
         }
         return "mv";
+    }
+    
+    protected boolean existe(String name, HttpServletRequest hsr) throws Exception {
+        DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+        this.cn = dataSource.getConnection();
+        Statement st = this.cn.createStatement();
+        Resource resourceLoad = new Resource();
+        //ModelAndView mv = new ModelAndView("lessonresources");
+       try{
+            String resourceId = name;
+
+            String consulta = "SELECT * FROM resources WHERE name = %"+name;
+            ResultSet rs = st.executeQuery(consulta);
+            resourceLoad.setId(resourceId);
+            
+            while (rs.next()) {        
+                resourceLoad.setName(rs.getString("name"));
+                resourceLoad.setLink(rs.getString("link"));
+                resourceLoad.setType(rs.getString("type"));
+                resourceLoad.setLesson_id(rs.getString("lesson_id"));
+            }
+            resourceLoad.setId(resourceId);
+       }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+       }
+       return resourceLoad.getId() != null;
     }
 }

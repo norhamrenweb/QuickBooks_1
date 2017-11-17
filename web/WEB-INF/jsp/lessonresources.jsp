@@ -727,6 +727,10 @@ input[type="radio"] .styled:checked + label::after {
     </head>
     <body>
         <input type="hidden" id="lessonid" name="lessonid" value = ${lessonid}>
+       
+        <!--<div class="modal-body text-center">
+        <H1><%= request.getParameter("message") %></H1>
+        </div>-->
         
         <div class="container">
         <h1 class="text-center">Presentation Resources</h1>
@@ -737,18 +741,6 @@ input[type="radio"] .styled:checked + label::after {
                     </span>
                 </legend>
                 <div class="form-group collapse" id="contenedorPropiertys">
-<!--                    <div class="col-xs-6 center-block">
-                        <label class="control-label">Title</label>
-                        <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>" value="${data.name}">
-                    </div>               
-                    <div class="col-xs-6 center-block form-group">
-                        <label class="control-label">Link</label>
-                        <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200">${data.comments}</textarea>
-                    </div>
-                    <div class="col-xs-6 center-block form-group">
-                        <label class="control-label">Type</label>
-                        <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200">${data.comments}</textarea>
-                    </div>-->
                     <div  id = "listResources" class="list-group col-xs-12 link">
                         <c:forEach var="item" items="${others}">
                             <c:choose>
@@ -793,21 +785,19 @@ input[type="radio"] .styled:checked + label::after {
                 <div class="form-group collapse" id="contenedorDetails">
                 <div class="list-group">
                     <c:forEach var="item" items="${files}">  
-                                   <div id = "divRecurso${item.id}" class="list-group col-xs-12">        
+                                   <div id = "divRecurso${item.id}" class="list-group col-xs-12 text-center">        
                                         <c:url var="post_url"  value="/upload" />    
-                                        <form class="col-xs-11 center-block form-group" action="${post_url}" method="GET" enctype="multipart/form-data">      
-                                       
-                                                   <div class="col-xs-10 center-block form-group">
+                                        <form class=" text-center form-group" action="${post_url}" method="GET" enctype="multipart/form-data">             
                                                        
                                                        <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>                
-                                                       <div class="col-xs-10 text-center" >
-                                                           <a href="${item.link}"  data-id="${item.id}" class="list-group-item link" >${item.name} 
+                                                       <div class="col-xs-8 center-block form-group text-center " >
+                                                           <a href="${item.link}"  data-id="${item.id}" class="list-group-item link fileNames" >
+                                                               <span class="fileName">${item.name}</span>
                                                              <span class="label label-primary">${item.type}</span> 
                                                            </a>
                                                        </div> 
-                                                   </div>
-
-                                                   <input type="submit" value="Download" class="col-xs-1 center-block form-group paddingLabel btn btn-success">     
+           
+                                                   <input type="submit" value="Download" class="col-xs-2 center-block form-group paddingLabel btn btn-success">     
                                        </form>
 
                                         <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
@@ -856,7 +846,7 @@ input[type="radio"] .styled:checked + label::after {
                         </select>
                     </div>
                         <div class="col-xs-3 center-block form-group paddingLabel">
-                            <input type="button" name="EditMethod" value="save changes" class="btn btn-success" id="EditLink" data-target=".bs-example-modal-lg" onclick="saveEditLink()"/> 
+                            <input type="button" name="EditMethod" diabled="true" value="save changes" class="btn btn-success" id="EditLink" data-target=".bs-example-modal-lg" onclick="saveEditLink()"/> 
                         </div>
                     </div>
                 
@@ -868,8 +858,7 @@ input[type="radio"] .styled:checked + label::after {
     </div>
 
   </div>
-</div>
-                    
+</div>     
 <div id="addnewLink" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
 
@@ -900,7 +889,7 @@ input[type="radio"] .styled:checked + label::after {
                         </select>
                     </div>
                         <div class="col-xs-3 center-block form-group paddingLabel">
-                            <input type="button" name="EditMethod" value="save" class="btn btn-success" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveEditMethod()"/> 
+                            <input type="button" name="EditMethod" disabled="true" value="save" class="btn btn-success" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveEditMethod()"/> 
                         </div>
                     </div>
                 
@@ -924,7 +913,52 @@ input[type="radio"] .styled:checked + label::after {
       </div>
         <div class="modal-body">
             <div class="container-fluid">
-              
+                <script>
+                     $(document).ready(function(){
+                         var arrayNamesFiles = [];
+                         var existeNombre;
+                    $('.fileNames').children('.fileName').each(function() {
+                            var nameFile = $(this).text();
+                            arrayNamesFiles.push(nameFile);
+
+                    });
+                    
+                    $('#editNameMethod,#editCommentsMethod').focusout(function() {
+                        if($('#editNameMethod').val() !== "" && $('#editCommentsMethod').val() !== ""){
+                               $('#EditMethod').prop('disabled', false);
+                        }
+                        else{
+                               $('#EditMethod').prop('disabled', true);
+                        }
+                    });
+                    
+                    $('#editLinkName,#editLinkComments').focusout(function() {
+                        if($('#editLinkName').val() !== ""  && $('#editLinkComments').val() !== ""){
+                               $('#EditLink').prop('disabled', false);
+                           }
+                        else{
+                                $('#EditLink').prop('disabled', true);
+                           }
+                    });
+                    
+                    $('#idNameFile,#file').focusout(function() {
+                        existeNombre = "0";
+                        $.each( arrayNamesFiles, function( index, value ){
+                            if ( $('#idNameFile').val() === value) {
+                                $('#submitSave').prop('disabled', true);
+                                existeNombre = "1";
+                                alert('Change name or select file');  
+                            }
+                        }); 
+                        if($('#file').val() !== "") {
+                           if(existeNombre === "0"){
+                               $('#submitSave').prop('disabled', false);
+                           }
+                        }
+                      });
+                      
+                     });
+                    </script>
              <c:url var="post_url"  value="/upload" />    
              <form class="col-xs-12 center-block form-group" action="${post_url}" method="POST" enctype="multipart/form-data">      
              <!--<form class="col-xs-12 center-block form-group" action="saveFile.htm" method="POST" enctype="multipart/form-data">-->
@@ -937,7 +971,7 @@ input[type="radio"] .styled:checked + label::after {
                         
                         </div>
 			
-                        <input type="submit" value="save" class="col-xs-2 center-block form-group paddingLabel btn btn-success">     
+                            <input id = "submitSave" type="submit" disabled="true" value="save" class="col-xs-2 center-block form-group paddingLabel btn btn-success">     
             </form>
                 
             </div>
