@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 
 @WebServlet(name = "upload", urlPatterns = {"/upload"})
 @MultipartConfig
@@ -49,7 +51,8 @@ public class upload extends HttpServlet {
             Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        String url =  "http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected="+rLoaded.getLesson_id();
+       String url =  "http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected="+rLoaded.getLesson_id();
+            
        
         String filePath = rLoaded.getLink();
         File downloadFile = new File(filePath);
@@ -100,20 +103,35 @@ public class upload extends HttpServlet {
 	    String name  = request.getParameter("idNameFile");
             String lessonId = request.getParameter("lessonid");
             String url =  "http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected="+lessonId;
-           
-         
+           String server = "ftp2.renweb.com";
+		int port = 21;
+		String user = "AH-ZAF";
+		String pass = "e3f14+7mANDp";
+
+		FTPClient ftpClient = new FTPClient();
+         FileInputStream fis = null;
             try {
+                ftpClient.connect(server, port);
+			ftpClient.login(user, pass);
+//			ftpClient.enterLocalPassiveMode();
+//
+//			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
                 //if(!rCont.existe(name+"-"+ filePart.getSubmittedFileName(), request)){
-                    File fileToSave = new File(RUTA_FTP +lessonId+"/"+name+"-"+ filePart.getSubmittedFileName());
-                    Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);   
-                    //GET VALUES FOR SAVE IN BBDD
-
-                    String path = fileToSave.toPath().toString();
-
+//                    File fileToSave = new File(RUTA_FTP +lessonId+"/"+name+"-"+ filePart.getSubmittedFileName());
+//                    Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);   
+//                    //GET VALUES FOR SAVE IN BBDD
+//
+//                    String path = fileToSave.toPath().toString();
+                String filename = filePart.getSubmittedFileName();
+//                fis = new FileInputStream(filename);
+                boolean success = ftpClient.changeWorkingDirectory("/MontessoriTesting/"+lessonId);
+                              
+                ftpClient.storeFile(filename, fileInputStream);
+                ftpClient.logout();
                     Resource r = new Resource();
 
                     r.setLesson_id(lessonId);
-                    r.setLink(path);
+                   // r.setLink(path);
                     r.setName(name);
                     r.setType("File");
                     String idResource = rCont.addResources(r,request,response);
