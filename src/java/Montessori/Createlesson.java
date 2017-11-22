@@ -7,13 +7,17 @@ package Montessori;
 
 import static Montessori.Resource.RUTA_FTP;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
+import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -49,11 +53,17 @@ public class Createlesson {
     { String lessonid= null;
     List<String> equipmentids;
     DriverManagerDataSource dataSource;
+    FTPClient ftpClient = new FTPClient();
+    
     try{
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
         String test = null;
+        String server = "ftp2.renweb.com";
+		int port = 21;
+		String user = "AH-ZAF";
+		String pass = "e3f14+7mANDp";
         if(newlessons.getMethod().getName() != ""){
         test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,method_id,archive,presentedby,idea) values (' "+newlessons.getName()+"',"+newlessons.getLevel().getName()+","+newlessons.getSubject().getName()+","+newlessons.getObjective().getName()+",now(),"+newlessons.getTeacherid()+",'"+newlessons.getStart()+"','"+newlessons.getFinish()+"','"+newlessons.getComments()+"','"+newlessons.getMethod().getName()+"',false,0,false)";
         }
@@ -81,12 +91,20 @@ public class Createlesson {
                 st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids.get(i)+"')");
             }
             }
-            File directorio=new File(RUTA_FTP+lessonid);
-            directorio.mkdir(); 
-          
+//            File directorio=new File(RUTA_FTP+lessonid);
+//            directorio.mkdir(); 
+        // create a folder in the FTP to upload resources to the new presentation
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+            boolean success = ftpClient.changeWorkingDirectory("/MontessoriTesting");
+            if(success){
+            ftpClient.mkd(lessonid);
+            }
     }
     catch (SQLException ex) {
             System.out.println("Error leyendo lessons: " + ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Createlesson.class.getName()).log(Level.SEVERE, null, ex);
         }
   //          st.executeUpdate("insert into lessons_time(teacher_id,lesson_id,lesson_start,lesson_end) values (5,"+lessonid+",'"+newlessons.getStart()+"','"+newlessons.getFinish()+"')");
     }
