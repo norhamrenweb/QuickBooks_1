@@ -13,6 +13,7 @@ import Montessori.*;
 import atg.taglib.json.util.JSONObject;
 import com.google.gson.Gson;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
 
 import org.springframework.context.ApplicationContext;
@@ -203,8 +205,7 @@ public class ResourcesControlador {
             //String lessonid = hsr.getParameter("LessonsSelected");
             String consulta = "insert into resources(name,link,type,lesson_id) values('"+name+"','"+link+"','"+type+"','"+lessonId+"')";
             st.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS); 
-            ResultSet rs = st.getGeneratedKeys();
-            
+            ResultSet rs = st.getGeneratedKeys();     
             while(rs.next())  id = ""+rs.getInt(1);
         }
         catch(SQLException ex){
@@ -256,10 +257,22 @@ public class ResourcesControlador {
             Resource resourceLoad = loadResource(resourceId,st);
             
             if(resourceLoad.getType().equals("File")){
-                File fileToDelete = new File(resourceLoad.getLink());
-                Files.delete(fileToDelete.toPath());
+                /*File fileToDelete = new File(resourceLoad.getLink());
+                Files.delete(fileToDelete.toPath());*/
+                String server = "192.168.1.36";
+		int port = 21;
+		String user = "david";
+		String pass = "david";
+
+		FTPClient ftpClient = new FTPClient();
+                ftpClient.connect(server, port);
+                ftpClient.login(user, pass);
+
+                //boolean success = ftpClient.changeWorkingDirectory("/MontessoriTesting/"+resourceLoad.getLesson_id());
+
+                ftpClient.deleteFile("/MontessoriTesting/"+resourceLoad.getLesson_id()+"/"+resourceLoad.getLink());
+                ftpClient.logout();
             }
-            
             String consulta = "delete from resources where id = "+resourceId;
             st.executeQuery(consulta);
         }catch(SQLException ex){

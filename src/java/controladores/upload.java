@@ -3,8 +3,10 @@ package controladores;
 import Montessori.Resource;
 import static Montessori.Resource.RUTA_FTP;
 import controladores.ResourcesControlador;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 @WebServlet(name = "upload", urlPatterns = {"/upload"})
 @MultipartConfig
@@ -40,59 +44,58 @@ public class upload extends HttpServlet {
     * @throws IOException if an I/O error occurs
     */
     protected void processResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException
-    {
-        
-        String idFile  = request.getParameter("idNameFileDown");
-        Resource rLoaded = new Resource();
-        ResourcesControlador rCont = new ResourcesControlador();
-        try {
-            rLoaded = rCont.loadResource(idFile,request);
-        } catch (Exception ex) {
-            Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-       String url =  "http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected="+rLoaded.getLesson_id();
+    {  
+            String idFile  = request.getParameter("idNameFileDown");
+            Resource rLoaded = new Resource();
+            ResourcesControlador rCont = new ResourcesControlador();
             
-       
-        String filePath = rLoaded.getLink();
-        File downloadFile = new File(filePath);
-        FileInputStream inStream = new FileInputStream(downloadFile);
-         
-   
-        // obtains ServletContext
-        ServletContext context = getServletContext();
-         
-        // gets MIME type of the file
-        String mimeType = context.getMimeType(filePath);
-        if (mimeType == null) {        
-            // set to binary type if MIME mapping not found
-            mimeType = "application/octet-stream";
-        }
-        System.out.println("MIME type: " + mimeType);
-         
-        // modifies response
-        response.setContentType(mimeType);
-        response.setContentLength((int) downloadFile.length());
-         
-        // forces download
-        String headerKey = "Content-Disposition";
-        String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
-        response.setHeader(headerKey, headerValue);
-         
-        // obtains response's output stream
-        OutputStream outStream = response.getOutputStream();
-         
-        byte[] buffer = new byte[4096];
-        int bytesRead = -1;
-         
-        while ((bytesRead = inStream.read(buffer)) != -1) {
-            outStream.write(buffer, 0, bytesRead);
-        }
-         
-        inStream.close();
-        outStream.close();
-        response.sendRedirect(url);
+            try {
+                rLoaded = rCont.loadResource(idFile,request);
+            } catch (Exception ex) {
+                Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            String filePath = "/MontessoriTesting/"+rLoaded.getLesson_id()+"/"+rLoaded.getLink();
+             
+            String url =  "http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected="+rLoaded.getLesson_id();
+            String server = "192.168.1.36";
+            int port = 21;
+            String user = "david";
+            String pass = "david";
+
+            FTPClient ftpClient = new FTPClient();
+            ftpClient.connect(server,port);
+            ftpClient.login(user, pass);
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            InputStream inStream = ftpClient.retrieveFileStream(filePath);
+           
+            // obtains ServletContext
+            ServletContext context = request.getServletContext();
+            String appPath = context.getRealPath("");
+            System.out.println("appPath = " + appPath);
+
+            // gets MIME type of the file
+            String mimeType = context.getMimeType(rLoaded.getLink());
+            if (mimeType == null) {        
+                // set to binary type if MIME mapping not found
+                mimeType = "application/octet-stream";
+            }
+            System.out.println("MIME type: " + mimeType);
+
+            // modifies response
+            response.setContentType(mimeType);
+            
+            // forces download
+            String headerKey = "Content-Disposition";
+            String headerValue = String.format("attachment; filename=\"%s\"", rLoaded.getLink());
+            response.setHeader(headerKey, headerValue);
+            IOUtils.copy(inStream, response.getOutputStream());
+            
+            response.flushBuffer();
+            response.sendRedirect(url);
     }
+        
+   
    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException
    {
             //get the file chosen by the user
@@ -100,13 +103,14 @@ public class upload extends HttpServlet {
             ResourcesControlador rCont = new ResourcesControlador();
 		//get the InputStream to store the file somewhere
 	    InputStream fileInputStream = filePart.getInputStream();
+            String urlBase = request.getParameter("txtUrl"); // CAMBIAR 
 	    String name  = request.getParameter("idNameFile");
             String lessonId = request.getParameter("lessonid");
             String url =  "http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected="+lessonId;
-           String server = "ftp2.renweb.com";
+            String server = "192.168.1.36";
 		int port = 21;
-		String user = "AH-ZAF";
-		String pass = "e3f14+7mANDp";
+		String user = "david";
+		String pass = "david";
 
 		FTPClient ftpClient = new FTPClient();
          FileInputStream fis = null;
@@ -121,20 +125,22 @@ public class upload extends HttpServlet {
 //                    Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);   
 //                    //GET VALUES FOR SAVE IN BBDD
 //
-//                    String path = fileToSave.toPath().toString();
-                String filename = filePart.getSubmittedFileName();
+                //String path = name+"-"+ filePart.getSubmittedFileName();
+                // String filename = filePart.getSubmittedFileName();
+                String filename = name+"-"+ filePart.getSubmittedFileName();
 //                fis = new FileInputStream(filename);
                 boolean success = ftpClient.changeWorkingDirectory("/MontessoriTesting/"+lessonId);
                               
                 ftpClient.storeFile(filename, fileInputStream);
+                
                 ftpClient.logout();
-                    Resource r = new Resource();
+                Resource r = new Resource();
 
-                    r.setLesson_id(lessonId);
-                   // r.setLink(path);
-                    r.setName(name);
-                    r.setType("File");
-                    String idResource = rCont.addResources(r,request,response);
+                r.setLesson_id(lessonId);
+                r.setLink(filename);
+                r.setName(name);
+                r.setType("File");
+                String idResource = rCont.addResources(r,request,response);
                // }
                
             } catch (Exception ex) {

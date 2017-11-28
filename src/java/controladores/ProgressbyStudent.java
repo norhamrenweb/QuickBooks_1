@@ -31,7 +31,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -61,6 +67,7 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 @Controller
 //@Scope("session")
 public class ProgressbyStudent {
+    
      Connection cn;
 static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
       private ServletContext servlet;
@@ -808,10 +815,10 @@ while(rs5.next())
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("progcal");
-    try{
+        String studentId = hsr.getParameter("studentid");
+        try{
         DriverManagerDataSource dataSource;
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
      
            }catch(SQLException ex){
@@ -819,10 +826,143 @@ while(rs5.next())
         ex.printStackTrace(new PrintWriter(errors));
         log.error(ex+errors.toString());
     }
-//    mv.addObject("message","works");
-String message = "works";
+        //    mv.addObject("message","works");
+        String message = "works";
+        mv.addObject("studentId",studentId);
+        
     return mv;
     }
+    
+    public static String getNextDate(String  curDate) throws ParseException {
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        final Date date = format.parse(curDate);
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        return format.format(calendar.getTime()); 
+    }
+    /* FUNCIONA PARA 5 DIAS SEGUIDOS
+    @RequestMapping("/loadComentsStudent.htm")
+    @ResponseBody
+    public String loadComentsStudent(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        final int DIAS_MAX = 5;
+        String studentId = ""+r.getStudentid();
+        DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");   
+        String dateSelected = formatoFecha.format(r.getDate());
+        int days=0;
+        
+        Observation oAux = new Observation();
+        Date fechaActual = new Date();
+        String currentDate = formatoFecha.format(fechaActual);
+        
+        ArrayList<ArrayList<Observation>> arrayObservations = new  ArrayList<ArrayList<Observation>>();
+        ArrayList<Observation> arrayComments = new ArrayList<Observation>();
+        String consulta = "SELECT * FROM classobserv WHERE student_id = "+studentId+" AND commentdate = '"+dateSelected+"'";
+        
+        try{
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            Statement st = this.cn.createStatement();
+            while(days < DIAS_MAX && !currentDate.equals(dateSelected)){
+                
+                //dateSelected = getNextDate(dateSelected);
+                arrayComments.clear();
+                consulta = "SELECT * FROM classobserv WHERE student_id = "+studentId+" AND commentdate = '"+dateSelected+"' ORDER BY commentdate";
+                ResultSet rs = st.executeQuery(consulta);
+               
+                
+                while (rs.next()) {        
+                    oAux.setId(rs.getInt("id"));
+                    oAux.setLogged_by(rs.getInt("logged_by"));
+                    oAux.setDate(rs.getDate("date_created"));
+                    oAux.setObservation(rs.getString("comment"));
+                    oAux.setType(rs.getString("category"));
+                    oAux.setStudentid(Integer.parseInt(studentId));
+                    oAux.setCommentDate(rs.getDate("commentdate"));
+                    arrayComments.add(new Observation(oAux));
+                }
+                
+                if(!arrayComments.isEmpty()){
+                    arrayObservations.add(new ArrayList<Observation>(arrayComments));
+                    days++;
+                }
+                dateSelected = getNextDate(dateSelected);
+            }
+        }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+        return new Gson().toJson(arrayObservations);
+    }*/
+    @RequestMapping("/loadComentsStudent.htm")
+    @ResponseBody
+    public String loadComentsStudent(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+
+        DateFormat formatoFecha;// = new SimpleDateFormat("M/d/yyyy");   
+        String date = r.getDateString()+"-01";
+        
+        LocalDate convertedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-M-d"));
+        convertedDate = convertedDate.withDayOfMonth( convertedDate.getMonth().length(convertedDate.isLeapYear()));
+       
+        int DIAS_MAX = convertedDate.getDayOfMonth();
+        
+        String studentId = ""+r.getStudentid();
+         
+        String monthSelected = ""+r.getDateString().charAt(5)+r.getDateString().charAt(6) ;
+        
+        String yearSelected = ""+r.getDateString().charAt(0)+r.getDateString().charAt(1)+r.getDateString().charAt(2)+r.getDateString().charAt(3);
+        int days=0;
+        
+        Observation oAux = new Observation();
+        
+        formatoFecha = new SimpleDateFormat("yyyy-MM-dd");   
+        Date fechaActual = new Date();
+        String currentDate = formatoFecha.format(fechaActual);
+                
+        String dateSelected = yearSelected+"-"+monthSelected+"-"+"01";
+        
+        ArrayList<ArrayList<Observation>> arrayObservations = new  ArrayList<ArrayList<Observation>>();
+        ArrayList<Observation> arrayComments = new ArrayList<Observation>();
+        String consulta = "SELECT * FROM classobserv WHERE student_id = "+studentId+" AND commentdate = '"+dateSelected+"'";
+        
+        try{
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            Statement st = this.cn.createStatement();
+            
+            while(days < DIAS_MAX && !currentDate.equals(dateSelected)){
+                //dateSelected = getNextDate(dateSelected);
+                arrayComments.clear();
+                consulta = "SELECT * FROM classobserv WHERE student_id = "+studentId+" AND commentdate = '"+dateSelected+"' ORDER BY commentdate";
+                ResultSet rs = st.executeQuery(consulta);
+               
+                
+                while (rs.next()) {        
+                    oAux.setId(rs.getInt("id"));
+                    oAux.setLogged_by(rs.getInt("logged_by"));
+                    oAux.setDate(rs.getDate("date_created"));
+                    oAux.setObservation(rs.getString("comment"));
+                    oAux.setType(rs.getString("category"));
+                    oAux.setStudentid(Integer.parseInt(studentId));
+                    oAux.setCommentDate(rs.getDate("commentdate"));
+                    arrayComments.add(new Observation(oAux));
+                }
+                
+                arrayObservations.add(new ArrayList<Observation>(arrayComments));                  
+                days++;
+                dateSelected = getNextDate(dateSelected);
+                
+            }
+        }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+        return new Gson().toJson(arrayObservations);
+    }
+    
+    
         public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException
        {
            ArrayList<Objective> objectives = new ArrayList<>();

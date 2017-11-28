@@ -1,548 +1,643 @@
+<%--
+   Document   : homepage
+   Created on : 24-ene-2017, 12:12:45
+   Author     : nmohamed
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <style>
-  .calendar-day {
-  width: 100px;
-  min-width: 100px;
-  max-width: 100px;
-  height: 80px;
-}
-.calendar-table {
-  margin: 0 auto;
-  width: 700px;
-}
-.selected {
-  background-color: #eee;
-}
-.outside .date {
-  color: #ccc;
-}
-.timetitle {
-  white-space: nowrap;
-  text-align: right;
-}
-.event {
-  border-top: 1px solid #b2dba1;
-  border-bottom: 1px solid #b2dba1;
-  background-image: linear-gradient(to bottom, #dff0d8 0px, #c8e5bc 100%);
-  background-repeat: repeat-x;
-  color: #3c763d;
-  border-width: 1px;
-  font-size: .75em;
-  padding: 0 .75em;
-  line-height: 2em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 1px;
-}
-.event.begin {
-  border-left: 1px solid #b2dba1;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-.event.end {
-  border-right: 1px solid #b2dba1;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-.event.all-day {
-  border-top: 1px solid #9acfea;
-  border-bottom: 1px solid #9acfea;
-  background-image: linear-gradient(to bottom, #d9edf7 0px, #b9def0 100%);
-  background-repeat: repeat-x;
-  color: #31708f;
-  border-width: 1px;
-}
-.event.all-day.begin {
-  border-left: 1px solid #9acfea;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-.event.all-day.end {
-  border-right: 1px solid #9acfea;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-.event.clear {
-  background: none;
-  border: 1px solid transparent;
-}
-.table-tight > thead > tr > th,
-.table-tight > tbody > tr > th,
-.table-tight > tfoot > tr > th,
-.table-tight > thead > tr > td,
-.table-tight > tbody > tr > td,
-.table-tight > tfoot > tr > td {
-  padding-left: 0;
-  padding-right: 0;
-}
-.table-tight-vert > thead > tr > th,
-.table-tight-vert > tbody > tr > th,
-.table-tight-vert > tfoot > tr > th,
-.table-tight-vert > thead > tr > td,
-.table-tight-vert > tbody > tr > td,
-.table-tight-vert > tfoot > tr > td {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-    
-            
-        </style>
-        
-        
-    </head>
-    <body>
-<div class="container theme-showcase">
-  <h1>Calendar</h1>
-<div id="holder" class="row" ></div>
-</div>
+   <%@ include file="infouser.jsp" %>
+   <%@ include file="menu.jsp" %>
+       
+   <head>
+       <title>Home</title>
 
+   <script type="text/javascript">
+   
+var ajax;
+   
+   $(document).ready( function () {
+         var userLang = navigator.language || navigator.userLanguage;
+           var myDate = new Date();
+           $( ".divClass" ).click(function() {
+                   
+                   
+                   var idCLass = $(this).attr('data-idclass');
+                   window.location.replace("<c:url value="/gradebook/loadRecords.htm?term=1&ClassSelected="/>"+idCLass);
+                   
+           });
+       //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
+       
 
-<script type="text/tmpl" id="tmpl">
-  {{ 
-  var date = date || new Date(),
-      month = date.getMonth(), 
-      year = date.getFullYear(), 
-      first = new Date(year, month, 1), 
-      last = new Date(year, month + 1, 0),
-      startingDay = first.getDay(), 
-      thedate = new Date(year, month, 1 - startingDay),
-      dayclass = lastmonthcss,
-      today = new Date(),
-      i, j; 
-  if (mode === 'week') {
-    thedate = new Date(date);
-    thedate.setDate(date.getDate() - date.getDay());
-    first = new Date(thedate);
-    last = new Date(thedate);
-    last.setDate(last.getDate()+6);
-  } else if (mode === 'day') {
-    thedate = new Date(date);
-    first = new Date(thedate);
-    last = new Date(thedate);
-    last.setDate(thedate.getDate() + 1);
-  }
+    $('#fecha').datetimepicker({
+
+               format: 'YYYY-MM',
+               locale: userLang.valueOf(),
+               daysOfWeekDisabled: [0, 6],
+               useCurrent: false//Important! See issue #1075
+               //defaultDate: '08:32:33',
+              
+           });
+           
+   $('#fecha').on('dp.change', function(e){loadComments(); })
+   
   
-  }}
-  <table class="calendar-table table table-condensed table-tight">
-    <thead>
-      <tr>
-        <td colspan="7" style="text-align: center">
-          <table style="white-space: nowrap; width: 100%">
-            <tr>
-              <td style="text-align: left;">
-                <span class="btn-group">
-                  <button class="js-cal-prev btn btn-default"><</button>
-                  <button class="js-cal-next btn btn-default">></button>
-                </span>
-                <button class="js-cal-option btn btn-default {{: first.toDateInt() <= today.toDateInt() && today.toDateInt() <= last.toDateInt() ? 'active':'' }}" data-date="{{: today.toISOString()}}" data-mode="month">{{: todayname }}</button>
-              </td>
-              <td>
-                <span class="btn-group btn-group-lg">
-                  {{ if (mode !== 'day') { }}
-                    {{ if (mode === 'month') { }}<button class="js-cal-option btn btn-link" data-mode="year">{{: months[month] }}</button>{{ } }}
-                    {{ if (mode ==='week') { }}
-                      <button class="btn btn-link disabled">{{: shortMonths[first.getMonth()] }} {{: first.getDate() }} - {{: shortMonths[last.getMonth()] }} {{: last.getDate() }}</button>
-                    {{ } }}
-                    <button class="js-cal-years btn btn-link">{{: year}}</button> 
-                  {{ } else { }}
-                    <button class="btn btn-link disabled">{{: date.toDateString() }}</button> 
-                  {{ } }}
-                </span>
-              </td>
-              <td style="text-align: right">
-                <span class="btn-group">
-                  <button class="js-cal-option btn btn-default {{: mode==='year'? 'active':'' }}" data-mode="year">Year</button>
-                  <button class="js-cal-option btn btn-default {{: mode==='month'? 'active':'' }}" data-mode="month">Month</button>
-                  <button class="js-cal-option btn btn-default {{: mode==='week'? 'active':'' }}" data-mode="week">Week</button>
-                  <button class="js-cal-option btn btn-default {{: mode==='day'? 'active':'' }}" data-mode="day">Day</button>
-                </span>
-              </td>
-            </tr>
-          </table>
-          
-        </td>
-      </tr>
-    </thead>
-    {{ if (mode ==='year') {
-      month = 0;
-    }}
-    <tbody>
-      {{ for (j = 0; j < 3; j++) { }}
-      <tr>
-        {{ for (i = 0; i < 4; i++) { }}
-        <td class="calendar-month month-{{:month}} js-cal-option" data-date="{{: new Date(year, month, 1).toISOString() }}" data-mode="month">
-          {{: months[month] }}
-          {{ month++;}}
-        </td>
-        {{ } }}
-      </tr>
-      {{ } }}
-    </tbody>
-    {{ } }}
-    {{ if (mode ==='month' || mode ==='week') { }}
-    <thead>
-      <tr class="c-weeks">
-        {{ for (i = 0; i < 7; i++) { }}
-          <th class="c-name">
-            {{: days[i] }}
-          </th>
-        {{ } }}
-      </tr>
-    </thead>
-    <tbody>
-      {{ for (j = 0; j < 6 && (j < 1 || mode === 'month'); j++) { }}
-      <tr>
-        {{ for (i = 0; i < 7; i++) { }}
-        {{ if (thedate > last) { dayclass = nextmonthcss; } else if (thedate >= first) { dayclass = thismonthcss; } }}
-        <td class="calendar-day {{: dayclass }} {{: thedate.toDateCssClass() }} {{: date.toDateCssClass() === thedate.toDateCssClass() ? 'selected':'' }} {{: daycss[i] }} js-cal-option" data-date="{{: thedate.toISOString() }}">
-          <div class="date">{{: thedate.getDate() }}</div>
-          {{ thedate.setDate(thedate.getDate() + 1);}}
-        </td>
-        {{ } }}
-      </tr>
-      {{ } }}
-    </tbody>
-    {{ } }}
-    {{ if (mode ==='day') { }}
-    <tbody>
-      <tr>
-        <td colspan="7">
-          <table class="table table-striped table-condensed table-tight-vert" >
-            <thead>
-              <tr>
-                <th> </th>
-                <th style="text-align: center; width: 100%">{{: days[date.getDay()] }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th class="timetitle" >All Day</th>
-                <td class="{{: date.toDateCssClass() }}">  </td>
-              </tr>
-              <tr>
-                <th class="timetitle" >Before 6 AM</th>
-                <td class="time-0-0"> </td>
-              </tr>
-              {{for (i = 6; i < 22; i++) { }}
-              <tr>
-                <th class="timetitle" >{{: i <= 12 ? i : i - 12 }} {{: i < 12 ? "AM" : "PM"}}</th>
-                <td class="time-{{: i}}-0"> </td>
-              </tr>
-              <tr>
-                <th class="timetitle" >{{: i <= 12 ? i : i - 12 }}:30 {{: i < 12 ? "AM" : "PM"}}</th>
-                <td class="time-{{: i}}-30"> </td>
-              </tr>
-              {{ } }}
-              <tr>
-                <th class="timetitle" >After 10 PM</th>
-                <td class="time-22-0"> </td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
-    </tbody>
-    {{ } }}
-  </table>
-</script>
 
 
 
-<div class="container">
-  <hr>
-  <p>Resources</p>
-  <ul>
-    <li><a href="https://github.com/twbs/bootstrap">Bootstrap</a></li>
-    <li><a href="https://bootstrap-calendar.azurewebsites.net/index-bs3.html">another calendar</a></li>
-    <li><a href="http://www.bootply.com/rzNQTlDlFX">another calendar</a></li>
-    <li><a href="http://slipsum.com">lipsum generator</a></li>
-  </ul>
-</div>
-<div class="container">
-  <hr>
-  <p>Notes</p>
-  <ul>
-    <li>clicking on year to open and let you jump around 5ish years, don't care for current ui...</li>
-    <li>work needed on day mode (buggy, unfinished)</li>
-    <li>options missing still for classes</li>
-    <li>not sure about popover contents</li>
-    <li>? use of success state color and info state color ?</li>
-    <li><a href="http://www.reddit.com/r/css/comments/2gvw4n/i_refactored_my_less_to_follow_fats_guidelines/">can do better with css rules</a></li>
-  </ul>
-</div>
-<script>
-    var $currentPopover = null;
-  $(document).on('shown.bs.popover', function (ev) {
-    var $target = $(ev.target);
-    if ($currentPopover && ($currentPopover.get(0) != $target.get(0))) {
-      $currentPopover.popover('toggle');
+
+   });
+function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
+
+       $('#lessonDelete').empty();
+       $('#lessonDelete').append(deleteLessonsName);
+       $('#buttonDelete').val(deleteLessonsSelected);
+       $('#deleteLesson').modal('show');
+}
+//  
+
+function funcionCallBackdetailsLesson()
+   {
+          if (ajax.readyState===4){
+               if (ajax.status===200){
+                  var object = JSON.parse(ajax.responseText);
+                  var s = JSON.parse(object.students);
+                  var c =  JSON.parse(object.contents);
+                 
+//                   var cntContent = (object.contents).toString();
+//                   var Contents = cntContent.substr(1,cntContent.length - 2);
+//                   var r = Contents.split(",");
+                       //var tableObjective = $('#tableobjective').DataTable();
+                       $('#nameLessonDetails').empty();
+                       $('#nameLessonDetails').append('Details '+nameLessons);
+                       //$('#detailsStudents').empty();
+                       $('#studentarea').append('<table id="detailsStudents" class="table table-striped">');
+                       $.each(s, function (i,student){
+                           $('#detailsStudents').append('<tr><td class="studentDetails">'+s[i].studentname+'</td></tr>');
+                           $("tr:odd").addClass("par");
+                           $("tr:even").addClass("impar");
+                       //    $("tr:odd").css("background-color", "lightgray");
+                       });
+                       $('#contentDetails').empty();
+                       $.each(c, function (i, content){
+                           $('#contentDetails').append('<li>'+c[i]+'</li>');
+                       });
+                       
+                       
+                       $('#methodDetails').empty();
+                       $('#methodDetails').append('<tr><td>'+object.method+'</td></tr>');
+                       $('#commentDetails').empty();
+                       $('#commentDetails').append('<tr><td>'+object.comment+'</td></tr>');
+                       $('#detailsLesson').modal('show');
+//                        });
+//                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
+//                        $('#tableobjective tbody tr td:eq(2)').empty();
+//                        $('#tableobjective tbody tr td:eq(2)').append("<input value='"+commentgeneral+"'></input>");  
+                         
+                       
+//     $('#tableobjective tbody tr td:eq(4)').on('click', 'tr', 'td:eq(4)', function () {
+//        
+//        var dataObjective = tableObjective.row( this ).data();
+//        dataObjective1 = dataObjective['col5'];
+//        selectionObjective();
+//    } );
+                   }
+               }
+           }
+  function rowselect(LessonsSelected)
+   {
+       //ESTO PARA PINCHAR EN LA FILAvar LessonsSelected = data1;
+       //var LessonsSelected = $(data1).html();
+       //var LessonsSelected = 565;
+
+       
+       
+//        if (window.XMLHttpRequest) //mozilla
+//        {
+//            ajax = new XMLHttpRequest(); //No Internet explorer
+//        }
+//        else
+//        {
+//            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+//        }
+       
+//ajax.onreadystatechange=funcionCallBackLessonsprogress;
+//       window.location.href = "/lessonprogress/loadRecords.htm?LessonsSelected="+LessonsSelected;
+      window.open("<c:url value="/lessonprogress/loadRecords.htm?LessonsSelected="/>"+LessonsSelected);
+//        ajax.open("POST","lessonprogress.htm?select6=loadRecords&LessonsSelected="+LessonsSelected,true);
+//        ajax.send("");
+ };
+// $('#fecha').datepicker({
+//     function loadComments;
+// });
+ function loadComments(){
+            if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        }
+        else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+              
+        var myObj = {};
+                myObj["studentid"] = $('#lessonid').val();    
+                myObj["dateString"] = $('#TXTfecha').val();
+                var json = JSON.stringify(myObj);
+        $.ajax({
+                    type: 'POST',
+                        url: 'loadComentsStudent.htm',
+                        data: json,
+                        datatype:"json",
+                        contentType: "application/json",           
+                     
+                        success: function(data) {                          
+                          var j = JSON.parse(data);
+                          var semana="";
+                          
+                          $("#semana1").empty();
+                          $("#semana2").empty();
+                          $("#semana3").empty();
+                          $("#semana4").empty();
+                          
+                          $.each(j, function (i,value){
+                            var f = value;
+               
+                                $.each(f, function (i2,value2){
+                                    
+                                    var comentario = value2.observation; 
+                                    var fechaCreacion = value2.date;
+                                    var category = value2.type;
+                                    var commentdate = value2.commentDate;
+                                        
+                                    if(i <= 7){ 
+                                        semana= "semana1"
+                                    }
+                                    else{
+                                        if(i<=14){
+                                           semana= "semana2"
+                                        }
+                                        else{
+                                            if(i<=21){
+                                                semana= "semana3"
+                                                
+                                            }
+                                            else{ 
+                                                semana= "semana4"
+                                            }
+                                        }
+                                    }   
+                                    
+                                    $("#"+semana+"").append("<div class='col-xs-3'>Comment Date: "+commentdate+"<br>Create Date: "+fechaCreacion+"<br>Type: "+category+"<br>Comment: "+comentario+"</div>");                            
+                                 
+                                });
+                             
+                          });
+                    
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                   console.log(xhr.responseText);
+                                   console.log(thrownError);
+                               }
+
+                    });
     }
-    $currentPopover = $target;
-  }).on('hidden.bs.popover', function (ev) {
-    var $target = $(ev.target);
-    if ($currentPopover && ($currentPopover.get(0) == $target.get(0))) {
-      $currentPopover = null;
-    }
-  });
+  function detailsSelect(LessonsSelected)
+   {
+       if (window.XMLHttpRequest) //mozilla
+       {
+           ajax = new XMLHttpRequest(); //No Internet explorer
+       }
+       else
+       {
+           ajax = new ActiveXObject("Microsoft.XMLHTTP");
+       }
+       ajax.onreadystatechange = funcionCallBackdetailsLesson;
+       ajax.open("POST","detailsLesson.htm?LessonsSelected="+LessonsSelected,true);
+       ajax.send("");
+ };
+  function modifySelect(LessonsSelected)
+   {
+      window.open("<c:url value="/editlesson/start.htm?LessonsSelected="/>"+LessonsSelected);
+ };
+  function funcionCallBackdeleteLesson()
+   {
+          if (ajax.readyState===4){
+               if (ajax.status===200){
+               <%--    var lessondeleteconfirm = '<%= request.getParameter("messageDelete") %>'; --%>
+                   var lessondeleteconfirm = "";
+               var lessondeleteconfirm = JSON.parse(ajax.responseText);
+//                   var s = JSON.parse(object.students);
+//                   var c =  JSON.parse(object.contents);
+//                  
+//                        $('#nameLessonDetails').empty();
+//                        $('#nameLessonDetails').append('Details '+nameLessons);
+//                        //$('#detailsStudents').empty();
+//                        $('#studentarea').append('<table id="detailsStudents" class="table table-striped">');
+//                        $.each(s, function (i,student){
+//                            $('#detailsStudents').append('<tr><td class="studentDetails">'+s[i].studentname+'</td></tr>');
+//                            $("tr:odd").addClass("par");
+//                            $("tr:even").addClass("impar");
+//                        });
+//                        $('#contentDetails').empty();
+//                        $.each(c, function (i, content){
+//                            $('#contentDetails').append('<li>'+c[i]+'</li>');
+//                        });
+//                        
+//                        
+//                        $('#methodDetails').empty();
+//                        $('#methodDetails').append('<tr><td>'+object.method+'</td></tr>');
+//                        $('#commentDetails').empty();
+//                        $('#commentDetails').append('<tr><td>'+object.comment+'</td></tr>');
+//                         $('#lessonDeleteMessage').empty();
+//                         document.getElementById("lessonDeleteMessage").innerHTML = ajax.responseText;
+                      if (lessondeleteconfirm.message === 'Presentation has progress records,it can not be deleted' ){
+                           $('#lessonDeleteMessage').append('<H1>'+lessondeleteconfirm.message+'</H1>');
+                           $('#deleteLessonMessage').modal('show');
+                       }else {
+                           $('#lessonDeleteMessage').append('<H1>'+lessondeleteconfirm.message+'</H1>');
+                           $('#deleteLessonMessage').modal('show'); //  Presentation deleted successfully
+                       };  
+                       
+                       
 
-
-//quicktmpl is a simple template language I threw together a while ago; it is not remotely secure to xss and probably has plenty of bugs that I haven't considered, but it basically works
-//the design is a function I read in a blog post by John Resig (http://ejohn.org/blog/javascript-micro-templating/) and it is intended to be loosely translateable to a more comprehensive template language like mustache easily
-$.extend({
-    quicktmpl: function (template) {return new Function("obj","var p=[],print=function(){p.push.apply(p,arguments);};with(obj){p.push('"+template.replace(/[\r\t\n]/g," ").split("{{").join("\t").replace(/((^|\}\})[^\t]*)'/g,"$1\r").replace(/\t:(.*?)\}\}/g,"',$1,'").split("\t").join("');").split("}}").join("p.push('").split("\r").join("\\'")+"');}return p.join('');")}
-});
-
-$.extend(Date.prototype, {
-  //provides a string that is _year_month_day, intended to be widely usable as a css class
-  toDateCssClass:  function () { 
-    return '_' + this.getFullYear() + '_' + (this.getMonth() + 1) + '_' + this.getDate(); 
-  },
-  //this generates a number useful for comparing two dates; 
-  toDateInt: function () { 
-    return ((this.getFullYear()*12) + this.getMonth())*32 + this.getDate(); 
-  },
-  toTimeString: function() {
-    var hours = this.getHours(),
-        minutes = this.getMinutes(),
-        hour = (hours > 12) ? (hours - 12) : hours,
-        ampm = (hours >= 12) ? ' pm' : ' am';
-    if (hours === 0 && minutes===0) { return ''; }
-    if (minutes > 0) {
-      return hour + ':' + minutes + ampm;
-    }
-    return hour + ampm;
-  }
-});
-
-
-(function ($) {
-
-  //t here is a function which gets passed an options object and returns a string of html. I am using quicktmpl to create it based on the template located over in the html block
-  var t = $.quicktmpl($('#tmpl').get(0).innerHTML);
+                   }
+               }
+           }
+ function deleteSelect(LessonsSelected)
+ {
+      if (window.XMLHttpRequest) //mozilla
+       {
+           ajax = new XMLHttpRequest(); //No Internet explorer
+       }
+       else
+       {
+           ajax = new ActiveXObject("Microsoft.XMLHTTP");
+       }
+       
+       ajax.onreadystatechange = funcionCallBackdeleteLesson;
+       ajax.open("POST","deleteLesson.htm?LessonsSelected="+LessonsSelected,true);
+   <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
+       ajax.send("");
+     
+     
+ };
+   function refresh()
+   {
+        location.reload();
+   }
+     
   
-  function calendar($el, options) {
-    //actions aren't currently in the template, but could be added easily...
-    $el.on('click', '.js-cal-prev', function () {
-      switch(options.mode) {
-      case 'year': options.date.setFullYear(options.date.getFullYear() - 1); break;
-      case 'month': options.date.setMonth(options.date.getMonth() - 1); break;
-      case 'week': options.date.setDate(options.date.getDate() - 7); break;
-      case 'day':  options.date.setDate(options.date.getDate() - 1); break;
-      }
-      draw();
-    }).on('click', '.js-cal-next', function () {
-      switch(options.mode) {
-      case 'year': options.date.setFullYear(options.date.getFullYear() + 1); break;
-      case 'month': options.date.setMonth(options.date.getMonth() + 1); break;
-      case 'week': options.date.setDate(options.date.getDate() + 7); break;
-      case 'day':  options.date.setDate(options.date.getDate() + 1); break;
-      }
-      draw();
-    }).on('click', '.js-cal-option', function () {
-      var $t = $(this), o = $t.data();
-      if (o.date) { o.date = new Date(o.date); }
-      $.extend(options, o);
-      draw();
-    }).on('click', '.js-cal-years', function () {
-      var $t = $(this), 
-          haspop = $t.data('popover'),
-          s = '', 
-          y = options.date.getFullYear() - 2, 
-          l = y + 5;
-      if (haspop) { return true; }
-      for (; y < l; y++) {
-        s += '<button type="button" class="btn btn-default btn-lg btn-block js-cal-option" data-date="' + (new Date(y, 1, 1)).toISOString() + '" data-mode="year">'+y + '</button>';
-      }
-      $t.popover({content: s, html: true, placement: 'auto top'}).popover('toggle');
-      return false;
-    }).on('click', '.event', function () {
-      var $t = $(this), 
-          index = +($t.attr('data-index')), 
-          haspop = $t.data('popover'),
-          data, time;
-          
-      if (haspop || isNaN(index)) { return true; }
-      data = options.data[index];
-      time = data.start.toTimeString();
-      if (time && data.end) { time = time + ' - ' + data.end.toTimeString(); }
-      $t.data('popover',true);
-      $t.popover({content: '<p><strong>' + time + '</strong></p>'+data.text, html: true, placement: 'auto left'}).popover('toggle');
-      return false;
-    });
-    function dayAddEvent(index, event) {
-      if (!!event.allDay) {
-        monthAddEvent(index, event);
-        return;
-      }
-      var $event = $('<div/>', {'class': 'event', text: event.title, title: event.title, 'data-index': index}),
-          start = event.start,
-          end = event.end || start,
-          time = event.start.toTimeString(),
-          hour = start.getHours(),
-          timeclass = '.time-22-0',
-          startint = start.toDateInt(),
-          dateint = options.date.toDateInt(),
-          endint = end.toDateInt();
-      if (startint > dateint || endint < dateint) { return; }
+   </script>
+   <style>
       
-      if (!!time) {
-        $event.html('<strong>' + time + '</strong> ' + $event.html());
-      }
-      $event.toggleClass('begin', startint === dateint);
-      $event.toggleClass('end', endint === dateint);
-      if (hour < 6) {
-        timeclass = '.time-0-0';
-      }
-      if (hour < 22) {
-        timeclass = '.time-' + hour + '-' + (start.getMinutes() < 30 ? '0' : '30');
-      }
-      $(timeclass).append($event);
-    }
-    
-    function monthAddEvent(index, event) {
-      var $event = $('<div/>', {'class': 'event', text: event.title, title: event.title, 'data-index': index}),
-          e = new Date(event.start),
-          dateclass = e.toDateCssClass(),
-          day = $('.' + e.toDateCssClass()),
-          empty = $('<div/>', {'class':'clear event', html:' '}), 
-          numbevents = 0, 
-          time = event.start.toTimeString(),
-          endday = event.end && $('.' + event.end.toDateCssClass()).length > 0,
-          checkanyway = new Date(e.getFullYear(), e.getMonth(), e.getDate()+40),
-          existing,
-          i;
-      $event.toggleClass('all-day', !!event.allDay);
-      if (!!time) {
-        $event.html('<strong>' + time + '</strong> ' + $event.html());
-      }
-      if (!event.end) {
-        $event.addClass('begin end');
-        $('.' + event.start.toDateCssClass()).append($event);
-        return;
-      }
+      .title
+       {
+           font-size: medium;
+           font-weight: bold;
+           color: gray;
+           margin-top: 5px;
+           padding-left: 5px;
+       }
+       .par
+       {
+           background-color: lightgrey;
+           
+       }
+       .impar
+       {
+          border-bottom: solid 1px grey;
+       }
+       .studentDetails{
+           padding-top: 5px;
+           padding-bottom: 5px;
+           padding-left: 10px;
+       }
+       .modal-header-details
+       {
+           background-color: #99CC66;
+       }
+       .modal-header-delete
+       {
+           background-color: #CC6666;
+       }
+       .divClass{
+           min-height: 20px;
+           color: #ffffff;
+           background-color: #666666;
+           padding: 5px;
+       }
+       .divAdd{
+           color: #ffffff;
+           height: 200px;
+           color: #ffffff;
+           background-color: #666666;
+           margin-right: 10px;
+           font-size: small;
+           padding-left: 5px;
+           padding-bottom: 5px;
+           display: line;
+           float: left;
+        }
+ 
+       .scroll{
+           overflow-x: scroll;
+       }
+       .tamFijo{
+           height:  200px;
+           display: flex;
+           weigth: 1300px;
+       }
+       .semana1
+       {
+           overflow-x: visible;
+       }
+        .semana2
+       {
+           overflow-x: visible;
+       }
+        .semana3
+       {
+           overflow-x: visible;
+       }
+        .semana4
+       {
+           overflow-x: visible;
+       }
+
+   </style>
+   </head>
+   <body>
+       <input type="hidden" id="lessonid" name="lessonid" value = ${studentId}>
+       <div class="col-xs-12">
+           <div class="col-sm-12" id="maincontainer">
+               <div class="col-sm-12 center-block text-center">
+                   <h2>CLASSROOM</h2>
+               </div>
+           </div>
+<%--            <div class="container">
+               <table id="table_id" class="display" >
+                   <thead>
+                       <tr>
+                           <td>id</td>
+                           <td>Lesson Name</td>
+                           <td>Grade Level</td>
+                           <td>Subject</td>
+                           <td>Objective</td>
+                           
+                           <td>Date</td>
+                           <td>Start Hour</td>
+                           <td>End Hour</td>
+                           <td><spring:message code="etiq.actionlessons"/></td>
+                       </tr>
+                   </thead>
+                   <tbody>
+                   <c:forEach var="lecciones" items="${lessonslist}" >
+                       <tr>
+                           <td>${lecciones.id}</td>
+                           <td>${lecciones.name}</td>
+                           <td>${lecciones.level.name}</td>
+                           <td>${lecciones.subject.name}</td>
+                           <td>${lecciones.objective.name}</td>
+                           <td>${lecciones.date}</td>
+                           <td>${lecciones.start}</td>
+                           <td>${lecciones.finish}</td>
+                           <td>
+                               <div class="col-xs-3">
+                                   <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Attendance">
+                               </div>
+                               <div class="col-xs-3">
+                                   <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
+                               </div>
+                               <div class="col-xs-3">
+                                   <input name="TXTid_lessons_modificar" type="image" src="<c:url value="/recursos/img/btn/btn_Edit.svg"/>" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
+                               </div>
+                               <div class="col-xs-3">
+                                   <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
+                               </div>
+                           </td>
+                       </tr>
+                   </c:forEach>
+                   </tbody>
+           </table>
+         
+           </div>--%>
+           <div class="col-xs-12">
+               <div class="col-xs-6" >
+
+                   <div class='col-xs-6'>
+                        <div class="form-group">
+                            <label class="control-label" for="fecha">Date</label>
+                            <div class='input-group date' id='fecha'>
+                                <input type='text' name="TXTfecha" class="form-control" id="TXTfecha" onselect="loadComments()"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                   
+               </div>
+             
+           </div>
+           <div class="col-xs-12">
+           <hr>
+           </div>
+           <script>
+            function moverDrech(x)
+   {
+       $("#semana"+x).children().not(".hide").first().addClass("hide");
+   }
+   function moverIzq(x)
+   {
+       $("#semana"+x).children().not(".hide").prev().removeClass("hide");
+   }
             
-      while (e <= event.end && (day.length || endday || options.date < checkanyway)) {
-        if(day.length) { 
-          existing = day.find('.event').length;
-          numbevents = Math.max(numbevents, existing);
-          for(i = 0; i < numbevents - existing; i++) {
-            day.append(empty.clone());
-          }
-          day.append(
-            $event.
-            toggleClass('begin', dateclass === event.start.toDateCssClass()).
-            toggleClass('end', dateclass === event.end.toDateCssClass())
-          );
-          $event = $event.clone();
-          $event.html(' ');
-        }
-        e.setDate(e.getDate() + 1);
-        dateclass = e.toDateCssClass();
-        day = $('.' + dateclass);
-      }
-    }
-    function yearAddEvents(events, year) {
-      var counts = [0,0,0,0,0,0,0,0,0,0,0,0];
-      $.each(events, function (i, v) {
-        if (v.start.getFullYear() === year) {
-            counts[v.start.getMonth()]++;
-        }
-      });
-      $.each(counts, function (i, v) {
-        if (v!==0) {
-            $('.month-'+i).append('<span class="badge">'+v+'</span>');
-        }
-      });
-    }
-    
-    function draw() {
-      $el.html(t(options));
-      //potential optimization (untested), this object could be keyed into a dictionary on the dateclass string; the object would need to be reset and the first entry would have to be made here
-      $('.' + (new Date()).toDateCssClass()).addClass('today');
-      if (options.data && options.data.length) {
-        if (options.mode === 'year') {
-            yearAddEvents(options.data, options.date.getFullYear());
-        } else if (options.mode === 'month' || options.mode === 'week') {
-            $.each(options.data, monthAddEvent);
-        } else {
-            $.each(options.data, dayAddEvent);
-        }
-      }
-    }
-    
-    draw();    
-  }
-  
-  ;(function (defaults, $, window, document) {
-    $.extend({
-      calendar: function (options) {
-        return $.extend(defaults, options);
-      }
-    }).fn.extend({
-      calendar: function (options) {
-        options = $.extend({}, defaults, options);
-        return $(this).each(function () {
-          var $this = $(this);
-          calendar($this, options);
-        });
-      }
-    });
-  })({
-    days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    date: (new Date()),
-        daycss: ["c-sunday", "", "", "", "", "", "c-saturday"],
-        todayname: "Today",
-        thismonthcss: "current",
-        lastmonthcss: "outside",
-        nextmonthcss: "outside",
-    mode: "month",
-    data: []
-  }, jQuery, window, document);
-    
-})(jQuery);
+           </script>
+          <div class=" col-xs-12 tamFijo">
+                <div class="col-xs-2  paddingLabel">
+                   <div class="col-xs-12 divClass" data-idclass="1919">
+                       <div class="col-xs-6">
+                           First Week
+                       </div>
+                   </div>
+               </div>
+               <div class="col-xs-1">
+                   <button class="col-xs-1 left carousel-control" onclick="moverIzq('1')"></button>
+               </div>
+               <div class="col-xs-8 paddingLabel  tamFijo" > 
+                   <div  class="semana1" id="semana1">
+                       
+                   </div>
+               </div>
+               <div class="col-xs-1">
+                   <button class="col-xs-1 right carousel-control" onclick="moverDrech('1')"></button>
+               </div>
+           </div>
+           <div class=" col-xs-12 tamFijo">
+                <div class="col-xs-2  paddingLabel">
+                   <div class="col-xs-12 divClass" data-idclass="1919">
+                       <div class="col-xs-6">
+                           Second Week
+                       </div>
+                   </div>
+               </div>
+               <div class="col-xs-1">
+                   <button class="col-xs-1 left carousel-control" onclick="moverIzq('2')"></button>
+               </div>
+               <div class="col-xs-8 paddingLabel  tamFijotamFijo" > 
+                   <div  class="semana2" id="semana2">
+                       
+                   </div>
+               </div>
+               <div class="col-xs-1">
+                   <button class="col-xs-1 right carousel-control" onclick="moverDrech('2')"></button>
+               </div>
+           </div>
+           
+           <div class=" col-xs-12 tamFijo">
+                <div class="col-xs-2  paddingLabel">
+                   <div class="col-xs-12 divClass" data-idclass="1919">
+                       <div class="col-xs-6">
+                           Third Week
+                       </div>
+                   </div>
+               </div>
+               <div class="col-xs-1">
+                   <button class="col-xs-1 left carousel-control" onclick="moverIzq('3')"></button>
+               </div>
+               <div class="col-xs-8 paddingLabel  " > 
+                   <div  class="semana3 col-xs-8" id="semana3">
+                   </div>
+               </div>
+               <div class="col-xs-1">
+                   <button class="col-xs-1 right carousel-control" onclick="moverDrech('3')"></button>
+               </div>
+           </div>
+            <div class=" col-xs-12 tamFijo">
+                    <div class="col-xs-2  paddingLabel">
+                       <div class="col-xs-12 divClass" data-idclass="1919">
+                           <div class="col-xs-6">
+                               Fourth Week
+                           </div>
+                       </div>
+                   </div>
+                   <div class="col-xs-1">
+                       <button class="col-xs-1 left carousel-control" onclick="moverIzq('4')"></button>
+                   </div>
+                   <div class="col-xs-8 paddingLabel  tamFijo" > 
+                       <div  class="semana4" id="semana4">
 
-var data = [],
-    date = new Date(),
-    d = date.getDate(),
-    d1 = d,
-    m = date.getMonth(),
-    y = date.getFullYear(),
-    i,
-    end, 
-    j, 
-    c = 1063, 
-    c1 = 3329,
-    h, 
-    m,
-    names = ['All Day Event', 'Long Event', 'Birthday Party', 'Repeating Event', 'Training', 'Meeting', 'Mr. Behnke', 'Date', 'Ms. Tubbs'],
-    slipsum = ["Now that we know who you are, I know who I am. I'm not a mistake! It all makes sense! In a comic, you know how you can tell who the arch-villain's going to be? He's the exact opposite of the hero. And most times they're friends, like you and me! I should've known way back when... You know why, David? Because of the kids. They called me Mr Glass.", "You see? It's curious. Ted did figure it out - time travel. And when we get back, we gonna tell everyone. How it's possible, how it's done, what the dangers are. But then why fifty years in the future when the spacecraft encounters a black hole does the computer call it an 'unknown entry event'? Why don't they know? If they don't know, that means we never told anyone. And if we never told anyone it means we never made it back. Hence we die down here. Just as a matter of deductive logic.", "Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses differently than mine. You don't get sick, I do. That's also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on the same curve, just on opposite ends.", "Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows. Some pilots get picked and become television programs. Some don't, become nothing. She starred in one of the ones that became nothing.", "Yeah, I like animals better than people sometimes... Especially dogs. Dogs are the best. Every time you come home, they act like they haven't seen you in a year. And the good thing about dogs... is they got different dogs for different people. Like pit bulls. The dog of dogs. Pit bull can be the right man's best friend... or the wrong man's worst enemy. You going to give me a dog for a pet, give me a pit bull. Give me... Raoul. Right, Omar? Give me Raoul.", "Like you, I used to think the world was this great place where everybody lived by the same standards I did, then some kid with a nail showed me I was living in his world, a world where chaos rules not order, a world where righteousness is not rewarded. That's Cesar's world, and if you're not willing to play by his rules, then you're gonna have to pay the price.", "You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man.", "You see? It's curious. Ted did figure it out - time travel. And when we get back, we gonna tell everyone. How it's possible, how it's done, what the dangers are. But then why fifty years in the future when the spacecraft encounters a black hole does the computer call it an 'unknown entry event'? Why don't they know? If they don't know, that means we never told anyone. And if we never told anyone it means we never made it back. Hence we die down here. Just as a matter of deductive logic.", "Like you, I used to think the world was this great place where everybody lived by the same standards I did, then some kid with a nail showed me I was living in his world, a world where chaos rules not order, a world where righteousness is not rewarded. That's Cesar's world, and if you're not willing to play by his rules, then you're gonna have to pay the price.", "You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man."];
+                       </div>
+                   </div>
+                   <div class="col-xs-1">
+                       <button class="col-xs-1 right carousel-control" onclick="moverDrech('4')"></button>
+                   </div>
+               </div>
+                
+           </div>
+       <!-- Modal delete-->
+<div id="detailsLesson" class="modal fade" role="dialog">
+ <div class="modal-dialog modal-lg">
 
-  for(i = 0; i < 500; i++) {
-    j = Math.max(i % 15 - 10, 0);
-    //c and c1 jump around to provide an illusion of random data
-    c = (c * 1063) % 1061; 
-    c1 = (c1 * 3329) % 3331;
-    d = (d1 + c + c1) % 839 - 440;
-    h = i % 36;
-    m = (i % 4) * 15;
-    if (h < 18) { h = 0; m = 0; } else { h = Math.max(h - 24, 0) + 8; }
-    end = !j ? null : new Date(y, m, d + j, h + 2, m);
-    data.push({ title: names[c1 % names.length], start: new Date(y, m, d, h, m), end: end, allDay: !(i % 6), text: slipsum[c % slipsum.length ]  });
-  }
-  
-  data.sort(function(a,b) { return (+a.start) - (+b.start); });
-  
-//data must be sorted by start date
+   <!-- Modal content-->
+   <div class="modal-content">
+     <div class="modal-header modal-header-details">
+       <button type="button" class="close" data-dismiss="modal">&times;</button>
+       <h4 id="nameLessonDetails" class="modal-title">Details</h4>
+     </div>
+       <div class="modal-body">
+           <div class="container-fluid">
+               <div class="col-xs-6">
+                   <div class="row title">
+                       Students
+                   </div>
+                   <div id="studentarea" class="row studentarea">
+       
+                   </div>
+               </div>
+               <div class="col-xs-6">
+                   <div class="row title">
+                       Method
+                   </div>
+                   <div class="row" id="methodDetails">
+                       
+                   </div>
+                   <div class="row title">
+                       Lesson Description
+                   </div>
+                   <div class="row" id="commentDetails">
+                       
+                   </div>
+                   <div class="row title">
+                       Content
+                   </div>
+                   <div class="row">
+                       <ul id="contentDetails">
+                           
+                       </ul>
+                   </div>
+                   <div class="row title">
+                       Objective:  
+                   </div>
+                   <div class="row">
+                       Learn ryhtmes
+                   </div>
+               </div>
+           </div>
+       </div>
+     <div class="modal-footer">
+       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+     </div>
+   </div>
 
-//Actually do everything
-$('#holder').calendar({
-  data: data
-});
-</script>
-    </body>
+ </div>
+</div>
+<!-- Modal confirm delete-->
+<div id="deleteLesson" class="modal fade" role="dialog">
+ <div class="modal-dialog">
+
+   <!-- Modal content-->
+   <div class="modal-content">
+     <div class="modal-header modal-header-delete">
+       <button type="button" class="close" data-dismiss="modal">&times;</button>
+       <h4 class="modal-title">are you sure you want to delete?</h4>
+     </div>
+       <div id="lessonDelete" class="modal-body">
+           
+       </div>
+     <div class="modal-footer text-center">
+         <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect(value)">Yes</button>
+       <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+     </div>
+   </div>
+
+ </div>
+</div>
+<!-- Modal lessons delete -->
+<div id="deleteLessonMessage" class="modal fade" role="dialog">
+ <div class="modal-dialog">
+
+   <!-- Modal content-->
+   <div class="modal-content">
+     <div class="modal-header modal-header-delete">
+       <button type="button" class="close" data-dismiss="modal">&times;</button>
+       <h4 class="modal-title"></h4>
+     </div>
+       <div id="lessonDeleteMessage" class="modal-body">
+           <c:out value='${messageDelete}'/>
+       </div>
+     <div class="modal-footer text-center">
+         <button type="button" class="btn btn-default" data-dismiss="modal" onclick="refresh()">OK</button>
+     </div>
+   </div>
+
+ </div>
+</div>
+   </body>
 </html>

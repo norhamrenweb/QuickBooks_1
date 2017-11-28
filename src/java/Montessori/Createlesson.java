@@ -60,10 +60,10 @@ public class Createlesson {
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
         String test = null;
-        String server = "ftp2.renweb.com";
+        String server = "192.168.1.36";
 		int port = 21;
-		String user = "AH-ZAF";
-		String pass = "e3f14+7mANDp";
+		String user = "david";
+		String pass = "david";
         if(newlessons.getMethod().getName() != ""){
         test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,method_id,archive,presentedby,idea) values (' "+newlessons.getName()+"',"+newlessons.getLevel().getName()+","+newlessons.getSubject().getName()+","+newlessons.getObjective().getName()+",now(),"+newlessons.getTeacherid()+",'"+newlessons.getStart()+"','"+newlessons.getFinish()+"','"+newlessons.getComments()+"','"+newlessons.getMethod().getName()+"',false,0,false)";
         }

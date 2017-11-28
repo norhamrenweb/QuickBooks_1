@@ -507,11 +507,11 @@
                     });    
                 }
   }
-  function showmierdacalendar()
-    {
- window.open("<c:url value="/progcal.htm"/>"); 
-
-  }
+  function showCalendar()
+    { 
+        var id = $('#studentid').val();
+        window.open("<c:url value="/progcal.htm?studentid="/>"+ id); 
+    }
 //  function funcionCallBacksavecomment(){
 //        if (ajax.readyState===4){
 //                if (ajax.status===200){
@@ -799,11 +799,9 @@ $(function() {
           <div class="col-xs-12 text-center hidden" id="error2">
            <label>Please make sure to fill all data</label>
            </div>
-<!--        <div class="col-xs-12 text-center">
-            <button type='button' class='btn-unbutton' id="showcalendar"  value="View all 
-
-" onclick="showmierdacalendar()">View all comments</button>
-            </div>-->
+       <div class="col-xs-12 text-center">
+            <button type='button' class='btn-unbutton' id="showcalendar"  value="View all" onclick="showCalendar()">View all comments</button>
+            </div>
         <div id="confirmsave" class="modal fade" role="dialog">
   <div class="modal-dialog">
 

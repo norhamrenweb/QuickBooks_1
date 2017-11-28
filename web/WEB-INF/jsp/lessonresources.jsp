@@ -18,6 +18,30 @@
         <script>
 
  $(document).ready(function(){
+     
+     // Instantiate the Bootstrap carousel
+        $('.multi-item-carousel').carousel({
+          interval: false
+        });
+
+        // for every slide in carousel, copy the next slide's item in the slide.
+        // Do the same for the next, next item.
+        $('.multi-item-carousel .item').each(function(){
+          var next = $(this).next();
+          if (!next.length) {
+            next = $(this).siblings(':first');
+          }
+          next.children(':first-child').clone().appendTo($(this));
+
+          if (next.next().length>0) {
+            next.next().children(':first-child').clone().appendTo($(this));
+          } else {
+                $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+          }
+        });
+        
+       $('#txtUrl').html("This page's URL is"+window.location.href);
+       
        var userLang = navigator.language || navigator.userLanguage;
        var myDate = new Date();
          //Muestra calendario
@@ -117,6 +141,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         $("#horafin").on("dp.change", function (e) {
             $('#horainicio').data("DateTimePicker").maxDate(e.date);
         });
+        
         
     });            
         
@@ -586,6 +611,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             
         </script>
         <style>
+            
             textarea 
             {
             resize: none;
@@ -727,7 +753,7 @@ input[type="radio"] .styled:checked + label::after {
     </head>
     <body>
         <input type="hidden" id="lessonid" name="lessonid" value = ${lessonid}>
-       
+        
         <!--<div class="modal-body text-center">
         <H1><%= request.getParameter("message") %></H1>
         </div>-->
@@ -787,8 +813,9 @@ input[type="radio"] .styled:checked + label::after {
                     <c:forEach var="item" items="${files}">  
                                    <div id = "divRecurso${item.id}" class="list-group col-xs-12 text-center">        
                                         <c:url var="post_url"  value="/upload" />    
-                                        <form class=" text-center form-group" action="${post_url}" method="GET" enctype="multipart/form-data">             
-                                                       
+                                        <form class=" text-center form-group" action="${post_url}" method="GET" enctype="multipart/form-data">  
+                                            
+                                                       <input type="hidden" id="txtUrl" name="txtUrl" value="" />
                                                        <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>                
                                                        <div class="col-xs-8 center-block form-group text-center " >
                                                            <a href="${item.link}"  data-id="${item.id}" class="list-group-item link fileNames" >
@@ -922,7 +949,7 @@ input[type="radio"] .styled:checked + label::after {
                             arrayNamesFiles.push(nameFile);
 
                     });
-                    
+
                     $('#editNameMethod,#editCommentsMethod').focusout(function() {
                         if($('#editNameMethod').val() !== "" && $('#editCommentsMethod').val() !== ""){
                                $('#EditMethod').prop('disabled', false);
@@ -958,6 +985,7 @@ input[type="radio"] .styled:checked + label::after {
                       });
                       
                      });
+                     
                     </script>
              <c:url var="post_url"  value="/upload" />    
              <form class="col-xs-12 center-block form-group" action="${post_url}" method="POST" enctype="multipart/form-data">      
@@ -965,6 +993,7 @@ input[type="radio"] .styled:checked + label::after {
                         <div class="col-xs-10 center-block form-group">
                             <label class="control-label">Name</label>
                             
+                            <input type="hidden" id="txtUrl" name="txtUrl" value="" />
                             <input type="hidden" id="lessonid" name="lessonid" value = ${lessonid}>                
                             <input type="text" class=" col-xs-3 form-control" name="idNameFile" id="idNameFile"  placeholder="Name">
                             <input type="file" class=" col-xs-7 center-block form-control" name="fileToUpload" id="file">
