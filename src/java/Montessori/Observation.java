@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -13,11 +13,43 @@ import java.util.Date;
  */
 public class Observation {
     
+    private int id;
     private String observation;
     private String type;
-private Date date;
-private int logged_by;
-private int studentid;
+    private Date date;
+    private String dateString;
+    private Date commentDate;
+    private int logged_by;
+    private int studentid;
+    
+    public String getDateString() {
+        return dateString;
+    }
+
+    public void setDateString(String DateString) {
+        this.dateString = DateString;
+    }
+   
+    
+    public Observation() {
+    }
+    public Observation(Observation o2) {
+        id = o2.getId();
+        observation = o2.getObservation();
+        type = o2.getType();
+        date = o2.getDate();
+        commentDate = o2.getCommentDate();
+        logged_by = o2.getLogged_by();
+        studentid = o2.getStudentid();
+    }
+
+    public Date getCommentDate() {
+        return commentDate;
+    }
+
+    public void setCommentDate(Date commentDate) {
+        this.commentDate = commentDate;
+    }
 
     public String getObservation() {
         return observation;
@@ -27,8 +59,16 @@ private int studentid;
         this.observation = observation;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getType() {
         return type;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setType(String type) {
