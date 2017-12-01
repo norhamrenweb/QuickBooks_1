@@ -317,7 +317,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                           }else{
                             $("#selectLinkTipo :selected").text("Video");
                           }
-                       
+                          $("#EditLink").prop('disabled', false);
                           $('editnewLink').click();
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
@@ -598,9 +598,14 @@ $("#method").on('mouseover', 'option' , function(e) {
     }
     $(function () {
         $('#addLink').click(function () {
-                   $('#addnewLink').modal('show');
+            
+                    $("#editNameMethod").val("");
+                    $("#editCommentsMethod").val("");
+                    $('#addnewLink').modal('show');
                 });
+                
         $('#addFile').click(function () {
+            
                    $('#addnewFile').modal('show');
                 });
         /*$('.editResource').click(function () {
@@ -952,21 +957,29 @@ input[type="radio"] .styled:checked + label::after {
 
                     });
 
+                    
                     $('#editNameMethod,#editCommentsMethod').focusout(function() {
-                        if($('#editNameMethod').val() !== "" && $('#editCommentsMethod').val() !== ""){
+                        if($('#editNameMethod').val() !== "" && $('#editCommentsMethod').val() !== "" && is_url($('#editCommentsMethod').val())){
                                $('#EditMethod').prop('disabled', false);
                         }
                         else{
-                               $('#EditMethod').prop('disabled', true);
+                            $('#EditMethod').prop('disabled', true);
+                            if(!is_url($('#editCommentsMethod').val()) && $('#editCommentsMethod').val() != "" ){      
+                                 alert('Invalid URL')
+                            }
+                           
                         }
                     });
                     
                     $('#editLinkName,#editLinkComments').focusout(function() {
-                        if($('#editLinkName').val() !== ""  && $('#editLinkComments').val() !== ""){
+                        if($('#editLinkName').val() !== ""  && $('#editLinkComments').val() !== "" && is_url($('#editLinkComments').val())){
                                $('#EditLink').prop('disabled', false);
                            }
                         else{
                                 $('#EditLink').prop('disabled', true);
+                                if(!is_url($('#editLinkComments').val()) && $('#editLinkComments').val() != "" ){      
+                                    alert('Invalid URL')
+                                }
                            }
                     });
                     
