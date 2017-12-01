@@ -114,9 +114,12 @@ var ajax;
                     }
                 }
             }
-   function accessrsrcs(LessonsSelected)
-   {
-     window.open("<c:url value="/lessonresources/loadResources.htm?LessonsSelected="/>"+LessonsSelected);   
+   function accessrsrcs(LessonsSelected,LessonsName)
+   {     
+       var path = LessonsSelected+"-"+LessonsName;
+     window.open("<c:url value="/lessonresources/loadResources.htm?LessonsSelected="/>"+path);   
+    // windows.open()
+      //ajax.open("POST","deleteLesson.htm?LessonsSelected="+LessonsSelected,true);
        
    }
    function rowselect(LessonsSelected)
@@ -318,7 +321,7 @@ var ajax;
                                     <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
                                 </div>
                                 <div class="sinpadding text-center">
-                                    <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id})" width="40px" data-placement="bottom" title="Resources">
+                                    <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id},'${lecciones.name}')" width="40px" data-placement="bottom" title="Resources">
                                 </div>
 
                             </td>

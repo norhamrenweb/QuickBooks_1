@@ -248,10 +248,14 @@ public class ProgressControlador {
         } 
     for(int i=0;i<studentids.length;i++)
     {  // if the teacher did not fill the attendance no update will be done to avoid null pointer exception
-        if(!att[i].isEmpty())
-    { String test = "update lesson_stud_att set attendance = '"+att[i]+"',timestamp= now() where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'";
-    st.executeUpdate(test);
-    }
+        if(att != null && !att[i].isEmpty())
+        { String test = "update lesson_stud_att set attendance = '"+att[i]+"',timestamp= now() where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'";
+            st.executeUpdate(test);
+        }
+          if(att == null)
+        { String test = "update lesson_stud_att set attendance = '',timestamp= now() where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'";
+            st.executeUpdate(test);
+        }
     }
     //update steps
     ResultSet rs2 = st.executeQuery("select id from obj_steps where obj_id = '"+objectiveid[0]+"' order by storder");

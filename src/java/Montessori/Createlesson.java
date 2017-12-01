@@ -98,7 +98,7 @@ public class Createlesson {
             ftpClient.login(user, pass);
             boolean success = ftpClient.changeWorkingDirectory("/MontessoriTesting");
             if(success){
-            ftpClient.mkd(lessonid);
+            ftpClient.mkd(lessonid+"-"+newlessons.getName());
             }
     }
     catch (SQLException ex) {

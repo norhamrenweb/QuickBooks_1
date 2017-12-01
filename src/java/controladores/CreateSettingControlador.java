@@ -242,13 +242,13 @@ public class CreateSettingControlador{
              Statement st = this.cn.createStatement();
             String objectiveid = hsr.getParameter("seleccion3");
             
-          ResultSet rs1 = st.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id = "+objectiveid+")");
+          ResultSet rs1 = st.executeQuery("SELECT name,id,description FROM content where content.id IN (select objective_content.content_id from objective_content where objective_content.objective_id = '"+objectiveid+"')");
          
            while (rs1.next())
             {
              String[] ids = new String[1];
              Content eq = new Content();
-            ids[0] = String.valueOf(rs1.getInt("id"));
+             ids[0] = ""+rs1.getInt("id");
              eq.setId(ids);
              eq.setName(rs1.getString("name"));
              eq.setDescription(rs1.getString("description"));

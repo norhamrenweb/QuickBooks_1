@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -156,7 +157,10 @@ public class ResourcesControlador {
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
+            String presentationName = hsr.getParameter("LessonsSelected");
+             presentationName =  presentationName.split("-")[1];
             String lessonid = hsr.getParameter("LessonsSelected");
+            lessonid = lessonid.split("-")[0];
             String consulta = "SELECT * FROM public.resources where lesson_id = "+lessonid;
             ResultSet rs = st.executeQuery(consulta);
             ArrayList<Resource> filersrcs = new ArrayList<>(); 
@@ -178,6 +182,7 @@ public class ResourcesControlador {
            }
        }
         mv.addObject("lessonid",lessonid);
+        mv.addObject("lessonsName",presentationName);
         mv.addObject("files",filersrcs);
         mv.addObject("others",otherrsrcs);
        }catch(SQLException ex){
@@ -254,6 +259,7 @@ public class ResourcesControlador {
             this.cn = dataSource.getConnection();
             Statement st = this.cn.createStatement();
             String resourceId = r.getId();
+            String lessonName = r.getName();
             Resource resourceLoad = loadResource(resourceId,st);
             
             if(resourceLoad.getType().equals("File")){
@@ -270,7 +276,7 @@ public class ResourcesControlador {
 
                 //boolean success = ftpClient.changeWorkingDirectory("/MontessoriTesting/"+resourceLoad.getLesson_id());
 
-                ftpClient.deleteFile("/MontessoriTesting/"+resourceLoad.getLesson_id()+"/"+resourceLoad.getLink());
+                ftpClient.deleteFile("/MontessoriTesting/"+resourceLoad.getLesson_id()+"-"+lessonName+"/"+resourceLoad.getLink());
                 ftpClient.logout();
             }
             String consulta = "delete from resources where id = "+resourceId;

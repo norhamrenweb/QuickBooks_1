@@ -21,34 +21,29 @@
 var ajax;
    
    $(document).ready( function () {
-         var userLang = navigator.language || navigator.userLanguage;
-           var myDate = new Date();
-           $( ".divClass" ).click(function() {
-                   
-                   
-                   var idCLass = $(this).attr('data-idclass');
-                   window.location.replace("<c:url value="/gradebook/loadRecords.htm?term=1&ClassSelected="/>"+idCLass);
-                   
-           });
-       //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
-       
-
-    $('#fecha').datetimepicker({
-
-               format: 'YYYY-MM',
-               locale: userLang.valueOf(),
-               daysOfWeekDisabled: [0, 6],
-               useCurrent: false//Important! See issue #1075
-               //defaultDate: '08:32:33',
-              
-           });
-           
-   $('#fecha').on('dp.change', function(e){loadComments(); })
-   
-  
+            var userLang = navigator.language || navigator.userLanguage;
+              var myDate = new Date();
+              $( ".divClass" ).click(function() {
 
 
+                      var idCLass = $(this).attr('data-idclass');
+                      window.location.replace("<c:url value="/gradebook/loadRecords.htm?term=1&ClassSelected="/>"+idCLass);
 
+              });
+          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
+
+
+       $('#fecha').datetimepicker({
+
+                  format: 'YYYY-MM',
+                  locale: userLang.valueOf(),
+                  daysOfWeekDisabled: [0, 6],
+                  useCurrent: false//Important! See issue #1075
+                  //defaultDate: '08:32:33',
+
+              });
+
+      $('#fecha').on('dp.change', function(e){loadComments(); })
 
    });
 function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
@@ -158,7 +153,11 @@ function funcionCallBackdetailsLesson()
                         success: function(data) {                          
                           var j = JSON.parse(data);
                           var semana="";
-                          
+                          var cont1=0;
+                          var cont2=0;
+                          var cont3=0;
+                          var cont4=0;
+                          var oculto="hide";
                           $("#semana1").empty();
                           $("#semana2").empty();
                           $("#semana3").empty();
@@ -175,29 +174,188 @@ function funcionCallBackdetailsLesson()
                                     var commentdate = value2.commentDate;
                                         
                                     if(i <= 7){ 
-                                        semana= "semana1"
+                                        //semana= "semana1" REDUCIR CODIGO
+                                        cont1 = cont1+250;
+                                        if(cont1>$("#semana1").width()){
+                                          $("#semana1").append("<div class='divAdd hide'>Comment Date: "+commentdate+"<br>Create Date: "+fechaCreacion+"<br>Type: "+category+"<br>Comment: "+comentario+"</div>");                            
+                                        }                                        
+                                        
+                                          $("#semana1").append("<div class='divAdd'>Comment Date: "+commentdate+"<br>Create Date: "+fechaCreacion+"<br>Type: "+category+"<br>Comment: "+comentario+"</div>");                            
+                                        
                                     }
                                     else{
                                         if(i<=14){
-                                           semana= "semana2"
+                                           //semana= "semana2"
+                                            cont2 = cont2+250;
+                                             if(cont2>$("#semana2").width())
+                                             {
+                                                       $("#semana2").append("<div class='divAdd hide'>\n\
+                                                                    Comment Date: "+commentdate+"<br>\n\
+                                                                    Create Date: "+fechaCreacion+"<br>\n\
+                                                                    Type: "+category+"<br>\n\
+                                                                    <div id='module"+cont2+"' class='container moreLess'>\n\
+                                                                    <a data-comment='"+comentario+"' data-createdate='"+fechaCreacion.toString()+"' data-type='"+category+"' data-commentdate='"+commentdate+"' role='button' class='showMore collapsed' ></a>\n\
+                                                                    \n\
+                                                                    <p class='collapse' id='semana2"+cont2+"' aria-expanded='false'>\n\
+                                                                            "+comentario+"\n\
+                                                                        </p>\n\
+                                                                    </div>\n\
+                                                                </div>");              
+                                              }                                        
+                                              else{
+                                                $("#semana2").append("<div class='divAdd'>\n\
+                                                                    Comment Date: "+commentdate+"<br>\n\
+                                                                    Create Date: "+fechaCreacion+"<br>\n\
+                                                                    Type: "+category+"<br>\n\
+                                                                    <div id='module"+cont2+"' class='container moreLess'>\n\
+                                                                    <a data-comment='"+comentario+"' data-createdate='"+fechaCreacion.toString()+"' data-type='"+category+"' data-commentdate='"+commentdate+"' role='button' class='showMore collapsed' ></a>\n\
+                                                                    \n\
+                                                                    <p class='collapse' id='semana2"+cont2+"' aria-expanded='false'>\n\
+                                                                            "+comentario+"\n\
+                                                                        </p>\n\
+                                                                    </div>\n\
+                                                                </div>");
+                                            }
                                         }
                                         else{
                                             if(i<=21){
-                                                semana= "semana3"
-                                                
-                                            }
+                                               // semana= "semana3"
+                                                cont3 = cont3+250;
+                                                 if(cont3>$("#semana3").width()){
+                                                                 $("#semana3").append("<div class='divAdd hide'>\n\
+                                                                                Comment Date: "+commentdate+"<br>\n\
+                                                                                Create Date: "+fechaCreacion+"<br>\n\
+                                                                                Type: "+category+"<br>\n\
+                                                                                <div id='module"+cont3+"' class='container moreLess'>\n\
+                                                                                <a data-comment='"+comentario+"' data-createdate='"+fechaCreacion.toString()+"' data-type='"+category+"' data-commentdate='"+commentdate+"' role='button' class='showMore collapsed' ></a>\n\
+                                                                                \n\
+                                                                                <p class='collapse' id='semana3"+cont3+"' aria-expanded='false'>\n\
+                                                                                        "+comentario+"\n\
+                                                                                    </p>\n\
+                                                                                </div>\n\
+                                                                            </div>");
+                        
+                                                     /* $("#semana3").append("<div class='divAdd hide'>\n\
+                                                                                Comment Date: "+commentdate+"<br>\n\
+                                                                                Create Date: "+fechaCreacion+"<br>\n\
+                                                                                Type: "+category+"<br><div class='span4 collapse-group'><p>You need to keep your enterprise secure, and you want to do it on your terms. <span class='collapse' id='viewdetailsSemana3"+cont3+"'> Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </span> <a data-toggle='collapse' data-target='#viewdetailsSemana3"+cont3+"'>More... &raquo;</a></p></div></div>");
+                                                     $("#semana3").append("<div class='divAdd hide'>Comment Date: "+commentdate+"<br>Create Date: "+fechaCreacion+"<br>Type: "+category+"<br>Comment: "+comentario+"</div>");                            
+
+                                                        $("#semana3").append("<div class='col-xs-3'>\n\
+                                                                                Comment Date: "+commentdate+"<br>\n\
+                                                                                Create Date: "+fechaCreacion+"<br>\n\
+                                                                                Type: "+category+"<br>\n\
+                                                                                    <div style='display:inline; width:250px;'>\n\
+                                                                                        <div class='contenedorObserParcial'>\n\
+                                                                                            <div style='display:inline-block;width:50px;'>\n\
+                                                                                                <p class='minimizeSmall'>"+comentario+"</p>\n\
+                                                                                            </div>\n\
+                                                                                            <div style='display:inline-block;width:50px;'>\n\
+                                                                                                <a data-id='#h#' class='more>more....</a>\n\
+                                                                                            </div>\n\
+                                                                                        </div>\n\
+                                                                                        <div class='contenedorObserCompleta' hidden='hidden'>\n\
+                                                                                            <p>"+comentario+"<button class='ocultar'>close</button></p>\n\
+                                                                                        </div>\n\
+                                                                                    </div>\n\
+                                                                              </div>"); */                                                  
+                                                    }                                       
+                                                  else{
+                                                      $("#semana3").append("<div class='divAdd'>\n\
+                                                                                Comment Date: "+commentdate+"<br>\n\
+                                                                                Create Date: "+fechaCreacion+"<br>\n\
+                                                                                Type: "+category+"<br>\n\
+                                                                                <div id='module"+cont3+"' class='container moreLess'>\n\
+                                                                                <a data-comment='"+comentario+"' data-createdate='"+fechaCreacion.toString()+"' data-type='"+category+"' data-commentdate='"+commentdate+"' role='button' class='showMore collapsed' ></a>\n\
+                                                                                \n\
+                                                                                <p class='collapse' id='semana3"+cont3+"' aria-expanded='false'>\n\
+                                                                                        "+comentario+"\n\
+                                                                                    </p>\n\
+                                                                                </div>\n\
+                                                                            </div>");
+                                                     /* $("#semana3").append("<div class='divAdd'>\n\
+                                                                                Comment Date: "+commentdate+"<br>\n\
+                                                                                Create Date: "+fechaCreacion+"<br>\n\
+                                                                                Type: "+category+"<br><div class='span4 collapse-group'><p>You need to keep your enterprise secure, and you want to do it on your terms. <span class='collapse' id='viewdetailsSemana3"+cont3+"'> Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </span> <a data-toggle='collapse' data-target='#viewdetailsSemana3"+cont3+"'>More... &raquo;</a></p></div></div>");
+                                                    
+                                                    $("#semana3").append("<div class='divAdd'>Comment Date: "+commentdate+"<br>Create Date: "+fechaCreacion+"<br>Type: "+category+"<br>Comment: "+comentario+"</div>");                            
+
+                                                    $("#semana3").append("<div class='col-xs-3'>\n\
+                                                                            Comment Date: "+commentdate+"<br>\n\
+                                                                            Create Date: "+fechaCreacion+"<br>\n\
+                                                                            Type: "+category+"<br>\n\
+                                                                                <div style='display:inline; width:250px;'>\n\
+                                                                                    <div class='contenedorObserParcial'>\n\
+                                                                                        <div style='display:inline-block;width:50px;'>\n\
+                                                                                            <p class='minimizeSmall'>"+comentario+"</p>\n\
+                                                                                        </div>\n\
+                                                                                        <div style='display:inline-block;width:50px;'>\n\
+                                                                                            <a data-id='#h#' class='more' >more....</a>\n\
+                                                                                        </div>\n\
+                                                                                    </div>\n\
+                                                                                    <div class='contenedorObserCompleta' hidden='hidden'>\n\
+                                                                                        <p>"+comentario+"<button class='ocultar'>close</button></p>\n\
+                                                                                    </div>\n\
+                                                                                </div>\n\
+                                                                          </div>");    
+                                                        }*/
+                                                    }  
+                                             }
                                             else{ 
-                                                semana= "semana4"
+                                                //semana= "semana4"
+                                                cont4 = cont4+250;
+                                                 if(cont4>$("#semana4").width()){
+                                                    $("#semana4").append("<div class='divAdd hide'>Comment Date: "+commentdate+"<br>Create Date: "+fechaCreacion+"<br>Type: "+category+"<br>Comment: "+comentario+"</div>");                            
+                                                  }                                        
+                                                  else{
+                                                    $("#semana4").append("<div class='divAdd'>Comment Date: "+commentdate+"<br>Create Date: "+fechaCreacion+"<br>Type: "+category+"<br>Comment: "+comentario+"</div>");                            
+                                                  }
                                             }
                                         }
                                     }   
                                     
-                                    $("#"+semana+"").append("<div class='col-xs-3'>Comment Date: "+commentdate+"<br>Create Date: "+fechaCreacion+"<br>Type: "+category+"<br>Comment: "+comentario+"</div>");                            
-                                 
+                                   //$("#"+semana+"").append("<div class='divAdd'>Comment Date: "+commentdate+"<br>Create Date: "+fechaCreacion+"<br>Type: "+category+"<br>Comment: "+comentario+"</div>");                            
+                                  /* $("#"+semana+"").append("<div class='col-xs-3'>\n\
+                                                                Comment Date: "+commentdate+"<br>\n\
+                                                                Create Date: "+fechaCreacion+"<br>\n\
+                                                                Type: "+category+"<br>\n\
+                                                                Comment: \n\
+                                                                    <span class='teaser'>Asi comienza</span>\n\
+                                                                    <span class='complete'>"+comentario+"</span> \n\
+                                                                    <span class='more'>more...</span> \n\
+                                                            </div>");
+                                   $("#"+semana+"").append("<div class='col-xs-3'>Comment Date: "+commentdate+"<br>Create Date: "+fechaCreacion+"<br>Type: "+category+"<br>\n\
+                                   <a href='#demo' class='btn btn-info' data-toggle='collapse'>Comment: </a><div id='demo' class='collapse'>"+comentario+"</div></div>");
+                                   */
+                                           
+                                           
+                                   
+                               /* $("#"+semana+"").append("<div class='col-xs-3'>\n\
+                                                            Comment Date: "+commentdate+"<br>\n\
+                                                            Create Date: "+fechaCreacion+"<br>\n\
+                                                            Type: "+category+"<br>\n\
+                                                                <div style='display:inline; width:250px;'>\n\
+                                                                    <div class='contenedorObserParcial'>\n\
+                                                                        <div style='display:inline-block;width:50px;'>\n\
+                                                                            <p class='minimizeSmall'>"+comentario+"</p>\n\
+                                                                        </div>\n\
+                                                                        <div style='display:inline-block;width:50px;'>\n\
+                                                                            <a data-id='#h#' class='mostrar'>more....</a>\n\
+                                                                        </div>\n\
+                                                                    </div>\n\
+                                                                    <div class='contenedorObserCompleta' hidden='hidden'>\n\
+                                                                        <p>"+comentario+"<button class='ocultar'>close</button></p>\n\
+                                                                    </div>\n\
+                                                                </div>\n\
+                                                          </div>");   */
                                 });
                              
                           });
-                    
+                    /*$('.more').toggle(function(){
+        $(this).text('less..').siblings('.complete').show();    
+    }, function(){
+        $(this).text('more..').siblings('.complete').hide();    
+    });*/
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -295,7 +453,74 @@ function funcionCallBackdetailsLesson()
   
    </script>
    <style>
-      
+
+       .moreLess{
+           position: absolute; 
+           height: 225px;
+           
+       }
+        div[id^='module'] {
+            width: 235px;
+            padding: 0px;
+            
+        }
+
+div[id^='module'] p.collapse[aria-expanded="false"] {
+    display: block;
+    height: 40px !important;
+    overflow: hidden;
+    
+}
+
+div[id^='module'] p.collapsing[aria-expanded="false"] {
+    height: 40px !important;
+    width: 200px;
+}
+
+div[id^='module'] a.collapsed:after  {
+    content: '+ Show More';
+}
+
+div[id^='module'] a:not(.collapsed):after {
+    
+    content: '- Show Less';
+}
+
+         .contenedorObservacionesCompleto{
+         position:absolute;
+         background-color:#FF9;
+         box-shadow:#CCC;
+         width:400px;
+         text-align:justify;
+         padding:5px;
+         }
+         .celdaObservaciones{
+         height:18 !important;
+         }
+
+         .minimize{
+width:200px;
+height:18px;
+margin:0px;
+padding:0px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-inline-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+}
+.minimizeSmall{
+width:50px;
+height:18px;
+margin:0px;
+padding:0px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-inline-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+}
+
       .title
        {
            font-size: medium;
@@ -333,16 +558,17 @@ function funcionCallBackdetailsLesson()
            padding: 5px;
        }
        .divAdd{
-           color: #ffffff;
-           height: 200px;
-           color: #ffffff;
-           background-color: #666666;
-           margin-right: 10px;
-           font-size: small;
-           padding-left: 5px;
-           padding-bottom: 5px;
-           display: line;
-           float: left;
+            color: #ffffff;
+            height: 225px;
+            width: 240px;
+            color: #ffffff;
+            background-color: #666666;
+            margin-right: 10px;
+            font-size: small;
+            padding-left: 5px;
+            padding-bottom: 5px;
+            display: line;
+            float: left;
         }
  
        .scroll{
@@ -359,9 +585,9 @@ function funcionCallBackdetailsLesson()
        }
         .semana2
        {
-           overflow-x: visible;
+           overflow-x: visible;    
        }
-        .semana3
+        #semana3
        {
            overflow-x: visible;
        }
@@ -370,6 +596,23 @@ function funcionCallBackdetailsLesson()
            overflow-x: visible;
        }
 
+       .complete{
+            display:none;
+        }
+
+        .more{
+            background:lightblue;
+            color:navy;
+            font-size:13px;
+            padding:3px;
+            cursor:pointer;
+        }
+        .moveBtn{
+            height: 225px;
+        }
+        div[data-toggle="collapse"] {
+            float: left;
+        }
    </style>
    </head>
    <body>
@@ -449,96 +692,141 @@ function funcionCallBackdetailsLesson()
            <hr>
            </div>
            <script>
-            function moverDrech(x)
-   {
-       $("#semana"+x).children().not(".hide").first().addClass("hide");
-   }
-   function moverIzq(x)
-   {
-       $("#semana"+x).children().not(".hide").prev().removeClass("hide");
-   }
+                $( window ).resize(function() {
+                   loadComments();
+                });
+                
+                
+                $(".divCollapse").on("hide", function() {
+                    $(this).prev("div").find("i").attr("class","icon-plus-sign");
+                    $(this).css("display","");
+                    $(this).css("height","5px");
+                });
+                $(".divCollapse").on("show", function() {
+                    $(this).prev("div").find("i").attr("class","icon-minus-sign");
+                    $(this).css("display","inline");
+                    $(this).css("height","5px");
+                });
+                
+                $(".more").toggle(function(){
+                    $(this).text('less..').siblings('.complete').show();    
+                    $(this).text('more..').siblings('.complete').hide();    
+                });
+
+
+                $("a").click(function(){
+                $(this).parent().parent('div.contenedorObserParcial').siblings().show().addClass('contenedorObservacionesCompleto');
+                })
+
+                $(".contenedorObserCompleta").click(function(){
+                $(this).hide().removeClass('contenedorObservacionesCompleto'); 
+                })
+                
+                /*function more(x)
+                {
+                   $("#semana"+x).text('less..').siblings('.complete').show();    
+                   $("#semana"+x).text('more..').siblings('.complete').hide();    
+                }
+                */
+           
+                function moverDrech(x)
+                {
+                    $("#semana"+x).children().not(".hide").next().removeClass("hide");
+                    $("#semana"+x).children().not(".hide").first().addClass("hide");
+                    //$("#semana"+x).children().not(".hide").next().animate({"width": 0}, "slow");
+                    
+                }
+                function moverIzq(x)
+                {
+                    $("#semana"+x).children().not(".hide").prev().removeClass("hide");
+                     
+                    if($("#semana"+x).children().not(".hide").length*250 > $("#semana"+x).width()){
+                         $("#semana"+x).children().not(".hide").last().addClass("hide");
+                    }
+                    if($("#semana"+x).children().not(".hide").length === 0){
+                        $("#semana"+x).children().last().removeClass("hide");
+                    }
+                }
             
            </script>
-          <div class=" col-xs-12 tamFijo">
-                <div class="col-xs-2  paddingLabel">
+         <div class=" col-xs-12" style="padding-top:5px">
+                <div class="col-xs-2 " >
                    <div class="col-xs-12 divClass" data-idclass="1919">
                        <div class="col-xs-6">
                            First Week
                        </div>
                    </div>
                </div>
-               <div class="col-xs-1">
+               <div class="col-xs-1 btn moveBtn">
                    <button class="col-xs-1 left carousel-control" onclick="moverIzq('1')"></button>
                </div>
-               <div class="col-xs-8 paddingLabel  tamFijo" > 
-                   <div  class="semana1" id="semana1">
-                       
+               <div class="col-xs-8 " > 
+                   <div  class="semana1 tam1" id="semana1">
                    </div>
                </div>
-               <div class="col-xs-1">
+               <div class="col-xs-1 btn moveBtn">
                    <button class="col-xs-1 right carousel-control" onclick="moverDrech('1')"></button>
                </div>
            </div>
-           <div class=" col-xs-12 tamFijo">
-                <div class="col-xs-2  paddingLabel">
+           <div class=" col-xs-12" style="padding-top:5px">
+                <div class="col-xs-2"  >
                    <div class="col-xs-12 divClass" data-idclass="1919">
                        <div class="col-xs-6">
                            Second Week
                        </div>
                    </div>
                </div>
-               <div class="col-xs-1">
+                <div class="col-xs-1 btn moveBtn">
                    <button class="col-xs-1 left carousel-control" onclick="moverIzq('2')"></button>
                </div>
-               <div class="col-xs-8 paddingLabel  tamFijotamFijo" > 
-                   <div  class="semana2" id="semana2">
-                       
+               <div class="col-xs-8   " > 
+                   <div  class="semana2 tam2" id="semana2">
                    </div>
                </div>
-               <div class="col-xs-1">
+               <div class="col-xs-1 btn moveBtn">
                    <button class="col-xs-1 right carousel-control" onclick="moverDrech('2')"></button>
                </div>
            </div>
            
-           <div class=" col-xs-12 tamFijo">
-                <div class="col-xs-2  paddingLabel">
+           <div class=" col-xs-12" style="padding-top:5px">
+                <div class="col-xs-2 " >
                    <div class="col-xs-12 divClass" data-idclass="1919">
                        <div class="col-xs-6">
                            Third Week
                        </div>
                    </div>
                </div>
-               <div class="col-xs-1">
+               <div class="col-xs-1 btn moveBtn">
                    <button class="col-xs-1 left carousel-control" onclick="moverIzq('3')"></button>
                </div>
-               <div class="col-xs-8 paddingLabel  " > 
-                   <div  class="semana3 col-xs-8" id="semana3">
+               <div class="col-xs-8 " > 
+                   <div  class="semana3 tam3" id="semana3">
                    </div>
                </div>
-               <div class="col-xs-1">
+               <div class="col-xs-1 btn moveBtn">
+                   
                    <button class="col-xs-1 right carousel-control" onclick="moverDrech('3')"></button>
                </div>
            </div>
-            <div class=" col-xs-12 tamFijo">
-                    <div class="col-xs-2  paddingLabel">
-                       <div class="col-xs-12 divClass" data-idclass="1919">
-                           <div class="col-xs-6">
-                               Fourth Week
-                           </div>
+           <div class=" col-xs-12" style="padding-top:5px">
+                <div class="col-xs-2 " >
+                   <div class="col-xs-12 divClass" data-idclass="1919">
+                       <div class="col-xs-6">
+                           Fourth Week
                        </div>
-                   </div>
-                   <div class="col-xs-1">
-                       <button class="col-xs-1 left carousel-control" onclick="moverIzq('4')"></button>
-                   </div>
-                   <div class="col-xs-8 paddingLabel  tamFijo" > 
-                       <div  class="semana4" id="semana4">
-
-                       </div>
-                   </div>
-                   <div class="col-xs-1">
-                       <button class="col-xs-1 right carousel-control" onclick="moverDrech('4')"></button>
                    </div>
                </div>
+               <div class="col-xs-1 btn moveBtn">
+                   <button class="col-xs-1 left carousel-control" onclick="moverIzq('4')"></button>
+               </div>
+               <div class="col-xs-8 " > 
+                   <div  class="semana4 tam4" id="semana4">
+                   </div>
+               </div>
+               <div class="col-xs-1 btn moveBtn">
+                   <button class="col-xs-1 right carousel-control" onclick="moverDrech('4')"></button>
+               </div>
+           </div>
                 
            </div>
        <!-- Modal delete-->
@@ -639,5 +927,61 @@ function funcionCallBackdetailsLesson()
 
  </div>
 </div>
+<script>
+    
+$(document).on("click", ".showMore", function () {
+    var comment= $(this).data('comment');
+    var createDate= $(this).data('createdate');
+    var type = $(this).data('type');
+    var commentDate = $(this).data('commentdate');
+    
+    $('#idCommentDate').text(commentDate);
+    $('#idCreateDate').text(createDate);
+    $('#idTypeComment').text(type);
+    $('#idComment').text(comment);
+       
+    $('#showComment').modal('show');
+});
+</script>
+
+<div id="showComment" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+          
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header modal-header-details">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">More Information</h4>
+      </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="col-xs-12">
+                        <div class="col-xs-4 center-block form-group">
+                            <label class="control-label">Comment Date:</label>
+                            <div id="idCommentDate"></div>                        
+                        </div>
+                        
+                        <div class="col-xs-4 center-block form-group">
+                            <label class="control-label">Create Date:</label>
+                            <div id="idCreateDate"></div>                        
+                        </div>   
+                        <div class="col-xs-4 center-block form-group">
+                            <label class="control-label">Type:</label>
+                            <div id="idTypeComment"></div>                        
+                        </div>
+                </div> 
+                
+                <div  class="col-xs-12">
+                    <div class="col-xs-12 form-group">
+                            <label class="control-label">Comment:</label>
+                            <div id="idComment"></div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  </div>
+</div> 
    </body>
 </html>

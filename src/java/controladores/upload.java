@@ -45,6 +45,7 @@ public class upload extends HttpServlet {
     */
     protected void processResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException
     {  
+            String presentationName = request.getParameter("lessonsName");
             String idFile  = request.getParameter("idNameFileDown");
             Resource rLoaded = new Resource();
             ResourcesControlador rCont = new ResourcesControlador();
@@ -55,14 +56,17 @@ public class upload extends HttpServlet {
                 Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            String filePath = "/MontessoriTesting/"+rLoaded.getLesson_id()+"/"+rLoaded.getLink();
-             
-            String url =  "http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected="+rLoaded.getLesson_id();
+            String filePath = "/MontessoriTesting/"+rLoaded.getLesson_id()+"-"+presentationName+"/"+rLoaded.getLink();
+            String url2 = request.getContextPath();
+            
+            String url3 = ""+request.getRequestURL();
+            String url =  "/lessonresources/loadResources.htm?LessonsSelected="+rLoaded.getLesson_id()+"-"+presentationName;
             String server = "192.168.1.36";
             int port = 21;
             String user = "david";
             String pass = "david";
-
+            
+            
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(server,port);
             ftpClient.login(user, pass);
@@ -92,7 +96,7 @@ public class upload extends HttpServlet {
             IOUtils.copy(inStream, response.getOutputStream());
             
             response.flushBuffer();
-            response.sendRedirect(url);
+            response.sendRedirect(request.getContextPath()+url);
     }
         
    
@@ -106,7 +110,10 @@ public class upload extends HttpServlet {
             String urlBase = request.getParameter("txtUrl"); // CAMBIAR 
 	    String name  = request.getParameter("idNameFile");
             String lessonId = request.getParameter("lessonid");
-            String url =  "http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected="+lessonId;
+            String presentationName = request.getParameter("lessonsName");
+            
+
+            String url =  "/lessonresources/loadResources.htm?LessonsSelected="+lessonId+"-"+presentationName;
             String server = "192.168.1.36";
 		int port = 21;
 		String user = "david";
@@ -129,10 +136,14 @@ public class upload extends HttpServlet {
                 // String filename = filePart.getSubmittedFileName();
                 String filename = name+"-"+ filePart.getSubmittedFileName();
 //                fis = new FileInputStream(filename);
-                boolean success = ftpClient.changeWorkingDirectory("/MontessoriTesting/"+lessonId);
+                if(!ftpClient.changeWorkingDirectory("/MontessoriTesting/"+lessonId+"-"+presentationName));
+                {
+                    ftpClient.changeWorkingDirectory("/MontessoriTesting");
+                    ftpClient.mkd(lessonId+"-"+presentationName);
+                    ftpClient.changeWorkingDirectory(lessonId+"-"+presentationName);
+                }
                               
-                ftpClient.storeFile(filename, fileInputStream);
-                
+                ftpClient.storeFile(filename, fileInputStream);       
                 ftpClient.logout();
                 Resource r = new Resource();
 
@@ -150,7 +161,7 @@ public class upload extends HttpServlet {
             //response.reset(); 
             //response.encodeRedirectURL("http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected=19");
             
-            response.sendRedirect(url);
+            response.sendRedirect(request.getContextPath()+url);
             
   }
   @Override

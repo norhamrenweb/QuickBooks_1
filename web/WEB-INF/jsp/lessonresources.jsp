@@ -251,7 +251,9 @@ $("#method").on('mouseover', 'option' , function(e) {
         }
         
         var idResource = id;
+        var lessonName = $('#lessonsName').val();
         var myObj = {};
+                myObj["name"] = lessonName;
                 myObj["id"] = idResource;
                 var json = JSON.stringify(myObj);
         $.ajax({
@@ -753,7 +755,7 @@ input[type="radio"] .styled:checked + label::after {
     </head>
     <body>
         <input type="hidden" id="lessonid" name="lessonid" value = ${lessonid}>
-        
+        <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}>
         <!--<div class="modal-body text-center">
         <H1><%= request.getParameter("message") %></H1>
         </div>-->
@@ -814,7 +816,7 @@ input[type="radio"] .styled:checked + label::after {
                                    <div id = "divRecurso${item.id}" class="list-group col-xs-12 text-center">        
                                         <c:url var="post_url"  value="/upload" />    
                                         <form class=" text-center form-group" action="${post_url}" method="GET" enctype="multipart/form-data">  
-                                            
+                                                       <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}> 
                                                        <input type="hidden" id="txtUrl" name="txtUrl" value="" />
                                                        <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>                
                                                        <div class="col-xs-8 center-block form-group text-center " >
@@ -985,8 +987,19 @@ input[type="radio"] .styled:checked + label::after {
                       });
                       
                      });
-                     
-                    </script>
+                     function is_url(str)
+                    {
+                      regexp =  /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+                            if (regexp.test(str))
+                            {
+                              return true;
+                            }
+                            else
+                            {
+                              return false;
+                            }
+                    }
+             </script>
              <c:url var="post_url"  value="/upload" />    
              <form class="col-xs-12 center-block form-group" action="${post_url}" method="POST" enctype="multipart/form-data">      
              <!--<form class="col-xs-12 center-block form-group" action="saveFile.htm" method="POST" enctype="multipart/form-data">-->
@@ -994,7 +1007,9 @@ input[type="radio"] .styled:checked + label::after {
                             <label class="control-label">Name</label>
                             
                             <input type="hidden" id="txtUrl" name="txtUrl" value="" />
-                            <input type="hidden" id="lessonid" name="lessonid" value = ${lessonid}>                
+                            <input type="hidden" id="lessonid" name="lessonid" value = ${lessonid}> 
+                            <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}> 
+
                             <input type="text" class=" col-xs-3 form-control" name="idNameFile" id="idNameFile"  placeholder="Name">
                             <input type="file" class=" col-xs-7 center-block form-control" name="fileToUpload" id="file">
                         
