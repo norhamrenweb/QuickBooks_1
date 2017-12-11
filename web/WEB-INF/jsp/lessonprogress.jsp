@@ -137,6 +137,7 @@ collectionAttendance.each(function() {
     }
     });
 
+
 });
         </script>
         <style>
@@ -253,7 +254,7 @@ collectionAttendance.each(function() {
                                         <textarea name="TXTcomment" >${record.comment}</textarea>
                                     </td>
                                     <td>
-                                        <select name="TXTattendance" class="attendance">
+                                        <select id="idSelectAttendance" name="TXTattendance" class="attendance">
                                             <c:if test="${empty record.attendancecode}">
                                                 <option selected></option>
                                             </c:if>
@@ -297,10 +298,11 @@ collectionAttendance.each(function() {
                                                             
                                                         }       
                                                 });
+                                              
                                             });
                                             
                                             </script>
-                                        <div class="rating" id="${record.studentid}">
+                                        <div id="${record.studentid}">
 <!--                                            <div class="progress-bar step1" role="progressbar" style="width:25%">
                                               1
                                             </div>
@@ -347,7 +349,7 @@ collectionAttendance.each(function() {
                         <input type="submit" class="btn btn-success" value="Save">
                     </div>
                     <div class="col-xs-4 text-center">
-                        <input type="checkbox" disabled="true" data-width="200px" data-onstyle="success" data-offstyle="warning" data-toggle="toggle" data-on="Archived" data-off="Not Archived" name="buttonAchived" id="buttonAchived">
+                        <input type="checkbox" disabled="false" data-width="200px" data-onstyle="success" data-offstyle="warning" data-toggle="toggle" data-on="Archived" data-off="Not Archived" name="buttonAchived" id="buttonAchived">              
                     </div>
             </form:form>
         </div>

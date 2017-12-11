@@ -120,7 +120,7 @@ static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
         ArrayList<Students> listaAlumnos = new ArrayList<>();
         try {
             
-             Statement st = this.cn.createStatement();
+            Statement st = this.cn.createStatement();
              
             String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' order by lastname";
             ResultSet rs = st.executeQuery(consulta);
