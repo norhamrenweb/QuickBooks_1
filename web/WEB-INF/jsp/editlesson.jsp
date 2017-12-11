@@ -120,8 +120,6 @@ $("#method").on('mouseover', 'option' , function(e) {
         
 //        QUITAR ESTUDIANTES DUPLICADOS
     var listStudentSelected = [];
-
-
         $('#destino option').each(function() {
             listStudentSelected.push($(this).val());
         });
@@ -132,10 +130,12 @@ $("#method").on('mouseover', 'option' , function(e) {
           });
     });            
         
+        
+        
         $().ready(function() 
 	{ 
         
-                  
+                
 		$('.pasar').click(function() {
                     !$('#origen option:selected').remove().appendTo('#destino');
                     var alumnosSelected = $('#destino').length;
@@ -163,7 +163,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     }
                 });
 		$('.quitartodos').click(function() {
-                    $('#destino option').each(function() { $(this).remove().appendTo('#origen'); });
+                    $('#destino option').each(function() { $(this).remove(); });
                     $('#createOnClick').attr('disabled', true);
                 });
 	});
@@ -366,6 +366,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.open("POST","contentlistObjective.htm?seleccion3="+seleccion3,true);
         ajax.send("");
     }
+    
     
         </script>
         <style>
