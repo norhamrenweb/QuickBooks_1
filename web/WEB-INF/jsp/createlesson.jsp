@@ -31,9 +31,9 @@
         }
         
         if (lessoncreate === 'Presentation created' ){
-        $('#lessonCreated').modal({
-           show: 'false'
-        });
+            $('#lessonCreated').modal({
+               show: 'false'
+            });
         }
         
             $( "#showPropiertys" ).click(function() {
@@ -75,23 +75,28 @@
                     $('#showStudents').removeClass("desactivada");
                     $('#showStudents').on('click', function(){ $("#contenedorDate").toggleClass('in');} );
                     $("#contenedorStudents").addClass('in');   
-                    }
+                    $('#createOnClick').attr('disabled', true);
+                }
             });
-            $( "#NameLessons" ).change(function() {
-               if(document.getElementById("ideaCheck").value === 'on' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' ){
-                    $('#createOnClick').attr('disabled', false);
+            
+            $( "#NameLessons,#comments,#objective" ).change(function() {
+                if(document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' ){
+                    if(document.getElementById("ideaCheck").value === 'on'){
+                        $('#createOnClick').attr('disabled', false);
+                    }
+                    else{ //no es idea
+                        if($("#fecha input").val() != '' && "#horainicio input").val() != '' && "#horafin input").val() != '' ){
+                            $('#createOnClick').attr('disabled', false);
+                        }
+                        else{
+                            $('#createOnClick').attr('disabled', true);
+                        }
+                    }
                 }else{
                     $('#createOnClick').attr('disabled', true);
                 }
             });
-            $( "#comments" ).change(function() {
-               if(document.getElementById("ideaCheck").value === 'on' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' ){
-                    $('#createOnClick').attr('disabled', false);
-                }else{
-                    $('#createOnClick').attr('disabled', true);
-                } 
-            });
-            
+             
 $("#method").on('mouseover', 'option' , function(e) {
     
         var $e = $(e.target);
@@ -147,29 +152,26 @@ $("#method").on('mouseover', 'option' , function(e) {
         $().ready(function() 
 	{ 
                   
-		$('.pasar').click(function() {
-                    !$('#origen option:selected').remove().appendTo('#destino');
+		$('.pasar').click(function() {             
+                    var exist = false;
+                    $('#destino option').each(function() {
+                        if($('#origen option:selected').val() === $(this).val()) exist = true;
+                    });
+                    
+                    if(!exist)!$('#origen option:selected').clone().appendTo('#destino');
+                    
                     var alumnosSelected = $('#destino').length;
                     var objectiveSelected = $('#objective').val();
-//                    var contentSelected = $('#content').val();
-                   // if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== '' && contentSelected !== null && contentSelected !== ''){
-                         if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== ''){
+                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== ''){
                         $('#createOnClick').attr('disabled', false);
                     }
-                    return;
-                });
-                $('#content').click(function() {
-                    !$('#origen option:selected').remove().appendTo('#destino');
-                    var alumnosSelected = $('#destino').length;
-                    var objectiveSelected = $('#objective').val();
-                    var contentSelected = $('#content').val();
-//                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== '' && contentSelected !== null && contentSelected !== ''){
-//                        $('#createOnClick').attr('disabled', false);
-//                    }
+                    $('#destino option').first().prop('selected',true);                     
                     return;
                 });  
 		$('.quitar').click(function() {
-                    !$('#destino option:selected').remove().appendTo('#origen');
+                    !$('#destino option:selected').remove();
+                    $('#destino option').first().prop('selected',true);
+                    
                     var alumnosSelected = $('#destino').length;
                     var objectiveSelected = $('#objective').val();
                     if(alumnosSelected === 0 || ( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '')){
@@ -178,18 +180,26 @@ $("#method").on('mouseover', 'option' , function(e) {
                     return;  
                 });
 		$('.pasartodos').click(function() {
-                    $('#origen option').each(function() { $(this).remove().appendTo('#destino'); });
-                    $('#destino option').prop('selected', true);
-//                    var contentSelected = $('#content').val();
+                    $('#origen option').each(function() {
+                        
+                    var valueInsert = $(this).val();
+                    var exist = false;
+                    $('#destino option').each(function() {
+                        if(valueInsert === $(this).val())exist = true;
+                    });
+
+                    if(!exist)$(this).clone().appendTo('#destino'); 
+                   
                     var objectiveSelected = $('#objective').val();
- //                   if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '' ||  contentSelected.length() === 0 || contentSelected === null || contentSelected === ''){
-                        if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === ''){
+                    if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === ''){
                         $('#createOnClick').attr('disabled', true);
                     }
- 
+                    });
+                    $('#destino option').first().prop('selected',true);
                 });
+                
 		$('.quitartodos').click(function() {
-                    $('#destino option').each(function() { $(this).remove().appendTo('#origen'); }); 
+                    $('#destino option').each(function() { $(this).remove(); });
                     $('#createOnClick').attr('disabled', true);
                 });
 	});
@@ -333,10 +343,14 @@ $("#method").on('mouseover', 'option' , function(e) {
         }
 
         $('#createOnClick').attr('disabled', true);
+        $('#objective').val("");
+        $('#subject').val("");
+        
         ajax.onreadystatechange = funcionCallBackSubject;
         var seleccion1 = document.getElementById("level").value;
         ajax.open("POST","subjectlistLevel.htm?seleccion1="+seleccion1,true);
-        
+        $('#objective').val("");
+        $('#subject').val("");
         ajax.send("");
        
     }
@@ -355,7 +369,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.onreadystatechange=funcionCallBackObjective;
         var seleccion2 = document.getElementById("subject").value;
         ajax.open("POST","objectivelistSubject.htm?seleccion2="+seleccion2,true);
-
+       // $('#objective').val("");
         ajax.send("");
         
     }  
@@ -617,7 +631,7 @@ input[type="radio"] .styled:checked + label::after {
                             <div class="form-group">
                                 <label class="control-label" for="horainicio">Start hour</label>
                                 <div class='input-group date' id='horainicio'>
-                                    <input type='text' name="TXThorainicio" class="form-control"/>
+                                    <input  type='text' name="TXThorainicio" class="form-control"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>

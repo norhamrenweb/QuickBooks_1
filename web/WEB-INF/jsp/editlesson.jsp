@@ -134,20 +134,27 @@ $("#method").on('mouseover', 'option' , function(e) {
         
         $().ready(function() 
 	{ 
-        
-                
-		$('.pasar').click(function() {
-                    !$('#origen option:selected').remove().appendTo('#destino');
+              
+		$('.pasar').click(function() {             
+                    var exist = false;
+                    $('#destino option').each(function() {
+                        if($('#origen option:selected').val() === $(this).val()) exist = true;
+                    });
+                    
+                    if(!exist)!$('#origen option:selected').clone().appendTo('#destino');
+                    
                     var alumnosSelected = $('#destino').length;
                     var objectiveSelected = $('#objective').val();
                     if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== ''){
                         $('#createOnClick').attr('disabled', false);
                     }
+                    $('#destino option').first().prop('selected',true);                     
                     return;
                 });  
 		$('.quitar').click(function() {
-                    !$('#destino option:selected').remove().appendTo('#origen');
-                    $('#destino option').prop('selected',true);
+                    !$('#destino option:selected').remove();
+                    $('#destino option').first().prop('selected',true);
+                    
                     var alumnosSelected = $('#destino').length;
                     var objectiveSelected = $('#objective').val();
                     if(alumnosSelected === 0 || ( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '')){
@@ -156,12 +163,24 @@ $("#method").on('mouseover', 'option' , function(e) {
                     return;  
                 });
 		$('.pasartodos').click(function() {
-                    $('#origen option').each(function() { $(this).remove().appendTo('#destino'); });
+                    $('#origen option').each(function() {
+                        
+                    var valueInsert = $(this).val();
+                    var exist = false;
+                    $('#destino option').each(function() {
+                        if(valueInsert === $(this).val())exist = true;
+                    });
+
+                    if(!exist)$(this).clone().appendTo('#destino'); 
+                   
                     var objectiveSelected = $('#objective').val();
                     if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === ''){
                         $('#createOnClick').attr('disabled', true);
                     }
+                    });
+                    $('#destino option').first().prop('selected',true);
                 });
+                
 		$('.quitartodos').click(function() {
                     $('#destino option').each(function() { $(this).remove(); });
                     $('#createOnClick').attr('disabled', true);
