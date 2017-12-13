@@ -1109,14 +1109,11 @@ $("#method").on('mouseover', 'option' , function(e) {
 //      $('#steps').append("<li id="+(rowCount+1)+">"+ NameStep +"</li>");
 //del step ,if the id is zero will not add to the del array or the updated array, always will be only in the new array,because it was a step that was added and removed while editing
       $('#tab_logic').append("<tr>\n\
-                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(rowCount+1) +"</td>\n\
-                        <td>\n\
-                            <input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'>\n\
-                        </td>\n\
-\n\                     <td>\n\
-                          <a id='delete_row' class='pull-right btn btn-default' onclick='delstep()'>Del</a>\n\
-                        </td>\n\
-                        </tr>");
+                        <td class='text-center' style='width:10%;'>"+(rowCount+1)+"</td>\n\
+                        <td style='width:75%;'><input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'></td>\n\
+<td class='text-center' style='width:5%;'><button id='up_row' class='btn btn-default subir'><span class='glyphicon glyphicon-chevron-up'></span></button></td>\n\
+<td class='text-center' style='width:5%;'><button id='down_row' class='btn btn-default bajar'><span class='glyphicon glyphicon-chevron-down'></span></button></td>\n\
+<td class='text-center' style='width:5%;'><button id='delete_row' class='btn btn-default eliminar' ><span class='glyphicon glyphicon-remove'></span></button></td></tr>");
 //      i++; 
  });
  $("#add_row2").click(function(){
@@ -1128,14 +1125,11 @@ $("#method").on('mouseover', 'option' , function(e) {
 //      $('#steps').append("<li id="+(rowCount+1)+">"+ NameStep +"</li>");
 //del step ,if the id is zero will not add to the del array or the updated array, always will be only in the new array,because it was a step that was added and removed while editing
       $('#tab_logic2').append("<tr>\n\
-                        <td class='text-center' style='width: 10%; vertical-align: middle;'>"+(rowCount+1) +"</td>\n\
-                        <td>\n\
-                            <input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'>\n\
-                        </td>\n\
-\n\                     <td>\n\
-                          <a id='delete_row' class='pull-right btn btn-default' onclick='delstep2()'>Del</a>\n\
-                        </td>\n\
-                        </tr>");
+                        <td class='text-center' style='width:10%;'>"+(rowCount+1)+"</td>\n\
+                        <td style='width:75%;'><input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'></td>\n\
+<td class='text-center' style='width:5%;'><button id='up_row' class='btn btn-default subir'><span class='glyphicon glyphicon-chevron-up'></span></button></td>\n\
+<td class='text-center' style='width:5%;'><button id='down_row' class='btn btn-default bajar'><span class='glyphicon glyphicon-chevron-down'></span></button></td>\n\
+<td class='text-center' style='width:5%;'><button id='delete_row' class='btn btn-default eliminar' ><span class='glyphicon glyphicon-remove'></span></button></td></tr>");
 //      i++; 
  });
 
@@ -1171,7 +1165,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 //                        $('#country'+i).val(paso);
                         $('#tab_logic2').append("<tr>\n\
                         <td class='text-center' style='width:10%;'>"+(i+1) +"</td>\n\
-                        <td style='width:75%;'><input id='"+item.id+"' name='"+item.name+"' value='"+item.name+"' type='text' placeholder='Pass' class='form-control input-md'></td>\n\
+                        <td style='width:75%;'><input id='"+item.id+"' name='"+item.name+"' value='"+item.name+"' type='text' placeholder='Step' class='form-control input-md'></td>\n\
 <td class='text-center' style='width:5%;'><button id='up_row' class='btn btn-default subir'><span class='glyphicon glyphicon-chevron-up'></span></button></td>\n\
 <td class='text-center' style='width:5%;'><button id='down_row' class='btn btn-default bajar'><span class='glyphicon glyphicon-chevron-down'></span></button></td>\n\
 <td class='text-center' style='width:5%;'><button id='delete_row' class='btn btn-default eliminar' ><span class='glyphicon glyphicon-remove'></span></button></td></tr>");
@@ -1179,7 +1173,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 }
                 else
                 {
-                    alert('No tiene pasos');
+//                    alert('No tiene pasos');
                 }
             }
             function stepsAdd()
