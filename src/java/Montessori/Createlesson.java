@@ -112,7 +112,12 @@ public class Createlesson {
     public void newidea(Lessons newlessons) throws SQLException {
      int lessonid=0;
     List<String> equipmentids;
+     String server = "192.168.1.36";
+		int port = 21;
+		String user = "david";
+		String pass = "david";
     DriverManagerDataSource dataSource;
+    FTPClient ftpClient = new FTPClient();
     try{
         dataSource = (DriverManagerDataSource)this.getBean("dataSource",this.servlet);
        this.cn = dataSource.getConnection();
@@ -143,10 +148,18 @@ public class Createlesson {
                 st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+lessonid+"','"+equipmentids.get(i)+"')");
             }
             }
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+            boolean success = ftpClient.changeWorkingDirectory("/MontessoriTesting");
+            if(success){
+            ftpClient.mkd(lessonid+"-"+newlessons.getName());
+            }
           
     }
     catch (SQLException ex) {
             System.out.println("Error leyendo lessons: " + ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Createlesson.class.getName()).log(Level.SEVERE, null, ex);
         }  
     
     }
