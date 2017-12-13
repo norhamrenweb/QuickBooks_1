@@ -347,9 +347,13 @@ public class CreateSettingControlador{
         String consulta = "update objective set name = '"+obj.getName()+"',description ='"+obj.getDescription()+"'where id ="+obid[0]; 
         st.executeUpdate(consulta);
         // we need here to update the edited steps and delete the deleted and add the new
-//        consulta ="select id from obj_steps where obj_id ='"+obid[0]+"'";
-//        ResultSet rs1 =st.executeQuery(consulta);
-
+//       consulta ="delete from obj_steps where obj_id ='"+obid[0]+"'";
+//     st.executeUpdate(consulta);
+//        List<Step> steps = obj.getSteps();
+//        for(Step s:steps)
+//        {
+//        st.executeUpdate("insert into obj_steps(name,weight,storder,obj_id) values('"+s.getName()+"',0,"+s.getOrder()+",'"+obid[0]+"')");
+//        }
         message = "Objective edited successfully";  
         Step s = new Step();
         s.compareandupdate(obj.getSteps(),obj.getId(),hsr.getServletContext());
