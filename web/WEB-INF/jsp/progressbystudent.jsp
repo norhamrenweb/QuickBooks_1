@@ -38,10 +38,11 @@
                 });
                 
     $('#table_students tbody').on('click', 'tr', function () {
-        
+       
         data = table.row( this ).data();
         data1 = data.id;
         selectionStudent();
+         $('#divProgress').removeClass("hidden");
     } ); 
     $('#fecha').datetimepicker({
             
@@ -680,7 +681,7 @@ $(function() {
                         </div>
                     </div> 
 
-                    <div class="col-xs-9">
+                    <div id="divProgress" class="col-xs-9 hidden">
                         <div class="col-xs-12 text-center nameStudent">
                             <span id="student"> </span>
                             <input type="hidden" id="studentid" name="studentid">
