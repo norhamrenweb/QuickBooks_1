@@ -136,7 +136,8 @@ public class upload extends HttpServlet {
                 // String filename = filePart.getSubmittedFileName();
                 String filename = name+"-"+ filePart.getSubmittedFileName();
 //                fis = new FileInputStream(filename);
-                if(!ftpClient.changeWorkingDirectory("/MontessoriTesting/"+lessonId+"-"+presentationName));
+                String rutaCompleta = "/MontessoriTesting/'"+lessonId+"-"+presentationName+"'";
+                if(!ftpClient.changeWorkingDirectory(rutaCompleta));
                 {
                     ftpClient.changeWorkingDirectory("/MontessoriTesting");
                     ftpClient.mkd(lessonId+"-"+presentationName);

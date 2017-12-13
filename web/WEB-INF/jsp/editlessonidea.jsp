@@ -74,6 +74,17 @@
                     }
             });
             
+             $( "#NameLessons,#comments,#objective,#fechaInput,#horainicioInput,#horafinInput" ).change(function() {
+                if(document.getElementById("level").value !== 'Select level' && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' )
+                {  
+                    $('#createOnClick').attr('disabled', false);
+                }
+                else{ //no es idea  
+                    $('#createOnClick').attr('disabled', true);
+                }
+            });
+            
+            
 
             
 $("#method").on('mouseover', 'option' , function(e) {
@@ -205,10 +216,12 @@ $("#method").on('mouseover', 'option' , function(e) {
         }
 
         $('#createOnClick').attr('disabled', true);
+        
         ajax.onreadystatechange = funcionCallBackSubject;
         var seleccion1 = document.getElementById("level").value;
         ajax.open("POST","editlessonidea/subjectlistLevel.htm?seleccion1="+seleccion1,true);
-        
+        $("#objective").val("");
+        $("#subject").val("");
         ajax.send("");
        
     }
@@ -410,11 +423,11 @@ input[type="radio"] .styled:checked + label::after {
                 </legend>
                 <div class="form-group collapse" id="contenedorPropiertys">
                     <div class="col-xs-6 center-block">
-                        <label class="control-label">Presentation Name</label>
+                        <label class="control-label">Presentation Name</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                         <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>" value="${data.name}">
                     </div>               
                     <div class="col-xs-6 center-block form-group">
-                        <label class="control-label">Presentation description</label>
+                        <label class="control-label">Presentation description</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                         <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200">${data.comments}</textarea>
                     </div>
                     
@@ -432,7 +445,7 @@ input[type="radio"] .styled:checked + label::after {
                 </legend>
                 <div class="form-group collapse" id="contenedorDetails">
                 <div class="col-xs-3 form-group">
-                    <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
+                    <label class="control-label"><spring:message code="etiq.txtlevels"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="levels" items="${gradelevels}">
                             <c:if test="${levels.id[0] == data.level.id[0]}">
@@ -445,7 +458,7 @@ input[type="radio"] .styled:checked + label::after {
                           
                 </div>
                 <div class="col-xs-3 center-block">
-                    <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
+                    <label class="control-label"><spring:message code="etiq.txtsubject"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                     <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
                     
                         <c:forEach var="subject" items="${subjects}">
@@ -458,7 +471,7 @@ input[type="radio"] .styled:checked + label::after {
                     </select>
                 </div>
                     <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Objective</label>
+                        <label class="control-label">Objective</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                         <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
                            <c:forEach var="objective" items="${objectives}">
                                <c:if test="${objective.id[0] == data.objective.id[0]}">

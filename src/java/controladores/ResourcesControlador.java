@@ -158,7 +158,7 @@ public class ResourcesControlador {
         this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
             String presentationName = hsr.getParameter("LessonsSelected");
-             presentationName =  presentationName.split("-")[1];
+            presentationName =  presentationName.split("-")[1];
             String lessonid = hsr.getParameter("LessonsSelected");
             lessonid = lessonid.split("-")[0];
             String consulta = "SELECT * FROM public.resources where lesson_id = "+lessonid;
@@ -182,6 +182,12 @@ public class ResourcesControlador {
            }
        }
         mv.addObject("lessonid",lessonid);
+        /*
+        int cantElem = presentationName.split("-").length;
+        for (int i = 0; i < cantElem; i++) {
+               
+        }*/
+        presentationName = "'"+presentationName+"'";
         mv.addObject("lessonsName",presentationName);
         mv.addObject("files",filersrcs);
         mv.addObject("others",otherrsrcs);

@@ -65,7 +65,24 @@
                     $("#contenedorStudents").addClass('in');   
                     }
             });
-            
+             $( "#NameLessons,#comments,#objective,#fechaInput,#horainicioInput,#horafinInput" ).change(function() {
+                if(document.getElementById("level").value !== 'Select level' && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' ){
+                    if($("#ideaCheck:checked").length === 1){
+                        $('#saveEdit').attr('disabled', false);
+                    }
+                    else{ //no es idea
+                        var numAlum = $('#destino option').length;
+                        if($('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0){
+                            $('#saveEdit').attr('disabled', false);
+                        }
+                        else{
+                            $('#saveEdit').attr('disabled', true);
+                        }
+                    }
+                }else{
+                    $('#saveEdit').attr('disabled', true);
+                }
+            });
 
             
 $("#method").on('mouseover', 'option' , function(e) {
@@ -134,8 +151,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         
         $().ready(function() 
 	{ 
-              
-		$('.pasar').click(function() {             
+              $('.pasar').click(function() {             
                     var exist = false;
                     $('#destino option').each(function() {
                         if($('#origen option:selected').val() === $(this).val()) exist = true;
@@ -143,22 +159,27 @@ $("#method").on('mouseover', 'option' , function(e) {
                     
                     if(!exist)!$('#origen option:selected').clone().appendTo('#destino');
                     
-                    var alumnosSelected = $('#destino').length;
-                    var objectiveSelected = $('#objective').val();
-                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== ''){
-                        $('#createOnClick').attr('disabled', false);
+                    var numAlum = $('#destino option').length;
+                    if(document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0){
+                        $('#saveEdit').attr('disabled', false);
                     }
+                    else{
+                        $('#saveEdit').attr('disabled', true);
+                    }
+                    
                     $('#destino option').first().prop('selected',true);                     
                     return;
                 });  
-		$('.quitar').click(function() {
+		
+        
+                $('.quitar').click(function() {
                     !$('#destino option:selected').remove();
                     $('#destino option').first().prop('selected',true);
                     
-                    var alumnosSelected = $('#destino').length;
+                    var alumnosSelected = $('#destino option').length;
                     var objectiveSelected = $('#objective').val();
                     if(alumnosSelected === 0 || ( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '')){
-                        $('#createOnClick').attr('disabled', true);
+                        $('#saveEdit').attr('disabled', true);
                     }
                     return;  
                 });
@@ -175,15 +196,24 @@ $("#method").on('mouseover', 'option' , function(e) {
                    
                     var objectiveSelected = $('#objective').val();
                     if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === ''){
-                        $('#createOnClick').attr('disabled', true);
+                        $('#saveEdit').attr('disabled', true);
                     }
                     });
+                    
+                    var numAlum = $('#destino option').length;
+                    if(document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0){
+                        $('#saveEdit').attr('disabled', false);
+                    }
+                    else{
+                        $('#saveEdit').attr('disabled', true);
+                    }
+                    
                     $('#destino option').first().prop('selected',true);
                 });
                 
-		$('.quitartodos').click(function() {
+                $('.quitartodos').click(function() {
                     $('#destino option').each(function() { $(this).remove(); });
-                    $('#createOnClick').attr('disabled', true);
+                    $('#saveEdit').attr('disabled', true);
                 });
 	});
         
@@ -318,11 +348,12 @@ $("#method").on('mouseover', 'option' , function(e) {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
 
-        $('#createOnClick').attr('disabled', true);
+        $('#saveEdit').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackSubject;
         var seleccion1 = document.getElementById("level").value;
         ajax.open("POST","subjectlistLevel.htm?seleccion1="+seleccion1,true);
-        
+        $("#objective").val("");
+        $("#subject").val("");
         ajax.send("");
        
     }
@@ -376,9 +407,9 @@ $("#method").on('mouseover', 'option' , function(e) {
         }
 
         if(document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("destino").length === 0 ){
-            $('#createOnClick').attr('disabled', true);
+            $('#saveEdit').attr('disabled', true);
         }else{
-            $('#createOnClick').attr('disabled', false);
+            $('#saveEdit').attr('disabled', false);
         }
         ajax.onreadystatechange=funcionCallBackContent;
         var seleccion3 = document.getElementById("objective").value;
@@ -542,11 +573,11 @@ input[type="radio"] .styled:checked + label::after {
                 </legend>
                 <div class="form-group collapse" id="contenedorPropiertys">
                     <div class="col-xs-6 center-block">
-                        <label class="control-label">Presentation Name</label>
+                        <label class="control-label">Presentation Name</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                         <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>" value="${data.name}">
                     </div>               
                     <div class="col-xs-6 center-block form-group">
-                        <label class="control-label">Presentation description</label>
+                        <label class="control-label">Presentation description</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                         <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200">${data.comments}</textarea>
                     </div>
 <!--                    <div class="col-xs-6 center-block checkbox checkbox-success">
@@ -570,9 +601,9 @@ input[type="radio"] .styled:checked + label::after {
                 <div class="form-group collapse" id="contenedorDate">
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="fecha">Date</label>
+                                <label class="control-label" for="fecha">Date</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                                 <div class='input-group date' id='fecha'>
-                                    <input type='text' name="TXTfecha" class="form-control" id="fecha" required="required" value="${data.date}"/>
+                                    <input id='fechaInput' type='text' name="TXTfecha" class="form-control" id="fecha" required="required" value="${data.date}"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -582,9 +613,9 @@ input[type="radio"] .styled:checked + label::after {
 
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="horainicio">Start hour</label>
+                                <label class="control-label" for="horainicio">Start hour</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                                 <div class='input-group date' id='horainicio'>
-                                    <input type='text' name="TXThorainicio" class="form-control" required="required"  value="${data.start}"/>
+                                    <input id='horainicioInput' type='text' name="TXThorainicio" class="form-control" required="required"  value="${data.start}"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -593,7 +624,7 @@ input[type="radio"] .styled:checked + label::after {
                         </div>
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="horafin">Finish hour</label>
+                                <label id='horafinInput' class="control-label" for="horafin">Finish hour</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                                 <div class='input-group date' id='horafin'>
                                     <input type='text' name="TXThorafin" class="form-control" required="required" value="${data.finish}"/>
                                     <span class="input-group-addon">
@@ -615,7 +646,7 @@ input[type="radio"] .styled:checked + label::after {
                 </legend>
                 <div class="form-group collapse" id="contenedorDetails">
                 <div class="col-xs-3 form-group">
-                    <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
+                    <label class="control-label"><spring:message code="etiq.txtlevels"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="levels" items="${gradelevels}">
                             <c:if test="${levels.id[0] == data.level.id[0]}">
@@ -627,7 +658,7 @@ input[type="radio"] .styled:checked + label::after {
                     </select>
                     </div>
                 <div class="col-xs-3 center-block">
-                    <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
+                    <label class="control-label"><spring:message code="etiq.txtsubject"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                     <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
                     
                        <c:forEach var="subject" items="${subjects}">
@@ -642,7 +673,7 @@ input[type="radio"] .styled:checked + label::after {
                 </div>          
                 
                     <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Objective</label>
+                        <label class="control-label">Objective</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                         <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
                            <c:forEach var="objective" items="${objectives}">
                                <c:if test="${objective.id[0] == data.objective.id[0]}">
@@ -712,7 +743,7 @@ input[type="radio"] .styled:checked + label::after {
             </fieldset>
             <fieldset>
                     <legend id="showStudents">
-                        Select Learners
+                        Select Learners <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                         <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom"></span>
                     </legend>
                 <div class="form-group collapse in" id="contenedorStudents">

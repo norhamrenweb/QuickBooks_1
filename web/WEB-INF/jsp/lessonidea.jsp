@@ -115,8 +115,10 @@ var to = false;
     }   
         function editrsrctree()
     {
-            var ideaSelect = $("#tree").jstree("get_selected");
-        window.open("<c:url value="/lessonresources/loadResources.htm?LessonsSelected="/>"+ideaSelect);
+        var ideaSelect = $("#tree").jstree("get_selected");
+        var nombre = $("#"+ideaSelect).children().text();
+        var conc = ideaSelect+"-"+nombre.substr(2,nombre.length);
+        window.open("<c:url value="/lessonresources/loadResources.htm?LessonsSelected="/>"+conc);
     }   
    function delttree()
     {
