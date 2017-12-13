@@ -367,7 +367,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                             $('#listResources').append("<div id = 'divRecurso"+id+"' class='list-group col-xs-12'>\n\
                                                     <div class='col-xs-10 text-center'>\n\
                                                          <a href="+linkResource+" class='list-group-item link'>\n\
-                                                             "+nameResource+"<span class='label "+claseTipo+"'>"+type+"</span>\n\
+                                                             "+nameResource+"<span class='label "+claseTipo+"' target='_blank'>"+type+"</span>\n\
                                                  </a>\n\
                                             </div>\n\
                                          <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning editResource'  onclick='loadInfResource("+id+")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editResource"+id+" '/></div>\n\
@@ -424,12 +424,14 @@ $("#method").on('mouseover', 'option' , function(e) {
                             //MODIFICAR EL JSON PARA QUE DEVUELVA EL ID OBTENIDO
                             $('#listResources').append("<div id = 'divRecurso"+id+"' class='list-group col-xs-12'>\n\
                                                     <div class='col-xs-10 text-center'>\n\
-                                                         <a href="+linkResource+" class='list-group-item link'>\n\
-                                                             "+nameResource+"<span class='label "+claseTipo+"'>"+type+"</span>\n\
+                                                         <a href="+linkResource+" class='list-group-item link ' target='_blank'>\n\
+                                                             "+nameResource+"<span class='label "+claseTipo+"' >"+type+"</span>\n\
                                                  </a>\n\
                                             </div>\n\
                                          <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning editResource'  onclick='loadInfResource("+id+")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editResource"+id+" '/></div>\n\
                                          <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning '  onclick='deleteLink("+id+")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteLink("+id+")'/></div></div>");   
+                            $("#addnewLink").modal('hide');
+      
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -780,7 +782,7 @@ input[type="radio"] .styled:checked + label::after {
                                
                                <c:when test="${item.type =='Video'}">
                                    <div id = "divRecurso${item.id}" class="list-group col-xs-12">
-                                   <div class="col-xs-10 text-center"><a href="${item.link}"  data-id="${item.id}" class="list-group-item link" >${item.name}<span class="label label-primary">${item.type}</span> </a></div> 
+                                   <div class="col-xs-10 text-center"><a href="${item.link}"  data-id="${item.id}" class="list-group-item link" target="_blank">${item.name}<span class="label label-primary">${item.type}</span> </a></div> 
                                    <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>  
                                    <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
 
@@ -789,7 +791,7 @@ input[type="radio"] .styled:checked + label::after {
                                 
                                 <c:otherwise> 
                                    <div id = "divRecurso${item.id}" class="list-group col-xs-12">
-                                   <div class="col-xs-10 text-center"> <a href="${item.link}" data-id="${item.id}"  class="list-group-item link">${item.name}<span class="label label-success">${item.type}</span></a></div>
+                                   <div class="col-xs-10 text-center"> <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}<span class="label label-success">${item.type}</span></a></div>
                                    <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>
                                    <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
 
@@ -916,7 +918,8 @@ input[type="radio"] .styled:checked + label::after {
                         </div>   
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Type</label>
-                        <select class="form-control" name="selectTipo" id="selectTipo" placeholder="Tipo">placeholder="Link"
+                        <select class="form-control" name="selectTipo" id="selectTipo" placeholder="Tipo">placeholder="Select"
+                            <option >Select</option>
                             <option >Link</option>
                             <option>Video</option>
  
@@ -1029,7 +1032,7 @@ input[type="radio"] .styled:checked + label::after {
                         
                         </div>
 			
-                            <input id = "submitSave" type="submit" disabled="true" value="save" class="col-xs-2 center-block form-group paddingLabel btn btn-success">     
+                            <input id = "submitSave" type="submit" disabled="true" value="save" class="col-xs-2 center-block form-group paddingLabel btn btn-success" >     
             </form>
                 
             </div>
