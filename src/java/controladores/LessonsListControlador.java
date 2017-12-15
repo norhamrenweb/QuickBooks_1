@@ -147,8 +147,12 @@ public class LessonsListControlador{
          }
          consulta = "select * from progress_Report where lesson_id ="+ id [0];
          ResultSet rs1 = st.executeQuery(consulta);
-         if(rs1.next()){
+         while(rs1.next()){
+             int check = rs1.getInt("rating_id");
+             if(check != 7)//empty rating
+             {
          message = "Presentation has progress records,it can not be deleted";
+             }
          }
          if(message == null)
          {
