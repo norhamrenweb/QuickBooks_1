@@ -281,7 +281,7 @@ public class ResourcesControlador {
                 ftpClient.login(user, pass);
 
                 //boolean success = ftpClient.changeWorkingDirectory("/MontessoriTesting/"+resourceLoad.getLesson_id());
-
+                lessonName = lessonName.replace("/", "_");
                 ftpClient.deleteFile("/MontessoriTesting/"+resourceLoad.getLesson_id()+"-"+lessonName+"/"+resourceLoad.getLink());
                 ftpClient.logout();
             }

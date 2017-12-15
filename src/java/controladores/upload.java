@@ -56,7 +56,7 @@ public class upload extends HttpServlet {
                 Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            String filePath = "/MontessoriTesting/"+rLoaded.getLesson_id()+"-"+presentationName+"/"+rLoaded.getLink();
+            
             String url2 = request.getContextPath();
             
             String url3 = ""+request.getRequestURL();
@@ -66,7 +66,8 @@ public class upload extends HttpServlet {
             String user = "david";
             String pass = "david";
             
-            
+            presentationName =  presentationName.replace("/", "_");
+            String filePath = "/MontessoriTesting/"+rLoaded.getLesson_id()+"-"+presentationName+"/"+rLoaded.getLink();
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(server,port);
             ftpClient.login(user, pass);
@@ -136,6 +137,7 @@ public class upload extends HttpServlet {
                 // String filename = filePart.getSubmittedFileName();
                 String filename = name+"-"+ filePart.getSubmittedFileName();
 //                fis = new FileInputStream(filename);
+                presentationName =  presentationName.replace("/", "_");
                 String rutaCompleta = "/MontessoriTesting/'"+lessonId+"-"+presentationName+"'";
                 if(!ftpClient.changeWorkingDirectory(rutaCompleta));
                 {

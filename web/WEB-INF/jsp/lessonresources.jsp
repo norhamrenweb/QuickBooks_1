@@ -1014,11 +1014,15 @@ input[type="radio"] .styled:checked + label::after {
                             }
                         }); 
                         if($('#file').val() !== "") {
-                           if(existeNombre === "0"){
+                           if(existeNombre === "0" && $('#idNameFile').val().indexOf("/") == "-1"){
                                $('#submitSave').prop('disabled', false);
                            }
-                        }
-                      });
+                           else {
+                               if($('#idNameFile').val().indexOf("/") != "-1")  alert('Not permited /');  
+                               $('#submitSave').prop('disabled', true);
+                           }
+                        }      
+                    });
                       
                      });
                      function is_url(str)
@@ -1035,6 +1039,7 @@ input[type="radio"] .styled:checked + label::after {
                               return false;
                             }
                     }
+                   
              </script>
              <c:url var="post_url"  value="/upload" />    
              <form class="col-xs-12 center-block form-group" action="${post_url}" method="POST" enctype="multipart/form-data">      
