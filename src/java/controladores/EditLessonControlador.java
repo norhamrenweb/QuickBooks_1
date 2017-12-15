@@ -480,7 +480,7 @@ public class EditLessonControlador {
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         Lessons newlesson = new Lessons();  
         try{
-      String id = hsr.getParameter("id");
+       String id = hsr.getParameter("id");
        HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
        List<String> contentids;
@@ -515,8 +515,8 @@ public class EditLessonControlador {
       // String[] ideaCheck = hsr.getParameterValues("ideaCheck");
 
       
-     newlesson.setTeacherid(user.getId());
-       newlesson.setId(Integer.parseInt(id));
+      newlesson.setTeacherid(user.getId());
+      newlesson.setId(Integer.parseInt(id));
       newlesson.setLevel(level);
       newlesson.setSubject(subject);
       newlesson.setObjective(objective);

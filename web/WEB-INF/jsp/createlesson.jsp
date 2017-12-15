@@ -106,6 +106,10 @@
                 }
             });
             
+            $("#saveEdit").focus(function() {
+              $('#destino option').prop('selected',true);     
+            });
+            
 $("#method").on('mouseover', 'option' , function(e) {
     
         var $e = $(e.target);

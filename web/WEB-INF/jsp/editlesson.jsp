@@ -84,6 +84,9 @@
                 }
             });
 
+            $("#saveEdit").focus(function() {
+              $('#destino option').prop('selected',true);     
+            });
             
 $("#method").on('mouseover', 'option' , function(e) {
     
@@ -167,14 +170,14 @@ $("#method").on('mouseover', 'option' , function(e) {
                         $('#saveEdit').attr('disabled', true);
                     }
                     
-                    $('#destino option').first().prop('selected',true);                     
+                    //$('#destino option').first().prop('selected',true);                     
                     return;
                 });  
 		
         
                 $('.quitar').click(function() {
                     !$('#destino option:selected').remove();
-                    $('#destino option').first().prop('selected',true);
+                   // $('#destino option').first().prop('selected',true);
                     
                     var alumnosSelected = $('#destino option').length;
                     var objectiveSelected = $('#objective').val();
@@ -208,7 +211,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                         $('#saveEdit').attr('disabled', true);
                     }
                     
-                    $('#destino option').first().prop('selected',true);
+                    //$('#destino option').first().prop('selected',true);
                 });
                 
                 $('.quitartodos').click(function() {
@@ -337,6 +340,9 @@ $("#method").on('mouseover', 'option' , function(e) {
                 }
             }
 
+    function seleccionarTodos(){
+        $('#destino option').first().prop('selected',true);
+    }
     function comboSelectionLevel()
     {
         if (window.XMLHttpRequest) //mozilla

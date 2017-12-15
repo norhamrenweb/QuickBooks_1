@@ -914,7 +914,7 @@ input[type="radio"] .styled:checked + label::after {
                         </div>
                         <div class="col-xs-6 center-block form-group">
                             <label class="control-label">Link</label>
-                            <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="Link">
+                            <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="Link" data-toggle="tooltip" data-placement="bottom" title="(http or https:)//www.example.com">
                         </div>   
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Type</label>
@@ -960,7 +960,7 @@ input[type="radio"] .styled:checked + label::after {
 
                     });
                     
-                      $('#editNameMethod').focusout(function() {
+                    $('#editNameMethod').focusout(function() {
                         if($('#editNameMethod').val() !== "" && $('#editCommentsMethod').val() !== "" && is_url($('#editCommentsMethod').val()) && $('#selectTipo').val() !== "Select"){
                                $('#EditMethod').prop('disabled', false);
                         }
@@ -979,6 +979,16 @@ input[type="radio"] .styled:checked + label::after {
                                  alert('Invalid URL')
                             }
                            
+                        }
+                    });
+                    
+                    
+                    $('#selectTipo').change(function() {
+                        if($('#editNameMethod').val() !== "" && $('#editCommentsMethod').val() !== "" && is_url($('#editCommentsMethod').val()) && $('#selectTipo').val() !== "Select"){
+                               $('#EditMethod').prop('disabled', false);
+                        }
+                        else{
+                            $('#EditMethod').prop('disabled', true);               
                         }
                     });
                     

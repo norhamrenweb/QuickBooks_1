@@ -116,7 +116,8 @@ var ajax;
             }
    function accessrsrcs(LessonsSelected,LessonsName)
    {     
-       var path = LessonsSelected+"-"+LessonsName;
+       var lessonName = LessonsName.substring(1,LessonsName.length);
+       var path = LessonsSelected+"-"+lessonName;
      window.open("<c:url value="/lessonresources/loadResources.htm?LessonsSelected="/>"+path);   
     // windows.open()
       //ajax.open("POST","deleteLesson.htm?LessonsSelected="+LessonsSelected,true);

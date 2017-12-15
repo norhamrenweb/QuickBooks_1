@@ -77,18 +77,18 @@ collectionAttendance.each(function() {
     });
 
 $(function() {
-$('select').change(function() {
+$('select,hi,idSelectAttendance').change(function() {
     var itemsRating = []; // needs to be outside
     var itemsAttendance = []; // needs to be outside
-var collectionRating = $(".rating");
-var collectionAttendance = $(".attendance");
+    var collectionRating = $(".rating");
+    var collectionAttendance = $(".attendance");
 
-collectionRating.each(function() {
-    itemsRating.push($(this).val());   
-});
-collectionAttendance.each(function() {
-    itemsAttendance.push($(this).val());   
-});
+    collectionRating.each(function() {
+        itemsRating.push($(this).val());   
+    });
+    collectionAttendance.each(function() {
+        itemsAttendance.push($(this).val());   
+    });
     var haynullRating = $.inArray('', itemsRating);
     var haynullAttendance = $.inArray('', itemsAttendance);
     
@@ -101,13 +101,37 @@ collectionAttendance.each(function() {
         $('#buttonAchived').parent().removeAttr('disabled');
     }
 });
-     $('#rellenarP').click(function() {
+
+    $('#rellenarP').click(function() {
 
        var rellenarPresent = $(".attendance");
        rellenarPresent.each(function() {
             $(this).val("P");
         });
        
+        var itemsRating = []; // needs to be outside
+        var itemsAttendance = []; // needs to be outside
+        var collectionRating = $(".rating");
+        var collectionAttendance = $(".attendance");
+
+        collectionRating.each(function() {
+            itemsRating.push($(this).val());   
+        });
+        collectionAttendance.each(function() {
+            itemsAttendance.push($(this).val());   
+        });
+        var haynullRating = $.inArray('', itemsRating);
+        var haynullAttendance = $.inArray('', itemsAttendance);
+
+        if( haynullRating !== -1 || haynullAttendance !== -1){
+            $('#buttonAchived').attr('disabled', true);
+            $('#buttonAchived').parent().attr('disabled', true);
+
+        }else{
+            $('#buttonAchived').attr('disabled', false);
+            $('#buttonAchived').parent().removeAttr('disabled');
+        }
+    
     });
     $('#rellenar').click(function() {
 
@@ -116,7 +140,32 @@ collectionAttendance.each(function() {
             $(this).val("");
         });
        
+          
+        var itemsRating = []; // needs to be outside
+        var itemsAttendance = []; // needs to be outside
+        var collectionRating = $(".rating");
+        var collectionAttendance = $(".attendance");
+
+        collectionRating.each(function() {
+            itemsRating.push($(this).val());   
+        });
+        collectionAttendance.each(function() {
+            itemsAttendance.push($(this).val());   
+        });
+        var haynullRating = $.inArray('', itemsRating);
+        var haynullAttendance = $.inArray('', itemsAttendance);
+
+        if( haynullRating !== -1 || haynullAttendance !== -1){
+            $('#buttonAchived').attr('disabled', true);
+            $('#buttonAchived').parent().attr('disabled', true);
+
+        }else{
+            $('#buttonAchived').attr('disabled', false);
+            $('#buttonAchived').parent().removeAttr('disabled');
+        }
+    
     });
+    
     $('#subject').change(function() {
 //        $('#LoadTemplates').parent().attr("disabled",false);
 //        $('#LoadTemplates').attr("disabled",false);
