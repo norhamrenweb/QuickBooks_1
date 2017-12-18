@@ -208,7 +208,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
         String test = hsr.getParameter("levelStudent");
         if(levelid[0]!="")
         {
-        studentsgrades =this.getStudentslevel(levelid[0]);
+            studentsgrades =this.getStudentslevel(levelid[0]);
         }
         else{
             studentsgrades = this.getStudents();

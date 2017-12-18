@@ -153,6 +153,7 @@ public class EditLessonControlador {
            }
        }
        data.setStudents(stud);
+       
        cn.close();
        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();

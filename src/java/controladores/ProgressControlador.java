@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.ServletContext;
@@ -62,9 +63,9 @@ public class ProgressControlador {
         Students teacher = new Students();
          try {
          DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-     String lessonid = hsr.getParameter("LessonsSelected");
+        String lessonid = hsr.getParameter("LessonsSelected");
 //     DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
 //Date lessondate = format.parse(hsr.getParameter("seleccion5"));
 
@@ -195,20 +196,27 @@ public class ProgressControlador {
             }
             }
             cn.close();
-             DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
-        this.cn = dataSource.getConnection();
-        st = this.cn.createStatement();
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
+            this.cn = dataSource.getConnection();
+            st = this.cn.createStatement();
+            consulta = "SELECT FirstName,LastName,MiddleName,StudentID FROM AH_ZAF.dbo.Students ";
+            ResultSet rs2 = st.executeQuery(consulta);
+            HashMap<String, String> map = new HashMap<String, String>();
+            String first,LastName,middle,studentID;
+            while(rs2.next()){
+                    first = rs2.getString("FirstName");
+                    LastName =rs2.getString("LastName");
+                    middle = rs2.getString("MiddleName");
+                    studentID = rs2.getString("StudentID");
+                    map.put(studentID, LastName+", "+first+" "+middle);	
+            }
             for(Progress record : records)
             {
-            consulta = "SELECT FirstName,LastName,MiddleName FROM AH_ZAF.dbo.Students where StudentID = '"+record.getStudentid()+"' order by LastName";
-            ResultSet rs2 = st.executeQuery(consulta);
-            while (rs2.next())
-            {
-              record.setStudentname(rs2.getString("LastName")+", "+ rs2.getString("FirstName")+" "+ rs2.getString("MiddleName"));
+                  String id = ""+record.getStudentid();
+                  String name = map.get(id);
+                  record.setStudentname(name);
             }
-            }
-        
             
         } catch (SQLException ex) {
             System.out.println("Error  " + ex);

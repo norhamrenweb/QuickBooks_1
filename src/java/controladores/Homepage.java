@@ -73,8 +73,10 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
         return mv;
          }
          else{
+             //=============================================== lag
          scgrpid=login.getSecurityGroupID("MontesoriTest");
          result = login.fromGroup(scgrpid, user.getId());
+            //=============================================== lag
         if (result == true){
             ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
             String  message = "welcome user";

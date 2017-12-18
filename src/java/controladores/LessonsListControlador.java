@@ -13,6 +13,7 @@ import java.io.StringWriter;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -70,34 +71,92 @@ public class LessonsListControlador{
         ArrayList<Lessons> lessonslist = new ArrayList<>();
         try {
             
-             Statement st = this.cn.createStatement();
-             
-            String consulta = "SELECT * FROM public.lessons where user_id = "+userid+" and COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
+            this.cn = dataSource.getConnection();
+            Statement st = this.cn.createStatement();
+            
+            String consulta = "SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels";
+            ResultSet rs2 = st.executeQuery(consulta);
+            HashMap<Integer, String> mapLevel = new HashMap<Integer, String>();
+            String name;
+            int id;
+            while(rs2.next()){
+                    name = rs2.getString("GradeLevel");
+                    id = rs2.getInt("GradeLevelID");
+                    mapLevel.put(id,name);	
+            }
+            
+            
+            DriverManagerDataSource dataSource2;
+            dataSource2 = (DriverManagerDataSource)this.getBean("dataSource",servlet);
+            this.cn = dataSource2.getConnection();
+            Statement st2 = this.cn.createStatement();
+            
+            consulta = "SELECT * FROM public.objective";
+            ResultSet rs3 = st2.executeQuery(consulta);
+            
+            HashMap<Integer, String> mapObjective = new HashMap<Integer, String>();
+            while(rs3.next()){
+                    name = rs3.getString("name");
+                    id = rs3.getInt("id");
+                    mapObjective.put(id,name);	
+            }
+            
+            
+            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
+            this.cn = dataSource.getConnection();
+            st = this.cn.createStatement();
+            
+            consulta = "SELECT Title,CourseID FROM AH_ZAF.dbo.Courses";
+            ResultSet rs4 = st.executeQuery(consulta);
+            HashMap<Integer, String> mapSubject = new HashMap<Integer, String>();
+            while(rs4.next()){
+                    name = rs4.getString("Title");
+                    id = rs4.getInt("CourseID");
+                    mapSubject.put(id,name);	
+            }
+            
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",servlet);
+            this.cn = dataSource.getConnection();
+            st = this.cn.createStatement();
+            
+            consulta = "SELECT * FROM public.lessons where user_id = "+userid+" and COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
             ResultSet rs = st.executeQuery(consulta);
-          
+
             while (rs.next())
             {
                 Lessons lesson = new Lessons();
               //  lesson.setId(rs.getString("id_lessons"));
                 lesson.setName(rs.getString("name"));
                 lesson.setId(rs.getInt("id"));
+                
                 Level level = new Level();
-                String name = level.fetchName(rs.getInt("level_id"),servlet);
-               level.setName(name);
+                int idLevel = rs.getInt("level_id");           
+               // String name = level.fetchName(rs.getInt("level_id"),servlet);
+                name = mapLevel.get(idLevel);
+                level.setName(name);
                 lesson.setLevel(level);
+                
                 Objective sub = new Objective();
-                name = sub.fetchName(rs.getInt("objective_id"), servlet);
+                int idObjective = rs.getInt("objective_id");       
+              //  name = sub.fetchName(rs.getInt("objective_id"), servlet);
+                name =  mapObjective.get(idObjective);
                 sub.setName(name);
                 lesson.setObjective(sub);
+                
                 Subject subject = new Subject();
-                name = subject.fetchName(rs.getInt("subject_id"), servlet);
+                int idSubject = rs.getInt("subject_id");
+                name = mapSubject.get(idSubject);
+               // name = subject.fetchName(rs.getInt("subject_id"), servlet);
                 subject.setName(name);
                 lesson.setSubject(subject);
-                 Timestamp stamp = rs.getTimestamp("start");
-               Timestamp finish = rs.getTimestamp("finish");
-               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-               SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm a");
-               String dateStr = sdfDate.format(stamp);
+                
+                Timestamp stamp = rs.getTimestamp("start");
+                Timestamp finish = rs.getTimestamp("finish");
+                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm a");
+                String dateStr = sdfDate.format(stamp);
                 String timeStr = sdfTime.format(stamp);
                  
                 String timeStr2 = sdfTime.format(finish);
@@ -252,17 +311,25 @@ public class LessonsListControlador{
                 records.add(att);
             }
             cn.close();
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        st = this.cn.createStatement();
+            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+            st = this.cn.createStatement();
+            consulta = "SELECT FirstName,LastName,MiddleName,StudentID FROM AH_ZAF.dbo.Students ";
+            ResultSet rs3 = st.executeQuery(consulta);
+            HashMap<String, String> map = new HashMap<String, String>();
+            String first,LastName,middle,studentID;
+            while(rs3.next()){
+                    first = rs3.getString("FirstName");
+                    LastName =rs3.getString("LastName");
+                    middle = rs3.getString("MiddleName");
+                    studentID = rs3.getString("StudentID");
+                    map.put(studentID, LastName+", "+first+" "+middle);	
+            }
             for(Progress record : records)
             {
-            consulta = "SELECT FirstName,LastName FROM AH_ZAF.dbo.Students where StudentID = '"+record.getStudentid()+"'";
-            ResultSet rs3 = st.executeQuery(consulta);
-            while (rs3.next())
-            {
-              record.setStudentname(rs3.getString("FirstName")+","+rs3.getString("LastName"));
-            }
+                  String id2 = ""+record.getStudentid();
+                  String name = map.get(id2);
+                  record.setStudentname(name);
             }
             jsonObj.put("students",new Gson().toJson(records));
        }catch (SQLException ex) {

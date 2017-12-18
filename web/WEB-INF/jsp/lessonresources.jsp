@@ -603,6 +603,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             
                     $("#editNameMethod").val("");
                     $("#editCommentsMethod").val("");
+                   $("#selectTipo option:eq(0)").prop('selected', true); 
                     $('#addnewLink').modal('show');
                 });
                 
@@ -918,7 +919,7 @@ input[type="radio"] .styled:checked + label::after {
                         </div>   
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Type</label>
-                        <select class="form-control" name="selectTipo" id="selectTipo" placeholder="Tipo">placeholder="Select"
+                        <select class="form-control" name="selectTipo" id="selectTipo" placeholder="Type">placeholder="Select"
                             <option >Select</option>
                             <option >Link</option>
                             <option>Video</option>
