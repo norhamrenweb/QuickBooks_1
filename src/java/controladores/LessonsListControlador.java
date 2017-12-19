@@ -60,8 +60,7 @@ public class LessonsListControlador{
         User user = (User) sesion.getAttribute("user");
         mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
         mv.addObject("username",user.getName());
-        
-        
+
         return mv;
     }
 //   

@@ -31,6 +31,7 @@ import com.google.gson.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.HashMap;
 import org.springframework.ui.ModelMap;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -85,43 +86,47 @@ public class EditLessonControlador {
          String lessonid = hsr.getParameter("LessonsSelected");
          ResultSet rs = st.executeQuery("select * from lessons where id= "+lessonid);
          while(rs.next()){
-             data.setComments(rs.getString("comments"));
-                Timestamp stamp = rs.getTimestamp("start");
-                Timestamp finish = rs.getTimestamp("finish");
-                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-                SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm:ss a");
-                String dateStr = sdfDate.format(stamp);
-                String timeStr = sdfTime.format(stamp);  
-                String timeStr2 = sdfTime.format(finish);
-                data.setDate(""+ dateStr);
-                data.setStart(timeStr);
-                data.setFinish(timeStr2);
-                data.setId(Integer.parseInt(lessonid));
-                l.setId(new String[] {""+rs.getInt("level_id")});
-                m.setId(new String[] {""+rs.getInt("method_id")});
-                data.setName(rs.getString("name"));
-                o.setId(new String[] {""+rs.getInt("objective_id")});
-                s.setId(new String[] {""+rs.getInt("subject_id")});
-                
-         }
-         id = s.getId() ;
-       s.setName(s.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
-       data.setSubject(s);
-       id=null;
-       id = m.getId();
-       m.setName(m.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
-       data.setMethod(m);
-        id=null;
-        id = o.getId();
-       o.setName(o.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
-        data.setObjective(o);
-         id=null;
-        id = l.getId();
-       l.setName(l.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
-       data.setLevel(l);
-       id=null;
-       ResultSet rs2 = st.executeQuery("select * from lesson_content where lesson_id = "+lessonid);
-      
+            data.setComments(rs.getString("comments"));
+            Timestamp stamp = rs.getTimestamp("start");
+            Timestamp finish = rs.getTimestamp("finish");
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm:ss a");
+            String dateStr = sdfDate.format(stamp);
+            String timeStr = sdfTime.format(stamp);  
+            String timeStr2 = sdfTime.format(finish);
+            data.setDate(""+ dateStr);
+            data.setStart(timeStr);
+            data.setFinish(timeStr2);
+            data.setId(Integer.parseInt(lessonid));
+            l.setId(new String[] {""+rs.getInt("level_id")});
+            m.setId(new String[] {""+rs.getInt("method_id")});
+            data.setName(rs.getString("name"));
+            o.setId(new String[] {""+rs.getInt("objective_id")});
+            s.setId(new String[] {""+rs.getInt("subject_id")});         
+         } 
+         
+         //=========================================
+
+         
+            id = s.getId() ;
+            s.setName(s.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
+            data.setSubject(s);
+            id=null;
+            id = m.getId();
+            m.setName(m.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
+            data.setMethod(m);
+            id=null;
+            id = o.getId();
+            o.setName(o.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
+            data.setObjective(o);
+            id=null;
+            id = l.getId();
+            l.setName(l.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
+            data.setLevel(l);
+            id=null;
+            
+            
+       ResultSet rs2 = st.executeQuery("select * from lesson_content where lesson_id = "+lessonid); 
        List<String>cid =new ArrayList<>();
        while(rs2.next())
        {
@@ -143,21 +148,31 @@ public class EditLessonControlador {
     dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();
          Statement st2 = this.cn.createStatement();
+          ResultSet rs7 =st2.executeQuery("SELECT FirstName,LastName,StudentID FROM AH_ZAF.dbo.Students ORDER BY LastName DESC");
+         // ResultSet rs4 = st.executeQuery(consulta);
+            HashMap<String, String> mapStudents = new HashMap<String, String>();
+            String first,LastName,studentID;
+            while(rs7.next()){
+                    first = rs7.getString("FirstName");
+                    LastName =rs7.getString("LastName");
+                    studentID = rs7.getString("StudentID");
+                    mapStudents.put(studentID, LastName+", "+first);	
+            }
          
        for(Students y:stud)
        {
-           ResultSet rs4 =st2.executeQuery("SELECT FirstName,LastName FROM AH_ZAF.dbo.Students where StudentID = '"+y.getId_students()+"'");
+          /* ResultSet rs4 =st2.executeQuery("SELECT FirstName,LastName FROM AH_ZAF.dbo.Students where StudentID = '"+y.getId_students()+"'");
            while(rs4.next())
-           {
-           y.setNombre_students(rs4.getString("FirstName")+","+rs4.getString("LastName"));
-           }
+           {*/
+           y.setNombre_students(mapStudents.get(""+y.getId_students()));
+         //  }
        }
        data.setStudents(stud);
        
        cn.close();
        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-       mv.addObject("data",data);
+       mv.addObject("data",data); //TARDA MUCHISMO
        ArrayList<Objective> test = this.getObjectives(data.getSubject().getId());
         mv.addObject("objectives",this.getObjectives(data.getSubject().getId()));
                  mv.addObject("contents",this.getContent(data.getObjective().getId()));
@@ -169,7 +184,7 @@ public class EditLessonControlador {
          List <Lessons> ideas = new ArrayList();
         dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
         this.cn = dataSource.getConnection();      
-        mv.addObject("listaAlumnos", this.getStudents()); 
+        mv.addObject("listaAlumnos", this.getStudents()); //tarda muchisimo
         Statement st4 = this.cn.createStatement();
         ResultSet rs4 = st4.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
         List <Level> grades = new ArrayList();
@@ -332,8 +347,7 @@ public class EditLessonControlador {
        }
         public ArrayList<Students> getStudentslevel(String gradeid) throws SQLException
     {
-//        this.conectarOracle();
-         
+//        this.conectarOracle();    
         ArrayList<Students> listaAlumnos = new ArrayList<>();
         String gradelevel = null;
         try {

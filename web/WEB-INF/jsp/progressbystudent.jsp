@@ -120,10 +120,12 @@
                         //var tableObjective = $('#tableobjective').DataTable();
 
                         $.each(json, function(i, item) {
+                            var gComment = item.col3 ;
+                            if(gComment === undefined) gComment ="";
 //                         var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').empty();
                         $('#tableobjective tbody tr:eq('+ i +') td:eq(2)').append("<div class='input-group'>\n\
-                <textarea rows='2' class='form-control commentGeneral' id='comment"+item.col5+"'>"+item.col3+"</textarea>\n\
+                <textarea rows='2' class='form-control commentGeneral' id='comment"+item.col5+"'>"+gComment+"</textarea>\n\
 <span class='input-group-btn'>\n\
 <button type='button' class='btn btn-default btn-xs' value='"+item.col5+"' onclick='saveGeneralComment("+item.col5+")'>save</button>\n\
 </span></div>");
@@ -170,6 +172,39 @@
                 }
             }
         }
+    
+    function treeload(levelid,studentid){
+         $('#loadingmessage').show();
+         $.ajax({
+            type: 'POST',
+            url: 'loadtree.htm?levelid='+levelid+'&studentid='+studentid,
+//            data: json,
+//            datatype:"json",
+            contentType: "application/json",           
+                     
+            success: function(datos) {    
+                    var prog = JSON.parse(datos);
+                    $('#loadingmessage').hide();
+                    $('#arbol').prop("onclick", null);
+                    $('#tg').treegrid({
+//                    view: myview,        
+                            data:prog.children,
+                            idField:'id',
+                            treeField:'name',
+                            columns:[[
+                        {title:'Name',field:'name'},
+                        {title:'No.of presentations planned',field:'noofplannedlessons'},
+                        {title:'No.of presentations done',field:'noofarchivedlessons'},
+                        {title:'Progress',field:'progress',formatter:formatProgress},
+                        {title:'Final rating',field:'rating'}
+                    ]]
+                });        
+            },error: function(){     
+                  $('#loadingmessage').hide();
+            }
+        });
+    }
+    
     function saveGeneralComment(objectiveId)
     {
         if (window.XMLHttpRequest) //mozilla
@@ -189,31 +224,31 @@
                 myObj["col2"] = studentId;
                 myObj["col3"] = dataCommentGeneral;
                 var json = JSON.stringify(myObj);
-        $.ajax({
-                    type: 'POST',
+            $.ajax({
+                        type: 'POST',
                         url: 'saveGeneralcomment.htm',
                         data: json,
                          datatype:"json",
                         contentType: "application/json",           
                      
                         success: function(data) {                          
-                          var j = JSON.parse(data);
-                          var mensaje = j.message;
-                    if( mensaje === "Comment successfully updated"){
-                        $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
-                        $('#showModalComment').click();
-                        $('#titleComment').text(mensaje);
-                        
-                    }else{
-                        $('#showModalComment').click();
-                        $('#titleComment').text(mensaje);
-                    }           
+                            var j = JSON.parse(data);
+                            var mensaje = j.message;
+                            if( mensaje === "Comment successfully updated"){
+                                $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);   
+                                $('#showModalComment').click();
+                                $('#titleComment').text(mensaje);
+
+                            }else{
+                                $('#showModalComment').click();
+                                $('#titleComment').text(mensaje);
+                            }           
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
-                                console.log(xhr.status);
-                                   console.log(xhr.responseText);
-                                   console.log(thrownError);
-                               }
+                            console.log(xhr.status);
+                            console.log(xhr.responseText);
+                            console.log(thrownError);
+                        }
 
                     });
 
@@ -227,7 +262,8 @@
                     var json = JSON.parse(ajax.responseText);
                     var info = JSON.parse(json.info);
                     var subjects = JSON.parse(json.sub);
-                    var prog = JSON.parse(json.prog);
+                    $('#myTab a:first').tab('show');
+                    //var prog = JSON.parse(json.prog);
                     //first load the demographics
                      $('#gradelevel').text(info.level_id);
                     $('#nextlevel').text(info.nextlevel);
@@ -238,21 +274,11 @@
                     }else{
                         $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/"+info.foto);
                     }
-                    //load the objectives tracking tree
-                    $('#tg').treegrid({
-//                    view: myview,        
-                    data:prog.children,
-                    idField:'id',
-                    treeField:'name',
-                    columns:[[
-                {title:'Name',field:'name'},
-                {title:'No.of presentations planned',field:'noofplannedlessons'},
-                {title:'No.of presentations done',field:'noofarchivedlessons'},
-                {title:'Progress',field:'progress',formatter:formatProgress},
-                {title:'Final rating',field:'rating'}
-        ]]
-            
-    });     
+                    
+                    $('#arbol').click(function(){
+                        treeload(info.level_id,info.id_students);
+                    });
+                    
                     //hide the objectives in case a previous student was selected
                     $('#divTableObjective').addClass('hidden');//to avoid having the general comments of the previous selected student
                     $('#divNotObjective').addClass('hidden');
@@ -689,7 +715,7 @@ $(function() {
                         <div class="col-xs-12 text-center" id="myTab">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#demographic" role="tab">Demographic</a></li>
-                                <li><a data-toggle="tab" href="#progress" role="tab">Objectives tracking</a></li>
+                                <li><a id="arbol" data-toggle="tab" href="#progress" role="tab">Objectives tracking</a></li>
                                 <li><a data-toggle="tab" href="#gradebook" role="tab">Academic Progress</a></li>
                                 <li><a data-toggle="tab" href="#observations" role="tab">Classroom Observation</a></li>
                             </ul>

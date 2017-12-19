@@ -65,6 +65,7 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
             ModelAndView mv = new ModelAndView("redirect:/suhomepage.htm?opcion=loadconfig"); 
             return mv;
          }else{
+             //comprobar tardo
          user = login.consultUserDB(hsr.getParameter("txtusuario"), hsr.getParameter("txtpassword"));
          if(user.getId()==0){
          ModelAndView mv = new ModelAndView("userform");
@@ -75,12 +76,14 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
          else{
              //=============================================== lag
          scgrpid=login.getSecurityGroupID("MontesoriTest");
+        //comprobar
          result = login.fromGroup(scgrpid, user.getId());
             //=============================================== lag
         if (result == true){
             ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
             String  message = "welcome user";
             session.setAttribute("user", user);
+            
             mv.addObject("message", message);
             return mv;
         }
