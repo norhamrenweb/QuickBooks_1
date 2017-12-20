@@ -136,6 +136,7 @@ var ajax;
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
+        $('#studentarea').empty();
         ajax.onreadystatechange = funcionCallBackdetailsLesson;
         ajax.open("POST","detailsLesson.htm?LessonsSelected="+LessonsSelected,true);
         ajax.send("");

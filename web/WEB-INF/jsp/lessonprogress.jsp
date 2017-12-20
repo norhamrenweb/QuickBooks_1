@@ -92,7 +92,7 @@ $('select,hi,idSelectAttendance').change(function() {
     var haynullRating = $.inArray('', itemsRating);
     var haynullAttendance = $.inArray('', itemsAttendance);
     
-    if( haynullRating !== -1 || haynullAttendance !== -1){
+    if( haynullRating !== 1 || haynullAttendance !== -1){
         $('#buttonAchived').attr('disabled', true);
         $('#buttonAchived').parent().attr('disabled', true);
         
@@ -366,7 +366,7 @@ $('select,hi,idSelectAttendance').change(function() {
                                             </div>-->
  
 <%--  <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="remove" data-icon-lib="fa" data-active-icon="fa-heart" data-inactive-icon="fa-heart-o" data-clearable-icon="fa-trash-o" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />--%>
-<input type="number" name="your_awesome_parameter" id="some_id" class="" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
+<input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
                                         
                                         </div> 
                                     </td>
