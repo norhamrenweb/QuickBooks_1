@@ -38,13 +38,13 @@ var ajax;
                   format: 'YYYY-MM',
                   locale: userLang.valueOf(),
                   daysOfWeekDisabled: [0, 6],
-                  useCurrent: false//Important! See issue #1075
+                  useCurrent: true//Important! See issue #1075
                   //defaultDate: '08:32:33',
 
               });
 
       $('#fecha').on('dp.change', function(e){loadComments(); })
-
+      loadComments();
    });
 function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
 

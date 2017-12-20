@@ -185,9 +185,9 @@
                      
             success: function(datos) {    
                     var prog = JSON.parse(datos);
-                    $('#loadingmessage').hide();
+                    
                     $('#arbol').prop("onclick", null);
-
+                    $('#tg').empty();
                     $('#tg').treegrid({
 //                    view: myview,        
                             data:prog.children,
@@ -200,7 +200,8 @@
                         {title:'Progress',field:'progress',formatter:formatProgress},
                         {title:'Final rating',field:'rating'}
                     ]]
-                });        
+                });
+                $('#loadingmessage').hide();
             },error: function(){     
                   $('#loadingmessage').hide();
             }
