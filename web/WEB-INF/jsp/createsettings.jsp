@@ -82,10 +82,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 
 });
 
-
-          
-            
-
+           
             var ajax;
             
             var subjectValue = $('#subject').select("selected").val();
@@ -231,7 +228,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             }
             function comboSelectionObjective()
             {
-//              
+                    $('#editDescriptionObjective').focus();
                     var seleccion3 = document.getElementById("objective").value;
                     
                     //var p = "&seleccion3"
@@ -629,6 +626,8 @@ $("#method").on('mouseover', 'option' , function(e) {
                     $('#formEditcontent').addClass("hidden");
                     $('#namenewobjective').val('');
                     $('#descriptionnewobjective').val('');
+                    $('#namenewobjective').focus();
+                    //document.formpepi.select();
                     $('#objectiveSelectedForAdd').text($('#subject option:selected').text());
                 });
                 
@@ -637,6 +636,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     $('#formEditobjetive').removeClass("hidden");
                     $('#formAddcontent').addClass("hidden");
                     $('#formEditcontent').addClass("hidden");
+                    $('#editDescriptionObjective').focus();
                     $('#objectiveSelectedForEdit').text($('#subject option:selected').text());
                 });
                 $('#content').click(function () {
@@ -671,6 +671,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     $('#formEditobjetive').addClass("hidden");
                     $('#namenewcontent').val('');
                     $('#commentsnewcontent').val('');
+                    $('#namenewcontent').focus();
                     $('#contentSelectedForAdd').text($('#objective option:selected').text());
                 });
                 $('#editContent').click(function () {
@@ -680,6 +681,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     $('#editNameContent').val($('#content option:selected').text());
                     $('#editCommentsContent').val($('#content option:selected').attr("title"));
                     //Añadimos el nombre del objective para saber a que objective pertenece el content que estamos editando
+                    $('#editCommentsContent').focus();
                     $('#contentSelectedForEdit').text($('#objective option:selected').text());
                 });
                 $('#method').click(function () {
@@ -698,6 +700,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 $('#addMethod').click(function () {
                     $('#formAddmethod').removeClass("hidden");
                     $('#formEditmethod').addClass("hidden");
+                    $('#namenewmethod').focus();
                 });
                 $('#editMethod').click(function () {
                     $('#formAddmethod').addClass("hidden");
@@ -707,6 +710,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     //Añadimos el comentario del method para editarlo
                     $('#editCommentsMethod').val($('#method option:selected').attr('data-content'));
                     //Añadimos el nombre del method para saber que estamos editando
+                    $('#editNameMethod').focus();
                     $('#methodSelectedForEdit').text($('#method option:selected').text());
                 });
                 $('#delMethod').click(function () {
@@ -773,7 +777,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                                     <input type="button" class="btn btn-success" disabled data-toggle="tooltip" data-placement="bottom" value="add" id="addObjective"/>
                                 </div>
                                 <div class="col-xs-4 text-center">
-                                    <input type="button" class="btn btn-warning" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editObjective"/>
+                                    <input type="button" class="btn btn-warning" disabled data-toggle="tooltip" data-placement="bottom"  value="edit" id="editObjective"/>
                                 </div>
                                 <div class="col-xs-4 text-center">
                                     <input type="button" class="btn btn-danger" disabled data-toggle="modal" data-target="#confirmedDeleteObjective" data-placement="bottom" value="del" id="delObjective"/>
@@ -808,7 +812,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     <%--Add objective--%>
                         <div class="col-xs-3 center-block form-group" id="addObjective">
                             <label class="control-label">Name new objective</label>
-                            <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name">
+                            <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name" >
                         </div>
                         <div class="col-xs-7 center-block form-group">
                             <label class="control-label">Description</label>
