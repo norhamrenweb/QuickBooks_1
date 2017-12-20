@@ -265,10 +265,12 @@
                     $('#myTab a:first').tab('show');
                     //var prog = JSON.parse(json.prog);
                     //first load the demographics
-                     $('#gradelevel').text(info.level_id);
+                   
+                    $('#gradelevel').text(info.level_id);
                     $('#nextlevel').text(info.nextlevel);
                     $('#student').text(info.nombre_students);
                     $('#studentid').val(info.id_students);
+                    $('#BOD').text(info.fecha_nacimiento);
                     if(typeof info.foto === 'undefined'){
                         $('#foto').attr('src', '../recursos/img/NotPhoto.png');
                     }else{
@@ -284,7 +286,7 @@
                     $('#divNotObjective').addClass('hidden');
                     $('#subjects').empty();
                     $.each(subjects, function(i, item) {
-                         $('#subjects').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
+                        if(subjects[i].name !== undefined) $('#subjects').append('<option value= "'+subjects[i].id+'">' + subjects[i].name + '</option>');
                    });
 //                    var birthday = info.fecha_nacimiento,
 //                            separador = " ",

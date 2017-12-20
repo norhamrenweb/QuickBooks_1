@@ -71,7 +71,8 @@ public class ProgressbyStudent {
     Connection cn;
     static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
     private ServletContext servlet;
-
+    List<Subject> subjects;
+    
     private Object getBean(String nombrebean, ServletContext servlet) {
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
         Object beanobject = contexto.getBean(nombrebean);
@@ -186,7 +187,7 @@ public class ProgressbyStudent {
                 sub.setId(ids);
                 subjects.add(sub);
             }
-          /*  String consulta = "select * from Courses";
+              String consulta = "select * from Courses";
             ResultSet rs9 = st.executeQuery(consulta);
 
             HashMap<String, String> mapSubject = new HashMap<String, String>();
@@ -205,22 +206,19 @@ public class ProgressbyStudent {
                 ids = s.getId();
                 s.setName(mapSubject.get(ids[0]));
                 activesubjects.add(s);
-            }*/
+            }
             //loop through subjects to get their names, skipping the first 
-              for(Subject s:subjects.subList(1,subjects.size()))
-          {
-              String[] ids = new String[1];
-              ids=s.getId();
-           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
-           while(rs2.next())
-           {
-                if(rs2.getBoolean("Active")== true)
-                    {
+          /*  for (Subject s : subjects.subList(1, subjects.size())) {
+                String[] ids = new String[1];
+                ids = s.getId();
+                ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = " + ids[0]);
+                while (rs2.next()) {
+                    if (rs2.getBoolean("Active") == true) {
                         s.setName(rs2.getString("Title"));
                         activesubjects.add(s);
                     }
-           }
-          }
+                }
+            }*/
 
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
@@ -228,6 +226,7 @@ public class ProgressbyStudent {
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
+               
         return activesubjects;
     }
 
@@ -411,24 +410,24 @@ public class ProgressbyStudent {
         return mv;
     }
 
-    
-	//FUNCION NUEVA
+    //FUNCION NUEVA
     @RequestMapping("/progressbystudent/loadtree.htm")
     @ResponseBody
-    public String treeload(HttpServletRequest hsr, HttpServletResponse hsr1){
+    public String treeload(HttpServletRequest hsr, HttpServletResponse hsr1) {
         try {
-            return this.loadtree(hsr.getParameter("levelid"),Integer.parseInt(hsr.getParameter("studentid")) , hsr.getServletContext());
+            return this.loadtree(hsr.getParameter("levelid"), Integer.parseInt(hsr.getParameter("studentid")), hsr.getServletContext());
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         return "";
     }
-    
+
     //load student demographics
     @RequestMapping("/progressbystudent/studentPage.htm")
     @ResponseBody
     public String studentPage(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         //    ModelAndView mv = new ModelAndView("progressbystudent");
+        this.subjects = new ArrayList<>();
         String[] studentIds = hsr.getParameterValues("selectStudent");
         Students student = new Students();
         JSONObject obj = new JSONObject();
@@ -460,8 +459,8 @@ public class ProgressbyStudent {
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
-        List<Subject> subjects = new ArrayList<>();
-        subjects = this.getSubjects(student.getLevel_id());
+       // List<Subject> subjects = new ArrayList<>();
+        this.subjects = this.getSubjects(student.getLevel_id());
         String info = new Gson().toJson(student);
         String sub = new Gson().toJson(subjects);
         obj.put("info", info);
@@ -469,7 +468,7 @@ public class ProgressbyStudent {
 //    mv.addObject("student",student);
 
 //     mv.addObject("subjects", this.getSubjects(student.getLevel_id()));//Integer.parseInt(alumnos.getLevel_id())));
-      //  obj.put("prog", this.loadtree(student.getLevel_id(), student.getId_students(),subjects, hsr.getServletContext()));
+        //  obj.put("prog", this.loadtree(student.getLevel_id(), student.getId_students(),subjects, hsr.getServletContext()));
         return obj.toString();
     }
 
@@ -597,6 +596,7 @@ public class ProgressbyStudent {
 //    @RequestMapping("/progressbystudent/loadtree.htm")
 //    @ResponseBody
     public String loadtree(String levelid, int studentid, ServletContext hsr) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
+       
         ModelAndView mv = new ModelAndView("progressbystudent");
         JSONObject json = new JSONObject();
         ArrayList<DBRecords> steps = new ArrayList<>();
@@ -611,7 +611,8 @@ public class ProgressbyStudent {
 
             Statement st = this.cn.createStatement();
 //        String[] levelid = hsr.getParameterValues("seleccion1");
-            List<Subject> subs = this.getSubjects(levelid);
+            //List<Subject> subs = this.getSubjects(levelid);
+            List<Subject> subs = this.subjects;
             dataSource = (DriverManagerDataSource) this.getBean("dataSource", hsr);
             this.cn = dataSource.getConnection();
 
@@ -634,11 +635,12 @@ public class ProgressbyStudent {
 
                 }
             }
-            for (DBRecords x : steps) {
+            for (DBRecords x : steps) {// AQUI ES DONDE TARDA!!!
                 Subject s = new Subject();
                 String id = null;
                 id = x.getCol3();
-                x.setCol3(s.fetchName(Integer.parseInt(id), hsr));
+                String t = s.fetchName(Integer.parseInt(id), hsr);
+                x.setCol3(t);
                 if (!subjects.contains(x.getCol3())) {
                     subjects.add(x.getCol3());
                 }
@@ -665,7 +667,6 @@ public class ProgressbyStudent {
             int z = 0;
             for (Subject x : subs)//subjects)
             {
-
                 Nodetreegrid<String> nodeC = new Nodetreegrid<String>("L" + i, x.getName(), "", "", "", "");
                 rootNode.addChild(nodeC);
                 i++;
@@ -941,7 +942,7 @@ public class ProgressbyStudent {
             dataSource = (DriverManagerDataSource) this.getBean("dataSource", hsr.getServletContext());
             this.cn = dataSource.getConnection();
             Statement st = this.cn.createStatement();
-            
+
             while (days < DIAS_MAX && !currentDate.equals(dateSelected)) {
                 //dateSelected = getNextDate(dateSelected);
                 arrayComments.clear();
