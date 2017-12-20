@@ -72,6 +72,7 @@ public class ProgressbyStudent {
     static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
     private ServletContext servlet;
     List<Subject> subjects;
+    HashMap<String, String> mapSubject;
     
     private Object getBean(String nombrebean, ServletContext servlet) {
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
@@ -190,7 +191,7 @@ public class ProgressbyStudent {
               String consulta = "select * from Courses";
             ResultSet rs9 = st.executeQuery(consulta);
 
-            HashMap<String, String> mapSubject = new HashMap<String, String>();
+            
             String name9, id;
 
             while (rs9.next()) {
@@ -428,6 +429,8 @@ public class ProgressbyStudent {
     public String studentPage(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         //    ModelAndView mv = new ModelAndView("progressbystudent");
         this.subjects = new ArrayList<>();
+        this.mapSubject = new HashMap<>();
+        
         String[] studentIds = hsr.getParameterValues("selectStudent");
         Students student = new Students();
         JSONObject obj = new JSONObject();
@@ -639,7 +642,8 @@ public class ProgressbyStudent {
                 Subject s = new Subject();
                 String id = null;
                 id = x.getCol3();
-                String t = s.fetchName(Integer.parseInt(id), hsr);
+                //String t = s.fetchName(Integer.parseInt(id), hsr);
+                String t = this.mapSubject.get(id);
                 x.setCol3(t);
                 if (!subjects.contains(x.getCol3())) {
                     subjects.add(x.getCol3());
