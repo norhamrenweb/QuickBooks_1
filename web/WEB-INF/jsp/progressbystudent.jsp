@@ -38,11 +38,11 @@
                 });
                 
     $('#table_students tbody').on('click', 'tr', function () {
-       
+      
         data = table.row( this ).data();
         data1 = data.id;
         selectionStudent();
-         $('#divProgress').removeClass("hidden");
+        $('#divProgress').removeClass("hidden");
     } ); 
     $('#fecha').datetimepicker({
             
@@ -176,6 +176,7 @@
     function treeload(levelid,studentid){
          $('#loadingmessage').show();
          $.ajax({
+             
             type: 'POST',
             url: 'loadtree.htm?levelid='+levelid+'&studentid='+studentid,
 //            data: json,
@@ -186,6 +187,7 @@
                     var prog = JSON.parse(datos);
                     $('#loadingmessage').hide();
                     $('#arbol').prop("onclick", null);
+
                     $('#tg').treegrid({
 //                    view: myview,        
                             data:prog.children,
@@ -265,7 +267,6 @@
                     $('#myTab a:first').tab('show');
                     //var prog = JSON.parse(json.prog);
                     //first load the demographics
-                   
                     $('#gradelevel').text(info.level_id);
                     $('#nextlevel').text(info.nextlevel);
                     $('#student').text(info.nombre_students);
