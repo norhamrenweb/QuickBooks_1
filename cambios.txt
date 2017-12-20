@@ -1,0 +1,28 @@
+/********Presentation progress************/
+
+-Cuando pulsas fill p deberia rellenar con p 
+todos los campos de todas las paginas, no solo
+los de una.
+
+-Hay que hacer lo mismo con clear.
+
+-Deberiamos de poner un modal que diga estas seguro
+de que quieres hacer fill p de todos,
+y lo mismo para clear.
+
+-En el campo de rating hay dos opciones vacias en todos
+los paneles de selección.
+
+-No se guardan bien los cambios en presentation progress,
+solo se guarda el contenido de la pagina que estas viendo.
+
+/****************************************/
+
+/********Edit Presentation   ************/
+
+-siempre sale el simbolo de exclamacion en los campos necesarios
+da la sensacion de que no has rellenado bien los campos.
+
+/****************************************/
+
+
