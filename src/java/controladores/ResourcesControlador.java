@@ -245,7 +245,7 @@ public class ResourcesControlador {
            // String lessonid = hsr.getParameter("LessonsSelected");
             //String consulta = "insert into resources(lesson_id) values('"+lessonid+"','')";
             String consulta = "update resources set name='"+name+"',link='"+link+"',type='"+type+"' where id = "+Idresource;
-            st.executeQuery(consulta);
+            st.executeUpdate(consulta);
         }catch(SQLException ex){
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));

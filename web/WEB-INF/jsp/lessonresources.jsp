@@ -374,6 +374,7 @@
                                          <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning editResource'  onclick='loadInfResource(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editResource" + id + " '/></div>\n\
                                          <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning '  onclick='deleteLink(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteLink(" + id + ")'/></div></div>");
                         $('#divRecurso' + id).remove();
+                        $("#editnewLink").modal('hide');
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -846,32 +847,6 @@
 
             </fieldset>
         </div>
-
-        <div id="showError" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-lg">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header modal-header-details">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 id="nameErrors" class="modal-title">Errors</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container-fluid">
-                            <div id="divLinks" class="col-xs-12">
-                                <div id="txtError" class="alert alert-danger">   
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <!--      <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
-                          </div>-->
-                </div>
-
-            </div>
-        </div>     
 
 
         <div id="editnewLink" class="modal fade" role="dialog">

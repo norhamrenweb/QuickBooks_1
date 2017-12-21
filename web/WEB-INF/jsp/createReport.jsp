@@ -106,7 +106,7 @@
                 }
             });
             
-            $("#createOnClick").focus(function() {
+            $("#saveEdit").focus(function() {
               $('#destino option').prop('selected',true);     
             });
             
@@ -172,16 +172,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     });
                     
                     if(!exist)!$('#origen option:selected').clone().appendTo('#destino');
-                    
-                    var numAlum = $('#destino option').length;
-                    if(document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0){
-                        $('#createOnClick').attr('disabled', false);
-                    }
-                    else{
-                        $('#createOnClick').attr('disabled', true);
-                    }
-                    
-                    $('#destino option').first().prop('selected',true);                     
+                            
                     return;
                 });  
 		
@@ -191,8 +182,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     $('#destino option').first().prop('selected',true);
                     
                     var alumnosSelected = $('#destino option').length;
-                    var objectiveSelected = $('#objective').val();
-                    if(alumnosSelected === 0 || ( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '')){
+                    if(alumnosSelected === 0){
                         $('#createOnClick').attr('disabled', true);
                     }
                     return;  
@@ -208,19 +198,9 @@ $("#method").on('mouseover', 'option' , function(e) {
 
                     if(!exist)$(this).clone().appendTo('#destino'); 
                    
-                    var objectiveSelected = $('#objective').val();
-                    if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === ''){
-                        $('#createOnClick').attr('disabled', true);
-                    }
                     });
                     
                     var numAlum = $('#destino option').length;
-                    if(document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0){
-                        $('#createOnClick').attr('disabled', false);
-                    }
-                    else{
-                        $('#createOnClick').attr('disabled', true);
-                    }
                     
                     $('#destino option').first().prop('selected',true);
                 });
@@ -604,188 +584,14 @@ input[type="radio"] .styled:checked + label::after {
     </head>
     <body>
         <div class="container">
-        <h1 class="text-center">Create New Presentation</h1>
+        <h1 class="text-center">Create New Report</h1>
 
         
         <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
-            <fieldset>
-                <legend id="showPropiertys">
-                    Presentation name and description
-                    <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
-                    </span>
-                </legend>
-                <div class="form-group collapse" id="contenedorPropiertys">
-                    <div class="col-xs-6 center-block">
-                        <label class="control-label">Presentation Name</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                        <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
-                    </div>               
-                    <div class="col-xs-6 center-block form-group">
-                        <label class="control-label">Presentation description</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                        <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"></textarea>
-                    </div>
-                    <div class="col-xs-6 center-block checkbox checkbox-success">
-                        <input class="styled" type="checkbox" id="ideaCheck" name="ideaCheck">
-                        <label for="ideaCheck" >
-                            Presentation idea
-                        </label>
-                        
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend id="showDate">
-                    Select date and time
-                    <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
-<!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDate" >
-                            <span class="glyphicon glyphicon-triangle-bottom"></span>
-                        </button>-->
-                    </span>
-                </legend>
-                <div class="form-group collapse" id="contenedorDate">
-                        <div class='col-xs-4'>
-                            <div class="form-group">
-                                <label class="control-label" for="fecha">Date</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                                <div class='input-group date' id='fecha'>
-                                    <input id = 'fechaInput'type='text' name="TXTfecha" class="form-control" id="fecha" />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class='col-xs-4'>
-                            <div class="form-group">
-                                <label class="control-label" for="horainicio">Start hour</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                                <div class='input-group date' id='horainicio'>
-                                    <input  id='horainicioInput' type='text' name="TXThorainicio" class="form-control"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-xs-4'>
-                            <div class="form-group">
-                                <label class="control-label" for="horafin">Finish hour</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                                <div class='input-group date' id='horafin'>
-                                    <input id='horafinInput' type='text' name="TXThorafin" class="form-control"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend id="showDetails">
-                    Presentation details
-                    <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
-<!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" >
-                            <span class="glyphicon glyphicon-triangle-bottom"></span>
-                        </button>-->
-                    </span>
-                </legend>
-                <div class="form-group collapse" id="contenedorDetails">
-                <div class="col-xs-3 form-group">
-                    <label class="control-label"><spring:message code="etiq.txtlevels"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                    <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
-                        <c:forEach var="levels" items="${gradelevels}">
-                            <option value="${levels.id[0]}" >${levels.name}</option>
-                        </c:forEach>
-                    </select>
-                          
-                </div>
-                <div class="col-xs-3 center-block">
-                    <label class="control-label"><spring:message code="etiq.txtsubject"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                    <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
-                    
-                       <c:forEach var="subject" items="${subjects}">
-                                <option value="${subject.id[0]}" data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
-                            </c:forEach>
-                    </select>
-                </div>
-<!--                <div class="col-xs-3 center-block text-center">
-                    <label class="control-label">Select your option</label>
-                    <div class="btn-group" data-toggle="buttons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">
-                        <label class="btn btn-primary active disabled">
-                            <input type="radio" name="options" id="option1" autocomplete="off" value="option1">Create Lessons
-                        </label>
-                        <label class="btn btn-success disabled">
-                            <input type="radio" name="options" id="option2" autocomplete="off" value="option2">Load Lessons
-                        </label>
-                    </div>
-<%--                    <input disabled="true" type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-on="Create Lessons" data-off="Load Lessons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">--%>
-                </div>-->
-                
-                
-                    <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Objective</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                        <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
-                           <c:forEach var="objective" items="${objectives}">
-                                    <option value="${objective.id[0]}" >${objective.name}</option>
-                                </c:forEach>
-                        </select>
-                    </div>
-
-                    <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Content</label>
-                        <select class="form-control" name="TXTcontent" id="content" multiple>
-                           <c:forEach var="content" items="${contents}">
-                                    <option value="${content.id[0]}" >${content.name}</option>
-                                </c:forEach>
-                        </select>
-                    </div>
-  
-                    <div class="col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
-                        <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Copy from idea</label>
-                            <select class="form-control" name="ideas" id="ideas" onchange="comboSelectionIdeaLessons()">
-                                <c:forEach var="idea" items="${ideas}">
-                                        <option value="${idea.id}" >${idea.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-    <%--                    <div class="col-xs-3 center-block">
-                            <label class="control-label"><spring:message code="etiq.txtobjective"/></label>
-                            <select class="form-control" name="TXTobjective" id="template">
-                                 <option value="${objective.name}" >${objective.name}</option>
-
-                            </select>
-                        </div>--%>
-<%--                      <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Template</label>
-                            <select class="form-control" name="TXTcontent" id="template" multiple>
-                                <c:forEach var="allcontents" items="${allcontents}">
-                                    <option selected="true" value="${allcontents.id[0]}" >${allcontents.name}</option>
-                                </c:forEach>
-                                <c:forEach var="contents" items="${contents}">
-                                    <option value="${allcontents.id[0]}" >${allcontents.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>-->--%>
-
-                    </div>    
-                    <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Method</label>
-                        <select class="form-control" name="TXTmethod" size="2" id="method">                   
-                            <c:forEach var="method" items="${methods}">
-                                <option value="${method.id[0]}"  data-title="${method.description}" data-content="${method.description}">${method.name}</option>
-                            </c:forEach>
-                        </select>
-
-                    </div>
-
-<!--                    <div class="col-xs-12 center-block form-group">
-                        <label class="control-label">Attachments</label>
-                        <input type="file" class="form-control" name="TXTfile" id="file">
-                    </div>-->
-                </div>
-            </fieldset>
+        
             <fieldset>
                     <legend id="showStudents">
-                        Select Learners <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                        Select Learners 
                         <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom"></span>
                     </legend>
                 <div class="form-group collapse in" id="contenedorStudents">

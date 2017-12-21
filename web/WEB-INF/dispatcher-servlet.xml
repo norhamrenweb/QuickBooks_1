@@ -63,7 +63,7 @@
         <bean class="controladores.SOWTreeControlador" id="sow"/>
 <!--        <bean class="controladores.Testcontrol" id="test"/>-->
         <bean class="controladores.TestCommentControl" id="testcomment"/>
-        
+        <bean class="controladores.ReportControlador" id="reportControlador"/>       
 <!--     <bean class="controladores.SettingsControlador" id="settings">
      <property name="methodNameResolver">
         <bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
@@ -127,6 +127,7 @@
                  <prop key="familymap2.htm">map</prop>
                  
                 <prop key="createlesson.htm">createlesson</prop>
+                <prop key="reportControlador.htm">reportControlador</prop>
                 <prop key="createsetting.htm">createsetting</prop>
                 <prop key="sowdisplay.htm">sow</prop>
                 <prop key="datosIdioma.htm">ControladorIdioma</prop>
