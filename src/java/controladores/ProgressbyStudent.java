@@ -71,9 +71,6 @@ public class ProgressbyStudent {
     Connection cn;
     static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
     private ServletContext servlet;
-    List<Subject> subjects;
-    HashMap<String, String> mapSubject;
-    
     private Object getBean(String nombrebean, ServletContext servlet) {
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
         Object beanobject = contexto.getBean(nombrebean);
@@ -173,6 +170,8 @@ public class ProgressbyStudent {
     public List<Subject> getSubjects(String levelname) throws SQLException {
         List<Subject> subjects = new ArrayList<>();
         List<Subject> activesubjects = new ArrayList<>();
+        HashMap<String, String> mapSubject = new HashMap<String,String>();
+        
         try {
 
             Statement st = this.cn.createStatement();
@@ -188,7 +187,7 @@ public class ProgressbyStudent {
                 sub.setId(ids);
                 subjects.add(sub);
             }
-              String consulta = "select * from Courses";
+            String consulta = "select * from Courses";
             ResultSet rs9 = st.executeQuery(consulta);
 
             
@@ -428,8 +427,8 @@ public class ProgressbyStudent {
     @ResponseBody
     public String studentPage(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         //    ModelAndView mv = new ModelAndView("progressbystudent");
-        this.subjects = new ArrayList<>();
-        this.mapSubject = new HashMap<>();
+        List<Subject> subjects= new ArrayList<>();
+        HashMap<String, String> mapSubject= new HashMap<>();
         
         String[] studentIds = hsr.getParameterValues("selectStudent");
         Students student = new Students();
@@ -463,7 +462,7 @@ public class ProgressbyStudent {
             log.error(ex + errors.toString());
         }
        // List<Subject> subjects = new ArrayList<>();
-        this.subjects = this.getSubjects(student.getLevel_id());
+        subjects = this.getSubjects(student.getLevel_id());
         String info = new Gson().toJson(student);
         String sub = new Gson().toJson(subjects);
         obj.put("info", info);
@@ -606,6 +605,8 @@ public class ProgressbyStudent {
         ArrayList<String> subjects = new ArrayList<>();
         ArrayList<String> objectives = new ArrayList<>();
         TreeGrid tree = new TreeGrid();
+        HashMap<String, String> mapSubject = new HashMap<String,String>();
+        List<Subject> subs  = new ArrayList<>();
         Nodetreegrid<String> rootNode = new Nodetreegrid<String>("Subjects", "A", "", "", "", "");
         try {
             DriverManagerDataSource dataSource;
@@ -615,7 +616,21 @@ public class ProgressbyStudent {
             Statement st = this.cn.createStatement();
 //        String[] levelid = hsr.getParameterValues("seleccion1");
             //List<Subject> subs = this.getSubjects(levelid);
-            List<Subject> subs = this.subjects;
+            subs = getSubjects(levelid);
+             
+           
+            String consulta = "select * from Courses";
+            ResultSet rs9 = st.executeQuery(consulta);
+            String name9, idHash;
+
+            while (rs9.next()) {
+                if (rs9.getBoolean("Active")) {
+                    name9 = rs9.getString("Title");
+                    idHash = rs9.getString("CourseID");
+                    mapSubject.put(idHash, name9);
+                }
+            }
+            
             dataSource = (DriverManagerDataSource) this.getBean("dataSource", hsr);
             this.cn = dataSource.getConnection();
 
@@ -638,12 +653,14 @@ public class ProgressbyStudent {
 
                 }
             }
+            
+
             for (DBRecords x : steps) {// AQUI ES DONDE TARDA!!!
                 Subject s = new Subject();
                 String id = null;
                 id = x.getCol3();
                 //String t = s.fetchName(Integer.parseInt(id), hsr);
-                String t = this.mapSubject.get(id);
+                String t = mapSubject.get(id);
                 x.setCol3(t);
                 if (!subjects.contains(x.getCol3())) {
                     subjects.add(x.getCol3());
