@@ -92,7 +92,7 @@
                     $('#saveEdit').attr('disabled', true);
                 }
             });
-
+            
             $("#saveEdit").focus(function() {
               $('#destino option').prop('selected',true);     
             });
@@ -118,10 +118,12 @@ $("#method").on('mouseover', 'option' , function(e) {
             format: 'YYYY-MM-DD',
             locale: userLang.valueOf(),
             daysOfWeekDisabled: [0, 6],
-            useCurrent: false//Important! See issue #1075
+            useCurrent: false,
+            minDate:'2000-01-01',
+            maxDate:'2099-01-01'
+            //Important! See issue #1075
             //defaultDate: '08:32:33',
 
-  
         });
         
         $('#horainicio').datetimepicker({
@@ -447,7 +449,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.send("");
     }
     
-    
+
         </script>
         <style>
             textarea 
