@@ -18,17 +18,26 @@
         <script>
 
  $(document).ready(function(){
-       var userLang = navigator.language || navigator.userLanguage;
-       var myDate = new Date();
+     
+                
+
+     
+    var userLang = navigator.language || navigator.userLanguage;
+    var myDate = new Date();
          //Muestra calendario
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
-         var lessoncreate = '<%= request.getParameter("message") %>';
+    var lessoncreate = '<%= request.getParameter("message") %>';
     
-     if (lessoncreate === 'Presentation updated' ){
-     $('#myModal').modal({
+    if (lessoncreate === 'Presentation updated' ){
+    $('#myModal').modal({
         show: 'false'
     });
     }
+            //DESELECCIONA Method
+            $( "#deselectMethod" ).click(function() {
+                $("#method option:selected").prop("selected", false);
+            }); 
+            
             $( "#showPropiertys" ).click(function() {
                     $("#contenedorPropiertys").toggleClass('in');
                     //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
@@ -709,26 +718,27 @@ input[type="radio"] .styled:checked + label::after {
                     <div class="col-xs-3 center-block form-group">
                         <label class="control-label">Content</label>
                         <c:if test="${not empty data.contentid}">
-                        <select class="form-control" name="TXTcontent" id="content" multiple>
-        <c:forEach var="content" items="${contents}">   
-            <c:set var="mySelectVar" value=""></c:set>
-            <c:forEach var="selcontent" items="${data.contentid}" varStatus="i">
-                <c:if test="${content.id[0] == data.contentid[i.count-1]}">                             
-                        <c:set var="mySelectVar" value="selected"></c:set>
-                </c:if>
-            </c:forEach>                      
-            <option value="${content.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''}>${content.name}</option>
-              <c:set var="mySelectVar" value=""></c:set>
-       </c:forEach>
-                        </select>
-                         </c:if>
+                            <select class="form-control" name="TXTcontent" id="content" multiple>
+                                <c:forEach var="content" items="${contents}">   
+                                    <c:set var="mySelectVar" value=""></c:set>
+                                    <c:forEach var="selcontent" items="${data.contentid}" varStatus="i">
+                                        <c:if test="${content.id[0] == data.contentid[i.count-1]}">                             
+                                                <c:set var="mySelectVar" value="selected"></c:set>
+                                        </c:if>
+                                    </c:forEach>                      
+                                    <option value="${content.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''}>${content.name}</option>
+                                      <c:set var="mySelectVar" value=""></c:set>
+                               </c:forEach>
+                            </select>
+                        </c:if>
                         <c:if test="${empty data.contentid}">
                             <select class="form-control" name="TXTcontent" id="content" multiple>
-                                 <c:forEach var="content" items="${contents}">
-                             <option value="${content.id[0]}" >${content.name}</option>
-                                 </c:forEach>
+                                <c:forEach var="content" items="${contents}">
+                                    <option value="${content.id[0]}" >${content.name}</option>
+                                </c:forEach>
                             </select>
-                            </c:if>
+                            <input type="button" class="btn btn-info" id="deselectContent" onclick="$('#content option:selected').prop('selected', false);" Title="deselect content" value="x">
+                        </c:if>
                     </div>
   
                     <div class="col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
@@ -736,7 +746,7 @@ input[type="radio"] .styled:checked + label::after {
                             <label class="control-label">Copy from idea</label>
                             <select class="form-control" name="ideas" id="ideas" onchange="comboSelectionIdeaLessons()">  
                                 <c:forEach var="idea" items="${ideas}">
-                                        <option value="${idea.id}" >${idea.name}</option>
+                                    <option value="${idea.id}" >${idea.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -746,14 +756,14 @@ input[type="radio"] .styled:checked + label::after {
                         <label class="control-label">Method</label>
                         <select class="form-control" name="TXTmethod" size="2" id="method"> 
                             <c:forEach var="method" items="${methods}">
-                              <c:if test="${method.id[0] == data.method.id[0]}">
-                              <c:set var="mySelectVar" value="selected"></c:set>
-                            </c:if>
+                                <c:if test="${method.id[0] == data.method.id[0]}">
+                                    <c:set var="mySelectVar" value="selected"></c:set>
+                                </c:if>
                                 <option value="${method.id[0]}"  data-title="${method.description}"  ${(mySelectVar eq 'selected')?'selected' : ''} data-content="${method.description}">${method.name}</option>
                                 <c:set var="mySelectVar" value=""></c:set>
                             </c:forEach>
                         </select>
-
+                        <input type="button" class="btn btn-info" id="deselectMethod"  Title="deselect Method" value="x">
                     </div>
 
 <!--                    <div class="col-xs-12 center-block form-group">
@@ -803,9 +813,9 @@ input[type="radio"] .styled:checked + label::after {
                             <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
                                 <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
                             </div>
-                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+<!--                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
                                 <input type="button" class="btn btn-danger btn-block test" value="test">
-                            </div>
+                            </div>-->
                         </div>
                 
                         <div class="col-xs-3">

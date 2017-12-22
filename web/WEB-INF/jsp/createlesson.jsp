@@ -18,6 +18,10 @@
         <script>
 
  $(document).ready(function(){
+        //DESELECCIONA Method
+        $( "#deselectMethod" ).click(function() {
+                $("#method option:selected").prop("selected", false);
+        });
        var userLang = navigator.language || navigator.userLanguage;
        var myDate = new Date();
          //Muestra calendario
@@ -461,6 +465,8 @@ $("#method").on('mouseover', 'option' , function(e) {
         ajax.send("");
     }
     
+
+    
         </script>
         <style>
             textarea 
@@ -736,6 +742,7 @@ input[type="radio"] .styled:checked + label::after {
                                     <option value="${content.id[0]}" >${content.name}</option>
                                 </c:forEach>
                         </select>
+                        <input type="button" class="btn btn-info" id="deselectContent" onclick="$('#content option:selected').prop('selected', false);" Title="deselect content" value="x">
                     </div>
   
                     <div class="col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
@@ -774,6 +781,7 @@ input[type="radio"] .styled:checked + label::after {
                                 <option value="${method.id[0]}"  data-title="${method.description}" data-content="${method.description}">${method.name}</option>
                             </c:forEach>
                         </select>
+                        <input type="button" class="btn btn-info" id="deselectMethod" title="deselect Method" value="x">
 
                     </div>
 
