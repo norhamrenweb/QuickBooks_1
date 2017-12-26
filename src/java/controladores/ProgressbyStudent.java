@@ -167,7 +167,7 @@ public class ProgressbyStudent {
         return data;
     }
 
-    public List<Subject> getSubjects(String levelname) throws SQLException {
+    public List<Subject> getSubjects(int studentid) throws SQLException {
         List<Subject> subjects = new ArrayList<>();
         List<Subject> activesubjects = new ArrayList<>();
         HashMap<String, String> mapSubject = new HashMap<String,String>();
@@ -176,27 +176,23 @@ public class ProgressbyStudent {
 
             Statement st = this.cn.createStatement();
 
-            ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel= '" + levelname + "'");
+            ResultSet rs1 = st.executeQuery("select courses.courseid, courses.title, courses.active from roster " +
+                "    inner join classes on roster.classid=classes.classid " +
+                "    inner join courses on courses.courseid=classes.courseid" +
+                "    where roster.studentid = "+studentid+" and roster.enrolled=1");
             Subject first = new Subject();
             first.setName("Select Subject");
             subjects.add(first);
+            String name9, id;
             while (rs1.next()) {
                 Subject sub = new Subject();
                 String[] ids = new String[1];
                 ids[0] = "" + rs1.getInt("CourseID");
                 sub.setId(ids);
                 subjects.add(sub);
-            }
-            String consulta = "select * from Courses";
-            ResultSet rs9 = st.executeQuery(consulta);
-
-            
-            String name9, id;
-
-            while (rs9.next()) {
-                if (rs9.getBoolean("Active")) {
-                    name9 = rs9.getString("Title");
-                    id = rs9.getString("CourseID");
+                if (rs1.getBoolean("Active")) {
+                    name9 = rs1.getString("Title");
+                    id = rs1.getString("CourseID");
                     mapSubject.put(id, name9);
                 }
             }
@@ -244,7 +240,7 @@ public class ProgressbyStudent {
         dataSource = (DriverManagerDataSource) this.getBean("dataSourceAH", hsr.getServletContext());
         this.cn = dataSource.getConnection();
 
-        mv.addObject("subjects", this.getSubjects(levelid[0]));
+//        mv.addObject("subjects", this.getSubjects(levelid[0]));
 
         return mv;
     }
@@ -415,7 +411,7 @@ public class ProgressbyStudent {
     @ResponseBody
     public String treeload(HttpServletRequest hsr, HttpServletResponse hsr1) {
         try {
-            return this.loadtree(hsr.getParameter("levelid"), Integer.parseInt(hsr.getParameter("studentid")), hsr.getServletContext());
+            return this.loadtree(Integer.parseInt(hsr.getParameter("studentid")), hsr.getServletContext());
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
@@ -462,7 +458,7 @@ public class ProgressbyStudent {
             log.error(ex + errors.toString());
         }
        // List<Subject> subjects = new ArrayList<>();
-        subjects = this.getSubjects(student.getLevel_id());
+        subjects = this.getSubjects(student.getId_students());
         String info = new Gson().toJson(student);
         String sub = new Gson().toJson(subjects);
         obj.put("info", info);
@@ -470,7 +466,7 @@ public class ProgressbyStudent {
 //    mv.addObject("student",student);
 
 //     mv.addObject("subjects", this.getSubjects(student.getLevel_id()));//Integer.parseInt(alumnos.getLevel_id())));
-        //  obj.put("prog", this.loadtree(student.getLevel_id(), student.getId_students(),subjects, hsr.getServletContext()));
+        obj.put("prog", this.loadtree(student.getId_students(), hsr.getServletContext()));
         return obj.toString();
     }
 
@@ -597,7 +593,7 @@ public class ProgressbyStudent {
 
 //    @RequestMapping("/progressbystudent/loadtree.htm")
 //    @ResponseBody
-    public String loadtree(String levelid, int studentid, ServletContext hsr) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
+    public String loadtree(int studentid, ServletContext hsr) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
        
         ModelAndView mv = new ModelAndView("progressbystudent");
         JSONObject json = new JSONObject();
@@ -616,7 +612,7 @@ public class ProgressbyStudent {
             Statement st = this.cn.createStatement();
 //        String[] levelid = hsr.getParameterValues("seleccion1");
             //List<Subject> subs = this.getSubjects(levelid);
-            subs = getSubjects(levelid);
+            subs = getSubjects(studentid);
              
            
             String consulta = "select * from Courses";

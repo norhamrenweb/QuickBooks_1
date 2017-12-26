@@ -173,12 +173,24 @@
             }
         }
     
+    var levelarbol;
+    var studentarbol;
+    
     function treeload(levelid,studentid){
+        var level;
+        var student;
+        if(levelid===-1){
+            level=levelarbol;
+            student=studentarbol;
+        }else{
+            level=levelid;
+            student=studentid;
+        }
          $('#loadingmessage').show();
          $.ajax({
              
             type: 'POST',
-            url: 'loadtree.htm?levelid='+levelid+'&studentid='+studentid,
+            url: 'loadtree.htm?levelid='+level+'&studentid='+student,
 //            data: json,
 //            datatype:"json",
             contentType: "application/json",           
@@ -186,7 +198,6 @@
             success: function(datos) {    
                     var prog = JSON.parse(datos);
                     
-                    $('#arbol').prop("onclick", null);
                     $('#tg').empty();
                     $('#tg').treegrid({
 //                    view: myview,        
@@ -199,8 +210,8 @@
                         {title:'No.of presentations done',field:'noofarchivedlessons'},
                         {title:'Progress',field:'progress',formatter:formatProgress},
                         {title:'Final rating',field:'rating'}
-                    ]]
-                });
+                        ]]
+                    });
                 $('#loadingmessage').hide();
             },error: function(){     
                   $('#loadingmessage').hide();
@@ -265,7 +276,7 @@
                     var json = JSON.parse(ajax.responseText);
                     var info = JSON.parse(json.info);
                     var subjects = JSON.parse(json.sub);
-                    $('#myTab a:first').tab('show');
+                    //$('#myTab a:first').tab('show');
                     //var prog = JSON.parse(json.prog);
                     //first load the demographics
                     $('#gradelevel').text(info.level_id);
@@ -278,11 +289,9 @@
                     }else{
                         $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/"+info.foto);
                     }
-                    
-                    $('#arbol').click(function(){
-                        treeload(info.level_id,info.id_students);
-                    });
-                    
+                    treeload(info.level_id,info.id_students);
+                    levelarbol=info.level_id;
+                    studentarbol=info.id_students;
                     //hide the objectives in case a previous student was selected
                     $('#divTableObjective').addClass('hidden');//to avoid having the general comments of the previous selected student
                     $('#divNotObjective').addClass('hidden');
@@ -299,8 +308,6 @@
 //                    
 //                    
 //                    $('#BOD').text(datebirthday);
-
-                  $('#loadingmessage').hide();  // hide the loading message.
                 }
             }
         };
@@ -720,7 +727,7 @@ $(function() {
                         <div class="col-xs-12 text-center" id="myTab">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#demographic" role="tab">Demographic</a></li>
-                                <li><a id="arbol" data-toggle="tab" href="#progress" role="tab">Objectives tracking</a></li>
+                                <li><a id="arbol" data-toggle="tab" href="#progress" role="tab" onclick="treeload(-1,-1)">Objectives tracking</a></li>
                                 <li><a data-toggle="tab" href="#gradebook" role="tab">Academic Progress</a></li>
                                 <li><a data-toggle="tab" href="#observations" role="tab">Classroom Observation</a></li>
                             </ul>
