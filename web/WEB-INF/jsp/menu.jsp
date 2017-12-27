@@ -18,13 +18,31 @@
     <!--MENU LATERAL-->
     <div id="barralateral">
         <nav>
-            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value='/homepage/loadLessons.htm'/>" ><input type="image" src="<c:url value='/recursos/img/iconos/home-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Home"></a></div>
-             <div class="col-xs-12 iconosmenulateral"><a href="<c:url value='/lessonarchive/loadLessons.htm'/>"><div class="center-block"><input type="image" src="<c:url value='/recursos/img/iconos/Calendar-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Archived"></div></a></div>
-            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value='/lessonidea/start.htm'/>"><div class="center-block"><input type="image" src="<c:url value='/recursos/img/iconos/LessonsIdea.svg'/>" data-toggle="tooltip" data-placement="top" title="Presentations Ideas"></div></a></div>
-            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value='/createlesson/start.htm'/>" ><div class="center-block"><input type="image" src="<c:url value='/recursos/img/iconos/classroomDashboard-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Create new presentation"></div></a></div>
-            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value='/progressbystudent/start.htm'/>" ><div class="center-block"><input type="image" src="<c:url value='/recursos/img/iconos/students-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Students"></div></a></div>
-            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value='/createsetting/start.htm'/>" ><div class="center-block"><input type="image" src="<c:url value='/recursos/img/iconos/CreateSettings-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Modify SOW"></div></a></div>
-            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value='/reportControlador/start.htm'/>" ><div class="center-block"><input type="image" src="<c:url value='/recursos/img/iconos/Reports.svg'/>" data-toggle="tooltip" data-placement="top" title="Reports"></div></a></div>
+            <div class="col-xs-12 iconosmenulateral">
+                <a href="<c:url value='/homepage/loadLessons.htm'/>" >
+                    <div class="center-block">
+                    <img type="image" src="<c:url value='/recursos/img/iconos/home-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Home">
+                    </div>
+                </a>
+            </div>
+            <div class="col-xs-12 iconosmenulateral">
+                <a href="<c:url value='/lessonarchive/loadLessons.htm'/>">
+                    <div class="center-block">
+                        <img type="image" src="<c:url value='/recursos/img/iconos/Calendar-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Archived">
+                    </div>
+                </a>
+            </div>
+            <div class="col-xs-12 iconosmenulateral">
+                <a href="<c:url value='/lessonidea/start.htm'/>">
+                    <div class="center-block">
+                        <img type="image" src="<c:url value='/recursos/img/iconos/LessonsIdea.svg'/>" data-toggle="tooltip" data-placement="top" title="Presentations Ideas">
+                    </div>
+                </a>
+            </div>
+            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value='/createlesson/start.htm'/>" ><div class="center-block"><img type="image" src="<c:url value='/recursos/img/iconos/classroomDashboard-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Create new presentation"></div></a></div>
+            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value='/progressbystudent/start.htm'/>" ><div class="center-block"><img type="image" src="<c:url value='/recursos/img/iconos/students-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Students"></div></a></div>
+            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value='/createsetting/start.htm'/>" ><div class="center-block"><img type="image" src="<c:url value='/recursos/img/iconos/CreateSettings-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Modify SOW"></div></a></div>
+            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value='/reportControlador/start.htm'/>" ><div class="center-block"><img type="image" src="<c:url value='/recursos/img/iconos/Reports.svg'/>" data-toggle="tooltip" data-placement="top" title="Reports"></div></a></div>
         
             <!--            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value="/createsetting/start.htm"/>" ><div class="center-block"><input type="image" src="<c:url value="/recursos/img/iconos/Reports.svg"/>" data-toggle="tooltip" data-placement="top" title="Reports"></div></a></div>-->
 <!--             <div class="col-xs-12">

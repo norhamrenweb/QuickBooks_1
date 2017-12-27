@@ -246,7 +246,7 @@ div {
             }
             .sinpadding
             {
-                padding: 0px;
+                padding: 0px !important;
             }
             .containerPhoto
             {

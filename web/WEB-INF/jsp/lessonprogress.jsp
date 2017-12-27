@@ -63,14 +63,16 @@
                 }
                 $('#table_progress').DataTable(
                         {
+                            "searching": false,
+                            "paging":   false,
                             "aaSorting": [[1, "asc"]],
                             "columnDefs": [
                                 {"width": "4%", "targets": 0},
                                 {"width": "20%", "targets": 1},
                                 {"width": "4%", "targets": 2},
-                                {"width": "40%", "targets": 3},
-                                {"width": "10%", "targets": 4, "orderable": false},
-                                {"width": "22%", "targets": 5, "orderable": false}
+                                {"width": "30%", "targets": 3},
+                                {"width": "22%", "targets": 4, "orderable": false},
+                                {"width": "20%", "targets": 5, "orderable": false}
                             ]
 
                         });
@@ -169,6 +171,7 @@
             });
         </script>
         <style>
+
             .textarea 
             {
                 resize: none;
@@ -191,7 +194,11 @@
                         {
                             background-image: linear-gradient(to bottom,#ddd 0,#ddd 100%);
                         }*/
-
+            .TXTcomment
+            {
+                width: 100%;
+                
+            }
         </style>
     </head>
     <body>
@@ -207,32 +214,25 @@
                 <fieldset>
                     <legend>Presentation details</legend>
 
-                    <div class="col-xs-3 center-block">
-                        Presentation Title:  <label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
+                    <div class="col-xs-4 center-block sinpadding">
+                        Presentation Title:<br>
+                        <label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
                     </div>
 
-                    <div class="col-xs-3 center-block">
-                        Subject:  <label class="control-label"> ${lessondetailes.subject.name}</label>
+                    <div class="col-xs-4 center-block sinpadding">
+                        Subject:<br>
+                        <label class="control-label"> ${lessondetailes.subject.name}</label>
                     </div>
-                    <div class="col-xs-3 center-block">
+                    <div class="col-xs-4 center-block  sinpadding">
                         Objective:  <label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
                     </div>
-                    <div class="col-xs-3 center-block">
-
-                        <!--                        <div class="col-xs-12 center-block">
-                                                    Step1: <label class="control-label">Counting and Slow Tempo</label>
-                                                </div>
-                                                <div class="col-xs-12 center-block">
-                                                    Step2: <label class="control-label">Record and Play Back</label>
-                                                </div>
-                                                <div class="col-xs-12 center-block">
-                                                    Step3: <label class="control-label">Divide the Beat</label>
-                                                </div>
-                                                <div class="col-xs-12 center-block">
-                                                    Step4: <label class="control-label"> Practice rhythm and timing on different instruments</label>
-                                                </div>-->
+                    <div class="col-xs-12 center-block  sinpadding">
                         <c:forEach var="step" items="${steps}" varStatus="i">
-                            Step${(i.index +1)}: <label class="control-label">${step.name}</label><br>
+                            <div class="col-xs-3 sinpadding">
+                                <div class="col-xs-12 sinpadding">
+                                    Step${(i.index +1)}:<br> <label class="control-label">${step.name}</label>
+                                </div>
+                            </div>
                         </c:forEach> 
                     </div>
 
@@ -248,7 +248,7 @@
                                     <td>Student Name</td>
                                     <td>Rating</td>
                                     <td>Comment</td>
-                                    <td>Attendance Code<br> 
+                                    <td>Attendance Code 
                                         <input type="button" class="btn btn-xs btn-info" id="rellenarP" value="Fill P"> 
                                         <input type="button" class="btn btn-xs btn-info" id="rellenar" value="Clear">
                                     </td>
@@ -279,7 +279,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <textarea name="TXTcomment" >${record.comment}</textarea>
+                                            <textarea name="TXTcomment" class="TXTcomment" rows="1">${record.comment}</textarea>
                                         </td>
                                         <td>
                                             <select id="idSelectAttendance" name="TXTattendance" class="attendance">

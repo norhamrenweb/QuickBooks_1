@@ -28,10 +28,10 @@
          
      
     $('#table_id').DataTable({
-    "aLengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
-    "iDisplayLength": 5,
-    "order": [[ 5, "desc" ]],
-    "columnDefs": [
+    aLengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
+    iDisplayLength: 5,
+    order: [[ 5, "desc" ]],
+    columnDefs: [
             { "width": "10%",  "targets": [ 0 ],
                 "visible": false,
                 "searchable": false},
@@ -44,7 +44,8 @@
             { "width": "10%",   "targets": [ 7 ] },
             { "width": "25%", "targets": [ 8 ] }
             
-        ]
+        ],
+    responsive: true
     });
         $('#table_datelessons').DataTable();
        

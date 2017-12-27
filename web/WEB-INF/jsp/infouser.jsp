@@ -89,7 +89,7 @@
     </div>
     
     <div class="col-xs-2 text-right">
-        <a href="<c:url value="/cerrarLogin.htm"/>" role="button" aria-haspopup="true" aria-expanded="false"><img src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>
+        <a href="<c:url value="/cerrarLogin.htm"/>" role="button" aria-haspopup="true" aria-expanded="false"><img class="imgUser" src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>
     </div>
 </div>           
 
