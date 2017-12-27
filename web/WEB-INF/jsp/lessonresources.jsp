@@ -826,7 +826,7 @@
                                     <input type="hidden" id="txtUrl" name="txtUrl" value="" />
                                     <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>                
                                     <div class="col-xs-9 center-block form-group text-center " >
-                                        <a href="${item.link}"  data-id="${item.id}" class="list-group-item link fileNames" >
+                                        <a data-id="${item.id}" class="list-group-item link fileNames" >
                                             <span class="fileName">${item.name}</span>
                                             <span class="label label-primary">${item.type}</span> 
                                         </a>
