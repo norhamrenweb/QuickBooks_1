@@ -67,6 +67,7 @@ public class upload extends HttpServlet {
             String pass = "david";
             
             presentationName =  presentationName.replace("/", "_");
+            presentationName =  presentationName.replace(" ", "-");
             String filePath = "/MontessoriTesting/"+rLoaded.getLesson_id()+"-"+presentationName+"/"+rLoaded.getLink();
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(server,port);
@@ -138,6 +139,7 @@ public class upload extends HttpServlet {
                 String filename = name+"-"+ filePart.getSubmittedFileName();
 //                fis = new FileInputStream(filename);
                 presentationName =  presentationName.replace("/", "_");
+                presentationName =  presentationName.replace(" ", "-");
                 String rutaCompleta = "/MontessoriTesting/'"+lessonId+"-"+presentationName+"'";
                 if(!ftpClient.changeWorkingDirectory(rutaCompleta));
                 {
