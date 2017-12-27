@@ -99,6 +99,7 @@ public class Createlesson {
             boolean success = ftpClient.changeWorkingDirectory("/MontessoriTesting");
             if(success){
                 String lessonName = newlessons.getName().replace("/", "_");
+                lessonName = newlessons.getName().replace(" ", "-");
                 ftpClient.mkd(lessonid+"-"+lessonName);
             }
     }
