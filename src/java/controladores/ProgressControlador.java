@@ -59,7 +59,7 @@ public class ProgressControlador {
         ModelAndView mv = new ModelAndView("lessonprogress");
         List<Students> instructors = new ArrayList<>();
 //        String disable = hsr.getParameter("disable");
-        String disable = "t";
+        String disable = null;
         Students teacher = new Students();
          try {
          DriverManagerDataSource dataSource;
@@ -114,6 +114,12 @@ public class ProgressControlador {
                 s.setId(""+rs3.getInt("id"));
                 s.setOrder(rs3.getInt("storder"));
                 steps.add(s);
+            }
+            ResultSet rs4 = st.executeQuery("select archive from lessons where id ="+lessonid);
+            while(rs4.next()){
+                if(rs4.getBoolean("archive")){
+                    disable = "t";
+                }
             }
     List<Progress> records = this.getRecords(lesson,hsr.getServletContext());
     mv.addObject("attendancelist", records);

@@ -171,15 +171,21 @@ public class ProgressbyStudent {
         List<Subject> subjects = new ArrayList<>();
         List<Subject> activesubjects = new ArrayList<>();
         HashMap<String, String> mapSubject = new HashMap<String,String>();
+        String termid = null;
+        String yearid = null;
         
         try {
 
             Statement st = this.cn.createStatement();
-
-            ResultSet rs1 = st.executeQuery("select courses.courseid, courses.title, courses.active from roster " +
-                "    inner join classes on roster.classid=classes.classid " +
-                "    inner join courses on courses.courseid=classes.courseid" +
-                "    where roster.studentid = "+studentid+" and roster.enrolled=1");
+            ResultSet rs = st.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where configschoolid = 1");
+            while(rs.next())
+            {
+                termid = ""+rs.getInt("defaulttermid");
+                yearid = ""+rs.getInt("defaultyearid");
+            }
+            ResultSet rs1 = st.executeQuery("select distinct courses.courseid, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n" +
+"                 inner join courses on courses.courseid=classes.courseid\n" +
+"                  where roster.studentid = "+studentid+" and roster.enrolled"+termid+"= 1 and courses.active = 1 and classes.yearid = '"+ yearid+"'");// the term and year need to be dynamic, check with vincent
             Subject first = new Subject();
             first.setName("Select Subject");
             subjects.add(first);
@@ -190,11 +196,11 @@ public class ProgressbyStudent {
                 ids[0] = "" + rs1.getInt("CourseID");
                 sub.setId(ids);
                 subjects.add(sub);
-                if (rs1.getBoolean("Active")) {
+               
                     name9 = rs1.getString("Title");
                     id = rs1.getString("CourseID");
                     mapSubject.put(id, name9);
-                }
+               
             }
 
             for (Subject s : subjects.subList(1, subjects.size())) {
@@ -637,10 +643,10 @@ public class ProgressbyStudent {
 
                 while (rs.next()) {
                     DBRecords l = new DBRecords();
-                    l.setCol1("" + rs.getInt("id"));
-                    l.setCol2(rs.getString("name"));
-                    l.setCol4(rs.getString("obj"));
-                    l.setCol3("" + rs.getInt("subject_id"));
+                    l.setCol1("" + rs.getInt("id"));// step id  
+                    l.setCol2(rs.getString("name"));// step name
+                    l.setCol4(rs.getString("obj"));// objective name
+                    l.setCol3("" + rs.getInt("subject_id"));// subjectid
                     l.setCol6("" + rs.getInt("objid"));//will only be used to get other data,then later will be the progress 100% of the objective
                     if (!objectives.contains(rs.getString("obj"))) {
                         objectives.add(rs.getString("obj"));
@@ -662,7 +668,7 @@ public class ProgressbyStudent {
                     subjects.add(x.getCol3());
                 }
                 //get the student progress for student 10101,getting the last step the student in, with the latest date
-                ResultSet rs5 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='" + x.getCol6() + "' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '" + studentid + "' AND objective_id = '" + x.getCol6() + "' and generalcomment = false) and generalcomment = false and student_id ='" + studentid + "'");
+                    ResultSet rs5 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='" + x.getCol6() + "' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '" + studentid + "' AND objective_id = '" + x.getCol6() + "' and generalcomment = false) and generalcomment = false and student_id ='" + studentid + "'");
                 if (rs5.next()) {
                     String stsdone = rs5.getString("step_id");
                     if (stsdone != null) {
@@ -700,7 +706,9 @@ public class ProgressbyStudent {
 
                             //match the objective with the step
                             for (DBRecords k : steps) {
-                                if (k.getCol4().equalsIgnoreCase(y.getName())) {
+                           //     if (k.getCol4().equalsIgnoreCase(y.getName())) {
+                           String[] match = y.getId();
+                           if (k.getCol6().equalsIgnoreCase(match[0])) {
                                     Nodetreegrid<String> nodeB = new Nodetreegrid<String>(k.getCol1(), k.getCol2(), "", "", "", k.getCol5());
 
                                     nodeA.addChild(nodeB);
