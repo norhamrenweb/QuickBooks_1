@@ -138,7 +138,6 @@ $("#method").on('mouseover', 'option' , function(e) {
         });
         
     });            
-        
         $().ready(function() 
 	{ 
                   
@@ -424,10 +423,10 @@ input[type="radio"] .styled:checked + label::after {
             <fieldset>
                 <legend id="showPropiertys">
                     Presentation name and description
-                    <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
+                    <span onclick="setTimeout(function(){ $('#NameLessons').focus(); }, 300);" class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
                     </span>
                 </legend>
-                <div class="form-group collapse" id="contenedorPropiertys">
+                <div class="form-group collapse" id="contenedorPropiertys" >
                     <div class="col-xs-6 center-block">
                         <label class="control-label">Presentation Name</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                         <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>" value="${data.name}">
