@@ -192,17 +192,19 @@ public class LessonsListControlador{
         this.cn = dataSource.getConnection();
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-         Statement st = this.cn.createStatement();
-         String consulta = "select attendance from lesson_stud_att where lesson_id = "+id[0];
-         ResultSet rs = st.executeQuery(consulta);
+        Statement st = this.cn.createStatement();
+        String consulta = "select attendance from lesson_stud_att where lesson_id = "+id[0];
+        ResultSet rs = st.executeQuery(consulta);
         
-         while(rs.next()){
-             String text = rs.getString("attendance");
-             if(!text.equals("")){
-                 message="Presentation has attendance records,it can not be deleted";
-                 break;
-             }
-         }
+        while(rs.next()){
+            String text = rs.getString("attendance");
+            if(text!=null){
+                 if(!text.equals("")){
+                    message="Presentation has attendance records,it can not be deleted";
+                    break;
+                }
+            }
+        }
          consulta = "select * from progress_Report where lesson_id ="+ id [0];
          ResultSet rs1 = st.executeQuery(consulta);
          while(rs1.next()){

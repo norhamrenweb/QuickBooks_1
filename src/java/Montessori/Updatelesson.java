@@ -126,23 +126,23 @@ public class Updatelesson {
        this.cn = dataSource.getConnection();
         Statement st = this.cn.createStatement();
         String test = null;
-        if(newlessons.getMethod().getName() != ""){
-        test = "update lessons set name = '"+newlessons.getName()+"',level_id = '"+newlessons.getLevel().getName()+"' ,subject_id = '"+newlessons.getSubject().getName()+"',objective_id= '"+newlessons.getObjective().getName()+"',comments='"+newlessons.getComments()+"',method_id='"+newlessons.getMethod().getName()+"' where id ='"+newlessons.getId()+"'";
+        if(newlessons.getMethod().getName()!= null && !"".equals(newlessons.getMethod().getName())){
+            test = "update lessons set name = '"+newlessons.getName()+"',level_id = '"+newlessons.getLevel().getName()+"' ,subject_id = '"+newlessons.getSubject().getName()+"',objective_id= '"+newlessons.getObjective().getName()+"',comments='"+newlessons.getComments()+"',method_id='"+newlessons.getMethod().getName()+"' where id ='"+newlessons.getId()+"'";
         }
         else{
-          test = "update lessons set name = '"+newlessons.getName()+"',level_id = '"+newlessons.getLevel().getName()+"' ,subject_id = '"+newlessons.getSubject().getName()+"',objective_id= '"+newlessons.getObjective().getName()+"',comments='"+newlessons.getComments()+"' where id ='"+newlessons.getId()+"'";;  
+            test = "update lessons set name = '"+newlessons.getName()+"',level_id = '"+newlessons.getLevel().getName()+"' ,subject_id = '"+newlessons.getSubject().getName()+"',objective_id= '"+newlessons.getObjective().getName()+"',comments='"+newlessons.getComments()+"',method_id=null where id ='"+newlessons.getId()+"'";;  
         }
        st.executeUpdate(test);
 
           //delete the old content list and add the new one
             //to avoid null pointer exception incase of lesson without content
-            if(newlessons.getContentid()!=null){
-                  equipmentids=newlessons.getContentid();
             st.executeUpdate("delete from lesson_content where lesson_id = '"+newlessons.getId()+"'");
-             for( int i = 0; i <= equipmentids.size()- 1; i++)
-            {
-                st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+newlessons.getId()+"','"+equipmentids.get(i)+"')");
-            }
+            if(newlessons.getContentid()!=null){
+                equipmentids=newlessons.getContentid();
+                for( int i = 0; i <= equipmentids.size()- 1; i++)
+                {
+                    st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('"+newlessons.getId()+"','"+equipmentids.get(i)+"')");
+                }
             }
           
     }

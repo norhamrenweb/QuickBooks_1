@@ -186,12 +186,17 @@ $("#method").on('mouseover', 'option' , function(e) {
             }
     function funcionCallBackObjective()
     {
-           if (ajax.readyState===4){
-                if (ajax.status===200){
-                    document.getElementById("objective").innerHTML= ajax.responseText;
-                    }
-                }
+        if (ajax.readyState===4){
+            if (ajax.status===200){
+                document.getElementById("objective").innerHTML= ajax.responseText;
             }
+        }
+        if($('#objective')[0][0] !== undefined){
+            $('#createOnClick').attr('disabled', false);
+        }else{
+            $('#createOnClick').attr('disabled', true);
+        }
+    }
        
 
     
@@ -227,6 +232,7 @@ $("#method").on('mouseover', 'option' , function(e) {
     }
     function comboSelectionSubject()
     {
+        $('#content').empty();
         if (window.XMLHttpRequest) //mozilla
         {
             ajax = new XMLHttpRequest(); //No Internet explorer

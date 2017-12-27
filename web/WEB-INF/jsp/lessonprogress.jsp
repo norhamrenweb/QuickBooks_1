@@ -21,11 +21,12 @@
         <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.css"/>"/>
         <title>Presentation progress</title>
         <script>
-
-
+                window.onbeforeunload = function exitAlert(){
+                    var textillo = "Changes you made may not be saved.";
+                    return textillo;
+                };
 
             $(document).ready(function () {
-
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
                 var lessoncreate = '<%= request.getParameter("message")%>';
                 var itemsRating = []; // needs to be outside
@@ -373,7 +374,7 @@
                     </select>
                 </div>
                 <div class="col-xs-4 text-center">   
-                    <input type="submit" class="btn btn-success" value="Save">
+                    <input type="submit" class="btn btn-success" value="Save" onclick="window.onbeforeunload=null;">
                 </div>
                 <div class="col-xs-4 text-center">
                     <input type="checkbox" disabled="false" data-width="200px" data-onstyle="success" data-offstyle="warning" data-toggle="toggle" data-on="Archived" data-off="Not Archived" name="buttonAchived" id="buttonAchived">              
