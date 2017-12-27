@@ -282,6 +282,7 @@ public class ResourcesControlador {
 
                 //boolean success = ftpClient.changeWorkingDirectory("/MontessoriTesting/"+resourceLoad.getLesson_id());
                 lessonName = lessonName.replace("/", "_");
+                 lessonName = lessonName.replace(" ", "-");
                 ftpClient.deleteFile("/MontessoriTesting/"+resourceLoad.getLesson_id()+"-"+lessonName+"/"+resourceLoad.getLink());
                 ftpClient.logout();
             }
