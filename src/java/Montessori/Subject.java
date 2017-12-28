@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -23,6 +24,15 @@ public class Subject {
     private String name;
     Connection cn;
     private ServletContext servlet;
+    private List<String> objectives;
+
+    public List<String> getObjectives() {
+        return objectives;
+    }
+
+    public void setObjectives(List<String> objectives) {
+        this.objectives = objectives;
+    }
     
     private Object getBean(String nombrebean, ServletContext servlet)
     {
