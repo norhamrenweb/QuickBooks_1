@@ -369,7 +369,7 @@ function funcionCallBackdetailsLesson()
        .divAdd{
             color: #777777;
             height: 100px;
-            width: 190px;
+            width: 200px;
             background-color: rgba(255,255,255,0.5);
             margin-right: 10px;
             font-size: small;
