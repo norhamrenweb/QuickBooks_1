@@ -1,0 +1,55 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="UnitOfMeasureRelatedUnits" description="Create and query QuickBooks unit-of-measure related units. QuickBooks requires QBXML version 7.0 or higher to use this table.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"     key="true"          references=""                  columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID,RelatedUnit"                  desc="The unique identifier of the unit-of-measure related unit."/>
+    <attr name="UnitOfMeasureSetId"         xs:type="string"       readonly="false"    required="false"    references="UnitOfMeasure.ID"  columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="UnitOfMeasureSetId,RelatedUnit"      desc="The item identifier of the unit of measure." />
+    <attr name="Name"                       xs:type="string"       readonly="false"    required="true"     references=""                  columnsize="31"       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="Name,RelatedUnit"                    desc="The name of the unit of measure."/>
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"    required="false"    references=""                  columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="IsActive,RelatedUnit"                desc="Boolean determining if the unit of measure is active."/>
+    <attr name="UnitOfMeasureType"          xs:type="string"       readonly="false"    required="false"    references=""                  columnsize="1000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="UnitOfMeasureType,RelatedUnit"       desc="The type of unit of measure, such as Count."/>
+    <attr name="BaseUnit_Name"              xs:type="string"       readonly="false"    required="false"    references=""                  columnsize="31"       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="BaseUnit,RelatedUnit"                desc="The name of the base unit of measure."/> 
+    <attr name="BaseUnit_Abbreviation"      xs:type="string"       readonly="false"    required="false"    references=""                  columnsize="31"       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="BaseUnit,RelatedUnit"                desc="The abbreviation for the base unit of measure."/> 
+    <attr name="RelatedUnit_Name#"          xs:type="string"       readonly="false"    required="false"    references=""                  columnsize="31"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="RelatedUnit"                         desc="The name of the related unit of measure."/> 
+    <attr name="RelatedUnit_Abbreviation#"  xs:type="string"       readonly="false"    required="false"    references=""                  columnsize="31"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="RelatedUnit"                         desc="The abbreviation of the related unit of measure."/> 
+    <attr name="RelatedUnit_ConversionRatio#"  xs:type="string"       readonly="false"    required="false"    references=""               columnsize="5000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="RelatedUnit"                  desc="The conversion ratio of the related unit of measure."/> 
+    <attr name="EditSequence"               xs:type="string"       readonly="true"     required="false"    references=""                  columnsize="16"       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="EditSequence,RelatedUnit"            desc="A string indicating the revision of the record."/>
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"     required="false"    references=""                  columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated,RelatedUnit"             desc="The time the record was created."/>
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"     required="false"    references=""                  columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeModified,RelatedUnit"            desc="The last time the record was modified."/>
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->    
+  <rsb:set attr="entityname"      value="UnitOfMeasureSet"/>
+  <rsb:set attr="objecttype"      value="OtherCollection"/>
+  <rsb:set attr="listtype"        value="List"/>
+  <rsb:set attr="linekey"         value="RelatedUnit_Abbreviation"/>
+  <rsb:set attr="querytype"       value="OtherList"/>
+  <rsb:set attr="qbcollections#"  value="RelatedUnit"/>
+  <rsb:set attr="includelineitems" value="true"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:throw code="300" desc="Updates to UnitOfMeasureRelatedUnits are not supported at this time."/>
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:throw code="300" desc="Deletions from UnitOfMeasureRelatedUnits are not supported at this time."/>
+</rsb:script>
+  
+</rsb:script>  

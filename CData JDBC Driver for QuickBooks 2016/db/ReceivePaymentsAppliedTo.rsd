@@ -1,0 +1,87 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+
+  <rsb:info title="ReceivePaymentsAppliedTo" description="Create, update, and query QuickBooks Receive Payment AppliedTo aggregates. In a Receive Payment, each AppliedTo aggregate represents the transaction to which this part of the payment is being applied. QBXMLVersion must be set to 6.0 or higher to update a ReceivePayment.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                                xs:type="string"       readonly="true"      key="true"          references=""                    columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                     desc="The unique identifier in the format ReceivePaymentId|AppliedToRefId." /> 
+    <attr name="ReceivePaymentId"                  xs:type="string"       readonly="false"     required="false"    references="ReceivePayments.ID"  columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                     desc="The Id of the bill-payment transaction." />I
+    <attr name="ReferenceNumber"                   xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="21"       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,RefNumber,AppliedToTxnRet"                 desc="The transaction reference number. This may be set to refnumber*, *refnumber, and *refnumber* in the WHERE clause of a SELECT statement to search by StartsWith, EndsWith, and Contains. Refnum1:refnum2, refnum1:, and :refnum1 may also be used to denote a range." />
+    <attr name="TxnNumber"                         xs:type="integer"      readonly="true"      required="false"    references=""                    columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnNumber,AppliedToTxnRet"                 desc="The transaction number. An identifying number for the transaction, different from the QuickBooks-generated Id." /> 
+    <attr name="Date"                              xs:type="date"         readonly="false"     required="false"    references=""                    columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnDate,AppliedToTxnRet"                   desc="The date of the transaction." />
+    <attr name="UnusedPayment"                     xs:type="double"       readonly="true"      required="false"    references=""                    columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,UnusedPayment,AppliedToTxnRet"             desc="This property will contain the amount of the payment that was not applied to existing invoices."/>
+    <attr name="Amount"                            xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TotalAmount,AppliedToTxnRet"               desc="The amount of the payment received from the Customer." />
+    <attr name="AccountsReceivableName"            xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"   columnsize="1000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ARAccountRef,AppliedToTxnRet"              desc="A reference to the name of the accounts-receivable account where the money received from this transaction will be deposited." />
+    <attr name="AccountsReceivableId"              xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"         columnsize="255"      normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ARAccountRef,AppliedToTxnRet"              desc="A reference to the Id of the accounts-receivable account where the money received from this transaction will be deposited." />
+    <attr name="CustomerName"                      xs:type="string"       readonly="false"     required="false"    references="Customers.FullName"  columnsize="1000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,CustomerRef,AppliedToTxnRet"               desc="The name of the customer who has purchased goods or services from the company. This is required to have a value when inserting if CustomerId is not defined." />
+    <attr name="CustomerId"                        xs:type="string"       readonly="false"     required="false"    references="Customers.ID"        columnsize="255"      normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,CustomerRef,AppliedToTxnRet"               desc="The Id of the customer who has purchased goods or services from the company. This is required to have a value when inserting if CustomerName is not defined." />
+    <attr name="DepositToAccountName"              xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"   columnsize="1000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositToAccountRef,AppliedToTxnRet"       desc="The account name that the payment should be deposited to." />
+    <attr name="DepositToAccountId"                xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"         columnsize="255"      normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositToAccountRef,AppliedToTxnRet"       desc="The account Id that the payment should be deposited to." />
+    <attr name="PaymentMethodName"                 xs:type="string"       readonly="false"     required="false"    references="PaymentMethods.Name" columnsize="100"      normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,PaymentMethodRef,AppliedToTxnRet"          desc="Name of a payment method that already exists in QuickBooks." />
+    <attr name="PaymentMethodId"                   xs:type="string"       readonly="false"     required="false"    references="PaymentMethods.ID"   columnsize="255"      normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,PaymentMethodRef,AppliedToTxnRet"          desc="Id of a payment method that already exists in QuickBooks." />
+    <attr name="Memo"                              xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="5000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,Memo,AppliedToTxnRet"                      desc="A memo to appear on internal reports."  />
+    <attr name="AutoApply"                         xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="20"       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="How the payment should be applied." default="ExistingTransactions" value="ExistingTransactions,FutureTransactions,Custom" />
+    <attr name="CustomFields"                      xs:type="string"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="false"     other:qbxmlversion="2.0"     other:selectcolumnname="TxnID,DataExtRet,AppliedToTxnRet"                desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="AppliedToRefId#"                   xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The applied-to reference identifier. This is the Id of an existing transaction that a payment can be applied to such as a JournalEntry, or an Invoice."/>
+    <attr name="AppliedToAmount#"                  xs:type="double"       readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The amount to be applied."/>
+    <attr name="AppliedToBalanceRemaining#"        xs:type="double"       readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The balance remaining to be applied."/>
+    <attr name="AppliedToCreditAppliedAmount#"     xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The credit applied amount to be applied." />
+    <attr name="AppliedToCreditMemoId#"            xs:type="string"       readonly="false"     required="false"    references="CreditMemos.ID"      columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The credit memo Id to be applied." />
+    <attr name="AppliedToDiscountAccountName#"     xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"   columnsize="1000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The discount account name to be applied." />
+    <attr name="AppliedToDiscountAccountId#"       xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"         columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The discount account Id to be applied." />
+    <attr name="AppliedToDiscountAmount#"          xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The discount amount to be applied."/>
+    <attr name="AppliedToPaymentAmount#"           xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The payment amount to be applied." />
+    <attr name="AppliedToReferenceNumber#"         xs:type="string"       readonly="true"      required="false"    references=""                    columnsize="21"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The ref number to be applied." />
+    <attr name="AppliedToTxnDate#"                 xs:type="date"         readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The transaction date to be applied."/>
+    <attr name="AppliedToTxnType#"                 xs:type="string"       readonly="true"      required="false"    references=""                    columnsize="100"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,AppliedToTxnRet"                           desc="The transaction type that was applied." />
+    <attr name="TimeModified"                      xs:type="datetime"     readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeModified,AppliedToTxnRet"              desc="When the receive payment was last modified." /> 
+    <attr name="TimeCreated"                       xs:type="datetime"     readonly="true"      required="false"    references=""                    columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeCreated,AppliedToTxnRet"               desc="When the receive payment was created."/> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="StartTxnDate"         desc="Earliest transaction date to search for." />
+    <input name="EndTxnDate"           desc="Latest transaction date to search for." />    
+    <input name="StartModifiedDate"    desc="Earliest modified date to search for." />
+    <input name="EndModifiedDate"      desc="Latest modified date to search for." />
+    <input name="AutoApply"            desc="How the payment should be applied." default="Custom" value="ExistingTransactions,FutureTransactions,Custom" />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="ReceivePayment"/>
+  <rsb:set attr="objecttype"    value="LineItem"/>
+  <rsb:set attr="linekey"       value="AppliedToRefId"/>
+  <rsb:set attr="includelineitems" value="true"/>
+  <rsb:set attr="outputitem"    value="applyto"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

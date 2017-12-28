@@ -1,0 +1,64 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="TransferInventory" description="Query and delete QuickBooks Transfer Inventory transactions. Transfer Inventory is available in only QuickBooks Enterprise 2010 and above, and only with the Advanced Inventory add-on.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                                 xs:type="string"       readonly="true"      key="true"          references=""                         columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID"                                 desc="The unique identifier." /> 
+    <attr name="TxnDate"                            xs:type="date"         readonly="false"     required="false"    references=""                         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnDate"                               desc="The date of the transaction."/> 
+    <attr name="TxnNumber"                          xs:type="integer"      readonly="true"      required="false"    references=""                         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnNumber"                             desc="An identifying number for this transaction."/> 
+    <attr name="RefNumber"                          xs:type="string"       readonly="false"     required="false"    references=""                         columnsize="21"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="RefNumber"                             desc="The transaction reference number."/> 
+    <attr name="FromInventorySiteRef_ListID"        xs:type="string"       readonly="false"     required="false"    references="InventorySites.ID"        columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="FromInventorySiteRef"                  desc="The site inventory was transfered from."/> 
+    <attr name="FromInventorySiteRef_FullName"      xs:type="string"       readonly="false"     required="false"    references="InventorySites.Name"      columnsize="31"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="FromInventorySiteRef"                  desc="The site inventory was transfered from."/> 
+    <attr name="ToInventorySiteRef_ListID"          xs:type="string"       readonly="false"     required="false"    references="InventorySites.ID"        columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ToInventorySiteRef"                    desc="The site inventory was transfered to."/> 
+    <attr name="ToInventorySiteRef_FullName"        xs:type="string"       readonly="false"     required="false"    references="InventorySites.Name"      columnsize="31"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ToInventorySiteRef"                    desc="The site inventory was transfered to."/> 
+    <attr name="Memo"                               xs:type="string"       readonly="false"     required="false"    references=""                         columnsize="5000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Memo"                                  desc="Additional information about the transaction."/> 
+    <attr name="ExternalGUID"                       xs:type="string"       readonly="false"     required="false"    references=""                         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ExternalGUID"                          desc="Allows for the attachment of a user defined GUID value."/> 
+    <attr name="TransferInventoryLineAggregate"     xs:type="string"       readonly="false"     required="false"    references=""                         columnsize="5000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TransferInventoryLineRet"              desc="An aggregate of the line item data which can be used for adding a transfer inventory and its line item data."/>
+    <attr name="TimeCreated"                        xs:type="datetime"     readonly="true"      required="false"    references=""                         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeCreated"                           desc="The datetime the transaction was made."/> 
+    <attr name="TimeModified"                       xs:type="datetime"     readonly="true"      required="false"    references=""                         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeModified"                          desc="The last datetime the transaction was modified."/> 
+    <attr name="EditSequence"                       xs:type="string"       readonly="true"      required="false"    references=""                         columnsize="16"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="EditSequence"                          desc="An identifier used for versioning for this copy of the object." /> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="TransferInventory"/>
+  <rsb:set attr="objecttype"     value="Transaction"/>
+  <rsb:set attr="querytype"      value="OtherTransaction"/>
+  <rsb:set attr="aggregatecolumns" value="TransferInventoryLineAggregate"/>
+  <rsb:set attr="childlinekeys" value="TransferInventoryLineRet_TxnLineID"/>
+  <rsb:set attr="childtables" value="TransferInventoryLineItems"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:throw code="300" desc="Inserts to TransferInventory must be done via the TransferInventoryLineItems table."/>
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:throw code="300" desc="Updates to TransferInventory are not supported at this time."/>
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>  

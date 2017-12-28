@@ -1,0 +1,35 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="CustomColumns" description="Query QuickBooks Custom Columns.">
+
+    <!-- Column definitions -->
+    <attr name="DataExtID"                  xs:type="string"     readonly="true"     key="true"          references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="DataExtID"          desc="The Id of a data extension."/>
+    <attr name="OwnerID"                    xs:type="string"     readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="OwnerID"            desc="The owner of a data extension."/>
+    <attr name="DataExtName"                xs:type="string"     readonly="true"     required="false"    references=""         columnsize="31"    normalized="true"     other:qbxmlversion=""      other:selectcolumnname="DataExtName"          desc="The name of the data extension."/>
+    <attr name="DataExtType"                xs:type="string"     readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="DataExtType"          desc="The field's data type."/>
+    <attr name="AssignToObject"             xs:type="string"     readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="AssignToObject"         desc="The object associated with the result."/>
+    <attr name="DataExtListRequire"         xs:type="boolean"    readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="DataExtListRequire"         desc=""/>
+    <attr name="DataExtTxnRequire"          xs:type="boolean"    readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="DataExtTxnRequire"          desc=""/>
+    <attr name="DataExtFormatString"        xs:type="string"     readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="DataExtFormatString"      desc=""/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="DataExtDef"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="DataExtDef"/>
+
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:set attr="AssignToObject" value="[qb:assigntoobject | join(',') | def('')]" />
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+  
+  
+</rsb:script>

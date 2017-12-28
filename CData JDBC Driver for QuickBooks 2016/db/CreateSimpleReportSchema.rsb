@@ -1,0 +1,24 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+  
+    <rsb:info title="CreateSimpleReportSchema"   description="Generates a simple report schema file." >
+        <input name="ReportName"                 desc="The name of the report. If this is not specified the ReportType will be used as the name."/>
+        <input name="ReportType"                 desc="The type of report to create a schema for."  values="1099DETAIL, APAGINGDETAIL, APAGINGSUMMARY, ARAGINGDETAIL, ARAGINGSUMMARY, AUDITTRAIL, BALANCESHEETBUDGETOVERVIEW, BALANCESHEETBUDGETVSACTUAL, BALANCESHEETDETAIL, BALANCESHEETPREVYEARCOMP, BALANCESHEETSTANDARD, BALANCESHEETSUMMARY, CHECKDETAIL, COLLECTIONSREPORT, CUSTOMERBALANCEDETAIL, CUSTOMERBALANCESUMMARY, DEPOSITDETAIL, EMPLOYEEEARNINGSSUMMARY, EMPLOYEESTATETAXESDETAIL, ESTIMATESBYJOB, EXPENSEBYVENDORDETAIL, EXPENSEBYVENDORSUMMARY, GENERALLEDGER, INCOMEBYCUSTOMERDETAIL, INCOMEBYCUSTOMERSUMMARY, INCOMETAXDETAIL, INCOMETAXSUMMARY, INVENTORYSTOCKSTATUSBYITEM, INVENTORYSTOCKSTATUSBYVENDOR, INVENTORYVALUATIONDETAIL, INVENTORYVALUATIONSUMMARY, ITEMESTIMATESVSACTUALS, ITEMPROFITABILITY, JOBESTIMATESVSACTUALSSUMMARY, JOBPROFITABILITYSUMMARY, JOBPROGRESSINVOICESVSESTIMATES, JOURNAL, OPENINVOICES, OPENPOS, OPENPOSBYJOB, OPENSALESORDERBYCUSTOMER, OPENSALESORDERBYITEM, PAYROLLITEMDETAIL, PAYROLLLIABILITYBALANCES, PAYROLLREVIEWDETAIL, PAYROLLSUMMARY, PAYROLLTRANSACTIONDETAIL, PAYROLLTRANSACTIONSBYPAYEE, PENDINGSALES, PHYSICALINVENTORYWORKSHEET, PROFITANDLOSSBUDGETOVERVIEW, PROFITANDLOSSBUDGETPERFORMANCE, PROFITANDLOSSBUDGETVSACTUAL, PROFITANDLOSSBYCLASS, PROFITANDLOSSBYJOB, PROFITANDLOSSDETAIL, PROFITANDLOSSPREVYEARCOMP, PROFITANDLOSSSTANDARD, PROFITANDLOSSYTDCOMP, PURCHASEBYITEMDETAIL, PURCHASEBYITEMSUMMARY, PURCHASEBYVENDORDETAIL, PURCHASEBYVENDORSUMMARY, SALESBYCUSTOMERDETAIL, SALESBYCUSTOMERSUMMARY, SALESBYITEMDETAIL, SALESBYITEMSUMMARY, SALESBYREPDETAIL, SALESBYREPSUMMARY, SALESTAXLIABILITY, SALESTAXREVENUESUMMARY, TIMEBYITEM, TIMEBYJOBDETAIL, TIMEBYJOBSUMMARY, TIMEBYNAME, TRIALBALANCE, TXNDETAILBYACCOUNT, TXNLISTBYCUSTOMER, TXNLISTBYDATE, TXNLISTBYVENDOR, UNBILLEDCOSTSBYJOB, UNPAIDBILLSDETAIL, VENDORBALANCEDETAIL, VENDORBALANCESUMMARY" required="true" />
+        <input name="ReportPeriod"               desc="Report date range in the format fromdate:todate where either value may be omitted for an open-ended range (e.g., 2009-12-25:). Supported date format: yyyy-MM-dd."/>
+        <input name="ReportDateRangeMacro"       desc="A macro that can be specified for the report date range." values="ALL,TODAY,THISWEEK,THISWEEKTODATE,THISMONTH,THISMONTHTODATE,THISQUARTER,THISQUARTERTODATE,THISYEAR,THISYEARTODATE,YESTERDAY,LASTWEEK,LASTWEEKTODATE,LASTMONTH,LASTMONTHTODATE,LASTQUARTER,LASTQUARTERTODATE,LASTYEAR,LASTYEARTODATE,NEXTWEEK,NEXTFOURWEEKS,NEXTMONTH,NEXTQUARTER,NEXTYEAR"/>
+        <input name="ReportCalendar"             desc="Specifies the type of year that will be used for this report." values="NONE,CALENDARYEAR,FISCALYEAR,TAXYEAR"/>
+        <input name="SummarizeColumnsBy"         desc="Determines which data the report calculates and how the columns will be labeled across the top of the report." values="NONE,ACCOUNT,BALANCESHEET,CLASS,CUSTOMER,CUSTOMERTYPE,DAY,EMPLOYEE,FOURWEEK,HALFMONTH,INCOMESTATEMENT,ITEMDETAIL,ITEMTYPE,MONTH,PAYEE,PAYMENTMETHOD,PAYROLLITEMDETAIL,QUARTER,SALESREP,SALESTAXCODE,SHIPMETHOD,TERMS,TOTALONLY,TWOWEEK,VENDOR,VENDORTYPE,WEEK,YEAR"/>
+        <input name="PostingStatus"              desc="Allows you to query for posting reports, nonposting reports, or reports that are either one." values="EITHER,NONPOSTING,POSTING" />
+        <input name="ReportAsOf"                 desc="The report will return open balance information up to the reportopenbalanceasof date." values="REPORTENDDATE,TODAY" />
+        <input name="ReportBasis"                desc="If reportbasis is Cash, the report bases income and expenses on the dates when money changed hands. If Accrual, the report bases income on the dates when customers were invoiced and bases expenses on the dates when bills were entered. If None, the report uses the default report basis, which is either the QuickBooks preference setting or the QuickBooks default for a given type of report. In a report response, the SDK returns None for reports that do not support a report basis. (The 1099 report, for example, has its own basis for generation.)" values="ACCRUAL,CASH,NONE" />
+        <input name="FiscalYear"                 desc="The fiscal year of the budget to be queried. For example, 2014." />
+    
+        <output name="Result" 			  desc="Success or Failure."/>
+        <output name="SchemaFile" 		desc="The generated schema file."/>
+        <output name="Columns" 		    desc="The number of columns found."/>
+    </rsb:info>
+      
+  <rsb:call op="quickbooksadoDesktopCreateReportSchema" output="out">
+    <rsb:push />
+  </rsb:call>
+
+</rsb:script>

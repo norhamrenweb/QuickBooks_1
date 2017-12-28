@@ -595,8 +595,8 @@
         <div class="container">
             <h1 class="text-center">Create New Report</h1>
 
-
-            <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
+              <c:url var="post_url"  value="/html" />
+            <form:form id="formStudents" method ="post" action="${post_url}" >
 
                 <fieldset>
                     <legend id="showStudents">
@@ -658,14 +658,14 @@
                     </div>
                 </fieldset>
                 <div class="hide col-xs-12 text-center">
-                    <input type="submit" class="btn btn-success" id="createOnClick" disabled="True" value="<spring:message code="etiq.txtcreate"/>">
+                    <input type="submit" class="btn btn-success" id="createOnClick" value="<spring:message code="etiq.txtcreate"/>">
                 </div>
-            </form:form>
+            
 
             <div class="col-xs-12 text-center">
-                <input type="button" class="btn btn-info" id="generateReport" disabled="false" value="Generate">
+                <input type="submit" class="btn btn-info" id="generateReport" value="Generate">
             </div>
-
+        </form:form>
         </div>
 
         <%--        <div class="col-xs-6">

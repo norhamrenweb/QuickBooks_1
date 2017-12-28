@@ -1,0 +1,69 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="InventorySites" description="Create, update, delete, and query QuickBooks Inventory Sites. Inventory Sites are only available in QuickBooks Enterprise 2010 and above, and only with the Advanced Inventory add-on.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"     key="true"                columnsize="255"      normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="The Id of the inventory site."/>
+    <attr name="Name"                       xs:type="string"       readonly="false"    required="true"           columnsize="31"       normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Name of the inventory site."/>
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"    required="false"          columnsize=""         normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Whether or not the inventory site is active."/>
+    <attr name="SiteDesc"                   xs:type="string"       readonly="false"    required="false"          columnsize="100"      normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="A description of the inventory site."/>
+    <attr name="Contact"                    xs:type="string"       readonly="false"    required="false"          columnsize="41"       normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Contact for the inventory site."/>
+    <attr name="Phone"                      xs:type="string"       readonly="false"    required="false"          columnsize="21"       normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Phone number for the inventory site."/>
+    <attr name="Fax"                        xs:type="string"       readonly="false"    required="false"          columnsize="21"       normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Fax number for the inventory site."/>
+    <attr name="Email"                      xs:type="string"       readonly="false"    required="false"          columnsize="1023"     normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Email address for the inventory site."/>
+    <attr name="SiteAddress_Addr1"          xs:type="string"       readonly="false"    required="false"          columnsize="500"      normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="First line of the address."/>
+    <attr name="SiteAddress_Addr2"          xs:type="string"       readonly="false"    required="false"          columnsize="500"      normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Second line of the address."/>
+    <attr name="SiteAddress_Addr3"          xs:type="string"       readonly="false"    required="false"          columnsize="500"      normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Third line of the address."/>
+    <attr name="SiteAddress_Addr4"          xs:type="string"       readonly="false"    required="false"          columnsize="500"      normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Fourth line of the address."/>
+    <attr name="SiteAddress_Addr5"          xs:type="string"       readonly="false"    required="false"          columnsize="41"       normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Fifth line of the address."/>
+    <attr name="SiteAddress_City"           xs:type="string"       readonly="false"    required="false"          columnsize="255"      normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="City portion of the address."/>
+    <attr name="SiteAddress_State"          xs:type="string"       readonly="false"    required="false"          columnsize="255"      normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="State portion of the address."/>
+    <attr name="SiteAddress_PostalCode"     xs:type="string"       readonly="false"    required="false"          columnsize="30"       normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Postal Code portion of the address."/>
+    <attr name="SiteAddress_Country"        xs:type="string"       readonly="false"    required="false"          columnsize="255"      normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Country portion of the address."/>
+    <attr name="EditSequence"               xs:type="string"       readonly="true"     required="false"          columnsize="16"       normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="A string indicating the revision of the inventory site."/>
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"     required="false"          columnsize=""         normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="The time the inventory site was created."/>
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"     required="false"          columnsize=""         normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="The time the inventory site was modified."/>
+    <attr name="IsDefaultSite"              xs:type="boolean"      readonly="true"     required="false"          columnsize=""         normalized="true"       other:qbxmlversion=""        other:selectcolumnname=""              desc="Boolean indicating if the inventory site is the default site for the company."/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="InventorySite"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="OtherList"/>  
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

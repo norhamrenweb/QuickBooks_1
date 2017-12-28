@@ -1,0 +1,117 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="Items" description="Create, update, delete, and query QuickBooks Items.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                    columnsize="255"      normalized="true"     other:selectcolumnname="ListID"                         desc="The unique identifier." /> 
+    <attr name="Name"                  xs:type="string"       readonly="false"     required="true"     references=""                    columnsize="100"      normalized="true"     other:selectcolumnname="Name"                           desc="The name of the item." />
+    <attr name="FullName"              xs:type="string"       readonly="true"      required="false"    references=""                    columnsize="1000"     normalized="true"     other:selectcolumnname="FullName"                       desc="Full item name in the format parentname:name if the item is a subitem." />
+    <attr name="Type"                  xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="100"      normalized="true"     other:selectcolumnname="Type"                           desc="The type of item. This is required to have a value when inserting." default="ALL" values="Unknown,Service,Inventory,NonInventory,Payment,Discount,SalesTax,SubTotal,OtherCharge,InventoryAssembly,Group,SalesTaxGroup,FixedAsset" />
+    <attr name="Account"               xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"   columnsize="1000"     normalized="true"     other:selectcolumnname="IncomeAccountRef"               desc="Account name the item is associated with."/>
+    <attr name="AccountId"             xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"         columnsize="255"      normalized="true"     other:selectcolumnname="IncomeAccountRef"               desc="Account Id the item is associated with." />
+    <attr name="COGSAccount"           xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"   columnsize="1000"     normalized="true"     other:selectcolumnname="COGSAccountRef"                 desc="Cost of Goods Sold account for the item." />
+    <attr name="COGSAccountId"         xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"         columnsize="255"      normalized="true"     other:selectcolumnname="COGSAccountRef"                 desc="Cost of Goods Sold account for the item." />
+    <attr name="AssetAccount"          xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"   columnsize="1000"     normalized="true"     other:selectcolumnname="AssetAccountRef"                desc="Inventory asset account for the item if it is an inventory item." />
+    <attr name="AssetAccountId"        xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"         columnsize="255"      normalized="true"     other:selectcolumnname="AssetAccountRef"                desc="Inventory asset account for the item if it is an inventory item." />
+    <attr name="DateSold"              xs:type="datetime"     readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="SalesDate"                      desc="Indicates the date an asset was sold. This is required for fixed asset items. It is not used for any other types of items." />
+    <attr name="PurchaseDate"          xs:type="date"         readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="PurchaseDate"                   desc="Indicates date asset was purchased. This field is required for the fixed-asset item type. It is not used by any other item type." />
+    <attr name="ItemCount"             xs:type="integer"      readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="ItemCount"                      desc="The number of line items associated with the inventory assembly." />
+    <attr name="ParentName"            xs:type="string"       readonly="false"     required="false"    references="Items.FullName"      columnsize=""         normalized="true"     other:selectcolumnname="ParentRef"                      desc="The parent name of the item if the item is a subitem." />
+    <attr name="ParentId"              xs:type="string"       readonly="false"     required="false"    references="Items.ID"            columnsize="255"      normalized="true"     other:selectcolumnname="ParentRef"                      desc="The parent Id of the item if the item is a subitem." />
+    <attr name="Description"           xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="5000"     normalized="true"     other:selectcolumnname="FixedAssetSalesInfo,ItemDesc"   desc="A description of the item." />
+    <attr name="Price"                 xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="SalesOrPurchase"                desc="The price for the item." />
+    <attr name="PricePercent"          xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="SalesOrPurchase"                desc="A price percent for this item (you might use a price percent if, for example, you are a service shop that calculates labor costs as a percentage of parts costs). If you set PricePercent, Price will be set to zero. Not used for payment, sales tax, or subtotal items." />
+    <attr name="AverageCost"           xs:type="double"       readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="AverageCost"                    desc="The average cost of the item." />
+    <attr name="IsActive"              xs:type="boolean"      readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="IsActive"                       desc="Whether the item is active or not."  />
+    <attr name="PurchaseCost"          xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="SalesPrice,PurchaseCost"        desc="Purchase cost for the item."  />
+    <attr name="PurchaseDescription"   xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="5000"     normalized="true"     other:selectcolumnname="SalesDesc,PurchaseDesc"         desc="Purchase description for the item."/>
+    <attr name="ExpenseAccount"        xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"   columnsize="1000"     normalized="true"     other:selectcolumnname="ExpenseAccountRef"              desc="Expense account for the item." />
+    <attr name="ExpenseAccountId"      xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"         columnsize="255"      normalized="true"     other:selectcolumnname="ExpenseAccountRef"              desc="Expense account for the item." />
+    <attr name="PreferredVendor"       xs:type="string"       readonly="false"     required="false"    references="Vendors.Name"        columnsize="1000"     normalized="true"     other:selectcolumnname="PrefVendorRef"                  desc="Preferred vendor for the item." />
+    <attr name="PreferredVendorId"     xs:type="string"       readonly="false"     required="false"    references="Vendors.ID"          columnsize="255"      normalized="true"     other:selectcolumnname="PrefVendorRef"                  desc="Preferred vendor for the item." />
+    <attr name="QuantityOnHand"        xs:type="double"       readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="QuantityOnHand"                 desc="Quantity in stock for this inventory item." />
+    <attr name="QuantityOnOrder"       xs:type="double"       readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="QuantityOnOrder"                desc="The number of these items that have been ordered from vendors, but not received." />
+    <attr name="QuantityOnSalesOrder"  xs:type="double"       readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="QuantityOnSalesOrder"           desc="The number of these items that have been ordered by customers, but not delivered." />
+    <attr name="InventoryDate"         xs:type="date"         readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="InventoryDate"                  desc="The date when the item was converted into an inventory item." />
+    <attr name="ReorderPoint"          xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="ReorderPoint"                   desc="Quantity at which the user will be reminded to reorder this inventory item." />
+    <attr name="Barcode"               xs:type="string"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="Barcode"                        desc="Barcode for the item."/>     
+    <attr name="TaxCode"               xs:type="string"       readonly="false"     required="false"    references="SalesTaxCodes.Name"  columnsize="3"        normalized="true"     other:selectcolumnname="SalesTaxCodeRef"                desc="Reference to a sales tax code predefined within QuickBooks." />
+    <attr name="TaxCodeId"             xs:type="string"       readonly="false"     required="false"    references="SalesTaxCodes.ID"    columnsize="255"      normalized="true"     other:selectcolumnname="SalesTaxCodeRef"                desc="Reference to a sales tax code predefined within QuickBooks." />
+    <attr name="IsTaxIncluded"         xs:type="boolean"      readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="IsTaxIncluded"                  desc="Determines if tax is included in the transaction amount. Available in only international editions of QuickBooks."/> 
+    <attr name="PurchaseTaxCode"       xs:type="string"       readonly="false"     required="false"    references="SalesTaxCodes.Name"  columnsize="3"        normalized="true"     other:selectcolumnname="PurchaseTaxCodeRef"             desc="Reference to a purchase tax code predefined within QuickBooks. Only available in international versions of QuickBooks." />
+    <attr name="PurchaseTaxCodeId"     xs:type="string"       readonly="false"     required="false"    references="SalesTaxCodes.ID"    columnsize="255"      normalized="true"     other:selectcolumnname="PurchaseTaxCodeRef"             desc="This is a reference to a purchase tax code predefined within QuickBooks. Available in only international versions of QuickBooks." />
+    <attr name="PartNumber"            xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="31"       normalized="true"     other:selectcolumnname="ManufacturerPartNumber"         desc="The manufacturer's part number for the item. This property requires QBXML Version 7.0 or higher and is only applicable to inventory and noninventory item types." />
+    <attr name="PaymentMethodName"     xs:type="string"       readonly="false"     required="false"    references="PaymentMethods.Name" columnsize="100"      normalized="true"     other:selectcolumnname="PaymentMethodRef"               desc="The method of payment: check, credit card, etc." />
+    <attr name="PaymentMethodId"       xs:type="string"       readonly="false"     required="false"    references="PaymentMethods.ID"   columnsize="255"      normalized="true"     other:selectcolumnname="PaymentMethodRef"               desc="The method of payment: check, credit card, etc." />
+    <attr name="TaxRate"               xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="TaxRate"                        desc="The percentage rate of tax." />
+    <attr name="TaxVendorName"         xs:type="string"       readonly="false"     required="false"    references="SalesTaxItems.Name"  columnsize="1000"     normalized="true"     other:selectcolumnname="TaxVendorRef"                   desc="The VENDOR or tax agency to whom taxes are due." />
+    <attr name="TaxVendorId"           xs:type="string"       readonly="false"     required="false"    references="SalesTaxItems.ID"    columnsize="255"      normalized="true"     other:selectcolumnname="TaxVendorRef"                   desc="The VENDOR or tax agency to whom taxes are due." />
+    <attr name="SpecialItemType"       xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="50"       normalized="true"     other:selectcolumnname="SpecialItemType"                desc="The type of the item when the value of item type is Unknown. Calling Add on such an item will result in an error, however Get or GetByName can get any item without causing an error."  values="FinanceCharge, ReimbursableExpenseGroup, ReimbursableExpenseSubtotal" />
+    <attr name="VendorOrPayeeName"     xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="50"       normalized="true"     other:selectcolumnname="VendorOrPayeeName"              desc="Name of the vendor from whom this asset was purchased." />
+    <attr name="IsPrintItemsInGroup"   xs:type="boolean"      readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="IsPrintItemsInGroup"            desc="If true, a list of this group's individual items their amounts will appear on printed forms." />
+    <attr name="SalesExpense"          xs:type="string"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="SalesDesc,FixedAssetSalesInfo"  desc="Any expenses that were incurred during the sale of a fixed asset. This is applicable only if the asset has been sold." />
+    <attr name="AssetAcquiredAs"       xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="3"        normalized="true"     other:selectcolumnname="AcquiredAs"                     desc="Indicates whether this item was new or used when the business acquired it. If AssetAcquiredAs is left blank, it will not be sent in the request." value="New,Old" />
+    <attr name="AssetDescription"      xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="5000"     normalized="true"     other:selectcolumnname="AssetDesc"                      desc="Description of the asset."/>
+    <attr name="AssetLocation"         xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="50"       normalized="true"     other:selectcolumnname="Location"                       desc="Where the asset is located or has been placed into service." />
+    <attr name="AssetPONumber"         xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="30"       normalized="true"     other:selectcolumnname="PONumber"                       desc="The purchase order number associated with this asset." />
+    <attr name="AssetSerialNumber"     xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="5000"     normalized="true"     other:selectcolumnname="SerialNumber"                   desc="The serial number of the asset."/>
+    <attr name="AssetWarrantyExpires"  xs:type="date"         readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="WarrantyExpDate"                desc="The date when the warranty for this asset expires." />
+    <attr name="AssetNotes"            xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="5000"     normalized="true"     other:selectcolumnname="Notes"                          desc="Additional information about the asset."/>
+    <attr name="AssetNumber"           xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="10"       normalized="true"     other:selectcolumnname="SerialNumber"                   desc="The number used by the QuickBooks Fixed Asset Manager to identify this asset." />
+    <attr name="AssetCostBasis"        xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="CostBasis"                      desc="The total cost of the fixed asset. This can include the cost of improvements or repairs. This amount is used to figure depreciation." />
+    <attr name="AssetDepreciation"     xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="YearEndAccumulatedDepreciation" desc="The amount the fixed asset has lost in value since it was purchased, as of the end of the year." />
+    <attr name="AssetBookValue"        xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="YearEndBookValue"               desc="A reasonable estimate of the sales value of the fixed asset, as of the end of the year." />
+    <attr name="UnitOfMeasure"         xs:type="string"       readonly="false"     required="false"    references="UnitOfMeasure.Name"  columnsize="100"      normalized="true"     other:selectcolumnname="UnitOfMeasureSetRef"            desc="Name of the units that the item is measured in. Requires QBXML Version 7.0 or higher." />
+    <attr name="UnitOfMeasureId"       xs:type="string"       readonly="false"     required="false"    references="UnitOfMeasure.ID"    columnsize="255"      normalized="true"     other:selectcolumnname="UnitOfMeasureSetRef"            desc="Id of the units that the item is measured in. Requires QBXML Version 7.0 or higher." />
+    <attr name="Sublevel"              xs:type="integer"      readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="Sublevel"                       desc="The number of ancestors this item has." />
+    <attr name="LineAggregate"         xs:type="string"       readonly="true"      required="false"    references=""                    columnsize="5000"     normalized="false"    other:selectcolumnname="ItemInventoryAssemblyLine,ItemGroupLine"   other:qbxmlversion=""        desc="An aggregate of the line item data."/>
+    <attr name="CustomFields"          xs:type="string"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="DataExtRet"                     desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="EditSequence"          xs:type="string"       readonly="true"      required="false"    references=""                    columnsize="16"       normalized="true"     other:selectcolumnname="EditSequence"                   desc="An identifier for this copy of the object."/> 
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="TimeModified"                   desc="When the item was last modified."/> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"     other:selectcolumnname="TimeCreated"                    desc="When the item was created."/>
+
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="Item"/>
+  <rsb:set attr="objecttype"    value="KnownList"/>
+  <rsb:set attr="outputitem"    value="entity"/>
+  <rsb:set attr="aggregatecolumns" value="LineAggregate"/>
+  <rsb:set attr="childtables" value="ItemLineItems"/>
+  <rsb:set attr="childlinekeys" value="LineItemId"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

@@ -1,0 +1,66 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="SalesTaxCodes" description="Create, update, delete, and query QuickBooks Sales Tax Codes.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"             xs:type="string"       readonly="true"      key="true"          columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID"              desc="The unique identifier." /> 
+    <attr name="Name"           xs:type="string"       readonly="false"     required="true"     columnsize="3"        normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Name"                desc="The name of the sales tax code." /> 
+    <attr name="Description"    xs:type="string"       readonly="false"     required="false"    columnsize="31"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Desc"                desc="The description of the sales tax code." /> 
+    <attr name="IsActive"       xs:type="boolean"      readonly="false"     required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="IsActive"            desc="Whether or not the other name is active." />
+    <attr name="IsTaxable"      xs:type="boolean"      readonly="false"     required="true"     columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="IsTaxable"           desc="Whether or not the other name is taxable." />
+    <attr name="ItemPurchaseTaxRef_FullName" xs:type="string"  readonly="false"    required="false"  columnsize="1000" normalized="true"    other:qbxmlversion="6.0"     other:selectcolumnname="ItemPurchaseTaxRef"  references=""          desc="Refers to the purchase tax item. Only available in international versions of QuickBooks."/>
+    <attr name="ItemPurchaseTaxRef_ListId"   xs:type="string"  readonly="false"    required="false"  columnsize="255"  normalized="true"    other:qbxmlversion="6.0"     other:selectcolumnname="ItemPurchaseTaxRef"  references=""          desc="Refers to the purchase tax item. Only available in international versions of QuickBooks."/>
+    <attr name="ItemSalesTaxRef_FullName"    xs:type="string"  readonly="false"    required="false"  columnsize="1000" normalized="true"    other:qbxmlversion="6.0"     other:selectcolumnname="ItemSalesTaxRef"     references="SalesTaxItems.Name"  desc="Refers to the sales tax item. Only available in international versions of QuickBooks."/>
+    <attr name="ItemSalesTaxRef_ListId"      xs:type="string"  readonly="false"    required="false"  columnsize="255"  normalized="true"    other:qbxmlversion="6.0"     other:selectcolumnname="ItemSalesTaxRef"     references="SalesTaxItems.ID"    desc="Refers to the sales tax item. Only available in international versions of QuickBooks."/>
+    <attr name="TimeCreated"    xs:type="datetime"     readonly="true"      required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"         desc="The datetime the sales tax code was made."/> 
+    <attr name="TimeModified"   xs:type="datetime"     readonly="true"      required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"        desc="The last datetime the sales tax code was modified."/> 
+    <attr name="EditSequence"   xs:type="string"       readonly="true"      required="false"    columnsize="16"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EditSequence"        desc="An identifier used for versioning for this copy of the object." /> 
+    
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"       value="SalesTaxCode"/>
+  <rsb:set attr="objecttype"       value="List"/>
+  <rsb:set attr="querytype"        value="SalesTaxCode"/>
+  
+  <rsb:check attr="_input.IsActive">
+    <rsb:set attr="IsActive" value="[_input.IsActive | tolower()]"/>
+  </rsb:check>
+  <rsb:check attr="_input.IsTaxable">
+    <rsb:set attr="IsTaxable" value="[_input.IsTaxable | tolower()]"/>
+  </rsb:check>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:set attr="Description" value="[qb:desc | def('')]"/>
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>  

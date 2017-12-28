@@ -1,0 +1,47 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="Transactions" description="Query QuickBooks transactions. You may search the Transactions using a number of values including Type, Entity, Account, ReferenceNumber, Item, Class, Date, and TimeModified.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                   columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID"                  desc="The unique identifier of the transaction." /> 
+    <attr name="TxnLineId"             xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="100"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnLineID"              desc="The id of the individual line item."/> 
+    <attr name="Type"                  xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="100"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnType"                desc="The transaction type of the result."/> 
+    <attr name="Date"                  xs:type="datetime"     readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnDate"                desc="The date of the transaction."/> 
+    <attr name="Entity"                xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EntityRef"              desc="The name of the entity associated with the transaction. For example, the name of a customer, vendor, employee, or other name."/> 
+    <attr name="EntityId"              xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EntityRef"              desc="The Id of the entity associated with the transaction. For example, the name of a customer, vendor, employee, or other name."/> 
+    <attr name="AccountName"           xs:type="string"       readonly="true"      required="false"    references="Accounts.Name"      columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="AccountRef"             desc="The name of the account associated with the transaction."/> 
+    <attr name="AccountId"             xs:type="string"       readonly="true"      required="false"    references="Accounts.ID"        columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="AccountRef"             desc="The Id of the account associated with the transaction."/> 
+    <attr name="ReferenceNumber"       xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="21"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="RefNumber"              desc="The reference number of the transaction, if applicable."/> 
+    <attr name="Amount"                xs:type="string"       readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Amount"                 desc="The amount of the transaction."/> 
+    <attr name="CurrencyName"          xs:type="string"       readonly="false"     required="false"    references="Currency.Name"      columnsize="64"       normalized="true"     other:qbxmlversion="8.0"     other:selectcolumnname="CurrencyRef"            desc="The name of the currency for this customer. A minimum QBXML Version of 8.0 is required for this feature."/>
+    <attr name="CurrencyId"            xs:type="string"       readonly="false"     required="false"    references="Currency.ID"        columnsize="255"      normalized="true"     other:qbxmlversion="8.0"     other:selectcolumnname="CurrencyRef"            desc="The unique Id of the currency for this customer. A minimum QBXML Version of 8.0 is required for this feature."/>
+    <attr name="ExchangeRate"          xs:type="double"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion="8.0"     other:selectcolumnname="ExchangeRate"           desc="The market price for which this currency can be exchanged for the currency used by the QuickBooks company file as the home currency." /> 
+    <attr name="Memo"                  xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="5000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Memo"                   desc="The memo appearing on the transaction."/> 
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"           desc="When the transaction was last modified."/> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"            desc="When the transaction was created."/> 
+
+    <!-- Psuedo-Column definitions -->
+    <input name="ItemName"             desc="The item name appearing in the transaction." />
+    <input name="ItemId"               desc="The item Id appearing in the transaction." />
+    <input name="ClassName"            desc="The class name applied to the transaction."/>
+    <input name="ClassId"              desc="The class Id applied to the transaction."/>
+    <input name="PostingStatus"        desc="The posting status of transactions to return." default="Either" values="Either, NonPosting, Posting" />
+    <input name="IsPaid"               desc="The paid status of transactions to return. Enter either true or false."/>
+    <input name="DetailLevel"          desc="The level of detail to use when filtering objects." default="SummaryOnly" values="All,AllExceptSummary,SummaryOnly"/>
+    
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+    
+  </rsb:info>
+  
+  <rsb:set attr="entityname"     value="Transaction"/>
+  <rsb:set attr="objecttype"     value="Transaction"/>
+  <rsb:set attr="querytype"      value="OtherTransaction"/>
+  <rsb:set attr="renameoutputs"  value="TxnType,Type,TxnDate,Date,EntityRef_FullName,Entity,EntityRef_ListID,EntityId,AccountRef_FullName,AccountName,Accountref_ListID,AccountId,RefNumber,ReferenceNumber,CurrencyRef_FullName,CurrencyName,CurrencyRef_listID,CurrencyId"/>
+    
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+  
+</rsb:script>

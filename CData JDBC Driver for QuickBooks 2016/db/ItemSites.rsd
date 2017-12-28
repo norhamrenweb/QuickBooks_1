@@ -1,0 +1,43 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="ItemSites" description="Create, update, delete, and query QuickBooks Item Sites. Item sites are only available in QuickBooks Enterprise 2010 and above, and only with the Advanced Inventory add-on. This table requires a minimum of QBXML version 10.0.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                                        xs:type="string"       readonly="true"     key="true"                references=""                     columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="ListID"                                        desc="The Id of the inventory site."/>
+    <attr name="ItemInventoryAssemblyRef_ListID"           xs:type="string"       readonly="true"     required="false"          references="Items.ID"             columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="ItemInventoryAssemblyRef"                      desc="Reference to the Id of an inventory assembly located on the item site. Either an inventory assembly or an inventory item will be specified, but not both."/>
+    <attr name="ItemInventoryAssemblyRef_FullName"         xs:type="string"       readonly="true"     required="false"          references="Items.FullName"       columnsize="1000"     normalized="true"    other:qbxmlversion=""        other:selectcolumnname="ItemInventoryAssemblyRef"                      desc="Reference to the full name of an inventory assembly located on the item site. Either an inventory assembly or an inventory item will be specified, but not both."/>
+    <attr name="ItemInventoryRef_ListID"                   xs:type="string"       readonly="true"     required="false"          references="Items.ID"             columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="ItemInventoryRef"                              desc="Reference to the Id of an inventory item located on the item site. Either an inventory assembly or an inventory item will be specified, but not both."/>
+    <attr name="ItemInventoryRef_FullName"                 xs:type="string"       readonly="true"     required="false"          references="Items.FullName"       columnsize="1000"     normalized="true"    other:qbxmlversion=""        other:selectcolumnname="ItemInventoryRef"                              desc="Reference to the full name of an inventory item located on the item Site. Either an inventory assembly or an Inventory Item will be specified, but not both."/>
+    <attr name="InventorySiteRef_ListID"                   xs:type="string"       readonly="true"     required="false"          references="InventorySites.ID"    columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="InventorySiteRef"                              desc="Reference to the Id of an inventory site."/>
+    <attr name="InventorySiteRef_FullName"                 xs:type="string"       readonly="true"     required="false"          references="InventorySites.Name"  columnsize="31"       normalized="true"    other:qbxmlversion=""        other:selectcolumnname="InventorySiteRef"                              desc="Reference to the full name of an inventory site."/>
+    <attr name="InventorySiteLocationRef_ListID"           xs:type="string"       readonly="true"     required="false"          references=""                     columnsize="255"      normalized="true"    other:qbxmlversion="12.0"    other:selectcolumnname="InventorySiteLocationRef"                      desc="Reference to the Id of an inventory site location. This field requires QBXML version 12.0 or higher."/>
+    <attr name="InventorySiteLocationRef_FullName"         xs:type="string"       readonly="true"     required="false"          references=""                     columnsize="31"       normalized="true"    other:qbxmlversion="12.0"    other:selectcolumnname="InventorySiteLocationRef"                      desc="Reference to the full name of an inventory site location. This field requires QBXML version 12.0 or higher."/>
+    <attr name="ReorderLevel"                              xs:type="double"       readonly="true"     required="false"          references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="ReorderLevel"                                  desc="The quantity at which to reorder the inventory assembly or inventory item."/>
+    <attr name="QuantityOnHand"                            xs:type="double"       readonly="true"     required="false"          references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="QuantityOnHand"                                desc="The total quantity of the inventory assemblies or inventory items in the inventory."/>
+    <attr name="QuantityOnPurchaseOrders"                  xs:type="double"       readonly="true"     required="false"          references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="QuantityOnPurchaseOrders"                      desc="The quantity of the inventory assemblies or inventory items currently on open purchase orders."/>
+    <attr name="QuantityOnSalesOrders"                     xs:type="double"       readonly="true"     required="false"          references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="QuantityOnSalesOrders"                         desc="The quantity of the inventory assemblies or inventory items currently on open sales orders."/>
+    <attr name="QuantityToBeBuiltByPendingBuildTxns"       xs:type="double"       readonly="true"     required="false"          references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="QuantityToBeBuiltByPendingBuildTxns"           desc="The quantity of the inventory assemblies or inventory items are in use by pending Build Assembly transactions."/>
+    <attr name="QuantityRequiredByPendingBuildTxns"        xs:type="double"       readonly="true"     required="false"          references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="QuantityRequiredByPendingBuildTxns"            desc="The quantity of the inventory assemblies or inventory items that are required to complete remaining build assembly transactions."/
+    <attr name="QuantityOnPendingTransfers"                xs:type="double"       readonly="true"     required="false"          references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="QuantityOnPendingTransfers"                    desc="The quantity of the inventory assemblies or inventory items that are currently on pending transfer inventory transactions."/>
+    <attr name="EditSequence"                              xs:type="string"       readonly="true"     required="false"          references=""                     columnsize="16"       normalized="true"    other:qbxmlversion=""        other:selectcolumnname="EditSequence"                                  desc="A string indicating the revision of the inventory site."/>
+    <attr name="TimeCreated"                               xs:type="datetime"     readonly="true"     required="false"          references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="TimeCreated"                                   desc="The time the inventory site was created."/>
+    <attr name="TimeModified"                              xs:type="datetime"     readonly="true"     required="false"          references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="TimeModified"                                  desc="The time the inventory site was modified."/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"             desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="ItemSites"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="OtherList"/>  
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+</rsb:script>

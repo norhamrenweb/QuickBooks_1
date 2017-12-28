@@ -1,0 +1,58 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="VendorTypes" description="Create, update, delete, and query QuickBooks Vendor Types.">
+
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"     key="true"          references=""                      columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID"            desc="The unique identifier of the vendor type."/>
+    <attr name="Name"                       xs:type="string"       readonly="false"    required="true"     references=""                      columnsize="31"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Name"              desc="The name of the vendor type."/>
+    <attr name="FullName"                   xs:type="string"       readonly="false"    required="true"     references=""                      columnsize="159"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="FullName"          desc="The name of the vendor type."/>
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"    required="false"    references=""                      columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="IsActive"          desc="Boolean determining if the vendor type is active."/>
+    <attr name="ParentRef_FullName"         xs:type="string"       readonly="false"    required="false"    references="VendorTypes.FullName"  columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ParentRef"         desc="Full name of the parent for the vendor type. You may specify only ParentRef_FullName or ParentRef_ListId on INSERT/UPDATE statements and not both."/>
+    <attr name="ParentRef_ListId"           xs:type="string"       readonly="false"    required="false"    references="VendorTypes.ID"        columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ParentRef"         desc="Id for the parent of the vendor type. You may specify only ParentRef_FullName or ParentRef_ListId on INSERT/UPDATE statements and not both."/>
+    <attr name="Sublevel"                   xs:type="integer"      readonly="true"     required="false"    references=""                      columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Sublevel"          desc="How many parents the vendor type has."/>
+    <attr name="EditSequence"               xs:type="string"       readonly="true"     required="false"    references=""                      columnsize="16"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="EditSequence"      desc="A string indicating the revision of the payment method."/>
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"     required="false"    references=""                      columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeCreated"       desc="The time the vendor type was created."/>
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"     required="false"    references=""                      columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeModified"      desc="The last time the vendor type was modified."/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="VendorType"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="OtherList"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

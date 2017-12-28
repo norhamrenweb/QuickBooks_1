@@ -1,0 +1,108 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="Vendors" description="Create, update, delete, and query QuickBooks Vendors.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"       key="true"          references=""                   columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID"                      desc="The unique identifier of the Vendor." /> 
+    <attr name="Name"                  xs:type="string"       readonly="false"      required="true"     references=""                   columnsize="100"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Name"                        desc="The vendor's name. This is required to have a value when inserting."/> 
+    <attr name="Salutation"            xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="15"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Salutation"                  desc="A salutation, such as Mr., Mrs., etc."/>
+    <attr name="FirstName"             xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="25"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="FirstName"                   desc="A first name."/>
+    <attr name="MiddleInitial"         xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="25"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="MiddleName"                  desc="The middle initial."/>
+    <attr name="LastName"              xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="25"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="LastName"                    desc="A last name."/>
+    <attr name="Company"               xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="50"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="CompanyName"                 desc="The vendor's company name."/> 
+    <attr name="Contact"               xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="1023"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Contact"                     desc="The contact's name."/> 
+    <attr name="AccountNumber"         xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="99"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="AccountNumber"               desc="The account number for this vendor."/> 
+    <attr name="Type"                  xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="1000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VendorTypeRef"               desc="The type of vendor, predefined in QuickBooks."/> 
+    <attr name="TypeId"                xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VendorTypeRef"               desc="The type of vendor, predefined in QuickBooks."/> 
+    <attr name="CreditLimit"           xs:type="double"       readonly="false"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="CreditLimit"                 desc="The credit limit for this vendor."/> 
+    <attr name="TaxIdentity"           xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="20"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VendorTaxIdent"              desc="String that identifies the vendor to the IRS."/>
+    <attr name="SalesTaxCountry"       xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="100"      normalized="true"      other:qbxmlversion="8.0"     other:selectcolumnname="SalesTaxCountry"             desc="Identifies the country collecting applicable sales taxes. Only available in international editons of QuickBooks. QBXML version must be set to 8.0 or higher to use this field."/>
+    <attr name="AlternateContact"      xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="41"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="AltContact"                  desc="The alternate contact's name."/> 
+    <attr name="Phone"                 xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="21"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Phone"                       desc="The vendor's telephone number."/> 
+    <attr name="Fax"                   xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="21"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Fax"                         desc="The vendor's fax number."/> 
+    <attr name="AlternatePhone"        xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="21"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="AltPhone"                    desc="The vendor's alternate telephone number."/> 
+    <attr name="Email"                 xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="1023"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Email"                       desc="The vendor's email address."/> 
+    <attr name="Cc"                    xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="1023"     normalized="true"      other:qbxmlversion="12.0"    other:selectcolumnname="Cc"                          desc="An additional email adress for a vendor."/> 
+    <attr name="Notes"                 xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="5000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Note"                        desc="Notes on this vendor."   /> 
+    <attr name="Address"               xs:type="string"       readonly="true"       required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VendorAddress"               desc="Full address returned by QuickBooks."/> 
+    <attr name="Line1"                 xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="500"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VendorAddress"               desc="First line of the address."/> 
+    <attr name="Line2"                 xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="500"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VendorAddress"               desc="Second line of the address."/> 
+    <attr name="Line3"                 xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="500"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VendorAddress"               desc="Third line of the address."/> 
+    <attr name="Line4"                 xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="500"      normalized="true"      other:qbxmlversion="2.0"     other:selectcolumnname="VendorAddress"               desc="Fourth line of the address."/> 
+    <attr name="Line5"                 xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="41"       normalized="true"      other:qbxmlversion="6.0"     other:selectcolumnname="VendorAddress"               desc="Fifth line of the address."/> 
+    <attr name="City"                  xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VendorAddress"               desc="City name for the address of the vendor."/> 
+    <attr name="State"                 xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VendorAddress"               desc="State name for the address of the vendor."/> 
+    <attr name="PostalCode"            xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="30"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VendorAddress"               desc="Postal code for the address of the vendor."/> 
+    <attr name="Country"               xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VendorAddress"               desc="Country for the address of the vendor."/> 
+    <attr name="Note"                  xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="41"       normalized="true"      other:qbxmlversion="6.0"     other:selectcolumnname="VendorAddress"               desc="Note for the address of the vendor." />
+    <attr name="ShippingAddress"       xs:type="string"       readonly="true"       required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ShipAddress"                 desc="Full shipping address returned by QuickBooks. Requires QBXML Version 11.0 or higher."/> 
+    <attr name="ShippingLine1"         xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="500"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ShipAddress"                 desc="First line of the shipping address. Requires QBXML Version 11.0 or higher."/> 
+    <attr name="ShippingLine2"         xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="500"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ShipAddress"                 desc="Second line of the shipping address. Requires QBXML Version 11.0 or higher."/> 
+    <attr name="ShippingLine3"         xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="500"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ShipAddress"                 desc="Third line of the shipping address. Requires QBXML Version 11.0 or higher."/> 
+    <attr name="ShippingLine4"         xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="500"      normalized="true"      other:qbxmlversion="2.0"     other:selectcolumnname="ShipAddress"                 desc="Fourth line of the shipping address. Requires QBXML Version 11.0 or higher."/> 
+    <attr name="ShippingLine5"         xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="41"       normalized="true"      other:qbxmlversion="6.0"     other:selectcolumnname="ShipAddress"                 desc="Fifth line of the shipping address. Requires QBXML Version 11.0 or higher."/> 
+    <attr name="ShippingCity"          xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ShipAddress"                 desc="City name for the shipping address of the vendor. Requires QBXML Version 11.0 or higher."/> 
+    <attr name="ShippingState"         xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ShipAddress"                 desc="State name for the shipping address of the vendor. Requires QBXML Version 11.0 or higher."/> 
+    <attr name="ShippingPostalCode"    xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="30"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ShipAddress"                 desc="Postal code for the shipping address of the vendor. Requires QBXML Version 11.0 or higher."/> 
+    <attr name="ShippingCountry"       xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ShipAddress"                 desc="Country for the shipping address of the vendor. Requires QBXML Version 11.0 or higher."/> 
+    <attr name="ShippingNote"          xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="41"       normalized="true"      other:qbxmlversion="6.0"     other:selectcolumnname="ShipAddress"                 desc="Note for the shipping address of the vendor. Requires QBXML Version 11.0 or higher." />
+    <attr name="Balance"               xs:type="double"       readonly="true"       required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Balance"                     desc="Open balance for this vendor." /> 
+    <attr name="Terms"                 xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="100"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TermsRef"                    desc="A reference to terms of payment for this vendor. A typical example might be '2% 10 Net 60'. This field can be set in inserts but not in updates."/>
+    <attr name="TermsId"               xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TermsRef"                    desc="A reference to terms of payment for this vendor."/>
+    <attr name="EligibleFor1099"       xs:type="boolean"      readonly="false"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="IsVendorEligibleFor1099"     desc="Whether this vendor is eligible for 1099."/> 
+    <attr name="NameOnCheck"           xs:type="string"       readonly="false"      required="false"    references=""                   columnsize="110"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="NameOnCheck"                 desc="The name to be printed on checks."/> 
+    <attr name="CurrencyName"          xs:type="string"       readonly="false"      required="false"    references="Currency.Name"      columnsize="64"       normalized="true"      other:qbxmlversion="8.0"     other:selectcolumnname="CurrencyRef"                 desc="Name of the currency code used for this vendor. QBXML version must be set to 8.0 or higher to use this field."/> 
+    <attr name="CurrencyId"            xs:type="string"       readonly="false"      required="false"    references="Currency.ID"        columnsize="255"      normalized="true"      other:qbxmlversion="8.0"     other:selectcolumnname="CurrencyRef"                 desc="Id of the currency code used for this vendor. QBXML version must be set to 8.0 or higher to use this field."/> 
+    <attr name="IsActive"              xs:type="boolean"      readonly="false"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="IsActive"                    desc="Whether or not the vendor is active." />
+    <attr name="CustomFields"          xs:type="string"       readonly="false"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="DataExtRet"                  desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="EditSequence"          xs:type="string"       readonly="true"       required="false"    references=""                   columnsize="16"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="EditSequence"                desc="An identifier for this copy of the object."/> 
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"       required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeModified"                desc="When the vendor was last modified." /> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"       required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeCreated"                 desc="When the vendor was created."/> 
+    <attr name="PrefillAccountId1"     xs:type="string"       readonly="false"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="PrefillAccountRef"           desc="Id of an Account Prefill defined for this vendor." /> 
+    <attr name="PrefillAccountName1"   xs:type="string"       readonly="false"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="PrefillAccountRef"           desc="Name of an Account Prefill defined for this vendor."/> 
+    <attr name="PrefillAccountId2"     xs:type="string"       readonly="false"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="PrefillAccountRef"           desc="Id of an Account Prefill defined for this vendor." /> 
+    <attr name="PrefillAccountName2"   xs:type="string"       readonly="false"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="PrefillAccountRef"           desc="Name of an Account Prefill defined for this vendor."/> 
+    <attr name="PrefillAccountId3"     xs:type="string"       readonly="false"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="PrefillAccountRef"           desc="Id of an Account Prefill defined for this vendor." /> 
+    <attr name="PrefillAccountName3"   xs:type="string"       readonly="false"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="PrefillAccountRef"           desc="Name of an Account Prefill defined for this vendor."/> 
+
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+    
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="Vendor"/>
+  <rsb:set attr="objecttype"     value="KnownList"/>
+    
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

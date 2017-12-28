@@ -1,0 +1,42 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="SalesOrderLinkedTransactions" description="Query QuickBooks Sales Order Linked Transactions.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                   columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The unique identifier in the format SalesOrderId|ItemLineId." /> 
+    <attr name="SalesOrderId"          xs:type="string"       readonly="true"      required="false"    references="SalesOrders.ID"     columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The item identifier." />
+    <attr name="ReferenceNumber"       xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="21"       normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,RefNumber,LinkedTxn"         desc="Transaction reference number."/> 
+    <attr name="TxnNumber"             xs:type="integer"      readonly="true"      required="false"    references=""                   columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnNumber,LinkedTxn"         desc="The transaction number. An identifying number for the transaction, different from the QuickBooks-generated Id." /> 
+    <attr name="CustomerName"          xs:type="string"       readonly="true"      required="false"    references="Customers.FullName" columnsize="1000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,CustomerRef,LinkedTxn"       desc="Customer name this transaction is recorded under."/> 
+    <attr name="CustomerId"            xs:type="string"       readonly="true"      required="false"    references="Customers.ID"       columnsize="255"      normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,CustomerRef,LinkedTxn"       desc="Customer Id this transaction is recorded under."/> 
+    <attr name="Date"                  xs:type="date"         readonly="true"      required="false"    references=""                   columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnDate,LinkedTxn"           desc="Transaction date." /> 
+    <attr name="TransactionId#"        xs:type="string"       readonly="true"      required="false"    references="Invoices.ID"        columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The Id of the linked transaction."/>
+    <attr name="TransactionAmount#"    xs:type="double"       readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The amount of the linked transaction."/>
+    <attr name="TransactionDate#"      xs:type="date"         readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The date of the linked transaction." />
+    <attr name="TransactionReferenceNumber#"     xs:type="string"       readonly="true"     required="false"    references=""          columnsize="21"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"        desc="The reference number of the linked transaction." />
+    <attr name="TransactionType#"      xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="100"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The type of linked transaction."/>
+    <attr name="TransactionLinkType#"  xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="100"      normalized="true"     other:qbxmlversion="3.0"     other:selectcolumnname="TxnID,LinkedTxn"                   desc="The link type between the sales order and linked transaction." />
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeModified,LinkedTxn"      desc="When the sales order was last modified."/> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeCreated,LinkedTxn"       desc="When the sales order was created."/> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="ItemPriceLevel#"      desc="Item price level name. QuickBooks will not return the price level." />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="SalesOrder"/>
+  <rsb:set attr="objecttype"    value="LineItem"/>
+  <rsb:set attr="linekey"       value="TransactionId"/>
+  <rsb:set attr="includelinkedtxns" value="true"/>
+  <rsb:set attr="outputitem"    value="linkedtxn"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+  
+</rsb:script>  

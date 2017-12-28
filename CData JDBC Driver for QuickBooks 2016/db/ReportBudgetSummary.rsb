@@ -1,0 +1,22 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+  
+    <rsb:info title="ReportBudgetSummary" description="Generates budget reports." >
+
+          <input name="reporttype" description="The type of the report." value="BALANCESHEETBUDGETOVERVIEW,BALANCESHEETBUDGETVSACTUAL,PROFITANDLOSSBUDGETOVERVIEW,PROFITANDLOSSBUDGETPERFORMANCE,PROFITANDLOSSBUDGETVSACTUAL," required="true" default="BALANCESHEETBUDGETOVERVIEW" />
+          <input name="fiscalyear" description="The fiscal year of the budget to be queried. For example, 2014."  />
+          <input name="budgetcriterion" description="Specifies what this budget covers." value="NONE,ACCOUNTS,ACCOUNTSANDCLASSES,ACCOUNTSANDCUSTOMERS," default="NONE" />
+          <input name="summarizebudgetcolumnsby" description="The data the report calculates and how the columns will be labeled across the top of the report." value="NONE,CLASS,CUSTOMER,DATE," default="NONE" />
+          <input name="summarizebudgetrowsby" description="How rows are to be labeled in the report. For example, if you set the value to Account, the row labels of the report might be Checking, Savings, and so on." value="NONE,CLASS,CUSTOMER,ACCOUNT," default="NONE" />
+          <input name="delimiter" description="Set the delimiter character for the fields" default=";" /> 
+          
+          <output name=rowtype         desc="The type of row being output. For example, TitleRow, TextRow, DataRow, SubtotalRow, or TotalRow." />
+          <output name=column_value    desc="The data in this row in a semicolon separated list of the report." />
+    </rsb:info>
+  
+  <rsb:set attr="operationname" value="qbReportBudgetSummary"/>
+  
+  <rsb:call op="quickbooksadoDesktopExecuteStoredProcedure" output="out">
+    <rsb:push />
+  </rsb:call>
+
+</rsb:script>

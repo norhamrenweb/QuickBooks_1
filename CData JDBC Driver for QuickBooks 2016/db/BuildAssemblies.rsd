@@ -1,0 +1,71 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="BuildAssemblies" description="Insert, Update, delete, and query QuickBooks Build Assembly transactions.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                                 xs:type="string"       readonly="true"      key="true"          references=""                      columnsize="255"      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TxnID"                         desc="The unique identifier." /> 
+    <attr name="TxnNumber"                          xs:type="integer"      readonly="true"      required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TxnNumber"                     desc="An identifying number for this transaction."/> 
+	  <attr name="ItemInventoryAssemblyRef_ListID"    xs:type="string"       readonly="false"     required="false"    references="Items.ID"              columnsize="255"      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="ItemInventoryAssemblyRef"      desc="A reference to the Id of an inventory assembly. Either ItemInventoryAssemblyRef_ListID or ItemInventoryAssemblyRef_FullName is required when inserting a BuildAssembly."/> 
+	  <attr name="ItemInventoryAssemblyRef_FullName"  xs:type="string"       readonly="false"     required="false"    references="Items.FullName"        columnsize="1000"     normalized="true"     other:qbxmlversion=""      other:selectcolumnname="ItemInventoryAssemblyRef"      desc="A reference to the name of an inventory assembly. Either ItemInventoryAssemblyRef_ListID or ItemInventoryAssemblyRef_FullName is required when inserting a BuildAssembly."/> 
+	  <attr name="InventorySiteRef_ListID"            xs:type="string"       readonly="false"     required="false"    references="InventorySites.ID"     columnsize="255"      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="InventorySiteRef"              desc="A reference to the Id of an inventory site."/> 
+	  <attr name="InventorySiteRef_FullName"          xs:type="string"       readonly="false"     required="false"    references="InventorySites.Name"   columnsize="31"       normalized="true"     other:qbxmlversion=""      other:selectcolumnname="InventorySiteRef"              desc="A reference to the name of an inventory site."/> 
+	  <attr name="SerialNumber"                       xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="5000"     normalized="true"     other:qbxmlversion=""      other:selectcolumnname="SerialNumber"                  desc="The serial number of the asset. This cannot be used with LotNumber."/> 
+	  <attr name="LotNumber"                          xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="40"       normalized="true"     other:qbxmlversion=""      other:selectcolumnname="LotNumber"                     desc="The lot number of the asset. This cannot be used with SerialNumber."/> 
+	  <attr name="TxnDate"                            xs:type="date"         readonly="false"     required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TxnDate"                       desc="The date of the transaction."/> 
+	  <attr name="RefNumber"                          xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="21"       normalized="true"     other:qbxmlversion=""      other:selectcolumnname="RefNumber"                     desc="A reference number identifying the transaction. This does not have to be unique."/> 
+	  <attr name="Memo"                               xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="5000"     normalized="true"     other:qbxmlversion=""      other:selectcolumnname="Memo"                          desc="A memo about the transaction."/> 
+	  <attr name="IsPending"                          xs:type="boolean"      readonly="true"      required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="IsPending"                     desc="If IsPending is set to true, the transaction in question has not been completed."/> 
+   	<attr name="QuantityToBuild"                    xs:type="double"       readonly="false"     required="true"     references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="QuantityToBuild"               desc="Specifies the number of assemblies to be built. The transaction will fail if the number specified here exceeds the number of on-hand items."/> 
+  	<attr name="QuantityCanBuild"                   xs:type="double"       readonly="true"      required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="QuantityCanBuild"              desc="Indicates the number of this assembly that can be built from the parts on hand."/> 
+	  <attr name="QuantityOnHand"                     xs:type="double"       readonly="true"      required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="QuantityOnHand"                desc="The number of these items in the inventory. To change the QuantityOnHand, you would need to add an inventory adjustment."/> 
+	  <attr name="QuantityOnSalesOrder"               xs:type="double"       readonly="true"      required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="QuantityOnSalesOrder"          desc="The number of these items that have been sold (as recorded in sales orders) but not delivered to customers."/> 
+	  <attr name="MarkPendingIfRequired"              xs:type="boolean"      readonly="false"     required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="MarkPendingIfRequired"         desc="Allows the build assembly to be marked pending if there are insufficient quantities to complete the build assembly. This field requires QBXML Version 7.0 and is not returned in the response from QuickBooks."/> 
+	  <attr name="ExternalGUID"                       xs:type="string"       readonly="true"      required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion="9.0"   other:selectcolumnname="ExternalGUID"                  desc="A user-defined GUID value. Requires QBXML Version 9.0."/> 
+    <attr name="BuildAssemblyLineAggregate"         xs:type="string"       readonly="true"      required="false"    references=""                      columnsize="5000"     normalized="false"    other:qbxmlversion=""      other:selectcolumnname="ComponentItemLineRet"          desc="An aggregate of the line item data which can be used for adding a transfer inventory and its line item data."/>
+    <attr name="TimeCreated"                        xs:type="datetime"     readonly="true"      required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeCreated"                   desc="The datetime the transaction was made."/> 
+    <attr name="TimeModified"                       xs:type="datetime"     readonly="true"      required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeModified"                  desc="The last datetime the transaction was modified."/> 
+    <attr name="EditSequence"                       xs:type="string"       readonly="true"      required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="EditSequence"                  desc="An identifier used for versioning for this copy of the object." /> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="BuildAssembly"/>
+  <rsb:set attr="objecttype"     value="Transaction"/>
+  <rsb:set attr="querytype"      value="OtherTransaction"/>
+  <rsb:set attr="aggregatecolumns" value="BuildAssemblyLineAggregate"/>
+  <rsb:set attr="childtables" value="BuildAssemblyLineItems"/>
+  <rsb:set attr="childlinekeys"    value="ComponentItemLineRet_ItemRef_ListID"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:throw code="300" desc="Updates to BuildAssemblies are not supported at this time."/>
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>  

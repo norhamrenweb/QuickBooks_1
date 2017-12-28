@@ -1,0 +1,19 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+  
+    <rsb:info title="VoidTransaction" description="Voids a given transaction in QuickBooks." >
+      <input name="TransactionType" description="The type of transaction to void." required="true" values="ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, SalesReceipt, VendorCredit" required="true" />
+      <input name="TxnID" description="The Id of the transaction to be voided. This should be the Id of an invoice, bill, check, or other such transaction." required="true"/>
+      
+      <output name="*" description="Output varies depending on the supplied QBXML request."  />
+    </rsb:info>
+    
+  <rsb:set attr="rawxml">
+    <?xml version="1.0" ?><?qbxml version="4.0"?><QBXML><QBXMLMsgsRq onError="stopOnError"><TxnVoidRq><TxnVoidType>[TransactionType]</TxnVoidType><TxnID>[TxnID]</TxnID></TxnVoidRq></QBXMLMsgsRq></QBXML>
+  </rsb:set>
+  <rsb:set attr="operationname" value="qbGet"/>
+  
+  <rsb:call op="quickbooksadoDesktopExecuteStoredProcedure" output="out">
+    <rsb:push />
+  </rsb:call>
+  
+</rsb:script>

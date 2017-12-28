@@ -1,0 +1,61 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="EmployeeEarnings" description="Create, update, delete, and query QuickBooks Employee Earnings.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,EmployeePayrollInfo"                    desc="The unique identifier in the format EmployeeId|EmployeeEarningsId." /> 
+    <attr name="Name"                  xs:type="string"       readonly="true"      required="true"     references=""                columnsize="255"      normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,Name,EmployeePayrollInfo"               desc="The name of the employee." />
+    <attr name="PayPeriod"             xs:type="string"       readonly="false"     required="true"     references=""                columnsize="255"      normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,Name,EmployeePayrollInfo"               desc="Indicates how often employees are paid" values="Daily,Weekly,Biweekly,Semimonthly,Monthly,Quarterly,Yearly" />
+    <attr name="EmployeeId"            xs:type="string"       readonly="false"     required="true"     references="Employees.ID"    columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,EmployeePayrollInfo"                    desc="The Id of the employee. This is required to have a value when inserting." />
+    <attr name="EarningsId"            xs:type="string"       readonly="true"      required="true"     references=""                columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,EmployeePayrollInfo"                    desc="The Id of the employee earnings entry." />
+    <attr name="EarningsWageName"      xs:type="string"       readonly="false"     required="false"    references=""                columnsize="31"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,EmployeePayrollInfo"                    desc="The wage name. This is required to have a value when inserting." />
+    <attr name="EarningsWageId"        xs:type="string"       readonly="false"     required="false"    references=""                columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,EmployeePayrollInfo"                    desc="A reference Id to the wage. Used for payroll." />
+    <attr name="EarningsRate"          xs:type="double"       readonly="false"     required="false"    references=""                columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,EmployeePayrollInfo"                    desc="Employee earnings rate. Used for payroll." />
+    <attr name="EarningsRatePercent"   xs:type="string"       readonly="false"     required="false"    references=""                columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,EmployeePayrollInfo"                    desc="Employee earnings ratepercent. Used for payroll." />
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,TimeModified,EmployeePayrollInfo"       desc="When the item was last modified."/> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,TimeCreated,EmployeePayrollInfo"        desc="When the item was created." /> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="Employee"/>
+  <rsb:set attr="objecttype"    value="LineItem"/>
+  <rsb:set attr="listtype"         value="List"/>
+  <rsb:set attr="linekey"       value="EarningsId"/>
+  <rsb:set attr="outputitem"    value="earnings"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>  

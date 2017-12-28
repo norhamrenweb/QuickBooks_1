@@ -1,0 +1,41 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="DeletedEntities" description="Query deleted Entities.">
+
+    <!-- Column definitions -->
+    <attr name="ListID"           xs:type="string"     readonly="true"     key="true"          references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="ListID"           desc="The unique identifier."/>
+    <attr name="ListDelType"      xs:type="string"     readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="ListDelType"      desc="The owner of a data extension."/>
+    <attr name="FullName"         xs:type="string"     readonly="true"     required="false"    references=""         columnsize="2000"  normalized="true"     other:qbxmlversion=""      other:selectcolumnname="FullName"         desc="The entity full name."/>
+    <attr name="TimeCreated"      xs:type="datetime"   readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeCreated"      desc="The time the object was created." />
+    <attr name="TimeDeleted"      xs:type="datetime"   readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeDeleted"      desc="The time the object was deleted." />
+
+    <!-- Psuedo-Column definitions -->
+    <input name="StartModifiedDate"    desc="Earliest modified date to search for." />
+    <input name="EndModifiedDate"      desc="Latest modified date to search for." />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <rsb:check attr="_input.ListDelType">
+    <rsb:else>
+      <rsb:throw code=500 desc="The ListDelType must be specified to query DeletedEntities.  Valid values are Account, BillingRate, Class, Currency, Customer, CustomerMsg, CustomerType, DateDrivenTerms, Employee, InventorySite, ItemDiscount, ItemFixedAsset, ItemGroup, ItemInventory, ItemInventoryAssembly, ItemNonInventory, ItemOtherCharge, ItemPayment, ItemSalesTax, ItemSalesTaxGroup, ItemService, ItemSubtotal, JobType, OtherName, PaymentMethod, PayrollItemNonWage, PayrollItemWage, PriceLevel, SalesRep, SalesTaxCode, ShipMethod, StandardTerms, ToDo, UnitOfMeasureSet, Vehicle, Vendor, VendorType, WorkersCompCode" />
+    </rsb:else>
+  </rsb:check>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="ListDeleted"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="ListDeleted"/>
+
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:set attr="starttxndate" value="[_input.StartModifiedDate | def('')]"/>
+  <rsb:set attr="endtxndate" value="[_input.EndModifiedDate | def('')]"/>
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+  
+  
+</rsb:script>

@@ -1,0 +1,70 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="Accounts" description="Create, update, delete, and query QuickBooks Accounts. To update Accounts, set the &rpQBXMLVersion; to 6.0 or higher.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                   columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID"                  desc="The unique identifier of the account." /> 
+    <attr name="Name"                  xs:type="string"       readonly="false"     required="true"     references=""                   columnsize="100"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Name"                    desc="The name of the account. This is required to have a value when inserting."/> 
+    <attr name="FullName"              xs:type="string"       readonly="true"      required="true"     references=""                   columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="FullName"                desc="The full name of the account, including any ancestors (parents) in the format Parent:AccountName."/> 
+    <attr name="Type"                  xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="100"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="AccountType"             desc="The type of account." values="ACCOUNTSPAYABLE,ACCOUNTSRECEIVABLE,BANK,COSTOFGOODSSOLD,CREDITCARD,EQUITY,EXPENSE,FIXEDASSET,INCOME,LONGTERMLIABILITY,OTHERASSET,OTHERCURRENTASSET,OTHERCURRENTLIABILITY,OTHEREXPENSE,OTHERINCOME,NONPOSTING"/> 
+    <attr name="SpecialType"           xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="100"      normalized="true"     other:qbxmlversion="2.1"     other:selectcolumnname="SpecialAccountType"      desc="The special account type in QuickBooks if applicable." value="AccountsPayable, AccountsReceivable, CondenseItemAdjustmentExpenses, CostOfGoodsSold, DirectDepositLiabilities, Estimates, ExchangeGainLoss, InventoryAssets, ItemReceiptAccount, OpeningBalanceEquity, PayrollExpenses, PayrollLiabilities, PettyCash, PurchaseOrders, ReconciliationDifferences, RetainedEarnings, SalesOrders, SalesTaxPayable, UncategorizedExpenses, UncategorizedIncome, UndepositedFunds"/> 
+    <attr name="Number"                xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="AccountNumber"           desc="The bank number of the account."/> 
+    <attr name="Balance"               xs:type="double"       readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TotalBalance"            desc="The total balance of the account, including subaccounts."/> 
+    <attr name="AccountBalance"        xs:type="double"       readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Balance"                 desc="The balance of this account only. This balance does not include subaccounts."/> 
+    <attr name="BankAccount"           xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion="2.0"     other:selectcolumnname="BankNumber"              desc="The bank account number for the account (or an identifying note)."/> 
+    <attr name="Description"           xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="200"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Desc"                    desc="A textual description of the account."/> 
+    <attr name="IsActive"              xs:type="boolean"      readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="IsActive"                desc="This property indicates whether the object is currently enabled for use by QuickBooks."/> 
+    <attr name="ParentName"            xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"  columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ParentRef"               desc="This is a reference to a parent account. If set to a nonempty string, then this account is a subaccount of its parent."/> 
+    <attr name="ParentId"              xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"        columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ParentRef"               desc="This is a reference to a parent account. If set to a nonempty string, then this account is a subaccount or job of its parent."/> 
+    <attr name="Sublevel"              xs:type="integer"      readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Sublevel"                desc="The number of ancestors the account has."/>
+    <attr name="CurrencyName"          xs:type="string"       readonly="false"     required="false"    references="Currency.Name"      columnsize="64"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="CurrencyRef"             desc="The name of the currency for the account. A minimum QBXML version of 8.0 is required for this feature."/>
+    <attr name="CurrencyId"            xs:type="string"       readonly="false"     required="false"    references="Currency.ID"        columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="CurrencyRef"             desc="The unique Id of the currency for the account. A minimum QBXML version of 8.0 is required for this feature."/>    
+    <attr name="CashFlowClassification"  xs:type="string"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="CashFlowClassification"  desc="Indicates how the account is classified for cash flow reporting.' value='None, Operating, Investing, Financing, NotApplicable."/> 
+    <attr name="TaxLineName"           xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="256"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TaxLineInfoRet"          desc="The name of the line on the tax form this account is associated with, if any. Check the CompanyInfo to see which tax form is associated with the company file."/> 
+    <attr name="TaxLineId"             xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TaxLineInfoRet"          desc="The Id of the line on the tax form this account is associated with, if any. Check the CompanyInfo to see which tax form is associated with the company file. Requires QBXML Version 7.0 to modify."/> 
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"            desc="When the account was last modified." /> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"             desc="When the account was created."/> 
+    
+    <!-- Pseudo-Column definitions -->
+    <input name="OpeningBalance"       desc="The opening balance of the account (by default 0). Note that this property is only used when adding new accounts to QuickBooks."/>
+    <input name="OpeningDate"          desc="The opening balance date of the account. Note that this property is only used when adding new accounts to QuickBooks."/>
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+    
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="Account"/>
+  <rsb:set attr="objecttype"     value="KnownList"/>
+    
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

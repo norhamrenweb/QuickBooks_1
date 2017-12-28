@@ -1,0 +1,17 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+  
+    <rsb:info title="GetQBFileStatus" description="Gets the status of the quickbooks file." >
+      <input name="x"/>
+      <output name="qbfilestatus" 		    desc="A number indicating the status of the qbfile. 0 indicates it can be connected to. 1 indicates it cannot be connected to. -1 indicates it could not be determined."/>
+    </rsb:info>
+      
+  <rsb:set attr="operationname" value="qbGetQBFileStatus"/>  
+  <rsb:set attr="out.qbfilestatus"/>
+  <rsb:push item="out"/>
+  <!--
+  <rsb:call op="quickbooksadoDesktopExecuteStoredProcedure" output="out">
+    <rsb:push />
+  </rsb:call>
+  -->
+
+</rsb:script>

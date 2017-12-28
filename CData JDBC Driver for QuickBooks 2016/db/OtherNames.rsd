@@ -1,0 +1,78 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="OtherNames" description="Create, update, delete, and query QuickBooks Other Name entities.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                          xs:type="string"       readonly="true"      key="true"          columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID"                 desc="The unique identifier." /> 
+    <attr name="Name"                        xs:type="string"       readonly="false"     required="true"     columnsize="41"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Name"                   desc="The name of the other name. This is required to have a value when inserting."/> 
+    <attr name="IsActive"                    xs:type="boolean"      readonly="false"     required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="IsActive"               desc="Whether or not the other name is active." />
+    <attr name="CompanyName"                 xs:type="string"       readonly="false"     required="false"    columnsize="41"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="CompanyName"            desc="The name of the customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="Salutation"                  xs:type="string"       readonly="false"     required="false"    columnsize="15"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Salutation"             desc="A salutation, such as Mr., Mrs., etc."/> 
+    <attr name="FirstName"                   xs:type="string"       readonly="false"     required="false"    columnsize="25"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="FirstName"              desc="The first name of a customer, vendor, employee, or person on the other-names list"/> 
+    <attr name="MiddleName"                  xs:type="string"       readonly="false"     required="false"    columnsize="25"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="MiddleName"             desc="The middle name of a customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="LastName"                    xs:type="string"       readonly="false"     required="false"    columnsize="25"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="LastName"               desc="The last name of a customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="OtherNameAddress_Addr1"      xs:type="string"       readonly="false"     required="false"    columnsize="500"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="OtherNameAddress"        desc="First line of the other-name address."/> 
+    <attr name="OtherNameAddress_Addr2"      xs:type="string"       readonly="false"     required="false"    columnsize="500"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="OtherNameAddress"        desc="Second line of the other-name address."/> 
+    <attr name="OtherNameAddress_Addr3"      xs:type="string"       readonly="false"     required="false"    columnsize="500"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="OtherNameAddress"        desc="Third line of the other-name address."/> 
+    <attr name="OtherNameAddress_Addr4"      xs:type="string"       readonly="false"     required="false"    columnsize="500"      normalized="true"     other:qbxmlversion="2.0"     other:selectcolumnname="OtherNameAddress"        desc="Fourth line of the other-name address."/> 
+    <attr name="OtherNameAddress_Addr5"      xs:type="string"       readonly="false"     required="false"    columnsize="41"       normalized="true"     other:qbxmlversion="6.0"     other:selectcolumnname="OtherNameAddress"        desc="Fifth line of the other-name address."/> 
+    <attr name="OtherNameAddress_City"       xs:type="string"       readonly="false"     required="false"    columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="OtherNameAddress"        desc="City name for the other-name address of the customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="OtherNameAddress_State"      xs:type="string"       readonly="false"     required="false"    columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="OtherNameAddress"        desc="State name for the other-name address of the customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="OtherNameAddress_PostalCode" xs:type="string"       readonly="false"     required="false"    columnsize="30"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="OtherNameAddress"        desc="Postal code for the other name address of the customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="OtherNameAddress_Country"    xs:type="string"       readonly="false"     required="false"    columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="OtherNameAddress"        desc="Country for the other-name address of the customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="OtherNameAddress_Note"       xs:type="string"       readonly="false"     required="false"    columnsize="41"       normalized="true"     other:qbxmlversion="6.0"     other:selectcolumnname="OtherNameAddress"        desc="Note for the other-name address of the customer, vendor, employee, or person on the other-names list." />
+    <attr name="Phone"                       xs:type="string"       readonly="false"     required="false"    columnsize="21"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Phone"                   desc="The main telephone number for the customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="AltPhone"                    xs:type="string"       readonly="false"     required="false"    columnsize="41"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="AltPhone"                desc="The alternate telephone number for the customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="Fax"                         xs:type="string"       readonly="false"     required="false"    columnsize="21"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Fax"                     desc="The fax number number for the customer, vendor, employee, or person on the other-names list." /> 
+    <attr name="Email"                       xs:type="string"       readonly="false"     required="false"    columnsize="1023"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Email"                   desc="The email address for communicating with the customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="Contact"                     xs:type="string"       readonly="false"     required="false"    columnsize="41"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Contact"                 desc="The name of a contact person for the customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="AltContact"                  xs:type="string"       readonly="false"     required="false"    columnsize="41"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="AltContact"              desc="The name of an alternate contact person for the customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="AccountNumber"               xs:type="string"       readonly="false"     required="false"    columnsize="99"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="AccountNumber"           desc="The account number for the other-name."/> 
+    <attr name="Notes"                       xs:type="string"       readonly="false"     required="false"    columnsize="5000"     normalized="true"     other:qbxmlversion="3.0"     other:selectcolumnname="Notes"                   desc="Notes on this customer, vendor, employee, or person on the other-names list."/> 
+    <attr name="ExternalGUID"                xs:type="string"       readonly="false"     required="false"    columnsize=""         normalized="true"     other:qbxmlversion="9.0"     other:selectcolumnname="ExternalGUID"            desc="Allows for the attachment of a user-defined GUID value. Can be used in only inserts and the value must be enclosed in curly brackets. Requires QBXML 8.0 or higher." />
+    <attr name="CustomFields"                xs:type="string"       readonly="false"     required="false"    columnsize=""         normalized="true"     other:qbxmlversion="2.0"     other:selectcolumnname="DataExtRet"              desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="TimeCreated"                 xs:type="datetime"     readonly="true"      required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"             desc="The datetime the other name was made."/> 
+    <attr name="TimeModified"                xs:type="datetime"     readonly="true"      required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"            desc="The last datetime the other name was modified."/> 
+    <attr name="EditSequence"                xs:type="string"       readonly="true"      required="false"    columnsize="16"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EditSequence"            desc="An identifier used for versioning for this copy of the object." /> 
+    
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"       value="OtherName"/>
+  <rsb:set attr="objecttype"       value="List"/>
+  <rsb:set attr="querytype"        value="OtherList"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>  

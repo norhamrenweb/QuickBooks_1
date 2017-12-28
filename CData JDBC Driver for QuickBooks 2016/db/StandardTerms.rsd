@@ -1,0 +1,59 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="StandardTerms" description="Create, update, delete, and query QuickBooks Standard Terms.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"        key="true"              columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID"                 desc="The Id of the standard term."/>
+    <attr name="Name"                       xs:type="string"       readonly="false"       required="true"         columnsize="100"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Name"                   desc="The name of the standard term."/>
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"       required="false"        columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="IsActive"               desc="Boolean indicating if the standard term is active."/>
+    <attr name="StdDueDays"                 xs:type="integer"      readonly="false"       required="false"        columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="StdDueDays"             desc="The number of days until payment is due."/>
+    <attr name="StdDiscountDays"            xs:type="integer"      readonly="false"       required="false"        columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="StdDiscountDays"        desc="If payment is received within StdDiscountDays number of the days, then DiscountPct will apply to the payment."/>
+    <attr name="DiscountPct"                xs:type="double"       readonly="false"       required="false"        columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="DiscountPct"            desc="If payment is received within StdDiscountDays number of days, then this discount will apply to the payment. DiscountPct must be between 0 and 100."/>
+    <attr name="EditSequence"               xs:type="string"       readonly="true"        required="false"        columnsize="16"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="EditSequence"           desc="A string indicating the revision of the standard term."/>
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"        required="false"        columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeCreated"            desc="The time the standard term was created."/>
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"        required="false"        columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeModified"           desc="The time the standard term was modified."/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="MaxResults"            desc="Maximum number of results to return." />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="StandardTerms"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="OtherList"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:throw code=500 desc="QuickBooks does not allow StandardTerms to be updated!"/>
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

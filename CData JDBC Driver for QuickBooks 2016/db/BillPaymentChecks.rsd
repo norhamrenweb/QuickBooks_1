@@ -1,0 +1,68 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+
+  <rsb:info title="BillPaymentChecks" description="Create, update, delete, and query QuickBooks Bill Payment Checks. QBXMLVersion must be set to 6.0 or higher to update a BillPaymentCheck.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                  xs:type="string"       readonly="true"      key="true"          references=""                    columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="TxnID"               desc="The unique identifier for the transaction." /> 
+    <attr name="PayeeName"           xs:type="string"       readonly="false"     required="false"    references="Vendors.Name"        columnsize="1000"     normalized="true"    other:qbxmlversion=""        other:selectcolumnname="PayeeEntityRef"      desc="A reference to the entity merchandise was purchased from. Either PayeeId or PayeeName is required."/> 
+    <attr name="PayeeId"             xs:type="string"       readonly="false"     required="false"    references="Vendors.ID"          columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="PayeeEntityRef"      desc="A reference to the entity merchandise was purchased from. Either PayeeId or PayeeName is required."/> 
+    <attr name="ReferenceNumber"     xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="21"       normalized="true"    other:qbxmlversion=""        other:selectcolumnname="RefNumber"           desc="The transaction reference number." />
+    <attr name="Date"                xs:type="date"         readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="TxnDate"             desc="The date of the transaction. If it is set in the WHERE clause of a SELECT query, the pseudo columns StartDate and EndDate are overwritten with the value." />
+    <attr name="Amount"              xs:type="double"       readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="Amount"              desc="Amount of the transaction. This is calculated by QuickBooks based on the line items or expense line items."/> 
+    <attr name="AccountsPayable"     xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"   columnsize="1000"     normalized="true"    other:qbxmlversion=""        other:selectcolumnname="APAccountRef"        desc="Reference to the accounts-payable account."/> 
+    <attr name="AccountsPayableId"   xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"         columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="APAccountRef"        desc="Reference to the accounts-payable account Id."/> 
+    <attr name="BankAccountName"     xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"   columnsize="1000"     normalized="true"    other:qbxmlversion=""        other:selectcolumnname="BankAccountRef"      desc="Refers to the Account funds are being drawn from for this bill payment. This property is only applicable to the check payment method."/> 
+    <attr name="BankAccountId"       xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"         columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="BankAccountRef"      desc="Refers to the Account funds are being drawn from for this bill payment. This property is only applicable to the check payment ethod."/> 
+    <attr name="IsToBePrinted"       xs:type="boolean"      readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="IsToBePrinted"       desc="Indicates whether or not the transaction is to be printed. If set to true, the 'To Be Printed' box in the QuickBooks user interface will be checked." default="false"/> 
+    <attr name="Memo"                xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="5000"     normalized="true"    other:qbxmlversion=""        other:selectcolumnname="Memo"                desc="A memo to appear on internal reports."/> 
+    <attr name="AppliedToAggregate"  xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="5000"     normalized="false"   other:qbxmlversion=""        other:selectcolumnname="AppliedToTxnRet"     desc="An aggregate of the applied-to data which can be used for adding a bill payment check and its applied-to data."/>
+    <attr name="CustomFields"        xs:type="string"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="DataExtRet"          desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="TimeModified"        xs:type="datetime"     readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="TimeModified"        desc="When the bill payment was last modified." /> 
+    <attr name="TimeCreated"         xs:type="datetime"     readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="TimeCreated"         desc="When the bill payment was created."/> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="AppliedTo*"           desc="All applied-to-specific columns may be used in insertions." />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="BillPaymentCheck"/>
+  <rsb:set attr="objecttype"    value="KnownTransaction"/>
+  <rsb:set attr="aggregatecolumns" value="AppliedToAggregate"/>
+  <rsb:set attr="childtables" value="BillPaymentChecksAppliedTo"/>
+  <rsb:set attr="childlinekeys" value="AppliedToRefId"/>
+  <rsb:set attr="outputitem"    value="transaction"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

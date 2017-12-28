@@ -1,0 +1,80 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="ItemReceiptExpenseItems" description="Create, update, delete, and query QuickBooks Item Receipt Expense Line Items.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                       xs:type="string"       readonly="true"      key="true"          references=""                         columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The unique identifier in the format ItemReceiptId|ExpenseLineId." /> 
+    <attr name="ItemReceiptId"            xs:type="string"       readonly="false"     required="false"    references="ItemReceipts.ID"          columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The item identifier for the item receipt. This is obtained from the ItemReceipts table." />
+    <attr name="VendorName"               xs:type="string"       readonly="false"     required="false"    references="Vendors.Name"             columnsize="1000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,VendorRef,ExpenseLineRet"          desc="The name of the vendor. Either VendorName or VendorId must be specified when inserting an item receipt."/> 
+    <attr name="VendorId"                 xs:type="string"       readonly="false"     required="false"    references="Vendors.ID"               columnsize="255"      normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,VendorRef,ExpenseLineRet"          desc="The unique Id of the vendor. Either VendorName or VendorId must be specified when inserting an item receipt."/> 
+    <attr name="Date"                     xs:type="date"         readonly="false"     required="false"    references=""                         columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnDate,ExpenseLineRet"            desc="The transaction date."/> 
+    <attr name="ReferenceNumber"          xs:type="string"       readonly="false"     required="false"    references=""                         columnsize="21"       normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,RefNumber,ExpenseLineRet"          desc="The transaction reference number."/> 
+    <attr name="AccountsPayable"          xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"        columnsize="1000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,APAccountRef,ExpenseLineRet"       desc="A reference to the name of the account the item receipt is payable to."/> 
+    <attr name="AccountsPayableId"        xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"              columnsize="255"      normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,APAccountRef,ExpenseLineRet"       desc="A reference to the unique Id of the account the item receipt is payable to."/> 
+    <attr name="Memo"                     xs:type="string"       readonly="false"     required="false"    references=""                         columnsize="5000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,Memo,ExpenseLineRet"               desc="A memo regarding the item receipt."/> 
+    <attr name="Amount"                   xs:type="double"       readonly="true"      required="false"    references=""                         columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TotalAmount,ExpenseLineRet"        desc="Total amount of the item receipt."/>     
+    <attr name="TxnNumber"                xs:type="integer"      readonly="true"      required="false"    references=""                         columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnNumber,ExpenseLineRet"          desc="The transaction number. An identifying number for the transaction, different from the QuickBooks-generated Id."/> 
+    <attr name="ExchangeRate"             xs:type="double"       readonly="false"     required="false"    references=""                         columnsize=""         normalized="false"    other:qbxmlversion="8.0"     other:selectcolumnname="TxnID,ExchangeRate,ExpenseLineRet"       desc="The market price for which this currency can be exchanged for the currency used by the QuickBooks company file as the home currency. Requires QBXML Version 8.0 or higher." /> 
+    <attr name="IsTaxIncluded"            xs:type="boolean"      readonly="false"     required="false"    references=""                         columnsize=""         normalized="false"    other:qbxmlversion="8.0"     other:selectcolumnname="TxnID,IsTaxIncluded,ExpenseLineRet"      desc="Determines if tax is included in the transaction amount. Available in only international editions of QuickBooks."/> 
+    <attr name="ExpenseLineId#"           xs:type="string"       readonly="true"      required="false"    references=""                         columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The line item identifier."/>
+    <attr name="ExpenseAccount#"          xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"        columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The account name for this expense line. ExpenseAccount or ExpenseAccountId must have a value when inserting." />
+    <attr name="ExpenseAccountId#"        xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"              columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The account Id for this expense line. ExpenseAccount or ExpenseAccountId must have a value when inserting." />
+    <attr name="ExpenseAmount#"           xs:type="double"       readonly="false"     required="false"    references=""                         columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The total amount of this expense line."  />
+    <attr name="ExpenseBillableStatus#"   xs:type="string"       readonly="false"     required="false"    references=""                         columnsize="13"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The billing status of this expense line." default="EMPTY" value="EMPTY,BILLABLE,NOTBILLABLE,HASBEENBILLED" />
+    <attr name="ExpenseCustomer#"         xs:type="string"       readonly="false"     required="false"    references="Customers.FullName"       columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The customer associated with this expense line." />
+    <attr name="ExpenseCustomerId#"       xs:type="string"       readonly="false"     required="false"    references="Customers.ID"             columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The customer associated with this expense line." />
+    <attr name="ExpenseClass#"            xs:type="string"       readonly="false"     required="false"    references="Class.FullName"           columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The class name of this expense."/>
+    <attr name="ExpenseClassId#"          xs:type="string"       readonly="false"     required="false"    references="Class.ID"                 columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The class Id of this expense."/>
+    <attr name="ExpenseTaxCode#"          xs:type="string"       readonly="false"     required="false"    references="SalesTaxCodes.Name"       columnsize="3"        normalized="true"     other:qbxmlversion="6.0"     other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="A reference to the name of the sales tax code associated with this expense item. Only available in QuickBooks UK and CA editions." />
+    <attr name="ExpenseTaxCodeId#"        xs:type="string"       readonly="false"     required="false"    references="SalesTaxCodes.ID"         columnsize="255"      normalized="true"     other:qbxmlversion="6.0"     other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="A reference to the Id of the sales tax code associated with this expense item. Only available in QuickBooks UK and CA editions."/>
+    <attr name="ExpenseCustomFields#"     xs:type="string"       readonly="true"      required="false"    references=""                         columnsize=""         normalized="true"     other:qbxmlversion="13.0"    other:selectcolumnname="TxnID,ExpenseLineRet"                    desc="The custom fields for this expense item." />
+    <attr name="CustomFields"             xs:type="string"       readonly="false"     required="false"    references=""                         columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,DataExtRet,ExpenseLineRet"         desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="EditSequence"             xs:type="string"       readonly="true"      required="false"    references=""                         columnsize="16"       normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,EditSequence,ExpenseLineRet"       desc="An identifier used for versioning for this copy of the object." /> 
+    <attr name="TimeModified"             xs:type="datetime"     readonly="true"      required="false"    references=""                         columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeModified,ExpenseLineRet"       desc="When the item receipt was last modified."/> 
+    <attr name="TimeCreated"              xs:type="datetime"     readonly="true"      required="false"    references=""                         columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeCreated,ExpenseLineRet"        desc="When the item receipt was created."/>
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="LinkToTxnId"            desc="The id of a transaction to link the new item receipt to. This should be a purchase order Id. Only available on an insert." />
+    <input name="Rows@Next"              desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="ItemReceipt"/>
+  <rsb:set attr="objecttype"    value="LineItem"/>
+  <rsb:set attr="linekey"       value="ExpenseLineId"/>
+  <rsb:set attr="includelineitems" value="true"/>
+  <rsb:set attr="outputitem"    value="expenseitem"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>  

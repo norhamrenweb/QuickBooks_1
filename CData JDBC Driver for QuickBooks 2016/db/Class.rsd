@@ -1,0 +1,58 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="Class" description="Create, update, delete, and query QuickBooks Classes. QuickBooks requires QBXML version 8.0 or higher for updates to a Class.">
+
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"     key="true"          references=""                 columnsize="255"      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="ListID"            desc="The unique identifier of the class."/>
+    <attr name="Name"                       xs:type="string"       readonly="false"    required="true"     references=""                 columnsize="100"      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="Name"              desc="The name of the class."/>
+    <attr name="FullName"                   xs:type="string"       readonly="true"     required="false"    references=""                 columnsize="1000"     normalized="true"     other:qbxmlversion=""      other:selectcolumnname="FullName"          desc="The full name of the class in the form ParentName|ClassName."/>
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"    required="false"    references=""                 columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="IsActive"          desc="Boolean determining if the class is active."/>
+    <attr name="ParentRef_FullName"         xs:type="string"       readonly="false"    required="false"    references="Class.FullName"   columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="ParentRef"         desc="Full name of the parent for the class. You may specify only ParentRef_FullName or ParentRef_ListId on INSERT/UPDATE statements and not both."/>
+    <attr name="ParentRef_ListId"           xs:type="string"       readonly="false"    required="false"    references="Class.ID"         columnsize="255"      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="ParentRef"         desc="Id for the parent of the class. You may specify only ParentRef_FullName or ParentRef_ListId on INSERT/UPDATE statements and not both."/>
+    <attr name="Sublevel"                   xs:type="integer"      readonly="true"     required="false"    references=""                 columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="Sublevel"          desc="How many parents the class has."/>
+    <attr name="EditSequence"               xs:type="string"       readonly="true"     required="false"    references=""                 columnsize="16"       normalized="true"     other:qbxmlversion=""      other:selectcolumnname="EditSequence"      desc="A string indicating the revision of the class."/>
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"     required="false"    references=""                 columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeCreated"       desc="The time the class was created."/>
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"     required="false"    references=""                 columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeModified"      desc="The last time the class was modified."/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="Class"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="Class"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>
