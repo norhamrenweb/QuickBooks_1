@@ -56,8 +56,8 @@
             }
             .spacediv
             {
-                margin-top: 5px;
-                margin-bottom: 5px;
+                margin-top: 10px;
+                margin-bottom: 10px;
             }
             .mastered
             {
@@ -130,7 +130,7 @@
                     </button>
                     </div>    
                 </div>
-                <div class="col-xs-12 collapse" id="contenedorAttempted">
+                <div class="col-xs-12 collapse " id="contenedorAttempted">
                     <c:forEach var="date" items="${attempteddates}">
                     <div class="col-xs-12 attempted">
                         <div class="col-xs-6">Attempted</div>
@@ -159,7 +159,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12" id="divTableLessons">
+            <div class="col-xs-12 spacediv" id="divTableLessons">
                 <table id="tablelessons" class="display">
                     <thead>
                         <tr>
@@ -185,7 +185,7 @@
 
             </div>
             <div class="col-xs-12 text-center" >
-                <input type="submit" value="print" onClick="window.print()" class="btn btn-info noPrint"/> 
+                <input type="submit" value="Print Report" onClick="window.print()" class="btn btn-info noPrint"/> 
             </div>
         </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
