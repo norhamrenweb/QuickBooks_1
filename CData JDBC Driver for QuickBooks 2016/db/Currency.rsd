@@ -1,0 +1,62 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">    
+
+  <rsb:info title="Currency" description="Create, update, delete, and query QuickBooks Currencies. This table requires QBXML version 8.0 or higher, and you will need to enable multiple Currencies in your QuickBooks company file to use it.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"      key="true"               columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID"              desc="The Id of the currency."/>
+    <attr name="Name"                       xs:type="string"       readonly="false"     required="false"         columnsize="64"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Name"                desc="The name of the currency."/>
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"     required="false"         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="IsActive"            desc="Boolean indicating if the currency is active."/> 
+    <attr name="CurrencyCode"               xs:type="string"       readonly="false"     required="true"          columnsize="3"        normalized="true"      other:qbxmlversion=""        other:selectcolumnname="CurrencyCode"        desc="A maximum of 3 characters describing the code for the currency. For example: USD."/>
+    <attr name="CurrencyFormat_ThousandSeparator"           xs:type="string"       readonly="false"     required="false"          columnsize="10"        normalized="true"     other:qbxmlversion=""        other:selectcolumnname="CurrencyFormat"        desc="The separating character for thousands. For example, in 1,000,000 the comma is the separator." values="Comma, Period, Space, Apostrophe" default="Comma"/>
+    <attr name="CurrencyFormat_ThousandSeparatorGrouping"   xs:type="string"       readonly="false"     required="false"          columnsize="50"        normalized="true"     other:qbxmlversion=""        other:selectcolumnname="CurrencyFormat"        desc="Controls how the display of the currency value is grouped. For example, 10,000,000 is XX_XXX_XXX, but could be replaced by X_XX_XX_XXX."/>
+    <attr name="CurrencyFormat_DecimalPlaces"               xs:type="string"       readonly="false"     required="false"          columnsize="50"        normalized="true"     other:qbxmlversion=""        other:selectcolumnname="CurrencyFormat"        desc="Controls the display of the decimal value. For example, in 1.00 the value would be 2. You can change to 0 if you do not want decimals to be displayed." default="2"/>
+    <attr name="CurrencyFormat_DecimalSeparator"            xs:type="string"       readonly="false"     required="false"          columnsize="6"         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="CurrencyFormat"        desc="Controls the character used to separate decimal values from whole numbers. For example, in 1.00 the value is Period." values="Comma, Period" default="Period"/>
+    <attr name="IsUserDefinedCurrency"      xs:type="boolean"      readonly="true"      required="false"         columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="IsUserDefinedCurrency"        desc="Indicates whether the currency is a built-in currency or a currency created by a QuickBooks user."/>
+    <attr name="ExchangeRate"               xs:type="double"       readonly="true"      required="false"         columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ExchangeRate"                 desc="The market price for which the currency can be exchanged for the currency used by the QuickBooks company file as the home currency. The exchange rate should be considered a snapshot of the rates in effect at the AsOfDate."/>
+    <attr name="AsOfDate"                   xs:type="date"         readonly="true"      required="false"         columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="AsOfDate"                     desc="The date when the exchange rate was last changed."/>
+    <attr name="EditSequence"               xs:type="string"       readonly="true"      required="false"         columnsize="16"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EditSequence"                 desc="A string indicating the revision of the currency."/>
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"      required="false"         columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"                  desc="The time the currency was created."/>
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"      required="false"         columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"                 desc="The time the currency was last modified."/>
+   
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"             desc="Identifier for the next page of results. Do not set this value manually." />
+    
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="Currency"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="OtherList"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

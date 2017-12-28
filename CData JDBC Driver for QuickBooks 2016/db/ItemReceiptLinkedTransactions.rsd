@@ -1,0 +1,49 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="ItemReceiptLinkedTransactions" description="Query QuickBooks Item Receipt Linked Transactions.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                       xs:type="string"       readonly="true"      key="true"          references=""                    columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The unique identifier in the format ItemReceiptId|ItemReceiptLineId." /> 
+    <attr name="ItemReceiptId"            xs:type="string"       readonly="true"      required="false"    references="ItemReceipts.ID"     columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The item identifier for the item receipt. This is obtained from the ItemReceipts table." />
+    <attr name="VendorName"               xs:type="string"       readonly="false"     required="false"    references="Vendors.Name"        columnsize="1000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,VendorRef,LinkedTxn"         desc="The name of the vendor. Either VendorName or VendorId must be specified when inserting an item receipt."/> 
+    <attr name="VendorId"                 xs:type="string"       readonly="false"     required="false"    references="Vendors.ID"          columnsize="255"      normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,VendorRef,LinkedTxn"         desc="The unique Id of the vendor. Either VendorName or VendorId must be specified when inserting an item receipt."/> 
+    <attr name="Date"                     xs:type="date"         readonly="false"     required="false"    references=""                    columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnDate,LinkedTxn"           desc="The transaction date."/> 
+    <attr name="ReferenceNumber"          xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="21"       normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,RefNumber,LinkedTxn"         desc="The transaction reference number."/> 
+    <attr name="AccountsPayable"          xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"   columnsize="1000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,APAccountRef,LinkedTxn"      desc="A reference to the name of the account the item receipt is payable to."/> 
+    <attr name="AccountsPayableId"        xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"         columnsize="255"      normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,APAccountRef,LinkedTxn"      desc="A reference to the unique Id of the account the item receipt is payable to."/> 
+    <attr name="Memo"                     xs:type="string"       readonly="false"     required="false"    references=""                    columnsize="5000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,Memo,LinkedTxn"              desc="A memo regarding the item receipt."/> 
+    <attr name="Amount"                   xs:type="double"       readonly="true"      required="false"    references=""                    columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TotalAmount,LinkedTxn"       desc="Total amount of the item receipt."/>     
+    <attr name="TxnNumber"                xs:type="integer"      readonly="true"      required="false"    references=""                    columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnNumber,LinkedTxn"         desc="The transaction number. An identifying number for the transaction, different from the QuickBooks-generated Id."/> 
+    <attr name="ExchangeRate"             xs:type="double"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="false"    other:qbxmlversion="8.0"     other:selectcolumnname="TxnID,ExchangeRate,LinkedTxn"      desc="The market price for which this currency can be exchanged for the currency used by the QuickBooks company file as the home currency. Requires QBXML Version 8.0 or higher." /> 
+    <attr name="TransactionId#"           xs:type="string"       readonly="true"      required="false"    references="PurchaseOrders.ID"   columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The Id of the linked transaction."/>
+    <attr name="TransactionAmount#"       xs:type="double"       readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The amount of the linked transaction."/>
+    <attr name="TransactionDate#"         xs:type="date"         readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The date of the linked transaction." />
+    <attr name="TransactionReferenceNumber#"     xs:type="string"       readonly="true"     required="false"    references=""              columnsize="16"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"           desc="The reference number of the linked transaction." />
+    <attr name="TransactionType#"         xs:type="string"       readonly="true"      required="false"    references=""                    columnsize="100"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The type of linked transaction."/>
+    <attr name="TransactionLinkType#"     xs:type="string"       readonly="true"      required="false"    references=""                    columnsize="100"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,LinkedTxn"                   desc="The link type between the item receipt and linked transaction." />    
+    <attr name="CustomFields"             xs:type="string"       readonly="false"     required="false"    references=""                    columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,DataExtRet,LinkedTxn"        desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="EditSequence"             xs:type="string"       readonly="true"      required="false"    references=""                    columnsize="16"       normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,EditSequence,LinkedTxn"      desc="An identifier used for versioning for this copy of the object." /> 
+    <attr name="TimeModified"             xs:type="datetime"     readonly="true"      required="false"    references=""                    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeModified,LinkedTxn"      desc="When the item receipt was last modified."/> 
+    <attr name="TimeCreated"              xs:type="datetime"     readonly="true"      required="false"    references=""                    columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeCreated,LinkedTxn"       desc="When the item receipt was created."/>
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="ItemReceipt"/>
+  <rsb:set attr="objecttype"    value="LineItem"/>
+  <rsb:set attr="linekey"       value="TransactionId"/>
+  <rsb:set attr="includelinkedtxns" value="true"/>
+  <rsb:set attr="outputitem"    value="linkedtxn"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:set attr="includelinkedtxns" value="true"/>
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+  
+</rsb:script>  

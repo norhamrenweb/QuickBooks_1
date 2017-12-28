@@ -1,0 +1,16 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+  
+    <rsb:info title="SendQBXML" description="Sends the provided QBXML directly to QuickBooks." >
+          <input name="RawXML" description="The QBXML to be sent to QuickBooks." required="true" />
+          <input name="OutputRawResponse" default='false' description="Determines whether or not to output the raw response or the parsed response.  The default behavior is to return the parsed response."/>
+          
+          <output name="*" description="Output varies depending on the supplied QBXML request."  />
+    </rsb:info>
+    
+  <rsb:set attr="operationname" value="qbGet"/>
+  
+  <rsb:call op="quickbooksadoDesktopExecuteStoredProcedure" output="out">
+    <rsb:push />
+  </rsb:call>
+  
+</rsb:script>

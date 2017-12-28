@@ -1,0 +1,87 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="DepositLineItems" description="Create, update, delete, and query QuickBooks Deposit Line Items. QBXMLVersion must be set to 7.0 or higher to update a deposit.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                      columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="The unique identifier in the format DepositId|ItemLineId." /> 
+    <attr name="DepositId"             xs:type="string"       readonly="false"     required="false"    references="Deposits.ID"           columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="The deposit identifier. Set this value when inserting values to an existing deposit, or leave it blank to add a new deposit." />
+    <attr name="TxnNumber"             xs:type="integer"      readonly="true"      required="false"    references=""                      columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnNumber"                              desc="The transaction number. An identifying number for the transaction, different from the QuickBooks-generated Id."/> 
+    <attr name="Date"                  xs:type="date"         readonly="false"     required="false"    references=""                      columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnDate,DepositLineRet"                 desc="The date of the transaction. If it is set in the WHERE clause of a SELECT query, the pseudo columns StartDate and EndDate are overwritten with the value." />
+    <attr name="CashBackAccount"       xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"     columnsize="1000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,CashBackInfoRet,DepositLineRet"         desc="Account reference to the bank or credit card company." />
+    <attr name="CashBackAccountId"     xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"           columnsize="255"      normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,CashBackInfoRet,DepositLineRet"         desc="Account reference to the bank or credit card company." />
+    <attr name="CashBackAmount"        xs:type="double"       readonly="false"     required="false"    references=""                      columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,CashBackInfoRet,DepositLineRet"         desc="Cash-back amount." />
+    <attr name="CashBackId"            xs:type="string"       readonly="true"      required="false"    references=""                      columnsize="255"      normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,CashBackInfoRet,DepositLineRet"         desc="Id of the cash back transaction."/>
+    <attr name="CashBackMemo"          xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="5000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,CashBackInfoRet,DepositLineRet"         desc="Additional info for the cash back transaction."/>
+    <attr name="DepositToAccount"      xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"     columnsize="1000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositToAccountRef,DepositLineRet"     desc="Account to deposit funds to."/>
+    <attr name="DepositToAccountId"    xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"           columnsize="255"      normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositToAccountRef,DepositLineRet"     desc="Account to deposit funds to."/>
+    <attr name="Memo"                  xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="5000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,Memo,DepositLineRet"                    desc="Memo to appear on internal reports only."/>
+    <attr name="TotalDeposit"          xs:type="double"       readonly="true"      required="false"    references=""                      columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositTotal,DepositLineRet"            desc="The total of the deposit."/>  
+    <attr name="CustomFields"          xs:type="string"       readonly="false"     required="false"    references=""                      columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,DataExtRet,DepositLineRet"              desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="ItemLineId#"           xs:type="string"       readonly="true"      required="false"    references=""                      columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="The line item identifier." />
+    <attr name="ItemAccount#"          xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"     columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="A reference to the account funds are being deposited to." />
+    <attr name="ItemAccountId#"        xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"           columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="A reference to the account funds are being deposited to." />
+    <attr name="ItemAmount#"           xs:type="double"       readonly="false"     required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="The total amount of this deposit line item. This should be a positive number." />
+    <attr name="ItemCheckNumber#"      xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="11"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="The check number for this deposit line item." />
+    <attr name="ItemClass#"            xs:type="string"       readonly="false"     required="false"    references="Class.FullName"        columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="Specifies the class of the deposit line item." />
+    <attr name="ItemClassId#"          xs:type="string"       readonly="false"     required="false"    references="Class.ID"              columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="Specifies the class of the deposit line item." />
+    <attr name="ItemEntityName#"       xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="209"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="An entity name for this deposit line item." />
+    <attr name="ItemEntityId#"         xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="An entity Id for this deposit line item." />
+    <attr name="ItemMemo#"             xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="5000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="Memo for this deposit line item." />
+    <attr name="ItemPaymentMethod#"    xs:type="string"       readonly="false"     required="false"    references="PaymentMethods.Name"   columnsize="31"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="The payment method (funding source) for this deposit line item. For example: cash, check, or Master Card." />
+    <attr name="ItemPaymentId#"        xs:type="string"       readonly="false"     required="false"    references="PaymentMethods.ID"     columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="The payment transaction Id for this deposit line item." />
+    <attr name="ItemPaymentLineId#"    xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="The payment transaction line id for this deposit line item." />
+    <attr name="ItemRefId#"            xs:type="string"       readonly="false"     required="false"    references=""                      columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="Identification number of the transaction associated with this deposit line." />
+    <attr name="ItemTxnType#"          xs:type="string"       readonly="true"      required="false"    references=""                      columnsize="100"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,DepositLineRet"                         desc="Type of the transaction associated with this deposit line." />
+    <attr name="CurrencyName"          xs:type="string"       readonly="false"     required="false"    references="Currency.Name"         columnsize="64"       normalized="false"    other:qbxmlversion="8.0"     other:selectcolumnname="TxnID,CurrencyRef"                                 desc="The name of the currency for this deposit. A minimum QBXML Version of 8.0 is required for this feature."/>
+    <attr name="CurrencyId"            xs:type="string"       readonly="false"     required="false"    references="Currency.ID"           columnsize="255"      normalized="false"    other:qbxmlversion="8.0"     other:selectcolumnname="TxnID,CurrencyRef"                                 desc="The unique Id of the currency for this deposit. A minimum QBXML Version of 8.0 is required for this feature."/>
+    <attr name="ExchangeRate"          xs:type="double"       readonly="false"     required="false"    references=""                      columnsize=""         normalized="false"    other:qbxmlversion="8.0"     other:selectcolumnname="TxnID,ExchangeRate"                                desc="The market price for which this currency can be exchanged for the currency used by the QuickBooks company file as the home currency." /> 
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeModified,DepositLineRet"            desc="When the deposit was last modified."/> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                      columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeCreated,DepositLineRet"             desc="When the deposit was created."/> 
+    <attr name="Payee"                 xs:type="string"       readonly="false"     required="false"    references="Vendors.Name"         columnsize="1000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,PayeeEntityRef"                      desc="The name of the payee for the Check."/> 
+    <attr name="PayeeId"               xs:type="string"       readonly="false"     required="false"    references="Vendors.ID"           columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,PayeeEntityRef"                      desc="The Id of the payee for the Check."/> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="ItemPriceLevel#"      desc="Item price level name. QuickBooks will not return the price level." />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="Deposit"/>
+  <rsb:set attr="objecttype"    value="LineItem"/>
+  <rsb:set attr="linekey"       value="ItemLineId"/>
+  <rsb:set attr="includelineitems" value="true"/>
+  <rsb:set attr="outputitem"    value="lineitem"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>  

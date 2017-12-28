@@ -1,0 +1,78 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="JournalEntries" description="Create, update, delete, and query QuickBooks Journal Entries. Note that while Journal Entry Lines can be created with a new Journal Entry, they cannot be added or removed from an existing Journal Entry.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                       xs:type="string"       readonly="true"      key="true"          references=""                   columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID"                                  desc="The unique identifier for the journal entry." /> 
+    <attr name="ReferenceNumber"          xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="21"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="RefNumber"                              desc="The transaction reference number."/> 
+    <attr name="TxnNumber"                xs:type="integer"      readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnNumber"                              desc="The transaction number. An identifying number for the transaction, different from the QuickBooks-generated Id."/> 
+    <attr name="Date"                     xs:type="date"         readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnDate"                                desc="The transaction date.  If it is set in the WHERE clause of a SELECT query, the pseudo columns StartDate and EndDate are overwritten with the value."/> 
+    <attr name="CreditLineCount"          xs:type="integer"      readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalCreditLine"                      desc="Number of credit lines." /> 
+    <attr name="DebitLineCount"           xs:type="integer"      readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalDebitLine"                       desc="Number of debit lines." /> 
+    <attr name="FirstCreditAccount"       xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"  columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalCreditLine"                      desc="The first credit account associated with the JournalEntry." /> 
+    <attr name="FirstCreditAmount"        xs:type="double"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalCreditLine"                      desc="The first credit amount associated with the JournalEntry." /> 
+    <attr name="FirstCreditMemo"          xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalCreditLine"                      desc="The first credit memo associated with the JournalEntry." /> 
+    <attr name="FirstCreditEntityName"    xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalCreditLine"                      desc="The first credit entity name associated with the JournalEntry." />
+    <attr name="FirstCreditEntityId"      xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalCreditLine"                      desc="The first credit entity id associated with the JournalEntry." />
+    <attr name="FirstDebitAccount"        xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"  columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalDebitLine"                       desc="The first debit account associated with the JournalEntry." /> 
+    <attr name="FirstDebitAmount"         xs:type="double"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalDebitLine"                       desc="The first debit amount associated with the JournalEntry." /> 
+    <attr name="FirstDebitMemo"           xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalDebitLine"                       desc="The first debit memo associated with the JournalEntry." /> 
+    <attr name="FirstDebitEntityName"     xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalDebitLine"                       desc="The first debit entity name associated with the JournalEntry." /> 
+    <attr name="FirstDebitEntityId"       xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="JournalDebitLine"                       desc="The first debit entity id associated with the JournalEntry." /> 
+    <attr name="LineAggregate"            xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="5000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="JournalCreditLine,JournalDebitLine"     desc="An aggregate of the credit lines and debit ines data which can be used for adding a journal entry and its line item data."/>l
+    <attr name="CurrencyName"             xs:type="string"       readonly="false"     required="false"    references="Currency.Name"      columnsize="64"       normalized="true"      other:qbxmlversion="8.0"     other:selectcolumnname="CurrencyRef"                            desc="The name of the currency for this customer. A minimum QBXML version of 8.0 is required for this feature."/>
+    <attr name="CurrencyId"               xs:type="string"       readonly="false"     required="false"    references="Currency.ID"        columnsize="255"      normalized="true"      other:qbxmlversion="8.0"     other:selectcolumnname="CurrencyRef"                            desc="The unique Id of the currency for this customer. A minimum QBXML version of 8.0 is required for this feature."/>   
+    <attr name="ExchangeRate"             xs:type="double"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion="8.0"     other:selectcolumnname="ExchangeRate"                           desc="The market price for which this currency can be exchanged for the currency used by the QuickBooks company file as the home currency." /> 
+    <attr name="IsHomeCurrencyAdjustment" xs:type="boolean"      readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion="8.0"     other:selectcolumnname="IsHomeCurrencyAdjustment"               desc="Indicates whether the transaction is using a home currency or foreign currency. Setting this field will override the Currency and ExchangeRate fields to use the home currency." />  
+    <attr name="EditSequence"             xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="16"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="EditSequence"                           desc="An identifier used for versioning for this copy of the object."/> 
+    <attr name="TimeModified"             xs:type="datetime"     readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeModified"                           desc="When the journal entry was last modified." /> 
+    <attr name="TimeCreated"              xs:type="datetime"     readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeCreated"                            desc="When the journal entry was created." />
+        
+    <!-- Psuedo-Column definitions -->
+    <input name="Line*"                desc="All line-item-specific columns may be used in insertions." />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="JournalEntry"/>
+  <rsb:set attr="objecttype"    value="KnownTransaction"/>
+  <rsb:set attr="linekey"       value="LineId"/>
+  <rsb:set attr="aggregatecolumns" value="LineAggregate"/>
+  <rsb:set attr="childtables" value="JournalEntryLines"/>
+  <rsb:set attr="childlinekeys" value="LineId"/>
+  <rsb:set attr="outputitem"    value="transaction"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:set attr="objecttype"    value="Transaction"/>
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

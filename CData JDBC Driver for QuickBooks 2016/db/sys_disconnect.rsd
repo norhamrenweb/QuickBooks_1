@@ -1,0 +1,6 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+  <rsb:info title="sys_disconnect" description="This is a system table that allows you to test a connection.">
+  </rsb:info>
+  <rsb:call op="quickbooksadoDesktopCloseConnection"/>
+  
+</rsb:script>

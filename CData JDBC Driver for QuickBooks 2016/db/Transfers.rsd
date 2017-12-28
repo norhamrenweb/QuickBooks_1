@@ -1,0 +1,57 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="Transfers" description="Create, update, and query QuickBooks transfers. Requires QBXML version 12.0 or higher.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                              xs:type="string"       readonly="true"      key="true"          references=""                   columnsize="255"   normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID"                        desc="The unique identifier." /> 
+    <attr name="TxnNumber"                       xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="21"    normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnNumber"                    desc="The transaction number. An identifying number for the transaction, different from the QuickBooks-generated Id."/> 
+    <attr name="TxnDate"                         xs:type="date"         readonly="false"     required="false"    references=""                   columnsize=""      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnDate"                      desc="The date of the transaction."/> 
+    <attr name="TransferFromAccountRef_ListID"   xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"        columnsize="255"   normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TransferFromAccountRef"       desc="The Id for the account from which the funds will be transfered."/> 
+    <attr name="TransferFromAccountRef_FullName" xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"  columnsize="1000"  normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TransferFromAccountRef"       desc="The account from which the funds will be transfered."/> 
+    <attr name="FromAccountBalance"              xs:type="double"       readonly="true"      required="false"    references=""                   columnsize=""      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="FromAccountBalance"           desc="The balance of the account from which the funds will be transfered."/>
+    <attr name="TransferToAccountRef_ListID"     xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"        columnsize="255"   normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TransferToAccountRef"         desc="The Id for the account to which the funds will be transfered."/> 
+    <attr name="TransferToAccountRef_FullName"   xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"  columnsize="1000"  normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TransferToAccountRef"         desc="The account to which the funds will be transfered."/> 
+    <attr name="ToAccountBalance"                xs:type="double"       readonly="true"      required="false"    references=""                   columnsize=""      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ToAccountBalance"             desc="The balance of the account to which the funds will be transfered."/>
+    <attr name="ClassRef_ListID"                 xs:type="string"       readonly="false"     required="false"    references="Class.ID"           columnsize="255"   normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ClassRef_ListID"              desc="A reference to the class of the transaction."/> 
+    <attr name="ClassRef_FullName"               xs:type="string"       readonly="false"     required="false"    references="Class.FullName"     columnsize="1000"  normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ClassRef_FullName"            desc="A reference to the class of the transaction."/> 
+    <attr name="Amount"                          xs:type="double"       readonly="false"     required="true"     references=""                   columnsize=""      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Amount"                       desc="The total amount for this transfer." />
+    <attr name="Memo"                            xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="5000"  normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Memo"                         desc="Memo for the transaction." />
+    <attr name="TimeCreated"                     xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"                  desc="The datetime the other name was made."/> 
+    <attr name="TimeModified"                    xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"                 desc="The last datetime the other name was modified."/> 
+    <attr name="EditSequence"                    xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="16"    normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EditSequence"                 desc="An identifier used for versioning for this copy of the object." /> 
+                                                                                                                 
+    <input name="Rows@Next"                      desc="Identifier for the next page of results. Do not set this value manually." />
+                                                                                                                 
+  </rsb:info>                                                                                                    
+                                                                                                                 
+  <!-- Important table information -->                                                                           
+  <rsb:set attr="entityname"       value="Transfer"/>                                                            
+  <rsb:set attr="objecttype"       value="Transaction"/>
+  <rsb:set attr="querytype"        value="OtherTransaction"/>
+  
+<!-- Operation definitions -->
+<!-- Classes added via the UI do not get returned from QB however ones added via the SDK are returned.  This is a bug with QB -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<!-- INSERTing with Account or Class Ids will result in a QB internal error.  You must use the names instead -->
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:throw code=500 desc="QuickBooks does not support deleting transfer records." />
+</rsb:script>
+
+</rsb:script>  

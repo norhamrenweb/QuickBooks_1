@@ -1,0 +1,46 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="WorkersCompCodeLines" description="Query QuickBooks Workers Comp Code entries by line. Requires QBXML Version 7.0 or higher.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"      key="true"          references=""     columnsize="255"   normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TxnID"                 desc="The unique identifier." /> 
+    <attr name="Name"                       xs:type="string"       readonly="false"     required="true"     references=""     columnsize="13"    normalized="true"     other:qbxmlversion=""      other:selectcolumnname="Name"                  desc="The name of the workers comp code. This is required to have a value when inserting."/>
+    <attr name="Desc"                       xs:type="string"       readonly="false"     required="true"     references=""     columnsize="31"    normalized="true"     other:qbxmlversion=""      other:selectcolumnname="Desc"                  desc="The description of the workers comp code."/>
+    <attr name="CurrentRate"                xs:type="double"       readonly="false"     required="false"    references=""     columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="CurrentRate"           desc="Indicates the workers comp insurance premium rate that is currently in effect for the current comp code. If the code doesn't have a current effective date--that is, it has a future date only, then this field is empty."/> 
+    <attr name="CurrentEffectiveDate"       xs:type="datetime"      readonly="false"     required="false"    references=""     columnsize=""     normalized="true"     other:qbxmlversion=""      other:selectcolumnname="CurrentEffectiveDate"  desc="Indicates the date at which the workers' compensation code went into effect. This field contains a value only if the code is currently in effect. If the code has only a future date, then this field is empty."/> 
+    <attr name="NextRate"                   xs:type="double"       readonly="false"     required="false"    references=""     columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="NextRate"              desc="Indicates the workers comp insurance premium rate that will occur after the current rate and effective date."/> 
+    <attr name="NextEffectiveDate"          xs:type="datetime"     readonly="false"     required="false"    references=""     columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="NextEffectiveDate"     desc="Indicates the the first effective date that will occur after the current effective date."/> 
+    <attr name="RateHistory_Rate#"          xs:type="double"       readonly="false"     required="false"    references=""     columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="RateHistory"           desc="The rate of the workers comp code."/> 
+    <attr name="RateHistory_EffectiveDate#" xs:type="datetime"     readonly="false"     required="false"    references=""     columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="RateHistory"           desc="Specifies the date at which the workers comp code and the related premium goes into effect."/>
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"     required="false"    references=""     columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="IsActive"              desc="Whether or not the workers comp code is active." />
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"      required="false"    references=""     columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeCreated"           desc="The datetime the entry was made."/> 
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"      required="false"    references=""     columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeModified"          desc="The last datetime the entry was modified."/> 
+    <attr name="EditSequence"               xs:type="string"       readonly="true"      required="false"    references=""     columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="EditSequence"          desc="An identifier used for versioning for this copy of the object." /> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="WorkersCompCode"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="OtherList"/>
+  <rsb:set attr="aggregatecolumns" value="RateHistory"/>
+  <rsb:set attr="qbcollections#"   value="RateHistory"/>
+  <rsb:set attr="linekey"          value=""/>
+
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>  

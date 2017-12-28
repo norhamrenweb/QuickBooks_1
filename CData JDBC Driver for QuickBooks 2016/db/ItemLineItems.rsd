@@ -1,0 +1,84 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="ItemLineItems" description="Create, update, delete, and query QuickBooks Item Line Items.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                          columnsize="255"      normalized="true"      desc="The unique identifier in the format ItemId|ItemLineId." /> 
+    <attr name="ItemId"                xs:type="string"       readonly="false"     required="true"     references="Items.ID"                  columnsize="255"      normalized="true"      desc="The unique identifier for the inventory assembly or group item."/>
+    <attr name="Name"                  xs:type="string"       readonly="false"     required="true"     references=""                          columnsize="100"      normalized="false"     desc="The name of the inventory assembly or group." />
+    <attr name="FullName"              xs:type="string"       readonly="true"      required="false"    references=""                          columnsize="1000"     normalized="false"     desc="Full item name in the format parentname:name if the item is a subitem)." />
+    <attr name="Type"                  xs:type="string"       readonly="false"     required="false"    references=""                          columnsize="100"      normalized="false"     desc="The type of item. This is required to have a value when inserting." default="ALL" />
+    <attr name="Account"               xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"         columnsize="1000"     normalized="false"     desc="Account name the inventory assembly or group is associated with."/>
+    <attr name="AccountId"             xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"               columnsize="255"      normalized="false"     desc="Account Id the inventory assembly or group is associated with." />
+    <attr name="COGSAccount"           xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"         columnsize="1000"     normalized="false"     desc="Cost of Goods Sold account for the inventory assembly or group." />
+    <attr name="COGSAccountId"         xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"               columnsize="255"      normalized="false"     desc="Cost of Goods Sold account for the inventory assembly or group." />
+    <attr name="AssetAccount"          xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"         columnsize="1000"     normalized="false"     desc="Inventory asset account for the inventory assembly or group if it is an inventory item." />
+    <attr name="AssetAccountId"        xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"               columnsize="255"      normalized="false"     desc="Inventory asset account for the inventory assembly or group if it is an inventory item." />
+    <attr name="LineItemId#"           xs:type="string"       readonly="false"     required="false"    references="Items.ID"                  columnsize="255"      normalized="true"      desc="The line item identifier. Either LineItemId or LineItemName need to have a value when inserting." />
+    <attr name="LineItemName#"         xs:type="string"       readonly="false"     required="false"    references="Items.FullName"            columnsize=""         normalized="true"      desc="The line item name. Either LineItemId or LineItemName need to have a value when inserting." />
+    <attr name="LineItemQuantity#"     xs:type="double"       readonly="false"     required="false"    references=""                          columnsize=""         normalized="true"      desc="The line item quantity." />
+    <attr name="ParentName"            xs:type="string"       readonly="false"     required="false"    references="Items.FullName"            columnsize=""         normalized="false"     desc="The parent name of the inventory assembly or group if the inventory assembly or group is a subitem." />
+    <attr name="ParentId"              xs:type="string"       readonly="false"     required="false"    references="Items.ID"                  columnsize="255"      normalized="false"     desc="The parent Id of the inventory assembly or group if the inventory assembly or group is a subitem." />
+    <attr name="Description"           xs:type="string"       readonly="false"     required="false"    references=""                          columnsize="5000"     normalized="false"     desc="A description of the inventory assembly or group."/>
+    <attr name="Price"                 xs:type="double"       readonly="false"     required="false"    references=""                          columnsize=""         normalized="false"     desc="The price for the inventory assembly or group." />
+    <attr name="AverageCost"           xs:type="double"       readonly="true"      required="false"    references=""                          columnsize=""         normalized="false"     desc="The average cost of the inventory assembly or group." />
+    <attr name="IsActive"              xs:type="boolean"      readonly="false"     required="false"    references=""                          columnsize=""         normalized="false"     desc="Whether the inventory assembly or group is active or not."  />
+    <attr name="PurchaseCost"          xs:type="double"       readonly="false"     required="false"    references=""                          columnsize=""         normalized="false"     desc="Purchase cost for the inventory assembly or group."  />
+    <attr name="PurchaseDescription"   xs:type="string"       readonly="false"     required="false"    references=""                          columnsize="5000"     normalized="false"     desc="Purchase description for the inventory assembly or group."/>
+    <attr name="ExpenseAccount"        xs:type="string"       readonly="false"     required="false"    references=""                          columnsize="1000"     normalized="false"     desc="Expense account for the inventory assembly or group." />
+    <attr name="PreferredVendor"       xs:type="string"       readonly="false"     required="false"    references="Vendors.Name"              columnsize="1000"     normalized="false"     desc="Preferred vendor for the inventory assembly or group." />
+    <attr name="PreferredVendorId"     xs:type="string"       readonly="false"     required="false"    references="Vendors.ID"                columnsize="255"      normalized="false"     desc="Preferred vendor for the inventory assembly or group." />
+    <attr name="TaxCode"               xs:type="string"       readonly="false"     required="false"    references="SalesTaxCodes.Name"        columnsize="3"        normalized="false"     desc="This is a reference to a sales tax code predefined within QuickBooks." />
+    <attr name="TaxCodeId"             xs:type="string"       readonly="false"     required="false"    references="SalesTaxCodes.ID"          columnsize="255"      normalized="false"     desc="This is a reference to a sales tax code predefined within QuickBooks." />
+    <attr name="PurchaseTaxCode"       xs:type="string"       readonly="false"     required="false"    references="SalesTaxCodes.Name"        columnsize="3"        normalized="false"     desc="This is a reference to a purchase tax code predefined within QuickBooks. Only available in international versions of QuickBooks." />
+    <attr name="PurchaseTaxCodeId"     xs:type="string"       readonly="false"     required="false"    references="SalesTaxCodes.ID"          columnsize="255"      normalized="false"     desc="This is a reference to a purchase tax code predefined within QuickBooks. Only available in international versions of QuickBooks." />
+    <attr name="IsTaxIncluded"         xs:type="boolean"      readonly="false"     required="false"    references=""                          columnsize=""         normalized="false"     desc="Determines if tax is included in the transaction amount. Available in only international editions of QuickBooks."/> 
+    <attr name="CustomFields"          xs:type="string"       readonly="false"     required="false"    references=""                          columnsize=""         normalized="false"     desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                          columnsize=""         normalized="true"      desc="When the inventory assembly or group was last modified."/> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                          columnsize=""         normalized="false"     desc="When the inventory assembly or group was created."/> 
+
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="Item"/>
+  <rsb:set attr="objecttype"    value="LineItem"/>
+  <rsb:set attr="linekey"       value="LineItemId"/>
+  <rsb:set attr="listtype"         value="List"/>
+  <rsb:set attr="includelineitems" value="true"/>
+  <rsb:set attr="outputitem"    value="lineitem"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>  

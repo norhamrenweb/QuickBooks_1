@@ -1,0 +1,38 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="DeletedTransactions" description="Query deleted Transactions.">
+
+    <!-- Column definitions -->
+    <attr name="TxnID"            xs:type="string"     readonly="true"     key="true"          references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TxnID"          desc="The unique identifier."/>
+    <attr name="TxnDelType"       xs:type="string"     readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TxnDelType"     desc="The owner of a data extension."/>
+    <attr name="ReferenceNumber"  xs:type="string"     readonly="true"     required="false"    references=""         columnsize="2000"  normalized="true"     other:qbxmlversion=""      other:selectcolumnname="RefNumber"      desc="The entity full name."/>
+    <attr name="TimeCreated"      xs:type="datetime"   readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeCreated"    desc="The time the object was created." />
+    <attr name="TimeDeleted"      xs:type="datetime"   readonly="true"     required="false"    references=""         columnsize=""      normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeDeleted"    desc="The time the object was deleted." />
+
+    <!-- Psuedo-Column definitions -->
+    <input name="StartTxnDate"         desc="Earliest modified date to search for." />
+    <input name="EndTxnDate"           desc="Latest modified date to search for." />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <rsb:check attr="_input.TxnDelType">
+    <rsb:else>
+      <rsb:throw code=500 desc="The TxnDelType must be specified to query DeletedTransactions.  Valid values are ARRefundCreditCard, Bill, BillPaymentCheck, BillPaymentCreditCard, BuildAssembly, Charge, Check, CreditCardCharge, CreditCardCredit, CreditMemo, Deposit, Estimate, InventoryAdjustment, Invoice, ItemReceipt, JournalEntry, PurchaseOrder, ReceivePayment, SalesOrder, SalesReceipt, SalesTaxPaymentCheck, TimeTracking, TransferInventory, VehicleMileage, VendorCredit" />
+    </rsb:else>
+  </rsb:check>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="TxnDeleted"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="TxnDeleted"/>
+
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+  
+  
+</rsb:script>

@@ -1,0 +1,42 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="Host" description="Query the QuickBooks host process. The Host represents information about the QuickBooks process currently being executed.">
+
+    <!-- Column definitions -->
+    <attr name="ProductName"                     xs:type="string"       readonly="true"     key="true"          normalized="true"    other:qbxmlversion=""        other:selectcolumnname="ProductName"                  desc="The name of the QuickBooks version being used."/>
+    <attr name="MajorVersion"                    xs:type="string"       readonly="true"     required="false"    normalized="true"    other:qbxmlversion=""        other:selectcolumnname="MajorVersion"                 desc="The major version of QuickBooks."/>
+    <attr name="MinorVersion"                    xs:type="string"       readonly="true"     required="false"    normalized="true"    other:qbxmlversion=""        other:selectcolumnname="MinorVersion"                 desc="The minor version of QuickBooks."/>
+    <attr name="Country"                         xs:type="string"       readonly="true"     required="false"    normalized="true"    other:qbxmlversion="3.0"     other:selectcolumnname="Country"                      desc="Country the QuickBooks edition was designed for."/>
+    <attr name="SupportedQBXMLVersion"           xs:type="string"       readonly="true"     required="false"    normalized="true"    other:qbxmlversion=""        other:selectcolumnname="SupportedQBXMLVersion"        desc="A comma separated list of QBXML versions supported by the version of QuickBooks."/>
+    <attr name="IsAutomaticLogin"                xs:type="boolean"      readonly="true"     required="false"    normalized="true"    other:qbxmlversion="3.0"     other:selectcolumnname="IsAutomaticLogin"             desc="A boolean indicating if the currently running .exe for QuickBooks is using automatic login. If true, this means that the QuickBooks UI is currently closed and the QuickBooks .exe was launched in the background to interact with the company file."/>
+    <attr name="QBFileMode"                      xs:type="string"       readonly="true"     required="false"    normalized="true"    other:qbxmlversion="3.0"     other:selectcolumnname="QBFileMode"                   desc="The company file mode currently in use. For instance, SingleUser or MultiUser."/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="Host"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="OtherList"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <!-- QuickBooks does not support any of these columns in the where clause -->
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:set attr="a.temp" value=""/>
+    <rsb:enum attr="toout.qb:supportedqbxmlversion">
+      <rsb:check attr="a.temp">
+        <rsb:set attr="a.temp" value="[a.temp],[_value]"/>
+        <rsb:else>
+          <rsb:set attr="a.temp" value="[_value]"/>
+        </rsb:else>
+      </rsb:check>
+    </rsb:enum>
+    <rsb:set attr="toout.supportedqbxmlversion" value="[a.temp]"/>
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+</rsb:script>

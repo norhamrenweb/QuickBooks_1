@@ -1,0 +1,88 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="Checks" description="Create, update, delete, and query QuickBooks Checks.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                       xs:type="string"       readonly="true"      key="true"          references=""                     columnsize="255"      normalized="true"      other:qbxmlversion=""       other:selectcolumnname="TxnID"                               desc="The unique identifier." /> 
+    <attr name="ReferenceNumber"          xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="21"       normalized="true"      other:qbxmlversion=""       other:selectcolumnname="RefNumber"                           desc="The transaction reference number."/> 
+    <attr name="TxnNumber"                xs:type="integer"      readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""       other:selectcolumnname="TxnNumber"                           desc="The transaction number. An identifying number for the transaction, different from the QuickBooks-generated Id."/> 
+    <attr name="Account"                  xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"    columnsize="1000"     normalized="true"      other:qbxmlversion=""       other:selectcolumnname="AccountRef"                          desc="The name of the account funds are being drawn from."/> 
+    <attr name="AccountId"                xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"          columnsize="255"      normalized="true"      other:qbxmlversion=""       other:selectcolumnname="AccountRef"                          desc="The id of the account funds are being drawn from."/> 
+    <attr name="Payee"                    xs:type="string"       readonly="false"     required="false"    references="Vendors.Name"         columnsize="1000"     normalized="true"      other:qbxmlversion=""       other:selectcolumnname="PayeeEntityRef"                      desc="The name of the payee for the Check."/> 
+    <attr name="PayeeId"                  xs:type="string"       readonly="false"     required="false"    references="Vendors.ID"           columnsize="255"      normalized="true"      other:qbxmlversion=""       other:selectcolumnname="PayeeEntityRef"                      desc="The Id of the payee for the Check."/> 
+    <attr name="Date"                     xs:type="date"         readonly="false"     required="true"     references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""       other:selectcolumnname="TxnDate"                             desc="Date of transaction. If it is set in the WHERE clause of a SELECT query, the pseudo columns StartDate and EndDate are overwritten with the value."/> 
+    <attr name="Amount"                   xs:type="double"       readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""       other:selectcolumnname="Amount"                              desc="Amount of the transaction." /> 
+    <attr name="Memo"                     xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="5000"     normalized="true"      other:qbxmlversion=""       other:selectcolumnname="Memo"                                desc="A memo regarding this transaction."/> 
+    <attr name="Address"                  xs:type="string"       readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""       other:selectcolumnname="Address"                             desc="Full address returned by QuickBooks."/> 
+    <attr name="Line1"                    xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="500"      normalized="true"      other:qbxmlversion=""       other:selectcolumnname="Address"                             desc="First line of the address."/> 
+    <attr name="Line2"                    xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="500"      normalized="true"      other:qbxmlversion=""       other:selectcolumnname="Address"                             desc="Second line of the address."/> 
+    <attr name="Line3"                    xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="500"      normalized="true"      other:qbxmlversion=""       other:selectcolumnname="Address"                             desc="Third line of the address."/> 
+    <attr name="Line4"                    xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="500"      normalized="true"      other:qbxmlversion="2.0"    other:selectcolumnname="Address"                             desc="Fourth line of the address."/> 
+    <attr name="Line5"                    xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="41"       normalized="true"      other:qbxmlversion="6.0"    other:selectcolumnname="Address"                             desc="Fifth line of the address."/> 
+    <attr name="City"                     xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="255"      normalized="true"      other:qbxmlversion=""       other:selectcolumnname="Address"                             desc="City name for the address of the check."/> 
+    <attr name="State"                    xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="255"      normalized="true"      other:qbxmlversion=""       other:selectcolumnname="Address"                             desc="State name for the address of the check."/> 
+    <attr name="PostalCode"               xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="30"       normalized="true"      other:qbxmlversion=""       other:selectcolumnname="Address"                             desc="Postal code for the address of the check."/> 
+    <attr name="Country"                  xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="255"      normalized="true"      other:qbxmlversion=""       other:selectcolumnname="Address"                             desc="Country for the address of the check."/> 
+    <attr name="Note"                     xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="41"       normalized="true"      other:qbxmlversion="6.0"    other:selectcolumnname="Address"                             desc="Note for the address of the check." />
+    <attr name="ItemCount"                xs:type="integer"      readonly="true"      required="false"    references=""                     columnsize=""         normalized="false"     other:qbxmlversion=""       other:selectcolumnname="ItemLineRet,ItemGroupLineRet"        desc="The count of line items."/> 
+    <attr name="ItemAggregate"            xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="5000"     normalized="false"     other:qbxmlversion=""       other:selectcolumnname="ItemLineRet,ItemGroupLineRet"        desc="An aggregate of the line item data which can be used for adding a check and its line item data." />
+    <attr name="ExpenseItemCount"         xs:type="integer"      readonly="true"      required="false"    references=""                     columnsize=""         normalized="false"     other:qbxmlversion=""       other:selectcolumnname="ExpenseLineRet"                      desc="The count of expense line items."/> 
+    <attr name="ExpenseItemAggregate"     xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="5000"     normalized="false"     other:qbxmlversion=""       other:selectcolumnname="ExpenseLineRet"                      desc="An aggregate of the expense item data which can be used for adding a check and its expense item data." />
+    <attr name="IsToBePrinted"            xs:type="boolean"      readonly="false"     required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""       other:selectcolumnname="IsToBePrinted"                       desc="Whether this transaction is to be printed." default="false"/> 
+    <attr name="IsTaxIncluded"            xs:type="boolean"      readonly="false"     required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""       other:selectcolumnname="IsTaxIncluded"                       desc="Determines if tax is included in the transaction amount. Available in only international editions of QuickBooks."/> 
+    <attr name="CurrencyName"             xs:type="string"       readonly="false"     required="false"    references="Currency.Name"        columnsize="64"       normalized="true"      other:qbxmlversion="8.0"    other:selectcolumnname="CurrencyRef"                         desc="The name of the currency for this customer. A minimum QBXML Version of 8.0 is required for this feature."/>
+    <attr name="CurrencyId"               xs:type="string"       readonly="false"     required="false"    references="Currency.ID"          columnsize="255"      normalized="true"      other:qbxmlversion="8.0"    other:selectcolumnname="CurrencyRef"                         desc="The unique Id of the currency for this customer. A minimum QBXML Version of 8.0 is required for this feature."/>
+    <attr name="ExchangeRate"             xs:type="double"       readonly="false"     required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion="8.0"    other:selectcolumnname="ExchangeRate"                        desc="The market price for which this currency can be exchanged for the currency used by the QuickBooks company file as the home currency." /> 
+    <attr name="CustomFields"             xs:type="string"       readonly="false"     required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion="2.0"    other:selectcolumnname="DataExtRet"                          desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="TimeModified"             xs:type="datetime"     readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""       other:selectcolumnname="TimeModified"                        desc="When the check was last modified."/> 
+    <attr name="TimeCreated"              xs:type="datetime"     readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""       other:selectcolumnname="TimeCreated"                         desc="When the check was created."/> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Item*"                  desc="All line-item-specific columns may be used in insertions." />
+    <input name="Expense*"               desc="All expense-item-specific columns may be used in insertions." />
+    <input name="ApplyCheckToTxnId"      desc="Identifies the transaction to be paid by this check. This can be used in updates and inserts." />
+    <input name="ApplyCheckToTxnAmount"  desc="The amount of the transaction to be paid by this check.  This can be used in updates and inserts." />
+    <input name="Rows@Next"              desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="Check"/>
+  <rsb:set attr="objecttype"    value="KnownTransaction"/>
+  <rsb:set attr="aggregatecolumns" value="ItemAggregate,ExpenseItemAggregate"/>
+  <rsb:set attr="childtables"   value="CheckLineItems,CheckExpenseItems"/>
+  <rsb:set attr="childlinekeys" value="ItemLineId,ExpenseLineId"/>
+  <rsb:set attr="outputitem"    value="transaction"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

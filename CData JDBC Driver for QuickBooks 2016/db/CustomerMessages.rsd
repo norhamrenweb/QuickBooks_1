@@ -1,0 +1,55 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="CustomerMessages" description="Create, delete, and query Customer Messages.">
+
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"     key="true"          columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID"              desc="The unique identifier of the customer message."/>
+    <attr name="Name"                       xs:type="string"       readonly="false"    required="true"     columnsize="101"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Name"                desc="The name of the customer message."/>
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"    required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="IsActive"            desc="Boolean determining if the customer message is active."/>
+    <attr name="EditSequence"               xs:type="string"       readonly="true"     required="false"    columnsize="16"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EditSequence"        desc="A string indicating the revision of the customer message."/>
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"     required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"         desc="The time the customer message was created."/>
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"     required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"        desc="The last time the customer message was modified."/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"             desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="CustomerMsg"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="OtherList"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:throw code=500 desc="QuickBooks does not allow CustomerMessages to be updated."/>
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

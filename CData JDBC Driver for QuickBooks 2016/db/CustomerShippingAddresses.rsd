@@ -1,0 +1,68 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="CustomerShippingAddresses" description="Create, update, delete, and query QuickBooks Customer Shipping Addresses. Multiple Customer Shipping Addresses are supported in only QuickBooks 2013 and higher. Additionally, this table requires QBXML version 12.0 or higher.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""               columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="The unique identifier of the shipping address in the format CustomerId|ShipToName." /> 
+    <attr name="CustomerId"            xs:type="string"       readonly="false"     required="false"    references="Customers.ID"   columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="The Id of the customer the shipping address is associated with." /> 
+    <attr name="Name"                  xs:type="string"       readonly="false"     required="false"    references=""               columnsize="100"      normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,Name,ShipAddress"          desc="The name of the customer. This is required to have a value when inserting."/> 
+    <attr name="FullName"              xs:type="string"       readonly="true"      required="false"    references=""               columnsize="1000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,FullName,ShipAddress"      desc="The full name of the customer, including parents in the format parent:customer."/>     
+    <attr name="ShipToName#"           xs:type="string"       readonly="false"     required="true"     references=""               columnsize="500"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="Name of the shipping address in QuickBooks. This input is required when inserting additional shipping addresses for a customer."/>
+    <attr name="ShipToAddr1#"          xs:type="string"       readonly="false"     required="false"    references=""               columnsize="500"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="First line of the shipping address."/>
+    <attr name="ShipToAddr2#"          xs:type="string"       readonly="false"     required="false"    references=""               columnsize="500"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="Second line of the shipping address."/>
+    <attr name="ShipToAddr3#"          xs:type="string"       readonly="false"     required="false"    references=""               columnsize="500"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="Third line of the shipping address."/>
+    <attr name="ShipToAddr4#"          xs:type="string"       readonly="false"     required="false"    references=""               columnsize="500"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="Fourth line of the shipping address."/>
+    <attr name="ShipToAddr5#"          xs:type="string"       readonly="false"     required="false"    references=""               columnsize="41"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="Fifth line of the shipping address."/>
+    <attr name="ShipToCity#"           xs:type="string"       readonly="false"     required="false"    references=""               columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="City name for the shipping address of the customer."/>
+    <attr name="ShipToState#"          xs:type="string"       readonly="false"     required="false"    references=""               columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="State name for the shipping address of the customer."/>
+    <attr name="ShipToPostalCode#"     xs:type="string"       readonly="false"     required="false"    references=""               columnsize="30"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="Postal code for the shipping address of the customer."/>
+    <attr name="ShipToCountry#"        xs:type="string"       readonly="false"     required="false"    references=""               columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="Country for the shipping address of the customer."/>
+    <attr name="ShipToNote#"           xs:type="string"       readonly="false"     required="false"    references=""               columnsize="41"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="Note for the shipping address of the customer."/>
+    <attr name="ShipToDefaultShipTo#"  xs:type="boolean"      readonly="false"     required="false"    references=""               columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,ShipAddress"               desc="Boolean indicating if this shipping address is the default shipping address for the customer."/>
+    <attr name="EditSequence"          xs:type="string"       readonly="false"     required="false"    references=""               columnsize="16"       normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,EditSequence"                desc="An identifier used for versioning for this copy of the object."/>
+    <attr name="TimeModified"          xs:type="datetime"     readonly="false"     required="false"    references=""               columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,TimeModified"                desc="When the customer was last modified."/> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="false"     required="false"    references=""               columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,TimeCreated"                 desc="When the customer was created."/> 
+
+    <!-- Psuedo-Column definitions -->
+    <input name="IncludeJobs"          desc="Whether or not to include job information in the results." default="TRUE" values="TRUE,FALSE"/>
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+    
+  </rsb:info>
+  
+  <rsb:set attr="entityname"     value="Customer"/>
+  <rsb:set attr="objecttype"     value="LineItem"/>  
+  <rsb:set attr="listtype"       value="List"/>
+  <rsb:set attr="linekey"        value="ShipToName"/>
+  <rsb:set attr="outputitem"     value="shipto"/>
+    
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

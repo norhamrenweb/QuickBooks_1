@@ -1,0 +1,31 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="Templates" description="Query QuickBooks templates.">
+
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"     key="true"          columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID"               desc="The unique identifier of the template."/>
+    <attr name="Name"                       xs:type="string"       readonly="false"    required="true"     columnsize="100"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Name"                 desc="The name of the template."/>
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"    required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="IsActive"             desc="Boolean determining if the template is active."/>
+    <attr name="TemplateType"               xs:type="string"       readonly="true"     required="false"    columnsize="100"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TemplateType"         desc="The type of template. This may be BuildAssembly, CreditMemo, Estimate, Invoice, PurchaseOrder, SalesOrder, or SalesReceipt."/>
+    <attr name="EditSequence"               xs:type="string"       readonly="true"     required="false"    columnsize="16"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EditSequence"         desc="A string indicating the revision of the template."/>
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"     required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"          desc="The time the template was created."/>
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"     required="false"    columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"         desc="The last time the template was modified."/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="Template"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="OtherList"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+</rsb:script>

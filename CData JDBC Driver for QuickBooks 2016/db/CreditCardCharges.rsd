@@ -1,0 +1,69 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+  
+  <rsb:info title="CreditCardCharges" description="Create, update, delete, and query QuickBooks Credit Card Charges.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                   columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID"                                  desc="The unique identifier of the transaction." /> 
+    <attr name="Date"                  xs:type="date"         readonly="false"     required="true"     references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnDate"                                desc="Date of the transaction. If it is set in the WHERE clause of a SELECT query, the pseudo columns StartDate and EndDate are overwritten with the value."/> 
+    <attr name="ReferenceNumber"       xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="21"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="RefNumber"                              desc="Reference number for the transaction."/> 
+    <attr name="AccountName"           xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"  columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="AccountRef"                             desc="A reference to the credit card account. Either AccountId or AccountName must have a value when inserting."/> 
+    <attr name="AccountId"             xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"        columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="AccountRef"                             desc="A reference to the credit card account. Either AccountId or AccountName must have a value when inserting."/> 
+    <attr name="Memo"                  xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="5000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Memo"                                   desc="Memo to appear on internal reports only."/> 
+    <attr name="PayeeName"             xs:type="string"       readonly="false"     required="false"    references="Vendors.Name"       columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="PayeeEntityRef"                         desc="Name of the payee for the transaction."/> 
+    <attr name="PayeeId"               xs:type="string"       readonly="false"     required="false"    references="Vendors.ID"         columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="PayeeEntityRef"                         desc="Id of the payee for the transaction."/> 
+    <attr name="IsTaxIncluded"         xs:type="boolean"      readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="IsTaxIncluded"                          desc="Determines if tax is included in the transaction amount. Available in only international editions of QuickBooks."/> 
+    <attr name="ItemCount"             xs:type="integer"      readonly="true"      required="false"    references=""                   columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ItemLineRet,ItemGroupLineRet"           desc="The count of line items."/> 
+    <attr name="ItemAggregate"         xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="5000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ItemLineRet,ItemGroupLineRet"           desc="An aggregate of the line item data which can be used for adding a bill and its line item data."/>
+    <attr name="ExpenseItemCount"      xs:type="integer"      readonly="true"      required="false"    references=""                   columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ExpenseLineRet"                         desc="The count of expense line items." />
+    <attr name="ExpenseItemAggregate"  xs:type="string"       readonly="false"     required="false"    references=""                   columnsize="5000"     normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ExpenseLineRet"                         desc="An aggregate of the expense item data which can be used for adding a bill and its expense item data."/>
+    <attr name="CustomFields"          xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion="2.0"     other:selectcolumnname="DataExtRet"                             desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"                           desc="When the credit card charge was last modified." /> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"                            desc="When the credit card charge was created."/> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Item*"                desc="All line-item-specific columns may be used in insertions." />
+    <input name="Expense*"             desc="All expense-item-specific columns may be used in insertions." />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="CreditCardCharge"/>
+  <rsb:set attr="objecttype"    value="KnownTransaction"/>
+  <rsb:set attr="aggregatecolumns" value="ItemAggregate,ExpenseItemAggregate"/>
+  <rsb:set attr="childtables"   value="CreditCardChargeLineItems,CreditCardChargeExpenseItems"/>
+  <rsb:set attr="childlinekeys" value="ItemLineId,ExpenseLineId"/>
+  <rsb:set attr="outputitem"    value="transaction"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

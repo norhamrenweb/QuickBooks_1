@@ -97,10 +97,10 @@ public class html extends HttpServlet {
 //           String where = "timestamp between '"+start+"' and '"+end+"'";
 //        map.put("studentid",stids[0]);
 //            map.put("end",enddate);
-           JRDataSource datasource = new JRBeanCollectionDataSource(DataFactory.getDataSource(this.getServletContext()), true);
-            JasperPrint jasperPrint = jasperFillManager.fill(jasperReport,map,datasource);//fill(jasperReport,map, conn);
-            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-            exporter.setExporterOutput(new SimpleHtmlExporterOutput(os));
+        JRDataSource datasource = new JRBeanCollectionDataSource(DataFactory.getDataSource(this.getServletContext()), true);
+        JasperPrint jasperPrint = jasperFillManager.fill(jasperReport,map,datasource);//fill(jasperReport,map, conn);
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleHtmlExporterOutput(os));
  //            exporter.setConfiguration(createHtmlConfiguration());
 // exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8"); 
 //exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint); 

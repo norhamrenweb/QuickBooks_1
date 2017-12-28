@@ -1,0 +1,57 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="CustomerNotes" description="Create, update, and query QuickBooks Customer Notes. This table requires QBXML version 12.0 or higher.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""               columnsize="255"    normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID,AdditionalNotesRet"               desc="The unique identifier of the note in the format CustomerId|NoteId." /> 
+    <attr name="CustomerID"            xs:type="string"       readonly="false"     required="false"    references="Customers.ID"   columnsize="255"    normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID,AdditionalNotesRet"               desc="The Id of the customer the note is associated with." /> 
+    <attr name="Name"                  xs:type="string"       readonly="false"     required="false"    references=""               columnsize="100"    normalized="false"     other:qbxmlversion=""        other:selectcolumnname="ListID,Name,AdditionalNotesRet"          desc="The name of the customer. This is required to have a value when inserting."/> 
+    <attr name="FullName"              xs:type="string"       readonly="true"      required="false"    references=""               columnsize="1000"   normalized="false"     other:qbxmlversion=""        other:selectcolumnname="ListID,FullName,AdditionalNotesRet"      desc="The full name of the customer, including parents in the format parent:customer."/>     
+    <attr name="NoteId#"               xs:type="string"       readonly="false"     required="true"     references=""               columnsize="255"    normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID,AdditionalNotesRet"               desc="Id of the note."/>
+    <attr name="Date#"                 xs:type="string"       readonly="false"     required="false"    references=""               columnsize="5000"   normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID,AdditionalNotesRet"               desc="Date for this note"/>
+    <attr name="Note#"                 xs:type="string"       readonly="false"     required="false"    references=""               columnsize="5000"   normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID,AdditionalNotesRet"               desc="Note for this customer"/>
+    <attr name="EditSequence"          xs:type="string"       readonly="false"     required="false"    references=""               columnsize="16"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="ListID,EditSequence,AdditionalNotesRet"  desc="An identifier used for versioning for this copy of the object."/>
+    <attr name="TimeModified"          xs:type="datetime"     readonly="false"     required="false"    references=""               columnsize=""       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID,TimeModified,AdditionalNotesRet"  desc="When the customer was last modified."/> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="false"     required="false"    references=""               columnsize=""       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="ListID,TimeCreated,AdditionalNotesRet"   desc="When the customer was created."/> 
+
+    <!-- Psuedo-Column definitions -->
+    <input name="IncludeJobs"          desc="Whether or not to include job information in the results." default="TRUE" values="TRUE,FALSE"/>
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+    
+  </rsb:info>
+  
+  <rsb:set attr="entityname"     value="Customer"/>
+  <rsb:set attr="objecttype"     value="LineItem"/>  
+  <rsb:set attr="listtype"       value="List"/>
+  <rsb:set attr="linekey"        value="NoteId"/>
+  <rsb:set attr="outputitem"     value="note"/>
+    
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:throw code=500 desc="QuickBooks does not support deleting notes." />
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

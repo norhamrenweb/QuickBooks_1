@@ -1,0 +1,62 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+
+  <rsb:info title="CompanyInfo" description="Query the company information from QuickBooks.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"     key="true"          columnsize="20"       normalized="true"      other:qbxmlversion=""         other:selectcolumnname="EIN"                           desc="The employer identification number of the company."/> 
+    <attr name="Name"                       xs:type="string"       readonly="true"                         columnsize="100"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="CompanyName"                   desc="The company name."/> 
+    <attr name="Type"                       xs:type="string"       readonly="true"                         columnsize="255"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="CompanyType"                   desc="The type of company."/> 
+    <attr name="Address"                    xs:type="string"       readonly="true"                         columnsize=""         normalized="true"      other:qbxmlversion=""         other:selectcolumnname="Address"                       desc="Full address returned by QuickBooks."/> 
+    <attr name="Line1"                      xs:type="string"       readonly="true"                         columnsize="500"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="Address"                       desc="First line of the address."/> 
+    <attr name="Line2"                      xs:type="string"       readonly="true"                         columnsize="500"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="Address"                       desc="Second line of the address."/> 
+    <attr name="Line3"                      xs:type="string"       readonly="true"                         columnsize="500"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="Address"                       desc="Third line of the address."/> 
+    <attr name="Line4"                      xs:type="string"       readonly="true"                         columnsize="500"      normalized="true"      other:qbxmlversion="2.0"      other:selectcolumnname="Address"                       desc="Fourth line of the address."/> 
+    <attr name="Line5"                      xs:type="string"       readonly="true"                         columnsize="41"       normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="Address"                       desc="Fifth line of the address."/> 
+    <attr name="City"                       xs:type="string"       readonly="true"                         columnsize="255"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="Address"                       desc="City name for the address of the company."/> 
+    <attr name="State"                      xs:type="string"       readonly="true"                         columnsize="255"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="Address"                       desc="State name for the address of the company."/> 
+    <attr name="PostalCode"                 xs:type="string"       readonly="true"                         columnsize="30"       normalized="true"      other:qbxmlversion=""         other:selectcolumnname="Address"                       desc="Postal code for the address of the company."/> 
+    <attr name="Country"                    xs:type="string"       readonly="true"                         columnsize="255"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="Address"                       desc="Country for the address of the company."/> 
+    <attr name="Note"                       xs:type="string"       readonly="true"                         columnsize="41"       normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="Address"                       desc="Note for the address of the company." />
+    <attr name="Email"                      xs:type="string"       readonly="true"                         columnsize="1023"     normalized="true"      other:qbxmlversion=""         other:selectcolumnname="Email"                         desc="Company email address."/> 
+    <attr name="Phone"                      xs:type="string"       readonly="true"                         columnsize="51"       normalized="true"      other:qbxmlversion=""         other:selectcolumnname="Phone"                         desc="Company phone number."/> 
+    <attr name="Fax"                        xs:type="string"       readonly="true"                         columnsize="51"       normalized="true"      other:qbxmlversion=""         other:selectcolumnname="Fax"                           desc="Company fax number."/> 
+    <attr name="SSN"                        xs:type="string"       readonly="true"                         columnsize="11"       normalized="true"      other:qbxmlversion="2.1"      other:selectcolumnname="SSN"                           desc="The SSN of the company."/> 
+    <attr name="Taxform"                    xs:type="string"       readonly="true"                         columnsize="11"       normalized="true"      other:qbxmlversion="2.1"      other:selectcolumnname="Taxform"                       desc="The tax form used by the company. "/> 
+    <attr name="Website"                    xs:type="string"       readonly="true"                         columnsize="128"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="CompanyWebSite"                desc="Company website URL."/>   
+    <attr name="FirstMonthFiscal"           xs:type="string"       readonly="true"                         columnsize="10"       normalized="true"      other:qbxmlversion=""         other:selectcolumnname="FirstMonthFiscalYear"          desc="The first month in the fiscal year for the company."/> 
+    <attr name="FirstMonthTax"              xs:type="string"       readonly="true"                         columnsize="10"       normalized="true"      other:qbxmlversion=""         other:selectcolumnname="FirstMonthIncomeTaxYear"       desc="The first month in the taxable year for the company."/> 
+    <attr name="LegalAddress"               xs:type="string"       readonly="true"                         columnsize=""         normalized="true"      other:qbxmlversion=""         other:selectcolumnname="LegalAddress"                  desc="Full legal address of the company."/> 
+    <attr name="LegalCity"                  xs:type="string"       readonly="true"                         columnsize="255"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="LegalAddress"                  desc="Legal city name for the company."/> 
+    <attr name="LegalCountry"               xs:type="string"       readonly="true"                         columnsize="255"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="LegalAddress"                  desc="Legal country name for the company."/> 
+    <attr name="LegalState"                 xs:type="string"       readonly="true"                         columnsize="255"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="LegalAddress"                  desc="Legal state name for the company."/> 
+    <attr name="LegalZip"                   xs:type="string"       readonly="true"                         columnsize="30"       normalized="true"      other:qbxmlversion=""         other:selectcolumnname="LegalAddress"                  desc="Legal zip code for the company."/> 
+    <attr name="LegalName"                  xs:type="string"       readonly="true"                         columnsize="100"      normalized="true"      other:qbxmlversion=""         other:selectcolumnname="LegalCompanyName"              desc="Legal company name."/> 
+    <attr name="ShippingAddress"            xs:type="string"       readonly="true"                         columnsize=""         normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="CompanyAddressForCustomer"     desc="Full shipping address returned by QuickBooks."/> 
+    <attr name="ShippingLine1"              xs:type="string"       readonly="true"                         columnsize="500"      normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="CompanyAddressForCustomer"     desc="First line of the shipping address."/> 
+    <attr name="ShippingLine2"              xs:type="string"       readonly="true"                         columnsize="500"      normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="CompanyAddressForCustomer"     desc="Second line of the shipping address."/> 
+    <attr name="ShippingLine3"              xs:type="string"       readonly="true"                         columnsize="500"      normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="CompanyAddressForCustomer"     desc="Third line of the shipping address."/> 
+    <attr name="ShippingLine4"              xs:type="string"       readonly="true"                         columnsize="500"      normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="CompanyAddressForCustomer"     desc="Fourth line of the shipping address."/> 
+    <attr name="ShippingLine5"              xs:type="string"       readonly="true"                         columnsize="41"       normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="CompanyAddressForCustomer"     desc="Fifth line of the shipping address."/> 
+    <attr name="ShippingCity"               xs:type="string"       readonly="true"                         columnsize="255"      normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="CompanyAddressForCustomer"     desc="City name for the shipping address of the company."/> 
+    <attr name="ShippingState"              xs:type="string"       readonly="true"                         columnsize="255"      normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="CompanyAddressForCustomer"     desc="State name for the shipping address of the company."/> 
+    <attr name="ShippingPostalCode"         xs:type="string"       readonly="true"                         columnsize="30"       normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="CompanyAddressForCustomer"     desc="Postal code for the shipping address of the company."/> 
+    <attr name="ShippingCountry"            xs:type="string"       readonly="true"                         columnsize="255"      normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="CompanyAddressForCustomer"     desc="Country for the shipping address of the company."/> 
+    <attr name="ShippingNote"               xs:type="string"       readonly="true"                         columnsize="41"       normalized="true"      other:qbxmlversion="6.0"      other:selectcolumnname="CompanyAddressForCustomer"     desc="Note for the shipping address of the company." />
+    <attr name="OpenedCompanyFile"          xs:type="string"       readonly="true"                         columnsize=""         normalized="true"      other:qbxmlversion=""         other:selectcolumnname=""                              desc="The path to the currently opened company file in QuickBooks."/> 
+    
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="Company"/>
+  <rsb:set attr="objecttype"     value="KnownList"/>
+  <rsb:set attr="id"             value="Company"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:set attr="toout.id" value="[ein | def('1')]"/>
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+</rsb:script>

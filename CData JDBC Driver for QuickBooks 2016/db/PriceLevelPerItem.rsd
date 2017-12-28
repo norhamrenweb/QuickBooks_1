@@ -1,0 +1,56 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="PriceLevelPerItem" description="Create and query QuickBooks Price Levels Per Item. Only QuickBooks Premier and Enterprise support Per-Item Price Levels. Note that while Price Levels can be added from this table, you may only add Per-Item Price Levels from this table. Price Levels may be deleted from the PriceLevels table. This table requires QBXML version 4.0 or later.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                                           xs:type="string"       readonly="true"      key="true"          references=""                   columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,PriceLevelPerItemRet"                       desc="The unique identifier." /> 
+    <attr name="PriceLevelID"                                 xs:type="string"       readonly="false"     required="true"     references="PriceLevels.ID"     columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,Name,PriceLevelPerItemRet"                  desc="The unique identifier of the price level."/>
+    <attr name="Name"                                         xs:type="string"       readonly="false"     required="true"     references=""                   columnsize="31"       normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,Name,PriceLevelPerItemRet"                  desc="The name of the price level."/> 
+    <attr name="PriceLevelType"                               xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="15"       normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,PriceLevelType,PriceLevelPerItemRet"        desc="The type of price level." values="FixedPercentage, PerItem" /> 
+    <attr name="IsActive"                                     xs:type="boolean"      readonly="false"     required="false"    references=""                   columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,IsActive,PriceLevelPerItemRet"              desc="A boolean determining if the price level is active."/> 
+    <attr name="PriceLevelPerItemRet_ItemRef_ListID#"         xs:type="string"       readonly="false"     required="false"    references="Items.ID"           columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,PriceLevelPerItemRet"                       desc="A reference to the Id of the item. Either the Id or FullName property of the item is required on insertion."/>
+    <attr name="PriceLevelPerItemRet_ItemRef_FullName#"       xs:type="string"       readonly="false"     required="false"    references="Items.FullName"     columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,PriceLevelPerItemRet"                       desc="A reference to the name of the item. Either the Id or FullName property of the item is required on insertion."/>
+    <attr name="PriceLevelPerItemRet_CustomPrice#"            xs:type="double"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,PriceLevelPerItemRet"                       desc="A fixed amount for the price."/>
+    <attr name="PriceLevelPerItemRet_CustomPricePercent#"     xs:type="double"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,PriceLevelPerItemRet"                       desc="A fixed discount percentage."/>
+    <attr name="PriceLevelPerItemRet_CurrencyRef_ListID"      xs:type="string"       readonly="false"     required="false"    references="Currency.ID"        columnsize="255"      normalized="true"     other:qbxmlversion="8.0"     other:selectcolumnname="ListID,CurrencyRef"                                desc="A reference to the currency Id. Requires a minimum QBXML version of 8.0 and multiple currencies enabled for the company file."/>
+    <attr name="PriceLevelPerItemRet_CurrencyRef_FullName"    xs:type="string"       readonly="false"     required="false"    references="Currency.FullName"  columnsize="64"       normalized="true"     other:qbxmlversion="8.0"     other:selectcolumnname="ListID,CurrencyRef"                                desc="A reference to the currency name. Requires a minimum QBXML version of 8.0 and multiple currencies enabled for the company file."/>
+    <attr name="TimeCreated"                                  xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,TimeCreated,PriceLevelPerItemRet"           desc="The datetime the transaction was made."/> 
+    <attr name="TimeModified"                                 xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID,TimeModified,PriceLevelPerItemRet"          desc="The last datetime the transaction was modified."/> 
+    <attr name="EditSequence"                                 xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="16"       normalized="false"    other:qbxmlversion=""        other:selectcolumnname="ListID,EditSequence,PriceLevelPerItemRet"          desc="An identifier used for versioning for this copy of the object." /> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->    
+  <rsb:set attr="entityname"       value="PriceLevel"/>
+  <rsb:set attr="objecttype"       value="LineItem"/>
+  <rsb:set attr="linekey"          value="PriceLevelPerItemRet_ItemRef_ListID"/>
+  <rsb:set attr="includelineitems" value="true"/>
+  <rsb:set attr="outputitem"       value="lineitem"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:throw code=500 desc="Deletes to Per Item Price Levels are not supported in the QuickBooks SDK." /> 
+</rsb:script>
+  
+</rsb:script>  

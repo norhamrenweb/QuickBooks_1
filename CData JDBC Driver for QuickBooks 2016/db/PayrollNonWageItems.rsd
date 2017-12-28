@@ -1,0 +1,57 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="PayrollNonWageItems" description="Query QuickBooks Non-Wage Payroll Items.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                           xs:type="string"       readonly="true"      key="true"          references=""                     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID"                       desc="The unique identifier." /> 
+    <attr name="Name"                         xs:type="string"       readonly="false"     required="true"     references=""                     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Name"                         desc="The name of the payroll item. This is required to have a value when inserting."/> 
+    <attr name="IsActive"                     xs:type="boolean"      readonly="false"     required="false"    references=""                     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="IsActive"                     desc="Whether or not the payroll item is active." />
+    <attr name="NonWageType"                  xs:type="string"       readonly="false"     required="true"     references=""                     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="NonWageType"                  desc="The type of pay."  values='Addition,CompanyContribution,Deduction,DirectDeposit,Tax'/> 
+    <attr name="ExpenseAccountRef_FullName"   xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"    normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ExpenseAccountRef"            desc="The expense account name for this nonwage payroll item. ExpenseAccount or ExpenseAccountId must have a value when inserting." />
+    <attr name="ExpenseAccountRef_ListID"     xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"          normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ExpenseAccountRef"            desc="The expense account id for this nonwage payroll item. ExpenseAccount or ExpenseAccountId must have a value when inserting." />
+    <attr name="LiabilityAccountRef_FullName" xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"    normalized="true"     other:qbxmlversion=""        other:selectcolumnname="LiabilityAccountRef"          desc="The liability account name for this nonwage payroll item. ExpenseAccount or ExpenseAccountId must have a value when inserting." />
+    <attr name="LiabilityAccountRef_ListID"   xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"          normalized="true"     other:qbxmlversion=""        other:selectcolumnname="LiabilityAccountRef"          desc="The liability account id for this nonwage payroll item. ExpenseAccount or ExpenseAccountId must have a value when inserting." />
+    <attr name="TimeCreated"                  xs:type="datetime"     readonly="true"      required="false"    references=""                     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"                  desc="The datetime the payroll item was made."/> 
+    <attr name="TimeModified"                 xs:type="datetime"     readonly="true"      required="false"    references=""                     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"                 desc="The last datetime the payroll item was modified."/> 
+    <attr name="EditSequence"                 xs:type="string"       readonly="true"      required="false"    references=""                     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EditSequence"                 desc="An identifier used for versioning for this copy of the object." /> 
+    
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"       value="PayrollItemNonWage"/>
+  <rsb:set attr="objecttype"       value="List"/>
+  <rsb:set attr="querytype"        value="OtherList"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:set attr="ExpenseAccount"      value="[ExpenseAccountRef_FullName | def('')]"/>
+    <rsb:set attr="ExpenseAccountId"    value="[ExpenseAccountRef_ListID | def('')]"/>
+    <rsb:set attr="LiabilityAccount"    value="[LiabilityAccountRef_FullName | def('')]"/>
+    <rsb:set attr="LiabilityAccountId"  value="[LiabilityAccountRef_ListID | def('')]"/>
+  
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:throw code=500 desc="QuickBooks does not support creating nonwage payroll items." />
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:throw code=500 desc="QuickBooks does not support updating nonwage payroll items." />
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:throw code=500 desc="QuickBooks does not support deleting nonwage payroll items." />
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>  

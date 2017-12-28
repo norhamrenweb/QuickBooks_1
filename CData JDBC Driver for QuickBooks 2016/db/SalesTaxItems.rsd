@@ -1,0 +1,61 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="SalesTaxItems" description="Create, update, delete, and query QuickBooks Sales Tax Items.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                  columnsize="255"      normalized="true"     other:qbxmlversion=""         other:selectcolumnname="ListID"               desc="The unique identifier." /> 
+    <attr name="Name"                  xs:type="string"       readonly="false"     required="true"     references=""                  columnsize="31"       normalized="true"     other:qbxmlversion=""         other:selectcolumnname="Name"                 desc="The name of the other name. This is required to have a value when inserting."/> 
+    <attr name="IsActive"              xs:type="boolean"      readonly="false"     required="false"    references=""                  columnsize=""         normalized="true"     other:qbxmlversion=""         other:selectcolumnname="IsActive"             desc="Whether or not the other name is active." />
+    <attr name="ClassRef_FullName"     xs:type="string"       readonly="false"     required="false"    references="Class.FullName"    columnsize="1000"     normalized="true"     other:qbxmlversion="12.0"     other:selectcolumnname="ClassRef"             desc="A reference to the class of the transaction. Requires QBXML version 12.0 or later." /> 
+    <attr name="ClassRef_ListID"       xs:type="string"       readonly="false"     required="false"    references="Class.ID"          columnsize="255"      normalized="true"     other:qbxmlversion="12.0"     other:selectcolumnname="ClassRef"             desc="A reference to the class of the transaction. Requires QBXML version 12.0 or later." /> 
+    <attr name="ItemDesc"              xs:type="string"       readonly="false"     required="false"    references=""                  columnsize="4096"     normalized="true"     other:qbxmlversion=""         other:selectcolumnname="ItemDesc"             desc="A description for the sales tax item." /> 
+    <attr name="TaxRate"               xs:type="double"       readonly="false"     required="false"    references=""                  columnsize=""         normalized="true"     other:qbxmlversion=""         other:selectcolumnname="TaxRate"              desc="The tax rate. If a nonzero TaxRate is specified, then TaxVendorRef is required. " /> 
+    <attr name="TaxVendorRef_FullName" xs:type="string"       readonly="false"     required="false"    references="Vendors.Name"      columnsize="1000"     normalized="true"     other:qbxmlversion=""         other:selectcolumnname="TaxVendorRef"         desc="Refers to the tax agency to whom collected taxes are owed. This will be a vendor on the vendor list." /> 
+    <attr name="TaxVendorRef_ListID"   xs:type="string"       readonly="false"     required="false"    references="Vendors.ID"        columnsize="255"      normalized="true"     other:qbxmlversion=""         other:selectcolumnname="TaxVendorRef"         desc="Refers to the tax agency to whom collected taxes are owed. This will be a vendor on the vendor list." />              
+    <attr name="CustomFields"          xs:type="string"       readonly="false"     required="false"    references=""                  columnsize=""         normalized="true"     other:qbxmlversion=""         other:selectcolumnname="CustomFields"         desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="EditSequence"          xs:type="string"       readonly="true"      required="false"    references=""                  columnsize="16"       normalized="true"     other:qbxmlversion=""         other:selectcolumnname="EditSequence"         desc="An identifier used for versioning for this copy of the object." /> 
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                  columnsize=""         normalized="true"     other:qbxmlversion=""         other:selectcolumnname="TimeModified"         desc="When the sales tax item was last modified."/> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                  columnsize=""         normalized="true"     other:qbxmlversion=""         other:selectcolumnname="TimeCreated"          desc="When the sales tax item was created."/> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"       value="ItemSalesTax"/>
+  <rsb:set attr="objecttype"       value="List"/>
+  <rsb:set attr="querytype"        value="OtherList"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

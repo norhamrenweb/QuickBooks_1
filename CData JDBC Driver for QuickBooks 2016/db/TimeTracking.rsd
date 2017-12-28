@@ -1,0 +1,65 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="TimeTracking" description="Create, update, delete, and query QuickBooks Time Tracking events.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                        columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnID"                  desc="An Id is an alphanumerical identifier assigned by the server whenever an object is added to QuickBooks. It is guaranteed to be unique across all objects of the same type." /> 
+    <attr name="BillableStatus"        xs:type="string"       readonly="false"     required="false"    references=""                        columnsize="15"       normalized="true"     other:qbxmlversion="6.0"     other:selectcolumnname="BillableStatus"         desc="The billing status of this line item. If the billing status is empty (that is, if no billing status appears in QuickBooks), then no BillableStatus value will be returned." value="Empty,Billable,NotBillable,HasBeenBilled"/> 
+    <attr name="Date"                  xs:type="date"         readonly="false"     required="false"    references=""                        columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TxnDate"                desc="The date of the transaction. The standard formatting for dates is YYYY-MM-DD; i.e., September 2, 2002 is formatted as 2002-09-02. When getting the value of a date property, the date will always be in this format. This is required to have a value when inserting."  /> 
+    <attr name="CustomerName"          xs:type="string"       readonly="false"     required="false"    references="Customers.FullName"      columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="CustomerRef"            desc="The Customer property indicates the customer who has purchased goods or services from the company. This is required to have a value when inserting if CustomerID is empty and BillableStatus is not NotBillable."/> 
+    <attr name="CustomerId"            xs:type="string"       readonly="false"     required="false"    references="Customers.ID"            columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="CustomerRef"            desc="The Customer property indicates the customer who has purchased goods or services from the company. This is required to have a value when inserting if CustomerName is empty and BillableStatus is not NotBillable."/> 
+    <attr name="Duration"              xs:type="string"       readonly="false"     required="false"    references=""                        columnsize="50"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Duration"               desc="The duration of time being tracked. Time is represented in hours followed by minutes, with the character ':' (colon) separating them. For instance, two hours and thirty minutes is represented as '2:30'."/> 
+    <attr name="EmployeeName"          xs:type="string"       readonly="false"     required="false"    references="Employees.Name"          columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EntityRef"              desc="A reference to the employee or subcontractor whose time is being tracked. The person is typically an employee but may be a vendor or defined in an other-name record as well. This is required to have a value when inserting if EmployeeId is empty."/>     
+    <attr name="EmployeeId"            xs:type="string"       readonly="false"     required="false"    references="Employees.ID"            columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EntityRef"              desc="A reference to the employee or subcontractor whose time is being tracked. The person is typically an employee but may be a vendor or defined in an other-name record as well. This is required to have a value when inserting if EmployeeName is empty."/> 
+    <attr name="Notes"                 xs:type="string"       readonly="false"     required="false"    references=""                        columnsize="5000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Notes"                  desc="Notes about this transaction."   /> 
+    <attr name="Class"                 xs:type="string"       readonly="false"     required="false"    references="Class.FullName"          columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ClassRef"               desc="A reference to the class of the transaction."/> 
+    <attr name="ClassId"               xs:type="string"       readonly="false"     required="false"    references="Class.ID"                columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ClassRef"               desc="A reference to the class of the transaction."/> 
+    <attr name="PayrollWageItemName"   xs:type="string"       readonly="false"     required="false"    references="PayrollWageItems.Name"   columnsize="100"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="PayrollItemWageRef"     desc="A payment scheme, such as Regular Pay, Overtime Pay, etc. This property may only be specified if (1) the employee specified refers to an employee, and not a vendor or subcontractor, and (2) the 'Use time data to create paychecks' option is selected for this employee (from within the QuickBooks UI.)"/> 
+    <attr name="PayrollWageItemId"     xs:type="string"       readonly="false"     required="false"    references="PayrollWageItems.ID"     columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="PayrollItemWageRef"     desc="A payment scheme, such as Regular Pay, Overtime Pay, etc. This property may only be specified if (1) the employee specified refers to an employee, and not a vendor or subcontractor, and (2) the 'Use time data to create paychecks' option is selected for this employee from within the QuickBooks UI."/> 
+    <attr name="ServiceItemName"       xs:type="string"       readonly="false"     required="false"    references="Items.Name"              columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ItemServiceRef"         desc="The type of work being performed. If a Customer is not specified, ServiceItem is not needed. If BillableStatus is set to Billable, then both ServiceItem and Customer are required. This is required to have a value when inserting if ServiceItemID is empty."/> 
+    <attr name="ServiceItemId"         xs:type="string"       readonly="false"     required="false"    references="Items.ID"                columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ItemServiceRef"         desc="The type of work being performed. If a Customer is not specified, ServiceItem is not needed. If BillableStatus is set to Billable, then both ServiceItem and Customer are required. This is required to have a value when inserting if ServiceItemName is empty."/> 
+    <attr name="EditSequence"          xs:type="string"       readonly="true"      required="false"    references=""                        columnsize="16"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EditSequence"           desc="An identifier used for versioning for this copy of the object." /> 
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                        columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"           desc="When the time-tracking event was last modified." /> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                        columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"            desc="When the time-tracking event was created."/> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+    
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="TimeTracking"/>
+  <rsb:set attr="objecttype"     value="KnownTransaction"/>
+    
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

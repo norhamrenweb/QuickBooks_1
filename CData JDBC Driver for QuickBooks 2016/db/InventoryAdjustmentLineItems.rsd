@@ -1,0 +1,74 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="InventoryAdjustmentLineItems" description="Create and query QuickBooks Inventory Adjustment Line Items.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                         columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,InventoryAdjustmentLineRet"                       desc="The unique identifier in the format InventoryAdjustmentId|ItemLineId." /> 
+    <attr name="InventoryAdjustmentID"   xs:type="string"     readonly="true"      required="false"    references="InventoryAdjustments.ID"  columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,InventoryAdjustmentLineRet"                       desc="The unique identifier for the Inventory Adjustment." /> 
+    <attr name="ReferenceNumber"       xs:type="string"       readonly="false"     required="false"    references=""                         columnsize="21"       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,RefNumber,InventoryAdjustmentLineRet"             desc="The transaction reference number."/> 
+	  <attr name="Account"               xs:type="string"       readonly="false"     required="true"     references="Accounts.FullName"        columnsize="1000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,AccountRef,InventoryAdjustmentLineRet"            desc="The account the inventory adjustment is associated with. Either Account or AccountId is required on insert."/> 
+	  <attr name="AccountId"             xs:type="string"       readonly="false"     required="true"     references="Accounts.ID"              columnsize="255"      normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,AccountRef,InventoryAdjustmentLineRet"            desc="The account the inventory adjustment is associated with. Either Account or AccountId is required on insert."/> 
+	  <attr name="Class"                 xs:type="string"       readonly="false"     required="false"    references="Class.FullName"           columnsize="1000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ClassRef,InventoryAdjustmentLineRet"              desc="A reference to the class for the inventory adjustment."/> 
+	  <attr name="ClassId"               xs:type="string"       readonly="false"     required="false"    references="Class.ID"                 columnsize="255"      normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ClassRef,InventoryAdjustmentLineRet"              desc="A reference to the class for the inventory adjustment."/> 
+    <attr name="CustomerName"          xs:type="string"       readonly="false"     required="false"    references="Customers.FullName"       columnsize="1000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,CustomerRef,InventoryAdjustmentLineRet"           desc="The name of the customer on the inventory adjustment."/> 
+    <attr name="CustomerId"            xs:type="string"       readonly="false"     required="false"    references="Customers.ID"             columnsize="255"      normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,CustomerRef,InventoryAdjustmentLineRet"           desc="The id of the customer on the inventory adjustment."/> 
+    <attr name="Memo"                  xs:type="string"       readonly="false"     required="false"    references=""                         columnsize="5000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,Memo,InventoryAdjustmentLineRet"                  desc="A memo regarding this transaction."/> 
+    <attr name="InventorySite"         xs:type="string"       readonly="false"     required="false"    references="InventorySites.Name"      columnsize="31"       normalized="false"     other:qbxmlversion="10.0"    other:selectcolumnname="TxnID,InventorySiteRef,InventoryAdjustmentLineRet"      desc="The name of the inventory site for the transaction."/> 
+    <attr name="InventorySiteId"       xs:type="string"       readonly="false"     required="false"    references="InventorySites.ID"        columnsize="255"      normalized="false"     other:qbxmlversion="10.0"    other:selectcolumnname="TxnID,InventorySiteRef,InventoryAdjustmentLineRet"      desc="The id of the inventory site for the transaction."/> 
+    <attr name="Date"                  xs:type="date"         readonly="false"     required="false"    references=""                         columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnDate,InventoryAdjustmentLineRet"               desc="The date of the transaction."/> 
+	  <attr name="ItemLineId#"           xs:type="string"       readonly="false"     required="true"     references=""                         columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,InventoryAdjustmentLineRet"                       desc="The line id of the item."/>
+	  <attr name="ItemName#"             xs:type="string"       readonly="false"     required="true"     references="Items.FullName"           columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,InventoryAdjustmentLineRet"                       desc="The item name. Either ItemName or ItemId is required on an insert."/>
+    <attr name="ItemId#"               xs:type="string"       readonly="false"     required="false"    references="Items.ID"                 columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,InventoryAdjustmentLineRet"                       desc="The item identifier. Either ItemName or ItemId is required on an insert."/>
+	  <attr name="ItemNewQuantity#"      xs:type="double"       readonly="false"     required="false"    references=""                         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,InventoryAdjustmentLineRet"                       desc="The new quantity for this adjustment. Used on only insert. There is no response value."/>
+	  <attr name="ItemNewValue#"         xs:type="double"       readonly="false"     required="false"    references=""                         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,InventoryAdjustmentLineRet"                       desc="New value of this adjustment. Used on only insert. There is no response value."/>
+	  <attr name="ItemQuantityDiff#"     xs:type="double"       readonly="false"     required="false"    references=""                         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,InventoryAdjustmentLineRet"                       desc="The change in quantity for this adjustment."/>
+	  <attr name="ItemValueDiff#"        xs:type="double"       readonly="false"     required="false"    references=""                         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,InventoryAdjustmentLineRet"                       desc="The change in total value for this adjustment."/>
+	  <attr name="ItemLotNumber#"        xs:type="string"       readonly="false"     required="false"    references=""                         columnsize="40"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,InventoryAdjustmentLineRet"                       desc="The lot number for this adjustment. This field requires QBXML Version 11.0."/>
+    <attr name="EditSequence"          xs:type="string"       readonly="true"      required="false"    references=""                         columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,EditSequence,InventoryAdjustmentLineRet"          desc="An identifier used for versioning for this copy of the object." /> 
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeModified,InventoryAdjustmentLineRet"          desc="When the inventory adjustment was last modified."/> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                         columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeCreated,InventoryAdjustmentLineRet"           desc="When the inventory adjustment was created."/> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="LinkToTxnId"          desc="Link this transaction to another transaction. This is available during only inserts and requires a minimum QBXML Version 6.0"/>
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="InventoryAdjustment"/>
+  <rsb:set attr="objecttype"    value="LineItem"/>
+  <rsb:set attr="linekey"       value="ItemLineId"/>
+  <rsb:set attr="includelineitems" value="true"/>
+  <rsb:set attr="outputitem"    value="lineitem"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:check attr="_input.inventoryadjustmentid">
+    <rsb:throw code=500 desc="Inventory Adjustment updates are not available at this time."/>
+  </rsb:check>
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:throw code=500 desc="Inventory Adjustment updates are not available at this time."/>
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:throw code=500 desc="Inventory Adjustment updates are not available at this time."/>
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>  

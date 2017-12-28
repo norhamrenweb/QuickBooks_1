@@ -1,0 +1,37 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+  
+    <rsb:info title="ReportJob" description="Generates job reports." >
+          <input name="reporttype" description="The type of the report." value="ITEMESTIMATESVSACTUALS,ITEMPROFITABILITY,JOBESTIMATESVSACTUALSDETAIL,JOBESTIMATESVSACTUALSSUMMARY,JOBPROFITABILITYDETAIL,JOBPROFITABILITYSUMMARY," required="true" default="ITEMESTIMATESVSACTUALS" />
+          <input name="reportperiod" description="Report date range in the format fromdate:todate where either value may be omitted for an open-ended range (e.g., 2009-12-25:). Supported date format: yyyy-MM-dd."  />
+          <input name="reportdaterangemacro" description="Use a predefined date range." value="ALL,TODAY,THISWEEK,THISWEEKTODATE,THISMONTH,THISMONTHTODATE,THISQUARTER,THISQUARTERTODATE,THISYEAR,THISYEARTODATE,YESTERDAY,LASTWEEK,LASTWEEKTODATE,LASTMONTH,LASTMONTHTODATE,LASTQUARTER,LASTQUARTERTODATE,LASTYEAR,LASTYEARTODATE,NEXTWEEK,NEXTFOURWEEKS,NEXTMONTH,NEXTQUARTER,NEXTYEAR," default="ALL" />
+          <input name="accounttype" description="Allows the user to query for a specified account type." value="NONE,ACCOUNTSPAYABLE,ACCOUNTSRECEIVABLE,ALLOWEDFOR1099,APANDSALESTAX,APORCREDITCARD,ARANDAP,ASSET,BALANCESHEET,BANK,BANKANDARANDAPANDUF,BANKANDUF,COSTOFSALES,CREDITCARD,CURRENTASSET,CURRENTASSETANDEXPENSE,CURRENTLIABILITY,EQUITY,EQUITYANDINCOMEANDEXPENSE,EXPENSEANDOTHEREXPENSE,FIXEDASSET,INCOMEANDEXPENSE,INCOMEANDOTHERINCOME,LIABILITY,LIABILITYANDEQUITY,LONGTERMLIABILITY,NONPOSTING,ORDINARYEXPENSE,ORDINARYINCOME,ORDINARYINCOMEANDCOGS,ORDINARYINCOMEANDEXPENSE,OTHERASSET,OTHERCURRENTASSET,OTHERCURRENTLIABILITY,OTHEREXPENSE,OTHERINCOME,OTHERINCOMEOREXPENSE," default="NONE" />
+          <input name="accountlisttype" description="Allows the user to query for specific list elements." value="LISTID,FULLNAME,LISTIDWITHCHILDREN,FULLNAMEWITHCHILDREN," default="FULLNAME" />
+          <input name="accountlists" description="The list elements to report on. For LISTIDLIST and FULLNAMELIST, use a comma-separated list."  />
+          <input name="entitytype" description="Allows the user to query for a specified name type." value="NONE,CUSTOMER,EMPLOYEE,OTHERNAME,VENDOR," default="NONE" />
+          <input name="entitylisttype" description="Allows the user to query for specific list elements." value="LISTID,FULLNAME,LISTIDWITHCHILDREN,FULLNAMEWITHCHILDREN," default="FULLNAME" />
+          <input name="entitylists" description="The list elements to report on. For LISTIDLIST and FULLNAMELIST, use a comma-separated list."  />
+          <input name="itemtype" description="Allows the user to query for a specified item type." value="NONE,ALLEXCEPTFIXEDASSET,ASSEMBLY,DISCOUNT,FIXEDASSET,INVENTORY,INVENTORYANDASSEMBLY,NONINVENTORY,OTHERCHARGE,PAYMENT,SALES,SALESTAX,SERVICE," default="NONE" />
+          <input name="itemlisttype" description="Allows the user to query for specific list elements." value="LISTID,FULLNAME,LISTIDWITHCHILDREN,FULLNAMEWITHCHILDREN," default="FULLNAME" />
+          <input name="itemlists" description="The list elements to report on. For LISTIDLIST and FULLNAMELIST, use a comma-separated list."  />
+          <input name="classlisttype" description="Allows the user to query for a specified class." value="LISTID,FULLNAME,LISTIDWITHCHILDREN,FULLNAMEWITHCHILDREN," default="FULLNAME" />
+          <input name="classlists" description="The list elements to report on. For LISTIDLIST and FULLNAMELIST, use a comma-separated list."  />
+          <input name="transactiontypes" description="A list of the transaction types you want the report to cover. Available values include: ALL,ARREFUNDCREDITCARD,BILL,BILLPAYMENTCHECK,BILLPAYMENTCREDITCARD,BUILDASSEMBLY,CHARGE,CHECK,CREDITCARDCHARGE,CREDITCARDCREDIT,CREDITMEMO,DEPOSIT,ESTIMATE,INVENTORYADJUSTMENT,INVOICE,ITEMRECEIPT,JOURNALENTRY,LIABILITYADJUSTMENT,PAYCHECK,PAYROLLLIABILITYCHECK,PURCHASEORDER,RECEIVEPAYMENT,SALESORDER,SALESRECEIPT,SALESTAXPAYMENTCHECK,TRANSFER,VENDORCREDIT,YTDADJUSTMENT" default="ALL" />
+          <input name="modifieddaterange" description="Modified date range in the format fromdate:todate where either value may be omitted for an open-ended range (e.g., 2009-12-25:). Supported date format: yyyy-MM-dd."  />
+          <input name="modifieddaterangemacro" description="Use a predefined modified date range." value="ALL,TODAY,THISWEEK,THISWEEKTODATE,THISMONTH,THISMONTHTODATE,THISQUARTER,THISQUARTERTODATE,THISYEAR,THISYEARTODATE,YESTERDAY,LASTWEEK,LASTWEEKTODATE,LASTMONTH,LASTMONTHTODATE,LASTQUARTER,LASTQUARTERTODATE,LASTYEAR,LASTYEARTODATE,NEXTWEEK,NEXTFOURWEEKS,NEXTMONTH,NEXTQUARTER,NEXTYEAR," default="ALL" />
+          <input name="detaillevel" description="The level of detail to include in the report." value="ALL,ALLEXCEPTSUMMARY,SUMMARYONLY," default="ALL" />
+          <input name="summarizecolumnsby" description="Determines which data the report calculates and how the columns will be labeled across the top of the report." value="NONE,ACCOUNT,BALANCESHEET,CLASS,CUSTOMER,CUSTOMERTYPE,DAY,EMPLOYEE,FOURWEEK,HALFMONTH,INCOMESTATEMENT,ITEMDETAIL,ITEMTYPE,MONTH,PAYEE,PAYMENTMETHOD,PAYROLLITEMDETAIL,QUARTER,SALESREP,SALESTAXCODE,SHIPMETHOD,TERMS,TOTALONLY,TWOWEEK,VENDOR,VENDORTYPE,WEEK,YEAR," default="NONE" />
+          <input name="includesubcolumns" description="Determines whether to include any subcolumn information." value="TRUE,FALSE," default="FALSE" />
+          <input name="postingstatus" description="Allows you to query for posting reports, non-posting reports, or reports that are either." value="EITHER,NONPOSTING,POSTING," default="EITHER" />
+          <input name="delimiter" description="Set the delimiter character for the fields" default=";" /> 
+          
+          <output name=rowtype         desc="The type of row being output. For example, TitleRow, TextRow, DataRow, SubtotalRow, or TotalRow." />
+          <output name=column_value    desc="The data in this row in a semicolon separated list of the report." />
+    </rsb:info>
+  
+  <rsb:set attr="operationname" value="qbReportJob"/>
+  
+  <rsb:call op="quickbooksadoDesktopExecuteStoredProcedure" output="out">
+    <rsb:push />
+  </rsb:call>
+
+</rsb:script>

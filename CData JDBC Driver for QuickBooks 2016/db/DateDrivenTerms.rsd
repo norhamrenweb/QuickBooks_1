@@ -1,0 +1,59 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">    
+
+  <rsb:info title="DateDrivenTerms" description="Create, delete, and query QuickBooks Date Driven Terms.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"      key="true"               columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ListID"                    desc="The Id of the date driven term."/>
+    <attr name="Name"                       xs:type="string"       readonly="false"     required="true"          columnsize="31"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Name"                      desc="The name of the date driven term."/>
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"     required="false"         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="IsActive"                  desc="Boolean indicating if the date driven term is active."/>
+    <attr name="DayOfMonthDue"              xs:type="integer"      readonly="false"     required="true"          columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="DayOfMonthDue"             desc="Day of the month when full payment is due with no discount."/>
+    <attr name="DueNextMonthDays"           xs:type="integer"      readonly="false"     required="false"         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="DueNextMonthDays"          desc="If the invoice or bill is issued within this many days of the due date, payment is not due until the following month."/>
+    <attr name="DiscountDayOfMonth"         xs:type="integer"      readonly="false"     required="false"         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="DiscountDayOfMonth"        desc="If the payment is made by this day of the month, then DiscountPct applies."/>
+    <attr name="DiscountPct"                xs:type="double"       readonly="false"     required="false"         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="DiscountPct"               desc="If the payment is received by DiscountDayOfMonth, then this discount will apply to the payment. DiscountPct must be between 0 and 100."/>
+    <attr name="EditSequence"               xs:type="string"       readonly="true"      required="false"         columnsize="16"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="EditSequence"              desc="A string indicating the revision of the date driven term."/>
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"      required="false"         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeCreated"               desc="The time the date driven term was created."/>
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"      required="false"         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeModified"              desc="The time the date driven term was last modified."/>
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"             desc="Identifier for the next page of results. Do not set this value manually." />
+    
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="DateDrivenTerms"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="OtherList"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:throw code=500 desc="QuickBooks does not allow DateDrivenTerms to be updated!"/>
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

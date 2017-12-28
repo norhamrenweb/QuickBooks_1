@@ -1,0 +1,75 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="StatementCharges" description="Create, update, delete, and query QuickBooks Statement Charges.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                       xs:type="string"       readonly="true"      key="true"          references=""                   columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID"                    desc="The unique identifier." /> 
+    <attr name="TxnNumber"                xs:type="integer"      readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnNumber"                desc="The transaction number. An identifying number for the transaction, different from the QuickBooks-generated Id." /> 
+    <attr name="ReferenceNumber"          xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="RefNumber"                desc="Transaction reference number." />
+    <attr name="CustomerName"             xs:type="string"       readonly="false"     required="false"    references="Customers.FullName" columnsize="1000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="CustomerRef"              desc="Customer name this transaction is recorded under. Either CustomerName or CustomerId must have a value when inserting."/> 
+    <attr name="CustomerId"               xs:type="string"       readonly="false"     required="false"    references="Customers.ID"       columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="CustomerRef"              desc="Customer Id this transaction is recorded under. Either CustomerName or CustomerId must have a value when inserting."/> 
+    <attr name="Date"                     xs:type="date"         readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnDate"                  desc="Transaction date." /> 
+    <attr name="ItemName"                 xs:type="string"       readonly="false"     required="false"    references="Items.FullName"     columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ItemRef"                  desc="A reference to the item for the transaction."/> 
+    <attr name="ItemId"                   xs:type="string"       readonly="false"     required="false"    references="Items.ID"           columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ItemRef"                  desc="A reference to the item for the transaction."/> 
+    <attr name="Quantity"                 xs:type="double"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Quantity"                 desc="Quantity in stock for this inventory item." />
+    <attr name="UnitOfMeasure"            xs:type="string"       readonly="false"     required="false"    references="UnitOfMeasure.Name" columnsize="31"       normalized="true"      other:qbxmlversion="7.0"     other:selectcolumnname="UnitOfMeasure"            desc="In a transaction line item, the name of the unit of measure is selected from within the item's available units. If the company file is enabled only for single unit of measure per item, this must be the base unit. Only available in QBXML Version 7.0 and above." />
+    <attr name="OverrideUnitOfMeasure"    xs:type="string"       readonly="false"     required="false"    references="UnitOfMeasure.Name" columnsize="100"      normalized="true"      other:qbxmlversion="7.0"     other:selectcolumnname="OverrideUOMSetRef"        desc="When you modify a transaction line to change the unit of measure used in that line, you use this to specify the UOM set within which you are choosing an available unit of measure. Only available in QBXML Version 7.0 and above." />
+    <attr name="OverrideUnitOfMeasureId"  xs:type="string"       readonly="false"     required="false"    references="UnitOfMeasure.ID"   columnsize=""         normalized="true"      other:qbxmlversion="7.0"     other:selectcolumnname="OverrideUOMSetRef"        desc="When you modify a transaction line to change the unit of measure used in that line, you use this to specify the UOM set within which you are choosing an available unit of measure. Only available in QBXML Version 7.0 and above." />
+    <attr name="Rate"                     xs:type="double"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Rate"                     desc="The unit rate charged for this item." />
+    <attr name="Amount"                   xs:type="double"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Amount"                   desc="Amount of the transaction."/> 
+    <attr name="Balance"                  xs:type="double"       readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="BalanceRemaining"         desc="The balance remaining on the transaction."/>
+    <attr name="Description"              xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Desc"                     desc="A textual description of the StatementCharge."/> 
+    <attr name="AccountsReceivable"       xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"  columnsize="1000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ARAccountRef"             desc="A reference to the name of the accounts-receivable account where the money received from this transaction will be deposited." />
+    <attr name="AccountsReceivableId"     xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"        columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ARAccountRef"             desc="A reference to the Id of the accounts-receivable account where the money received from this transaction will be deposited." />
+    <attr name="Class"                    xs:type="string"       readonly="false"     required="false"    references="Class.FullName"     columnsize="1000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ClassRef"                 desc="A reference to the class of the transaction."/> 
+    <attr name="ClassId"                  xs:type="string"       readonly="false"     required="false"    references="Class.ID"           columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ClassRef"                 desc="A reference to the class of the transaction."/> 
+    <attr name="BilledDate"               xs:type="date"         readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="BilledDate"               desc="Date when the customer was billed." /> 
+    <attr name="DueDate"                  xs:type="date"         readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="DueDate"                  desc="Date when the payment is due." /> 
+    <attr name="IsPaid"                   xs:type="boolean"      readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="IsPaid"                   desc="Indicates whether this statement charge has been paid."/> 
+    <attr name="CustomFields"             xs:type="string"       readonly="false"     required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="DataExtRet"               desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="EditSequence"             xs:type="string"       readonly="true"      required="false"    references=""                   columnsize="16"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="EditSequence"             desc="An identifier used for versioning for this copy of the object." /> 
+    <attr name="TimeModified"             xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeModified"             desc="When the statement charge was last modified."/> 
+    <attr name="TimeCreated"              xs:type="datetime"     readonly="true"      required="false"    references=""                   columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeCreated"              desc="When the statement charge was created."/> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="StatementCharge"/>
+  <rsb:set attr="objecttype"    value="KnownTransaction"/> 
+  <rsb:set attr="outputitem"    value="transaction"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

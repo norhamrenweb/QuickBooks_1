@@ -1,0 +1,67 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="InventoryAdjustments" description="Create, query, and delete QuickBooks Inventory Adjustments.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                    xs:type="string"       readonly="true"      key="true"          references=""                     columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="TxnID"                             desc="The unique identifier." /> 
+    <attr name="ReferenceNumber"       xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="21"       normalized="true"    other:qbxmlversion=""        other:selectcolumnname="RefNumber"                         desc="The transaction reference number."/> 
+	  <attr name="Account"               xs:type="string"       readonly="false"     required="true"     references="Accounts.FullName"    columnsize="1000"     normalized="true"    other:qbxmlversion=""        other:selectcolumnname="AccountRef"                        desc="The account the inventory adjustment is associated with. Either Account or AccountId is required on insert."/> 
+	  <attr name="AccountId"             xs:type="string"       readonly="false"     required="true"     references="Accounts.ID"          columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="AccountRef"                        desc="The account the inventory adjustment is associated with. Either Account or AccountId is required on insert."/> 
+	  <attr name="Class"                 xs:type="string"       readonly="false"     required="false"    references="Class.FullName"       columnsize="1000"     normalized="true"    other:qbxmlversion=""        other:selectcolumnname="ClassRef"                          desc="A reference to the class for the inventory adjustment."/> 
+	  <attr name="ClassId"               xs:type="string"       readonly="false"     required="false"    references="Class.ID"             columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="ClassRef"                          desc="A reference to the class for the inventory adjustment."/> 
+    <attr name="CustomerName"          xs:type="string"       readonly="false"     required="false"    references="Customers.FullName"   columnsize="1000"     normalized="true"    other:qbxmlversion=""        other:selectcolumnname="CustomerRef"                       desc="The name of the customer on the inventory adjustment."/> 
+    <attr name="CustomerId"            xs:type="string"       readonly="false"     required="false"    references="Customers.ID"         columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="CustomerRef"                       desc="The Id of the customer on the inventory adjustment."/>
+    <attr name="Memo"                  xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="5000"     normalized="true"    other:qbxmlversion=""        other:selectcolumnname="Memo"                              desc="A memo regarding this transaction."/> 
+    <attr name="InventorySite"         xs:type="string"       readonly="false"     required="false"    references="InventorySites.Name"  columnsize="31"       normalized="true"    other:qbxmlversion="10.0"    other:selectcolumnname="InventorySiteRef"                  desc="The name of the inventory site for the transaction."/> 
+    <attr name="InventorySiteId"       xs:type="string"       readonly="false"     required="false"    references="InventorySites.ID"    columnsize="255"      normalized="true"    other:qbxmlversion="10.0"    other:selectcolumnname="InventorySiteRef"                  desc="The Id of the inventory site for the transaction."/> 
+    <attr name="Date"                  xs:type="date"         readonly="false"     required="false"    references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="TxnDate"                           desc="The date of the transaction."/> 
+    <attr name="ItemCount"             xs:type="integer"      readonly="true"      required="false"    references=""                     columnsize=""         normalized="false"   other:qbxmlversion=""        other:selectcolumnname="InventoryAdjustmentLineRet"        desc="The number of line items for the inventory adjustment."/> 
+    <attr name="ItemAggregate"         xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="5000"     normalized="false"   other:qbxmlversion=""        other:selectcolumnname="InventoryAdjustmentLineRet"        desc="An aggregate of the Line Item data which can be used for adding an inventory adjustment and its line item data."/>
+    <attr name="EditSequence"          xs:type="string"       readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="EditSequence"                      desc="An identifier used for versioning for this copy of the object." /> 
+    <attr name="TimeModified"          xs:type="datetime"     readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="TimeModified"                      desc="When the inventory adjustment was last modified."/> 
+    <attr name="TimeCreated"           xs:type="datetime"     readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"    other:qbxmlversion=""        other:selectcolumnname="TimeCreated"                       desc="When the inventory adjustment was created."/> 
+
+    <!-- Psuedo-Column definitions -->
+    <input name="Item*"                desc="All line-item-specific columns may be used in insertions or updates." />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+		
+  </rsb:info>
+  
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="InventoryAdjustment"/>
+  <rsb:set attr="objecttype"    value="KnownTransaction"/>
+  <rsb:set attr="aggregatecolumns" value="ItemAggregate"/>
+  <rsb:set attr="childtables" value="InventoryAdjustmentLineItems"/>
+  <rsb:set attr="childlinekeys" value="ItemLineId"/>
+  <rsb:set attr="outputitem"    value="transaction"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:throw code=500 desc="inventory adjustment updates are not available at this time."/>
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

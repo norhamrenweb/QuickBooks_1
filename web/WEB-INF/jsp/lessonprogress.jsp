@@ -138,13 +138,19 @@
                 });
                 $('#rellenar').click(function () {
 
-                    var rellenarPresent = $(".attendance");
-                    rellenarPresent.each(function () {
-                        $(this).val("");
+                    var rellenarNull = $(".attendance");
+                    rellenarNull.each(function () {
+                        var valorAttendance = $('option:selected', this).val();
+                        if (valorAttendance !== '0'){
+                            $('option:selected', this).remove();
+                        }
                     });
+                    
+                    $(".attendance option[value='0']").attr('selected', true);
+                  
 
-                    $('#buttonAchived').attr('disabled', true);
-                    $('#buttonAchived').parent().attr('disabled', true);
+                        $('#buttonAchived').attr('disabled', true);
+                        $('#buttonAchived').parent().add('disabled');
                 });
 
                 $('#subject').change(function () {
@@ -283,15 +289,34 @@
                                         </td>
                                         <td>
                                             <select id="idSelectAttendance" name="TXTattendance" class="attendance">
-                                                <c:if test="${empty record.attendancecode}">
-                                                    <option selected></option>
+                                                <%--<c:if test="${record.attendancecode eq '0'}">
+                                                    <option value="0" selected> </option>
+                                                    <option value="P">P</option>
+                                                    <option value="A">A</option>
+                                                    <option value="T">T</option>
                                                 </c:if>
-                                                <c:if test="${not empty record.attendancecode}">
-                                                    <option selected>${record.attendancecode}</option>
-                                                </c:if>
-                                                <option>P</option>
-                                                <option>A</option>
-                                                <option>T</option>
+                                                <c:if test="${record.attendancecode}">
+                                                    <option value="${record.attendancecode}" selected>${record.attendancecode}</option>
+                                                    <option value="0"></option>
+                                                    <option value="P">P</option>
+                                                    <option value="A">A</option>
+                                                    <option value="T">T</option>
+                                                </c:if>--%>
+                                                <c:choose>
+                                                <c:when test="${record.attendancecode=='0'}">
+                                                    <option value="0" selected> </option>
+                                                    <option value="P">P</option>
+                                                    <option value="A">A</option>
+                                                    <option value="T">T</option>
+                                                </c:when>    
+                                                <c:otherwise>
+                                                    <option value="${record.attendancecode}" selected>${record.attendancecode}</option>
+                                                    <option value="0"></option>
+                                                    <option value="P">P</option>
+                                                    <option value="A">A</option>
+                                                    <option value="T">T</option>
+                                                </c:otherwise>
+                                            </c:choose>
                                             </select>
                                         </td>
                                         <td>

@@ -1,0 +1,67 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="TransferInventoryLineItems" description="Create and query QuickBooks Transfer Inventory Line Items. Transfer Inventory is available in only QuickBooks Enterprise 2010 and above, and only with the Advanced Inventory add-on.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                                                              xs:type="string"       readonly="true"      key="true"          references=""                          columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="The unique identifier in the format TransferInventoryId|TransferInventoryLineRet_TxnLineID." /> 
+    <attr name="TransferInventoryId"                                             xs:type="string"       readonly="false"     required="false"    references=""                          columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="The item identifier." />
+    <attr name="TxnDate"                                                         xs:type="date"         readonly="false"     required="false"    references=""                          columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnDate,TransferInventoryLineRet"                    desc="The date of the transaction."/> 
+    <attr name="TxnNumber"                                                       xs:type="integer"      readonly="true"      required="false"    references=""                          columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TxnNumber,TransferInventoryLineRet"                  desc="An identifying number for this transaction."/> 
+    <attr name="RefNumber"                                                       xs:type="string"       readonly="false"     required="false"    references=""                          columnsize="21"       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,RefNumber,TransferInventoryLineRet"                  desc="The transaction reference number."/> 
+    <attr name="FromInventorySiteRef_ListID"                                     xs:type="string"       readonly="false"     required="false"    references="InventorySites.ID"         columnsize="255"      normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,FromInventorySiteRef,TransferInventoryLineRet"       desc="The site inventory was transfered from."/> 
+    <attr name="FromInventorySiteRef_FullName"                                   xs:type="string"       readonly="false"     required="false"    references="InventorySites.Name"       columnsize="31"       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,FromInventorySiteRef,TransferInventoryLineRet"       desc="The site inventory was transfered from."/> 
+    <attr name="ToInventorySiteRef_ListID"                                       xs:type="string"       readonly="false"     required="false"    references="InventorySites.ID"         columnsize="255"      normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ToInventorySiteRef,TransferInventoryLineRet"         desc="The site inventory was transfered to."/> 
+    <attr name="ToInventorySiteRef_FullName"                                     xs:type="string"       readonly="false"     required="false"    references="InventorySites.Name"       columnsize="31"       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ToInventorySiteRef,TransferInventoryLineRet"         desc="The site inventory was transfered to."/> 
+    <attr name="Memo"                                                            xs:type="string"       readonly="false"     required="false"    references=""                          columnsize="5000"     normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,Memo,TransferInventoryLineRet"                       desc="Additional information about the transaction."/> 
+    <attr name="ExternalGUID"                                                    xs:type="string"       readonly="false"     required="false"    references=""                          columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,ExternalGUID,TransferInventoryLineRet"               desc="Allows for the attachment of a user-defined GUID value."/> 
+    <attr name="TransferInventoryLineRet_TxnLineID#"                             xs:type="string"       readonly="true"      required="false"    references=""                          columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="Identifying number for the transaction line."/> 
+    <attr name="TransferInventoryLineRet_ItemRef_ListID#"                        xs:type="string"       readonly="false"     required="false"    references="Items.ID"                  columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="A reference to the item that was transfered."/> 
+    <attr name="TransferInventoryLineRet_ItemRef_FullName#"                      xs:type="string"       readonly="false"     required="false"    references="Items.FullName"            columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="Name of the item that was transfered."/> 
+    <attr name="TransferInventoryLineRet_FromInventorySiteLocationRef_ListID#"   xs:type="string"       readonly="false"     required="false"    references=""                          columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="A reference to the location to transfer from."/> 
+    <attr name="TransferInventoryLineRet_FromInventorySiteLocationRef_FullName#" xs:type="string"       readonly="false"     required="false"    references=""                          columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="Name of the location to transfer from."/> 
+    <attr name="TransferInventoryLineRet_ToInventorySiteLocationRef_ListID#"     xs:type="string"       readonly="false"     required="false"    references=""                          columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="A reference to the location to transfer to."/> 
+    <attr name="TransferInventoryLineRet_ToInventorySiteLocationRef_FullName#"   xs:type="string"       readonly="false"     required="false"    references=""                          columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="Name of the location to transfer to."/> 
+    <attr name="TransferInventoryLineRet_QuantityToTransfer#"                    xs:type="double"       readonly="false"     required="false"    references=""                          columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="Quantity of items to transfer. This is an input only. Check the TransferInventoryLineRet_QuantityTransferred for the response."/> 
+    <attr name="TransferInventoryLineRet_QuantityTransferred#"                   xs:type="double"       readonly="true"      required="false"    references=""                          columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="Quantity of items that were transfered. This is an output only."/> 
+    <attr name="TransferInventoryLineRet_SerialNumber#"                          xs:type="string"       readonly="false"     required="false"    references=""                          columnsize="5000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="The serial number of the asset."/> 
+    <attr name="TransferInventoryLineRet_LotNumber#"                             xs:type="string"       readonly="false"     required="false"    references=""                          columnsize="40"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TransferInventoryLineRet"                            desc="A lot number the item is stored on."/> 
+    <attr name="TimeCreated"                                                     xs:type="datetime"     readonly="true"      required="false"    references=""                          columnsize=""         normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeCreated,TransferInventoryLineRet"                desc="The datetime the transaction was made."/> 
+    <attr name="TimeModified"                                                    xs:type="datetime"     readonly="true"      required="false"    references=""                          columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID,TimeModified,TransferInventoryLineRet"               desc="The last datetime the transaction was modified."/> 
+    <attr name="EditSequence"                                                    xs:type="string"       readonly="true"      required="false"    references=""                          columnsize="16"       normalized="false"     other:qbxmlversion=""        other:selectcolumnname="TxnID,EditSequence,TransferInventoryLineRet"               desc="An identifier used for versioning for this copy of the object." /> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+
+  </rsb:info>
+  
+  <!-- Important table information -->    
+  <rsb:set attr="entityname"      value="TransferInventory"/>
+  <rsb:set attr="objecttype"      value="OtherCollection"/>
+  <rsb:set attr="listtype"        value="Txn"/>
+  <rsb:set attr="linekey"         value="TransferInventoryLineRet_TxnLineID"/>
+  <rsb:set attr="querytype"       value="OtherTransaction"/>
+  <rsb:set attr="qbcollections#"  value="TransferInventoryLineRet"/>
+  <rsb:set attr="includelineitems" value="true"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:throw code="300" desc="Updates to TransferInventory are not supported at this time."/>
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:throw code="300" desc="Deletions from TransferInventoryLineItems are not supported at this time."/>
+</rsb:script>
+  
+</rsb:script>  

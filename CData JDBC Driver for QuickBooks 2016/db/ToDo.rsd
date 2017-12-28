@@ -1,0 +1,70 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="ToDo" description="Create, update, delete, and query QuickBooks To Do entries.">
+
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"     key="true"          references=""                      columnsize="255"    normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID"            desc="The unique identifier of the vendor type."/>
+    <attr name="Notes"                      xs:type="string"       readonly="false"    required="false"    references=""                      columnsize=""       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Notes"             desc="Notes on this to do entry."/> 
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"    required="false"    references=""                      columnsize=""       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="IsActive"          desc="Boolean determining if the vendor type is active."/>
+    <attr name="Type"                       xs:type="string"       readonly="false"    required="false"    references=""                      columnsize=""       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Type"              desc="Type of this to do entry. Requires QBXML Version 13.0 or higher."/>
+    <attr name="Priority"                   xs:type="string"       readonly="false"    required="false"    references=""                      columnsize=""       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Priority"          desc="Priority of this to do entry. Requires QBXML Version 13.0 or higher."/>
+    <!-- These fields are in the documentation but don't appear to work with the live data
+    
+    <attr name="CustomerRef_FullName"       xs:type="string"       readonly="false"    required="false"    references="Customers.FullName"  columnsize="209"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="CustomerRef"       desc="Full name of the customer for the to do entry. You may specify only CustomerRef_FullName or CustomerRef_ListId on INSERT/UPDATE statements and not both."/>
+    <attr name="CustomerRef_ListId"         xs:type="string"       readonly="false"    required="false"    references="Customers.ID"        columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="CustomerRef"       desc="Id for the customer for the to do entry. You may specify only CustomerRef_FullName or CustomerRef_ListId on INSERT/UPDATE statements and not both."/>
+    <attr name="EmployeeRef_FullName"       xs:type="string"       readonly="false"    required="false"    references="Employees.FullName"  columnsize="31"       normalized="true"    other:qbxmlversion=""        other:selectcolumnname="EmployeeRef"       desc="Full name of the employee for the to do entry. You may specify only EmployeeRef_FullName or EmployeeRef_ListId on INSERT/UPDATE statements and not both."/>
+    <attr name="EmployeeRef_ListId"         xs:type="string"       readonly="false"    required="false"    references="Employees.ID"        columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="EmployeeRef"       desc="Id for the employee for the to do entry. You may specify only EmployeeRef_FullName or EmployeeRef_ListId on INSERT/UPDATE statements and not both."/>
+    <attr name="LeadRef_FullName"           xs:type="string"       readonly="false"    required="false"    references=""                    columnsize="209"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="LeadRef"           desc="Full name of the lead for the to do entry. You may specify only LeadRef_FullName or LeadRef_ListId on INSERT/UPDATE statements and not both."/>
+    <attr name="LeadRef_ListId"             xs:type="string"       readonly="false"    required="false"    references=""                    columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="LeadRef"           desc="Id for the lead for the to do entry. You may specify only LeadRef_FullName or LeadRef_ListId on INSERT/UPDATE statements and not both."/>
+    <attr name="VendorRef_FullName"         xs:type="string"       readonly="false"    required="false"    references="Vendors.FullName"    columnsize="41"       normalized="true"    other:qbxmlversion=""        other:selectcolumnname="VendorRef"         desc="Full name of the vendor for the to do entry. You may specify only VendorsRef_FullName or VendorsRef_ListId on INSERT/UPDATE statements and not both."/>
+    <attr name="VendorRef_ListId"           xs:type="string"       readonly="false"    required="false"    references="Vendors.ID"          columnsize="255"      normalized="true"    other:qbxmlversion=""        other:selectcolumnname="VendorRef"         desc="Id for the vendor for the to do entry. You may specify only VendorsRef_FullName or VendorsRef_ListId on INSERT/UPDATE statements and not both."/>
+    -->
+    <attr name="IsDone"                   xs:type="boolean"        readonly="false"    required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="IsDone"          desc="Whether or not this to do entry is complete."/>
+    <attr name="ReminderDate"             xs:type="datetime"       readonly="false"    required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="ReminderDate"    desc="Reminder date for this to do entry."/>
+    <attr name="ReminderTime"             xs:type="string"         readonly="false"    required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="ReminderTime"    desc="Reminder time for this to do entry. Requires QBXML Version 13.0 or higher."/>
+    <attr name="EditSequence"             xs:type="string"         readonly="true"     required="false"    references=""                      columnsize="16"       normalized="true"     other:qbxmlversion=""      other:selectcolumnname="EditSequence"      desc="A string indicating the revision of the payment method."/>
+    <attr name="TimeCreated"              xs:type="datetime"       readonly="true"     required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeCreated"       desc="The time the vendor type was created."/>
+    <attr name="TimeModified"             xs:type="datetime"       readonly="true"     required="false"    references=""                      columnsize=""         normalized="true"     other:qbxmlversion=""      other:selectcolumnname="TimeModified"      desc="The last time the vendor type was modified."/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="ToDo"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="OtherList"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

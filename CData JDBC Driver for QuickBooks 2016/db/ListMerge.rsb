@@ -1,0 +1,19 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+  
+  <rsb:info title="ListMerge" description="Merge two accounts, customers, or vendors. Requires QBXML version 7.0 or higher." >
+    <input name="Type"                           required="true"     description="The type of the object to be merged." required="true" values="Account,Customer,Vendor"  />
+    <input name="MergeFromId"                    required="false"    description="The Id of the object to be merged into another object. Either the name or Id must be specified for the From object."  required="true" />
+    <input name="MergeFromName"                  required="false"    description="The name of the object to be merged into another object. Either the name or Id must be specified for the From object."  required="true" />
+    <input name="MergeToId"                      required="false"    description="The Id of the object into which another object is merged. Either the name or Id must be specified for the To object."  required="true" />
+    <input name="MergeToName"                    required="false"    description="The name of the object into which another object is merged. Either the name or Id must be specified for the To object."  required="true" />
+    <input name="OverwriteDuplicateShipToAddr"   required="false"    description="If set to true, shipping addresses with the same name will be overwritten with the addresses in the object you are merging to. Requires QBXML version 8.0 or higher."  />
+        
+     <output name="Success"       description="Whether the two objects were successfully merged."  />
+     <output name="ErrorMessage"  description="The error message if there is a failure."  />
+  </rsb:info>
+  
+  <rsb:call op="quickbooksadoDesktopListMerge" output="out">
+    <rsb:push />
+  </rsb:call>
+  
+</rsb:script>

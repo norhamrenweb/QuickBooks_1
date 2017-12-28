@@ -1,0 +1,36 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+
+  <rsb:info title="SearchEntities" description="Search entities in QuickBooks.">
+  
+     <input name="Entity" description="The entity to search." value="Vendor,Employee,Bill,Invoice,CreditMemo,VendorCredit,SalesReceipt,PurchaseOrder,CCCredit,CCCharge,Customer,Estimate,SalesOrder,TimeTracking,ReceivePayment,JournalEntry,Item,Account,Deposit,InventoryAdjustment,PriceLevel,Class,CustomerType,JobType,PaymentMethod,PayrollItemWage,SalesTaxCode,ShipMethod,SalesRep,VendorType,BillToPay,ItemAssembliesCanBuild,ListDeleted,Preferences,ReceivePaymentToDeposit,SalesTaxPaymentCheck,TxnDeleted,ItemReceipt,BillPaymentCheck,BillPaymentCharge,StatementCharge,VehicleMileage,OtherTransaction,OtherList" default="Vendor" required="true" />
+     <input name="Name" description="The name to search for. Use in conjunction with MatchType for more granular control over the entries returned." /> 
+     <input name="NameMatch" description="The type of match to use for this entity." value="EXACT, CONTAINS, STARTSWITH, ENDSWITH, RANGEEND, RANGESTART" default="EXACT" />
+     <input name="StartModifiedDate" description="Earliest modified date to search for. Limits the search to records modified on or after this date. When setting the value of a date property, the formats MM-DD-YY, MM-DD-YYYY, MM/DD/YY, and MM/DD/YYYY are acceptable. Dates in these formats will be automatically parsed and stored in YYYY-MM-DD format." /> 
+     <input name="EndModifiedDate" description="Latest modified date to search for. Limits the search to records modified on or before this date.  When setting the value of a date property, the formats MM-DD-YY, MM-DD-YYYY, MM/DD/YY, and MM/DD/YYYY are acceptable. Dates in these formats will be automatically parsed and stored in YYYY-MM-DD format." /> 
+
+     <input name="MinBalance" desc="The minimum balance that returned records should have. Limits the search to records with balances greater than or equal to MinBalance."/>
+     <input name="MaxBalance" desc="The maximum balance that returned records should have. Limits the search to records with balances less than or equal to MaxBalance."/>
+     
+     <input name="MaxResults" description="Maximum number of results to be returned from this search." />
+     <input name="OtherEntity"   desc="To search for other entities not included in the entity input; for example ItemService. When searching for other entities the entity input should be set to OtherList."/>
+ 
+     <output name="qb:XMLEntry" desc="A entry in the result collection encoded in XML from QuickBooks."/> 
+     <output name="qb:*"        desc="Output varies based upon the type of entity queried."/>
+   
+  </rsb:info>
+    
+  <rsb:check attr=_input.Entity>
+    <rsb:set attr="querytype" value="[_input.entity]"/>
+  </rsb:check>
+  
+  <rsb:check attr=_input.OtherEntity>
+    <rsb:set attr="specialquerytype" value="[_input.otherentity]"/>
+  </rsb:check>
+  
+  <rsb:set attr="operationname" value="qbSearchEntities"/>
+  
+  <rsb:call op="quickbooksadoDesktopExecuteStoredProcedure" output="out">
+    <rsb:push />
+  </rsb:call>
+
+</rsb:script>

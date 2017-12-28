@@ -1,0 +1,57 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="SalesReps" description="Create, update, delete, and query QuickBooks Sales Rep entities.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"     key="true"                references=""                   columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="ListID"                           desc="The Id of the sales rep."/>
+    <attr name="Initial"                    xs:type="string"       readonly="false"    required="true"           references=""                   columnsize="5"        normalized="true"     other:qbxmlversion=""        other:selectcolumnname="Initial"                          desc="The initials of the sales rep. These must be unique for each record."/>
+    <attr name="IsActive"                   xs:type="boolean"      readonly="false"    required="false"          references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="IsActive"                         desc="Boolean indicating if the sales rep is active."/>
+    <attr name="SalesRepEntityRef_FullName" xs:type="string"       readonly="false"    required="false"          references=""                   columnsize="1000"     normalized="true"     other:qbxmlversion=""        other:selectcolumnname="SalesRepEntityRef"                desc="Refers to the sales rep's full name on the employee, vendor, or other-name list. You may specify either SalesRepEntityRef_FullName or SalesRepEntityRef_ListId on insert/update statements, but not both."/>
+    <attr name="SalesRepEntityRef_ListId"   xs:type="string"       readonly="false"    required="false"          references=""                   columnsize="255"      normalized="true"     other:qbxmlversion=""        other:selectcolumnname="SalesRepEntityRef"                desc="Refers to the sales rep's Id on the employee, vendor, or other-name list. You may specify either SalesRepEntityRef_FullNamee or SalesRepEntityRef_ListId on insert/update statements, but not both."/>
+    <attr name="EditSequence"               xs:type="string"       readonly="true"     required="false"          references=""                   columnsize="16"       normalized="true"     other:qbxmlversion=""        other:selectcolumnname="EditSequence"                     desc="A string indicating the revision of the sales rep."/>
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"     required="false"          references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeCreated"                      desc="The time the sales rep was created."/>
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"     required="false"          references=""                   columnsize=""         normalized="true"     other:qbxmlversion=""        other:selectcolumnname="TimeModified"                     desc="The time the sales rep was modified."/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="MaxResults"            desc="Maximum number of results to return." />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"     value="SalesRep"/>
+  <rsb:set attr="objecttype"     value="List"/>
+  <rsb:set attr="querytype"      value="SalesRep"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

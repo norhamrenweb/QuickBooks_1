@@ -1,0 +1,71 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">
+
+  <rsb:info title="ReceivePayments" description="Create, update, delete, and query QuickBooks Receive Payment transactions. QBXMLVersion must be set to 6.0 or higher to update a ReceivePayment.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                        xs:type="string"       readonly="true"      key="true"          references=""                     columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID"                     desc="The unique identifier for the transaction." /> 
+    <attr name="ReferenceNumber"           xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="21"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="RefNumber"                 desc="The transaction reference number." />    
+    <attr name="TxnNumber"                 xs:type="integer"      readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnNumber"                 desc="The transaction number. An identifying number for the transaction, different from the QuickBooks-generated Id." /> 
+    <attr name="Date"                      xs:type="date"         readonly="false"     required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnDate"                   desc="The date of the transaction. " />
+    <attr name="UnusedPayment"             xs:type="double"       readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="UnusedPayment"             desc="This property will contain the amount of the payment that was not applied to existing invoices."/>
+    <attr name="Amount"                    xs:type="double"       readonly="false"     required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TotalAmount"               desc="The amount of the payment received from the Customer." />
+    <attr name="AccountsReceivableName"    xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"    columnsize="1000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ARAccountRef"              desc="A reference to the name of the accounts-receivable account where the money received from this transaction will be deposited." />
+    <attr name="AccountsReceivableId"      xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"          columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ARAccountRef"              desc="A reference to the Id of the accounts-receivable account where the money received from this transaction will be deposited." />
+    <attr name="CustomerName"              xs:type="string"       readonly="false"     required="false"    references="Customers.FullName"   columnsize="1000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="CustomerRef"               desc="The name of the customer who has purchased goods or services from the company. This is required to have a value when inserting if CustomerID does not." />
+    <attr name="CustomerId"                xs:type="string"       readonly="false"     required="false"    references="Customers.ID"         columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="CustomerRef"               desc="The Id of the customer who has purchased goods or services from the company. This is required to have a value when inserting if CustomerName does not." />
+    <attr name="DepositToAccountName"      xs:type="string"       readonly="false"     required="false"    references="Accounts.FullName"    columnsize="1000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="DepositToAccountRef"       desc="The account name that the payment should be deposited to." />
+    <attr name="DepositToAccountId"        xs:type="string"       readonly="false"     required="false"    references="Accounts.ID"          columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="DepositToAccountRef"       desc="The account Id that the payment should be deposited to." />
+    <attr name="PaymentMethodName"         xs:type="string"       readonly="false"     required="false"    references="PaymentMethods.Name"  columnsize="100"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="PaymentMethodRef"          desc="Name of the payment method that already exists in QuickBooks." />
+    <attr name="PaymentMethodId"           xs:type="string"       readonly="false"     required="false"    references="PaymentMethods.ID"    columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="PaymentMethodRef"          desc="Id of the payment method that already exists in QuickBooks." />
+    <attr name="Memo"                      xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="5000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Memo"                      desc="A memo to appear on internal reports." />
+    <attr name="AppliedToAggregate"        xs:type="string"       readonly="false"     required="false"    references=""                     columnsize="5000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="AppliedToTxnRet"           desc="An aggregate of the applied-to data which can be used for adding a bill payment credit card and its applied-to data."/>
+    <attr name="CustomFields"              xs:type="string"       readonly="false"     required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion="2.0"     other:selectcolumnname="DataExtRet"                desc="Custom fields returned from QuickBooks and formatted into XML." /> 
+    <attr name="TimeModified"              xs:type="datetime"     readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeModified"              desc="When the receive payment was last modified." /> 
+    <attr name="TimeCreated"               xs:type="datetime"     readonly="true"      required="false"    references=""                     columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeCreated"               desc="When the receive payment was created."/> 
+    
+    <!-- Psuedo-Column definitions -->
+    <input name="AutoApply"            desc="How the payment should be applied." default="ExistingTransactions" value="ExistingTransactions,FutureTransactions,Custom" />
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="ReceivePayment"/>
+  <rsb:set attr="objecttype"    value="KnownTransaction"/>
+  <rsb:set attr="aggregatecolumns" value="AppliedToAggregate"/>
+  <rsb:set attr="childtables" value="ReceivePaymentsAppliedTo"/>
+  <rsb:set attr="childlinekeys" value="AppliedToRefId"/>
+  <rsb:set attr="outputitem"    value="transaction"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>

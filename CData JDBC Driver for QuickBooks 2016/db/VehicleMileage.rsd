@@ -1,0 +1,72 @@
+<rsb:script xmlns:rsb="http://www.rssbus.com/ns/rsbscript/2">  
+
+  <rsb:info title="VehicleMileage"  description="Create, update, delete, and query QuickBooks Vehicle Mileage entities. QuickBooks requires QBXML version 6.0 or higher to use this table.">
+  
+    <!-- Column definitions -->
+    <attr name="ID"                         xs:type="string"       readonly="true"       key="true"           references=""                       columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TxnID"                           desc="The Id of the vehicle mileage."/>
+    <attr name="VehicleRef_FullName"        xs:type="string"       readonly="false"      required="true"      references=""                       columnsize="100"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VehicleRef"                      desc="The vehicle for use in vehicle mileage transactions. Each vehicle name must be unique."/>
+    <attr name="VehicleRef_ListID"          xs:type="string"       readonly="false"      required="false"     references=""                       columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="VehicleRef"                      desc="The reference Id for the vehicle mileage transaction."/>
+    <attr name="CustomerRef_FullName"       xs:type="string"       readonly="false"      required="false"     references="Customers.FullName"     columnsize="1000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="CustomerRef"                     desc="The full name of a referenced customer in QuickBooks. You may specify only CustomerRef_FullName or CustomerRef_ListId on insert/update statements and not both."/>
+    <attr name="CustomerRef_ListID"         xs:type="string"       readonly="false"      required="false"     references="Customers.ID"           columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="CustomerRef"                     desc="The Id of the referenced customer in QuickBooks. You may specify only CustomerRef_FullName or CustomerRef_ListId on insert/update statements and not both."/>
+    <attr name="ItemRef_FullName"           xs:type="string"       readonly="false"      required="false"     references="Items.FullName"         columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ItemRef"                         desc="A reference to the full name of an item in QuickBooks. You may specify only ItemRef_FullName or ItemRef_ListId on insert/update statements and not both."/>
+    <attr name="ItemRef_ListID"             xs:type="string"       readonly="false"      required="false"     references="Items.ID"               columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ItemRef"                         desc="A reference to the Id of an item in QuickBooks. You may specify only ItemRef_FullName or ItemRef_ListId on insert/update statements and not both."/>
+    <attr name="ClassRef_FullName"          xs:type="string"       readonly="false"      required="false"     references="Class.FullName"         columnsize="1000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ClassRef"                        desc="A reference to the full name of a class in QuickBooks. You may specify only ClassRef_FullName or ClassRef_ListId on insert/update statements and not both."/>
+    <attr name="ClassRef_ListID"            xs:type="string"       readonly="false"      required="false"     references="Class.ID"               columnsize="255"      normalized="true"      other:qbxmlversion=""        other:selectcolumnname="ClassRef"                        desc="A reference to the Id of a class in QuickBooks. You may specify only ClassRef_FullName or ClassRef_ListId on insert/update statements and not both."/>
+    <attr name="TripStartDate"              xs:type="string"       readonly="false"      required="false"     references=""                       columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TripStartDate"                   desc="Date the trip began. If left blank on an insert, the current date at the time of the transaction will be used."/>
+    <attr name="TripEndDate"                xs:type="string"       readonly="false"      required="false"     references=""                       columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TripEndDate"                     desc="The date the trip ended. If left blank on an insert, the current date at the time of the transaction will be used."/>
+    <attr name="OdometerStart"              xs:type="integer"      readonly="false"      required="false"     references=""                       columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="OdometerStart"                   desc="Odometer reading at the start of the trip. If TotalMiles is specified, you cannot specify OdometerStart and OdometerEnd."/>
+    <attr name="OdometerEnd"                xs:type="integer"      readonly="false"      required="false"     references=""                       columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="OdometerEnd"                     desc="Odometer reading at the end of the trip. If TotalMiles is specified, you cannot specify OdometerStart and OdometerEnd."/>
+    <attr name="TotalMiles"                 xs:type="double"       readonly="false"      required="false"     references=""                       columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TotalMiles"                      desc="Total trip miles. If TotalMiles is specified, you cannot specify OdometerStart and OdometerEnd."/>
+    <attr name="Notes"                      xs:type="string"       readonly="false"      required="false"     references=""                       columnsize="5000"     normalized="true"      other:qbxmlversion=""        other:selectcolumnname="Notes"                           desc="Additional information."/>
+    <attr name="BillableStatus"             xs:type="string"       readonly="false"      required="false"     references=""                       columnsize="13"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="BillableStatus"                  desc="The billig status of the vehicle mileage." value="Billable,NotBillable,HasBeenBilled"/>
+    <attr name="StandardMileageRate"        xs:type="double"       readonly="false"      required="false"     references=""                       columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="StandardMileageRate"             desc="The mileage rate currently allowed by the tax authority for vehicle expenses."/>
+    <attr name="StandardMileageTotalAmount" xs:type="double"       readonly="false"      required="false"     references=""                       columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="StandardMileageTotalAmount"      desc="Amount calculated by multiplying the total trip miles in the current vehicle mileage transaction by the standard mileage rate currently in use."/>
+    <attr name="BillableRate"               xs:type="double"       readonly="false"      required="false"     references=""                       columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="BillableRate"                    desc="In a billable vehicle mileage transaction, refers to the rate being used to charge mileage to a customer. The rate is specified in the service item or the other charge item that is referenced in the ItemRef columns."/>
+    <attr name="BillableAmount"             xs:type="double"       readonly="false"      required="false"     references=""                       columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="BillableAmount"                  desc="In a billable vehicle mileage transaction, this refers to the total charge that QuickBooks calculates by by multiplying the trip total mileage by the rate specified in the item referenced by the ItemRef columns."/>
+    <attr name="EditSequence"               xs:type="string"       readonly="true"       required="false"     references=""                       columnsize="16"       normalized="true"      other:qbxmlversion=""        other:selectcolumnname="EditSequence"                    desc="A string indicating the revision of the vehicle mileage transaction."/>
+    <attr name="TimeCreated"                xs:type="datetime"     readonly="true"       required="false"     references=""                       columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeCreated"                     desc="When the vehicle mileage was last modified."/>
+    <attr name="TimeModified"               xs:type="datetime"     readonly="true"       required="false"     references=""                       columnsize=""         normalized="true"      other:qbxmlversion=""        other:selectcolumnname="TimeModified"                    desc="When the vehicle mileage was created."/>
+  
+    <!-- Psuedo-Column definitions -->
+    <input name="Rows@Next"            desc="Identifier for the next page of results. Do not set this value manually." />
+  
+  </rsb:info>
+
+  <!-- Important table information -->  
+  <rsb:set attr="entityname"    value="VehicleMileage"/>
+  <rsb:set attr="objecttype"    value="Transaction"/>
+  <rsb:set attr="querytype"     value="VehicleMileage"/>
+  
+<!-- Operation definitions -->
+<rsb:script method="GET">
+  <rsb:call op="quickbooksadoDesktopSearch" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>
+</rsb:script>
+
+<rsb:script method="POST">
+  <rsb:call op="quickbooksadoDesktopAdd" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="MERGE">
+  <rsb:throw code=500 desc="QuickBooks does not allow VehicleMileage to be updated!"/>
+  <rsb:call op="quickbooksadoDesktopUpdate" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+
+<rsb:script method="DELETE">
+  <rsb:call op="quickbooksadoDesktopDelete" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>
+  
+<rsb:script method="GETDELETED">
+  <rsb:call op="quickbooksadoDesktopGetDeleted" out="toout">
+    <rsb:push item="toout"/>
+  </rsb:call>  
+</rsb:script>  
+  
+</rsb:script>
