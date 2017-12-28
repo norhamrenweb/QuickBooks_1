@@ -361,51 +361,36 @@ function funcionCallBackdetailsLesson()
            background-color: #CC6666;
        }
        .divClass{
+           margin-top: 20px;
            min-height: 20px;
            color: #ffffff;
-           background-color: #666666;
            padding: 5px;
        }
        .divAdd{
-            color: #ffffff;
-            height: 225px;
-            width: 240px;
-            color: #ffffff;
-            background-color: #666666;
+            color: #777777;
+            height: 100px;
+            width: 190px;
+            background-color: rgba(255,255,255,0.5);
             margin-right: 10px;
             font-size: small;
-            padding-left: 5px;
-            padding-bottom: 5px;
+            padding: 5px;
             display: line;
             float: left;
-            
         }
  
        .scroll{
            overflow-x: scroll;
        }
        .tamFijo{
-           height:  200px;
+           height:  120px;
            display: flex;
-           weigth: 1300px;
+           width:  1300px;
        }
-       .semana1
+       .semana1, .semana2, .semana3, .semana4
        {
            overflow-x: visible;
        }
-        .semana2
-       {
-           overflow-x: visible;    
-       }
-        #semana3
-       {
-           overflow-x: visible;
-       }
-        .semana4
-       {
-           overflow-x: visible;
-       }
-
+       
        .complete{
             display:none;
         }
@@ -417,11 +402,33 @@ function funcionCallBackdetailsLesson()
             padding:3px;
             cursor:pointer;
         }
-        .moveBtn{
-            height: 225px;
-        }
         div[data-toggle="collapse"] {
             float: left;
+        }
+        .firstWeek
+        {
+            margin-top: 5px;
+            background-color: #99CC66;
+        }
+        .secondWeek
+        {
+            margin-top: 5px;
+            background-color: #cdcdcd;
+        }
+        .carousel-control
+        {
+            position: absolute;
+            top: 25px;
+            bottom: 0;
+            left: 0;
+            width: 15%;
+            font-size: 30px;
+            color: #fff;
+            text-align: center;
+            text-shadow: 0 1px 2px rgba(0,0,0,.6);
+            background-color: rgba(0,0,0,0);
+            filter: alpha(opacity=50);
+            opacity: .5;
         }
    </style>
    </head>
@@ -433,8 +440,8 @@ function funcionCallBackdetailsLesson()
                    <h2>CLASSROOM</h2>
                </div>
            </div>
-<%--            <div class="container">
-               <table id="table_id" class="display" >
+            <div class="container">
+ <%--              <table id="table_id" class="display" >
                    <thead>
                        <tr>
                            <td>id</td>
@@ -479,7 +486,7 @@ function funcionCallBackdetailsLesson()
                    </tbody>
            </table>
          
-           </div>--%>
+           --%>
            <div class="col-xs-12">
                <div class="col-xs-6" >
 
@@ -501,7 +508,7 @@ function funcionCallBackdetailsLesson()
            <div class="col-xs-12">
            <hr>
            </div>
-           <script>
+            <script>
                 $( window ).resize(function() {
                    loadComments();
                 });
@@ -526,82 +533,81 @@ function funcionCallBackdetailsLesson()
                 }
             
            </script>
-         <div class=" col-xs-12" style="padding-top:5px">
-                <div class="col-xs-2 " >
-                   <div class="col-xs-12 divClass" data-idclass="1919">
-                       <div class="col-xs-6">
-                           First Week
+            <div class="col-xs-12 firstWeek sinpadding">
+                <div class="col-xs-2" >
+                   <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
+                       <div class="col-xs-12 sinpadding">
+                           <h4>First Week</h4>
                        </div>
                    </div>
                </div>
-               <div class="col-xs-1 btn moveBtn">
-                   <button class="col-xs-1 left carousel-control" onclick="moverIzq('1')"></button>
+               <div class="col-xs-1">
+                    <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('1')"></span>
                </div>
-               <div class="col-xs-8 " > 
-                   <div  class="semana1 tam1" id="semana1">
+               <div class="col-xs-8 sinpadding" > 
+                   <div class="semana1 tam1" id="semana1">
                    </div>
                </div>
-               <div class="col-xs-1 btn moveBtn">
-                   <button class="col-xs-1 right carousel-control" onclick="moverDrech('1')"></button>
+               <div class="col-xs-1">
+                   <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('1')"></span>
                </div>
            </div>
-           <div class=" col-xs-12" style="padding-top:5px">
-                <div class="col-xs-2"  >
-                   <div class="col-xs-12 divClass" data-idclass="1919">
-                       <div class="col-xs-6">
-                           Second Week
+           <div class="col-xs-12 secondWeek sinpadding">
+                <div class="col-xs-2">
+                   <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
+                       <div class="col-xs-12 sinpadding">
+                           <h4>Second Week</h4>
                        </div>
                    </div>
                </div>
-                <div class="col-xs-1 btn moveBtn">
-                   <button class="col-xs-1 left carousel-control" onclick="moverIzq('2')"></button>
+                <div class="col-xs-1">
+                   <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('2')"></span>
                </div>
-               <div class="col-xs-8   " > 
+               <div class="col-xs-8 sinpadding" > 
                    <div  class="semana2 tam2" id="semana2">
                    </div>
                </div>
-               <div class="col-xs-1 btn moveBtn">
-                   <button class="col-xs-1 right carousel-control" onclick="moverDrech('2')"></button>
+               <div class="col-xs-1">
+                   <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('2')"></span>
                </div>
            </div>
            
-           <div class=" col-xs-12" style="padding-top:5px">
-                <div class="col-xs-2 " >
-                   <div class="col-xs-12 divClass" data-idclass="1919">
-                       <div class="col-xs-6">
-                           Third Week
+           <div class="col-xs-12 firstWeek sinpadding">
+                <div class="col-xs-2">
+                   <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
+                       <div class="col-xs-12 sinpadding">
+                           <h4>Third Week</h4>
                        </div>
                    </div>
                </div>
-               <div class="col-xs-1 btn moveBtn">
-                   <button class="col-xs-1 left carousel-control" onclick="moverIzq('3')"></button>
+               <div class="col-xs-1">
+                   <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('3')"></span>
                </div>
-               <div class="col-xs-8 " > 
+               <div class="col-xs-8 sinpadding" > 
                    <div  class="semana3 tam3" id="semana3">
                    </div>
                </div>
-               <div class="col-xs-1 btn moveBtn">
-                   
-                   <button class="col-xs-1 right carousel-control" onclick="moverDrech('3')"></button>
+               <div class="col-xs-1">
+                   <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('3')"></span>
                </div>
            </div>
-           <div class=" col-xs-12" style="padding-top:5px">
-                <div class="col-xs-2 " >
-                   <div class="col-xs-12 divClass" data-idclass="1919">
-                       <div class="col-xs-6">
-                           Fourth Week
+           <div class="col-xs-12 secondWeek sinpadding">
+                <div class="col-xs-2" >
+                   <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
+                       <div class="col-xs-12 sinpadding">
+                           <h4>Fourth Week</h4>
                        </div>
                    </div>
                </div>
-               <div class="col-xs-1 btn moveBtn">
-                   <button class="col-xs-1 left carousel-control" onclick="moverIzq('4')"></button>
+               <div class="col-xs-1">
+                   <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('4')"></span>
                </div>
-               <div class="col-xs-8 " > 
+               <div class="col-xs-8 sinpadding" > 
                    <div  class="semana4 tam4" id="semana4">
                    </div>
                </div>
                <div class="col-xs-1 btn moveBtn">
-                   <button class="col-xs-1 right carousel-control" onclick="moverDrech('4')"></button>
+                   <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('4')"></span>
                </div>
            </div>
                 
