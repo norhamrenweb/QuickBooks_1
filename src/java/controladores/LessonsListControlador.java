@@ -199,7 +199,7 @@ public class LessonsListControlador{
         while(rs.next()){
             String text = rs.getString("attendance");
             if(text!=null){
-                 if(text!= null && !text.equals("")){
+                 if(text!= null && !text.equals("") && !text.equals("0")){
                     message="Presentation has attendance records,it can not be deleted";
                     break;
                 }

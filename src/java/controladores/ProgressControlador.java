@@ -171,7 +171,14 @@ public class ProgressControlador {
                 Progress att = new Progress();
              
                 att.setStudentid(rs.getInt("student_id"));
-                att.setAttendancecode(rs.getString("attendance"));
+                if(rs.getString("attendance") == null || rs.getString("attendance").equals("")|| rs.getString("attendance").equals("0"))
+                {
+                    att.setAttendancecode("0");
+                }
+                else
+                {
+                    att.setAttendancecode(rs.getString("attendance"));
+                }
                 records.add(att);
             }
              for(Progress record : records)

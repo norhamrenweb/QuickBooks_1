@@ -312,9 +312,11 @@
                         //$('#resourceId').val(id);
 
                         if (type === "Link") {
-                            $("#selectLinkTipo :selected").text("Link");
+                           
+                       //     $("#selectLinkTipo :selected").text("Link");
+                            $("#selectLinkTipo").html("<option selected value='Link'>Link</option> <option value='Video'>Video</option>");
                         } else {
-                            $("#selectLinkTipo :selected").text("Video");
+                           $("#selectLinkTipo").html("<option selected value='Video'>Video</option> <option value='Link'>Link</option>");
                         }
                         $("#EditLink").prop('disabled', false);
                         $('editnewLink').click();
@@ -367,8 +369,8 @@
                         //MODIFICAR EL JSON PARA QUE DEVUELVA EL ID OBTENIDO
                         $('#listResources').append("<div id = 'divRecurso" + id + "' class='list-group col-xs-12'>\n\
                                                     <div class='col-xs-10 text-center'>\n\
-                                                         <a href=" + linkResource + " class='list-group-item link'>\n\
-                                                             " + nameResource + "<span class='label " + claseTipo + "' target='_blank'>" + type + "</span>\n\
+                                                         <a href=" + linkResource + " class='list-group-item link' target='_blank'>\n\
+                                                             " + nameResource + "<span class='label " + claseTipo + "' >" + type + "</span>\n\
                                                  </a>\n\
                                             </div>\n\
                                          <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning editResource'  onclick='loadInfResource(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editResource" + id + " '/></div>\n\
@@ -425,8 +427,7 @@
                         //MODIFICAR EL JSON PARA QUE DEVUELVA EL ID OBTENIDO
                         $('#listResources').append("<div id = 'divRecurso" + id + "' class='list-group col-xs-12'>\n\
                                                     <div class='col-xs-10 text-center'>\n\
-                                                         <a href=" + linkResource + " class='list-group-item link ' target='_blank'>\n\
-                                                             " + nameResource + "<span class='label " + claseTipo + "' >" + type + "</span>\n\
+                                                         <a href=" + linkResource + "   class='list-group-item link' target='_blank' >" + nameResource + "<span class='label " + claseTipo + "' >" + type + "</span>\n\
                                                  </a>\n\
                                             </div>\n\
                                          <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning editResource'  onclick='loadInfResource(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editResource" + id + " '/></div>\n\
@@ -767,7 +768,10 @@
         </div>-->
 
         <div class="container">
-            <h1 class="text-center">Presentation Resources</h1>
+            <div class="col-xs-12" style="margin-bottom: 30px;">
+            <h1 class=" text-center">${lessonsName} Resources</h1>
+            </div>
+            <div class="col-xs-12">
             <fieldset>
                 <legend id="showPropiertys">
                     External links and videos
@@ -846,6 +850,7 @@
                 </div>
 
             </fieldset>
+            </div>
         </div>
 
 
@@ -874,7 +879,7 @@
                                     <span class="help-block hide">(http or https:)//www.example.com</span>
                                 </div>   
                                 <div class="col-xs-3 center-block form-group">
-                                    <label class="control-label">Tipo</label>
+                                    <label class="control-label">Type</label>
                                     <select class="form-control" name="selectTipo" id="selectLinkTipo" placeholder="Type">
                                         <option></option>
                                         <option value ="Link">Link</option>
@@ -1079,7 +1084,7 @@
                                     <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}> 
 
                                     <input type="text" class=" col-xs-3 form-control" name="idNameFile" id="idNameFile"  placeholder="Name">
-                                    <span class="help-block hide">Invalid Name (Not repeat name and dont use /)</span>
+                                    <span class="help-block hide">Invalid Name (Name can not be repeated nor contain special characters)</span>
                                     <input type="file" class=" col-xs-7 center-block form-control" name="fileToUpload" id="file">
                                     <span id="spanSelectFile"class="help-block hide">Select a file</span>
                                 </div>
