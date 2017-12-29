@@ -315,10 +315,10 @@ public class ProgressbyStudent {
             this.cn = dataSource.getConnection();
 
             Statement st = this.cn.createStatement(1004, 1007);
-
+//will display only if there is a lesson that has a progress record,but if a lesson is only planned will not be displayed
             ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = " + d.getCol2());
             if (!rs1.next()) {
-                String message = "Student does not have lessons under the selected objective";
+                String message = "Student does not have progress under the selected objective";
                 mv.addObject("message", message);
             } else {
                 rs1.beforeFirst();
