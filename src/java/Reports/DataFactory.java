@@ -99,27 +99,25 @@ public class DataFactory {
             }
             int counter = 0;
             ArrayList<String> finalratings = new ArrayList<>();
-            ArrayList<Integer> indEliminarObjectives =new ArrayList<Integer>();
-            for (String d : os){
+            ArrayList<Integer> indEliminarObjectives = new ArrayList<Integer>();
+            for (String d : os) {
                 Objective b = new Objective();
                 String name = b.fetchName(Integer.parseInt(d), servlet);
                 String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '" + studentId + "' AND comment_date = (select max(comment_date)   from public.progress_report where student_id = '" + studentId + "' AND objective_id =" + d + " and generalcomment = false) AND objective_id =" + d + " and generalcomment = false )";
                 ResultSet rs2 = st.executeQuery(consulta);
-                if(!rs2.next()){
-                   indEliminarObjectives.add(counter);
-                }
-                else{
+                if (!rs2.next()) {
+                    indEliminarObjectives.add(counter);
+                } else {
                     rs2 = st.executeQuery(consulta);
                     while (rs2.next()) {
                         String var = rs2.getString("name");
-                        if(rs2.getString("name").equals("N/A") || rs2.getString("name").equals(" ")  || rs2.getString("name").equals("")){
-                             indEliminarObjectives.add(counter);
-                        }
-                        else{
+                        if (rs2.getString("name").equals("N/A") || rs2.getString("name").equals(" ") || rs2.getString("name").equals("")) {
+                            indEliminarObjectives.add(counter);
+                        } else {
                             var = rs2.getString("name");
                             //  finalratings.add("Mastered");//rs2.getString("name"));
                             finalratings.add(rs2.getString("name"));
-                       
+
                         }
                     }
                 }
@@ -129,8 +127,8 @@ public class DataFactory {
             x.setObjectives(os);
             Subject t = new Subject();
             cn.close();
-            
-            for (int i = indEliminarObjectives.size()-1; i >=0; i--) {
+
+            for (int i = indEliminarObjectives.size() - 1; i >= 0; i--) {
                 int k = indEliminarObjectives.get(i);
                 os.remove(k);
             }
@@ -150,8 +148,10 @@ public class DataFactory {
             }
             //============================================================
 
-            BeanWithList bean = new BeanWithList(x.fetchName(Integer.parseInt(id[0]), servlet), os, finalratings, nameStudent, dob, age);
-            coll.add(bean);
+            if (os.size() > 0) {
+                BeanWithList bean = new BeanWithList(x.fetchName(Integer.parseInt(id[0]), servlet), os, finalratings, nameStudent, dob, age);
+                coll.add(bean);
+            }
             cn.close();
         }
         //     FALTA TERMINAR PODRIAMOS TOMAR LOS SUBJECT_ID DE LOS ALUMNOS QUE SEAN ELECTIVOS Y COMPROBAR QUE NO EXISTAN EN LA UQERY SIGUIENTE

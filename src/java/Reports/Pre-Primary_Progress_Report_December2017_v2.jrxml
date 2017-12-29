@@ -294,9 +294,9 @@
 		</band>
 	</title>
 	<detail>
-		<band height="120" splitType="Stretch">
+		<band height="129" splitType="Stretch">
 			<componentElement>
-				<reportElement stretchType="ElementGroupBottom" x="18" y="6" width="556" height="60" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="b6dbf7c4-72eb-439f-8a9e-68089f225ded">
+				<reportElement stretchType="ElementGroupBottom" x="18" y="11" width="556" height="60" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="b6dbf7c4-72eb-439f-8a9e-68089f225ded">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -334,7 +334,7 @@
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement style="Table_TD" stretchType="ElementGroupBottom" x="18" y="15" width="111" height="60" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="ec816aee-c76a-4e12-9785-1c3f305b5171">
+				<reportElement style="Table_TD" stretchType="ElementGroupBottom" x="18" y="19" width="111" height="60" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="ec816aee-c76a-4e12-9785-1c3f305b5171">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -359,7 +359,7 @@
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement x="454" y="6" width="120" height="60" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="9e5f2b31-508c-47d5-b6f8-dbd527aaa880">
+				<reportElement x="454" y="11" width="120" height="60" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="9e5f2b31-508c-47d5-b6f8-dbd527aaa880">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -384,8 +384,7 @@
 							<textField>
 								<reportElement style="Table_TH" x="0" y="0" width="40" height="30" backcolor="#FFFFFF" uuid="0aad1b9c-56d8-41d2-b779-69b57dea155c"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[(($F{_THIS}.equals("Presented")) ? "*" : "")
-	]]></textFieldExpression>
+								<textFieldExpression><![CDATA[(($F{_THIS}.equals("Presented")) ? "*" : "")]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -428,7 +427,7 @@
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement x="129" y="15" width="445" height="60" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="4be81dc3-096a-4292-8d08-b3af916ed010">
+				<reportElement x="129" y="19" width="445" height="60" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="4be81dc3-096a-4292-8d08-b3af916ed010">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -454,7 +453,7 @@
 				</jr:table>
 			</componentElement>
 			<textField>
-				<reportElement x="26" y="11" width="380" height="18" uuid="8edf00c1-d9ec-4667-8855-e57866595e63">
+				<reportElement x="26" y="15" width="380" height="18" uuid="8edf00c1-d9ec-4667-8855-e57866595e63">
 					<printWhenExpression><![CDATA[(($F{subject}.equals("Comments")) ? false : true)]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -463,7 +462,7 @@
 				<textFieldExpression><![CDATA[$F{subject}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement key="" x="26" y="21" width="104" height="18" uuid="a83cd503-44e2-4b91-967c-ea94f92deaf7">
+				<reportElement key="" x="26" y="25" width="104" height="18" uuid="a83cd503-44e2-4b91-967c-ea94f92deaf7">
 					<printWhenExpression><![CDATA[(($F{subject}.equals("Comments")) ? true: false)]]></printWhenExpression>
 				</reportElement>
 				<textElement>

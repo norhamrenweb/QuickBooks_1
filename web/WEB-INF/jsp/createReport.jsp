@@ -165,6 +165,11 @@
             $().ready(function ()
             {
 
+
+                $("#generateReport").focus(function () {
+                    $('#destino option').prop('selected', true);
+                });
+                
                 $('.pasar').click(function () {
                     var exist = false;
                     $('#destino option').each(function () {
@@ -172,13 +177,14 @@
                             exist = true;
                     });
 
-                    if (!exist){
+                    if (!exist) {
                         $('#destino option').each(function () {
                             $(this).remove();
                         });
-                        
+
                         $('#origen option:selected').clone().appendTo('#destino');
-                        if( $('#destino option').length > 0) $('#generateReport').attr('disabled', false);
+                        if ($('#destino option').length > 0)
+                            $('#generateReport').attr('disabled', false);
                     }
                     return;
                 });
@@ -595,7 +601,7 @@
         <div class="container">
             <h1 class="text-center">Create New Report</h1>
 
-              <c:url var="post_url"  value="/html" />
+            <c:url var="post_url"  value="/html" />
             <form:form id="formStudents" method ="post" action="${post_url}" >
 
                 <fieldset>
@@ -630,7 +636,7 @@
                                 <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
                                     <input id='btnPasar' type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
                                 </div>
-                                 <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
                                     <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremove"/>">
                                 </div>
                             </div>
@@ -660,12 +666,12 @@
                 <div class="hide col-xs-12 text-center">
                     <input type="submit" class="btn btn-success" id="createOnClick" value="<spring:message code="etiq.txtcreate"/>">
                 </div>
-            
 
-            <div class="col-xs-12 text-center">
-                <input type="submit" class="btn btn-info" id="generateReport" value="Generate">
-            </div>
-        </form:form>
+
+                <div class="col-xs-12 text-center">
+                    <input type="submit" class="btn btn-info" id="generateReport" value="Generate">
+                </div>
+            </form:form>
         </div>
 
         <%--        <div class="col-xs-6">
