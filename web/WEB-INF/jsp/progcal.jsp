@@ -137,7 +137,7 @@ function funcionCallBackdetailsLesson()
                                     var visible ="";    
                                     if(i <= 7){ 
                                         //semana= "semana1" REDUCIR CODIGO
-                                        cont1 = cont1+250;
+                                        cont1 = cont1+180;
                                         if(cont1>$("#semana1").width()){ 
                                             visible = "hide"; 
                                         }                                       
@@ -158,7 +158,7 @@ function funcionCallBackdetailsLesson()
                                     else{
                                         if(i<=14){
                                            //semana= "semana2"
-                                            cont2 = cont2+250;
+                                            cont2 = cont2+180;
                                             if(cont2>$("#semana2").width())
                                             {
                                                 visible = "hide";         
@@ -180,7 +180,7 @@ function funcionCallBackdetailsLesson()
                                         else{
                                             if(i<=21){
                                                // semana= "semana3"
-                                                cont3 = cont3+250;
+                                                cont3 = cont3+180;
                                                 if(cont3>$("#semana3").width()){ 
                                                     visible = "hide"; 
                                                 }                                       
@@ -201,7 +201,7 @@ function funcionCallBackdetailsLesson()
                                              }
                                             else{ 
                                                 //semana= "semana4"
-                                                cont4 = cont4+250;
+                                                cont4 = cont4+180;
                                                  if(cont4>$("#semana4").width()){ 
                                                     visible = "hide"; 
                                                 }                                       
@@ -311,14 +311,14 @@ function funcionCallBackdetailsLesson()
 
         div[id^='module'] p.collapse[aria-expanded="false"] {
             display: block;
-            height: 40px !important;
+            height: 20px !important;
             overflow: hidden;
 
         }
 
         div[id^='module'] p.collapsing[aria-expanded="false"] {
-            height: 40px !important;
-            width: 200px;
+            height: 20px !important;
+            width: 180px;
         }
 
         div[id^='module'] a.collapsed:after  {
@@ -368,11 +368,11 @@ function funcionCallBackdetailsLesson()
        }
        .divAdd{
             color: #777777;
-            height: 100px;
-            width: 200px;
+            height: 110px;
+            width: 180px;
             background-color: rgba(255,255,255,0.5);
             margin-right: 10px;
-            font-size: small;
+            font-size: 12px;
             padding: 5px;
             display: line;
             float: left;
@@ -382,7 +382,7 @@ function funcionCallBackdetailsLesson()
            overflow-x: scroll;
        }
        .tamFijo{
-           height:  120px;
+           height:  130px;
            display: flex;
            width:  1300px;
        }
@@ -516,15 +516,16 @@ function funcionCallBackdetailsLesson()
            
                 function moverDrech(x)
                 {
-                    $("#semana"+x).children().not(".hide").next().removeClass("hide");
-                    $("#semana"+x).children().not(".hide").first().addClass("hide");
-                    
+                    if($("#semana"+x).children().not(".hide").length !== 1){
+                        $("#semana"+x).children().not(".hide").next().removeClass("hide");
+                        $("#semana"+x).children().not(".hide").first().addClass("hide");
+                    }
                 }
                 function moverIzq(x)
                 {
                     $("#semana"+x).children().not(".hide").prev().removeClass("hide");
                      
-                    if($("#semana"+x).children().not(".hide").length*250 > $("#semana"+x).width()){
+                    if($("#semana"+x).children().not(".hide").length*180 > $("#semana"+x).width()){
                          $("#semana"+x).children().not(".hide").last().addClass("hide");
                     }
                     if($("#semana"+x).children().not(".hide").length === 0){
