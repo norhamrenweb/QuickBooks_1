@@ -17,6 +17,7 @@ public class Observation {
     private String observation;
     private String type;
     private Date date;
+
     private String dateString;
     private Date commentDate;
     private int logged_by;

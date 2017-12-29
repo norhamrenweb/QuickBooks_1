@@ -27,6 +27,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import com.google.gson.*;
+import static controladores.ResourcesControlador.log;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -46,6 +47,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -930,6 +932,51 @@ public class ProgressbyStudent {
         }
         return new Gson().toJson(arrayObservations);
     }*/
+    
+    
+        
+    @RequestMapping("/updateComment.htm")
+    public ModelAndView updateComment(@RequestBody Observation r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        ModelAndView mv = new ModelAndView("lessonresources");
+        try{
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+            Statement st = this.cn.createStatement();       
+            st.executeUpdate("update classobserv set date_created = now(), comment = '"+r.getObservation()+"' ,category = '"+r.getType()+"', commentdate = '"+r.getDateString()+"' where id = '"+r.getId()+"'");
+
+        }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+        return mv;
+    }
+    
+    @RequestMapping("/delComentario.htm")
+    public ModelAndView delComment(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
+        if((new SessionCheck()).checkSession(hsr))
+           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        ModelAndView mv = new ModelAndView("lessonresources");
+        try{
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+            Statement st = this.cn.createStatement();
+            String commentId = r.getId();
+            
+            String consulta = "delete from classobserv where id = "+commentId;
+            st.executeUpdate(consulta);
+        }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+        return mv;
+    }
+    
     @RequestMapping("/loadComentsStudent.htm")
     @ResponseBody
     public String loadComentsStudent(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
