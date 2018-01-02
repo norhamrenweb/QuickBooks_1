@@ -43,6 +43,7 @@
                     data1 = data.id;
                     selectionStudent();
                     $('#divProgress').removeClass("hidden");
+                    $('#savecomment').prop("disabled",true);
                 });
                 $('#fecha').datetimepicker({
                     format: 'YYYY-MM-DD',
@@ -53,8 +54,24 @@
 
 
                 });
-
-
+              
+                $('#fecha').on('dp.change', function (e) {
+                    if(($('#observationfecha').val() !== "") && ( $('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")){
+                         $('#savecomment').prop("disabled",false);
+                    }
+                    else{
+                        $('#savecomment').prop("disabled",true);
+                    }
+                });
+                
+                $('#observationcomments,#observationtype').change(function() {
+                    if(($('#observationfecha').val() !== "") && ( $('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")){
+                         $('#savecomment').prop("disabled",false);
+                    }
+                    else{
+                        $('#savecomment').prop("disabled",true);
+                    }
+                });
             });
 
 
@@ -297,6 +314,7 @@
                             if (subjects[i].name !== undefined)
                                 $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                         });
+                        
 //                    var birthday = info.fecha_nacimiento,
 //                            separador = " ",
 //                            limite = 1, 
