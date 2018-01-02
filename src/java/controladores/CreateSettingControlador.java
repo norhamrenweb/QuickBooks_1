@@ -446,7 +446,7 @@ public class CreateSettingControlador{
          String consulta = "select name from lessons where objective_id = "+ id[0];
           ResultSet rs = st.executeQuery(consulta );
           if(rs.next()){
-            message="This objective is linked to lessons";  
+            message="This objective is linked to lessons and can not be deleted";  
           }
           else{
         consulta = "DELETE FROM public.objective WHERE id="+id[0];

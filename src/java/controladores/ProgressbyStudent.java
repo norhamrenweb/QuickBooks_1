@@ -315,10 +315,10 @@ public class ProgressbyStudent {
             this.cn = dataSource.getConnection();
 
             Statement st = this.cn.createStatement(1004, 1007);
-
+//will display only if there is a lesson that has a progress record,but if a lesson is only planned will not be displayed
             ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = " + d.getCol2());
             if (!rs1.next()) {
-                String message = "Student does not have lessons under the selected objective";
+                String message = "Student does not have progress under the selected objective";
                 mv.addObject("message", message);
             } else {
                 rs1.beforeFirst();
@@ -340,12 +340,13 @@ public class ProgressbyStudent {
                     }
                 }
                 //           select the latest rating to be presented as the final rating for this objective
-                String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '" + d.getCol2() + "' AND comment_date = (select max(comment_date)   from public.progress_report where student_id =" + d.getCol2() + " AND objective_id =" + d.getCol1() + " and generalcomment = false) AND objective_id =" + d.getCol1() + "and generalcomment = false )";
-                ResultSet rs2 = st.executeQuery(consulta);
-                while (rs2.next()) {
-                    finalrating = rs2.getString("name");
-                }
-                consulta = "select min(comment_date) as date from progress_report where student_id =" + d.getCol2() + " and rating_id in (select id from rating where name = 'Presented') and objective_id =" + d.getCol1();
+//                String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '" + d.getCol2() + "' AND comment_date = (select max(comment_date)   from public.progress_report where student_id =" + d.getCol2() + " AND objective_id =" + d.getCol1() + " and generalcomment = false) AND objective_id =" + d.getCol1() + "and generalcomment = false )";
+//                ResultSet rs2 = st.executeQuery(consulta);
+//                while (rs2.next()) {
+//                    finalrating = rs2.getString("name");
+//                }
+                    finalrating = this.getfinalrating(d.getCol1(), d.getCol2());
+                String consulta = "select min(comment_date) as date from progress_report where student_id =" + d.getCol2() + " and rating_id in (select id from rating where name = 'Presented') and objective_id =" + d.getCol1();
                 ResultSet rs3 = st.executeQuery(consulta);
                 if (rs3.next()) {
                     rs3.beforeFirst();
@@ -673,7 +674,7 @@ public class ProgressbyStudent {
                     ResultSet rs5 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='" + x.getCol6() + "' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '" + studentid + "' AND objective_id = '" + x.getCol6() + "' and generalcomment = false) and generalcomment = false and student_id ='" + studentid + "'");
                 if (rs5.next()) {
                     String stsdone = rs5.getString("step_id");
-                    if (stsdone != null) {
+                    if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
                         List<String> ste = Arrays.asList(stsdone.split(","));
 
                         if (ste.contains(x.getCol1())) {
@@ -1119,8 +1120,14 @@ public class ProgressbyStudent {
         try {
 
             Statement st = this.cn.createStatement();
+// most recent rating excluding the NA & the empty rating which have ids 6 & 7
+            String consulta = "SELECT rating.name FROM rating where id in"
+                    + "(select rating_id from progress_report where student_id = '"+studid+"'"
+                    + " AND comment_date = (select max(comment_date)   from public.progress_report "
+                    + "where student_id = '"+studid+"' AND objective_id = '"+objid+"' "
+                    + "and generalcomment = false and rating_id not in(6,7)) "
+                    + "AND objective_id ='"+objid+"'and generalcomment = false )";
 
-            String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '10101' AND comment_date = (select max(comment_date)   from public.progress_report where student_id = '10101' AND objective_id = '26' and generalcomment = false) AND objective_id ='26'and generalcomment = false )";
             ResultSet rs2 = st.executeQuery(consulta);
             while (rs2.next()) {
                 result = rs2.getString("name");
@@ -1149,7 +1156,7 @@ public class ProgressbyStudent {
             ResultSet rs2 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='" + objid + "' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '" + studid + "' AND objective_id = '" + objid + "' and generalcomment = false) and generalcomment = false");
             if (rs2.next()) {
                 String stsdone = rs2.getString("step_id");
-                if (stsdone != null) {
+                if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
                     List<String> ste = Arrays.asList(stsdone.split(","));
                     double percent = (ste.size() * 100) / count;
                     result = "" + percent;
