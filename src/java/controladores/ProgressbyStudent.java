@@ -1000,8 +1000,8 @@ public class ProgressbyStudent {
         Observation oAux = new Observation();
 
         formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-        Date fechaActual = new Date();
-        String currentDate = formatoFecha.format(fechaActual);
+     //   Date fechaActual = new Date();
+       // String currentDate = formatoFecha.format(fechaActual);
 
         String dateSelected = yearSelected + "-" + monthSelected + "-" + "01";
 
@@ -1016,7 +1016,8 @@ public class ProgressbyStudent {
             this.cn = dataSource.getConnection();
             Statement st = this.cn.createStatement();
 
-            while (days < DIAS_MAX && !currentDate.equals(dateSelected)) {
+           // while (days < DIAS_MAX && !currentDate.equals(dateSelected)) {
+            while (days < DIAS_MAX) {
                 //dateSelected = getNextDate(dateSelected);
                 arrayComments.clear();
                 consulta = "SELECT * FROM classobserv WHERE student_id = " + studentId + " AND commentdate = '" + dateSelected + "' ORDER BY commentdate";
