@@ -556,6 +556,11 @@
                 margin-top: 5px;
                 background-color: #99CC66;
             }
+            .collapse {
+                display: none;
+                width: 180px;
+            }
+
             .secondWeek
             {
                 margin-top: 5px;
