@@ -45,10 +45,13 @@
                     $('#divProgress').removeClass("hidden");
                     $('#savecomment').prop("disabled",true);
                 });
+                
+                var today = new Date();
                 $('#fecha').datetimepicker({
                     format: 'YYYY-MM-DD',
 //            locale: userLang.valueOf(),
                     daysOfWeekDisabled: [0, 6],
+                    maxDate: today,
                     useCurrent: false//Important! See issue #1075
                             //defaultDate: '08:32:33',
 
