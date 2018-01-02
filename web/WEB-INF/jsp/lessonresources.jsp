@@ -1042,7 +1042,7 @@
                                         if ($('#file').val() !== "") {
                                             $('#divAddFile').removeClass("has-error");
                                             $('#spanSelectFile').addClass("hide")
-                                            if (existeNombre === "0" && $('#idNameFile').val().indexOf("/") == "-1") {
+                                            if (existeNombre === "0" && $('#idNameFile').val().indexOf("/") === -1 && $('#idNameFile').val().indexOf("\"") === -1&& $('#idNameFile').val().indexOf("'") === -1) {
                                                 $('#submitSave').prop('disabled', false);
                                                 $('#divAddFile').removeClass("has-error");
                                                 $('#divAddFile').children().last().prev().prev().addClass("hide")
@@ -1084,7 +1084,7 @@
                                     <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}> 
 
                                     <input type="text" class=" col-xs-3 form-control" name="idNameFile" id="idNameFile"  placeholder="Name">
-                                    <span class="help-block hide">Invalid Name (Name can not be repeated nor contain special characters)</span>
+                                    <span class="help-block hide">Invalid Name (Name can not be repeated nor contain special characters / " ')</span>
                                     <input type="file" class=" col-xs-7 center-block form-control" name="fileToUpload" id="file">
                                     <span id="spanSelectFile"class="help-block hide">Select a file</span>
                                 </div>
