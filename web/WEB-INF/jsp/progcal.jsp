@@ -55,6 +55,25 @@
                     loadComments();
                 })
                 loadComments();
+                
+                
+                $('#fecha2').on('dp.change', function (e) {
+                    if(($('#observationfecha').val() !== "") && ( $('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")){
+                         $('#savecomment').prop("disabled",false);
+                    }
+                    else{
+                        $('#savecomment').prop("disabled",true);
+                    }
+                });
+                
+                $('#observationcomments,#observationtype').change(function() {
+                    if(($('#observationfecha').val() !== "") && ( $('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")){
+                         $('#savecomment').prop("disabled",false);
+                    }
+                    else{
+                        $('#savecomment').prop("disabled",true);
+                    }
+                });
             });
             function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
 
