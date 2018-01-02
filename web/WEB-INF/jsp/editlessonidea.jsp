@@ -74,13 +74,24 @@
                     }
             });
             
+                
+                
              $( "#NameLessons,#comments,#objective,#fechaInput,#horainicioInput,#horafinInput" ).change(function() {
-                if(document.getElementById("level").value !== 'Select level' && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' )
+                if(($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("level").value !== 'Select level' && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' )
                 {  
                     $('#createOnClick').attr('disabled', false);
                 }
                 else{ //no es idea  
                     $('#createOnClick').attr('disabled', true);
+                }
+                if (($("#NameLessons").val().indexOf("'") !== -1) || ($("#NameLessons").val().indexOf("\"") !== -1)) {
+                        $('#NameLessons').parent().addClass("has-error");
+                        $('#NameLessons').parent().children().last().removeClass("hide");
+                        $('#createOnClick').attr('disabled', true);
+                }
+                else{
+                    $('#NameLessons').parent().removeClass("has-error");
+                    $('#NameLessons').parent().children().last().addClass("hide");
                 }
             });
             
@@ -145,7 +156,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     !$('#origen option:selected').remove().appendTo('#destino');
                     var alumnosSelected = $('#destino').length;
                     var objectiveSelected = $('#objective').val();
-                    if(alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== ''){
+                    if(($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && alumnosSelected !== 0 && objectiveSelected !== 0 && objectiveSelected !== null && objectiveSelected !== ''){
                         $('#createOnClick').attr('disabled', false);
                     }
                     return;
@@ -162,7 +173,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 		$('.pasartodos').click(function() {
                     $('#origen option').each(function() { $(this).remove().appendTo('#destino'); });
                     var objectiveSelected = $('#objective').val();
-                    if( objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === ''){
+                    if(($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === ''){
                         $('#createOnClick').attr('disabled', true);
                     }
                 });
@@ -430,6 +441,7 @@ input[type="radio"] .styled:checked + label::after {
                     <div class="col-xs-6 center-block">
                         <label class="control-label">Presentation Name</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                         <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>" value="${data.name}">
+                       <span class="help-block hide">Invalid Name (Nor contain special characters)</span>
                     </div>               
                     <div class="col-xs-6 center-block form-group">
                         <label class="control-label">Presentation description</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>

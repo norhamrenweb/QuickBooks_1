@@ -74,8 +74,10 @@
                     $("#contenedorStudents").addClass('in');   
                     }
             });
+            
+                    
              $( "#NameLessons,#comments,#objective,#fechaInput,#horainicioInput,#horafinInput" ).change(function() {
-                if(document.getElementById("level").value !== 'Select level' && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' ){
+                if(($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("level").value !== 'Select level' && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' ){
                     if($("#ideaCheck:checked").length === 1){
                         $('#saveEdit').attr('disabled', false);
                     }
@@ -90,6 +92,15 @@
                     }
                 }else{
                     $('#saveEdit').attr('disabled', true);
+                }
+                if (($("#NameLessons").val().indexOf("'") !== -1) || ($("#NameLessons").val().indexOf("\"") !== -1)) {
+                        $('#NameLessons').parent().addClass("has-error");
+                        $('#NameLessons').parent().children().last().removeClass("hide");
+                        $('#createOnClick').attr('disabled', true);
+                }
+                else{
+                    $('#NameLessons').parent().removeClass("has-error");
+                    $('#NameLessons').parent().children().last().addClass("hide");
                 }
             });
             
@@ -189,7 +200,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     if(!exist)!$('#origen option:selected').clone().appendTo('#destino');
                     
                     var numAlum = $('#destino option').length;
-                    if(document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0){
+                    if(($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0){
                         $('#saveEdit').attr('disabled', false);
                     }
                     else{
@@ -230,7 +241,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     });
                     
                     var numAlum = $('#destino option').length;
-                    if(document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0){
+                    if(($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0){
                         $('#saveEdit').attr('disabled', false);
                     }
                     else{
@@ -607,6 +618,7 @@ input[type="radio"] .styled:checked + label::after {
                     <div class="col-xs-6 center-block">
                         <label class="control-label">Presentation Name</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                         <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>" value="${data.name}">
+                        <span class="help-block hide">Invalid Name (Nor contain special characters)</span>
                     </div>               
                     <div class="col-xs-6 center-block form-group">
                         <label class="control-label">Presentation description</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
