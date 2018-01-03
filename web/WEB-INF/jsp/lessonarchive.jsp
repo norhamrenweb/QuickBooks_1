@@ -30,6 +30,7 @@
     $('#table_id').DataTable({
     "aLengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
     "iDisplayLength": 5,
+    "order": [[ 5, "desc" ]],
     "columnDefs": [
         {
             "targets": [ 0 ],
@@ -282,11 +283,11 @@ var ajax;
                             <td>${lecciones.start}</td>
                             <td>${lecciones.finish}</td>
                             <td>
-                                <div class="col-xs-3">
+                                <div class="col-xs-5">
                                     <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Attendance">
                                 </div>
                                 
-                                <div class="col-xs-3">
+                                <div class="col-xs-5">
                                     <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
                                 </div>
                             </td>
