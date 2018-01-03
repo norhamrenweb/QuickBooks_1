@@ -63,7 +63,7 @@
                    $("#tree").jstree('destroy');
                    var node = JSON.parse(ajax.responseText);
                    var i = node.length;
-
+                   $('#loadingmessage').hide();
                 // direct data
                 $('#tree').jstree({
                     "core" : {
@@ -149,6 +149,7 @@ var to = false;
        window.location.reload(true);
       
    }
+    var cargar = 0;
     function comboSelectionLevel()
     {
         if (window.XMLHttpRequest) //mozilla
@@ -159,7 +160,12 @@ var to = false;
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-
+        if(cargar===1){
+            cargar = 0;
+            $('#loadingmessage').show();
+        }else{
+            cargar = 1;
+        }
         $('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackIdeaLessons;
         var seleccion1 = document.getElementById("level").value;
@@ -392,6 +398,11 @@ input[type="radio"] .styled:checked + label::after {
     </div>
   </div>
 </div>
+        <div class="divLoadStudent" id="loadingmessage">
+            <div class="text-center"> 
+                <img src='../recursos/img/large_loading.gif'/>
+            </div>
+        </div>
         
     </body>
 </html>
