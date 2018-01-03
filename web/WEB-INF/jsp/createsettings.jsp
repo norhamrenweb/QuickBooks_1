@@ -334,6 +334,9 @@ $("#method").on('mouseover', 'option' , function(e) {
                         success: function(data) {                          
                            if(data==='success')  {           
                                $('#objective option:selected').remove();
+                               $('#content').empty();
+                               $('#delObjective').attr("disabled", true);
+                               $('#editObjective').attr("disabled", true);
            //         $('#objective').remove('option:selected');
                             }else{
                                 $('#buttomModalObjective').click();
