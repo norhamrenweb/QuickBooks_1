@@ -14,7 +14,7 @@
     <%@ include file="menu.jsp" %>
 
     <head>
-        <title>Home</title>
+        <title>Classroom Observation</title>
 
         <script type="text/javascript">
 
@@ -44,6 +44,15 @@
                 
                 $('#fecha').datetimepicker({
                     format: 'YYYY-MM',
+                    locale: userLang.valueOf(),
+                    daysOfWeekDisabled: [0, 6],
+                    useCurrent: true//Important! See issue #1075
+                            //defaultDate: '08:32:33',
+
+                });
+                
+                $('#observationfecha').datetimepicker({
+                    format: 'YYYY-MM-DD',
                     locale: userLang.valueOf(),
                     daysOfWeekDisabled: [0, 6],
                     useCurrent: true//Important! See issue #1075
@@ -128,9 +137,10 @@
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-
+                
+		
                 var comments = $('#observationcomments').val();
-                var fecha =  $('#observationfecha').val();
+                var fecha =  $( "#observationfecha" ).val();
                 var tipo = $('#observationtype').val();
                 var id = $('#idComentario').val();
                 var myObj = {};
@@ -167,6 +177,7 @@
                 var type = $('#editComentario' + id).data('type');
                 var commentDate = $('#editComentario' + id).data('commentdate');
                 
+                
                 $('#observationfecha').val(commentDate);
                 $('#observationtype').val(type);
                 $('#observationcomments').val(comment);
@@ -174,8 +185,11 @@
 
                 $('#editComment').modal('show');
             }
-
-
+            function ConfirmDeleteComentario(val) {
+                $('#deleteObservation').modal('show');
+                $('#buttonDelete').val(val);
+                
+            }
             function deleteComentario(id) {
                 if (window.XMLHttpRequest) //mozilla
                 {
@@ -184,7 +198,7 @@
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-
+                
                 var idComment = id;
                 var myObj = {};
                 myObj["id"] = idComment;
@@ -250,6 +264,10 @@
                             $.each(f, function (i2, value2) {
                                 var id = value2.id;
                                 var comentario = value2.observation;
+                                var comentarioExtenso = '';
+                                if (comentario.length >= 57) {
+                                    var comentarioExtenso = '...';
+                                }
                                 var fechaCreacion = value2.date;
                                 var category = value2.type;
                                 var commentdate = value2.commentDate;
@@ -260,21 +278,30 @@
                                     if (cont1 > $("#semana1").width()) {
                                         visible = "hide";
                                     }
-
-                                    $("#semana1").append("<div id= 'comment" + id + "' class='divAdd " + visible + "'>\n\
-                                                                       Comment Date: " + commentdate + "<br>\n\
-                                                                       Create Date: " + fechaCreacion + "<br>\n\
-                                                                       Type: " + category + "<br>\n\
-                                                                       <div id='module" + cont1 + "' class='container moreLess'>\n\
-                                                                       <a data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' role='button' class='showMore collapsed' ></a>\n\
-                                                                       \n\
-                                                                       <p class='collapse' id='semana1" + cont1 + "' aria-expanded='false'>\n\
-                                                                               " + comentario + "\n\
-                                                                           </p>\n\
-                                                                       </div>\n\
-                                                                       <div ><input type='button' class='btnEdit btn btn-warning' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'/>\n\
-                                                                             <input type='button' class='btnRemove btn btn-warning'  onclick='deleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteComentario(" + id + ")'/></div>\n\
-                                                                        </div>");
+                                    
+<%--Create Date: " + fechaCreacion + "<br>\n\
+Type: " + category + "<br>\n\--%>
+                                    $("#semana1").append("<div id='comment" + id + "' class='divAdd" + visible + "'>\n\
+                                <strong>Date:</strong> " + commentdate + "<br>\n\
+                                <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
+\n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+<span class='glyphicon glyphicon-list-alt'></span>\n\
+</button>\n\
+</div>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+<span class='glyphicon glyphicon-pencil'></span>\n\
+</button>\n\
+</div>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario(" + id + ")'>\n\
+<span class=' glyphicon glyphicon-remove'></span>\n\
+</button>\n\
+</div>\n\
+</div>\n\
+</div>");
                                 } else {
                                     if (i <= 14) {
                                         //semana= "semana2"
@@ -283,20 +310,27 @@
                                         {
                                             visible = "hide";
                                         }
-                                        $("#semana2").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
-                                                                     Comment Date: " + commentdate + "<br>\n\
-                                                                     Create Date: " + fechaCreacion + "<br>\n\
-                                                                     Type: " + category + "<br>\n\
-                                                                     <div id='module" + cont2 + "' class='container moreLess'>\n\
-                                                                     <a data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' role='button' class='showMore collapsed' ></a>\n\
-                                                                     \n\
-                                                                     <p class='collapse' id='semana2" + cont2 + "' aria-expanded='false'>\n\
-                                                                             " + comentario + "\n\
-                                                                         </p>\n\
-                                                                     </div>\n\
-                                                                     <div ><input type='button' class='btnEdit btn btn-warning' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'/>\n\
-                                                                             <input type='button' class='btnRemove btn btn-warning'  onclick='deleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteComentario(" + id + ")'/></div>\n\
-                                                                     </div>");
+                                        $("#semana2").append("<div id='comment" + id + "' class='divAdd" + visible + "'>\n\
+                                <strong>Date:</strong> " + commentdate + "<br>\n\
+                                <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
+\n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+<span class='glyphicon glyphicon-list-alt'></span>\n\
+</button>\n\
+</div>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+<span class='glyphicon glyphicon-pencil'></span>\n\
+</button>\n\
+</div>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario(" + id + ")'>\n\
+<span class=' glyphicon glyphicon-remove'></span>\n\
+</button>\n\
+</div>\n\
+</div>\n\
+</div>");
                                     } else {
                                         if (i <= 21) {
                                             // semana= "semana3"
@@ -305,20 +339,27 @@
                                                 visible = "hide";
                                             }
 
-                                            $("#semana3").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
-                                                                               Comment Date: " + commentdate + "<br>\n\
-                                                                               Create Date: " + fechaCreacion + "<br>\n\
-                                                                               Type: " + category + "<br>\n\
-                                                                               <div id='module" + cont3 + "' class='container moreLess'>\n\
-                                                                               <a data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' role='button' class='showMore collapsed' ></a>\n\
-                                                                               \n\
-                                                                               <p class='collapse' id='semana3" + cont3 + "' aria-expanded='false'>\n\
-                                                                                       " + comentario + "\n\
-                                                                                   </p>\n\
-                                                                               </div>\n\
-                                                                               <div ><input type='button' class='btnEdit btn btn-warning' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'/>\n\
-                                                                             <input type='button' class='btnRemove btn btn-warning'  onclick='deleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteComentario(" + id + ")'/></div>\n\
-                                                                            </div>");
+                                            $("#semana3").append("<div id='comment" + id + "' class='divAdd" + visible + "'>\n\
+                                <strong>Date:</strong> " + commentdate + "<br>\n\
+                                <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
+\n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+<span class='glyphicon glyphicon-list-alt'></span>\n\
+</button>\n\
+</div>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+<span class='glyphicon glyphicon-pencil'></span>\n\
+</button>\n\
+</div>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario(" + id + ")'>\n\
+<span class=' glyphicon glyphicon-remove'></span>\n\
+</button>\n\
+</div>\n\
+</div>\n\
+</div>");
 
                                         } else {
                                             //semana= "semana4"
@@ -327,20 +368,27 @@
                                                 visible = "hide";
                                             }
 
-                                            $("#semana4").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
-                                                                               Comment Date: " + commentdate + "<br>\n\
-                                                                               Create Date: " + fechaCreacion + "<br>\n\
-                                                                               Type: " + category + "<br>\n\
-                                                                               <div id='module" + cont4 + "' class='container moreLess'>\n\
-                                                                               <a data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' role='button' class='showMore collapsed' ></a>\n\
-                                                                               \n\
-                                                                               <p class='collapse' id='semana4" + cont4 + "' aria-expanded='false'>\n\
-                                                                                       " + comentario + "\n\
-                                                                                   </p>\n\
-                                                                               </div>\n\
-                                                                               <div ><input type='button' class='btnEdit btn btn-warning' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'/>\n\
-                                                                             <input type='button' class='btnRemove btn btn-warning'  onclick='deleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteComentario(" + id + ")'/></div>\n\
-                                                                            </div>");
+                                            $("#semana4").append("<div id='comment" + id + "' class='divAdd" + visible + "'>\n\
+                                <strong>Date:</strong> " + commentdate + "<br>\n\
+                                <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
+\n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+<span class='glyphicon glyphicon-list-alt'></span>\n\
+</button>\n\
+</div>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+<span class='glyphicon glyphicon-pencil'></span>\n\
+</button>\n\
+</div>\n\
+<div class='col-xs-4 text-center sinpadding'>\n\
+<button type='button' class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario(" + id + ")'>\n\
+<span class=' glyphicon glyphicon-remove'></span>\n\
+</button>\n\
+</div>\n\
+</div>\n\
+</div>");
                                         }
                                     }
                                 }
@@ -522,6 +570,11 @@
                 padding: 5px;
                 display: line;
                 float: left;
+                position: relative;
+            }
+            .optionsObservations{
+                position: absolute;
+                bottom: 0px;
             }
 
             .scroll{
@@ -581,6 +634,10 @@
                 filter: alpha(opacity=50);
                 opacity: .5;
             }
+            .btn-link
+            {
+                color: #777777 !important;
+            }
         </style>
     </head>
     <body>
@@ -592,52 +649,6 @@
                 </div>
             </div>
             <div class="container">
-                <%--              <table id="table_id" class="display" >
-                                  <thead>
-                                      <tr>
-                                          <td>id</td>
-                                          <td>Lesson Name</td>
-                                          <td>Grade Level</td>
-                                          <td>Subject</td>
-                                          <td>Objective</td>
-                                          
-                                          <td>Date</td>
-                                          <td>Start Hour</td>
-                                          <td>End Hour</td>
-                                          <td><spring:message code="etiq.actionlessons"/></td>
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-                                  <c:forEach var="lecciones" items="${lessonslist}" >
-                                      <tr>
-                                          <td>${lecciones.id}</td>
-                                          <td>${lecciones.name}</td>
-                                          <td>${lecciones.level.name}</td>
-                                          <td>${lecciones.subject.name}</td>
-                                          <td>${lecciones.objective.name}</td>
-                                          <td>${lecciones.date}</td>
-                                          <td>${lecciones.start}</td>
-                                          <td>${lecciones.finish}</td>
-                                          <td>
-                                              <div class="col-xs-3">
-                                                  <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Attendance">
-                                              </div>
-                                              <div class="col-xs-3">
-                                                  <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
-                                              </div>
-                                              <div class="col-xs-3">
-                                                  <input name="TXTid_lessons_modificar" type="image" src="<c:url value="/recursos/img/btn/btn_Edit.svg"/>" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
-                                              </div>
-                                              <div class="col-xs-3">
-                                                  <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
-                                              </div>
-                                          </td>
-                                      </tr>
-                                  </c:forEach>
-                                  </tbody>
-                          </table>
-                        
-                --%>
                 <div class="col-xs-12">
                     <div class="col-xs-6" >
 
@@ -822,7 +833,7 @@
                 </div>
             </div>
             <!-- Modal confirm delete-->
-            <div id="deleteLesson" class="modal fade" role="dialog">
+            <div id="deleteObservation" class="modal fade" role="dialog">
                 <div class="modal-dialog">
 
                     <!-- Modal content-->
@@ -835,7 +846,7 @@
 
                         </div>
                         <div class="modal-footer text-center">
-                            <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect(value)">Yes</button>
+                            <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick='deleteComentario(value)' >Yes</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                         </div>
                     </div>
@@ -885,6 +896,7 @@
                     <div class="modal-content">
                         
                         <div class="modal-header modal-header-details">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h2>Enter a classroom observation</h2>
                         </div>
                         <div class="modal-body">
