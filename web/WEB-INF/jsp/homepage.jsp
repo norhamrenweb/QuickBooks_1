@@ -35,8 +35,8 @@
             { "width": "10%",  "targets": [ 0 ],
                 "visible": false,
                 "searchable": false},
-            { "width": "20%",   "targets": [ 1 ] },
-            { "width": "5%",    "targets": [ 2 ] },
+            { "width": "18%",   "targets": [ 1 ] },
+            { "width": "7%",    "targets": [ 2 ] },
             { "width": "10%",   "targets": [ 3 ] },
             { "width": "10%",   "targets": [ 4 ] },
             { "width": "10%",   "targets": [ 5 ] },
@@ -276,13 +276,14 @@ var ajax;
     </style>
     </head>
     <body>
-        <div class="col-xs-12">
-            <div class="col-sm-12" id="maincontainer">
-                <div class="col-sm-12 center-block text-center">
-                    <h2><spring:message code="etiq.txtactivities"/></h2>
-                </div>
-            </div>
+        
+            
             <div class="container">
+                <div class="col-sm-12" id="maincontainer">
+                    <div class="col-sm-12 center-block text-center">
+                        <h2><spring:message code="etiq.txtactivities"/></h2>
+                    </div>
+                </div>
                 <table id="table_id" class="display" >
                     <thead>
                         <tr>
@@ -331,10 +332,9 @@ var ajax;
                         </tr>
                     </c:forEach>
                     </tbody>
-            </table>
-           
+                </table>
             </div>
-        </div>
+        
 <!-- Modal delete-->
 <div id="detailsLesson" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">

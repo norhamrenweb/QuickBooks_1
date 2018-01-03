@@ -826,11 +826,10 @@
                                 </div>
                             </div>
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="observations">
-                                <h2>Enter a classroom observation</h2>
-
-                                <div id="contenedorDate">
-                                    <div class='col-xs-4'>
-                                        <div class="form-group">
+                                <div class="col-xs-12 text-center">
+                                    <h2>Enter a classroom observation</h2>
+                                </div>
+                                    <div class='col-xs-6 form-group'>
                                             <label class="control-label" for="fecha">Date</label>
                                             <div class='input-group date' id='fecha'>
                                                 <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
@@ -838,11 +837,6 @@
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6 center-block form-group">
-                                        <label class="control-label">Observation</label>
-                                        <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"></textarea>
                                     </div>
                                     <div class="col-xs-6 center-block form-group">
                                         <label class="control-label">Observation type</label>
@@ -855,17 +849,23 @@
                                             <option value="Social">Social</option>
                                         </select>
                                     </div>
-                                </div>  
-                                <div class="col-xs-12 text-center">
-                                    <input type="button" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">
-                                </div>
+                                    <div class="col-xs-12 center-block form-group">
+                                        <label class="control-label">Observation</label>
+                                        <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"></textarea>
+                                    </div>
+                                    
                                 <div class="col-xs-12 text-center hidden" id="error1">
                                     <label>Please select a student first</label>
                                 </div>
                                 <div class="col-xs-12 text-center hidden" id="error2">
                                     <label>Please make sure to fill all data</label>
                                 </div>
-                                <div class="col-xs-12 text-center">
+                                
+                                <div class="col-xs-6 text-center">
+                                    <input type="button" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">
+                                </div>
+                                
+                                <div class="col-xs-6 text-center">
                                     <button type='button' class='btn-unbutton' id="showcalendar"  value="View all" onclick="showCalendar()">View all comments</button>
                                 </div>
                                 <div id="confirmsave" class="modal fade" role="dialog">
