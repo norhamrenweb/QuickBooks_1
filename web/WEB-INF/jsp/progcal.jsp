@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html>
     <%@ include file="infouser.jsp" %>
-    <%@ include file="menu.jsp" %>
+  
 
     <head>
         <title>Classroom Observation</title>
@@ -645,7 +645,7 @@ Type: " + category + "<br>\n\--%>
         <div class="col-xs-12">
             <div class="col-sm-12" id="maincontainer">
                 <div class="col-sm-12 center-block text-center">
-                    <h2>CLASSROOM</h2>
+                    <h2>CLASSROOM OBSERVATIONS</h2>
                 </div>
             </div>
             <div class="container">
