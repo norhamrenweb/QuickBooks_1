@@ -451,6 +451,10 @@ public class CreateSettingControlador{
           else{
             consulta="delete from objective_content where objective_id= '"+id[0]+"'";
             st.executeUpdate(consulta);
+            consulta="delete from progress_report where objective_id= '"+id[0]+"'";//incase the objective has a general comment that is not linked to a lesson
+            st.executeUpdate(consulta);
+            consulta="delete from obj_steps where obj_id= '"+id[0]+"'";//incase the objective has steps 
+            st.executeUpdate(consulta);
             consulta = "DELETE FROM public.objective WHERE id="+id[0];
             st.executeUpdate(consulta);
             message="success";

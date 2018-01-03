@@ -316,9 +316,10 @@ public class ProgressbyStudent {
 
             Statement st = this.cn.createStatement(1004, 1007);
 //will display only if there is a lesson that has a progress record,but if a lesson is only planned will not be displayed
+// the message should appear if an objective has only a general comment
             ResultSet rs1 = st.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = " + d.getCol2());
             if (!rs1.next()) {
-                String message = "Student does not have progress under the selected objective";
+                String message = "Student does not have progress under the selected objective";//if i change this message must change as well in the jsp
                 mv.addObject("message", message);
             } else {
                 rs1.beforeFirst();

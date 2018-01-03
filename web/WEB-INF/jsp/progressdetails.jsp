@@ -29,7 +29,7 @@
                 });
                 var message = '${message}';
     
-     if (message === 'Student does not have lessons under the selected objective' ){
+     if (message === 'Student does not have progress under the selected objective' ){
      $('#myModal').modal({
         show: 'false'
     });
