@@ -824,10 +824,11 @@ public class ProgressbyStudent {
 //       }
     //classroom observations
     @RequestMapping("/progressbystudent/savecomment.htm")
-    public ModelAndView savecomment(@RequestBody Observation obs, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if ((new SessionCheck()).checkSession(hsr)) {
-            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-        }
+    @ResponseBody
+    public String savecomment(@RequestBody Observation obs, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+//        if ((new SessionCheck()).checkSession(hsr)) {
+//            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+//        }
         ModelAndView mv = new ModelAndView("progressbystudent");
         try {
             DriverManagerDataSource dataSource;
@@ -836,13 +837,14 @@ public class ProgressbyStudent {
             Statement st = this.cn.createStatement();
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
+            String test = "insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('" + user.getId() + "',now(),'" + obs.getObservation() + "','" + obs.getType() + "','" + obs.getStudentid() + "','" + obs.getDate() + "')";
             st.executeUpdate("insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('" + user.getId() + "',now(),'" + obs.getObservation() + "','" + obs.getType() + "','" + obs.getStudentid() + "','" + obs.getDate() + "')");
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
-        return mv;
+        return "success";
     }
 
     @RequestMapping("/progcal.htm")
@@ -969,7 +971,7 @@ public class ProgressbyStudent {
             String commentId = r.getId();
             
             String consulta = "delete from classobserv where id = "+commentId;
-            st.executeUpdate(consulta);
+            st.executeUpdate (consulta);
         }catch(SQLException ex){
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
@@ -1026,11 +1028,11 @@ public class ProgressbyStudent {
                 while (rs.next()) {
                     oAux.setId(rs.getInt("id"));
                     oAux.setLogged_by(rs.getInt("logged_by"));
-                    oAux.setDate(rs.getDate("date_created"));
+                    oAux.setDate(""+rs.getDate("date_created"));
                     oAux.setObservation(rs.getString("comment"));
                     oAux.setType(rs.getString("category"));
                     oAux.setStudentid(Integer.parseInt(studentId));
-                    oAux.setCommentDate(rs.getDate("commentdate"));
+                    oAux.setCommentDate(""+rs.getDate("commentdate"));
                     arrayComments.add(new Observation(oAux));
                 }
 

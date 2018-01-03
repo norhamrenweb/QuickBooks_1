@@ -16,10 +16,10 @@ public class Observation {
     private int id;
     private String observation;
     private String type;
-    private Date date;
+    private String date;
 
     private String dateString;
-    private Date commentDate;
+    private String commentDate;
     private int logged_by;
     private int studentid;
     
@@ -44,11 +44,11 @@ public class Observation {
         studentid = o2.getStudentid();
     }
 
-    public Date getCommentDate() {
+    public String getCommentDate() {
         return commentDate;
     }
 
-    public void setCommentDate(Date commentDate) {
+    public void setCommentDate(String commentDate) {
         this.commentDate = commentDate;
     }
 
@@ -76,11 +76,11 @@ public class Observation {
         this.type = type;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
