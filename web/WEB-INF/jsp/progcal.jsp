@@ -281,7 +281,7 @@
                                     
 <%--Create Date: " + fechaCreacion + "<br>\n\
 Type: " + category + "<br>\n\--%>
-                                    $("#semana1").append("<div id='comment" + id + "' class='divAdd" + visible + "'>\n\
+                                    $("#semana1").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
                                 <strong>Date:</strong> " + commentdate + "<br>\n\
                                 <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
@@ -310,7 +310,7 @@ Type: " + category + "<br>\n\--%>
                                         {
                                             visible = "hide";
                                         }
-                                        $("#semana2").append("<div id='comment" + id + "' class='divAdd" + visible + "'>\n\
+                                        $("#semana2").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
                                 <strong>Date:</strong> " + commentdate + "<br>\n\
                                 <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
@@ -339,7 +339,7 @@ Type: " + category + "<br>\n\--%>
                                                 visible = "hide";
                                             }
 
-                                            $("#semana3").append("<div id='comment" + id + "' class='divAdd" + visible + "'>\n\
+                                            $("#semana3").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
                                 <strong>Date:</strong> " + commentdate + "<br>\n\
                                 <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
@@ -368,7 +368,7 @@ Type: " + category + "<br>\n\--%>
                                                 visible = "hide";
                                             }
 
-                                            $("#semana4").append("<div id='comment" + id + "' class='divAdd" + visible + "'>\n\
+                                            $("#semana4").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
                                 <strong>Date:</strong> " + commentdate + "<br>\n\
                                 <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
