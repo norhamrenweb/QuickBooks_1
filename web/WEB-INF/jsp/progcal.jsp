@@ -187,7 +187,7 @@
             }
             function ConfirmDeleteComentario(val) {
                 $('#deleteObservation').modal('show');
-                $('#buttonDelete').val(val);
+                $('#buttonDeleteObservation').val(val);
                 
             }
             function deleteComentario(id) {
@@ -775,63 +775,7 @@ Type: " + category + "<br>\n\--%>
                 </div>
 
             </div>
-            <!-- Modal delete-->
-            <div id="detailsLesson" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-lg">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header modal-header-details">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 id="nameLessonDetails" class="modal-title">Details</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container-fluid">
-                                <div class="col-xs-6">
-                                    <div class="row title">
-                                        Students
-                                    </div>
-                                    <div id="studentarea" class="row studentarea">
-
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="row title">
-                                        Method
-                                    </div>
-                                    <div class="row" id="methodDetails">
-
-                                    </div>
-                                    <div class="row title">
-                                        Lesson Description
-                                    </div>
-                                    <div class="row" id="commentDetails">
-
-                                    </div>
-                                    <div class="row title">
-                                        Content
-                                    </div>
-                                    <div class="row">
-                                        <ul id="contentDetails">
-
-                                        </ul>
-                                    </div>
-                                    <div class="row title">
-                                        Objective:  
-                                    </div>
-                                    <div class="row">
-                                        Learn ryhtmes
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+            
             <!-- Modal confirm delete-->
             <div id="deleteObservation" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -846,33 +790,14 @@ Type: " + category + "<br>\n\--%>
 
                         </div>
                         <div class="modal-footer text-center">
-                            <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick='deleteComentario(value)' >Yes</button>
+                            <button id="buttonDeleteObservation" type="button" class="btn btn-danger" data-dismiss="modal" onclick='deleteComentario(value)' value="">Yes</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                         </div>
                     </div>
 
                 </div>
             </div>
-            <!-- Modal lessons delete -->
-            <div id="deleteLessonMessage" class="modal fade" role="dialog">
-                <div class="modal-dialog">
 
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header modal-header-delete">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"></h4>
-                        </div>
-                        <div id="lessonDeleteMessage" class="modal-body">
-                            <c:out value='${messageDelete}'/>
-                        </div>
-                        <div class="modal-footer text-center">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="refresh()">OK</button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
             <script>
 
                 $(document).on("click", ".showMore", function () {
