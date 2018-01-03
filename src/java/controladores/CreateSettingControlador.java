@@ -449,11 +449,11 @@ public class CreateSettingControlador{
             message="This objective is linked to lessons and can not be deleted";  
           }
           else{
-        consulta = "DELETE FROM public.objective WHERE id="+id[0];
-           st.executeUpdate(consulta);
-           consulta="delete from objective_content where objective_id= '"+id[0]+"'";
-           st.executeUpdate(consulta);
-           message="success";
+            consulta="delete from objective_content where objective_id= '"+id[0]+"'";
+            st.executeUpdate(consulta);
+            consulta = "DELETE FROM public.objective WHERE id="+id[0];
+            st.executeUpdate(consulta);
+            message="success";
            // need to decide what to do with the contents also if the objective has a record in the progress_report
           }
        }catch (SQLException ex) {

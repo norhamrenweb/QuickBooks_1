@@ -21,6 +21,8 @@
 
 
 
+            var pestaña = "";
+
             $(document).ready(function () {
                 $("#tg").treegrid();
                 $('#tableobjective').DataTable();
@@ -37,15 +39,24 @@
                             ]
                         });
 
+                $('#myTab ul li').on('click', function () {
+                    pestaña = $(this).text();
+                });
+
                 $('#table_students tbody').on('click', 'tr', function () {
 
                     data = table.row(this).data();
                     data1 = data.id;
+                  //  $('#arbol').tab('show');
                     selectionStudent();
+                    
+
+                    
                     $('#divProgress').removeClass("hidden");
-                    $('#savecomment').prop("disabled",true);
+                    $('#savecomment').prop("disabled", true);
+
                 });
-                
+
                 var today = new Date();
                 $('#fecha').datetimepicker({
                     format: 'YYYY-MM-DD',
@@ -57,22 +68,20 @@
 
 
                 });
-              
+
                 $('#fecha').on('dp.change', function (e) {
-                    if(($('#observationfecha').val() !== "") && ( $('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")){
-                         $('#savecomment').prop("disabled",false);
-                    }
-                    else{
-                        $('#savecomment').prop("disabled",true);
+                    if (($('#observationfecha').val() !== "") && ($('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")) {
+                        $('#savecomment').prop("disabled", false);
+                    } else {
+                        $('#savecomment').prop("disabled", true);
                     }
                 });
-                
-                $('#observationcomments,#observationtype').change(function() {
-                    if(($('#observationfecha').val() !== "") && ( $('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")){
-                         $('#savecomment').prop("disabled",false);
-                    }
-                    else{
-                        $('#savecomment').prop("disabled",true);
+
+                $('#observationcomments,#observationtype').change(function () {
+                    if (($('#observationfecha').val() !== "") && ($('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")) {
+                        $('#savecomment').prop("disabled", false);
+                    } else {
+                        $('#savecomment').prop("disabled", true);
                     }
                 });
             });
@@ -206,6 +215,7 @@
                     level = levelid;
                     student = studentid;
                 }
+                var pActual = $("ul li.active").text().replace(" ","");
                 $('#loadingmessage').show();
                 $.ajax({
                     type: 'POST',
@@ -215,7 +225,7 @@
                     contentType: "application/json",
                     success: function (datos) {
                         var prog = JSON.parse(datos);
-
+                        $('#Objectivestracking').tab('show');
                         $('#tg').empty();
                         $('#tg').treegrid({
 //                    view: myview,        
@@ -231,6 +241,10 @@
                                 ]]
                         });
                         $('#loadingmessage').hide();
+                       
+                        
+                        if( pActual === "") pActual="Demographic";
+                        $('#'+pActual).tab('show');
                     }, error: function () {
                         $('#loadingmessage').hide();
                     }
@@ -317,7 +331,7 @@
                             if (subjects[i].name !== undefined)
                                 $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                         });
-                        
+
 //                    var birthday = info.fecha_nacimiento,
 //                            separador = " ",
 //                            limite = 1, 
@@ -392,7 +406,7 @@
                     type: "POST",
                     url: "studentlistLevel.htm?seleccion=" + seleccion,
                     data: seleccion,
-         dataType: 'text',
+                    dataType: 'text',
                     success: function (data) {
                         var json = JSON.parse(data);
                         //var table = $('#table_students').DataTable();
@@ -739,10 +753,10 @@
                         </div>
                         <div class="col-xs-12 text-center" id="myTab">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#demographic" role="tab">Demographic</a></li>
-                                <li><a id="arbol" data-toggle="tab" href="#progress" role="tab" onclick="treeload(-1, -1)">Objectives tracking</a></li>
-                                <li><a data-toggle="tab" href="#gradebook" role="tab">Academic Progress</a></li>
-                                <li><a data-toggle="tab" href="#observations" role="tab">Classroom Observation</a></li>
+                                <li class="active"><a id="Demographic" data-toggle="tab" href="#demographic" role="tab" >Demographic</a></li>
+                                <li><a id="Objectivestracking" data-toggle="tab" href="#progress" role="tab">Objectives tracking</a></li>
+                                <li><a id="AcademicProgress" data-toggle="tab" href="#gradebook" role="tab">Academic Progress</a></li>
+                                <li><a id="ClassroomObservation" data-toggle="tab" href="#observations" role="tab">Classroom Observation</a></li>
                             </ul>
                         </div>
                         <div class="tab-content">

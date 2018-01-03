@@ -138,6 +138,7 @@ $("#method").on('mouseover', 'option' , function(e) {
             {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
+                        $('#loadingmessage').hide();
                         document.getElementById("subject").innerHTML = ajax.responseText;
                         //Activamos el select de subject
                         var levelValue = $('#level').select("selected").val();
@@ -157,7 +158,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     }
                 }
             }
-
+            var cargar=0;
             function comboSelectionLevel()
             {
                 if (window.XMLHttpRequest) //mozilla
@@ -174,8 +175,14 @@ $("#method").on('mouseover', 'option' , function(e) {
                 
                 ajax.onreadystatechange = funcionCallBackSubject;
                 var seleccion1 = document.getElementById("level").value;
+                
                 ajax.open("GET", "subjectlistLevel.htm?seleccion1=" + seleccion1, true);
-
+                if(cargar===1){
+                    $('#loadingmessage').show();
+                    pr=0;
+                }
+                else
+                    cargar=1;
                 ajax.send("");
 
             }
@@ -327,6 +334,9 @@ $("#method").on('mouseover', 'option' , function(e) {
                         success: function(data) {                          
                            if(data==='success')  {           
                                $('#objective option:selected').remove();
+                               $('#content').empty();
+                               $('#delObjective').attr("disabled", true);
+                               $('#editObjective').attr("disabled", true);
            //         $('#objective').remove('option:selected');
                             }else{
                                 $('#buttomModalObjective').click();
@@ -1297,6 +1307,10 @@ $("#method").on('mouseover', 'option' , function(e) {
             </div>
         </div>
     <%---    <%= request.getParameter("message")%>---%>
-     
+        <div class="divLoadStudent" id="loadingmessage">
+            <div class="text-center"> 
+                <img src='../recursos/img/large_loading.gif'/>
+            </div>
+        </div>
     </body>
 </html>

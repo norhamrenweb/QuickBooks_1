@@ -451,7 +451,7 @@ public class ProgressbyStudent {
 
                 student.setId_students(rs.getInt("StudentID"));
                 student.setNombre_students(rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName"));
-                student.setFecha_nacimiento(rs.getString("Birthdate"));
+                student.setFecha_nacimiento(rs.getString("Birthdate").substring(0, 10));
                 student.setFoto(rs.getString("PathToPicture"));
                 student.setLevel_id(rs.getString("GradeLevel"));
                 student.setNextlevel(rs.getString("NextGradeLevel"));
