@@ -857,7 +857,7 @@
                                     </div>
                                 </div>  
                                 <div class="col-xs-12 text-center">
-                                    <input type="submit" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">
+                                    <input type="button" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">
                                 </div>
                                 <div class="col-xs-12 text-center hidden" id="error1">
                                     <label>Please select a student first</label>
