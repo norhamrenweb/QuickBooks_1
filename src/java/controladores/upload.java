@@ -123,7 +123,7 @@ public class upload extends HttpServlet {
             ftpClient.login(user, pass);
 //			ftpClient.enterLocalPassiveMode();
 //
-//			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             //if(!rCont.existe(name+"-"+ filePart.getSubmittedFileName(), request)){
 //                    File fileToSave = new File(RUTA_FTP +lessonId+"/"+name+"-"+ filePart.getSubmittedFileName());
 //                    Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);   
