@@ -190,6 +190,7 @@ $("#method").on('mouseover', 'option' , function(e) {
     {
            if (ajax.readyState===4){
                 if (ajax.status===200){
+                    $('#loadingmessage').hide();
                     document.getElementById("subject").innerHTML= ajax.responseText;
                     }
                 }
@@ -229,7 +230,7 @@ $("#method").on('mouseover', 'option' , function(e) {
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-
+        $('#loadingmessage').show();
         $('#createOnClick').attr('disabled', true);
         
         ajax.onreadystatechange = funcionCallBackSubject;
@@ -590,7 +591,11 @@ input[type="radio"] .styled:checked + label::after {
   </div>
 </div>
 
-
+        <div class="divLoadStudent" id="loadingmessage">
+            <div class="text-center"> 
+                <img src='./recursos/img/large_loading.gif'/>
+            </div>
+        </div>
 
     </body>
 </html>

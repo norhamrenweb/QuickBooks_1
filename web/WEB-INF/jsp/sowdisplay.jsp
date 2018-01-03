@@ -63,7 +63,7 @@
                    $("#tree").jstree('destroy');
                    var node = JSON.parse(ajax.responseText);
                    var i = node.length;
-
+                   $('#loadingmessage').hide();
                 // direct data
                 $('#tree').jstree({
                     "core" : {
@@ -157,6 +157,7 @@
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
+        $('#loadingmessage').show();
 
         $('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackIdeaLessons;
@@ -394,6 +395,11 @@ input[type="radio"] .styled:checked + label::after {
       </div>-->
     </div>
   </div>
+</div>
+<div class="divLoadStudent" id="loadingmessage">
+    <div class="text-center"> 
+        <img src='../recursos/img/large_loading.gif'/>
+    </div>
 </div>
         
     </body>

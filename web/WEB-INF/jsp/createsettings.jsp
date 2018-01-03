@@ -559,7 +559,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                         contentType: "application/json",
                         success: function(data) {                          
                             var json = JSON.parse(data);                               
-                        $('#method').append('<option value = "'+json.id[0]+'" >' + json.name + '</option>');
+                        $('#method').append('<option value = "'+json.id[0]+'" title="'+json.description+'" >' + json.name + '</option>');
                         $('#formAddmethod').addClass("hidden");               
                         },
                         error: function (xhr, ajaxOptions, thrownError) {

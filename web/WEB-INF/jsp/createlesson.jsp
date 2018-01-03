@@ -305,6 +305,7 @@
             {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
+                        $('#loadingmessage').hide();
                         document.getElementById("subject").innerHTML = ajax.responseText;
                     }
                 }
@@ -330,6 +331,7 @@
             {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
+                        $('#loadingmessage').hide();
                         var json = JSON.parse(ajax.responseText);
                         var level = json.level;
                         var subject = JSON.parse(json.subject).id;
@@ -407,7 +409,7 @@
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-
+                $('#loadingmessage').show();
                 $('#createOnClick').attr('disabled', true);
                 $('#objective').val("");
                 $('#subject').val("");
@@ -464,7 +466,7 @@
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
 
-
+                $('#loadingmessage').show();
                 ajax.onreadystatechange = funcionCallBackIdeaLessons;
                 var seleccionidea = document.getElementById("ideas").value;
                 //ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccionTemplate,true);
@@ -929,6 +931,11 @@
             </div>
         </div>
 
+        <div class="divLoadStudent" id="loadingmessage">
+            <div class="text-center"> 
+                <img src='../recursos/img/large_loading.gif'/>
+            </div>
+        </div>
 
     </body>
 </html>
