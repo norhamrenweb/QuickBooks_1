@@ -144,6 +144,7 @@ public class DataFactory {
             while (rs.next()) {
                 nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName");
                 dob = rs.getString("Birthdate");
+                dob = dob.split(" ")[0];
                 age = "" + (year - Integer.parseInt("" + dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3)));
             }
             //============================================================
