@@ -246,49 +246,49 @@
 				<text><![CDATA[PRE-PRIMARY PROGRESS REPORT - December 2017]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="145" y="70" width="50" height="19" uuid="a6ed17bd-7e05-430c-a739-9ce93c98ccea"/>
+				<reportElement x="147" y="70" width="50" height="19" uuid="a6ed17bd-7e05-430c-a739-9ce93c98ccea"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Name:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="199" y="72" width="375" height="18" uuid="00b7fbb6-8552-47ac-9f68-e44efe63b3a1"/>
+				<reportElement x="199" y="71" width="375" height="18" uuid="00b7fbb6-8552-47ac-9f68-e44efe63b3a1"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="191" y="98" width="49" height="18" uuid="dc2b49ad-7174-4cfe-8098-2c3cad9b57bf"/>
+				<reportElement x="199" y="99" width="49" height="18" uuid="dc2b49ad-7174-4cfe-8098-2c3cad9b57bf"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{age}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="145" y="95" width="39" height="19" uuid="956d96c7-fc3f-443e-b1ad-5c0625987a63"/>
+				<reportElement x="147" y="95" width="39" height="19" uuid="956d96c7-fc3f-443e-b1ad-5c0625987a63"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Age:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="310" y="95" width="50" height="19" uuid="126768f1-cea3-4c21-b8ff-d98604b1bca9"/>
+				<reportElement x="320" y="95" width="50" height="19" uuid="126768f1-cea3-4c21-b8ff-d98604b1bca9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[D.O.B:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="367" y="98" width="207" height="18" uuid="950b6f51-c490-4c4d-84e7-fdec1cde05ce"/>
+				<reportElement x="368" y="99" width="207" height="18" uuid="950b6f51-c490-4c4d-84e7-fdec1cde05ce"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dob}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="Clip" isLazy="true" onErrorType="Icon">
-				<reportElement stretchType="ElementGroupBottom" x="2" y="1" width="120" height="100" uuid="bde09757-871b-4d48-8c2f-dfd26f2a62d4"/>
+				<reportElement stretchType="ElementGroupBottom" x="0" y="30" width="110" height="100" uuid="bde09757-871b-4d48-8c2f-dfd26f2a62d4"/>
 				<imageExpression><![CDATA["/QuickBooks_1/recursos/img/AuburnHouse.PNG"]]></imageExpression>
 			</image>
 		</band>

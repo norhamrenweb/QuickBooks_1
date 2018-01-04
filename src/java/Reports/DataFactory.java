@@ -162,13 +162,14 @@ public class DataFactory {
 
         ArrayList<String> os = new ArrayList<>();
         ArrayList<String> as = new ArrayList<>();
-
+        Subject s = new Subject();
         String consulta = "SELECT lessons.subject_id,progress_report.comment FROM progress_report join lessons on (progress_report.lesson_id = lessons.id) where student_id= '" + studentId + "'";
         rs = st.executeQuery(consulta);
         while (rs.next()) {
             String comment = rs.getString("comment");
             if (!comment.equals("")) {
-                os.add("" + rs.getInt("subject_id"));
+                //os.add("" + rs.getInt("subject_id"));
+                os.add(s.fetchName(rs.getInt("subject_id"), servlet));
                 as.add(comment);
             }
         }
