@@ -245,10 +245,6 @@
 				</textElement>
 				<text><![CDATA[PRE-PRIMARY PROGRESS REPORT - December 2017]]></text>
 			</staticText>
-			<image>
-				<reportElement x="0" y="24" width="139" height="99" uuid="a959e100-1d4d-415f-90dc-6fa97c92eca6"/>
-				<imageExpression><![CDATA["C:/Users/nmoha/Documents/AuburnHouse.PNG"]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement x="111" y="65" width="50" height="19" uuid="a6ed17bd-7e05-430c-a739-9ce93c98ccea"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -291,6 +287,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dob}]]></textFieldExpression>
 			</textField>
+			<image scaleImage="Clip" isLazy="true" onErrorType="Icon">
+				<reportElement x="20" y="22" width="90" height="108" uuid="bde09757-871b-4d48-8c2f-dfd26f2a62d4"/>
+				<imageExpression><![CDATA["/QuickBooks_1/recursos/img/AuburnHouse.PNG"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<detail>
