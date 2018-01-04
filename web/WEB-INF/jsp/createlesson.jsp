@@ -769,7 +769,7 @@
                         </div>
 
                         <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Content</label>
+                            <label class="control-label">Equipment</label>
                             <select class="form-control" name="TXTcontent" id="content" multiple>
                                 <c:forEach var="content" items="${contents}">
                                     <option value="${content.id[0]}" >${content.name}</option>

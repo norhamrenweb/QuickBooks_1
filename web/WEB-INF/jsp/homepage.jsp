@@ -375,7 +375,7 @@ var ajax;
                         
                     </div>
                     <div class="row title">
-                        Content 
+                        Equipment 
                     </div>
                     <div class="row">
                         <ul id="contentDetails">

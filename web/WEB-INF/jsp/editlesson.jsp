@@ -730,7 +730,7 @@ input[type="radio"] .styled:checked + label::after {
                     </div>
 
                     <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Content</label>
+                        <label class="control-label">Equipment</label>
                         <c:if test="${not empty data.contentid}">
                             <select class="form-control" name="TXTcontent" id="content" multiple>
                                 <c:forEach var="content" items="${contents}">   

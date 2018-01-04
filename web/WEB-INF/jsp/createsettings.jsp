@@ -792,7 +792,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                             </div>
                         </div>
                         <div class="col-xs-3 center-block">
-                            <label class="control-label">Content</label>
+                            <label class="control-label">Equipment</label>
                             <select class="form-control" disabled="true" name="TXTcontent" id="content" multiple size="10" onclick="comboSelectionContent()">
                                 <c:forEach var="content" items="${contents}">
                                     <option value="${content.id[0]}" title="${content.description}" >${content.name}</option>
@@ -870,11 +870,11 @@ $("#method").on('mouseover', 'option' , function(e) {
                         </div>
                 </fieldset>
                 <fieldset class="hidden" id="formAddcontent">
-                    <legend>Add content to <span id="contentSelectedForAdd"></span></legend>  
+                    <legend>Add equipment to <span id="contentSelectedForAdd"></span></legend>  
                     <div class="col-xs-12" style="margin-top: 20px;">
 
                         <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Name new content</label>
+                            <label class="control-label">Name new equipment</label>
                             <input type="text" class="form-control" name="TXTnamenewcontent" id="namenewcontent"  placeholder="Name new content">
                         </div>
                         <div class="col-xs-6 center-block form-group">
@@ -890,11 +890,11 @@ $("#method").on('mouseover', 'option' , function(e) {
                     </div>
                 </fieldset>
                 <fieldset class="hidden" id="formEditcontent">
-                    <legend>Edit content in <span id="contentSelectedForEdit"></span></legend>  
+                    <legend>Edit equipment in <span id="contentSelectedForEdit"></span></legend>  
                     <div class="col-xs-12" style="margin-top: 20px;">
 
                         <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Edit content</label>
+                            <label class="control-label">Edit equipment</label>
                             <input type="text" class="form-control" name="TXTnameeditcontent" id="editNameContent"  placeholder="Name new content">
                         </div>
                         <div class="col-xs-6 center-block form-group">
@@ -1003,7 +1003,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Are you sure you want to delete this content?</h4>
+                            <h4 class="modal-title" id="myModalLabel">Are you sure you want to delete this equipment?</h4>
                         </div>
                         <div class="modal-body">
                             <button type="button" class="btn btn-default" data-dismiss="modal" id="" onclick="deleteContent()">Yes</button>
@@ -1067,7 +1067,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Modal Content</h4>
+                            <h4 class="modal-title" id="myModalLabel">Modal Equipment</h4>
                         </div>
                         <div class="modal-body" id="modal-contentLinkLessons">
                             ...

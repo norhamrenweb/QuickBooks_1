@@ -575,7 +575,7 @@ public class CreateSettingControlador{
          String consulta = "select lesson_id from lesson_content where content_id = "+ id[0];
           ResultSet rs = st.executeQuery(consulta );
           if(rs.next()){
-            message="This content is linked to lessons";  
+            message="This equipment is linked to lessons";  
           }
           else{
         consulta = "DELETE FROM objective_content WHERE content_id="+id[0];
