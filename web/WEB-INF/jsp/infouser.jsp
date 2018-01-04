@@ -43,9 +43,9 @@
     <script type="text/javascript" src="<c:url value="/recursos/js/bootstrap.js" />"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/jquery-ui-1.11.4.custom/jquery-ui.js" />"></script>
     
-<%--   <script type="text/javascript" src="<c:url value="/recursos/js/tree/jstree.js" />"></script>
+   <script type="text/javascript" src="<c:url value="/recursos/js/tree/jstree.js" />"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/tree/jstree.checkbox.js" />"></script>
-    <script type="text/javascript" src="<c:url value="/recursos/js/tree/jstree.search.js" />"></script>--%>
+    <script type="text/javascript" src="<c:url value="/recursos/js/tree/jstree.search.js" />"></script>
 
     <script type="text/javascript" src="<c:url value="/recursos/js/moment.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/transition.js"/>"></script>
