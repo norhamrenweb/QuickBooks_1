@@ -23,7 +23,7 @@
                 //Muestra calendario
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
                 var lessoncreate = '<%= request.getParameter("message")%>';
-
+                $('#generateReport').attr('disabled', true);
                 if (lessoncreate === 'Presentation idea created') {
                     $('#lessonIdeaCreated').modal({
                         show: 'false'
