@@ -295,6 +295,7 @@
 	</title>
 	<detail>
 		<band height="129" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout"/>
 			<componentElement>
 				<reportElement stretchType="ElementGroupBottom" x="18" y="11" width="556" height="60" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="b6dbf7c4-72eb-439f-8a9e-68089f225ded">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
@@ -309,6 +310,7 @@
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{objectives})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="556" uuid="08da8eb7-04ef-41f6-bf28-36fd26814a37">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 						<jr:tableHeader style="Table 2_TH" height="30">
 							<box>
 								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -453,7 +455,7 @@
 				</jr:table>
 			</componentElement>
 			<textField>
-				<reportElement x="26" y="15" width="380" height="18" uuid="8edf00c1-d9ec-4667-8855-e57866595e63">
+				<reportElement x="18" y="-7" width="380" height="18" uuid="8edf00c1-d9ec-4667-8855-e57866595e63">
 					<printWhenExpression><![CDATA[(($F{subject}.equals("Comments")) ? false : true)]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -462,7 +464,7 @@
 				<textFieldExpression><![CDATA[$F{subject}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement key="" x="26" y="25" width="104" height="18" uuid="a83cd503-44e2-4b91-967c-ea94f92deaf7">
+				<reportElement key="" x="18" y="1" width="104" height="18" uuid="a83cd503-44e2-4b91-967c-ea94f92deaf7">
 					<printWhenExpression><![CDATA[(($F{subject}.equals("Comments")) ? true: false)]]></printWhenExpression>
 				</reportElement>
 				<textElement>

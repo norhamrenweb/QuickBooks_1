@@ -312,11 +312,11 @@
                         //$('#resourceId').val(id);
 
                         if (type === "Link") {
-                           
-                       //     $("#selectLinkTipo :selected").text("Link");
+
+                            //     $("#selectLinkTipo :selected").text("Link");
                             $("#selectLinkTipo").html("<option selected value='Link'>Link</option> <option value='Video'>Video</option>");
                         } else {
-                           $("#selectLinkTipo").html("<option selected value='Video'>Video</option> <option value='Link'>Link</option>");
+                            $("#selectLinkTipo").html("<option selected value='Video'>Video</option> <option value='Link'>Link</option>");
                         }
                         $("#EditLink").prop('disabled', false);
                         $('editnewLink').click();
@@ -608,6 +608,11 @@
                     $('#editLinkError').removeClass("has-error");
                     $('#editLinkError').children().last().removeClass("hide");
                     $('#editLinkError').children().last().prev().prev().removeClass("hide");
+                    $('#idNameFile').val("");
+                    $('#file').val("");
+                    $('#divAddFile').removeClass("has-error");
+                    $('#divAddFile').children().last().prev().prev().addClass("hide");
+                    $('#spanSelectFile').addClass("hide");
                     $('#addnewFile').modal('show');
                 });
                 /*$('.editResource').click(function () {
@@ -769,87 +774,87 @@
 
         <div class="container">
             <div class="col-xs-12" style="margin-bottom: 30px;">
-            <h1 class=" text-center">${lessonsName} Resources</h1>
+                <h1 class=" text-center">${lessonsName} Resources</h1>
             </div>
             <div class="col-xs-12">
-            <fieldset>
-                <legend id="showPropiertys">
-                    External links and videos
-                    <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
-                    </span>
-                </legend>
-                <div class="form-group collapse" id="contenedorPropiertys">
-                    <div  id = "listResources" class="list-group col-xs-12 link">
-                        <c:forEach var="item" items="${others}">
-                            <c:choose>
+                <fieldset>
+                    <legend id="showPropiertys">
+                        External links and videos
+                        <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
+                        </span>
+                    </legend>
+                    <div class="form-group collapse" id="contenedorPropiertys">
+                        <div  id = "listResources" class="list-group col-xs-12 link">
+                            <c:forEach var="item" items="${others}">
+                                <c:choose>
 
-                                <c:when test="${item.type =='Video'}">
-                                    <div id = "divRecurso${item.id}" class="list-group col-xs-12">
-                                        <div class="col-xs-10 text-center"><a href="${item.link}"  data-id="${item.id}" class="list-group-item link" target="_blank">${item.name}<span class="label label-primary">${item.type}</span> </a></div> 
-                                        <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>  
+                                    <c:when test="${item.type =='Video'}">
+                                        <div id = "divRecurso${item.id}" class="list-group col-xs-12">
+                                            <div class="col-xs-10 text-center"><a href="${item.link}"  data-id="${item.id}" class="list-group-item link" target="_blank">${item.name}<span class="label label-primary">${item.type}</span> </a></div> 
+                                            <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>  
+                                            <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
+
+                                        </div>
+                                    </c:when>
+
+                                    <c:otherwise> 
+                                        <div id = "divRecurso${item.id}" class="list-group col-xs-12">
+                                            <div class="col-xs-10 text-center"> <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}<span class="label label-success">${item.type}</span></a></div>
+                                            <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>
+                                            <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
+
+                                        </div>
+                                    </c:otherwise> 
+
+                                </c:choose>
+
+                            </c:forEach>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <input type="button" class="btn btn-warning"  data-toggle="tooltip" data-placement="bottom" value="add" id="addLink"/>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend id="showDetails">
+                        Files
+                        <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
+                            <!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" >
+                                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                                    </button>-->
+                        </span>
+                    </legend>
+                    <div class="form-group collapse" id="contenedorDetails">
+                        <div class="list-group">
+                            <c:forEach var="item" items="${files}">  
+                                <div id = "divRecurso${item.id}" class="list-group col-xs-12 text-center">        
+                                    <c:url var="post_url"  value="/upload" />    
+                                    <form class=" text-center form-group" action="${post_url}" method="GET" enctype="multipart/form-data">  
+                                        <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}> 
+                                        <input type="hidden" id="txtUrl" name="txtUrl" value="" />
+                                        <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>                
+                                        <div class="col-xs-9 center-block form-group text-center " >
+                                            <a data-id="${item.id}" class="list-group-item link fileNames" >
+                                                <span class="fileName">${item.name}</span>
+                                                <span class="label label-primary">${item.type}</span> 
+                                            </a>
+                                        </div> 
+
+                                        <input type="submit" value="Download" class="col-xs-2 center-block form-group paddingLabel btn btn-success">     
                                         <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
 
-                                    </div>
-                                </c:when>
+                                    </form>
+                                </div>
 
-                                <c:otherwise> 
-                                    <div id = "divRecurso${item.id}" class="list-group col-xs-12">
-                                        <div class="col-xs-10 text-center"> <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}<span class="label label-success">${item.type}</span></a></div>
-                                        <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>
-                                        <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
-
-                                    </div>
-                                </c:otherwise> 
-
-                            </c:choose>
-
-                        </c:forEach>
+                            </c:forEach>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <input type="button" class="btn btn-warning"  data-toggle="tooltip" data-placement="bottom" value="add" id="addFile"/>
+                        </div>
                     </div>
-                    <div class="col-xs-4 text-center">
-                        <input type="button" class="btn btn-warning"  data-toggle="tooltip" data-placement="bottom" value="add" id="addLink"/>
-                    </div>
-                </div>
-            </fieldset>
 
-            <fieldset>
-                <legend id="showDetails">
-                    Files
-                    <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
-                        <!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" >
-                                                    <span class="glyphicon glyphicon-triangle-bottom"></span>
-                                                </button>-->
-                    </span>
-                </legend>
-                <div class="form-group collapse" id="contenedorDetails">
-                    <div class="list-group">
-                        <c:forEach var="item" items="${files}">  
-                            <div id = "divRecurso${item.id}" class="list-group col-xs-12 text-center">        
-                                <c:url var="post_url"  value="/upload" />    
-                                <form class=" text-center form-group" action="${post_url}" method="GET" enctype="multipart/form-data">  
-                                    <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}> 
-                                    <input type="hidden" id="txtUrl" name="txtUrl" value="" />
-                                    <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>                
-                                    <div class="col-xs-9 center-block form-group text-center " >
-                                        <a data-id="${item.id}" class="list-group-item link fileNames" >
-                                            <span class="fileName">${item.name}</span>
-                                            <span class="label label-primary">${item.type}</span> 
-                                        </a>
-                                    </div> 
-
-                                    <input type="submit" value="Download" class="col-xs-2 center-block form-group paddingLabel btn btn-success">     
-                                    <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
-
-                                </form>
-                            </div>
-
-                        </c:forEach>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                        <input type="button" class="btn btn-warning"  data-toggle="tooltip" data-placement="bottom" value="add" id="addFile"/>
-                    </div>
-                </div>
-
-            </fieldset>
+                </fieldset>
             </div>
         </div>
 
@@ -1027,22 +1032,27 @@
 
                                     $('#idNameFile,#file').focusout(function () {
                                         existeNombre = "0";
+                                        arrayNamesFiles = [];
+                                        $('.fileNames').children('.fileName').each(function () {
+                                            var nameFile = $(this).text();
+                                            arrayNamesFiles.push(nameFile);
+                                        });
                                         $.each(arrayNamesFiles, function (index, value) {
-                                            if ($('#idNameFile').val() === value) {   
+                                            if ($('#idNameFile').val() === value) {
                                                 existeNombre = "1";
                                                 //alert('Change name or select file');
                                             }
                                         });
-                                        if(existeNombre === "1"){
-                                             $('#submitSave').prop('disabled', true);
-                                             $('#divAddFile').addClass("has-error");
-                                              $('#divAddFile').children().prev().prev().last().removeClass("hide")
+                                        if (existeNombre === "1") {
+                                            $('#submitSave').prop('disabled', true);
+                                            $('#divAddFile').addClass("has-error");
+                                            $('#divAddFile').children().prev().prev().last().removeClass("hide")
                                         }
-                                            
+
                                         if ($('#file').val() !== "") {
                                             $('#divAddFile').removeClass("has-error");
                                             $('#spanSelectFile').addClass("hide")
-                                            if (existeNombre === "0" && $('#idNameFile').val().indexOf("/") === -1 && $('#idNameFile').val().indexOf("\"") === -1&& $('#idNameFile').val().indexOf("'") === -1) {
+                                            if (existeNombre === "0" && $('#idNameFile').val().indexOf("/") === -1 && $('#idNameFile').val().indexOf("\"") === -1 && $('#idNameFile').val().indexOf("'") === -1) {
                                                 $('#submitSave').prop('disabled', false);
                                                 $('#divAddFile').removeClass("has-error");
                                                 $('#divAddFile').children().last().prev().prev().addClass("hide")
