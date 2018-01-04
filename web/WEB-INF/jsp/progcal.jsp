@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html>
     <%@ include file="infouser.jsp" %>
-  
+
 
     <head>
         <title>Classroom Observation</title>
@@ -41,7 +41,7 @@
 
 
                 });
-                
+
                 $('#fecha').datetimepicker({
                     format: 'YYYY-MM',
                     locale: userLang.valueOf(),
@@ -50,7 +50,7 @@
                             //defaultDate: '08:32:33',
 
                 });
-                
+
                 $('#observationfecha').datetimepicker({
                     format: 'YYYY-MM-DD',
                     locale: userLang.valueOf(),
@@ -64,23 +64,21 @@
                     loadComments();
                 })
                 loadComments();
-                
-                
+
+
                 $('#fecha2').on('dp.change', function (e) {
-                    if(($('#observationfecha').val() !== "") && ( $('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")){
-                         $('#savecomment').prop("disabled",false);
-                    }
-                    else{
-                        $('#savecomment').prop("disabled",true);
+                    if (($('#observationfecha').val() !== "") && ($('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")) {
+                        $('#savecomment').prop("disabled", false);
+                    } else {
+                        $('#savecomment').prop("disabled", true);
                     }
                 });
-                
-                $('#observationcomments,#observationtype').change(function() {
-                    if(($('#observationfecha').val() !== "") && ( $('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")){
-                         $('#savecomment').prop("disabled",false);
-                    }
-                    else{
-                        $('#savecomment').prop("disabled",true);
+
+                $('#observationcomments,#observationtype').change(function () {
+                    if (($('#observationfecha').val() !== "") && ($('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")) {
+                        $('#savecomment').prop("disabled", false);
+                    } else {
+                        $('#savecomment').prop("disabled", true);
                     }
                 });
             });
@@ -128,19 +126,19 @@
                     }
                 }
             }
-  
-            function updateComment() {   
-                 if (window.XMLHttpRequest) //mozilla
+
+            function updateComment() {
+                if (window.XMLHttpRequest) //mozilla
                 {
                     ajax = new XMLHttpRequest(); //No Internet explorer
                 } else
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-                
-		
+
+
                 var comments = $('#observationcomments').val();
-                var fecha =  $( "#observationfecha" ).val();
+                var fecha = $("#observationfecha").val();
                 var tipo = $('#observationtype').val();
                 var id = $('#idComentario').val();
                 var myObj = {};
@@ -155,7 +153,7 @@
                     data: json,
                     datatype: "json",
                     contentType: "application/json",
-                    success: function (data) {                      
+                    success: function (data) {
                         //var j = JSON.parse(data);
                         id = data;
                         //MODIFICAR EL JSON PARA QUE DEVUELVA EL ID OBTENIDO 
@@ -170,14 +168,14 @@
 
                 });
             }
-            
+
             function editComentario(id) {
                 var comment = $('#editComentario' + id).data('comment');
                 var createDate = $('#editComentario' + id).data('createdate');
                 var type = $('#editComentario' + id).data('type');
                 var commentDate = $('#editComentario' + id).data('commentdate');
-                
-                
+
+
                 $('#observationfecha').val(commentDate);
                 $('#observationtype').val(type);
                 $('#observationcomments').val(comment);
@@ -188,7 +186,7 @@
             function ConfirmDeleteComentario(val) {
                 $('#deleteObservation').modal('show');
                 $('#buttonDeleteObservation').val(val);
-                
+
             }
             function deleteComentario(id) {
                 if (window.XMLHttpRequest) //mozilla
@@ -198,7 +196,7 @@
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-                
+
                 var idComment = id;
                 var myObj = {};
                 myObj["id"] = idComment;
@@ -278,12 +276,12 @@
                                     if (cont1 > $("#semana1").width()) {
                                         visible = "hide";
                                     }
-                                    
-<%--Create Date: " + fechaCreacion + "<br>\n\
-Type: " + category + "<br>\n\--%>
+
+            <%--Create Date: " + fechaCreacion + "<br>\n\
+            Type: " + category + "<br>\n\--%>
                                     $("#semana1").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
                                 <strong>Date:</strong> " + commentdate + "<br>\n\
-                                <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
+                                <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
 <button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
@@ -312,7 +310,7 @@ Type: " + category + "<br>\n\--%>
                                         }
                                         $("#semana2").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
                                 <strong>Date:</strong> " + commentdate + "<br>\n\
-                                <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
+                                <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
 <button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
@@ -341,7 +339,7 @@ Type: " + category + "<br>\n\--%>
 
                                             $("#semana3").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
                                 <strong>Date:</strong> " + commentdate + "<br>\n\
-                                <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
+                                <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
 <button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
@@ -370,7 +368,7 @@ Type: " + category + "<br>\n\--%>
 
                                             $("#semana4").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
                                 <strong>Date:</strong> " + commentdate + "<br>\n\
-                                <strong>Observation:</strong> " + comentario.substring(0,57) + " " + comentarioExtenso + "<br>\n\
+                                <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
 <button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
@@ -642,10 +640,14 @@ Type: " + category + "<br>\n\--%>
     </head>
     <body>
         <input type="hidden" id="lessonid" name="lessonid" value = ${studentId}>
+        <input type="hidden" id="nameStudent" name="nameStudent" value = ${nameStudent}>
         <div class="col-xs-12">
             <div class="col-sm-12" id="maincontainer">
                 <div class="col-sm-12 center-block text-center">
-                    <h2>CLASSROOM OBSERVATIONS</h2>
+                    <h1>CLASSROOM OBSERVATIONS</h1>
+                </div>
+                <div class="col-sm-12 center-block text-center">
+                    <h2>${nameStudent}</h2> 
                 </div>
             </div>
             <div class="container">
@@ -775,7 +777,7 @@ Type: " + category + "<br>\n\--%>
                 </div>
 
             </div>
-            
+
             <!-- Modal confirm delete-->
             <div id="deleteObservation" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -819,62 +821,62 @@ Type: " + category + "<br>\n\--%>
                 <input type='text' name="TXTfecha" class="hide" id="idComentario"/>
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        
+
                         <div class="modal-header modal-header-details">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h2>Enter a classroom observation</h2>
                         </div>
                         <div class="modal-body">
                             <div class="container-fluid">
-                            <div id="contenedorDate">
-                                <div class='col-xs-4'>
-                                    <div class="form-group">
-                                        <label class="control-label" for="fecha">Comment Date</label>
-                                        <div class='input-group date' id='fecha2'>
-                                            <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
+                                <div id="contenedorDate">
+                                    <div class='col-xs-4'>
+                                        <div class="form-group">
+                                            <label class="control-label" for="fecha">Comment Date</label>
+                                            <div class='input-group date' id='fecha2'>
+                                                <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-xs-6 center-block form-group">
-                                    <label class="control-label">Observation</label>
-                                    <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"></textarea>
-                                </div>
-                                <div class="col-xs-6 center-block form-group">
-                                    <label class="control-label">Observation type</label>
-                                    <select class="form-control" name="observationtype" id="observationtype" >
-                                        <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
-                                        <option value="Physical">Physical</option>
-                                        <option value="Intellectual">Intellectual</option>
-                                        <option value="Literacy">Literacy</option>
-                                        <option value="Emotional">Emotional</option>
-                                        <option value="Social">Social</option>
-                                    </select>
-                                </div>
-                            </div>  
-                            <div class="col-xs-12 text-center">
-                                <input type="submit" class="btn btn-success" id="savecomment"  value="Save" onclick="updateComment()">
-                            </div>
-                            <div class="col-xs-12 text-center hidden" id="error1">
-                                <label>Please select a student first</label>
-                            </div>
-                            <div class="col-xs-12 text-center hidden" id="error2">
-                                <label>Please make sure to fill all data</label>
-                            </div>
-                            <div id="confirmsave" class="modal fade" role="dialog">
-                                <div class="modal-dialog">
-
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header modal-header-delete">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">comment saved</h4>
-                                        </div>
-
+                                    <div class="col-xs-6 center-block form-group">
+                                        <label class="control-label">Observation</label>
+                                        <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"></textarea>
                                     </div>
-</div>
+                                    <div class="col-xs-6 center-block form-group">
+                                        <label class="control-label">Observation type</label>
+                                        <select class="form-control" name="observationtype" id="observationtype" >
+                                            <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
+                                            <option value="Physical">Physical</option>
+                                            <option value="Intellectual">Intellectual</option>
+                                            <option value="Literacy">Literacy</option>
+                                            <option value="Emotional">Emotional</option>
+                                            <option value="Social">Social</option>
+                                        </select>
+                                    </div>
+                                </div>  
+                                <div class="col-xs-12 text-center">
+                                    <input type="submit" class="btn btn-success" id="savecomment"  value="Save" onclick="updateComment()">
+                                </div>
+                                <div class="col-xs-12 text-center hidden" id="error1">
+                                    <label>Please select a student first</label>
+                                </div>
+                                <div class="col-xs-12 text-center hidden" id="error2">
+                                    <label>Please make sure to fill all data</label>
+                                </div>
+                                <div id="confirmsave" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header modal-header-delete">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">comment saved</h4>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div> 
                         </div>

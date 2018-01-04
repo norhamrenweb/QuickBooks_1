@@ -855,7 +855,11 @@ public class ProgressbyStudent {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
         ModelAndView mv = new ModelAndView("progcal");
-        String studentId = hsr.getParameter("studentid");
+        
+        
+        String[] output = hsr.getParameter("studentid").split("-");
+        String studentId = output[0];
+        String nameStudent  = "'"+output[1]+"'";
         try {
             DriverManagerDataSource dataSource;
             dataSource = (DriverManagerDataSource) this.getBean("dataSourceAH", hsr.getServletContext());
@@ -869,7 +873,7 @@ public class ProgressbyStudent {
         //    mv.addObject("message","works");
         String message = "works";
         mv.addObject("studentId", studentId);
-
+        mv.addObject("nameStudent",nameStudent);
         return mv;
     }
 
