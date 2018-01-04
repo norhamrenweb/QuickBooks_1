@@ -149,7 +149,6 @@ var to = false;
        window.location.reload(true);
       
    }
-    var cargar = 0;
     function comboSelectionLevel()
     {
         if (window.XMLHttpRequest) //mozilla
@@ -160,12 +159,7 @@ var to = false;
         {
             ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-        if(cargar===1){
-            cargar = 0;
-            $('#loadingmessage').show();
-        }else{
-            cargar = 1;
-        }
+        $('#loadingmessage').show();
         $('#createOnClick').attr('disabled', true);
         ajax.onreadystatechange = funcionCallBackIdeaLessons;
         var seleccion1 = document.getElementById("level").value;

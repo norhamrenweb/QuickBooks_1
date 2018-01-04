@@ -177,12 +177,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 var seleccion1 = document.getElementById("level").value;
                 
                 ajax.open("GET", "subjectlistLevel.htm?seleccion1=" + seleccion1, true);
-                if(cargar===1){
-                    $('#loadingmessage').show();
-                    pr=0;
-                }
-                else
-                    cargar=1;
+                $('#loadingmessage').show();
                 ajax.send("");
 
             }
@@ -337,6 +332,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                                $('#content').empty();
                                $('#delObjective').attr("disabled", true);
                                $('#editObjective').attr("disabled", true);
+                               $('#addContent').attr("disabled", true);
            //         $('#objective').remove('option:selected');
                             }else{
                                 $('#buttomModalObjective').click();
@@ -430,6 +426,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                         contentType: "application/json",           
                      
                         success: function(data) {
+                            $('#content').empty();
                             $('#objective').empty();
                             var json = JSON.parse(data);                            
                             $.each(json, function(i, item) { 
@@ -559,7 +556,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                         contentType: "application/json",
                         success: function(data) {                          
                             var json = JSON.parse(data);                               
-                        $('#method').append('<option value = "'+json.id[0]+'" title="'+json.description+'" >' + json.name + '</option>');
+                        $('#method').append('<option value = "'+json.id[0]+'" data-title="'+json.name+'" data-content="'+json.description+'"  >' + json.name + '</option>');
                         $('#formAddmethod').addClass("hidden");               
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
@@ -760,7 +757,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                     <div class="col-xs-12">
                         <div class="col-xs-3 form-group">
                             <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
-                            <select class="form-control" name="TXTlevel" id="level" onclick="comboSelectionLevel()">
+                            <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                                 <c:forEach var="levels" items="${gradelevels}">
                                     <option value="${levels.id[0]}" >${levels.name}</option>
                                 </c:forEach>
