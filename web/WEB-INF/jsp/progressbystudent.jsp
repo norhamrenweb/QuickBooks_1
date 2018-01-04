@@ -25,6 +25,7 @@
 
             $(document).ready(function () {
                 $("#tg").treegrid();
+
                 $('#tableobjective').DataTable();
                 table = $('#table_students').DataTable(
                         {
@@ -317,8 +318,9 @@
                         if (typeof info.foto === 'undefined') {
                             $('#foto').attr('src', '../recursos/img/NotPhoto.png');
                         } else {
-                            $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + info.foto);
+                            $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + info.foto).css('width','300px').css('height','500px');
                         }
+                        $('.cell').off('click');
                         treeload(info.level_id, info.id_students);
                         levelarbol = info.level_id;
                         studentarbol = info.id_students;
@@ -573,11 +575,13 @@
                     });
                 }
             }
-            function showCalendar()
-            {
-                var id = $('#studentid').val();
-                window.open("<c:url value="/progcal.htm?studentid="/>" + id);
-            }
+             function showCalendar()
+            {
+                var id = $('#studentid').val();
+                var nameStudent = $('#student').text();
+                id = id+"-"+nameStudent;
+                window.open("<c:url value="/progcal.htm?studentid="/>" + id);
+            }
 //  function funcionCallBacksavecomment(){
 //        if (ajax.readyState===4){
 //                if (ajax.status===200){
@@ -643,7 +647,8 @@
                 display: table;
                 /*                background-color: lightgray;*/
                 border-right: 1px #D0D2D3 double;
-                min-height: 300px;
+                text-align: center;
+                min-height: 600px;
             }
             .cell{
                 display: table-cell;
@@ -764,7 +769,7 @@
                             <div role="tabpanel" class="col-xs-12 tab-pane in active" id="demographic">
                                 <div class="col-xs-6 text-center containerPhoto">
                                     <div class="cell">
-                                        <img id="foto" src="../recursos/img/NotPhoto.png" alt='img' width="200px;"/>
+                                        <iframe id="foto" src="../recursos/img/NotPhoto.png" frameborder="0" scrolling="no" sandbox alt='img' align="center"></iframe>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
@@ -783,20 +788,7 @@
                                 </div>
                             </div>
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="progress">
-
-                                <%--                                <div class="form-group" id="contenedorDetails">
-                                                                <div class="col-xs-3 form-group">
-                                                                    <label class="control-label">Select Grade Level</label>
-                                                                    <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
-                                                                        <c:forEach var="level" items="${levels}">
-                                                                            <option value="${level.id[0]}" >${level.name}</option>
-                                                                        </c:forEach>
-                                                                    </select>
-
-                                </div>
-                                </div>--%>
                                 <div class="col-xs-12">
-
                                     <table id="tg" class="easyui-treegrid"></table>
                                 </div>     
                             </div>
@@ -862,11 +854,11 @@
                                 </div>
                                 
                                 <div class="col-xs-6 text-center">
-                                    <input type="button" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">
+                                    <button type="button" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">Save observation</button>
                                 </div>
                                 
                                 <div class="col-xs-6 text-center">
-                                    <button type='button' class='btn-unbutton' id="showcalendar"  value="View all" onclick="showCalendar()">View all comments</button>
+                                    <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View all comments</button>
                                 </div>
                                 <div id="confirmsave" class="modal fade" role="dialog">
                                     <div class="modal-dialog">
