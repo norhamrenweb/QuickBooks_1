@@ -100,6 +100,7 @@
                         $('#buttonAchived').parent().attr('disabled', true);
 
                     } else {
+                        
                         $('#buttonAchived').attr('disabled', false);
                         $('#buttonAchived').parent().removeAttr('disabled');
                     }
