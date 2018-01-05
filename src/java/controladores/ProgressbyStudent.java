@@ -1044,7 +1044,7 @@ public class ProgressbyStudent {
         ArrayList<ArrayList<Observation>> arrayObservations = new ArrayList<ArrayList<Observation>>();
         ArrayList<Observation> arrayComments = new ArrayList<Observation>();
         String consulta = "SELECT * FROM public.classobserv WHERE student_id = " + studentId + " AND commentdate = '" + dateSelected + "'";
-        
+        String s;
         try {
 
             DriverManagerDataSource dataSource;
