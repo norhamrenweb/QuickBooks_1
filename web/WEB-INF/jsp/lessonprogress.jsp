@@ -21,10 +21,10 @@
         <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.css"/>"/>
         <title>Presentation progress</title>
         <script>
-                window.onbeforeunload = function exitAlert(){
-                    var textillo = "Changes you made may not be saved.";
-                    return textillo;
-                };
+            window.onbeforeunload = function exitAlert() {
+                var textillo = "Changes you made may not be saved.";
+                return textillo;
+            };
 
             $(document).ready(function () {
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
@@ -41,7 +41,7 @@
                     itemsAttendance.push($(this).val());
                 });
                 var haynullRating = $.inArray('', itemsRating);
-                var haynullAttendance = $.inArray('', itemsAttendance);
+                var haynullAttendance = $.inArray('0', itemsAttendance);
 
                 if (haynullRating !== -1 || haynullAttendance !== -1) {
                     $('#buttonAchived').attr('disabled', true);
@@ -64,7 +64,7 @@
                 $('#table_progress').DataTable(
                         {
                             "searching": false,
-                            "paging":   false,
+                            "paging": false,
                             "aaSorting": [[1, "asc"]],
                             "columnDefs": [
                                 {"width": "4%", "targets": 0},
@@ -93,13 +93,14 @@
                         itemsAttendance.push($(this).val());
                     });
                     var haynullRating = $.inArray('', itemsRating);
-                    var haynullAttendance = $.inArray('', itemsAttendance);
+                    var haynullAttendance = $.inArray('0', itemsAttendance);
 
                     if (haynullRating !== -1 || haynullAttendance !== -1) {
                         $('#buttonAchived').attr('disabled', true);
                         $('#buttonAchived').parent().attr('disabled', true);
 
                     } else {
+                        
                         $('#buttonAchived').attr('disabled', false);
                         $('#buttonAchived').parent().removeAttr('disabled');
                     }
@@ -124,7 +125,7 @@
                         itemsAttendance.push($(this).val());
                     });
                     var haynullRating = $.inArray('', itemsRating);
-                    var haynullAttendance = $.inArray('', itemsAttendance);
+                    var haynullAttendance = $.inArray('0', itemsAttendance);
 
                     if (haynullRating !== -1 || haynullAttendance !== -1) {
                         $('#buttonAchived').attr('disabled', true);
@@ -132,7 +133,7 @@
 
                     } else {
                         $('#buttonAchived').attr('disabled', false);
-                        $('#buttonAchived').parent().removeAttr('disabled');
+                        $('#buttonAchived').parent().removeAttr('disabled', true);
                     }
 
                 });
@@ -141,16 +142,16 @@
                     var rellenarNull = $(".attendance");
                     rellenarNull.each(function () {
                         var valorAttendance = $('option:selected', this).val();
-                        if (valorAttendance !== '0'){
+                        if (valorAttendance !== '0') {
                             $('option:selected', this).remove();
                         }
                     });
-                    
-                    $(".attendance option[value='0']").attr('selected', true);
-                  
 
-                        $('#buttonAchived').attr('disabled', true);
-                        $('#buttonAchived').parent().add('disabled');
+                    $(".attendance option[value='0']").attr('selected', true);
+
+
+                    $('#buttonAchived').attr('disabled', true);
+                    $('#buttonAchived').parent().attr('disabled', true);
                 });
 
                 $('#subject').change(function () {
@@ -203,7 +204,7 @@
             .TXTcomment
             {
                 width: 100%;
-                
+
             }
         </style>
     </head>
@@ -303,20 +304,20 @@
                                                     <option value="T">T</option>
                                                 </c:if>--%>
                                                 <c:choose>
-                                                <c:when test="${record.attendancecode=='0'}">
-                                                    <option value="0" selected> </option>
-                                                    <option value="P">P</option>
-                                                    <option value="A">A</option>
-                                                    <option value="T">T</option>
-                                                </c:when>    
-                                                <c:otherwise>
-                                                    <option value="${record.attendancecode}" selected>${record.attendancecode}</option>
-                                                    <option value="0"></option>
-                                                    <option value="P">P</option>
-                                                    <option value="A">A</option>
-                                                    <option value="T">T</option>
-                                                </c:otherwise>
-                                            </c:choose>
+                                                    <c:when test="${record.attendancecode=='0'}">
+                                                        <option value="0" selected> </option>
+                                                        <option value="P">P</option>
+                                                        <option value="A">A</option>
+                                                        <option value="T">T</option>
+                                                    </c:when>    
+                                                    <c:otherwise>
+                                                        <option value="${record.attendancecode}" selected>${record.attendancecode}</option>
+                                                        <option value="0"></option>
+                                                        <option value="P">P</option>
+                                                        <option value="A">A</option>
+                                                        <option value="T">T</option>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </select>
                                         </td>
                                         <td>
@@ -399,7 +400,7 @@
                     </select>
                 </div>
                 <div class="col-xs-4 text-center">   
-                    <input type="submit" class="btn btn-success" value="Save" onclick="window.onbeforeunload=null;">
+                    <input type="submit" class="btn btn-success" value="Save" onclick="window.onbeforeunload = null;">
                 </div>
                 <div class="col-xs-4 text-center">
                     <input type="checkbox" disabled="false" data-width="200px" data-onstyle="success" data-offstyle="warning" data-toggle="toggle" data-on="Archived" data-off="Not Archived" name="buttonAchived" id="buttonAchived">              

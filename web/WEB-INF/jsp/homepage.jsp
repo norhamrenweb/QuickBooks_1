@@ -210,8 +210,9 @@ var ajax;
                     }
                 }
             }
-  function deleteSelect(LessonsSelected)
+  function deleteSelect()
   {
+       var lessonSelect = $('#buttonDelete').val();
        if (window.XMLHttpRequest) //mozilla
         {
             ajax = new XMLHttpRequest(); //No Internet explorer
@@ -222,7 +223,7 @@ var ajax;
         }
         
         ajax.onreadystatechange = funcionCallBackdeleteLesson;
-        ajax.open("POST","deleteLesson.htm?LessonsSelected="+LessonsSelected,true);
+        ajax.open("POST","deleteLesson.htm?LessonsSelected="+lessonSelect,true);
     <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
         ajax.send("");
       
@@ -407,7 +408,7 @@ var ajax;
             
         </div>
       <div class="modal-footer text-center">
-          <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect(value)">Yes</button>
+          <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect()">Yes</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
       </div>
     </div>

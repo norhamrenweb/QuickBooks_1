@@ -985,10 +985,39 @@ public class ProgressbyStudent {
         return mv;
     }
     
+    private String fetchTeacher(int id, HttpServletRequest hsr) throws Exception {
+        DriverManagerDataSource dataSource2 = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource2.getConnection();
+        Statement st2 = this.cn.createStatement();
+        String first,LastName, name="";
+        ResultSet rs7 =st2.executeQuery("select lastname,firstname from person where personid ="+id);        
+            while(rs7.next()){
+                    first = rs7.getString("firstName");
+                    LastName =rs7.getString("lastName");
+                    name = LastName+", "+first;	
+            }
+            return name;
+    }
     @RequestMapping("/loadComentsStudent.htm")
     @ResponseBody
     public String loadComentsStudent(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 
+        DriverManagerDataSource dataSource2 = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        this.cn = dataSource2.getConnection();
+        Statement st2 = this.cn.createStatement();
+         
+         ResultSet rs7 =st2.executeQuery("select lastname,firstname,personid from person");
+         // ResultSet rs4 = st.executeQuery(consulta);
+            HashMap<String, String> mapPersons= new HashMap<String, String>();
+            String first,LastName,studentID;
+            while(rs7.next()){
+                    first = rs7.getString("firstName");
+                    LastName =rs7.getString("lastName");
+                    studentID = rs7.getString("personid");
+                    mapPersons.put(studentID, LastName+", "+first);	
+            }
+        
+        
         DateFormat formatoFecha;// = new SimpleDateFormat("M/d/yyyy");   
         String date = r.getDateString() + "-01";
 
@@ -1002,7 +1031,7 @@ public class ProgressbyStudent {
         String monthSelected = "" + r.getDateString().charAt(5) + r.getDateString().charAt(6);
 
         String yearSelected = "" + r.getDateString().charAt(0) + r.getDateString().charAt(1) + r.getDateString().charAt(2) + r.getDateString().charAt(3);
-        int days = 0;
+        int days = 0,logId;
 
         Observation oAux = new Observation();
 
@@ -1015,7 +1044,7 @@ public class ProgressbyStudent {
         ArrayList<ArrayList<Observation>> arrayObservations = new ArrayList<ArrayList<Observation>>();
         ArrayList<Observation> arrayComments = new ArrayList<Observation>();
         String consulta = "SELECT * FROM public.classobserv WHERE student_id = " + studentId + " AND commentdate = '" + dateSelected + "'";
-
+        String s;
         try {
 
             DriverManagerDataSource dataSource;
@@ -1031,8 +1060,12 @@ public class ProgressbyStudent {
                 ResultSet rs = st.executeQuery(consulta);
 
                 while (rs.next()) {
-                    oAux.setId(rs.getInt("id"));
-                    oAux.setLogged_by(rs.getInt("logged_by"));
+                    oAux.setId(rs.getInt("id"));   
+                    logId = rs.getInt("logged_by");
+                    oAux.setNameTeacher(mapPersons.get(""+logId));
+                    oAux.setLogged_by(logId);
+                   // oAux.setNameTeacher(mapPersons.get(""+rs.getInt("logged_by")));
+                  //  oAux.setNameTeacher(fetchTeacher(rs.getInt("logged_by"),hsr));
                     oAux.setDate(""+rs.getDate("date_created"));
                     oAux.setObservation(rs.getString("comment"));
                     oAux.setType(rs.getString("category"));
