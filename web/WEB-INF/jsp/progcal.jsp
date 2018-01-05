@@ -897,19 +897,23 @@
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div class="col-xs-12">
-                                <div class="col-xs-4 center-block form-group">
+                                <div class="col-xs-3 center-block form-group">
                                     <label class="control-label">Comment Date:</label>
                                     <div id="idCommentDate"></div>                        
                                 </div>
 
-                                <div class="col-xs-4 center-block form-group">
+                                <div class="col-xs-3 center-block form-group">
                                     <label class="control-label">Create Date:</label>
                                     <div id="idCreateDate"></div>                        
                                 </div>   
-                                <div class="col-xs-4 center-block form-group">
+                                <div class="col-xs-3 center-block form-group">
                                     <label class="control-label">Type:</label>
                                     <div id="idTypeComment"></div>                        
                                 </div>
+                                <div class="col-xs-3 center-block form-group">
+                                    <label class="control-label">Teacher:</label>
+                                    <div id="idTeacher"></div>                        
+                                </div> 
                             </div> 
 
                             <div  class="col-xs-12">
