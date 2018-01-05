@@ -21,19 +21,13 @@
         <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.css"/>"/>
         <title>Presentation progress</title>
         <script>
-                window.onbeforeunload = function exitAlert(){
-                    var textillo = "Changes you made may not be saved.";
-                    return textillo;
-                };
-
             $(document).ready(function () {
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
                 var lessoncreate = '<%= request.getParameter("message")%>';
                 var itemsRating = []; // needs to be outside
                 var itemsAttendance = []; // needs to be outside
-                var collectionRating = $(".studentRating");
+                var collectionRating = $(".rating2");
                 var collectionAttendance = $(".attendance");
-
                 collectionRating.each(function () {
                     itemsRating.push($(this).val());
                 });
@@ -41,7 +35,7 @@
                     itemsAttendance.push($(this).val());
                 });
                 var haynullRating = $.inArray('', itemsRating);
-                var haynullAttendance = $.inArray('', itemsAttendance);
+                var haynullAttendance = $.inArray(null, itemsAttendance);
 
                 if (haynullRating !== -1 || haynullAttendance !== -1) {
                     $('#buttonAchived').attr('disabled', true);
@@ -63,29 +57,25 @@
                 }
                 $('#table_progress').DataTable(
                         {
-                            "searching": false,
-                            "paging":   false,
                             "aaSorting": [[1, "asc"]],
                             "columnDefs": [
                                 {"width": "4%", "targets": 0},
                                 {"width": "20%", "targets": 1},
                                 {"width": "4%", "targets": 2},
-                                {"width": "30%", "targets": 3},
-                                {"width": "22%", "targets": 4, "orderable": false},
-                                {"width": "20%", "targets": 5, "orderable": false}
+                                {"width": "40%", "targets": 3},
+                                {"width": "10%", "targets": 4, "orderable": false},
+                                {"width": "22%", "targets": 5, "orderable": false}
                             ]
 
                         });
 
             });
-
             $(function () {
                 $('select,hi,idSelectAttendance').change(function () {
                     var itemsRating = []; // needs to be outside
                     var itemsAttendance = []; // needs to be outside
-                    var collectionRating = $(".studentRating");
+                    var collectionRating = $(".rating2");
                     var collectionAttendance = $(".attendance");
-
                     collectionRating.each(function () {
                         itemsRating.push($(this).val());
                     });
@@ -93,7 +83,7 @@
                         itemsAttendance.push($(this).val());
                     });
                     var haynullRating = $.inArray('', itemsRating);
-                    var haynullAttendance = $.inArray('', itemsAttendance);
+                    var haynullAttendance = $.inArray(null, itemsAttendance);
 
                     if (haynullRating !== -1 || haynullAttendance !== -1) {
                         $('#buttonAchived').attr('disabled', true);
@@ -104,9 +94,7 @@
                         $('#buttonAchived').parent().removeAttr('disabled');
                     }
                 });
-
                 $('#rellenarP').click(function () {
-
                     var rellenarPresent = $(".attendance");
                     rellenarPresent.each(function () {
                         $(this).val("P");
@@ -114,9 +102,8 @@
 
                     var itemsRating = []; // needs to be outside
                     var itemsAttendance = []; // needs to be outside
-                    var collectionRating = $(".studentRating");
+                    var collectionRating = $(".rating2");
                     var collectionAttendance = $(".attendance");
-
                     collectionRating.each(function () {
                         itemsRating.push($(this).val());
                     });
@@ -124,12 +111,10 @@
                         itemsAttendance.push($(this).val());
                     });
                     var haynullRating = $.inArray('', itemsRating);
-                    var haynullAttendance = $.inArray('', itemsAttendance);
-
+                    var haynullAttendance = $.inArray(null, itemsAttendance);
                     if (haynullRating !== -1 || haynullAttendance !== -1) {
                         $('#buttonAchived').attr('disabled', true);
                         $('#buttonAchived').parent().attr('disabled', true);
-
                     } else {
                         $('#buttonAchived').attr('disabled', false);
                         $('#buttonAchived').parent().removeAttr('disabled');
@@ -137,20 +122,12 @@
 
                 });
                 $('#rellenar').click(function () {
-
-                    var rellenarNull = $(".attendance");
-                    rellenarNull.each(function () {
-                        var valorAttendance = $('option:selected', this).val();
-                        if (valorAttendance !== '0'){
-                            $('option:selected', this).remove();
-                        }
+                    var rellenarPresent = $(".attendance");
+                    rellenarPresent.each(function () {
+                        $(this).val('');
                     });
-                    
-                    $(".attendance option[value='0']").attr('selected', true);
-                  
-
                         $('#buttonAchived').attr('disabled', true);
-                        $('#buttonAchived').parent().add('disabled');
+                        $('#buttonAchived').parent().attr('disabled', true);
                 });
 
                 $('#subject').change(function () {
@@ -172,12 +149,9 @@
 //    $("#NameLessons").attr("disabled", false);
                     }
                 });
-
-
             });
         </script>
         <style>
-
             .textarea 
             {
                 resize: none;
@@ -200,11 +174,6 @@
                         {
                             background-image: linear-gradient(to bottom,#ddd 0,#ddd 100%);
                         }*/
-            .TXTcomment
-            {
-                width: 100%;
-                
-            }
         </style>
     </head>
     <body>
@@ -220,25 +189,32 @@
                 <fieldset>
                     <legend>Presentation details</legend>
 
-                    <div class="col-xs-4 center-block sinpadding">
-                        Presentation Title:<br>
-                        <label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
+                    <div class="col-xs-3 center-block">
+                        Presentation Title:  <label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
                     </div>
 
-                    <div class="col-xs-4 center-block sinpadding">
-                        Subject:<br>
-                        <label class="control-label"> ${lessondetailes.subject.name}</label>
+                    <div class="col-xs-3 center-block">
+                        Subject:  <label class="control-label"> ${lessondetailes.subject.name}</label>
                     </div>
-                    <div class="col-xs-4 center-block  sinpadding">
+                    <div class="col-xs-3 center-block">
                         Objective:  <label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
                     </div>
-                    <div class="col-xs-12 center-block  sinpadding">
+                    <div class="col-xs-3 center-block">
+
+                        <!--                        <div class="col-xs-12 center-block">
+                                                    Step1: <label class="control-label">Counting and Slow Tempo</label>
+                                                </div>
+                                                <div class="col-xs-12 center-block">
+                                                    Step2: <label class="control-label">Record and Play Back</label>
+                                                </div>
+                                                <div class="col-xs-12 center-block">
+                                                    Step3: <label class="control-label">Divide the Beat</label>
+                                                </div>
+                                                <div class="col-xs-12 center-block">
+                                                    Step4: <label class="control-label"> Practice rhythm and timing on different instruments</label>
+                                                </div>-->
                         <c:forEach var="step" items="${steps}" varStatus="i">
-                            <div class="col-xs-3 sinpadding">
-                                <div class="col-xs-12 sinpadding">
-                                    Step${(i.index +1)}:<br> <label class="control-label">${step.name}</label>
-                                </div>
-                            </div>
+                            Step${(i.index +1)}: <label class="control-label">${step.name}</label><br>
                         </c:forEach> 
                     </div>
 
@@ -254,7 +230,7 @@
                                     <td>Student Name</td>
                                     <td>Rating</td>
                                     <td>Comment</td>
-                                    <td>Attendance Code 
+                                    <td>Attendance Code<br> 
                                         <input type="button" class="btn btn-xs btn-info" id="rellenarP" value="Fill P"> 
                                         <input type="button" class="btn btn-xs btn-info" id="rellenar" value="Clear">
                                     </td>
@@ -270,7 +246,7 @@
                                         <td hidden="true"><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
                                         <td>${record.studentname}</td>
                                         <td>
-                                            <select name="TXTrating" id="hi" class="studentRating rating">
+                                            <select name="TXTrating" id="hi" class="rating2">
                                                 <c:if test="${empty record.rating}">
                                                     <option selected></option>
                                                 </c:if>
@@ -285,38 +261,19 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <textarea name="TXTcomment" class="TXTcomment" rows="1">${record.comment}</textarea>
+                                            <textarea name="TXTcomment" >${record.comment}</textarea>
                                         </td>
                                         <td>
                                             <select id="idSelectAttendance" name="TXTattendance" class="attendance">
-                                                <%--<c:if test="${record.attendancecode eq '0'}">
-                                                    <option value="0" selected> </option>
-                                                    <option value="P">P</option>
-                                                    <option value="A">A</option>
-                                                    <option value="T">T</option>
+                                                <c:if test="${empty record.attendancecode}">
+                                                    <option selected></option>
                                                 </c:if>
-                                                <c:if test="${record.attendancecode}">
-                                                    <option value="${record.attendancecode}" selected>${record.attendancecode}</option>
-                                                    <option value="0"></option>
-                                                    <option value="P">P</option>
-                                                    <option value="A">A</option>
-                                                    <option value="T">T</option>
-                                                </c:if>--%>
-                                                <c:choose>
-                                                <c:when test="${record.attendancecode=='0'}">
-                                                    <option value="0" selected> </option>
-                                                    <option value="P">P</option>
-                                                    <option value="A">A</option>
-                                                    <option value="T">T</option>
-                                                </c:when>    
-                                                <c:otherwise>
-                                                    <option value="${record.attendancecode}" selected>${record.attendancecode}</option>
-                                                    <option value="0"></option>
-                                                    <option value="P">P</option>
-                                                    <option value="A">A</option>
-                                                    <option value="T">T</option>
-                                                </c:otherwise>
-                                            </c:choose>
+                                                <c:if test="${not empty record.attendancecode}">
+                                                    <option selected>${record.attendancecode}</option>
+                                                </c:if>
+                                                <option>P</option>
+                                                <option>A</option>
+                                                <option>T</option>
                                             </select>
                                         </td>
                                         <td>
@@ -399,7 +356,7 @@
                     </select>
                 </div>
                 <div class="col-xs-4 text-center">   
-                    <input type="submit" class="btn btn-success" value="Save" onclick="window.onbeforeunload=null;">
+                    <input type="submit" class="btn btn-success" value="Save">
                 </div>
                 <div class="col-xs-4 text-center">
                     <input type="checkbox" disabled="false" data-width="200px" data-onstyle="success" data-offstyle="warning" data-toggle="toggle" data-on="Archived" data-off="Not Archived" name="buttonAchived" id="buttonAchived">              
