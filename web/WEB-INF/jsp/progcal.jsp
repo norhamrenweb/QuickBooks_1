@@ -19,7 +19,7 @@
         <script type="text/javascript">
 
             var ajax;
-
+            var userId = ${user.id};
             $(document).ready(function () {
                 var userLang = navigator.language || navigator.userLanguage;
                 var myDate = new Date();
@@ -211,8 +211,10 @@
                         //var j = JSON.parse(data);   
                         if ($('#comment' + id).parent().children().length === 1) {
                             $('#comment' + id).parent().append("<div class='divAdd'></div>");
-                        }
+                        } 
+                        
                         $('#comment' + id).remove();
+
 
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -270,6 +272,14 @@
                                 var category = value2.type;
                                 var commentdate = value2.commentDate;
                                 var visible = "";
+                                var nameTeacher = value2.nameTeacher;
+                                var disable = "";
+                                var idTeacher = value2.logged_by;
+
+                                if (userId !== idTeacher) {
+                                    disable = "disabled='disabled'";
+                                }
+
                                 if (i <= 7) {
                                     //semana= "semana1" REDUCIR CODIGO
                                     cont1 = cont1 + 180;
@@ -284,17 +294,17 @@
                                 <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+<button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
 <span class='glyphicon glyphicon-list-alt'></span>\n\
 </button>\n\
 </div>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+<button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
 <span class='glyphicon glyphicon-pencil'></span>\n\
 </button>\n\
 </div>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario(" + id + ")'>\n\
+<button type='button'  " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
 <span class=' glyphicon glyphicon-remove'></span>\n\
 </button>\n\
 </div>\n\
@@ -313,17 +323,17 @@
                                 <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+<button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
 <span class='glyphicon glyphicon-list-alt'></span>\n\
 </button>\n\
 </div>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+<button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
 <span class='glyphicon glyphicon-pencil'></span>\n\
 </button>\n\
 </div>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario(" + id + ")'>\n\
+<button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
 <span class=' glyphicon glyphicon-remove'></span>\n\
 </button>\n\
 </div>\n\
@@ -342,17 +352,17 @@
                                 <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+<button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
 <span class='glyphicon glyphicon-list-alt'></span>\n\
 </button>\n\
 </div>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+<button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
 <span class='glyphicon glyphicon-pencil'></span>\n\
 </button>\n\
 </div>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario(" + id + ")'>\n\
+<button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
 <span class=' glyphicon glyphicon-remove'></span>\n\
 </button>\n\
 </div>\n\
@@ -371,17 +381,17 @@
                                 <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link showMore' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+<button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
 <span class='glyphicon glyphicon-list-alt'></span>\n\
 </button>\n\
 </div>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+<button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
 <span class='glyphicon glyphicon-pencil'></span>\n\
 </button>\n\
 </div>\n\
 <div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario(" + id + ")'>\n\
+<button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
 <span class=' glyphicon glyphicon-remove'></span>\n\
 </button>\n\
 </div>\n\
@@ -807,12 +817,13 @@
                     var createDate = $(this).data('createdate');
                     var type = $(this).data('type');
                     var commentDate = $(this).data('commentdate');
+                    var nameTeacher = $(this).data('nameteacher');
 
                     $('#idCommentDate').text(commentDate);
                     $('#idCreateDate').text(createDate);
                     $('#idTypeComment').text(type);
                     $('#idComment').text(comment);
-
+                    $('#idTeacher').text(nameTeacher);
                     $('#showComment').modal('show');
                 });
             </script>
