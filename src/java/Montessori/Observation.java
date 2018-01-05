@@ -17,8 +17,16 @@ public class Observation {
     private String observation;
     private String type;
     private String date;
-
+    private String nameTeacher;
     private String dateString;
+
+    public String getNameTeacher() {
+        return nameTeacher;
+    }
+
+    public void setNameTeacher(String nameTeacher) {
+        this.nameTeacher = nameTeacher;
+    }
     private String commentDate;
     private int logged_by;
     private int studentid;
@@ -42,6 +50,7 @@ public class Observation {
         commentDate = o2.getCommentDate();
         logged_by = o2.getLogged_by();
         studentid = o2.getStudentid();
+        nameTeacher = o2.getNameTeacher();
     }
 
     public String getCommentDate() {
