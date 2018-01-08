@@ -143,7 +143,8 @@
                     rellenarNull.each(function () {
                         var valorAttendance = $('option:selected', this).val();
                         if (valorAttendance !== '0') {
-                            $('option:selected', this).remove();
+//                            $('option:selected', this).remove();
+                            $('option:selected', this).attr('selected', false);
                         }
                     });
 
