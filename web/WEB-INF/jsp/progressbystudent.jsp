@@ -232,9 +232,12 @@
 //                    view: myview,        
                             data: prog.children,
                             idField: 'id',
-                            treeField: 'name',
+                            treeField: 'name', 
+                            fitColumns: true,
                             columns: [[
-                                    {title: 'Name', field: 'name'},
+                                    {title: 'Name', field: 'name',formatter:function(value){
+				return '<img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/>'+value;
+			}},
                                     {title: 'No.of presentations planned', field: 'noofplannedlessons'},
                                     {title: 'No.of presentations done', field: 'noofarchivedlessons'},
                                     {title: 'Progress', field: 'progress', formatter: formatProgress},
@@ -708,6 +711,9 @@
                 -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
                 transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
             }
+            .tree-icon{
+		display:none;
+	}
 
         </style>
     </head>
