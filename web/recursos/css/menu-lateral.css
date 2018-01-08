@@ -209,7 +209,7 @@ a.nav-expander {
   font-size: 15px;
   font-weight: 400;
   
-  margin-top: 700px;
+  margin-top: 65%;
   margin-right: 0;
   padding: 6.5em 1.2em 1.2em 2em;
   position: absolute;
@@ -246,14 +246,14 @@ a.nav-expander.fixed {
 }
  
 .nav-expanded a.nav-expander.fixed {
-    left: 4em;  /* changed */
+    left: 2%;  /* changed */
 }
 
 /* SECTION 2 */
 nav {
   background: lightgray;
   display: block;
-  height: 72%;
+  height: 70%;
   overflow: auto;
   position: fixed;
   left: -30%;
