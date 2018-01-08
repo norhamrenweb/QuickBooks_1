@@ -208,14 +208,15 @@
                     datatype: "json",
                     contentType: "application/json",
                     success: function (data) {
+                        
+                        var parentAux = $('#comment' + id).parent();
                         //var j = JSON.parse(data);   
                         if ($('#comment' + id).parent().children().length === 1) {
-                            $('#comment' + id).parent().append("<div class='divAdd'></div>");
-                        } 
-                        
-                        $('#comment' + id).remove();
-
-
+                            $('#comment' + id).parent().append("<div class='divAdd'>Not exists comments</div>");
+                        }
+                        $('#comment' + id).remove();                    
+                   
+                        parentAux.children().last().removeClass("hide");
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -405,13 +406,13 @@
                         });
 
                         if (cont1 === 0)
-                            $("#semana1").append("<div class='divAdd'></div>");
+                            $("#semana1").append("<div class='divAdd'>Not exists comments</div>");
                         if (cont2 === 0)
-                            $("#semana2").append("<div class='divAdd'></div>");
+                            $("#semana2").append("<div class='divAdd'>Not exists comments</div>");
                         if (cont3 === 0)
-                            $("#semana3").append("<div class='divAdd'></div>");
+                            $("#semana3").append("<div class='divAdd'>Not exists comments</div>");
                         if (cont4 === 0)
-                            $("#semana4").append("<div class='divAdd'></div>");
+                            $("#semana4").append("<div class='divAdd'>Not exists comments</div>");
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -781,7 +782,7 @@
                         <div  class="semana4 tam4" id="semana4">
                         </div>
                     </div>
-                    <div class="col-xs-1 btn moveBtn">
+                    <div class="col-xs-1">
                         <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('4')"></span>
                     </div>
                 </div>
