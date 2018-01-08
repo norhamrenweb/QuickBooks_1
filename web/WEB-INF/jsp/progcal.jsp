@@ -212,7 +212,7 @@
                         var parentAux = $('#comment' + id).parent();
                         //var j = JSON.parse(data);   
                         if ($('#comment' + id).parent().children().length === 1) {
-                            $('#comment' + id).parent().append("<div class='divAdd'>Not exists comments</div>");
+                            $('#comment' + id).parent().append("<div class='divAdd'>No comments this week</div>");
                         }
                         $('#comment' + id).remove();                    
                    
@@ -406,13 +406,13 @@
                         });
 
                         if (cont1 === 0)
-                            $("#semana1").append("<div class='divAdd'>Not exists comments</div>");
+                            $("#semana1").append("<div class='divAdd'>No comments this week</div>");
                         if (cont2 === 0)
-                            $("#semana2").append("<div class='divAdd'>Not exists comments</div>");
+                            $("#semana2").append("<div class='divAdd'>No comments this week</div>");
                         if (cont3 === 0)
-                            $("#semana3").append("<div class='divAdd'>Not exists comments</div>");
+                            $("#semana3").append("<div class='divAdd'>No comments this week</div>");
                         if (cont4 === 0)
-                            $("#semana4").append("<div class='divAdd'>Not exists comments</div>");
+                            $("#semana4").append("<div class='divAdd'>No comments this week</div>");
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
