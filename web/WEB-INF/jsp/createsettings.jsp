@@ -257,7 +257,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                 var objective = JSON.parse(json.objective);
                 var content = JSON.parse(json.content);
                 if(objective.nooflessons !== 'NaN'){
-                    $('#nooflessons').text("This objective is currently linked to "+objective.nooflessonsplanned+" lessons");
+                    $('#nooflessons').text("This objective is currently linked to "+objective.nooflessonsplanned+" presentations");
                 };
                 $('#steps').children().remove();
                 steps = objective.steps;
@@ -394,7 +394,9 @@ $("#method").on('mouseover', 'option' , function(e) {
                         success: function(data) {                          
                             var json = JSON.parse(data);                               
                         $('#objective').append('<option value = "'+json.id[0]+'" >' + json.name + '</option>');
-                        $('#formAddobjetive').addClass("hidden");               
+                        $('#formAddobjetive').addClass("hidden");   
+                        $('#newsteps').empty();
+                        $('#tab_logic').empty();
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -875,7 +877,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Name new equipment</label>
-                            <input type="text" class="form-control" name="TXTnamenewcontent" id="namenewcontent"  placeholder="Name new content">
+                            <input type="text" class="form-control" name="TXTnamenewcontent" id="namenewcontent"  placeholder="Name new equipment">
                         </div>
                         <div class="col-xs-6 center-block form-group">
                             <label class="control-label">Description</label>
@@ -895,7 +897,7 @@ $("#method").on('mouseover', 'option' , function(e) {
 
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Edit equipment</label>
-                            <input type="text" class="form-control" name="TXTnameeditcontent" id="editNameContent"  placeholder="Name new content">
+                            <input type="text" class="form-control" name="TXTnameeditcontent" id="editNameContent"  placeholder="Name new equipment">
                         </div>
                         <div class="col-xs-6 center-block form-group">
                             <label class="control-label">Description</label>
