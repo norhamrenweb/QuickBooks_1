@@ -915,7 +915,7 @@
                                 </div>
 
                                 <div class="col-xs-3 center-block form-group">
-                                    <label class="control-label">Create Date:</label>
+                                    <label class="control-label">Created on:</label>
                                     <div id="idCreateDate"></div>                        
                                 </div>   
                                 <div class="col-xs-3 center-block form-group">
