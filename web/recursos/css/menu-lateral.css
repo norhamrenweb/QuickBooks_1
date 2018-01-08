@@ -9,7 +9,9 @@ and open the template in the editor.
 */
 
 @media (max-width: 2000px) {
- 
+a:hover {
+color: #F2F2F2; /* verde */
+} 
 /* SECTION 1 */
 a.nav-expander {
   background: none repeat scroll 0 0 grey;
@@ -49,6 +51,8 @@ a.nav-expander {
  
 a.nav-expander:hover {
   cursor: pointer;
+  color: #F2F2F2;
+  text-decoration: none;
 }
  
 a.nav-expander.fixed {
@@ -63,21 +67,25 @@ a.nav-expander.fixed {
 nav {
   background: lightgray;
   display: block;
-  height: 72%;
+  height: 77%;
   overflow: auto;
   position: fixed;
-  left: -20em;
-  padding-top: 35px;     /* changed */
+  left: -10%;
+  padding-top: 1%;     /* changed */
   font-size: 15px;
-  top: 20%;
-  width: 10em;
+  top: 17%;
+  width: 7%;
   z-index: 2000;
  
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  
   transition: left 0.3s ease-in-out 0s;  /* changed for this and the 3 lines below */
   -webkit-transition: left 0.3s ease-in-out 0s;
   -moz-transition: left 0.3s ease-in-out 0s;
   -o-transition: left 0.3s ease-in-out 0s;
- 
+ overflow-x: hidden;
+ overflow-y: hidden;
 }
 .nav-expanded nav {
   left: 0; /* changed */
@@ -97,7 +105,7 @@ body.nav-expanded {
   padding-top: 12px;
 }
 .iconosmenulateral{
-    padding-bottom: 20px;
+    padding-bottom: 10%;
     text-align: center;
 }
 .main-menu li {
@@ -180,47 +188,48 @@ body.nav-expanded {
 
 
 @media (max-width: 1024px){
-a:hover {
-color: #F2F2F2; /* verde */
-}
 img{
-    width: 100%;
+    width: 90%;
 }
 .imgUser
 {
-    width: 60% !important;
+    width: 100% !important;
 }
+a:hover {
+color: #F2F2F2; /* verde */
+} 
+/* SECTION 1 */
 a.nav-expander {
-  background: none repeat scroll 0 0 #dff0d8;
-  color: #323949;
+  background: none repeat scroll 0 0 grey;
+  color: #D0D2D3;
   border-radius: 15%; /*redondo*/
   border-bottom-width: 1px;
   border-bottom-style: solid;
   display: block;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 400;
   
-  margin-bottom: 20%;
+  margin-top: 700px;
   margin-right: 0;
   padding: 6.5em 1.2em 1.2em 2em;
   position: absolute;
-  left: -45px;  /* changed */
+  left: -10%; /* changed */
   text-decoration: none;
   text-transform: uppercase;
   text-align: center;
   vertical-align: middle;
   top: 0;
-  transition: left 0.3s ease-in-out 0s;   /*changed */
+  transition: left 0.3s ease-in-out 0s;  /* changed */
   
-  height: 85px;
-  width: 85px;
+  height: 130px;
+  width: 130px;
   z-index: 12;
  
-  transition: left 0.3s ease-in-out 0s;   /*changed for this and the 3 lines below */
+  transition: left 0.3s ease-in-out 0s;  /* changed for this and the 3 lines below */
   -webkit-transition: left 0.3s ease-in-out 0s;
   -moz-transition: left 0.3s ease-in-out 0s;
   -o-transition: left 0.3s ease-in-out 0s;
-/*  Rotacion 90 grados*/
+  /*Rotacion 90 grados*/
   -webkit-transform: rotate(-90deg); 
   -moz-transform: rotate(-90deg);	
  
@@ -228,6 +237,8 @@ a.nav-expander {
  
 a.nav-expander:hover {
   cursor: pointer;
+  color: #F2F2F2;
+  text-decoration: none;
 }
  
 a.nav-expander.fixed {
@@ -235,42 +246,39 @@ a.nav-expander.fixed {
 }
  
 .nav-expanded a.nav-expander.fixed {
-    left: 4em;   changed 
+    left: 4em;  /* changed */
 }
 
 /* SECTION 2 */
 nav {
-  background: #dff0d8;
+  background: lightgray;
   display: block;
-  height: 73%;
+  height: 72%;
   overflow: auto;
   position: fixed;
-  left: -85px;
-  padding-top: 35px;      /*changed */
-  font-size: 11px;
-  text-decoration: none;
-  text-transform: uppercase;
-  text-align: center;
-  vertical-align: middle;
-  top: 28%;
-  bottom: 0% !important;
-  
-  width: 85px;
+  left: -30%;
+  padding-top: 1%;     /* changed */
+  font-size: 15px;
+  top: 20%;
+  width: 10%;
   z-index: 2000;
  
-  transition: left 0.3s ease-in-out 0s;   /*changed for this and the 3 lines below */
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  
+  transition: left 0.3s ease-in-out 0s;  /* changed for this and the 3 lines below */
   -webkit-transition: left 0.3s ease-in-out 0s;
   -moz-transition: left 0.3s ease-in-out 0s;
   -o-transition: left 0.3s ease-in-out 0s;
  
 }
 .nav-expanded nav {
-  left: 0;  /*changed */
+  left: 0; /* changed */
 }
  
 body.nav-expanded {
   margin-left: 0em;
-  transition: left 0.4s ease-in-out 0s;   /*changed for this and the 3 lines below */
+  transition: left 0.4s ease-in-out 0s;  /* changed for this and the 3 lines below */
   -webkit-transition: left 0.4s ease-in-out 0s;
   -moz-transition: left 0.4s ease-in-out 0s;
   -o-transition: left 0.4s ease-in-out 0s;
@@ -282,11 +290,11 @@ body.nav-expanded {
   padding-top: 12px;
 }
 .iconosmenulateral{
-    padding-bottom: 20px;
+    padding-bottom: 15%;
     text-align: center;
 }
 .main-menu li {
-  border-bottom: 1px solid #323949;
+/*  border-bottom: 1px solid #323949;*/
   margin-left: 20px;
   font-size: 18px;
   padding: 12px;
