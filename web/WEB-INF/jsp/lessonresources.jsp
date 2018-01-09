@@ -19,7 +19,6 @@
 
             $(document).ready(function () {
 
-                // Instantiate the Bootstrap carousel
                 $('.multi-item-carousel').carousel({
                     interval: false
                 });
@@ -267,6 +266,7 @@
                     success: function (data) {
                         //var j = JSON.parse(data);    
                         $('#divRecurso' + id).remove();
+                        $('#separador' + id).remove();
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -331,6 +331,7 @@
 
                 });
             }
+            
             function saveEditLink() {
                 if (window.XMLHttpRequest) //mozilla
                 {
@@ -361,21 +362,36 @@
                     success: function (data) {
                         // var j = JSON.parse(data);
                         var id = idResource;
-                        var claseTipo = "label-success";
+                        var claseTipo = "label-link";
                         if (type === "Video") {
-                            claseTipo = "label-primary"
+                            claseTipo = "label-video";
                         }
 
                         //MODIFICAR EL JSON PARA QUE DEVUELVA EL ID OBTENIDO
-                        $('#listResources').append("<div id = 'divRecurso" + id + "' class='list-group col-xs-12'>\n\
-                                                    <div class='col-xs-10 text-center'>\n\
-                                                         <a href=" + linkResource + " class='list-group-item link' target='_blank'>\n\
-                                                             " + nameResource + "<span class='label " + claseTipo + "' >" + type + "</span>\n\
-                                                 </a>\n\
-                                            </div>\n\
-                                         <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning editResource'  onclick='loadInfResource(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editResource" + id + " '/></div>\n\
-                                         <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning '  onclick='deleteLink(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteLink(" + id + ")'/></div></div>");
+                        $('#listResources').append("<div id = 'divRecurso" + id + "' class='col-xs-12 " + claseTipo + "'>\n\
+<div class='col-xs-10 text-center tableCell sinpadding'>\n\
+    <div class='col-xs-2 sinpadding cell'>" + type +"</div>\n\
+    <div class='col-xs-10 sinpadding'>\n\
+        <a href=" + linkResource + " class='list-group-item link' target='_blank'>\n\
+             " + nameResource + "\n\
+        </a>\n\
+    </div>\n\
+</div>\n\
+<div class='col-xs-1 text-center'>\n\
+    <button type='button' class='btn-link editResource' onclick='loadInfResource(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editResource" + id + " '>\n\
+        <i class='glyphicon glyphicon-pencil'></i>\n\
+    </button>\n\
+</div>\n\
+<div class='col-xs-1 text-center'>\n\
+    <button type='button' class='btn-link'  onclick='deleteLink(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteLink(" + id + ")'>\n\
+        <i class='glyphicon glyphicon-remove'></i>\n\
+    </button>\n\
+</div>\n\
+</div>\n\
+<div id='separador" + id + "' class='col-xs-12'><hr></div>");
+       
                         $('#divRecurso' + id).remove();
+                        $('#separador' + id).remove();
                         $("#editnewLink").modal('hide');
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -420,18 +436,31 @@
                     success: function (data) {   //NO ENTRA A SUCCESS                       
                         //var j = JSON.parse(data);
                         id = data;
-                        var claseTipo = "label-success";
+                         var claseTipo = "label-link";
                         if (type === "Video") {
-                            claseTipo = "label-primary"
+                            claseTipo = "label-video";
                         }
                         //MODIFICAR EL JSON PARA QUE DEVUELVA EL ID OBTENIDO
-                        $('#listResources').append("<div id = 'divRecurso" + id + "' class='list-group col-xs-12'>\n\
-                                                    <div class='col-xs-10 text-center'>\n\
-                                                         <a href=" + linkResource + "   class='list-group-item link' target='_blank' >" + nameResource + "<span class='label " + claseTipo + "' >" + type + "</span>\n\
-                                                 </a>\n\
-                                            </div>\n\
-                                         <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning editResource'  onclick='loadInfResource(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editResource" + id + " '/></div>\n\
-                                         <div class='col-xs-1 text-center'><input type='button' class='btn btn-warning '  onclick='deleteLink(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteLink(" + id + ")'/></div></div>");
+                        $('#listResources').append("<div id = 'divRecurso" + id + "' class='col-xs-12 " + claseTipo + "'>\n\
+                <div class='col-xs-10 text-center tableCell sinpadding'>\n\
+                <div class='col-xs-2 sinpadding cell'>" + type +"</div>\n\
+                <div class='col-xs-10 sinpadding'>\n\
+                     <a href=" + linkResource + "   class='list-group-item link' target='_blank' >" + nameResource + "\n\
+                    </a>\n\
+                </div>\n\
+</div>\n\
+ <div class='col-xs-1 text-center'>\n\
+    <button type='button' class='btn-link editResource' onclick='loadInfResource(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editResource" + id + " '>\n\
+        <i class='glyphicon glyphicon-pencil'></i>\n\
+    </button>\n\
+</div>\n\
+<div class='col-xs-1 text-center'>\n\
+    <button type='button' class='btn-link'  onclick='deleteLink(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='deleteLink(" + id + ")'>\n\
+        <i class='glyphicon glyphicon-remove'></i>\n\
+    </button>\n\
+</div>\n\
+</div>\n\
+<div id='separador" + id + "' class='col-xs-12'><hr></div>");
                         $("#addnewLink").modal('hide');
 
                     },
@@ -762,7 +791,65 @@
             input[type="checkbox"] .styled:checked + label::after,
             input[type="radio"] .styled:checked + label::after {
                 color: #fff; }
-
+            .btn-link
+            {
+                color: #777777 !important;
+                font-size: 20px !important;
+            }
+            .padding5TopBottom
+            {
+                padding-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+            hr { 
+                display: block;
+                margin-top: 0.5em;
+                margin-bottom: 0.5em;
+                margin-left: auto;
+                margin-right: auto;
+                border-width: 1px;
+            }
+            .label-link
+            {
+            padding-left: 0px;
+            padding-right: 0px;
+            background-image: linear-gradient(to right, rgba(0,155,0,0.6), rgba(0,155,0,0));
+            color: white;
+border-radius: 10px;
+            }
+            .label-video
+            {
+            padding-left: 0px;
+            padding-right: 0px;
+            background-image: linear-gradient(to right, rgba(0,0,155,0.6), rgba(0,0,155,0));
+            color: white;
+            border-radius: 10px;
+            }
+            .label-file
+            {
+            padding-left: 0px;
+            padding-right: 0px;
+            background-image: linear-gradient(to right, rgba(155,0,0,0.6), rgba(155,0,0,0));
+            color: white;
+            border-radius: 10px;
+            }
+            .tableCell
+            {
+                height: 40px;
+            }
+            .cell{
+                padding-top: 10px !important;
+            }
+            .link
+            {
+                padding: 10px;
+            }
+            .list-group-item
+            {
+                background-color: rgba(255,255,255,0.5)
+            }
         </style>
     </head>
     <body>
@@ -776,81 +863,119 @@
             <div class="col-xs-12" style="margin-bottom: 30px;">
                 <h1 class=" text-center">${lessonsName} Resources</h1>
             </div>
-            <div class="col-xs-12">
+            <div class="col-xs-12 col-md-12 col-lg-12">
                 <fieldset>
                     <legend id="showPropiertys">
                         External links and videos
                         <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
                         </span>
                     </legend>
-                    <div class="form-group collapse" id="contenedorPropiertys">
-                        <div  id = "listResources" class="list-group col-xs-12 link">
+                    <div class="form-group collapse in" id="contenedorPropiertys">
+                        <div class="list-group col-xs-12 link" id ="listResources" >
                             <c:forEach var="item" items="${others}">
                                 <c:choose>
 
                                     <c:when test="${item.type =='Video'}">
-                                        <div id = "divRecurso${item.id}" class="list-group col-xs-12">
-                                            <div class="col-xs-10 text-center"><a href="${item.link}"  data-id="${item.id}" class="list-group-item link" target="_blank">${item.name}<span class="label label-primary">${item.type}</span> </a></div> 
-                                            <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>  
-                                            <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
-
+                                        <div id ="divRecurso${item.id}" class="col-xs-12 label-video">
+                                            <div class="col-xs-10 text-center tableCell sinpadding">       
+                                                    <div class="col-xs-2 sinpadding cell">${item.type}</div>
+                                                    <div class="col-xs-10 sinpadding">
+                                                       <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}</a>
+                                                    </div>      
+                                            </div> 
+                                            <div class="col-xs-1 text-center padding5TopBottom">
+                                                <button type='button' class="btn-link editResource" onclick="loadInfResource(${item.id})" id="editResource(${item.id})">
+                                                   <i class='glyphicon glyphicon-pencil'></i>
+                                                </button>
+                                            </div>
+                                            <div class="col-xs-1 text-center padding5TopBottom">
+                                                <button type="button" class="btn-link"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})">
+                                                    <i class='glyphicon glyphicon-remove'></i>
+                                                </button>
+                                            </div>
+                                        
                                         </div>
+                                        <div id="separador${item.id}" class='col-xs-12'><hr></div>
                                     </c:when>
 
                                     <c:otherwise> 
-                                        <div id = "divRecurso${item.id}" class="list-group col-xs-12">
-                                            <div class="col-xs-10 text-center"> <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}<span class="label label-success">${item.type}</span></a></div>
-                                            <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning editResource"  onclick="loadInfResource(${item.id})" data-toggle="tooltip" data-placement="bottom" value="edit" id="editResource(${item.id})"/></div>
-                                            <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
-
+                                        <div id ="divRecurso${item.id}" class="col-xs-12 label-link">
+                                            <div class="col-xs-10 text-center tableCell sinpadding">       
+                                                    <div class="col-xs-2 sinpadding cell">${item.type}</div>
+                                                    <div class="col-xs-10 sinpadding">
+                                                       <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}</a>
+                                                    </div>      
+                                            </div> 
+                                            <div class="col-xs-1 text-center padding5TopBottom">
+                                                <button type='button' class="btn-link editResource" onclick="loadInfResource(${item.id})" id="editResource(${item.id})">
+                                                   <i class='glyphicon glyphicon-pencil'></i>
+                                                </button>
+                                            </div>
+                                            <div class="col-xs-1 text-center padding5TopBottom">
+                                                <button type="button" class="btn-link"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})">
+                                                    <i class='glyphicon glyphicon-remove'></i>
+                                                </button>
+                                            </div>
                                         </div>
+                                        <div id="separador${item.id}" class='col-xs-12'><hr></div>
                                     </c:otherwise> 
 
                                 </c:choose>
 
                             </c:forEach>
                         </div>
-                        <div class="col-xs-4 text-center">
-                            <input type="button" class="btn btn-warning"  data-toggle="tooltip" data-placement="bottom" value="add" id="addLink"/>
+                        <div class="col-xs-12 text-right">
+                            <button class=" btn btn-sm" data-toggle="tooltip" data-placement="bottom" id="addLink">
+                                add link or video <i class='glyphicon glyphicon-plus'></i>
+                            </button>
                         </div>
                     </div>
                 </fieldset>
-
+            </div>
+            <div class="col-xs-12 col-md-12 col-lg-12">
                 <fieldset>
                     <legend id="showDetails">
                         Files
                         <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
-                            <!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" >
-                                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
-                                                    </button>-->
                         </span>
                     </legend>
-                    <div class="form-group collapse" id="contenedorDetails">
-                        <div class="list-group">
+                    <div class="form-group collapse in" id="contenedorDetails">
+                        <div class="list-group col-xs-12 link">
                             <c:forEach var="item" items="${files}">  
-                                <div id = "divRecurso${item.id}" class="list-group col-xs-12 text-center">        
-                                    <c:url var="post_url"  value="/upload" />    
-                                    <form class=" text-center form-group" action="${post_url}" method="GET" enctype="multipart/form-data">  
-                                        <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}> 
-                                        <input type="hidden" id="txtUrl" name="txtUrl" value="" />
-                                        <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>                
-                                        <div class="col-xs-9 center-block form-group text-center " >
-                                            <a data-id="${item.id}" class="list-group-item link fileNames" >
-                                                <span class="fileName">${item.name}</span>
-                                                <span class="label label-primary">${item.type}</span> 
-                                            </a>
-                                        </div> 
-
-                                        <input type="submit" value="Download" class="col-xs-2 center-block form-group paddingLabel btn btn-success">     
-                                        <div class="col-xs-1 text-center"><input type="button" class="btn btn-warning"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})"/></div>
-
-                                    </form>
+                                <div id = "divRecurso${item.id}" class="col-xs-12 label-file">
+                                    
+                                        <c:url var="post_url"  value="/upload" />    
+                                        <form class=" text-center form-group" action="${post_url}" method="GET" enctype="multipart/form-data">  
+                                            <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}> 
+                                            <input type="hidden" id="txtUrl" name="txtUrl" value="" />
+                                            <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>
+                                            <div class="col-xs-10 text-center tableCell sinpadding">
+                                                <div class="col-xs-2 sinpadding cell">${item.type}</div>
+                                                <div class="col-xs-10 sinpadding text-center " >
+                                                    <a data-id="${item.id}" class="list-group-item link fileNames" >
+                                                        <span class="fileName">${item.name}</span>
+                                                    </a>
+                                                </div> 
+                                            </div>
+                                            <div class="col-xs-1 text-center padding5TopBottom">
+                                                <button type="submit" class="btn-link"  data-toggle="tooltip" data-placement="bottom" value="Download">
+                                                    <i class='glyphicon glyphicon-circle-arrow-down'></i>
+                                                </button>
+                                            </div> 
+                                            <div class="col-xs-1 text-center padding5TopBottom">
+                                                <button type="button" class="btn-link"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})">
+                                                    <i class='glyphicon glyphicon-remove'></i>
+                                                </button>
+                                            </div>
+                                        </form>
                                 </div>
-
+                                <div id="separador${item.id}" class='col-xs-12'><hr></div>
                             </c:forEach>
                         </div>
-                        <div class="col-xs-4 text-center">
-                            <input type="button" class="btn btn-warning"  data-toggle="tooltip" data-placement="bottom" value="add" id="addFile"/>
+                        <div class="col-xs-12 text-right">
+                            <button class=" btn btn-sm" data-toggle="tooltip" data-placement="bottom" id="addFile">
+                                add file <i class='glyphicon glyphicon-circle-arrow-up'></i>
+                            </button>
                         </div>
                     </div>
 
@@ -1019,13 +1144,13 @@
                                             $('#editLinkError').children().last().addClass("hide")
                                         } else {
                                             $('#EditLink').prop('disabled', true);
-                                            if (!is_url($('#editLinkComments').val()) && $('#editLinkComments').val() != "") {
+                                            if (!is_url($('#editLinkComments').val()) && $('#editLinkComments').val() !== "") {
                                                 $('#editLinkError').addClass("has-error");
-                                                $('#editLinkError').children().last().removeClass("hide")
+                                                $('#editLinkError').children().last().removeClass("hide");
                                                 // alert('Invalid URL')
                                             } else {
                                                 $('#editLinkError').removeClass("has-error");
-                                                $('#editLinkError').children().last().addClass("hide")
+                                                $('#editLinkError').children().last().addClass("hide");
                                             }
                                         }
                                     });
@@ -1046,24 +1171,24 @@
                                         if (existeNombre === "1") {
                                             $('#submitSave').prop('disabled', true);
                                             $('#divAddFile').addClass("has-error");
-                                            $('#divAddFile').children().prev().prev().last().removeClass("hide")
+                                            $('#divAddFile').children().prev().prev().last().removeClass("hide");
                                         }
 
                                         if ($('#file').val() !== "") {
                                             $('#divAddFile').removeClass("has-error");
-                                            $('#spanSelectFile').addClass("hide")
+                                            $('#spanSelectFile').addClass("hide");
                                             if (existeNombre === "0" && $('#idNameFile').val().indexOf("/") === -1 && $('#idNameFile').val().indexOf("\"") === -1 && $('#idNameFile').val().indexOf("'") === -1) {
                                                 $('#submitSave').prop('disabled', false);
                                                 $('#divAddFile').removeClass("has-error");
-                                                $('#divAddFile').children().last().prev().prev().addClass("hide")
+                                                $('#divAddFile').children().last().prev().prev().addClass("hide");
                                             } else {
                                                 $('#divAddFile').addClass("has-error");
-                                                $('#divAddFile').children().prev().prev().last().removeClass("hide")
+                                                $('#divAddFile').children().prev().prev().last().removeClass("hide");
                                                 $('#submitSave').prop('disabled', true);
                                             }
                                         } else {
                                             $('#divAddFile').addClass("has-error");
-                                            $('#spanSelectFile').removeClass("hide")
+                                            $('#spanSelectFile').removeClass("hide");
                                         }
                                     });
 
