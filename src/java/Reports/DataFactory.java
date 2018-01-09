@@ -43,14 +43,16 @@ public class DataFactory {
 //        Object beanobject = contexto.getBean(nombrebean);
 //        return beanobject;
 //    }
-    public static Collection getDataSource(ServletContext servlet) throws SQLException, ClassNotFoundException {
+    public static Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
         //AGREGAR CODIGO PARA ACCESO A LA BBDD RENWEB Y BUSCAR DATOS DEL ALUMNO
 
         //new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{studentId});
         Collection<String> c;
         //JRDataSource datasource = new JRBeanCollectionDataSource(c, true);
 
-        String studentId = "10101";
+        //String studentId = "10101";
+          String nameStudent = "", dob = "", age = "";
+        String studentId = idStudent;
         Class.forName("org.postgresql.Driver");
         Connection cn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/Lessons?user=eduweb&password=Madrid2016");
         Statement st = cn.createStatement();
@@ -103,7 +105,12 @@ public class DataFactory {
             for (String d : os) {
                 Objective b = new Objective();
                 String name = b.fetchName(Integer.parseInt(d), servlet);
-                String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '" + studentId + "' AND comment_date = (select max(comment_date)   from public.progress_report where student_id = '" + studentId + "' AND objective_id =" + d + " and generalcomment = false) AND objective_id =" + d + " and generalcomment = false )";
+                String consulta = "SELECT rating.name FROM rating where id in"
+                    + "(select rating_id from progress_report where student_id = '"+studentId+"'"
+                    + " AND comment_date = (select max(comment_date)   from public.progress_report "
+                    + "where student_id = '"+studentId+"' AND objective_id = '"+d+"' "
+                    + "and generalcomment = false and rating_id not in(6,7)) "
+                    + "AND objective_id ='"+d+"'and generalcomment = false )";
                 ResultSet rs2 = st.executeQuery(consulta);
                 if (!rs2.next()) {
                     indEliminarObjectives.add(counter);
@@ -111,14 +118,10 @@ public class DataFactory {
                     rs2 = st.executeQuery(consulta);
                     while (rs2.next()) {
                         String var = rs2.getString("name");
-                        if (rs2.getString("name").equals("N/A") || rs2.getString("name").equals(" ") || rs2.getString("name").equals("")) {
-                            indEliminarObjectives.add(counter);
-                        } else {
+
                             var = rs2.getString("name");
                             //  finalratings.add("Mastered");//rs2.getString("name"));
                             finalratings.add(rs2.getString("name"));
-
-                        }
                     }
                 }
                 os.set(counter, name);
@@ -139,7 +142,7 @@ public class DataFactory {
 
             String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentId = '" + studentId + "'";
             rs = st.executeQuery(consulta);
-            String nameStudent = "", dob = "", age = "";
+          
             int year = Calendar.getInstance().get(Calendar.YEAR);
             while (rs.next()) {
                 nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName");
@@ -155,7 +158,7 @@ public class DataFactory {
             }
             cn.close();
         }
-        //     FALTA TERMINAR PODRIAMOS TOMAR LOS SUBJECT_ID DE LOS ALUMNOS QUE SEAN ELECTIVOS Y COMPROBAR QUE NO EXISTAN EN LA UQERY SIGUIENTE
+        // FALTA TERMINAR PODRIAMOS TOMAR LOS SUBJECT_ID DE LOS ALUMNOS QUE SEAN ELECTIVOS Y COMPROBAR QUE NO EXISTAN EN LA UQERY SIGUIENTE
         Class.forName("org.postgresql.Driver");
         cn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/Lessons?user=eduweb&password=Madrid2016");
         st = cn.createStatement();
@@ -167,15 +170,16 @@ public class DataFactory {
         rs = st.executeQuery(consulta);
         while (rs.next()) {
             String comment = rs.getString("comment");
-            if (!comment.equals("")) {
+         //   if (!comment.equals("")) {
                 //os.add("" + rs.getInt("subject_id"));
+                
                 os.add(s.fetchName(rs.getInt("subject_id"), servlet));
                 as.add(comment);
-            }
+          //  }
         }
         //============================================================
 
-        BeanWithList bean = new BeanWithList("Comments", os, as, "david", "1991/25/02", "26");
+        BeanWithList bean = new BeanWithList("Comments", os, as, nameStudent, dob, age);
         coll.add(bean);
 
         //JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(coll);
