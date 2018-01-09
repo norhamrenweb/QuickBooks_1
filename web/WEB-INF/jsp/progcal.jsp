@@ -216,7 +216,7 @@
                         }
                         $('#comment' + id).remove();                    
                    
-                        parentAux.children().last().removeClass("hide");
+                        parentAux.children().not(".hide").last().next().removeClass("hide");
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
