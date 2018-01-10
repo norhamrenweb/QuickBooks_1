@@ -53,9 +53,25 @@ public class DataFactory {
         //String studentId = "10101";
           String nameStudent = "", dob = "", age = "";
         String studentId = idStudent;
+        
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Connection cn = DriverManager.getConnection("jdbc:sqlserver://ah-zaf.odbc.renweb.com\\ah_zaf:1433;databaseName=ah_zaf", "AH_ZAF_CUST", "BravoJuggle+396");
+            Statement st = cn.createStatement();
+
+            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentId = '" + studentId + "'";
+            ResultSet rs = st.executeQuery(consulta);
+          
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            while (rs.next()) {
+                nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName");
+                dob = rs.getString("Birthdate");
+                dob = dob.split(" ")[0];
+                age = "" + (year - Integer.parseInt("" + dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3)));
+        }
+            
         Class.forName("org.postgresql.Driver");
-        Connection cn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/Lessons?user=eduweb&password=Madrid2016");
-        Statement st = cn.createStatement();
+         cn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/Lessons?user=eduweb&password=Madrid2016");
+         st = cn.createStatement();
         ArrayList<String> lessons = new ArrayList<>();
         java.util.Vector coll = new java.util.Vector();
         // ArrayList<BeanWithList> coll = new ArrayList<BeanWithList>();
@@ -63,7 +79,7 @@ public class DataFactory {
         //ArrayList<BeanWithList> coll = new ArrayList<BeanWithList>();
         // get the lessons attended by the student
         ArrayList<Subject> subjects = new ArrayList<>();
-        ResultSet rs = st.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
+         rs = st.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
         while (rs.next()) {
             lessons.add("" + rs.getInt("lesson_id"));
         }
@@ -105,7 +121,7 @@ public class DataFactory {
             for (String d : os) {
                 Objective b = new Objective();
                 String name = b.fetchName(Integer.parseInt(d), servlet);
-                String consulta = "SELECT rating.name FROM rating where id in"
+                 consulta = "SELECT rating.name FROM rating where id in"
                     + "(select rating_id from progress_report where student_id = '"+studentId+"'"
                     + " AND comment_date = (select max(comment_date)   from public.progress_report "
                     + "where student_id = '"+studentId+"' AND objective_id = '"+d+"' "
@@ -136,20 +152,7 @@ public class DataFactory {
                 os.remove(k);
             }
             //FUNCIONA PERO LO HACE INNECESARIAMENTE 3 VECES NO SE PORQUE CUANDO LO HAGO FUERA FALLA.
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            cn = DriverManager.getConnection("jdbc:sqlserver://ah-zaf.odbc.renweb.com\\ah_zaf:1433;databaseName=ah_zaf", "AH_ZAF_CUST", "BravoJuggle+396");
-            st = cn.createStatement();
-
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentId = '" + studentId + "'";
-            rs = st.executeQuery(consulta);
-          
-            int year = Calendar.getInstance().get(Calendar.YEAR);
-            while (rs.next()) {
-                nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName");
-                dob = rs.getString("Birthdate");
-                dob = dob.split(" ")[0];
-                age = "" + (year - Integer.parseInt("" + dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3)));
-            }
+            
             //============================================================
 
             if (os.size() > 0) {
@@ -166,7 +169,7 @@ public class DataFactory {
         ArrayList<String> os = new ArrayList<>();
         ArrayList<String> as = new ArrayList<>();
         Subject s = new Subject();
-        String consulta = "SELECT lessons.subject_id,progress_report.comment FROM progress_report join lessons on (progress_report.lesson_id = lessons.id) where student_id= '" + studentId + "'";
+        consulta = "SELECT lessons.subject_id,progress_report.comment FROM progress_report join lessons on (progress_report.lesson_id = lessons.id) where student_id= '" + studentId + "'";
         rs = st.executeQuery(consulta);
         while (rs.next()) {
             String comment = rs.getString("comment");
@@ -178,10 +181,10 @@ public class DataFactory {
           //  }
         }
         //============================================================
-
+        if (os.size() > 0) {
         BeanWithList bean = new BeanWithList("Comments", os, as, nameStudent, dob, age);
         coll.add(bean);
-
+        }
         //JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(coll);
         //return coll.toArray(new BeanWithList[coll.size()]);
         /*
@@ -200,7 +203,7 @@ public class DataFactory {
         ArrayList<String> os2 = new ArrayList<>();
         os2.add("Informacion relacionada con Social Development");
 
-        BeanWithList bean2 = new BeanWithList("SocialDevelopment", os2, new ArrayList<String>(), "ultimosComentarios", "1991/25/02", "26");
+        BeanWithList bean2 = new BeanWithList("SocialDevelopment", os2, new ArrayList<String>(), nameStudent, dob, age);
 
         coll.add(bean2);
         //============================
@@ -208,7 +211,7 @@ public class DataFactory {
         ArrayList<String> os3 = new ArrayList<>();
         os3.add("Informacion relacionada con General");
 
-        BeanWithList bean3 = new BeanWithList("General", os3, new ArrayList<String>(), "ultimosComentario", "1991/25/02", "26");
+        BeanWithList bean3 = new BeanWithList("General", os3, new ArrayList<String>(), nameStudent, dob, age);
 
         coll.add(bean3);
         //============================
