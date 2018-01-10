@@ -2,15 +2,7 @@
 <!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="03973e11-97f6-4b1e-8dee-5d04f0eccf11">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Montessori_v2"/>
-	<property name="com.jaspersoft.studio.unit." value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit." value="cm"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -237,7 +229,7 @@
 		<fieldDescription><![CDATA[age]]></fieldDescription>
 	</field>
 	<title>
-		<band height="161" splitType="Stretch">
+		<band height="151" splitType="Stretch">
 			<staticText>
 				<reportElement x="129" y="20" width="445" height="40" uuid="d73b92eb-824d-49eb-af8c-7e18641fd4a1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -294,7 +286,7 @@
 		</band>
 	</title>
 	<detail>
-		<band height="94" splitType="Stretch">
+		<band height="121" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout"/>
 			<componentElement>
 				<reportElement stretchType="ElementGroupBottom" x="18" y="11" width="556" height="60" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="b6dbf7c4-72eb-439f-8a9e-68089f225ded">
@@ -484,61 +476,61 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="718">
+		<band height="761">
 			<staticText>
-				<reportElement positionType="Float" x="56" y="246" width="90" height="24" uuid="11cd21d9-87f6-46e8-bb01-aafffda54929"/>
+				<reportElement positionType="Float" x="56" y="244" width="90" height="24" uuid="11cd21d9-87f6-46e8-bb01-aafffda54929"/>
 				<textElement textAlignment="Left">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Lead Teacher: 				]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="336" y="246" width="90" height="24" uuid="f6cca382-6c77-487b-b20b-e5a2b4cf1787"/>
+				<reportElement positionType="Float" x="336" y="244" width="90" height="24" uuid="f6cca382-6c77-487b-b20b-e5a2b4cf1787"/>
 				<textElement textAlignment="Left">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Assistants: 				]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="56" y="334" width="90" height="24" uuid="8917a0af-4666-461b-a08d-85e074e206b2"/>
+				<reportElement positionType="Float" x="56" y="347" width="90" height="24" uuid="8917a0af-4666-461b-a08d-85e074e206b2"/>
 				<textElement textAlignment="Left">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Days absent:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="336" y="334" width="106" height="24" uuid="287ec384-b2fd-43cd-9a45-32d6604d9883"/>
+				<reportElement positionType="Float" x="336" y="347" width="106" height="24" uuid="287ec384-b2fd-43cd-9a45-32d6604d9883"/>
 				<textElement textAlignment="Left">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[New Term Starts:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="109" y="480" width="90" height="24" uuid="aaa84c8f-9771-4074-98b4-d175a75eab14"/>
+				<reportElement positionType="Float" x="133" y="494" width="90" height="24" uuid="aaa84c8f-9771-4074-98b4-d175a75eab14"/>
 				<textElement textAlignment="Left">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Lead Teacher 				]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="372" y="477" width="144" height="24" uuid="53c4fd6a-bd02-480d-ae68-9db7c050d0f3"/>
+				<reportElement positionType="Float" x="372" y="491" width="144" height="24" uuid="53c4fd6a-bd02-480d-ae68-9db7c050d0f3"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Kim Euston-Brown]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="402" y="502" width="90" height="24" uuid="ce41668f-e44f-4231-95d9-124b43c865af"/>
+				<reportElement positionType="Float" x="402" y="516" width="90" height="24" uuid="ce41668f-e44f-4231-95d9-124b43c865af"/>
 				<textElement textAlignment="Left">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Head ofSchool]]></text>
 			</staticText>
 			<line>
-				<reportElement positionType="Float" x="336" y="476" width="209" height="1" uuid="35c19a3f-a816-4fc5-9ac0-1bb9803f3893"/>
+				<reportElement positionType="Float" x="336" y="490" width="209" height="1" uuid="35c19a3f-a816-4fc5-9ac0-1bb9803f3893"/>
 			</line>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="105" y="49" width="120" height="20" backcolor="#F0F8FF" uuid="ee44340e-27f9-424f-9e43-0d7f587a6034"/>
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="105" y="82" width="120" height="20" backcolor="#F0F8FF" uuid="ee44340e-27f9-424f-9e43-0d7f587a6034"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -552,7 +544,7 @@
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="105" y="69" width="120" height="17" backcolor="#F0F8FF" uuid="38ce4310-db5e-4258-8435-ddca6b328478"/>
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="105" y="102" width="120" height="17" backcolor="#F0F8FF" uuid="38ce4310-db5e-4258-8435-ddca6b328478"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -565,7 +557,7 @@
 				<text><![CDATA[ Introduction]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="105" y="86" width="120" height="31" backcolor="#FFFFFF" uuid="231f3ccc-f50a-4bcc-91a4-2365ff676bbc"/>
+				<reportElement positionType="FixRelativeToBottom" x="105" y="119" width="120" height="31" backcolor="#FFFFFF" uuid="231f3ccc-f50a-4bcc-91a4-2365ff676bbc"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -578,7 +570,7 @@
 				<text><![CDATA[♦]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="225" y="86" width="150" height="31" backcolor="#FFFFFF" uuid="7340fd00-222f-46a7-a728-4e0c112e4596"/>
+				<reportElement positionType="FixRelativeToBottom" x="225" y="119" width="150" height="31" backcolor="#FFFFFF" uuid="7340fd00-222f-46a7-a728-4e0c112e4596"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -591,7 +583,7 @@
 				<text><![CDATA[•]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="225" y="69" width="150" height="17" backcolor="#F0F8FF" uuid="b2275942-c26e-4f80-bdb3-4bb1b40de0b2"/>
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="225" y="102" width="150" height="17" backcolor="#F0F8FF" uuid="b2275942-c26e-4f80-bdb3-4bb1b40de0b2"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -604,7 +596,7 @@
 				<text><![CDATA[ Working on - practising]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="225" y="49" width="150" height="20" backcolor="#F0F8FF" uuid="6d1b1e65-a331-434e-9be9-db229540d315"/>
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="225" y="82" width="150" height="20" backcolor="#F0F8FF" uuid="6d1b1e65-a331-434e-9be9-db229540d315"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -617,7 +609,7 @@
 				<text><![CDATA[ Progressing:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="375" y="49" width="120" height="20" backcolor="#F0F8FF" uuid="f22f38be-ee44-4df7-8c57-db9faf6b806a"/>
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="375" y="82" width="120" height="20" backcolor="#F0F8FF" uuid="f22f38be-ee44-4df7-8c57-db9faf6b806a"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -631,7 +623,7 @@
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="375" y="69" width="120" height="17" backcolor="#F0F8FF" uuid="f88cc8b9-5bde-4c61-b096-f708137f0276"/>
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="375" y="102" width="120" height="17" backcolor="#F0F8FF" uuid="f88cc8b9-5bde-4c61-b096-f708137f0276"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -644,7 +636,7 @@
 				<text><![CDATA[ Moving to Mastery]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="375" y="86" width="120" height="31" backcolor="#FFFFFF" uuid="ff838b2d-5aaf-46ad-abbd-f8c70bdb16f4"/>
+				<reportElement positionType="FixRelativeToBottom" x="375" y="119" width="120" height="31" backcolor="#FFFFFF" uuid="ff838b2d-5aaf-46ad-abbd-f8c70bdb16f4"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -657,15 +649,15 @@
 				<text><![CDATA[○]]></text>
 			</staticText>
 			<line>
-				<reportElement positionType="Float" x="45" y="476" width="209" height="1" uuid="5cd2f908-d8f9-4d58-acc2-23a1ae7dfdbc"/>
+				<reportElement positionType="Float" x="69" y="490" width="209" height="1" uuid="5cd2f908-d8f9-4d58-acc2-23a1ae7dfdbc"/>
 			</line>
 			<staticText>
-				<reportElement positionType="Float" x="0" y="700" width="595" height="18" uuid="90bd3034-7c0b-4e44-bccc-59cc6395076b"/>
+				<reportElement positionType="Float" x="0" y="730" width="595" height="18" uuid="90bd3034-7c0b-4e44-bccc-59cc6395076b"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[3 Auburn Road Kenilworth 7708 ~ T 021 797 7872 ~ F 021 797 1931 ~ info@auburnhouse.co.za ~ www.auburnhouse.co.za]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="0" y="610" width="595" height="88" uuid="06dba67e-389b-498f-8838-dab265a44526"/>
+				<reportElement positionType="Float" x="-1" y="610" width="595" height="88" uuid="06dba67e-389b-498f-8838-dab265a44526"/>
 				<textElement textAlignment="Left">
 					<font size="12.5" isBold="true" isItalic="true"/>
 				</textElement>

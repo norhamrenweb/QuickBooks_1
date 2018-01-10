@@ -23,8 +23,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -97,8 +99,18 @@ public class html extends HttpServlet {
 //           String where = "timestamp between '"+start+"' and '"+end+"'";
 //        map.put("studentid",stids[0]);
 //            map.put("end",enddate);
-        JRDataSource datasource = new JRBeanCollectionDataSource(DataFactory.getDataSource(stids[0],this.getServletContext()), true);
+     //   List<SimpleExporterInput> list = new ArrayList<SimpleExporterInput>();
+        JRDataSource datasource = new JRBeanCollectionDataSource(DataFactory.getDataSource(stids[0], this.getServletContext()), true);
         JasperPrint jasperPrint = jasperFillManager.fill(jasperReport,map,datasource);//fill(jasperReport,map, conn);
+         /* 
+        for (int i = 1; i < stids.length; i++) {
+             JRDataSource datasource2 = new JRBeanCollectionDataSource(DataFactory.getDataSource(stids[i], this.getServletContext()), true);
+             JasperPrint jasperPrintAux = jasperFillManager.fill(jasperReport,map,datasource2);//fill(jasperReport,map, conn);
+             for (int j = 0; j < jasperPrintAux.getPages().size(); j++) {
+                jasperPrint.addPage(jasperPrintAux.getPages().get(j));
+            }        
+        }*/
+
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
         exporter.setExporterOutput(new SimpleHtmlExporterOutput(os));
  //            exporter.setConfiguration(createHtmlConfiguration());
