@@ -169,7 +169,38 @@
                 $("#generateReport").focus(function () {
                     $('#destino option').prop('selected', true);
                 });
-                
+                //PARA 1 SOLO STUDENT
+                /* $('.pasar').click(function () {
+                 var exist = false;
+                 $('#destino option').each(function () {
+                 if ($('#origen option:selected').val() === $(this).val())
+                 exist = true;
+                 });
+                 
+                 if (!exist) {
+                 $('#destino option').each(function () {
+                 $(this).remove();
+                 });
+                 
+                 $('#origen option:selected').clone().appendTo('#destino');
+                 if ($('#destino option').length > 0)
+                 $('#generateReport').attr('disabled', false);
+                 }
+                 return;
+                 });
+                 
+                 
+                 $('.quitar').click(function () {
+                 !$('#destino option:selected').remove();
+                 $('#destino option').first().prop('selected', true);
+                 
+                 var alumnosSelected = $('#destino option').length;
+                 if (alumnosSelected === 0) {
+                 $('#generateReport').attr('disabled', true);
+                 }
+                 return;
+                 });*/
+
                 $('.pasar').click(function () {
                     var exist = false;
                     $('#destino option').each(function () {
@@ -177,15 +208,17 @@
                             exist = true;
                     });
 
-                    if (!exist) {
-                        $('#destino option').each(function () {
-                            $(this).remove();
-                        });
+                    if (!exist)
+                        !$('#origen option:selected').clone().appendTo('#destino');
 
-                        $('#origen option:selected').clone().appendTo('#destino');
-                        if ($('#destino option').length > 0)
-                            $('#generateReport').attr('disabled', false);
+                    var numAlum = $('#destino option').length;
+                    if (numAlum > 0) {
+                        $('#generateReport').attr('disabled', false);
+                    } else {
+                        $('#generateReport').attr('disabled', true);
                     }
+
+                    $('#destino option').first().prop('selected', true);
                     return;
                 });
 
@@ -196,7 +229,7 @@
 
                     var alumnosSelected = $('#destino option').length;
                     if (alumnosSelected === 0) {
-                        $('#createOnClick').attr('disabled', true);
+                        $('#generateReport').attr('disabled', true);
                     }
                     return;
                 });
@@ -212,10 +245,14 @@
 
                         if (!exist)
                             $(this).clone().appendTo('#destino');
-
                     });
 
                     var numAlum = $('#destino option').length;
+                    if (numAlum > 0) {
+                        $('#generateReport').attr('disabled', false);
+                    } else {
+                        $('#generateReport').attr('disabled', true);
+                    }
 
                     $('#destino option').first().prop('selected', true);
                 });
@@ -224,7 +261,6 @@
                     $('#destino option').each(function () {
                         $(this).remove();
                     });
-                    $('#createOnClick').attr('disabled', true);
                     $('#generateReport').attr('disabled', true);
                 });
             });
@@ -625,22 +661,23 @@
                                 </select>
                             </div>
                             <div class="col-xs-3">
-                                <!--<select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">-->
-                                <select class="form-control" size="20" name="origen[]" id="origen" style="width: 100% !important;">
+                                <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
+                                    <!--<select class="form-control" size="20" name="origen[]" id="origen" style="width: 100% !important;">-->
                                     <c:forEach var="alumnos" items="${listaAlumnos}">
                                         <option value="${alumnos.id_students}" >${alumnos.nombre_students}</option>
                                     </c:forEach>
                                 </select>
                             </div>
-                            <div class="  col-xs-2">
+
+                            <!-- para un solo alumno<div class="  hide col-xs-2">
                                 <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
                                     <input id='btnPasar' type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
                                 </div>
                                 <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
                                     <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremove"/>">
                                 </div>
-                            </div>
-                            <div class=" hide col-xs-2">
+                            </div>-->
+                            <div class="  col-xs-2">
                                 <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
                                     <input id='btnPasar' type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
                                 </div>
