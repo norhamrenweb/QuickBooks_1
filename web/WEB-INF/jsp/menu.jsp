@@ -21,7 +21,7 @@
             <div class="col-xs-12 iconosmenulateral">
                 <a href="<c:url value='/homepage/loadLessons.htm'/>" >
                     <div class="center-block">
-                    <img width="70%" src="<c:url value='/recursos/img/iconos/Home-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Home">
+                    <img width="70%" src="<c:url value='/recursos/img/iconos/home-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Home">
                     </div>
                 </a>
             </div>
@@ -60,7 +60,7 @@
                     </div>
                 </a>
             </div>
-<!--            <div class="col-xs-12 iconosmenulateral">
+            <div class="col-xs-12 iconosmenulateral">
                 <a href="<c:url value='/reportControlador/start.htm'/>" >
                     <div class="center-block">
                         <img width="70%" src="<c:url value='/recursos/img/iconos/Reports.svg'/>" data-toggle="tooltip" data-placement="top" title="Reports">
@@ -73,7 +73,7 @@
                         <img width="70%" src="<c:url value='/recursos/img/iconos/Setup-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Setup">
                     </div>
                 </a>
-            </div>-->
+            </div>
         
             <!--            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value="/createsetting/start.htm"/>" ><div class="center-block"><input type="image" src="<c:url value="/recursos/img/iconos/Reports.svg"/>" data-toggle="tooltip" data-placement="top" title="Reports"></div></a></div>-->
 <!--             <div class="col-xs-12">

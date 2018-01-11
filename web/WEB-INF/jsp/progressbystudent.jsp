@@ -48,11 +48,11 @@
 
                     data = table.row(this).data();
                     data1 = data.id;
-                  //  $('#arbol').tab('show');
+                    //  $('#arbol').tab('show');
                     selectionStudent();
-                    
 
-                    
+
+
                     $('#divProgress').removeClass("hidden");
                     $('#savecomment').prop("disabled", true);
 
@@ -216,7 +216,7 @@
                     level = levelid;
                     student = studentid;
                 }
-                var pActual = $("ul li.active").text().replace(" ","");
+                var pActual = $("ul li.active").text().replace(" ", "");
                 $('#loadingmessage').show();
                 $.ajax({
                     type: 'POST',
@@ -232,12 +232,12 @@
 //                    view: myview,        
                             data: prog.children,
                             idField: 'id',
-                            treeField: 'name', 
+                            treeField: 'name',
                             fitColumns: true,
                             columns: [[
-                                    {title: 'Name', field: 'name',formatter:function(value){
-				return '<img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/>'+value;
-			}},
+                                    {title: 'Name', field: 'name', formatter: function (value) {
+                                            return '<img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/>' + value;
+                                        }},
                                     {title: 'No.of presentations planned', field: 'noofplannedlessons'},
                                     {title: 'No.of presentations done', field: 'noofarchivedlessons'},
                                     {title: 'Progress', field: 'progress', formatter: formatProgress},
@@ -245,10 +245,11 @@
                                 ]]
                         });
                         $('#loadingmessage').hide();
-                       
-                        
-                        if( pActual === "") pActual="Demographic";
-                        $('#'+pActual).tab('show');
+
+
+                        if (pActual === "")
+                            pActual = "Demographic";
+                        $('#' + pActual).tab('show');
                     }, error: function () {
                         $('#loadingmessage').hide();
                     }
@@ -321,7 +322,7 @@
                         if (typeof info.foto === 'undefined') {
                             $('#foto').attr('src', '../recursos/img/NotPhoto.png');
                         } else {
-                            $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + info.foto).css('width','300px').css('height','500px');
+                            $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + info.foto).css('width', '300px').css('height', '500px');
                         }
                         $('.cell').off('click');
                         treeload(info.level_id, info.id_students);
@@ -451,6 +452,21 @@
                 ajax.send("");
 
             }
+            function showCommentSubject() {
+                if ($('#divCommentSubject').hasClass('hidden')) {
+                    $('#divCommentSubject').removeClass('hidden');
+                    $('#saveCommentSubject>i').removeClass('glyphicon-chevron-down');
+                    $('#saveCommentSubject>i').addClass('glyphicon-chevron-up');
+                } else {
+                    $('#divCommentSubject').addClass('hidden');
+                    $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
+                     $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
+                    
+                }
+            }
+
+            function saveCommentSubject() {
+            }
 
             function selectionStudent()
             {
@@ -578,13 +594,13 @@
                     });
                 }
             }
-             function showCalendar()
-            {
-                var id = $('#studentid').val();
-                var nameStudent = $('#student').text();
-                id = id+"-"+nameStudent;
-                window.open("<c:url value="/progcal.htm?studentid="/>" + id);
-            }
+            function showCalendar()
+                        {
+                                var id = $('#studentid').val();
+                                var nameStudent = $('#student').text();
+                                id = id + "-" + nameStudent;
+                                window.open("<c:url value="/progcal.htm?studentid="/>" + id);
+                        }
 //  function funcionCallBacksavecomment(){
 //        if (ajax.readyState===4){
 //                if (ajax.status===200){
@@ -712,8 +728,8 @@
                 transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
             }
             .tree-icon{
-		display:none;
-	}
+                display:none;
+            }
 
         </style>
     </head>
@@ -799,15 +815,34 @@
                                 </div>     
                             </div>
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="gradebook">
-                                <div class="col-xs-6" >
-                                    <Label>Subject</Label>
-                                    <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
-
-                                    </select>
+                                <div class="col-xs-12">
+                                    <div class="col-xs-10" >
+                                        <Label>Subject</Label>
+                                          <button type='button' class='btn-link editResource' onclick='showCommentSubject()' data-toggle='tooltip' data-placement='bottom' value='edit' id='saveCommentSubject'>
+                                            <i class='glyphicon glyphicon-chevron-down'></i>
+                                        </button>
+                                        <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
+                                        </select>
+                                    </div>
+                                    <!--<div class=" col-xs-2 center-block form-group paddingLabel">
+                                        <input type="button" name="saveCommentSubject" value="save" class="btn btn-success" id="saveCommentSubject" data-target=".bs-example-modal-lg" onclick="showCommentSubject()"/> 
+                                        
+                                    </div>-->
                                 </div>
+                                <div class="col-xs-12 hidden" id="divCommentSubject">
+                                    <div class="col-xs-10 ">
+                                        <input type="text" class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject">
+                                    </div>
+                                    <div class=" col-xs-2 ">
+                                        <input type="button" name="saveCommentSubject" value="save" class="btn btn-info" id="saveCommentSubject" data-target=".bs-example-modal-lg" onclick="saveCommentSubject()"/> 
+                                   
+                                    </div>
+                                </div>
+                                
                                 <div class="col-xs-12 hidden" id="divNotObjective">
                                     The selected subject does not have objectives
                                 </div>
+                                
                                 <div class="col-xs-12 hidden" id="divTableObjective">
                                     <table id="tableobjective" class="display">
                                         <thead>
@@ -827,42 +862,42 @@
                                 <div class="col-xs-12 text-center">
                                     <h2>Enter a classroom observation</h2>
                                 </div>
-                                    <div class='col-xs-6 form-group'>
-                                            <label class="control-label" for="fecha">Date</label>
-                                            <div class='input-group date' id='fecha'>
-                                                <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                            </div>
+                                <div class='col-xs-6 form-group'>
+                                    <label class="control-label" for="fecha">Date</label>
+                                    <div class='input-group date' id='fecha'>
+                                        <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
                                     </div>
-                                    <div class="col-xs-6 center-block form-group">
-                                        <label class="control-label">Observation type</label>
-                                        <select class="form-control" name="observationtype" id="observationtype" >
-                                            <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
-                                            <option value="Physical">Physical</option>
-                                            <option value="Intellectual">Intellectual</option>
-                                            <option value="Literacy">Literacy</option>
-                                            <option value="Emotional">Emotional</option>
-                                            <option value="Social">Social</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-xs-12 center-block form-group">
-                                        <label class="control-label">Observation</label>
-                                        <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"></textarea>
-                                    </div>
-                                    
+                                </div>
+                                <div class="col-xs-6 center-block form-group">
+                                    <label class="control-label">Observation type</label>
+                                    <select class="form-control" name="observationtype" id="observationtype" >
+                                        <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
+                                        <option value="Physical">Physical</option>
+                                        <option value="Intellectual">Intellectual</option>
+                                        <option value="Literacy">Literacy</option>
+                                        <option value="Emotional">Emotional</option>
+                                        <option value="Social">Social</option>
+                                    </select>
+                                </div>
+                                <div class="col-xs-12 center-block form-group">
+                                    <label class="control-label">Observation</label>
+                                    <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"></textarea>
+                                </div>
+
                                 <div class="col-xs-12 text-center hidden" id="error1">
                                     <label>Please select a student first</label>
                                 </div>
                                 <div class="col-xs-12 text-center hidden" id="error2">
                                     <label>Please make sure to fill all data</label>
                                 </div>
-                                
+
                                 <div class="col-xs-6 text-center">
                                     <button type="button" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">Save observation</button>
                                 </div>
-                                
+
                                 <div class="col-xs-6 text-center">
                                     <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View all comments</button>
                                 </div>
