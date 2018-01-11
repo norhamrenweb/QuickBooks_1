@@ -14,7 +14,7 @@ public class User {
     private int id;
     private String name;
     private String lang;
-     private int type;
+     private int type; //0 ADMIN , 1 TEACHER
 
     public String getPassword() {
         return password;

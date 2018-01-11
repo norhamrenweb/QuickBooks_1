@@ -58,13 +58,12 @@ public class LessonsListControlador{
         this.cn = dataSource.getConnection();
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-        mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
+        mv.addObject("lessonslist", this.getLessons(user,hsr.getServletContext()));
         mv.addObject("username",user.getName());
-
         return mv;
     }
 //   
-    public ArrayList<Lessons> getLessons(int userid,ServletContext servlet) throws SQLException
+    public ArrayList<Lessons> getLessons(User user,ServletContext servlet) throws SQLException
     {
 //        this.conectarOracle();
         ArrayList<Lessons> lessonslist = new ArrayList<>();
@@ -120,7 +119,10 @@ public class LessonsListControlador{
             this.cn = dataSource.getConnection();
             st = this.cn.createStatement();
             
-            consulta = "SELECT * FROM public.lessons where user_id = "+userid+" and COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+            String consultAux="";
+            if(user.getType() == 1) consultAux = "user_id = "+user.getId()+" and";
+            
+            consulta = "SELECT * FROM public.lessons where "+consultAux+" COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
             ResultSet rs = st.executeQuery(consulta);
 
             while (rs.next())
@@ -253,7 +255,7 @@ public class LessonsListControlador{
           
         String consulta = "DELETE FROM public.lessons WHERE id="+id[0];
            st.executeUpdate(consulta);
-        mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
+        mv.addObject("lessonslist", this.getLessons(user,hsr.getServletContext()));
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
             StringWriter errors = new StringWriter();
@@ -263,8 +265,37 @@ public class LessonsListControlador{
        
         return mv;
     }
+      
+      
+      
+    private String fetchNameTeacher(int id, ServletContext servlet)
+    { String subjectName = null ;
+        try {
+             DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
+            this.cn = dataSource.getConnection();
+             Statement st = this.cn.createStatement();
+             
+            String consulta = "select lastname,firstname from person where personid = "+id;
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                subjectName = rs.getString("lastname")+", "+rs.getString("firstname");
+                
+            }
+            //this.finalize();
+            
+        } catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+        }
+       
+        return subjectName;
+    
+    }  
+    
     @RequestMapping("/homepage/detailsLesson.htm")
-      @ResponseBody
+    @ResponseBody
         public String detailsLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         
     //    ModelAndView mv = new ModelAndView("homepage");
@@ -285,7 +316,10 @@ public class LessonsListControlador{
        while(rs.next())
        {
         Method m = new Method();
-        Objective o = new Objective();
+        
+       Objective o = new Objective();
+       jsonObj.put("nameteacher",fetchNameTeacher(rs.getInt("user_id"),hsr.getServletContext()));
+       
        jsonObj.put("method",m.fetchName(rs.getInt("method_id"),hsr.getServletContext()));
        Timestamp date = rs.getTimestamp("date_created");
                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");

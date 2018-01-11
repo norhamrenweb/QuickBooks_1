@@ -58,8 +58,9 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
        
         HttpSession session = hsr.getSession();
         User user = new User();
-        int scgrpid = 0;
-        boolean result = false;
+        int scgrpidTeacher = 0;
+        int scgrpidAdmin = 0;
+        boolean result = true;
          LoginVerification login = new LoginVerification();
          if("QuickBook".equals(hsr.getParameter("txtusuario"))){
             ModelAndView mv = new ModelAndView("redirect:/suhomepage.htm?opcion=loadconfig"); 
@@ -74,11 +75,14 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
         return mv;
          }
          else{
-             //=============================================== lag
-         scgrpid=login.getSecurityGroupID("MontesoriTest");
-        //comprobar
-         result = login.fromGroup(scgrpid, user.getId());
-            //=============================================== lag
+            
+         scgrpidTeacher = login.getSecurityGroupID("MontessoriTeacher");
+         scgrpidAdmin = login.getSecurityGroupID("MontessoriAdmin");
+
+        if(login.fromGroup(scgrpidAdmin, user.getId())) user.setType(0);       
+        else if (login.fromGroup(scgrpidTeacher, user.getId())) user.setType(1);    
+        else result = false;
+
         if (result == true){
             ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
             String  message = "welcome user";
@@ -90,9 +94,9 @@ public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) thro
       
          else{
            ModelAndView mv = new ModelAndView("userform");
-        String message = "Username or Password incorrect";
-        mv.addObject("message", message);
-        return mv;
+            String message = "Username or Password incorrect";
+            mv.addObject("message", message);
+            return mv;
        }}}
 //        DriverManagerDataSource dataSource;
 //        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());

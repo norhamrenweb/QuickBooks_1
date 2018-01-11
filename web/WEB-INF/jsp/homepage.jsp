@@ -18,7 +18,8 @@
 
     <script type="text/javascript">
     
-
+    var userId = ${user.id};
+ 
     
     $(document).ready( function () {
     
@@ -54,7 +55,7 @@
         data = table.row( this ).data();
         nameLessons = data[1];
     } );
-
+  
     } );
 function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
 
@@ -99,6 +100,8 @@ var ajax;
                         $('#commentDetails').append('<tr><td>'+object.comment+'</td></tr>');
                         $('#objectivedetails').empty();
                         $('#objectivedetails').append('<tr><td>'+object.objective+'</td></tr>');
+                        $('#createBy').empty();
+                        $('#createBy').append('<tr><td>'+object.nameteacher+'</td></tr>');
                         $('#detailsLesson').modal('show');
 //                        });
 //                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
@@ -257,6 +260,9 @@ var ajax;
             background-color: lightgrey;
             
         }
+        #createBy{
+            padding-left: 0px;
+        }
         .impar
         {
            border-bottom: solid 1px grey;
@@ -277,8 +283,7 @@ var ajax;
     </style>
     </head>
     <body>
-        
-            
+
             <div class="container">
                 <div class="col-sm-12" id="maincontainer">
                     <div class="col-sm-12 center-block text-center">
@@ -383,7 +388,13 @@ var ajax;
                             
                         </ul>
                     </div>
-                    
+                     <div class="row title">
+                        Created by 
+                    </div>
+                    <div class="row">
+                        <ul id="createBy">
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

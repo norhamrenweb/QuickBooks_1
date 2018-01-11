@@ -25,6 +25,24 @@ public class DetallesLessons {
     private String nombre_archivo;
     private int id_students;
     private String nombre_students;
+    private int id_teacher;
+    private String nombreTeacher;
+
+    public int getId_teacher() {
+        return id_teacher;
+    }
+
+    public void setId_teacher(int id_teacher) {
+        this.id_teacher = id_teacher;
+    }
+
+    public String getNombreTeacher() {
+        return nombreTeacher;
+    }
+
+    public void setNombreTeacher(String nombreTeacher) {
+        this.nombreTeacher = nombreTeacher;
+    }
 
     public DetallesLessons(int id_lessons, String nombre_lessons, int id_level, String nombre, int id_subject, String nombre_subject, int id_subsection, String nombre_sub_section, String id_equipment, String fecha_inicio, String fecha_fin, String nombre_archivo, int id_students , String nombre_students) {
         this.id_lessons = id_lessons;
@@ -41,7 +59,6 @@ public class DetallesLessons {
         this.nombre_archivo = nombre_archivo;
         this.id_students = id_students;
         this.nombre_students = nombre_students;
-        
     }
     
     public DetallesLessons() {
@@ -59,6 +76,8 @@ public class DetallesLessons {
         this.nombre_archivo = "";
         this.id_students = 0;
         this.nombre_students = "";
+        this.id_teacher = 0;
+        this.nombreTeacher = "";
     }
     
     public DetallesLessons(String nombre_lessons, int id_level, String nombre, int id_subject, String nombre_subject, int id_subsection, String nombre_sub_section, String id_equipment, String fecha_inicio, String fecha_fin, String nombre_archivo, int id_students , String nombre_students) {

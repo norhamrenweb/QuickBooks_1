@@ -1,4 +1,5 @@
         <script>
+            var usertype = ${user.type};
             $(document).ready(function () {
                 //Menu lateral
                 $('#nav-expander').on('click', function (e) {
@@ -13,7 +14,11 @@
                     o.preventDefault();
                     $('body').removeClass('nav-expanded');
                 });
+            if(usertype === 1){
+                    $('#barralateral>nav').children().last().prev().prev().addClass("hide");
+                }
             });
+              
         </script>
     <!--MENU LATERAL-->
     <div id="barralateral">
@@ -74,7 +79,7 @@
                     </div>
                 </a>
             </div>
-        
+
             <!--            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value="/createsetting/start.htm"/>" ><div class="center-block"><input type="image" src="<c:url value="/recursos/img/iconos/Reports.svg"/>" data-toggle="tooltip" data-placement="top" title="Reports"></div></a></div>-->
 <!--             <div class="col-xs-12">
                 <hr>

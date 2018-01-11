@@ -20,6 +20,7 @@
 
             var ajax;
             var userId = ${user.id};
+            var userType = ${user.type};
             $(document).ready(function () {
                 var userLang = navigator.language || navigator.userLanguage;
                 var myDate = new Date();
@@ -277,7 +278,7 @@
                                 var disable = "";
                                 var idTeacher = value2.logged_by;
 
-                                if (userId !== idTeacher) {
+                                if (userId !== idTeacher && userType !== 0) {
                                     disable = "disabled='disabled'";
                                 }
 
