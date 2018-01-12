@@ -63,6 +63,27 @@ public class EditLessonControlador {
         return beanobject;
     }
     
+    private boolean existInProgress_report(String id, HttpServletRequest hsr){    
+       try{
+            DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+            Statement st = this.cn.createStatement();
+            String presentationId = id;
+
+            String consulta = "SELECT lesson_id FROM progress_report WHERE lesson_id = "+presentationId;
+            ResultSet rs = st.executeQuery(consulta);
+            if(rs.next()){
+                return true;
+            }
+       }catch(SQLException ex){
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+       }
+       return false;
+    }
+    
     
     @RequestMapping("/editlesson/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -172,8 +193,19 @@ public class EditLessonControlador {
        cn.close();
        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
         this.cn = dataSource.getConnection();
-       mv.addObject("data",data); //TARDA MUCHISMO
-       ArrayList<Objective> test = this.getObjectives(data.getSubject().getId());
+        /*
+        
+        
+        
+        */
+        mv.addObject("DatainBBDD",existInProgress_report(lessonid,hsr));
+        /*
+        
+        
+        
+        */
+        mv.addObject("data",data); //TARDA MUCHISMO
+        ArrayList<Objective> test = this.getObjectives(data.getSubject().getId());
         mv.addObject("objectives",this.getObjectives(data.getSubject().getId()));
                  mv.addObject("contents",this.getContent(data.getObjective().getId()));
                
