@@ -28,10 +28,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import com.google.gson.*;
 import static controladores.ResourcesControlador.log;
+import java.awt.Image;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -44,17 +54,21 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -73,6 +87,7 @@ public class ProgressbyStudent {
     Connection cn;
     static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
     private ServletContext servlet;
+
     private Object getBean(String nombrebean, ServletContext servlet) {
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
         Object beanobject = contexto.getBean(nombrebean);
@@ -172,22 +187,21 @@ public class ProgressbyStudent {
     public List<Subject> getSubjects(int studentid) throws SQLException {
         List<Subject> subjects = new ArrayList<>();
         List<Subject> activesubjects = new ArrayList<>();
-        HashMap<String, String> mapSubject = new HashMap<String,String>();
+        HashMap<String, String> mapSubject = new HashMap<String, String>();
         String termid = null;
         String yearid = null;
-        
+
         try {
 
             Statement st = this.cn.createStatement();
             ResultSet rs = st.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where configschoolid = 1");
-            while(rs.next())
-            {
-                termid = ""+rs.getInt("defaulttermid");
-                yearid = ""+rs.getInt("defaultyearid");
+            while (rs.next()) {
+                termid = "" + rs.getInt("defaulttermid");
+                yearid = "" + rs.getInt("defaultyearid");
             }
-            ResultSet rs1 = st.executeQuery("select distinct courses.courseid, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n" +
-"                 inner join courses on courses.courseid=classes.courseid\n" +
-"                  where roster.studentid = "+studentid+" and roster.enrolled"+termid+"= 1 and courses.active = 1 and classes.yearid = '"+ yearid+"'");// the term and year need to be dynamic, check with vincent
+            ResultSet rs1 = st.executeQuery("select distinct courses.courseid, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
+                    + "                 inner join courses on courses.courseid=classes.courseid\n"
+                    + "                  where roster.studentid = " + studentid + " and roster.enrolled" + termid + "= 1 and courses.active = 1 and classes.yearid = '" + yearid + "'");// the term and year need to be dynamic, check with vincent
             Subject first = new Subject();
             first.setName("Select Subject");
             subjects.add(first);
@@ -198,11 +212,11 @@ public class ProgressbyStudent {
                 ids[0] = "" + rs1.getInt("CourseID");
                 sub.setId(ids);
                 subjects.add(sub);
-               
-                    name9 = rs1.getString("Title");
-                    id = rs1.getString("CourseID");
-                    mapSubject.put(id, name9);
-               
+
+                name9 = rs1.getString("Title");
+                id = rs1.getString("CourseID");
+                mapSubject.put(id, name9);
+
             }
 
             for (Subject s : subjects.subList(1, subjects.size())) {
@@ -212,7 +226,7 @@ public class ProgressbyStudent {
                 activesubjects.add(s);
             }
             //loop through subjects to get their names, skipping the first 
-          /*  for (Subject s : subjects.subList(1, subjects.size())) {
+            /*  for (Subject s : subjects.subList(1, subjects.size())) {
                 String[] ids = new String[1];
                 ids = s.getId();
                 ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = " + ids[0]);
@@ -230,7 +244,7 @@ public class ProgressbyStudent {
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
-               
+
         return activesubjects;
     }
 
@@ -249,7 +263,6 @@ public class ProgressbyStudent {
         this.cn = dataSource.getConnection();
 
 //        mv.addObject("subjects", this.getSubjects(levelid[0]));
-
         return mv;
     }
 
@@ -346,7 +359,7 @@ public class ProgressbyStudent {
 //                while (rs2.next()) {
 //                    finalrating = rs2.getString("name");
 //                }
-                    finalrating = this.getfinalrating(d.getCol1(), d.getCol2());
+                finalrating = this.getfinalrating(d.getCol1(), d.getCol2());
                 String consulta = "select min(comment_date) as date from progress_report where student_id =" + d.getCol2() + " and rating_id in (select id from rating where name = 'Presented') and objective_id =" + d.getCol1();
                 ResultSet rs3 = st.executeQuery(consulta);
                 if (rs3.next()) {
@@ -428,17 +441,103 @@ public class ProgressbyStudent {
         return "";
     }
 
+    private String cargarFoto(String photoName, HttpServletResponse hsr1) {
+        // $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + info.foto).css('width', '300px').css('height', '500px');
+
+        String server = "ftp2.renweb.com";
+        int port = 21;
+        String user = "AH-ZAF";
+        String pass = "e3f14+7mANDp";
+
+        String filePath = "/Pictures/" + photoName;
+
+        String total = "";
+        try {
+
+            /*URL url = new URL ("ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + photoName);
+            URLConnection con = url.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+           String inputLine="";
+            while ((inputLine = in.readLine()) != null){ 
+                total += inputLine;
+                System.out.println(inputLine);}
+            in.close();*/
+            FTPClient ftpClient = new FTPClient();
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            InputStream inStream = ftpClient.retrieveFileStream(filePath);
+
+            System.err.println("");
+
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        return total;
+    }
+
+    /*
+    @RequestMapping(value = "/getImage/{imageId}")
+    @ResponseBody
+    public byte[] getImage(@PathVariable long imageId, HttpServletRequest request) throws IOException {
+        String rpath = request.getRealPath("/");
+        rpath = rpath + "/" + imageId; // whatever path you used for storing the file
+        Path path = Paths.get(rpath);
+        byte[] data = Files.readAllBytes(path);
+        return data;
+    }
+     */
+    public String getImage(String photoName, HttpServletRequest request) throws IOException {
+
+        String ftpUrl = "ftp2.renweb.com";
+        int port = 21;
+        String user = "AH-ZAF";
+        String pass = "e3f14+7mANDp";
+
+        String filePath = "/Pictures/" + photoName;
+        String appPath="";
+        String savePath = request.getContextPath() + "/photo.jpeg";
+
+        byte[] buffer = new byte[4096];
+        try {
+            URL url = new URL("ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + photoName);
+            URLConnection conn = url.openConnection();
+            InputStream inputStream = conn.getInputStream();
+
+            ServletContext context = request.getServletContext();
+            appPath = context.getRealPath("") + "recursos\\img\\"+photoName+".jpeg";
+
+            // FileOutputStream outputStream = new FileOutputStream(savePath);
+            FileOutputStream outputStream = new FileOutputStream(appPath);
+            
+            int bytesRead = -1;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            outputStream.close();
+            inputStream.close();
+
+            System.out.println("File downloaded");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return appPath;
+    }
+
     //load student demographics
     @RequestMapping("/progressbystudent/studentPage.htm")
     @ResponseBody
     public String studentPage(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         //    ModelAndView mv = new ModelAndView("progressbystudent");
-        List<Subject> subjects= new ArrayList<>();
-        HashMap<String, String> mapSubject= new HashMap<>();
-        
+        List<Subject> subjects = new ArrayList<>();
+        HashMap<String, String> mapSubject = new HashMap<>();
+
         String[] studentIds = hsr.getParameterValues("selectStudent");
         Students student = new Students();
         JSONObject obj = new JSONObject();
+        //String prueba = "";
+        String prueba = "";
         try {
             DriverManagerDataSource dataSource;
             dataSource = (DriverManagerDataSource) this.getBean("dataSourceAH", hsr.getServletContext());
@@ -460,19 +559,24 @@ public class ProgressbyStudent {
 
             }
             //this.finalize();
-
+            // prueba = cargarFoto(student.getFoto());
+            //      cargarFoto(student.getFoto(), hsr1);
+            prueba = getImage(student.getFoto(), hsr);
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
-       // List<Subject> subjects = new ArrayList<>();
+
+        // List<Subject> subjects = new ArrayList<>();
         subjects = this.getSubjects(student.getId_students());
         String info = new Gson().toJson(student);
         String sub = new Gson().toJson(subjects);
+        String prueba2 = new Gson().toJson(prueba);
         obj.put("info", info);
         obj.put("sub", sub);
+        obj.put("prueba", prueba2);
 //    mv.addObject("student",student);
 
 //     mv.addObject("subjects", this.getSubjects(student.getLevel_id()));//Integer.parseInt(alumnos.getLevel_id())));
@@ -604,15 +708,15 @@ public class ProgressbyStudent {
 //    @RequestMapping("/progressbystudent/loadtree.htm")
 //    @ResponseBody
     public String loadtree(int studentid, ServletContext hsr) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
-       
+
         ModelAndView mv = new ModelAndView("progressbystudent");
         JSONObject json = new JSONObject();
         ArrayList<DBRecords> steps = new ArrayList<>();
         ArrayList<String> subjects = new ArrayList<>();
         ArrayList<String> objectives = new ArrayList<>();
         TreeGrid tree = new TreeGrid();
-        HashMap<String, String> mapSubject = new HashMap<String,String>();
-        List<Subject> subs  = new ArrayList<>();
+        HashMap<String, String> mapSubject = new HashMap<String, String>();
+        List<Subject> subs = new ArrayList<>();
         Nodetreegrid<String> rootNode = new Nodetreegrid<String>("Subjects", "A", "", "", "", "");
         try {
             DriverManagerDataSource dataSource;
@@ -623,8 +727,7 @@ public class ProgressbyStudent {
 //        String[] levelid = hsr.getParameterValues("seleccion1");
             //List<Subject> subs = this.getSubjects(levelid);
             subs = getSubjects(studentid);
-             
-           
+
             String consulta = "select * from Courses";
             ResultSet rs9 = st.executeQuery(consulta);
             String name9, idHash;
@@ -636,7 +739,7 @@ public class ProgressbyStudent {
                     mapSubject.put(idHash, name9);
                 }
             }
-            
+
             dataSource = (DriverManagerDataSource) this.getBean("dataSource", hsr);
             this.cn = dataSource.getConnection();
 
@@ -659,7 +762,6 @@ public class ProgressbyStudent {
 
                 }
             }
-            
 
             for (DBRecords x : steps) {// AQUI ES DONDE TARDA!!!
                 Subject s = new Subject();
@@ -672,7 +774,7 @@ public class ProgressbyStudent {
                     subjects.add(x.getCol3());
                 }
                 //get the student progress for student 10101,getting the last step the student in, with the latest date
-                    ResultSet rs5 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='" + x.getCol6() + "' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '" + studentid + "' AND objective_id = '" + x.getCol6() + "' and generalcomment = false) and generalcomment = false and student_id ='" + studentid + "'");
+                ResultSet rs5 = st.executeQuery("select comment_date,step_id from progress_report where objective_id='" + x.getCol6() + "' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '" + studentid + "' AND objective_id = '" + x.getCol6() + "' and generalcomment = false) and generalcomment = false and student_id ='" + studentid + "'");
                 if (rs5.next()) {
                     String stsdone = rs5.getString("step_id");
                     if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
@@ -710,9 +812,9 @@ public class ProgressbyStudent {
 
                             //match the objective with the step
                             for (DBRecords k : steps) {
-                           //     if (k.getCol4().equalsIgnoreCase(y.getName())) {
-                           String[] match = y.getId();
-                           if (k.getCol6().equalsIgnoreCase(match[0])) {
+                                //     if (k.getCol4().equalsIgnoreCase(y.getName())) {
+                                String[] match = y.getId();
+                                if (k.getCol6().equalsIgnoreCase(match[0])) {
                                     Nodetreegrid<String> nodeB = new Nodetreegrid<String>(k.getCol1(), k.getCol2(), "", "", "", k.getCol5());
 
                                     nodeA.addChild(nodeB);
@@ -855,11 +957,10 @@ public class ProgressbyStudent {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
         ModelAndView mv = new ModelAndView("progcal");
-        
-        
+
         String[] output = hsr.getParameter("studentid").split("-");
         String studentId = output[0];
-        String nameStudent  = "'"+output[1]+"'";
+        String nameStudent = "'" + output[1] + "'";
         try {
             DriverManagerDataSource dataSource;
             dataSource = (DriverManagerDataSource) this.getBean("dataSourceAH", hsr.getServletContext());
@@ -873,7 +974,7 @@ public class ProgressbyStudent {
         //    mv.addObject("message","works");
         String message = "works";
         mv.addObject("studentId", studentId);
-        mv.addObject("nameStudent",nameStudent);
+        mv.addObject("nameStudent", nameStudent);
         return mv;
     }
 
@@ -940,84 +1041,83 @@ public class ProgressbyStudent {
         }
         return new Gson().toJson(arrayObservations);
     }*/
-    
-    
-        
     @RequestMapping("/updateComment.htm")
-    public ModelAndView updateComment(@RequestBody Observation r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
-        if((new SessionCheck()).checkSession(hsr))
-           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+    public ModelAndView updateComment(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        }
         ModelAndView mv = new ModelAndView("lessonresources");
-        try{
+        try {
             DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            dataSource = (DriverManagerDataSource) this.getBean("dataSource", hsr.getServletContext());
             this.cn = dataSource.getConnection();
-            Statement st = this.cn.createStatement();       
-            st.executeUpdate("update classobserv set date_created = now(), comment = '"+r.getObservation()+"' ,category = '"+r.getType()+"', commentdate = '"+r.getDateString()+"' where id = '"+r.getId()+"'");
+            Statement st = this.cn.createStatement();
+            st.executeUpdate("update classobserv set date_created = now(), comment = '" + r.getObservation() + "' ,category = '" + r.getType() + "', commentdate = '" + r.getDateString() + "' where id = '" + r.getId() + "'");
 
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
+            log.error(ex + errors.toString());
         }
         return mv;
     }
-    
+
     @RequestMapping("/delComentario.htm")
-    public ModelAndView delComment(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
-        if((new SessionCheck()).checkSession(hsr))
-           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+    public ModelAndView delComment(@RequestBody Resource r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        }
         ModelAndView mv = new ModelAndView("lessonresources");
-        try{
+        try {
             DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
+            dataSource = (DriverManagerDataSource) this.getBean("dataSource", hsr.getServletContext());
             this.cn = dataSource.getConnection();
             Statement st = this.cn.createStatement();
             String commentId = r.getId();
-            
-            String consulta = "delete from classobserv where id = "+commentId;
-            st.executeUpdate (consulta);
-        }catch(SQLException ex){
+
+            String consulta = "delete from classobserv where id = " + commentId;
+            st.executeUpdate(consulta);
+        } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
+            log.error(ex + errors.toString());
         }
         return mv;
     }
-    
+
     private String fetchTeacher(int id, HttpServletRequest hsr) throws Exception {
-        DriverManagerDataSource dataSource2 = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        DriverManagerDataSource dataSource2 = (DriverManagerDataSource) this.getBean("dataSourceAH", hsr.getServletContext());
         this.cn = dataSource2.getConnection();
         Statement st2 = this.cn.createStatement();
-        String first,LastName, name="";
-        ResultSet rs7 =st2.executeQuery("select lastname,firstname from person where personid ="+id);        
-            while(rs7.next()){
-                    first = rs7.getString("firstName");
-                    LastName =rs7.getString("lastName");
-                    name = LastName+", "+first;	
-            }
-            return name;
+        String first, LastName, name = "";
+        ResultSet rs7 = st2.executeQuery("select lastname,firstname from person where personid =" + id);
+        while (rs7.next()) {
+            first = rs7.getString("firstName");
+            LastName = rs7.getString("lastName");
+            name = LastName + ", " + first;
+        }
+        return name;
     }
+
     @RequestMapping("/loadComentsStudent.htm")
     @ResponseBody
     public String loadComentsStudent(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 
-        DriverManagerDataSource dataSource2 = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
+        DriverManagerDataSource dataSource2 = (DriverManagerDataSource) this.getBean("dataSourceAH", hsr.getServletContext());
         this.cn = dataSource2.getConnection();
         Statement st2 = this.cn.createStatement();
-         
-         ResultSet rs7 =st2.executeQuery("select lastname,firstname,personid from person");
-         // ResultSet rs4 = st.executeQuery(consulta);
-            HashMap<String, String> mapPersons= new HashMap<String, String>();
-            String first,LastName,studentID;
-            while(rs7.next()){
-                    first = rs7.getString("firstName");
-                    LastName =rs7.getString("lastName");
-                    studentID = rs7.getString("personid");
-                    mapPersons.put(studentID, LastName+", "+first);	
-            }
-        
-        
+
+        ResultSet rs7 = st2.executeQuery("select lastname,firstname,personid from person");
+        // ResultSet rs4 = st.executeQuery(consulta);
+        HashMap<String, String> mapPersons = new HashMap<String, String>();
+        String first, LastName, studentID;
+        while (rs7.next()) {
+            first = rs7.getString("firstName");
+            LastName = rs7.getString("lastName");
+            studentID = rs7.getString("personid");
+            mapPersons.put(studentID, LastName + ", " + first);
+        }
+
         DateFormat formatoFecha;// = new SimpleDateFormat("M/d/yyyy");   
         String date = r.getDateString() + "-01";
 
@@ -1031,13 +1131,13 @@ public class ProgressbyStudent {
         String monthSelected = "" + r.getDateString().charAt(5) + r.getDateString().charAt(6);
 
         String yearSelected = "" + r.getDateString().charAt(0) + r.getDateString().charAt(1) + r.getDateString().charAt(2) + r.getDateString().charAt(3);
-        int days = 0,logId;
+        int days = 0, logId;
 
         Observation oAux = new Observation();
 
         formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-     //   Date fechaActual = new Date();
-       // String currentDate = formatoFecha.format(fechaActual);
+        //   Date fechaActual = new Date();
+        // String currentDate = formatoFecha.format(fechaActual);
 
         String dateSelected = yearSelected + "-" + monthSelected + "-" + "01";
 
@@ -1052,7 +1152,7 @@ public class ProgressbyStudent {
             this.cn = dataSource.getConnection();
             Statement st = this.cn.createStatement();
 
-           // while (days < DIAS_MAX && !currentDate.equals(dateSelected)) {
+            // while (days < DIAS_MAX && !currentDate.equals(dateSelected)) {
             while (days < DIAS_MAX) {
                 //dateSelected = getNextDate(dateSelected);
                 arrayComments.clear();
@@ -1060,17 +1160,17 @@ public class ProgressbyStudent {
                 ResultSet rs = st.executeQuery(consulta);
 
                 while (rs.next()) {
-                    oAux.setId(rs.getInt("id"));   
+                    oAux.setId(rs.getInt("id"));
                     logId = rs.getInt("logged_by");
-                    oAux.setNameTeacher(mapPersons.get(""+logId));
+                    oAux.setNameTeacher(mapPersons.get("" + logId));
                     oAux.setLogged_by(logId);
-                   // oAux.setNameTeacher(mapPersons.get(""+rs.getInt("logged_by")));
-                  //  oAux.setNameTeacher(fetchTeacher(rs.getInt("logged_by"),hsr));
-                    oAux.setDate(""+rs.getDate("date_created"));
+                    // oAux.setNameTeacher(mapPersons.get(""+rs.getInt("logged_by")));
+                    //  oAux.setNameTeacher(fetchTeacher(rs.getInt("logged_by"),hsr));
+                    oAux.setDate("" + rs.getDate("date_created"));
                     oAux.setObservation(rs.getString("comment"));
                     oAux.setType(rs.getString("category"));
                     oAux.setStudentid(Integer.parseInt(studentId));
-                    oAux.setCommentDate(""+rs.getDate("commentdate"));
+                    oAux.setCommentDate("" + rs.getDate("commentdate"));
                     arrayComments.add(new Observation(oAux));
                 }
 
@@ -1163,11 +1263,11 @@ public class ProgressbyStudent {
             Statement st = this.cn.createStatement();
 // most recent rating excluding the NA & the empty rating which have ids 6 & 7
             String consulta = "SELECT rating.name FROM rating where id in"
-                    + "(select rating_id from progress_report where student_id = '"+studid+"'"
+                    + "(select rating_id from progress_report where student_id = '" + studid + "'"
                     + " AND comment_date = (select max(comment_date)   from public.progress_report "
-                    + "where student_id = '"+studid+"' AND objective_id = '"+objid+"' "
+                    + "where student_id = '" + studid + "' AND objective_id = '" + objid + "' "
                     + "and generalcomment = false and rating_id not in(6,7)) "
-                    + "AND objective_id ='"+objid+"'and generalcomment = false )";
+                    + "AND objective_id ='" + objid + "'and generalcomment = false )";
 
             ResultSet rs2 = st.executeQuery(consulta);
             while (rs2.next()) {

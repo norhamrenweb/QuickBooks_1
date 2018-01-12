@@ -181,7 +181,10 @@
                     }
                 }
             }
-
+            
+            function downloadPhoto(){
+                
+            }
             function funcionCallBackSaveGeneralComent()
             {
                 if (ajax.readyState === 4) {
@@ -310,7 +313,9 @@
                         //data
                         var json = JSON.parse(ajax.responseText);
                         var info = JSON.parse(json.info);
-                                            var subjects = JSON.parse(json.sub);
+                        var foto = JSON.parse(json.prueba);
+                        
+                        var subjects = JSON.parse(json.sub);
                         //$('#myTab a:first').tab('show');
                         //var prog = JSON.parse(json.prog);
                         //first load the demographics
@@ -322,8 +327,10 @@
                         if (typeof info.foto === 'undefined') {
                             $('#foto').attr('src', '../recursos/img/NotPhoto.png');
                         } else {
-                            $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + info.foto).css('width', '300px').css('height', '500px');
+                            $('#foto').removeAttr('src');
+                            $('#foto').attr('src', '../recursos/img/'+info.foto+'.jpeg');
                         }
+                       
                         $('.cell').off('click');
                         treeload(info.level_id, info.id_students);
                         levelarbol = info.level_id;
@@ -791,10 +798,10 @@
                             <div role="tabpanel" class="col-xs-12 tab-pane in active" id="demographic">
                                 <div class="col-xs-6 text-center containerPhoto">
                                     <div class="cell">
-                                        <iframe id="foto" src="../recursos/img/NotPhoto.png" frameborder="0" scrolling="no" sandbox alt='img' align="center"></iframe>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
+           
+                                       <img id="foto" src="../recursos/img/NotPhoto.png" >
+                                    </div>                                        
+                                </div>                                     
                                     <div class="col-xs-12 sinpadding form-group">
                                         <label class="col-xs-6 label-demographic" >Birthday</label>
                                         <span class="col-xs-12 demographic" id="BOD"></span>
@@ -808,7 +815,7 @@
                                         <span class="col-xs-12 demographic" id="nextlevel"></span>
                                     </div>
                                 </div>
-                            </div>
+                            
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="progress">
                                 <div class="col-xs-12">
                                     <table id="tg" class="easyui-treegrid"></table>
