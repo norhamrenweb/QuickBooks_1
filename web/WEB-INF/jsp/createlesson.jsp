@@ -812,24 +812,7 @@
                                     </c:forEach>
                                 </select>
                             </div>
-                            <%--                    <div class="col-xs-3 center-block">
-                                                    <label class="control-label"><spring:message code="etiq.txtobjective"/></label>
-                                                    <select class="form-control" name="TXTobjective" id="template">
-                                                         <option value="${objective.name}" >${objective.name}</option>
-
-                            </select>
-                        </div>--%>
-                            <%--                      <div class="col-xs-3 center-block form-group">
-                                                        <label class="control-label">Template</label>
-                                                        <select class="form-control" name="TXTcontent" id="template" multiple>
-                                                            <c:forEach var="allcontents" items="${allcontents}">
-                                                                <option selected="true" value="${allcontents.id[0]}" >${allcontents.name}</option>
-                                                            </c:forEach>
-                                                            <c:forEach var="contents" items="${contents}">
-                                                                <option value="${allcontents.id[0]}" >${allcontents.name}</option>
-                                                            </c:forEach>
-                                                        </select>
-                                                    </div>-->--%>
+                 
 
                         </div>    
                         <div class="col-xs-3 center-block form-group">
