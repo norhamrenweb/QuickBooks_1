@@ -26,7 +26,7 @@
             <div class="col-xs-12 iconosmenulateral">
                 <a href="<c:url value='/homepage/loadLessons.htm'/>" >
                     <div class="center-block">
-                    <img width="70%" src="<c:url value='/recursos/img/iconos/home-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Home">
+                    <img width="70%" src="<c:url value='/recursos/img/iconos/Home-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Home">
                     </div>
                 </a>
             </div>
