@@ -123,8 +123,32 @@
                 $("#createOnClick").focus(function () {
                     $('#destino option').prop('selected', true);
                 });
-
-
+                
+               $('#fecha,#horainicio,#horafin').on('dp.change', function (e) {
+                if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) &&document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '') {
+                        if ($("#ideaCheck:checked").length === 1) {
+                            $('#createOnClick').attr('disabled', false);
+                        } else { //no es idea
+                            var numAlum = $('#destino option').length;
+                            if ($('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
+                                $('#createOnClick').attr('disabled', false);
+                            } else {
+                                $('#createOnClick').attr('disabled', true);
+                            }
+                        }
+                    } else {
+                        $('#createOnClick').attr('disabled', true);
+                    }
+                    if (($("#NameLessons").val().indexOf("'") !== -1) || ($("#NameLessons").val().indexOf("\"") !== -1)) {
+                        $('#NameLessons').parent().addClass("has-error");
+                        $('#NameLessons').parent().children().last().removeClass("hide");
+                        $('#createOnClick').attr('disabled', true);
+                    }
+                    else{
+                        $('#NameLessons').parent().removeClass("has-error");
+                        $('#NameLessons').parent().children().last().addClass("hide");
+                    }
+                });
                /* $("#NameLessons").change(function () {
                     if (($("#NameLessons").val().indexOf("'") !== -1) || ($("#NameLessons").val().indexOf("\"") !== -1)) {
                         $('#NameLessons').parent().addClass("has-error");
@@ -199,6 +223,7 @@
 
             });
 
+            
             $().ready(function ()
             {
 
