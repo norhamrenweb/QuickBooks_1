@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
@@ -82,4 +83,28 @@ public class Subject {
     
     }   
     
+    public ArrayList<String> fetchNameAndElective(int id, ServletContext servlet)
+    { ArrayList<String> subjectName = new ArrayList<String>() ;
+        try {
+             DriverManagerDataSource dataSource;
+        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
+        this.cn = dataSource.getConnection();
+             Statement st = this.cn.createStatement();
+             
+            String consulta = "SELECT Title,Elective FROM AH_ZAF.dbo.Courses where CourseID = "+id;
+            ResultSet rs = st.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                subjectName.add(rs.getString("Title"));
+                subjectName.add(""+rs.getBoolean("Elective"));
+            }
+            //this.finalize();
+            
+        } catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+        }
+       
+        return subjectName;
+    }  
 }
