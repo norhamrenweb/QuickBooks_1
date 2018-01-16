@@ -91,7 +91,7 @@ public class html extends HttpServlet {
 //                conn = DriverManager.getConnection("jdbc:postgresql://192.168.1.9:5432/Maintenance_jobs?user=eduweb&password=Madrid2016");
         response.setContentType("text/html;charset=UTF-8");
         HtmlExporter exporter = new HtmlExporter();
-        InputStream jasperStream = this.getClass().getResourceAsStream("Pre-Primary_Progress_Report_December2017_v2.jasper");
+        InputStream jasperStream = this.getClass().getResourceAsStream("Pre-Primary_Progress_Report_December2017_v2_4.jasper");
         JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
         Map<String, Object> map = new HashMap<String, Object>();
 //            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");

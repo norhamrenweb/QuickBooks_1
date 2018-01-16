@@ -51,27 +51,27 @@ public class DataFactory {
         //JRDataSource datasource = new JRBeanCollectionDataSource(c, true);
 
         //String studentId = "10101";
-          String nameStudent = "", dob = "", age = "";
+        String nameStudent = "", dob = "", age = "";
         String studentId = idStudent;
-        
-        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection cn = DriverManager.getConnection("jdbc:sqlserver://ah-zaf.odbc.renweb.com\\ah_zaf:1433;databaseName=ah_zaf", "AH_ZAF_CUST", "BravoJuggle+396");
-            Statement st = cn.createStatement();
 
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentId = '" + studentId + "'";
-            ResultSet rs = st.executeQuery(consulta);
-          
-            int year = Calendar.getInstance().get(Calendar.YEAR);
-            while (rs.next()) {
-                nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName");
-                dob = rs.getString("Birthdate");
-                dob = dob.split(" ")[0];
-                age = "" + (year - Integer.parseInt("" + dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3)));
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        Connection cn = DriverManager.getConnection("jdbc:sqlserver://ah-zaf.odbc.renweb.com\\ah_zaf:1433;databaseName=ah_zaf", "AH_ZAF_CUST", "BravoJuggle+396");
+        Statement st = cn.createStatement();
+
+        String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentId = '" + studentId + "'";
+        ResultSet rs = st.executeQuery(consulta);
+
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        while (rs.next()) {
+            nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName");
+            dob = rs.getString("Birthdate");
+            dob = dob.split(" ")[0];
+            age = "" + (year - Integer.parseInt("" + dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3)));
         }
-            
+
         Class.forName("org.postgresql.Driver");
-         cn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/Lessons?user=eduweb&password=Madrid2016");
-         st = cn.createStatement();
+        cn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/Lessons?user=eduweb&password=Madrid2016");
+        st = cn.createStatement();
         ArrayList<String> lessons = new ArrayList<>();
         java.util.Vector coll = new java.util.Vector();
         // ArrayList<BeanWithList> coll = new ArrayList<BeanWithList>();
@@ -79,7 +79,7 @@ public class DataFactory {
         //ArrayList<BeanWithList> coll = new ArrayList<BeanWithList>();
         // get the lessons attended by the student
         ArrayList<Subject> subjects = new ArrayList<>();
-         rs = st.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
+        rs = st.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
         while (rs.next()) {
             lessons.add("" + rs.getInt("lesson_id"));
         }
@@ -101,10 +101,11 @@ public class DataFactory {
             }
         }
 
+        
         for (Subject x : subjects) {
             Class.forName("org.postgresql.Driver");
-            cn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/Lessons?user=eduweb&password=Madrid2016");
-            st = cn.createStatement();
+             cn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/Lessons?user=eduweb&password=Madrid2016");
+             st = cn.createStatement();
             String[] id = x.getId();
             ArrayList<String> os = new ArrayList<>();
             for (String b : lessons) {
@@ -121,12 +122,12 @@ public class DataFactory {
             for (String d : os) {
                 Objective b = new Objective();
                 String name = b.fetchName(Integer.parseInt(d), servlet);
-                 consulta = "SELECT rating.name FROM rating where id in"
-                    + "(select rating_id from progress_report where student_id = '"+studentId+"'"
-                    + " AND comment_date = (select max(comment_date)   from public.progress_report "
-                    + "where student_id = '"+studentId+"' AND objective_id = '"+d+"' "
-                    + "and generalcomment = false and rating_id not in(6,7)) "
-                    + "AND objective_id ='"+d+"'and generalcomment = false )";
+                consulta = "SELECT rating.name FROM rating where id in"
+                        + "(select rating_id from progress_report where student_id = '" + studentId + "'"
+                        + " AND comment_date = (select max(comment_date)   from public.progress_report "
+                        + "where student_id = '" + studentId + "' AND objective_id = '" + d + "' "
+                        + "and generalcomment = false and rating_id not in(6,7)) "
+                        + "AND objective_id ='" + d + "'and generalcomment = false )";
                 ResultSet rs2 = st.executeQuery(consulta);
                 if (!rs2.next()) {
                     indEliminarObjectives.add(counter);
@@ -135,9 +136,9 @@ public class DataFactory {
                     while (rs2.next()) {
                         String var = rs2.getString("name");
 
-                            var = rs2.getString("name");
-                            //  finalratings.add("Mastered");//rs2.getString("name"));
-                            finalratings.add(rs2.getString("name"));
+                        var = rs2.getString("name");
+                        //  finalratings.add("Mastered");//rs2.getString("name"));
+                        finalratings.add(rs2.getString("name"));
                     }
                 }
                 os.set(counter, name);
@@ -145,19 +146,34 @@ public class DataFactory {
             }
             x.setObjectives(os);
             Subject t = new Subject();
-            cn.close();
+          
 
             for (int i = indEliminarObjectives.size() - 1; i >= 0; i--) {
                 int k = indEliminarObjectives.get(i);
                 os.remove(k);
             }
-            //FUNCIONA PERO LO HACE INNECESARIAMENTE 3 VECES NO SE PORQUE CUANDO LO HAGO FUERA FALLA.
             
-            //============================================================
+            //obtener comentario del subject
+          //  boolean existeComentario = false;
+                    
+            consulta = "SELECT comment FROM subjects_comments where subject_id="+id[0]+" and studentid="+idStudent+" ORDER BY date_created DESC";
+            ResultSet rs3 = st.executeQuery(consulta);
+            if(rs3.next()){
+           //     existeComentario = true;
+                os.add(rs3.getString("comment"));
+            }
+            //=============================
+            //os.add("comentario sobre este subject");
+            //FUNCIONA PERO LO HACE INNECESARIAMENTE 3 VECES NO SE PORQUE CUANDO LO HAGO FUERA FALLA.
 
+            //============================================================
             if (os.size() > 0) {
-                BeanWithList bean = new BeanWithList(x.fetchName(Integer.parseInt(id[0]), servlet), os, finalratings, nameStudent, dob, age);
-                coll.add(bean);
+               
+                ArrayList<String> subjectName = x.fetchNameAndElective(Integer.parseInt(id[0]), servlet);
+                if(subjectName.get(1).equals("false")){ // compruebo que no sea electivo
+                    BeanWithList bean = new BeanWithList(subjectName.get(0), os, finalratings, nameStudent, dob, age);
+                    coll.add(bean);
+                }
             }
             cn.close();
         }
@@ -171,19 +187,22 @@ public class DataFactory {
         Subject s = new Subject();
         consulta = "SELECT lessons.subject_id,progress_report.comment FROM progress_report join lessons on (progress_report.lesson_id = lessons.id) where student_id= '" + studentId + "'";
         rs = st.executeQuery(consulta);
+        
         while (rs.next()) {
             String comment = rs.getString("comment");
-         //   if (!comment.equals("")) {
-                //os.add("" + rs.getInt("subject_id"));
-                
-                os.add(s.fetchName(rs.getInt("subject_id"), servlet));
+            //   if (!comment.equals("")) {
+            //os.add("" + rs.getInt("subject_id"));
+            ArrayList<String> nombSubject = s.fetchNameAndElective(rs.getInt("subject_id"), servlet);
+            if(nombSubject.get(1).equals("true")){
+                os.add(nombSubject.get(0));
                 as.add(comment);
-          //  }
+            }
+            //  }
         }
         //============================================================
         if (os.size() > 0) {
-        BeanWithList bean = new BeanWithList("Comments", os, as, nameStudent, dob, age);
-        coll.add(bean);
+            BeanWithList bean = new BeanWithList("Comments", os, as, nameStudent, dob, age);
+            coll.add(bean);
         }
         //JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(coll);
         //return coll.toArray(new BeanWithList[coll.size()]);
