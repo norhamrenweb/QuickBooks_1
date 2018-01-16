@@ -37,7 +37,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LessonsListControlador{
     
-      Connection cn;
       static Logger log = Logger.getLogger(LessonsListControlador.class.getName());
 //      private ServletContext servlet;
     
@@ -52,10 +51,6 @@ public class LessonsListControlador{
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("homepage");
-       
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
         mv.addObject("lessonslist", this.getLessons(user,hsr.getServletContext()));
@@ -69,13 +64,9 @@ public class LessonsListControlador{
         ArrayList<Lessons> lessonslist = new ArrayList<>();
         try {
             
-            DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
-            this.cn = dataSource.getConnection();
-            Statement st = this.cn.createStatement();
             
             String consulta = "SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels";
-            ResultSet rs2 = st.executeQuery(consulta);
+            ResultSet rs2 = DBConect.ah.executeQuery(consulta);
             HashMap<Integer, String> mapLevel = new HashMap<Integer, String>();
             String name;
             int id;
@@ -86,13 +77,8 @@ public class LessonsListControlador{
             }
             
             
-            DriverManagerDataSource dataSource2;
-            dataSource2 = (DriverManagerDataSource)this.getBean("dataSource",servlet);
-            this.cn = dataSource2.getConnection();
-            Statement st2 = this.cn.createStatement();
-            
             consulta = "SELECT * FROM public.objective";
-            ResultSet rs3 = st2.executeQuery(consulta);
+            ResultSet rs3 = DBConect.eduweb.executeQuery(consulta);
             
             HashMap<Integer, String> mapObjective = new HashMap<Integer, String>();
             while(rs3.next()){
@@ -102,12 +88,8 @@ public class LessonsListControlador{
             }
             
             
-            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
-            this.cn = dataSource.getConnection();
-            st = this.cn.createStatement();
-            
             consulta = "SELECT Title,CourseID FROM AH_ZAF.dbo.Courses";
-            ResultSet rs4 = st.executeQuery(consulta);
+            ResultSet rs4 = DBConect.ah.executeQuery(consulta);
             HashMap<Integer, String> mapSubject = new HashMap<Integer, String>();
             while(rs4.next()){
                     name = rs4.getString("Title");
@@ -115,15 +97,11 @@ public class LessonsListControlador{
                     mapSubject.put(id,name);	
             }
             
-            dataSource = (DriverManagerDataSource)this.getBean("dataSource",servlet);
-            this.cn = dataSource.getConnection();
-            st = this.cn.createStatement();
-            
             String consultAux="";
             if(user.getType() == 1) consultAux = "user_id = "+user.getId()+" and";
             
             consulta = "SELECT * FROM public.lessons where "+consultAux+" COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
 
             while (rs.next())
             {
@@ -167,10 +145,6 @@ public class LessonsListControlador{
                 lessonslist.add(lesson);
                 
             }
-           
-            
-            this.cn.close();
-            
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
             StringWriter errors = new StringWriter();
@@ -189,14 +163,10 @@ public class LessonsListControlador{
        String[] id = hsr.getParameterValues("LessonsSelected");
        String message = null;
        try {
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-        Statement st = this.cn.createStatement();
         String consulta = "select attendance from lesson_stud_att where lesson_id = "+id[0];
-        ResultSet rs = st.executeQuery(consulta);
+        ResultSet rs = DBConect.eduweb.executeQuery(consulta);
         
         while(rs.next()){
             String text = rs.getString("attendance");
@@ -208,7 +178,7 @@ public class LessonsListControlador{
             }
         }
          consulta = "select * from progress_Report where lesson_id ="+ id [0];
-         ResultSet rs1 = st.executeQuery(consulta);
+         ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
          while(rs1.next()){
              int check = rs1.getInt("rating_id");
              if(check != 7)//empty rating
@@ -219,11 +189,11 @@ public class LessonsListControlador{
          if(message == null)
          {
            consulta = "DELETE FROM lesson_content WHERE lesson_id="+id[0];
-          st.executeUpdate(consulta);
+          DBConect.eduweb.executeUpdate(consulta);
           consulta = "DELETE FROM lesson_stud_att WHERE lesson_id="+id[0];
-          st.executeUpdate(consulta);
+          DBConect.eduweb.executeUpdate(consulta);
         consulta = "DELETE FROM public.lessons WHERE id="+id[0];
-           st.executeUpdate(consulta);
+           DBConect.eduweb.executeUpdate(consulta);
            message = "Presentation deleted successfully";
          }
         //mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
@@ -246,15 +216,11 @@ public class LessonsListControlador{
         ModelAndView mv = new ModelAndView("homepage");
        String[] id = hsr.getParameterValues("seleccion");
        try {
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-         Statement st = this.cn.createStatement();
           
         String consulta = "DELETE FROM public.lessons WHERE id="+id[0];
-           st.executeUpdate(consulta);
+           DBConect.eduweb.executeUpdate(consulta);
         mv.addObject("lessonslist", this.getLessons(user,hsr.getServletContext()));
        }catch (SQLException ex) {
             System.out.println("Error : " + ex);
@@ -271,13 +237,8 @@ public class LessonsListControlador{
     private String fetchNameTeacher(int id, ServletContext servlet)
     { String subjectName = null ;
         try {
-             DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
-            this.cn = dataSource.getConnection();
-             Statement st = this.cn.createStatement();
-             
             String consulta = "select lastname,firstname from person where personid = "+id;
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
           
             while (rs.next())
             {
@@ -304,15 +265,10 @@ public class LessonsListControlador{
         ArrayList<Progress> records = new ArrayList<>();
        ArrayList<String> contents = new ArrayList<>();
        try {
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-         Statement st = this.cn.createStatement();
-          
         String consulta = "select * FROM public.lessons WHERE id="+id[0];
-           ResultSet rs = st.executeQuery(consulta);
+           ResultSet rs = DBConect.eduweb.executeQuery(consulta);
        while(rs.next())
        {
         Method m = new Method();
@@ -329,14 +285,14 @@ public class LessonsListControlador{
        jsonObj.put("objective",o.fetchName(rs.getInt("objective_id"),hsr.getServletContext()));
        }
        consulta = "select name from content where id in (select content_id from lesson_content where lesson_id = "+id[0]+")";
-       ResultSet rs1 = st.executeQuery(consulta);
+       ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
        while(rs1.next())
        {
            contents.add(rs1.getString("name"));
        }
        jsonObj.put("contents",new Gson().toJson(contents));
        consulta = "SELECT * FROM public.lesson_stud_att where lesson_id ="+id[0];
-       ResultSet rs2 = st.executeQuery(consulta);
+       ResultSet rs2 = DBConect.eduweb.executeQuery(consulta);
           
             while (rs2.next())
             {
@@ -345,12 +301,8 @@ public class LessonsListControlador{
                 att.setStudentid(rs2.getInt("student_id"));
                 records.add(att);
             }
-            cn.close();
-            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-            this.cn = dataSource.getConnection();
-            st = this.cn.createStatement();
             consulta = "SELECT FirstName,LastName,MiddleName,StudentID FROM AH_ZAF.dbo.Students ";
-            ResultSet rs3 = st.executeQuery(consulta);
+            ResultSet rs3 = DBConect.ah.executeQuery(consulta);
             HashMap<String, String> map = new HashMap<String, String>();
             String first,LastName,middle,studentID;
             while(rs3.next()){

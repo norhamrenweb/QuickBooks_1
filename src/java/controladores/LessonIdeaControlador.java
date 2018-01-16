@@ -8,21 +8,17 @@ package controladores;
 import Montessori.*;
 import Montessori.Level;
 import atg.taglib.json.util.JSONException;
-import atg.taglib.json.util.JSONObject;
 import com.google.gson.*;
 
 import atg.taglib.json.util.JSONObject;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,7 +26,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -41,8 +36,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Iterator;
 import javax.servlet.http.HttpSession;
@@ -55,7 +48,6 @@ import org.apache.log4j.Logger;
  */
 @Controller
 public class LessonIdeaControlador {
-     Connection cn;
      static Logger log = Logger.getLogger(LessonIdeaControlador.class.getName());
      private Object getBean(String nombrebean, ServletContext servlet)
     {
@@ -69,11 +61,7 @@ public class LessonIdeaControlador {
                return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonidea");
     try{
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
-        ResultSet rs = st.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
         List <Level> grades = new ArrayList();
         Level l = new Level();
         l.setName("Select level");
@@ -104,14 +92,8 @@ public class LessonIdeaControlador {
       ArrayList<String> subjects = new ArrayList<>();
       ArrayList<String> objectives = new ArrayList<>();
     try{
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-       
-       
-        Statement st = this.cn.createStatement();
         String[] lessonid = hsr.getParameterValues("seleccion1");
-        ResultSet rs = st.executeQuery("SELECT lessons.id,lessons.subject_id,lessons.objective_id,objective.name as obj,lessons.name FROM lessons inner join objective on lessons.objective_id = objective.id where lessons.level_id= "+lessonid[0]+" and lessons.idea = true ");
+        ResultSet rs = DBConect.eduweb.executeQuery("SELECT lessons.id,lessons.subject_id,lessons.objective_id,objective.name as obj,lessons.name FROM lessons inner join objective on lessons.objective_id = objective.id where lessons.level_id= "+lessonid[0]+" and lessons.idea = true ");
         while(rs.next())
         {
             DBRecords l = new DBRecords();
@@ -233,11 +215,7 @@ public class LessonIdeaControlador {
         Method m = new Method();
         String[] id = new String[1];
         try{
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
-       ResultSet rs = st.executeQuery("select * from lessons where id= "+lessonid);
+       ResultSet rs = DBConect.eduweb.executeQuery("select * from lessons where id= "+lessonid);
          while(rs.next()){
              data.setComments(rs.getString("comments"));
            
@@ -265,7 +243,7 @@ public class LessonIdeaControlador {
        l.setName(l.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
        data.setLevel(l);
        id=null;
-       ResultSet rs2 = st.executeQuery("select * from lesson_content where lesson_id = "+lessonid);
+       ResultSet rs2 = DBConect.eduweb.executeQuery("select * from lesson_content where lesson_id = "+lessonid);
       
        List<String>cid =new ArrayList<>();
        while(rs2.next())
@@ -279,15 +257,9 @@ public class LessonIdeaControlador {
        ArrayList<Objective> test = this.getObjectives(data.getSubject().getId());
         mv.addObject("objectives",this.getObjectives(data.getSubject().getId()));
                  mv.addObject("contents",this.getContent(data.getObjective().getId()));
-                  cn.close();
-                  dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
                mv.addObject("subjects",this.getSubjects(data.getLevel().getId()));
          List <Lessons> ideas = new ArrayList();
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st4 = this.cn.createStatement();
-        ResultSet rs4 = st4.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        ResultSet rs4 = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
         List <Level> grades = new ArrayList();
         Level le = new Level();
         le.setName("Select level");
@@ -301,11 +273,7 @@ public class LessonIdeaControlador {
             x.setName(rs4.getString("GradeLevel"));
         grades.add(x);
         }
-        DriverManagerDataSource dataSource2;
-        dataSource2 = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource2.getConnection();
-         Statement st3 = this.cn.createStatement();
-        ResultSet rs1 = st3.executeQuery("SELECT * FROM public.method");
+        ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT * FROM public.method");
         List <Method> methods = new ArrayList();
         Method me = new Method();
         me.setName("Select Method");
@@ -339,17 +307,13 @@ public class LessonIdeaControlador {
         String lessonid = hsr.getParameter("selected");
         JSONObject jsonObj = new JSONObject();
         try{
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
        String message = null;
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
           String consulta = "DELETE FROM lesson_content WHERE lesson_id="+lessonid;
-          st.executeUpdate(consulta);
+          DBConect.eduweb.executeUpdate(consulta);
         consulta = "DELETE FROM public.lessons WHERE id="+lessonid;
-           st.executeUpdate(consulta);
+           DBConect.eduweb.executeUpdate(consulta);
            message = "Presentation deleted successfully";
         jsonObj.put("message", message);
         }catch (SQLException ex) {
@@ -366,9 +330,8 @@ public class LessonIdeaControlador {
         ArrayList<Subject> subjects = new ArrayList<>();
         ArrayList<Subject> activesubjects = new ArrayList<>();
         try{
-           Statement st = this.cn.createStatement();
              
-          ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
+          ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
            Subject s = new Subject();
           s.setName("Select Subject");
           subjects.add(s);
@@ -386,7 +349,7 @@ public class LessonIdeaControlador {
           {
               String[] ids = new String[1];
               ids=su.getId();
-           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
+           ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
            while(rs2.next())
            {
             if(rs2.getBoolean("Active")== true)
@@ -407,10 +370,8 @@ public class LessonIdeaControlador {
        {
            ArrayList<Objective> objectives = new ArrayList<>();
        try {
-        
-             Statement st = this.cn.createStatement();
-            
-          ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid[0]);
+
+          ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id="+subjectid[0]);
 //          Objective s = new Objective();
 //          s.setName("Select Objective");
 //          objectives.add(s);
@@ -438,11 +399,8 @@ public class LessonIdeaControlador {
        {
            ArrayList<Content> contents = new ArrayList<>();
        try {
-        
-             Statement st = this.cn.createStatement();
-            
-            
-          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+objectiveid[0]+")");
+
+          ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+objectiveid[0]+")");
          
            while (rs1.next())
             {
@@ -526,23 +484,7 @@ public class LessonIdeaControlador {
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("editlessonidea");
-        
-       try {
-         DriverManagerDataSource dataSource;
-       
-           
-            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-             this.cn = dataSource.getConnection();
-            
-            
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Subjects: " + ex);
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
-        }
-        
-        
+
          mv.addObject("subjects",this.getSubjects(hsr.getParameterValues("seleccion1")));
         
         return mv;
@@ -552,10 +494,6 @@ public class LessonIdeaControlador {
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("editlessonidea");
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
     //    mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
         mv.addObject("objectives", this.getObjectives(hsr.getParameterValues("seleccion2")));
         
@@ -566,10 +504,6 @@ public class LessonIdeaControlador {
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("editlessonidea");
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();    
-      
          mv.addObject("contents", this.getContent(hsr.getParameterValues("seleccion3")));
         
         return mv;

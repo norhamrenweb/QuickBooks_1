@@ -427,6 +427,7 @@
 
             function comboSelectionLevel()
             {
+                $('#content').empty();
                 if (window.XMLHttpRequest) //mozilla
                 {
                     ajax = new XMLHttpRequest(); //No Internet explorer
@@ -449,6 +450,7 @@
             }
             function comboSelectionSubject()
             {
+                $('#content').empty();
                 if (window.XMLHttpRequest) //mozilla
                 {
                     ajax = new XMLHttpRequest(); //No Internet explorer

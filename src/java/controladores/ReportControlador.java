@@ -6,61 +6,25 @@
 package controladores;
 
 import Montessori.*;
-import Montessori.Method;
-import Montessori.Objective;
 import Montessori.Students;
-import Montessori.Subject;
-import atg.taglib.json.util.JSONException;
-import atg.taglib.json.util.JSONObject;
-import com.fasterxml.jackson.core.JsonEncoding;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import com.google.gson.*;
-import static controladores.CreateLessonControlador.log;
-import static controladores.ProgressbyStudent.log;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 /**
  *
@@ -70,7 +34,6 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 //@Scope("session")
 public class ReportControlador {
 
-    Connection cn;
     static Logger log = Logger.getLogger(ReportControlador.class.getName());
     private ServletContext servlet;
 
@@ -90,12 +53,8 @@ public class ReportControlador {
 
         try {
             List<Lessons> ideas = new ArrayList();
-            DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource) this.getBean("dataSourceAH", hsr.getServletContext());
-            this.cn = dataSource.getConnection();
             mv.addObject("listaAlumnos", this.getStudents());
-            Statement st = this.cn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
             List<Level> grades = new ArrayList();
             Level l = new Level();
             l.setName("Select level");
@@ -123,11 +82,10 @@ public class ReportControlador {
 //        this.conectarOracle();
         ArrayList<Students> listaAlumnos = new ArrayList<>();
         try {
-            
-             Statement st = this.cn.createStatement();
+
              
             String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' order by LastName";
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
           
             while (rs.next())
             {
@@ -158,10 +116,6 @@ public class ReportControlador {
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createlesson");
-       
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
         List <Students> studentsgrades = new ArrayList();
         String[] levelid = hsr.getParameterValues("seleccion");
         String test = hsr.getParameter("levelStudent");
@@ -185,15 +139,14 @@ public class ReportControlador {
         String gradelevel = null;
         try {
             
-             Statement st = this.cn.createStatement();
-            ResultSet rs1= st.executeQuery("select GradeLevel from AH_ZAF.dbo.GradeLevels where GradeLevelID ="+gradeid);
+            ResultSet rs1= DBConect.ah.executeQuery("select GradeLevel from AH_ZAF.dbo.GradeLevels where GradeLevelID ="+gradeid);
              while(rs1.next())
              {
              gradelevel = rs1.getString("GradeLevel");
              }
            
             String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel = '"+gradelevel+"' order by LastName";
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
           
             while (rs.next())
             {

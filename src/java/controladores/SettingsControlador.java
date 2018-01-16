@@ -6,11 +6,10 @@
 package controladores;
 
 import Montessori.Content;
+import Montessori.DBConect;
 import Montessori.Level;
-import Montessori.Method;
 import Montessori.Objective;
 import Montessori.Subject;
-import Montessori.User;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +19,6 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -33,7 +31,6 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
  */
 public class SettingsControlador extends MultiActionController{
     
-      Connection cn;
       
 //      private ServletContext servlet;
     
@@ -48,12 +45,7 @@ public class SettingsControlador extends MultiActionController{
         
         ModelAndView mv = new ModelAndView("settings");
        
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-     
-        Statement st = this.cn.createStatement();
-        ResultSet rs = st.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
         List <Level> grades = new ArrayList();
         Level l = new Level();
         l.setName("Select level");
@@ -78,19 +70,9 @@ public class SettingsControlador extends MultiActionController{
         List<Subject> subjects = new ArrayList<>();
          List<Subject> activesubjects = new ArrayList<>();
        try {
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-        
-            
-             Statement st = this.cn.createStatement();
              String[] levelid = new String[1];
-            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-             this.cn = dataSource.getConnection();
-             st = this.cn.createStatement();
              levelid= hsr.getParameterValues("seleccion1");
-          ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
+          ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
            Subject s = new Subject();
           s.setName("Select Subject");
           subjects.add(s);
@@ -108,7 +90,7 @@ public class SettingsControlador extends MultiActionController{
           {
               String[] ids = new String[1];
               ids=su.getId();
-           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
+           ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
            while(rs2.next())
            {
            if(rs2.getBoolean("Active")== true)
@@ -134,20 +116,10 @@ public class SettingsControlador extends MultiActionController{
         ModelAndView mv = new ModelAndView("settingtable");
         List<Objective> objectives = new ArrayList<>();
        try {
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-        
-            
-             Statement st = this.cn.createStatement();
              String subjectid = null;
-          
-            
-                subjectid = hsr.getParameter("seleccion2");
-            
-            
-          ResultSet rs1 = st.executeQuery("select name,id,description from public.objective where subject_id="+subjectid);
+             subjectid = hsr.getParameter("seleccion2");
+ 
+          ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id,description from public.objective where subject_id="+subjectid);
 //          Objective s = new Objective();
 //          s.setName("Select Objective");
 //          objectives.add(s);
@@ -177,19 +149,11 @@ public class SettingsControlador extends MultiActionController{
         ModelAndView mv = new ModelAndView("settings");
         List<Content> contents = new ArrayList<>();
        try {
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-        
-            
-             Statement st = this.cn.createStatement();
              String objectiveid = null;
+             objectiveid = hsr.getParameter("seleccion3");
             
-                objectiveid = hsr.getParameter("seleccion3");
             
-            
-          ResultSet rs1 = st.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+objectiveid+")");
+          ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+objectiveid+")");
           //String[] ids = new String[1];
            while (rs1.next())
             {
@@ -218,14 +182,7 @@ public class SettingsControlador extends MultiActionController{
         List<Content> contents = new ArrayList<>();
        List<Objective> objectives = new ArrayList<>();
         try {
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-        
-            
-             Statement st = this.cn.createStatement();
-            ResultSet rs2 = st.executeQuery("select id, name from objective where subject_id ="+hsr.getParameter("seleccion"));
+            ResultSet rs2 = DBConect.eduweb.executeQuery("select id, name from objective where subject_id ="+hsr.getParameter("seleccion"));
             while(rs2.next()){
                 Objective o = new Objective();
                 String[] ids = new String[1];
@@ -237,7 +194,7 @@ public class SettingsControlador extends MultiActionController{
           for(Objective obj:objectives){
            String[] id = new String[1];
             id = obj.getId();
-            ResultSet rs1 = st.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+id[0]+")");
+            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+id[0]+")");
 
               while (rs1.next())
             {
@@ -269,13 +226,9 @@ public class SettingsControlador extends MultiActionController{
         ModelAndView mv = new ModelAndView("editsetting");
        Objective objective = new Objective();
         try {
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
         String[] id = new String[1];
         id[0]= hsr.getParameter("id");
-        ResultSet rs = st.executeQuery("select name,description from objective where id ="+id[0]);
+        ResultSet rs = DBConect.eduweb.executeQuery("select name,description from objective where id ="+id[0]);
         while(rs.next()){
             objective.setId(id);
             objective.setName(rs.getString("name"));
@@ -299,14 +252,11 @@ public class SettingsControlador extends MultiActionController{
         ModelAndView mv = new ModelAndView("editsetting");
         String message = null;
         try {
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
-        String consulta = "update objective set name = '"+hsr.getParameter("name")+"',description ='"+hsr.getParameter("description")+"'where id ="+hsr.getParameter("id"); 
-        st.executeUpdate(consulta);
-        message = "Objective edited successfully";   
-              
+
+            String consulta = "update objective set name = '"+hsr.getParameter("name")+"',description ='"+hsr.getParameter("description")+"'where id ="+hsr.getParameter("id"); 
+            DBConect.eduweb.executeUpdate(consulta);
+            message = "Objective edited successfully";   
+            
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
             message ="Something went wrong";
@@ -324,18 +274,15 @@ public class SettingsControlador extends MultiActionController{
        String[] id = hsr.getParameterValues("id");
        String message =null;
        try {
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-         Statement st = this.cn.createStatement();
+           
          String consulta = "select name from lessons where objective_id = "+ id[0];
-          ResultSet rs = st.executeQuery(consulta );
+          ResultSet rs = DBConect.eduweb.executeQuery(consulta );
           if(rs.next()){
             message="This objective is linked to lessons";  
           }
           else{
         consulta = "DELETE FROM public.objective WHERE id="+id[0];
-           st.executeUpdate(consulta);
+           DBConect.eduweb.executeUpdate(consulta);
            // need to decide what to do with the contents
           }
        }catch (SQLException ex) {
@@ -353,12 +300,8 @@ public class SettingsControlador extends MultiActionController{
        String[] id = hsr.getParameterValues("id");
        String message =null;
        try {
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-         Statement st = this.cn.createStatement();
          String consulta = "insert into objectives(name,description,subject_id) values('"+hsr.getParameter("name")+"','"+hsr.getParameter("description")+","+ id[0]+")";
-          st.executeUpdate(consulta );
+          DBConect.eduweb.executeUpdate(consulta );
           
             message="Objectived added";  
           

@@ -18,6 +18,33 @@ public class BeanWithList {
     private String nameStudent;
     private String dob;
     private String age;
+    private String grade;
+    private String Term;
+
+    public String getNameStudent() {
+        return nameStudent;
+    }
+
+    public void setNameStudent(String nameStudent) {
+        this.nameStudent = nameStudent;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getTerm() {
+        return Term;
+    }
+
+    public void setTerm(String Term) {
+        this.Term = Term;
+    }
+    
 
     public String getName() {
         return nameStudent;
@@ -59,7 +86,16 @@ public class BeanWithList {
       this.age = age;
       
     }
-     
+      public BeanWithList(String subject,List<String> objs,List<String> rating,String name, String dob,String age,String grade, String term) {
+      this.objectives=objs;
+      this.rating = rating;
+      this.subject= subject;
+      this.nameStudent = name;
+      this.dob = dob;
+      this.age = age;
+      this.grade = grade;
+      this.Term = term;
+    }
     public List<String> getObjectives() {
         return objectives;
     }

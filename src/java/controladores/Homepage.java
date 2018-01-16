@@ -11,24 +11,14 @@ package controladores;
  */
 
 import Montessori.*;
-import java.io.DataOutput;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mapcusts.Getcusts;
 import quickbooksync.*;
-import controladores.LessonsListControlador;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.context.ApplicationContext;
@@ -36,13 +26,13 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 
 @RequestMapping("/")
 public class Homepage extends MultiActionController  {
    Connection cn;
+   DBConect c;
     private Object getBean(String nombrebean, ServletContext servlet)
 {
 ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
@@ -50,12 +40,12 @@ ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicati
         return beanobject;
 }
     public ModelAndView inicio(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-    
         return new ModelAndView("userform");
     }
   @RequestMapping
 public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-       
+        DBConect.close();
+        c=new DBConect(hsr,hsr1);
         HttpSession session = hsr.getSession();
         User user = new User();
         int scgrpidTeacher = 0;

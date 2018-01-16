@@ -10,35 +10,22 @@ package controladores;
  * @author nmohamed
  */
 import Montessori.*;
-import atg.taglib.json.util.JSONObject;
 import com.google.gson.Gson;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -67,15 +54,11 @@ public class ResourcesControlador {
         Resource resourceLoad = new Resource();
         //ModelAndView mv = new ModelAndView("lessonresources");
        try{
-            DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-            this.cn = dataSource.getConnection();
-            Statement st = this.cn.createStatement();
             String resourceId = r.getId();
            // String name="", link="", type="";
 
             String consulta = "SELECT * FROM resources WHERE id = "+resourceId;
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             resourceLoad.setId(resourceId);
             
             while (rs.next()) {        
@@ -119,17 +102,13 @@ public class ResourcesControlador {
     }
     
     protected Resource loadResource(String id, HttpServletRequest hsr) throws Exception {
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
         Resource resourceLoad = new Resource();
         //ModelAndView mv = new ModelAndView("lessonresources");
        try{
             String resourceId = id;
 
             String consulta = "SELECT * FROM resources WHERE id = "+resourceId;
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             resourceLoad.setId(resourceId);
             
             while (rs.next()) {        
@@ -153,16 +132,12 @@ public class ResourcesControlador {
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonresources");
        try{
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
             String presentationName = hsr.getParameter("LessonsSelected");
             presentationName =  presentationName.split("-")[1];
             String lessonid = hsr.getParameter("LessonsSelected");
             lessonid = lessonid.split("-")[0];
             String consulta = "SELECT * FROM public.resources where lesson_id = "+lessonid;
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             ArrayList<Resource> filersrcs = new ArrayList<>(); 
             ArrayList<Resource> otherrsrcs = new ArrayList<>(); 
        while(rs.next())
@@ -209,14 +184,10 @@ public class ResourcesControlador {
         String lessonId = r.getLesson_id();
         String id="";
         try{
-            DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-            this.cn = dataSource.getConnection();
-            Statement st = this.cn.createStatement();
             //String lessonid = hsr.getParameter("LessonsSelected");
             String consulta = "insert into resources(name,link,type,lesson_id) values('"+name+"','"+link+"','"+type+"','"+lessonId+"')";
-            st.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS); 
-            ResultSet rs = st.getGeneratedKeys();     
+            DBConect.eduweb.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS); 
+            ResultSet rs = DBConect.eduweb.getGeneratedKeys();     
             while(rs.next())  id = ""+rs.getInt(1);
         }
         catch(SQLException ex){
@@ -238,14 +209,10 @@ public class ResourcesControlador {
         String type = r.getType();
 
         try{
-            DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-            this.cn = dataSource.getConnection();
-            Statement st = this.cn.createStatement();
            // String lessonid = hsr.getParameter("LessonsSelected");
             //String consulta = "insert into resources(lesson_id) values('"+lessonid+"','')";
             String consulta = "update resources set name='"+name+"',link='"+link+"',type='"+type+"' where id = "+Idresource;
-            st.executeUpdate(consulta);
+            DBConect.eduweb.executeUpdate(consulta);
         }catch(SQLException ex){
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
@@ -260,13 +227,9 @@ public class ResourcesControlador {
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonresources");
         try{
-            DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-            this.cn = dataSource.getConnection();
-            Statement st = this.cn.createStatement();
             String resourceId = r.getId();
             String lessonName = r.getName();
-            Resource resourceLoad = loadResource(resourceId,st);
+            Resource resourceLoad = loadResource(resourceId,DBConect.eduweb);
             
             if(resourceLoad.getType().equals("File")){
                 /*File fileToDelete = new File(resourceLoad.getLink());
@@ -287,7 +250,7 @@ public class ResourcesControlador {
                 ftpClient.logout();
             }
             String consulta = "delete from resources where id = "+resourceId;
-            st.executeQuery(consulta);
+            DBConect.eduweb.executeQuery(consulta);
         }catch(SQLException ex){
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
@@ -300,14 +263,8 @@ public class ResourcesControlador {
     public String downloadFile(@RequestBody Resource r,HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception{
         
         try{
-            DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-            this.cn = dataSource.getConnection();
-            Statement st = this.cn.createStatement();
             String resourceId = r.getId();
-            Resource resourceLoad = loadResource(resourceId,st);
-           
-            
+            Resource resourceLoad = loadResource(resourceId,DBConect.eduweb);
         }catch(SQLException ex){
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
@@ -317,17 +274,13 @@ public class ResourcesControlador {
     }
     
     protected boolean existe(String name, HttpServletRequest hsr) throws Exception {
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
         Resource resourceLoad = new Resource();
         //ModelAndView mv = new ModelAndView("lessonresources");
        try{
             String resourceId = name;
 
             String consulta = "SELECT * FROM resources WHERE name = %"+name;
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             resourceLoad.setId(resourceId);
             
             while (rs.next()) {        
