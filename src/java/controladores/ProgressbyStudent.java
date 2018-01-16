@@ -204,6 +204,11 @@ public class ProgressbyStudent {
                     + "                  where roster.studentid = " + studentid + " and roster.enrolled" + termid + "= 1 and courses.active = 1 and classes.yearid = '" + yearid + "'");// the term and year need to be dynamic, check with vincent
             Subject first = new Subject();
             first.setName("Select Subject");
+            
+            String[] ids2 = new String[1];
+            ids2[0] = "682";       
+            first.setId(ids2);
+            
             subjects.add(first);
             String name9, id;
             while (rs1.next()) {
@@ -219,6 +224,10 @@ public class ProgressbyStudent {
 
             }
 
+            activesubjects.add(subjects.get(0));
+            
+                
+            
             for (Subject s : subjects.subList(1, subjects.size())) {
                 String[] ids = new String[1];
                 ids = s.getId();
@@ -237,7 +246,7 @@ public class ProgressbyStudent {
                     }
                 }
             }*/
-
+            
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
             StringWriter errors = new StringWriter();
@@ -942,6 +951,7 @@ public class ProgressbyStudent {
             User user = (User) sesion.getAttribute("user");
             String test = "insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('" + user.getId() + "',now(),'" + obs.getObservation() + "','" + obs.getType() + "','" + obs.getStudentid() + "','" + obs.getDate() + "')";
             st.executeUpdate("insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('" + user.getId() + "',now(),'" + obs.getObservation() + "','" + obs.getType() + "','" + obs.getStudentid() + "','" + obs.getDate() + "')");
+            
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
@@ -950,6 +960,31 @@ public class ProgressbyStudent {
         return "success";
     }
 
+    @RequestMapping("/progressbystudent/saveSubjectComment.htm")
+    @ResponseBody
+    public String saveSubjectComment(@RequestBody CommentSubject cSub, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+//        if ((new SessionCheck()).checkSession(hsr)) {
+//            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+//        }
+            ModelAndView mv = new ModelAndView("progressbystudent");
+     try {
+                DriverManagerDataSource dataSource;
+            dataSource = (DriverManagerDataSource) this.getBean("dataSource", hsr.getServletContext());
+            this.cn = dataSource.getConnection();
+            Statement st = this.cn.createStatement();
+            HttpSession sesion = hsr.getSession();
+            User user = (User) sesion.getAttribute("user");
+            String test = "insert into subjects_comments(subject_id,date_created,createdby_id,comment,studentid)values('" + cSub.getIdSubject() + "',now(),'" + user.getId() + "','" + cSub.getComment() + "','" + cSub.getIdStudent() +"')";
+            st.executeUpdate(test);
+           
+           } catch (SQLException ex) {
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return "success";
+    }
+    
     @RequestMapping("/progcal.htm")
     @ResponseBody
     public ModelAndView progcal(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {

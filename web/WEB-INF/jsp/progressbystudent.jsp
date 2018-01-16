@@ -339,12 +339,14 @@
                         $('#divTableObjective').addClass('hidden');//to avoid having the general comments of the previous selected student
                         $('#divNotObjective').addClass('hidden');
                         $('#subjects').empty();
-                        $('#subjects').append('<option>Select Subject</option>');
+                        //$('#subjects').append('<option>Select Subject</option>');
                         $.each(subjects, function (i, item) {
                             if (subjects[i].name !== undefined)
                                 $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                         });
-
+                        $('#divCommentSubject').addClass('hidden');
+                        $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
+                        $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
 //                    var birthday = info.fecha_nacimiento,
 //                            separador = " ",
 //                            limite = 1, 
@@ -467,12 +469,47 @@
                 } else {
                     $('#divCommentSubject').addClass('hidden');
                     $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
-                     $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
+                    $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
                     
                 }
             }
 
-            function saveCommentSubject() {
+            function saveCommentSubjects() {
+                
+                 if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                
+                var studentId = $('#studentid').val();
+                var idSubject = $('#subjects option:selected').val();
+                var comment = $('#commentSubject').val();
+               
+                var myObj = {};
+                myObj["idSubject"] = idSubject;
+                myObj["idStudent"] = studentId;
+                myObj["comment"] = comment;
+                
+                var json = JSON.stringify(myObj);
+                $.ajax({
+                    type: 'POST',
+                    url: "saveSubjectComment.htm",
+                    data: json,
+                    datatype: "json",
+                    contentType: "application/json",
+                    success: function (data) {
+                        alert("se guardo correctamente");
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
+                    }
+
+                });
             }
 
             function selectionStudent()
@@ -714,6 +751,9 @@
                 text-align: left !important;
                 padding-left: 16px;
             }
+            #divCommentSubject{
+                margin-top: 5px;
+            }
             .dataTables_filter input {
                 display: block;
                 float: left;
@@ -837,11 +877,12 @@
                                     </div>-->
                                 </div>
                                 <div class="col-xs-12 hidden" id="divCommentSubject">
-                                    <div class="col-xs-10 ">
-                                        <input type="text" class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject">
-                                    </div>
+                                    <div class="col-xs-10 center-block form-group">
+                                    
+                                    <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject"maxlength="1000"></textarea>
+                                    </div>             
                                     <div class=" col-xs-2 ">
-                                        <input type="button" name="saveCommentSubject" value="save" class="btn btn-info" id="saveCommentSubject" data-target=".bs-example-modal-lg" onclick="saveCommentSubject()"/> 
+                                        <input type="button" name="saveCommentSubject" value="save" class="btn btn-info" id="saveCommentSubject" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
                                    
                                     </div>
                                 </div>
