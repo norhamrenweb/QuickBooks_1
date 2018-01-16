@@ -339,7 +339,7 @@
                         $('#divTableObjective').addClass('hidden');//to avoid having the general comments of the previous selected student
                         $('#divNotObjective').addClass('hidden');
                         $('#subjects').empty();
-                        //$('#subjects').append('<option>Select Subject</option>');
+                        $('#subjects').append('<option>Select Subject</option>');
                         $.each(subjects, function (i, item) {
                             if (subjects[i].name !== undefined)
                                 $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');

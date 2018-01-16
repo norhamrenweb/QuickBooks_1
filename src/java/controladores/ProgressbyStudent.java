@@ -202,14 +202,14 @@ public class ProgressbyStudent {
             ResultSet rs1 = st.executeQuery("select distinct courses.courseid, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
                     + "                 inner join courses on courses.courseid=classes.courseid\n"
                     + "                  where roster.studentid = " + studentid + " and roster.enrolled" + termid + "= 1 and courses.active = 1 and classes.yearid = '" + yearid + "'");// the term and year need to be dynamic, check with vincent
-            Subject first = new Subject();
+            /*Subject first = new Subject();
             first.setName("Select Subject");
             
             String[] ids2 = new String[1];
             ids2[0] = "682";       
             first.setId(ids2);
             
-            subjects.add(first);
+            subjects.add(first);*/
             String name9, id;
             while (rs1.next()) {
                 Subject sub = new Subject();
@@ -224,16 +224,16 @@ public class ProgressbyStudent {
 
             }
 
-            activesubjects.add(subjects.get(0));
+            //activesubjects.add(subjects.get(0));
             
                 
-            
-            for (Subject s : subjects.subList(1, subjects.size())) {
+            for (int i = 0; i < subjects.size(); i++) {
                 String[] ids = new String[1];
-                ids = s.getId();
-                s.setName(mapSubject.get(ids[0]));
-                activesubjects.add(s);
+                ids = subjects.get(i).getId();
+                subjects.get(i).setName(mapSubject.get(ids[0]));
+                activesubjects.add(subjects.get(i));
             }
+
             //loop through subjects to get their names, skipping the first 
             /*  for (Subject s : subjects.subList(1, subjects.size())) {
                 String[] ids = new String[1];
