@@ -8,39 +8,24 @@ package controladores;
 import Montessori.*;
 import atg.taglib.json.util.JSONObject;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
-import org.springframework.web.servlet.mvc.*;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
-import org.springframework.ui.ModelMap;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.stereotype.Controller;
 /**
@@ -49,8 +34,6 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class CreateLessonControlador {
-    
-      Connection cn;
 static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());      
 //      private ServletContext servlet;
     
@@ -67,12 +50,8 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
         ModelAndView mv = new ModelAndView("createlesson");
         try{
        List <Lessons> ideas = new ArrayList();
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
         mv.addObject("listaAlumnos", this.getStudents());
-        Statement st = this.cn.createStatement();
-        ResultSet rs = st.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
         List <Level> grades = new ArrayList();
         Level l = new Level();
         l.setName("Select level");
@@ -86,11 +65,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
             x.setName(rs.getString("GradeLevel"));
         grades.add(x);
         }
-        DriverManagerDataSource dataSource2;
-        dataSource2 = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource2.getConnection();
-         Statement st2 = this.cn.createStatement();
-        ResultSet rs1 = st2.executeQuery("SELECT * FROM public.method");
+        ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT * FROM public.method");
         List <Method> methods = new ArrayList();
         Method m = new Method();
         m.setName("Select Method");
@@ -108,7 +83,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
             mv.addObject("gradelevels", grades);
             mv.addObject("methods",methods);
        //get lesson ideas
-       ResultSet rs2 = st2.executeQuery("SELECT * FROM public.lessons where idea = true");
+       ResultSet rs2 = DBConect.eduweb.executeQuery("SELECT * FROM public.lessons where idea = true");
         Lessons d = new Lessons();
        d.setName("Select an idea");
        ideas.add(d);
@@ -135,12 +110,8 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
         ModelAndView mv = new ModelAndView("lessonidea");
         try{
        List <Lessons> ideas = new ArrayList();
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
         mv.addObject("listaAlumnos", this.getStudents());
-        Statement st = this.cn.createStatement();
-        ResultSet rs = st.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
         List <Level> grades = new ArrayList();
         Level l = new Level();
         l.setName("Select level");
@@ -154,11 +125,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
             x.setName(rs.getString("GradeLevel"));
         grades.add(x);
         }
-        DriverManagerDataSource dataSource2;
-        dataSource2 = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource2.getConnection();
-         Statement st2 = this.cn.createStatement();
-        ResultSet rs1 = st2.executeQuery("SELECT * FROM public.method");
+        ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT * FROM public.method");
         List <Method> methods = new ArrayList();
         Method m = new Method();
         m.setName("Select Method");
@@ -176,7 +143,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
             mv.addObject("gradelevels", grades);
             mv.addObject("methods",methods);
        //get lesson ideas
-       ResultSet rs2 = st2.executeQuery("SELECT * FROM public.lessons where idea = true");
+       ResultSet rs2 = DBConect.eduweb.executeQuery("SELECT * FROM public.lessons where idea = true");
         while(rs2.next())
         {
          Lessons idea = new Lessons();   
@@ -199,10 +166,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createlesson");
-       
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
+        
         List <Students> studentsgrades = new ArrayList();
         String[] levelid = hsr.getParameterValues("seleccion");
         String test = hsr.getParameter("levelStudent");
@@ -222,23 +186,6 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createlesson");
-        
-       try {
-         DriverManagerDataSource dataSource;
-       
-           
-            dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-             this.cn = dataSource.getConnection();
-            
-            
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Subjects: " + ex);
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
-        }
-        
-        
          mv.addObject("subjects",this.getSubjects(hsr.getParameterValues("seleccion1")));
         
         return mv;
@@ -248,9 +195,6 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createlesson");
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
         
     //    mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
         mv.addObject("objectives", this.getObjectives(hsr.getParameterValues("seleccion2")));
@@ -262,9 +206,6 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
         if((new SessionCheck()).checkSession(hsr))
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("createlesson");
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();    
       
          mv.addObject("contents", this.getContent(hsr.getParameterValues("seleccion3")));
         
@@ -277,10 +218,9 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
         ArrayList<Students> listaAlumnos = new ArrayList<>();
         try {
             
-             Statement st = this.cn.createStatement();
              
             String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' order by LastName";
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
           
             while (rs.next())
             {
@@ -314,15 +254,14 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
         String gradelevel = null;
         try {
             
-             Statement st = this.cn.createStatement();
-            ResultSet rs1= st.executeQuery("select GradeLevel from AH_ZAF.dbo.GradeLevels where GradeLevelID ="+gradeid);
+            ResultSet rs1= DBConect.ah.executeQuery("select GradeLevel from AH_ZAF.dbo.GradeLevels where GradeLevelID ="+gradeid);
              while(rs1.next())
              {
              gradelevel = rs1.getString("GradeLevel");
              }
            
             String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel = '"+gradelevel+"' order by LastName";
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
           
             while (rs.next())
             {
@@ -436,27 +375,18 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
      List<Lessons> lessons = new ArrayList<>();
      
       try {
-         DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-        
-            
-             Statement st = this.cn.createStatement();
-             String subjectid = null;
-        
-                subjectid = hsr.getParameter("seleccionTemplate") ;
-          
-            
-          ResultSet rs1 = st.executeQuery("select name,id from lesson_plan where subject_id= "+subjectid);
-          Lessons l = new Lessons();
-          l.setName("Select lesson name");
-          lessons.add(l);
-           while (rs1.next())
+
+            String subjectid = null;
+            subjectid = hsr.getParameter("seleccionTemplate") ;
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from lesson_plan where subject_id= "+subjectid);
+            Lessons l = new Lessons();
+            l.setName("Select lesson name");
+            lessons.add(l);
+            while (rs1.next())
             {
-                 Lessons ll = new Lessons();
-                 ll.setName(rs1.getString("name"));
-                 ll.setId(rs1.getInt("id"));
+                Lessons ll = new Lessons();
+                ll.setName(rs1.getString("name"));
+                ll.setId(rs1.getInt("id"));
                 lessons.add(ll);
             }
             
@@ -488,10 +418,6 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
               DriverManagerDataSource dataSource;
                try {
         
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        
-             Statement st = this.cn.createStatement();
             
              String[] oid = new String[1];
              String[] sid = new String[1];
@@ -499,7 +425,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
              String[] cid = new String[1];
              
             String consulta = "SELECT objective_id,subject_id,level_id,method_id FROM public.lessons where id ="+lessonplanid[0];
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
           
             while (rs.next())
             {
@@ -512,7 +438,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
              levelid= rs.getInt("level_id");
             }
            
-        ResultSet rs2 = st.executeQuery("select content_id from public.lesson_content where lesson_id = "+lessonplanid[0]);
+        ResultSet rs2 = DBConect.eduweb.executeQuery("select content_id from public.lesson_content where lesson_id = "+lessonplanid[0]);
               
    while (rs2.next())
             {
@@ -543,9 +469,6 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
                 json.put("objectiveslist",new Gson().toJson(this.getObjectives(sub.getId())));
                  json.put("contentslist",new Gson().toJson(this.getContent(obj.getId())));
                
-                 cn.close();
-                  dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
                json.put("subjectslist",new Gson().toJson(this.getSubjects(ids)));
                
                
@@ -558,9 +481,8 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
            
         ArrayList<Subject> subjects = new ArrayList<>();
         ArrayList<Subject> activesubjects = new ArrayList<>();
-           Statement st = this.cn.createStatement();
              
-          ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
+          ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
            Subject s = new Subject();
           s.setName("Select Subject");
           subjects.add(s);
@@ -578,7 +500,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
           {
               String[] ids = new String[1];
               ids=su.getId();
-           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
+           ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
            while(rs2.next())
            {
             if(rs2.getBoolean("Active")== true)
@@ -594,10 +516,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
        {
            ArrayList<Objective> objectives = new ArrayList<>();
        try {
-        
-             Statement st = this.cn.createStatement();
-            
-          ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid[0]);
+          ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id="+subjectid[0]);
           Objective s = new Objective();
           s.setName("Select Objective");
           objectives.add(s);
@@ -625,11 +544,7 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
        {
            ArrayList<Content> contents = new ArrayList<>();
        try {
-        
-             Statement st = this.cn.createStatement();
-            
-            
-          ResultSet rs1 = st.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+objectiveid[0]+")");
+          ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+objectiveid[0]+")");
          
            while (rs1.next())
             {

@@ -86,13 +86,9 @@ public class Subject {
     public ArrayList<String> fetchNameAndElective(int id, ServletContext servlet)
     { ArrayList<String> subjectName = new ArrayList<String>() ;
         try {
-             DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
-        this.cn = dataSource.getConnection();
-             Statement st = this.cn.createStatement();
              
             String consulta = "SELECT Title,Elective FROM AH_ZAF.dbo.Courses where CourseID = "+id;
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
           
             while (rs.next())
             {

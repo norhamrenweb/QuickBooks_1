@@ -8,7 +8,6 @@ package controladores;
 import Montessori.*;
 import Montessori.Level;
 import atg.taglib.json.util.JSONException;
-import atg.taglib.json.util.JSONObject;
 import com.google.gson.*;
 
 import atg.taglib.json.util.JSONObject;
@@ -30,7 +29,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -41,11 +39,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Iterator;
-import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 
@@ -55,7 +49,6 @@ import org.apache.log4j.Logger;
  */
 @Controller
 public class SOWTreeControlador {
-     Connection cn;
      static Logger log = Logger.getLogger(SOWTreeControlador.class.getName());
      private Object getBean(String nombrebean, ServletContext servlet)
     {
@@ -69,11 +62,7 @@ public class SOWTreeControlador {
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("sowdisplay");
     try{
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-        Statement st = this.cn.createStatement();
-        ResultSet rs = st.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
         List <Level> grades = new ArrayList();
         Level l = new Level();
         l.setName("Select level");
@@ -106,22 +95,13 @@ public class SOWTreeControlador {
        Tree tree = new Tree();
        Node<String> rootNode = new Node<String>("Subjects","A"," {\"disabled\":true}");
     try{
-        DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-       
-       
-        Statement st = this.cn.createStatement();
+
         String[] levelid = hsr.getParameterValues("seleccion1");
         ArrayList<Subject> subs = this.getSubjects(levelid);
-         dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-        this.cn = dataSource.getConnection();
-       
-       
-        st = this.cn.createStatement();
+
         for(Subject sub:subs){
             String[] sid = sub.getId();
-        ResultSet rs = st.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '"+sid[0]+"'");
+        ResultSet rs = DBConect.eduweb.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '"+sid[0]+"'");
         
         while(rs.next())
         {
@@ -245,9 +225,8 @@ public class SOWTreeControlador {
         ArrayList<Subject> subjects = new ArrayList<>();
         ArrayList<Subject> activesubjects = new ArrayList<>();
         try{
-           Statement st = this.cn.createStatement();
              
-          ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
+          ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
            Subject s = new Subject();
           s.setName("Select Subject");
           subjects.add(s);
@@ -265,7 +244,7 @@ public class SOWTreeControlador {
           {
               String[] ids = new String[1];
               ids=su.getId();
-           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
+           ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
            while(rs2.next())
            {
             if(rs2.getBoolean("Active")== true)
@@ -286,10 +265,8 @@ public class SOWTreeControlador {
        {
            ArrayList<Objective> objectives = new ArrayList<>();
        try {
-        
-             Statement st = this.cn.createStatement();
             
-          ResultSet rs1 = st.executeQuery("select name,id from public.objective where subject_id="+subjectid[0]);
+          ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id="+subjectid[0]);
 //          Objective s = new Objective();
 //          s.setName("Select Objective");
 //          objectives.add(s);
