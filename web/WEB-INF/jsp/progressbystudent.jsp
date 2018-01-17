@@ -328,7 +328,7 @@
                             $('#foto').attr('src', '../recursos/img/NotPhoto.png');
                         } else {
                             $('#foto').removeAttr('src');
-                            $('#foto').attr('src', '../recursos/img/'+info.foto+'.jpeg');
+                            $('#foto').attr('src', '../recursos/img/'+info.foto);
                         }
                        
                         $('.cell').off('click');

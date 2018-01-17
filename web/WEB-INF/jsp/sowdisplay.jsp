@@ -398,7 +398,7 @@ input[type="radio"] .styled:checked + label::after {
 </div>
 <div class="divLoadStudent" id="loadingmessage">
     <div class="text-center"> 
-        <img src='../recursos/img/large_loading.gif'/>
+        <img class="imgLoading" src='../recursos/img/large_loading.gif'/>
     </div>
 </div>
         
