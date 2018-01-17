@@ -428,44 +428,46 @@
             function comboSelectionLevel()
             {
                 $('#content').empty();
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                if($('#level').val()!==-1){
+                    if (window.XMLHttpRequest) //mozilla
+                    {
+                        ajax = new XMLHttpRequest(); //No Internet explorer
+                    } else
+                    {
+                        ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    $('#loadingmessage').show();
+                    $('#createOnClick').attr('disabled', true);
+                    $('#objective').val("");
+                    $('#subject').val("");
+
+                    ajax.onreadystatechange = funcionCallBackSubject;
+                    var seleccion1 = document.getElementById("level").value;
+                    ajax.open("POST", "subjectlistLevel.htm?seleccion1=" + seleccion1, true);
+                    $('#objective').val("");
+                    $('#subject').val("");
+                    ajax.send("");
                 }
-                $('#loadingmessage').show();
-                $('#createOnClick').attr('disabled', true);
-                $('#objective').val("");
-                $('#subject').val("");
-
-                ajax.onreadystatechange = funcionCallBackSubject;
-                var seleccion1 = document.getElementById("level").value;
-                ajax.open("POST", "subjectlistLevel.htm?seleccion1=" + seleccion1, true);
-                $('#objective').val("");
-                $('#subject').val("");
-                ajax.send("");
-
             }
             function comboSelectionSubject()
             {
                 $('#content').empty();
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                if($('#subject').val()!==-1){
+                    if (window.XMLHttpRequest) //mozilla
+                    {
+                        ajax = new XMLHttpRequest(); //No Internet explorer
+                    } else
+                    {
+                        ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+
+
+                    ajax.onreadystatechange = funcionCallBackObjective;
+                    var seleccion2 = document.getElementById("subject").value;
+                    ajax.open("POST", "objectivelistSubject.htm?seleccion2=" + seleccion2, true);
+                    // $('#objective').val("");
+                    ajax.send("");
                 }
-
-
-                ajax.onreadystatechange = funcionCallBackObjective;
-                var seleccion2 = document.getElementById("subject").value;
-                ajax.open("POST", "objectivelistSubject.htm?seleccion2=" + seleccion2, true);
-                // $('#objective').val("");
-                ajax.send("");
-
             }
             function comboSelectionLoadTemplateLessons()
             {
