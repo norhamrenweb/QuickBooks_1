@@ -777,7 +777,10 @@
             .tree-icon{
                 display:none;
             }
-
+            .foto
+            {
+                width: 100%;
+            }
         </style>
     </head>
 
@@ -839,9 +842,10 @@
                                 <div class="col-xs-6 text-center containerPhoto">
                                     <div class="cell">
            
-                                       <img id="foto" src="../recursos/img/NotPhoto.png" >
+                                        <img id="foto" src="../recursos/img/NotPhoto.png" class="foto">
                                     </div>                                        
-                                </div>                                     
+                                </div>
+                                <div class="col-xs-6">
                                     <div class="col-xs-12 sinpadding form-group">
                                         <label class="col-xs-6 label-demographic" >Birthday</label>
                                         <span class="col-xs-12 demographic" id="BOD"></span>
@@ -855,7 +859,7 @@
                                         <span class="col-xs-12 demographic" id="nextlevel"></span>
                                     </div>
                                 </div>
-                            
+                            </div>
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="progress">
                                 <div class="col-xs-12">
                                     <table id="tg" class="easyui-treegrid"></table>
