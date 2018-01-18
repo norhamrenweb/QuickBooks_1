@@ -55,6 +55,9 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
         List <Level> grades = new ArrayList();
         Level l = new Level();
         l.setName("Select level");
+        String[] aux= new String[1];
+        aux[0]= "-1";
+        l.setId(aux);
         grades.add(l);
         while(rs.next())
         {
@@ -496,6 +499,12 @@ static Logger log = Logger.getLogger(CreateLessonControlador.class.getName());
             
                 subjects.add(sub);
             }
+           String[] aux = new String[1];
+           aux[0]="-1";
+           Subject sub = new Subject();
+           sub.setId(aux);
+           sub.setName("Select subject");
+           activesubjects.add(sub);
            for(Subject su:subjects.subList(1,subjects.size()))
           {
               String[] ids = new String[1];

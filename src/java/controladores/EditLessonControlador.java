@@ -183,6 +183,9 @@ public class EditLessonControlador {
         List <Level> grades = new ArrayList();
         Level le = new Level();
         le.setName("Select level");
+        String[] aux= new String[1];
+        aux[0]= "-1";
+        le.setId(aux);
         grades.add(le);
         while(rs4.next())
         {
@@ -253,6 +256,12 @@ public class EditLessonControlador {
             
                 subjects.add(sub);
             }
+                      String[] aux = new String[1];
+           aux[0]="-1";
+           Subject sub = new Subject();
+           sub.setId(aux);
+           sub.setName("Select subject");
+           activesubjects.add(sub);
            for(Subject su:subjects.subList(1,subjects.size()))
           {
               String[] ids = new String[1];

@@ -474,7 +474,7 @@ public class ProgressbyStudent {
             InputStream inputStream = conn.getInputStream();
 
             ServletContext context = request.getServletContext();
-            appPath = context.getRealPath("") + "recursos\\img\\"+photoName+".jpeg";
+            appPath = context.getRealPath("") + "recursos/img/"+photoName;
 
             // FileOutputStream outputStream = new FileOutputStream(savePath);
             FileOutputStream outputStream = new FileOutputStream(appPath);

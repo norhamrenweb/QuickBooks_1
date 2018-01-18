@@ -19,7 +19,7 @@
 
             var error = ${DatainBBDD};
             $(document).ready(function () {
-
+                $('#loadingmessage').hide();
                 var userLang = navigator.language || navigator.userLanguage;
                 var myDate = new Date();
                 //Muestra calendario
@@ -183,7 +183,32 @@
                 if (error === true) {
                     $("#msjError").removeClass("hide");
                 }
-
+               
+    $('#fecha,#horainicio,#horafin').on('dp.change', function (e) {
+                if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) &&document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '') {
+                        if ($("#ideaCheck:checked").length === 1) {
+                            $('#saveEdit').attr('disabled', false);
+                        } else { //no es idea
+                            var numAlum = $('#destino option').length;
+                            if ($('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
+                                $('#saveEdit').attr('disabled', false);
+                            } else {
+                                $('#saveEdit').attr('disabled', true);
+                            }
+                        }
+                    } else {
+                        $('#saveEdit').attr('disabled', true);
+                    }
+                    if (($("#NameLessons").val().indexOf("'") !== -1) || ($("#NameLessons").val().indexOf("\"") !== -1)) {
+                        $('#NameLessons').parent().addClass("has-error");
+                        $('#NameLessons').parent().children().last().removeClass("hide");
+                        $('#saveEdit').attr('disabled', true);
+                    }
+                    else{
+                        $('#NameLessons').parent().removeClass("has-error");
+                        $('#NameLessons').parent().children().last().addClass("hide");
+                    }
+                });
             });
 
 
@@ -265,6 +290,7 @@
             {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
+                        $('#loadingmessage').hide();
                         document.getElementById("origen").innerHTML = ajax.responseText;
                     }
                 }
@@ -292,6 +318,7 @@
             {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
+                        $('#loadingmessage').hide();
                         document.getElementById("subject").innerHTML = ajax.responseText;
                     }
                 }
@@ -310,6 +337,7 @@
             {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
+                        $('#loadingmessage').hide();
                         var json = JSON.parse(ajax.responseText);
                         var level = json.level;
                         var subject = JSON.parse(json.subject).id;
@@ -381,42 +409,50 @@
             function seleccionarTodos() {
                 $('#destino option').first().prop('selected', true);
             }
+            
             function comboSelectionLevel()
             {
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                $('#content').empty();
+                if($('#level').val()!==-1){
+                    if (window.XMLHttpRequest) //mozilla
+                    {
+                        ajax = new XMLHttpRequest(); //No Internet explorer
+                    } else
+                    {
+                        ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    $('#loadingmessage').show();
+                    $('#createOnClick').attr('disabled', true);
+                    $('#objective').val("");
+                    $('#subject').val("");
+
+                    ajax.onreadystatechange = funcionCallBackSubject;
+                    var seleccion1 = document.getElementById("level").value;
+                    ajax.open("POST", "subjectlistLevel.htm?seleccion1=" + seleccion1, true);
+                    $('#objective').val("");
+                    $('#subject').val("");
+                    ajax.send("");
                 }
-
-                $('#saveEdit').attr('disabled', true);
-                ajax.onreadystatechange = funcionCallBackSubject;
-                var seleccion1 = document.getElementById("level").value;
-                ajax.open("POST", "subjectlistLevel.htm?seleccion1=" + seleccion1, true);
-                $("#objective").val("");
-                $("#subject").val("");
-                ajax.send("");
-
             }
             function comboSelectionSubject()
             {
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                $('#content').empty();
+                if($('#subject').val()!==-1){
+                    if (window.XMLHttpRequest) //mozilla
+                    {
+                        ajax = new XMLHttpRequest(); //No Internet explorer
+                    } else
+                    {
+                        ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+
+
+                    ajax.onreadystatechange = funcionCallBackObjective;
+                    var seleccion2 = document.getElementById("subject").value;
+                    ajax.open("POST", "objectivelistSubject.htm?seleccion2=" + seleccion2, true);
+                    // $('#objective').val("");
+                    ajax.send("");
                 }
-
-
-                ajax.onreadystatechange = funcionCallBackObjective;
-                var seleccion2 = document.getElementById("subject").value;
-                ajax.open("POST", "objectivelistSubject.htm?seleccion2=" + seleccion2, true);
-
-                ajax.send("");
-
             }
 
             function comboSelectionIdeaLessons()
@@ -429,13 +465,14 @@
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
 
-
+                $('#loadingmessage').show();
                 ajax.onreadystatechange = funcionCallBackIdeaLessons;
                 var seleccionidea = document.getElementById("ideas").value;
                 //ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccionTemplate,true);
                 ajax.open("POST", "copyfromIdea.htm?seleccionidea=" + seleccionidea, true);
                 ajax.send("");
             }
+            
             function comboSelectionObjective()
             {
                 if (window.XMLHttpRequest) //mozilla
@@ -883,6 +920,11 @@
             </div>
         </div>
 
+        <div class="divLoadStudent" id="loadingmessage">
+            <div class="text-center"> 
+                <img class="imgLoading" src='../recursos/img/large_loading.gif'/>
+            </div>
+        </div>
 
 
     </body>
