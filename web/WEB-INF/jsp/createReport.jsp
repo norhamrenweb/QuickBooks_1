@@ -647,7 +647,6 @@
                     </legend>
                     <div class="form-group collapse in" id="contenedorStudents">
                         <div class="col-xs-12">
-                            <div class="col-xs-2"></div>
                             <div class="col-xs-3">
                                 <label>Filter</label>     
                             </div>
@@ -700,6 +699,22 @@
                         </div>
                     </div>
                 </fieldset>
+                                <div class="col-xs-12">
+                            <div class="col-xs-3">
+                                <label>Report</label>     
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="col-xs-3">
+                                <select class="form-control" name="typeReport" id="typeReport" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">              
+                                    <option value="" disabled="true"  disabled="true">Select Type</option>
+                                    <option value="progress_prePrimary" >Progress Pre-Primary</option>
+                                    <option value="progress_Yr1_3" disabled="true">Progress Yr1_3</option>
+                                    <option value="progress_Gr4" >Progress Gr4</option>
+                                    <option value="progress_Gr7" disabled="true" >Academic Gr7</option>                                    
+                                </select>
+                            </div></div>
+                                
                 <div class="hide col-xs-12 text-center">
                     <input type="submit" class="btn btn-success" id="createOnClick" value="<spring:message code="etiq.txtcreate"/>">
                 </div>
