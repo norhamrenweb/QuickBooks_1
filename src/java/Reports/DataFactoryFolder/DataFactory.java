@@ -5,6 +5,7 @@
  */
 package Reports.DataFactoryFolder;
 
+import Montessori.DBConect;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -32,9 +33,9 @@ public abstract class DataFactory{
     public abstract Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException;
     public abstract String getNameReport();
                 
-    protected ResultSet cargarAlumno(String studentId, Connection cn,Statement st ) throws SQLException{
+    protected ResultSet cargarAlumno(String studentId) throws SQLException{
         String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentId = '" + studentId + "'";
-        ResultSet rs = st.executeQuery(consulta);
+        ResultSet rs = DBConect.ah.executeQuery(consulta);
 
         int year = Calendar.getInstance().get(Calendar.YEAR);
         while (rs.next()) {
