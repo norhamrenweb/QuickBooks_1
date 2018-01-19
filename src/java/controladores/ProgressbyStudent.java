@@ -62,11 +62,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * progress by student
+ *
  * @author nmohamed
  */
 @Controller
 //@Scope("session")
 public class ProgressbyStudent {
+
     static Logger log = Logger.getLogger(ProgressbyStudent.class.getName());
     private ServletContext servlet;
 
@@ -109,7 +111,6 @@ public class ProgressbyStudent {
         return mv;
     }
 
-    // loads the students based on the selected level
     @RequestMapping("/progressbystudent/studentlistLevel.htm")
     @ResponseBody
     public String studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -118,7 +119,7 @@ public class ProgressbyStudent {
         List<Students> studentsgrades = new ArrayList();
         String[] levelid = hsr.getParameterValues("seleccion");
         String test = hsr.getParameter("levelStudent");
-        studentsgrades = Students.getStudentslevel(levelid[0],log);
+        studentsgrades = Students.getStudentslevel(levelid[0], log);
         String data = new Gson().toJson(studentsgrades);
 //        mv.addObject("listaAlumnos",data );
 
@@ -141,14 +142,7 @@ public class ProgressbyStudent {
             ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
                     + "                 inner join courses on courses.courseid=classes.courseid\n"
                     + "                  where roster.studentid = " + studentid + " and roster.enrolled" + termid + "= 1 and courses.active = 1 and classes.yearid = '" + yearid + "'");// the term and year need to be dynamic, check with vincent
-            /*Subject first = new Subject();
-            first.setName("Select Subject");
-            
-            String[] ids2 = new String[1];
-            ids2[0] = "682";       
-            first.setId(ids2);
-            
-            subjects.add(first);*/
+
             String name9, id;
             while (rs1.next()) {
                 Subject sub = new Subject();
@@ -163,9 +157,6 @@ public class ProgressbyStudent {
 
             }
 
-            //activesubjects.add(subjects.get(0));
-            
-                
             for (int i = 0; i < subjects.size(); i++) {
                 String[] ids = new String[1];
                 ids = subjects.get(i).getId();
@@ -173,19 +164,6 @@ public class ProgressbyStudent {
                 activesubjects.add(subjects.get(i));
             }
 
-            //loop through subjects to get their names, skipping the first 
-            /*  for (Subject s : subjects.subList(1, subjects.size())) {
-                String[] ids = new String[1];
-                ids = s.getId();
-                ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = " + ids[0]);
-                while (rs2.next()) {
-                    if (rs2.getBoolean("Active") == true) {
-                        s.setName(rs2.getString("Title"));
-                        activesubjects.add(s);
-                    }
-                }
-            }*/
-            
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
             StringWriter errors = new StringWriter();
@@ -206,8 +184,6 @@ public class ProgressbyStudent {
 
         String[] levelid = new String[1];
         levelid = hsr.getParameterValues("seleccion1");
-
-//        mv.addObject("subjects", this.getSubjects(levelid[0]));
         return mv;
     }
 
@@ -220,9 +196,7 @@ public class ProgressbyStudent {
         }
         ModelAndView mv = new ModelAndView("progressdetails");
         Objective o = new Objective();
-        //     String[] hi = hsr.getParameterValues("data");
         servlet = hsr.getServletContext();
-        // JSONObject jsonObj = new JSONObject(hi[0]);
         List<Progress> progress = new ArrayList<>();
         String finalrating = null;
         String presenteddate = null;
@@ -255,12 +229,7 @@ public class ProgressbyStudent {
                         attemptdates.add(x.getComment_date());
                     }
                 }
-                //           select the latest rating to be presented as the final rating for this objective
-//                String consulta = "SELECT rating.name FROM rating where id in(select rating_id from progress_report where student_id = '" + d.getCol2() + "' AND comment_date = (select max(comment_date)   from public.progress_report where student_id =" + d.getCol2() + " AND objective_id =" + d.getCol1() + " and generalcomment = false) AND objective_id =" + d.getCol1() + "and generalcomment = false )";
-//                ResultSet rs2 = st.executeQuery(consulta);
-//                while (rs2.next()) {
-//                    finalrating = rs2.getString("name");
-//                }
+
                 finalrating = this.getfinalrating(d.getCol1(), d.getCol2());
                 String consulta = "select min(comment_date) as date from progress_report where student_id =" + d.getCol2() + " and rating_id in (select id from rating where name = 'Presented') and objective_id =" + d.getCol1();
                 ResultSet rs3 = DBConect.eduweb.executeQuery(consulta);
@@ -303,13 +272,6 @@ public class ProgressbyStudent {
                 String prog = new Gson().toJson(progress);
                 String rating = new Gson().toJson(finalrating);
                 JSONObject obj = new JSONObject();
-//        obj.put("progress", prog);
-//        obj.put("finalrating", rating);
-//        obj.put("attempteddate",attempteddate);
-//        obj.put("mastereddate",mastereddate);
-//        obj.put("presenteddate",presenteddate);
-                //return obj.toString();
-                // model.addAttribute("holas");
                 mv.addObject("progress", progress);
                 mv.addObject("finalrating", finalrating);
                 mv.addObject("attempteddate", attempteddate);
@@ -321,7 +283,6 @@ public class ProgressbyStudent {
                 mv.addObject("attempteddates", attemptdates);
                 mv.addObject("objective", o.fetchName(Integer.parseInt(d.getCol1()), servlet));
             }
-//        mv.addObject(obj);
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);
             StringWriter errors = new StringWriter();
@@ -331,7 +292,6 @@ public class ProgressbyStudent {
         return mv;
     }
 
-    //FUNCION NUEVA
     @RequestMapping("/progressbystudent/loadtree.htm")
     @ResponseBody
     public String treeload(HttpServletRequest hsr, HttpServletResponse hsr1) {
@@ -355,15 +315,6 @@ public class ProgressbyStudent {
 
         String total = "";
         try {
-
-            /*URL url = new URL ("ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + photoName);
-            URLConnection con = url.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-           String inputLine="";
-            while ((inputLine = in.readLine()) != null){ 
-                total += inputLine;
-                System.out.println(inputLine);}
-            in.close();*/
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
@@ -378,17 +329,6 @@ public class ProgressbyStudent {
         return total;
     }
 
-    /*
-    @RequestMapping(value = "/getImage/{imageId}")
-    @ResponseBody
-    public byte[] getImage(@PathVariable long imageId, HttpServletRequest request) throws IOException {
-        String rpath = request.getRealPath("/");
-        rpath = rpath + "/" + imageId; // whatever path you used for storing the file
-        Path path = Paths.get(rpath);
-        byte[] data = Files.readAllBytes(path);
-        return data;
-    }
-     */
     public String getImage(String photoName, HttpServletRequest request) throws IOException {
 
         String ftpUrl = "ftp2.renweb.com";
@@ -397,7 +337,7 @@ public class ProgressbyStudent {
         String pass = "e3f14+7mANDp";
 
         String filePath = "/Pictures/" + photoName;
-        String appPath="";
+        String appPath = "";
         String savePath = request.getContextPath() + "/photo.jpeg";
 
         byte[] buffer = new byte[4096];
@@ -407,11 +347,11 @@ public class ProgressbyStudent {
             InputStream inputStream = conn.getInputStream();
 
             ServletContext context = request.getServletContext();
-            appPath = context.getRealPath("") + "recursos/img/"+photoName;
+            appPath = context.getRealPath("") + "recursos/img/" + photoName;
 
             // FileOutputStream outputStream = new FileOutputStream(savePath);
             FileOutputStream outputStream = new FileOutputStream(appPath);
-            
+
             int bytesRead = -1;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
@@ -452,12 +392,9 @@ public class ProgressbyStudent {
                 student.setFoto(rs.getString("PathToPicture"));
                 student.setLevel_id(rs.getString("GradeLevel"));
                 student.setNextlevel(rs.getString("NextGradeLevel"));
-//                student.setSubstatus("Substatus");
 
             }
-            //this.finalize();
-            // prueba = cargarFoto(student.getFoto());
-            //      cargarFoto(student.getFoto(), hsr1);
+
             prueba = getImage(student.getFoto(), hsr);
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
@@ -474,9 +411,6 @@ public class ProgressbyStudent {
         obj.put("info", info);
         obj.put("sub", sub);
         obj.put("prueba", prueba2);
-//    mv.addObject("student",student);
-
-//     mv.addObject("subjects", this.getSubjects(student.getLevel_id()));//Integer.parseInt(alumnos.getLevel_id())));
         obj.put("prog", this.loadtree(student.getId_students(), hsr.getServletContext()));
         return obj.toString();
     }
@@ -489,35 +423,8 @@ public class ProgressbyStudent {
         String[] data = selection.split(",");
         String subjectid = data[0];
         String studentid = data[1];
-//        List<Progress> progress = new ArrayList<>();
-//        List<Objective> objectives = new ArrayList<>();
-//        List<String> objname = new ArrayList<>();
-//        List<String> objdscp = new ArrayList<>();
-//        List<String> comment = new ArrayList<>();
-//        List<Date> commentdate = new ArrayList<>();
-//        List<Integer> objid = new ArrayList<>();
         List<DBRecords> result = new ArrayList<>();
         try {
-
-//            String consulta = "SELECT * FROM objective where subject_id = "+subjectid;
-//            ResultSet rs = st.executeQuery(consulta);
-//          String consulta = " SELECT objective.id,objective.name,objective.description,progress_report.comment,progress_report.comment_date FROM progress_report  INNER JOIN objective ON progress_report.objective_id = objective.id where generalcomment = TRUE AND student_id = "+studentid+" AND subject_id = "+subjectid;
-//          ResultSet rs = st.executeQuery(consulta);
-//          int i = 0;
-//           while (rs.next())
-//            {
-//                DBRecords r = new DBRecords();
-//                r.setCol1(rs.getString("name"));
-//                r.setCol2(rs.getString("description"));
-//                r.setCol3(rs.getString("comment"));
-//                r.setCol4(""+rs.getDate("comment_date"));
-//                r.setCol5(""+rs.getInt("id"));
-//                result.add(r);
-//                objname.add(rs.getString("name"));
-//                objdscp.add(rs.getString("description"));
-//                comment.add(rs.getString("comment"));
-//                commentdate.add(rs.getDate("comment_date"));
-//                objid.add(rs.getInt("id"));
             String consulta = " SELECT id,name,description from objective where subject_id = " + subjectid;
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
@@ -545,16 +452,6 @@ public class ProgressbyStudent {
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
-
-//      String jname = new Gson().toJson(objname);
-//       String jdscp = new Gson().toJson(objdscp);
-//       String jcomm = new Gson().toJson(comment);
-//       String jcommd = new Gson().toJson(commentdate);
-//       JSONObject json = new JSONObject();
-//      json.put("objname",objname);
-//      json.put("dscp",objdscp);
-//      json.put("comment",comment);
-//      json.put("commentdate",commentdate);
         String off = new Gson().toJson(result);
         return off;
         //           return pjson;
@@ -567,8 +464,6 @@ public class ProgressbyStudent {
         JSONObject obj = new JSONObject();
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-//    String[] hi = hsr.getParameterValues("data");
-        // JSONObject jsonObj = new JSONObject(hi[0]);
         String objectiveid = data.getCol1();
         String comment = data.getCol3();
         String studentid = data.getCol2();
@@ -576,11 +471,11 @@ public class ProgressbyStudent {
             String consulta = "select id from progress_report where objective_id = " + objectiveid + " and generalcomment = TRUE and student_id ='" + studentid + "'";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             if (!rs.next()) {
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,createdby) values (now(),'" + comment + "','" + studentid + "','" + objectiveid + "',true,'"+user.getId()+"')");
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,createdby) values (now(),'" + comment + "','" + studentid + "','" + objectiveid + "',true,'" + user.getId() + "')");
                 message = "Comment successfully updated";
 
             } else {
-                String s ="update progress_report set modifyby = '"+user.getId()+"',comment_date = now(),comment = '" + comment + "' where objective_id = " + objectiveid + " AND student_id = '" + studentid + "' and generalcomment = true";
+                String s = "update progress_report set modifyby = '" + user.getId() + "',comment_date = now(),comment = '" + comment + "' where objective_id = " + objectiveid + " AND student_id = '" + studentid + "' and generalcomment = true";
                 DBConect.eduweb.executeUpdate(s);
                 message = "Comment successfully updated";
             }
@@ -597,8 +492,6 @@ public class ProgressbyStudent {
         return obj.toString();
     }
 
-//    @RequestMapping("/progressbystudent/loadtree.htm")
-//    @ResponseBody
     public String loadtree(int studentid, ServletContext hsr) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
 
         ModelAndView mv = new ModelAndView("progressbystudent");
@@ -611,8 +504,6 @@ public class ProgressbyStudent {
         List<Subject> subs = new ArrayList<>();
         Nodetreegrid<String> rootNode = new Nodetreegrid<String>("Subjects", "A", "", "", "", "");
         try {
-//        String[] levelid = hsr.getParameterValues("seleccion1");
-            //List<Subject> subs = this.getSubjects(levelid);
             subs = getSubjects(studentid);
 
             String consulta = "select * from Courses";
@@ -645,7 +536,7 @@ public class ProgressbyStudent {
                 }
             }
 
-            for (DBRecords x : steps) {// AQUI ES DONDE TARDA!!!
+            for (DBRecords x : steps) {
                 Subject s = new Subject();
                 String id = null;
                 id = x.getCol3();
@@ -655,7 +546,6 @@ public class ProgressbyStudent {
                 if (!subjects.contains(x.getCol3())) {
                     subjects.add(x.getCol3());
                 }
-                //get the student progress for student 10101,getting the last step the student in, with the latest date
                 ResultSet rs5 = DBConect.eduweb.executeQuery("select comment_date,step_id from progress_report where objective_id='" + x.getCol6() + "' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '" + studentid + "' AND objective_id = '" + x.getCol6() + "' and generalcomment = false) and generalcomment = false and student_id ='" + studentid + "'");
                 if (rs5.next()) {
                     String stsdone = rs5.getString("step_id");
@@ -764,63 +654,16 @@ public class ProgressbyStudent {
         return obN;
     }
 
-//    public ArrayList<Subject> getSubjects(String levelid) throws SQLException
-//       {
-//           
-//        ArrayList<Subject> subjects = new ArrayList<>();
-//        ArrayList<Subject> activesubjects = new ArrayList<>();
-//        try{
-//           Statement st = this.cn.createStatement();
-//             
-//          ResultSet rs1 = st.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid+")");
-//           Subject s = new Subject();
-//          s.setName("Select Subject");
-//          subjects.add(s);
-//           
-//           while (rs1.next())
-//            {
-//             Subject sub = new Subject();
-//             String[] ids = new String[1];
-//            ids[0]=""+rs1.getInt("CourseID");
-//             sub.setId(ids);
-//            
-//                subjects.add(sub);
-//            }
-//           for(Subject su:subjects.subList(1,subjects.size()))
-//          {
-//              String[] ids = new String[1];
-//              ids=su.getId();
-//           ResultSet rs2 = st.executeQuery("select Title,Active from Courses where CourseID = "+ids[0]);
-//           while(rs2.next())
-//           {
-//            if(rs2.getBoolean("Active")== true)
-//               {
-//                   su.setName(rs2.getString("Title"));
-//                   activesubjects.add(su);
-//               }
-//           }
-//          }
-//        }catch(SQLException ex){
-//        StringWriter errors = new StringWriter();
-//        ex.printStackTrace(new PrintWriter(errors));
-//        log.error(ex+errors.toString());
-//        }
-//           return activesubjects;
-//       }
-    //classroom observations
     @RequestMapping("/progressbystudent/savecomment.htm")
     @ResponseBody
     public String savecomment(@RequestBody Observation obs, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-//        if ((new SessionCheck()).checkSession(hsr)) {
-//            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-//        }
         ModelAndView mv = new ModelAndView("progressbystudent");
         try {
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
             String test = "insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('" + user.getId() + "',now(),'" + obs.getObservation() + "','" + obs.getType() + "','" + obs.getStudentid() + "','" + obs.getDate() + "')";
             DBConect.eduweb.executeUpdate("insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('" + user.getId() + "',now(),'" + obs.getObservation() + "','" + obs.getType() + "','" + obs.getStudentid() + "','" + obs.getDate() + "')");
-            
+
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
@@ -832,24 +675,21 @@ public class ProgressbyStudent {
     @RequestMapping("/progressbystudent/saveSubjectComment.htm")
     @ResponseBody
     public String saveSubjectComment(@RequestBody CommentSubject cSub, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-//        if ((new SessionCheck()).checkSession(hsr)) {
-//            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-//        }
-            ModelAndView mv = new ModelAndView("progressbystudent");
-     try {
+        ModelAndView mv = new ModelAndView("progressbystudent");
+        try {
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
-            String test = "insert into subjects_comments(subject_id,date_created,createdby_id,comment,studentid)values('" + cSub.getIdSubject() + "',now(),'" + user.getId() + "','" + cSub.getComment() + "','" + cSub.getIdStudent() +"')";
+            String test = "insert into subjects_comments(subject_id,date_created,createdby_id,comment,studentid)values('" + cSub.getIdSubject() + "',now(),'" + user.getId() + "','" + cSub.getComment() + "','" + cSub.getIdStudent() + "')";
             DBConect.eduweb.executeUpdate(test);
-           
-           } catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
         return "success";
     }
-    
+
     @RequestMapping("/progcal.htm")
     @ResponseBody
     public ModelAndView progcal(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -877,60 +717,6 @@ public class ProgressbyStudent {
         return format.format(calendar.getTime());
     }
 
-    /* FUNCIONA PARA 5 DIAS SEGUIDOS
-    @RequestMapping("/loadComentsStudent.htm")
-    @ResponseBody
-    public String loadComentsStudent(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        final int DIAS_MAX = 5;
-        String studentId = ""+r.getStudentid();
-        DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");   
-        String dateSelected = formatoFecha.format(r.getDate());
-        int days=0;
-        
-        Observation oAux = new Observation();
-        Date fechaActual = new Date();
-        String currentDate = formatoFecha.format(fechaActual);
-        
-        ArrayList<ArrayList<Observation>> arrayObservations = new  ArrayList<ArrayList<Observation>>();
-        ArrayList<Observation> arrayComments = new ArrayList<Observation>();
-        String consulta = "SELECT * FROM classobserv WHERE student_id = "+studentId+" AND commentdate = '"+dateSelected+"'";
-        
-        try{
-            DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource)this.getBean("dataSource",hsr.getServletContext());
-            Statement st = this.cn.createStatement();
-            while(days < DIAS_MAX && !currentDate.equals(dateSelected)){
-                
-                //dateSelected = getNextDate(dateSelected);
-                arrayComments.clear();
-                consulta = "SELECT * FROM classobserv WHERE student_id = "+studentId+" AND commentdate = '"+dateSelected+"' ORDER BY commentdate";
-                ResultSet rs = st.executeQuery(consulta);
-               
-                
-                while (rs.next()) {        
-                    oAux.setId(rs.getInt("id"));
-                    oAux.setLogged_by(rs.getInt("logged_by"));
-                    oAux.setDate(rs.getDate("date_created"));
-                    oAux.setObservation(rs.getString("comment"));
-                    oAux.setType(rs.getString("category"));
-                    oAux.setStudentid(Integer.parseInt(studentId));
-                    oAux.setCommentDate(rs.getDate("commentdate"));
-                    arrayComments.add(new Observation(oAux));
-                }
-                
-                if(!arrayComments.isEmpty()){
-                    arrayObservations.add(new ArrayList<Observation>(arrayComments));
-                    days++;
-                }
-                dateSelected = getNextDate(dateSelected);
-            }
-        }catch(SQLException ex){
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
-        }
-        return new Gson().toJson(arrayObservations);
-    }*/
     @RequestMapping("/updateComment.htm")
     public ModelAndView updateComment(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         if ((new SessionCheck()).checkSession(hsr)) {
@@ -1011,9 +797,6 @@ public class ProgressbyStudent {
         Observation oAux = new Observation();
 
         formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-        //   Date fechaActual = new Date();
-        // String currentDate = formatoFecha.format(fechaActual);
-
         String dateSelected = yearSelected + "-" + monthSelected + "-" + "01";
 
         ArrayList<ArrayList<Observation>> arrayObservations = new ArrayList<ArrayList<Observation>>();
@@ -1034,8 +817,6 @@ public class ProgressbyStudent {
                     logId = rs.getInt("logged_by");
                     oAux.setNameTeacher(mapPersons.get("" + logId));
                     oAux.setLogged_by(logId);
-                    // oAux.setNameTeacher(mapPersons.get(""+rs.getInt("logged_by")));
-                    //  oAux.setNameTeacher(fetchTeacher(rs.getInt("logged_by"),hsr));
                     oAux.setDate("" + rs.getDate("date_created"));
                     oAux.setObservation(rs.getString("comment"));
                     oAux.setType(rs.getString("category"));
@@ -1062,10 +843,6 @@ public class ProgressbyStudent {
         try {
 
             ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id=" + subjectid[0]);
-//          Objective s = new Objective();
-//          s.setName("Select Objective");
-//          objectives.add(s);
-
             while (rs1.next()) {
                 String[] ids = new String[1];
                 Objective sub = new Objective();
@@ -1123,7 +900,6 @@ public class ProgressbyStudent {
     public String getfinalrating(String objid, String studid) throws SQLException {
         String result = "";
         try {
-// most recent rating excluding the NA & the empty rating which have ids 6 & 7
             String consulta = "SELECT rating.name FROM rating where id in"
                     + "(select rating_id from progress_report where student_id = '" + studid + "'"
                     + " AND comment_date = (select max(comment_date)   from public.progress_report "

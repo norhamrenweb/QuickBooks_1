@@ -9,8 +9,6 @@ package controladores;
  *
  * @author Jesús Aragón
  */
-
-
 import java.io.IOException;
 import java.util.Locale;
 import javax.servlet.ServletException;
@@ -20,23 +18,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+public class DatosUsuarioControlador implements Controller {
 
-public class DatosUsuarioControlador implements Controller
-{
     @Override
-  public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             RequestContextUtils.getLocaleResolver(request).setLocale(request, response, new Locale(request.getParameter("lenguaje")));
         } catch (Exception ex) {
         }
- 
+
         return new ModelAndView("userform");
     }
 
-
-
-
-   
 }
-

@@ -53,21 +53,11 @@ public class ProgressControlador {
            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonprogress");
         List<Students> instructors = new ArrayList<>();
-//        String disable = hsr.getParameter("disable");
         String disable = null;
         Students teacher = new Students();
          try {
         String lessonid = hsr.getParameter("LessonsSelected");
-//     DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-//Date lessondate = format.parse(hsr.getParameter("seleccion5"));
-//            
-//            String consulta = "SELECT id_lessons FROM public.lessons where nombre_lessons ='"+lessonname+ "' ";
-//            ResultSet rs = st.executeQuery(consulta);
-//          int lessonid = 0;
-//            while (rs.next())
-//            {
-//                lessonid = rs.getInt("id_lessons");
-//            }
+
            String consulta = "SELECT * FROM public.lesson_detailes where id ="+lessonid;
             ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
         Lessons lesson = new Lessons();
@@ -116,8 +106,6 @@ public class ProgressControlador {
     mv.addObject("lessondetailes",lesson);
     mv.addObject("disable", disable);
     mv.addObject("steps",steps);
-    //load instructors names from renweb, persons with faculty flag (in staff field)
-
     consulta = "select LastName,FirstName,MiddleName,PersonID from Person where PersonID in (select PersonID from Staff where Faculty = 1) order by LastName";
     ResultSet rs2 = DBConect.ah.executeQuery(consulta);
     while(rs2.next())
@@ -241,41 +229,24 @@ public class ProgressControlador {
         String[] teacher= hsr.getParameterValues("TXTinstructor");
         String[] steps= hsr.getParameterValues("your_awesome_parameter");
         String archived = hsr.getParameter("buttonAchived");// is equal to on or null
-    //update presented by
         if(!teacher[0].isEmpty())
         {
         DBConect.eduweb.executeUpdate("update lessons set presentedby = "+teacher[0]+" where id = "+lessonid[0]);
         } 
     for(int i=0;i<studentids.length;i++)
-    { // if the teacher did not fill the attendance no update will be done to avoid null pointer exception
-//        if(att[i].equals("0") || att[i].isEmpty())
-//        { 
+    {
             String test = "update lesson_stud_att set attendance = '"+att[i]+"',timestamp= now() where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'";
             DBConect.eduweb.executeUpdate(test);
-//        }
-//          if(att == null)
-//        { String test = "update lesson_stud_att set attendance = '',timestamp= now() where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'";
-//            st.executeUpdate(test);
-//        }
-
     }
-    //update steps
     ResultSet rs2 = DBConect.eduweb.executeQuery("select id from obj_steps where obj_id = '"+objectiveid[0]+"' order by storder");
-//             List<Step> allsteps = new ArrayList();
              ArrayList<String> allsteps = new ArrayList();
              while(rs2.next()){
-//                 Step s = new Step();
-//                 s.setId(""+rs1.getInt("id"));
-//                 s.setOrder(rs1.getInt("storder"));
-//                 allsteps.add(s);
                 allsteps.add(""+rs2.getInt("id"));
              }
                 
      for(int i=0;i<studentids.length;i++)
          
     {   String step=null;
-        // need to see if an objective does not have a steps how it will act, also if the user erased the steps done by
-        // the student, need to update the DB
         if(!steps[i].equals("0") && !allsteps.isEmpty() && !steps[i].equals("")){
              
             ArrayList<String> al2 = new ArrayList<String>(allsteps.subList(0,(Integer.parseInt(steps[i]))));
@@ -289,12 +260,8 @@ public class ProgressControlador {
             step = step.substring(0, step.length()-1);
         }
         
-    
-   //update rating
-//     for(int i=0;i<studentids.length;i++)
-         
+
        String ratingid = null;
-      //  if(!ratings[i].isEmpty()){ 
         ResultSet rs1 = DBConect.eduweb.executeQuery("select id from rating where name = '"+ratings[i]+"'");
                 
                 
@@ -302,7 +269,7 @@ public class ProgressControlador {
                 {
                ratingid = ""+rs1.getInt("id");
                 }
-                //check if there is already progress records for this lesson, if yes then will do update instead of insert
+            
               ResultSet rs = DBConect.eduweb.executeQuery("select * from progress_report where lesson_id ="+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
               if(!rs.next()){
                   if(ratingid != null){
@@ -321,16 +288,13 @@ public class ProgressControlador {
                         DBConect.eduweb.executeUpdate("update progress_report set  modifyby = '"+user.getId()+"',comment_date = now(),comment = '"+comments[i]+"',lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false ,step_id = '"+step+"' where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
                     }
               }
-    //}
     } 
-     //archive lesson
      if ("on".equals(archived))
      {
          DBConect.eduweb.executeUpdate("update lessons set archive = TRUE where id = '"+lessonid[0]+"'");
      }else{
          DBConect.eduweb.executeUpdate("update lessons set archive = FALSE where id = '"+lessonid[0]+"'");
      }
-//     mv.addObject("message",message);
         }catch(SQLException ex){
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));

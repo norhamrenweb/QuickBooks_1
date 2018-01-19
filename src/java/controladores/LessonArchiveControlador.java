@@ -39,7 +39,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class LessonArchiveControlador {
 
     static Logger log = Logger.getLogger(LessonArchiveControlador.class.getName());
-//      private ServletContext servlet;
 
     private Object getBean(String nombrebean, ServletContext servlet) {
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
