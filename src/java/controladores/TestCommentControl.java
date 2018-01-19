@@ -5,14 +5,11 @@
  */
 package controladores;
 import Montessori.*;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -58,21 +55,4 @@ public class TestCommentControl {
         ModelAndView mv = new ModelAndView("testcomment");
     return mv;
     }
-//     @RequestMapping("/calendar.htm")
-//    public ModelAndView calendar(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-//         ModelAndView mv = new ModelAndView("calendar");
-//    try{
-//        DriverManagerDataSource dataSource;
-//        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",hsr.getServletContext());
-//        this.cn = dataSource.getConnection();
-//        Statement st = this.cn.createStatement();
-//     
-//           }catch(SQLException ex){
-//        StringWriter errors = new StringWriter();
-//        ex.printStackTrace(new PrintWriter(errors));
-//        log.error(ex+errors.toString());
-//    }
-//    mv.addObject("message","works");
-//    return mv;
-//    }
 }
