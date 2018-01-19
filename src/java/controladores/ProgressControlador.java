@@ -19,6 +19,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -229,6 +230,9 @@ public class ProgressControlador {
         String[]lessonid=hsr.getParameterValues("TXTlessonid");
         ModelAndView mv = new ModelAndView("redirect:/lessonprogress/loadRecords.htm?LessonsSelected="+lessonid[0],"message",message);
         try{
+            HttpSession sesion = hsr.getSession();
+        User user = (User) sesion.getAttribute("user");
+        String userId = ""+user.getId();
         String[] objectiveid = hsr.getParameterValues("TXTobjectiveid");
         String[] comments = hsr.getParameterValues("TXTcomment");
         String[] ratings= hsr.getParameterValues("TXTrating");
@@ -302,19 +306,19 @@ public class ProgressControlador {
               ResultSet rs = DBConect.eduweb.executeQuery("select * from progress_report where lesson_id ="+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
               if(!rs.next()){
                   if(ratingid != null){
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment,step_id) values (now(),'"+comments[i]+"','"+ratingid+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false,'"+step+"')");
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment,step_id,createby) values (now(),'"+comments[i]+"','"+ratingid+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false,'"+step+"','"+user.getId()+"')");
               }
                   else {
-                     DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,lesson_id,student_id,objective_id,generalcomment,step_id) values (now(),'"+comments[i]+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false,'"+step+"')"); 
+                     DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,lesson_id,student_id,objective_id,generalcomment,step_id,createby) values (now(),'"+comments[i]+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false,'"+step+"','"+user.getId()+"')"); 
                   }
               }
               else{
                     if(ratingid != null){
                         String test = "update progress_report set comment_date = now(),comment = '"+comments[i]+"',rating_id ='"+ratingid+"' ,lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false ,step_id = '"+step+"' where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'";
-                DBConect.eduweb.executeUpdate("update progress_report set comment_date = now(),comment = '"+comments[i]+"',rating_id ='"+ratingid+"' ,lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false ,step_id = '"+step+"' where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
+                DBConect.eduweb.executeUpdate("update progress_report set  modifyby = '"+user.getId()+"', comment_date = now(),comment = '"+comments[i]+"',rating_id ='"+ratingid+"' ,lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false ,step_id = '"+step+"' where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
                     }
                     else {
-                        DBConect.eduweb.executeUpdate("update progress_report set comment_date = now(),comment = '"+comments[i]+"',lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false ,step_id = '"+step+"' where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
+                        DBConect.eduweb.executeUpdate("update progress_report set  modifyby = '"+user.getId()+"',comment_date = now(),comment = '"+comments[i]+"',lesson_id = '"+lessonid[0]+"',student_id = '"+studentids[i]+"',objective_id ='"+objectiveid[0]+"',generalcomment = false ,step_id = '"+step+"' where lesson_id = "+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
                     }
               }
     //}

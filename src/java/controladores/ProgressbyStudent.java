@@ -632,6 +632,8 @@ public class ProgressbyStudent {
     public String saveGeneralcomment(@RequestBody DBRecords data, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String message = "Comment was not saved";
         JSONObject obj = new JSONObject();
+        HttpSession sesion = hsr.getSession();
+        User user = (User) sesion.getAttribute("user");
 //    String[] hi = hsr.getParameterValues("data");
         // JSONObject jsonObj = new JSONObject(hi[0]);
         String objectiveid = data.getCol1();
@@ -641,11 +643,12 @@ public class ProgressbyStudent {
             String consulta = "select id from progress_report where objective_id = " + objectiveid + " and generalcomment = TRUE and student_id ='" + studentid + "'";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             if (!rs.next()) {
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment) values (now(),'" + comment + "','" + studentid + "','" + objectiveid + "',true)");
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,createdby) values (now(),'" + comment + "','" + studentid + "','" + objectiveid + "',true,'"+user.getId()+"')");
                 message = "Comment successfully updated";
 
             } else {
-                DBConect.eduweb.executeUpdate("update progress_report set comment_date = now(),comment = '" + comment + "' where objective_id = " + objectiveid + " AND student_id = '" + studentid + "' and generalcomment = true");
+                String s ="update progress_report set modifyby = '"+user.getId()+"',comment_date = now(),comment = '" + comment + "' where objective_id = " + objectiveid + " AND student_id = '" + studentid + "' and generalcomment = true";
+                DBConect.eduweb.executeUpdate(s);
                 message = "Comment successfully updated";
             }
             obj.put("message", message);
