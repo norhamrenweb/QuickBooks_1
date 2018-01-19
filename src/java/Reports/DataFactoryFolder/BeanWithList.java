@@ -21,6 +21,7 @@ public class BeanWithList {
     private String grade;
     private String Term;
 
+    
     public String getNameStudent() {
         return nameStudent;
     }
@@ -119,7 +120,6 @@ public class BeanWithList {
     public void setSubject(String subject) {
         this.subject = subject;
     }
-
-   
     
+   
 }

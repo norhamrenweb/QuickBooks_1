@@ -5,6 +5,7 @@
  */
 package Reports.DataFactoryFolder;
 
+import Montessori.DBConect;
 import Montessori.Objective;
 import Montessori.Subject;
 import java.sql.Connection;
@@ -34,28 +35,21 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
     public Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
 
         String studentId = idStudent;
-
-        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        Connection cn = DriverManager.getConnection("jdbc:sqlserver://ah-zaf.odbc.renweb.com\\ah_zaf:1433;databaseName=ah_zaf", "AH_ZAF_CUST", "BravoJuggle+396");
-        Statement st = cn.createStatement();
         String consulta = "";
 
-        ResultSet rs = cargarAlumno(studentId, cn, st);
+        ResultSet rs = cargarAlumno(studentId);
 
-        Class.forName("org.postgresql.Driver");
-        cn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/Lessons?user=eduweb&password=Madrid2016");
-        st = cn.createStatement();
         ArrayList<String> lessons = new ArrayList<>();
         java.util.Vector coll = new java.util.Vector();
         ArrayList<Subject> subjects = new ArrayList<>();
-        rs = st.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
+        rs = DBConect.eduweb.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
         while (rs.next()) {
             lessons.add("" + rs.getInt("lesson_id"));
         }
         //select the subjects of these lessons
         ArrayList<String> subids = new ArrayList<>();
         for (String b : lessons) {
-            ResultSet rs2 = st.executeQuery("select subject_id from lessons where id =" + b);
+            ResultSet rs2 = DBConect.eduweb.executeQuery("select subject_id from lessons where id =" + b);
 
             while (rs2.next()) {
                 // this for avoidind duplicate subjects
@@ -71,13 +65,11 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         }
 
         for (Subject x : subjects) {
-            Class.forName("org.postgresql.Driver");
-            cn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/Lessons?user=eduweb&password=Madrid2016");
-            st = cn.createStatement();
+            
             String[] id = x.getId();
             ArrayList<String> os = new ArrayList<>();
             for (String b : lessons) {
-                ResultSet rs1 = st.executeQuery("select objective_id from lessons where id = " + b + " and subject_id =" + id[0]);
+                ResultSet rs1 = DBConect.eduweb.executeQuery("select objective_id from lessons where id = " + b + " and subject_id =" + id[0]);
                 while (rs1.next()) {
                     if (!os.contains("" + rs1.getInt("objective_id"))) {
                         os.add("" + rs1.getInt("objective_id"));
@@ -96,11 +88,11 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
                         + "where student_id = '" + studentId + "' AND objective_id = '" + d + "' "
                         + "and generalcomment = false and rating_id not in(6,7)) "
                         + "AND objective_id ='" + d + "'and generalcomment = false )";
-                ResultSet rs2 = st.executeQuery(consulta);
+                ResultSet rs2 = DBConect.eduweb.executeQuery(consulta);
                 if (!rs2.next()) {
                     indEliminarObjectives.add(counter);
                 } else {
-                    rs2 = st.executeQuery(consulta);
+                    rs2 = DBConect.eduweb.executeQuery(consulta);
                     while (rs2.next()) {
                         String var = rs2.getString("name");
 
@@ -123,7 +115,7 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
             //obtener comentario del subject
             //  boolean existeComentario = false;
             consulta = "SELECT comment FROM subjects_comments where subject_id=" + id[0] + " and studentid=" + idStudent + " ORDER BY date_created DESC";
-            ResultSet rs3 = st.executeQuery(consulta);
+            ResultSet rs3 = DBConect.eduweb.executeQuery(consulta);
             if (rs3.next()) {
                 //     existeComentario = true;
                 os.add(rs3.getString("comment"));
@@ -140,18 +132,14 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
                     coll.add(bean);
                 }
             }
-            cn.close();
         }
         // FALTA TERMINAR PODRIAMOS TOMAR LOS SUBJECT_ID DE LOS ALUMNOS QUE SEAN ELECTIVOS Y COMPROBAR QUE NO EXISTAN EN LA UQERY SIGUIENTE
-        Class.forName("org.postgresql.Driver");
-        cn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/Lessons?user=eduweb&password=Madrid2016");
-        st = cn.createStatement();
 
         ArrayList<String> os = new ArrayList<>();
         ArrayList<String> as = new ArrayList<>();
         Subject s = new Subject();
         consulta = "SELECT lessons.subject_id,progress_report.comment FROM progress_report join lessons on (progress_report.lesson_id = lessons.id) where student_id= '" + studentId + "'";
-        rs = st.executeQuery(consulta);
+        rs = DBConect.eduweb.executeQuery(consulta);
 
         while (rs.next()) {
             String comment = rs.getString("comment");
@@ -185,7 +173,6 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
 
         coll.add(bean3);
         //============================
-        cn.close();
         return coll;
         // return new JRBeanCollectionDataSource(coll);
     }
