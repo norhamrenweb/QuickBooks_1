@@ -39,6 +39,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
 
@@ -118,18 +119,31 @@ public class SOWTreeControlador {
 
                 }
             }
+            
+            String idHash;
+            String consulta = "SELECT Title,CourseID FROM AH_ZAF.dbo.Courses",name;
+            ResultSet rs4 = DBConect.ah.executeQuery(consulta);
+            HashMap<String, String> mapSubject = new HashMap<String, String>();
+            while(rs4.next()){
+                    name = rs4.getString("Title");
+                    idHash = ""+rs4.getInt("CourseID");
+                    mapSubject.put(idHash,name);	
+            }
+            
+////////////////////// AQUI ES DONDE TARDA
             for (DBRecords x : steps) {
                 Subject s = new Subject();
                 String id = null;
                 id = x.getCol3();
-                x.setCol3(s.fetchName(Integer.parseInt(id), hsr.getServletContext()));
+             //   x.setCol3(s.fetchName(Integer.parseInt(id), hsr.getServletContext()));
+                x.setCol3(mapSubject.get(id));
                 if (!subjects.contains(x.getCol3())) {
                     subjects.add(x.getCol3());
                 }
             }
 
             String test = new Gson().toJson(steps);
-
+////////////////////////////////////////////////////////////
             int i = 0;
             int z = 0;
             for (Subject x : subs)//subjects)
@@ -164,7 +178,6 @@ public class SOWTreeControlador {
                 }
 
             }
-
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);
             StringWriter errors = new StringWriter();
