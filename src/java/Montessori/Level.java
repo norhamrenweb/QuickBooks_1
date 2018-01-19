@@ -53,13 +53,9 @@ public class Level {
     public String fetchName(int id, ServletContext servlet)
     { String levelName = null ;
         try {
-             DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
-        this.cn = dataSource.getConnection();
-             Statement st = this.cn.createStatement();
              
             String consulta = "SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels where GradeLevelID = "+id;
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
           
             while (rs.next())
             {

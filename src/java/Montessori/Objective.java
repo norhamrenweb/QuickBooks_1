@@ -109,13 +109,9 @@ public class Objective {
  public String fetchName(int id, ServletContext servlet)
     { String subName = null ;
         try {
-             DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",servlet);
-        this.cn = dataSource.getConnection();
-             Statement st = this.cn.createStatement();
              
             String consulta = "SELECT name FROM public.objective where id = "+id;
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
           
             while (rs.next())
             {

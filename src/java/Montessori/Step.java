@@ -16,15 +16,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-
 public class Step {
+
     private ServletContext servlet;
     private String id;
     private String name;
-private int order;
-private int weight;
-private Objective obj;
-Connection cn;
+    private int order;
+    private int weight;
+    private Objective obj;
+    Connection cn;
 
     public int getOrder() {
         return order;
@@ -65,102 +65,64 @@ Connection cn;
     public void setName(String name) {
         this.name = name;
     }
-    private Object getBean(String nombrebean, ServletContext servlet)
-    {
+
+    private Object getBean(String nombrebean, ServletContext servlet) {
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
-//         public String fetchName(int id, ServletContext servlet)
-//    { String name = null ;
-//        try {
-//             DriverManagerDataSource dataSource;
-//        dataSource = (DriverManagerDataSource)this.getBean("dataSource",servlet);
-//        this.cn = dataSource.getConnection();
-//             Statement st = this.cn.createStatement();
-//             
-//            String consulta = "SELECT name FROM public.content where id = "+id;
-//            ResultSet rs = st.executeQuery(consulta);
-//          
-//            while (rs.next())
-//            {
-//                name = rs.getString("name");
-//                
-//            }
-//            //this.finalize();
-//            
-//        } catch (SQLException ex) {
-//            System.out.println("Error reading methods: " + ex);
-//        }
-//       
-//        return name;
-//    
-//    }   
 
-    public void compareandupdate(List<Step> newsteps, String[] objid,ServletContext servlet) {
-       
+    public void compareandupdate(List<Step> newsteps, String[] objid, ServletContext servlet) {
+
         try {
-             DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",servlet);
-        this.cn = dataSource.getConnection();
-             Statement st = this.cn.createStatement();
-             
-            String consulta = "SELECT * FROM obj_steps where obj_id = "+objid[0];
-            ResultSet rs = st.executeQuery(consulta);
-          List<Step> old = new ArrayList<>();
-            while (rs.next())
-            {
+
+            String consulta = "SELECT * FROM obj_steps where obj_id = " + objid[0];
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            List<Step> old = new ArrayList<>();
+            while (rs.next()) {
                 Step s = new Step();
-                s.setId(""+rs.getInt("id"));
-             s.setName(rs.getString("name"));
-             s.setOrder(rs.getInt("storder"));
-             old.add(s);
+                s.setId("" + rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setOrder(rs.getInt("storder"));
+                old.add(s);
             }
-            int found= 0;
-            
-           for(Step y:old)
-        {
-             for(Step x:newsteps)
-            {
-               if(y.getId().equals(x.getId()))
-                {
-                    found=1;
-                    break;
-                }  
-            }
-             if(found==0)
-             {
-                 //delete step
-                 st.executeUpdate("delete from obj_steps where id ="+y.getId());
-                 
-             }
-        } 
-       
-        for(Step x:newsteps)
-        {
-        if(x.getId().equals("0")){
-            //add new step
-            st.executeUpdate("insert into obj_steps(name,storder,obj_id) values('"+x.getName()+"','"+x.getOrder()+"','"+objid[0]+"')");
-        }
-        else{
-            for(Step y:old)
-            {
-                if(y.getId().equals(x.getId()))
-                {
-                    //update step
-                   st.executeUpdate("update obj_steps set name = '"+x.getName()+"',storder= '"+x.getOrder()+"' where id = "+x.getId());
-                    break;
+            int found = 0;
+
+            for (Step y : old) {
+                for (Step x : newsteps) {
+                    if (y.getId().equals(x.getId())) {
+                        found = 1;
+                        break;
+                    }
+                }
+                if (found == 0) {
+                    //delete step
+                    DBConect.eduweb.executeUpdate("delete from obj_steps where id =" + y.getId());
+
                 }
             }
-            
-        }
-        
-        }
-            
+
+            for (Step x : newsteps) {
+                if (x.getId().equals("0")) {
+                    //add new step
+                    DBConect.eduweb.executeUpdate("insert into obj_steps(name,storder,obj_id) values('" + x.getName() + "','" + x.getOrder() + "','" + objid[0] + "')");
+                } else {
+                    for (Step y : old) {
+                        if (y.getId().equals(x.getId())) {
+                            //update step
+                            DBConect.eduweb.executeUpdate("update obj_steps set name = '" + x.getName() + "',storder= '" + x.getOrder() + "' where id = " + x.getId());
+                            break;
+                        }
+                    }
+
+                }
+
+            }
+
         } catch (SQLException ex) {
             System.out.println("Error updating steps: " + ex);
         }
 
     }
-   
+
 }

@@ -21,6 +21,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author nmohamed
  */
 public class Subject {
+
     private String[] id;
     private String name;
     Connection cn;
@@ -34,9 +35,8 @@ public class Subject {
     public void setObjectives(List<String> objectives) {
         this.objectives = objectives;
     }
-    
-    private Object getBean(String nombrebean, ServletContext servlet)
-    {
+
+    private Object getBean(String nombrebean, ServletContext servlet) {
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
@@ -57,50 +57,44 @@ public class Subject {
     public void setName(String name) {
         this.name = name;
     }
-    public String fetchName(int id, ServletContext servlet)
-    { String subjectName = null ;
+
+    public String fetchName(int id, ServletContext servlet) {
+        String subjectName = null;
         try {
-             DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSourceAH",servlet);
-        this.cn = dataSource.getConnection();
-             Statement st = this.cn.createStatement();
-             
-            String consulta = "SELECT Title FROM AH_ZAF.dbo.Courses where CourseID = "+id;
-            ResultSet rs = st.executeQuery(consulta);
-          
-            while (rs.next())
-            {
-                subjectName = rs.getString("Title");
-                
-            }
-            //this.finalize();
-            
-        } catch (SQLException ex) {
-            System.out.println("Error : " + ex);
-        }
-       
-        return subjectName;
-    
-    }   
-    
-    public ArrayList<String> fetchNameAndElective(int id, ServletContext servlet)
-    { ArrayList<String> subjectName = new ArrayList<String>() ;
-        try {
-             
-            String consulta = "SELECT Title,Elective FROM AH_ZAF.dbo.Courses where CourseID = "+id;
+            String consulta = "SELECT Title FROM AH_ZAF.dbo.Courses where CourseID = " + id;
             ResultSet rs = DBConect.ah.executeQuery(consulta);
-          
-            while (rs.next())
-            {
-                subjectName.add(rs.getString("Title"));
-                subjectName.add(""+rs.getBoolean("Elective"));
+
+            while (rs.next()) {
+                subjectName = rs.getString("Title");
+
             }
             //this.finalize();
-            
+
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
         }
-       
+
         return subjectName;
-    }  
+
+    }
+
+    public ArrayList<String> fetchNameAndElective(int id, ServletContext servlet) {
+        ArrayList<String> subjectName = new ArrayList<String>();
+        try {
+
+            String consulta = "SELECT Title,Elective FROM AH_ZAF.dbo.Courses where CourseID = " + id;
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
+
+            while (rs.next()) {
+                subjectName.add(rs.getString("Title"));
+                subjectName.add("" + rs.getBoolean("Elective"));
+            }
+            //this.finalize();
+
+        } catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+        }
+
+        return subjectName;
+    }
 }

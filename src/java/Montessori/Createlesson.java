@@ -53,9 +53,6 @@ public class Createlesson {
         FTPClient ftpClient = new FTPClient();
 
         try {
-            dataSource = (DriverManagerDataSource) this.getBean("dataSource", this.servlet);
-            this.cn = dataSource.getConnection();
-            Statement st = this.cn.createStatement();
             String test = null;
             String server = "192.168.1.36";
             int port = 21;
@@ -69,14 +66,14 @@ public class Createlesson {
             } else {
                 test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment + "',false,0,false)";
             }
-            st.executeUpdate(test, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = st.getGeneratedKeys();
+            DBConect.eduweb.executeUpdate(test, Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = DBConect.eduweb.getGeneratedKeys();
             while (rs.next()) {
                 lessonid = "" + rs.getInt(1);
             }
 
             for (int i = 0; i <= studentIds.length - 1; i++) {
-                st.executeUpdate("insert into lesson_stud_att(lesson_id,student_id) values ('" + lessonid + "','" + studentIds[i] + "')");
+                DBConect.eduweb.executeUpdate("insert into lesson_stud_att(lesson_id,student_id) values ('" + lessonid + "','" + studentIds[i] + "')");
             }
             //to avoid null pointer exception incase of lesson without content
             if (newlessons.getContentid() != null) {
@@ -84,7 +81,7 @@ public class Createlesson {
 
                 for (int i = 0; i <= equipmentids.size() - 1; i++) {
 
-                    st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('" + lessonid + "','" + equipmentids.get(i) + "')");
+                    DBConect.eduweb.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('" + lessonid + "','" + equipmentids.get(i) + "')");
                 }
             }
 //            File directorio=new File(RUTA_FTP+lessonid);
@@ -116,9 +113,7 @@ public class Createlesson {
         DriverManagerDataSource dataSource;
         FTPClient ftpClient = new FTPClient();
         try {
-            dataSource = (DriverManagerDataSource) this.getBean("dataSource", this.servlet);
-            this.cn = dataSource.getConnection();
-            Statement st = this.cn.createStatement();
+           
             String test = null;
             //to avoid null pointer exception when there is no method
             if (newlessons.getMethod().getName() != "") {
@@ -126,8 +121,8 @@ public class Createlesson {
             } else {
                 test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getComments() + "',false,0,true)";
             }
-            st.executeUpdate(test, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = st.getGeneratedKeys();
+            DBConect.eduweb.executeUpdate(test, Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = DBConect.eduweb.getGeneratedKeys();
             while (rs.next()) {
                 lessonid = rs.getInt(1);
 
@@ -139,7 +134,7 @@ public class Createlesson {
 
                 for (int i = 0; i <= equipmentids.size() - 1; i++) {
 
-                    st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('" + lessonid + "','" + equipmentids.get(i) + "')");
+                    DBConect.eduweb.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('" + lessonid + "','" + equipmentids.get(i) + "')");
                 }
             }
             ftpClient.connect(server, port);

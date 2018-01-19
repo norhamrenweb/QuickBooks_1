@@ -45,12 +45,8 @@ public class Updatelesson {
 
     private void cleanProgress(String idLesson) {
         try {
-            DriverManagerDataSource dataSource;
-            dataSource = (DriverManagerDataSource) this.getBean("dataSource", this.servlet);
-            this.cn = dataSource.getConnection();
-            Statement st = this.cn.createStatement();
             String consulta = "DELETE FROM progress_report a WHERE lesson_id=" + idLesson + " and NOT EXISTS (SELECT * FROM lesson_stud_att b WHERE a.student_id = b.student_id and a.lesson_id = b.lesson_id)";
-            st.executeUpdate(consulta);
+            DBConect.eduweb.executeUpdate(consulta);
         } catch (SQLException ex) {
             System.out.println("Error leyendo lessons: " + ex);
         }
@@ -65,19 +61,16 @@ public class Updatelesson {
         List<String> delstuds = new ArrayList<>();
         DriverManagerDataSource dataSource;
         try {
-            dataSource = (DriverManagerDataSource) this.getBean("dataSource", this.servlet);
-            this.cn = dataSource.getConnection();
-            Statement st = this.cn.createStatement();
+            
             String test = null;
             if (newlessons.getMethod().getName() != "") {
                 test = "update lessons set name = '" + newlessons.getName() + "',level_id = '" + newlessons.getLevel().getName() + "' ,subject_id = '" + newlessons.getSubject().getName() + "',objective_id= '" + newlessons.getObjective().getName() + "',start ='" + newlessons.getStart() + "',finish='" + newlessons.getFinish() + "',comments='" + newlessons.getComments() + "',method_id='" + newlessons.getMethod().getName() + "' where id ='" + newlessons.getId() + "'";
             } else {
                 test = "update lessons set name = '" + newlessons.getName() + "',level_id = '" + newlessons.getLevel().getName() + "' ,subject_id = '" + newlessons.getSubject().getName() + "',objective_id= '" + newlessons.getObjective().getName() + "',start ='" + newlessons.getStart() + "',finish='" + newlessons.getFinish() + "',comments='" + newlessons.getComments() + "' where id ='" + newlessons.getId() + "'";;
             }
-            st.executeUpdate(test);
-            //extract array of original studentids
+            DBConect.eduweb.executeUpdate(test);
             String consulta = "select student_id from lesson_stud_att where lesson_id ='" + newlessons.getId() + "'";
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 oldstuds.add("" + rs.getInt("student_id"));
             }
@@ -92,7 +85,7 @@ public class Updatelesson {
                     boolean prueba = addstuds.removeAll(Collections.singleton(v));
                 }
                 for (String x : addstuds) {
-                    st.executeUpdate("insert into lesson_stud_att(lesson_id,student_id) values ('" + newlessons.getId() + "','" + x + "')");
+                    DBConect.eduweb.executeUpdate("insert into lesson_stud_att(lesson_id,student_id) values ('" + newlessons.getId() + "','" + x + "')");
                 }
                 newList = new LinkedList<String>(Arrays.asList(studentIds));
                 // get the studs tp be deleted
@@ -100,17 +93,17 @@ public class Updatelesson {
 
                 oldstuds.removeAll(delstuds);
                 for (String y : oldstuds) {
-                    st.executeUpdate("delete from lesson_stud_att where lesson_id = '" + newlessons.getId() + "'and student_id = '" + y + "'");
+                    DBConect.eduweb.executeUpdate("delete from lesson_stud_att where lesson_id = '" + newlessons.getId() + "'and student_id = '" + y + "'");
                 }
             }
             //delete the old content list and add the new one
             //to avoid null pointer exception incase of lesson without content
             if (newlessons.getContentid() != null) {
                 equipmentids = newlessons.getContentid();
-                st.executeUpdate("delete from lesson_content where lesson_id = '" + newlessons.getId() + "'");
+                DBConect.eduweb.executeUpdate("delete from lesson_content where lesson_id = '" + newlessons.getId() + "'");
                 for (int i = 0; i <= equipmentids.size() - 1; i++) {
 
-                    st.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('" + lessonid + "','" + equipmentids.get(i) + "')");
+                    DBConect.eduweb.executeUpdate("insert into lesson_content(lesson_id,content_id) values ('" + lessonid + "','" + equipmentids.get(i) + "')");
                 }
             }
             cleanProgress("" + newlessons.getId());

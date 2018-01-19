@@ -159,23 +159,6 @@ public class Nodetreegrid<String> {
         children.remove(index);
     }
  
-    
-     
-//    public String toString() {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("{").append(getData().toString()).append(",[");
-//        int i = 0;
-//        for (Node<String> e : getChildren()) {
-//            if (i > 0) {
-//                sb.append(",");
-//            }
-//            sb.append(e.getData().toString());
-//            i++;
-//        }
-//        sb.append("]").append("}");
-//        return sb.toString();
-//    }
-
     public String getProgress() {
         return progress;
     }

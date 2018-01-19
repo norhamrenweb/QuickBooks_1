@@ -21,7 +21,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class Method {
      private String[] id;
     private String name;
- Connection cn;
     private ServletContext servlet;
 
     public String getDescription() {
@@ -33,7 +32,6 @@ public class Method {
     }
     private String description;
       
-//      private ServletContext servlet;
     
     private Object getBean(String nombrebean, ServletContext servlet)
     {
@@ -59,13 +57,9 @@ public class Method {
  public String fetchName(int id, ServletContext servlet)
     { String name = null ;
         try {
-             DriverManagerDataSource dataSource;
-        dataSource = (DriverManagerDataSource)this.getBean("dataSource",servlet);
-        this.cn = dataSource.getConnection();
-             Statement st = this.cn.createStatement();
              
             String consulta = "SELECT name FROM public.method where id = "+id;
-            ResultSet rs = st.executeQuery(consulta);
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
           
             while (rs.next())
             {

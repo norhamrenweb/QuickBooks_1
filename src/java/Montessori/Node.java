@@ -26,15 +26,6 @@ public class Node<String> {
         this.state = state;
     }
     
-
-//    public String getState() {
-//        return state;
-//    }
-//
-//    public void setState(String state) {
-//        this.state = state;
-//    }
-
     public String getId() {
         return id;
     }
@@ -143,19 +134,4 @@ public class Node<String> {
     public void setData(String data) {
         this.data = data;
     }
-     
-//    public String toString() {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("{").append(getData().toString()).append(",[");
-//        int i = 0;
-//        for (Node<String> e : getChildren()) {
-//            if (i > 0) {
-//                sb.append(",");
-//            }
-//            sb.append(e.getData().toString());
-//            i++;
-//        }
-//        sb.append("]").append("}");
-//        return sb.toString();
-//    }
 }
