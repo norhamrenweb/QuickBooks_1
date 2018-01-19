@@ -159,15 +159,32 @@
 <span class='input-group-btn'>\n\
 <button type='button' class='btn btn-default btn-xs' value='" + item.col5 + "' onclick='saveGeneralComment(" + item.col5 + ")'>save</button>\n\
 </span></div>");
+//                        if(item.col4 === currentTime ){
+//                        $('#tableobjective tbody tr:eq('+ i +') td:eq(3)').append("<div class='input-group'>"+currentTime+"</div>");
+//                        }
                             $('#tableobjective tbody tr:eq(' + i + ') td:eq(4)').empty();
                             $('#tableobjective tbody tr:eq(' + i + ') td:eq(4)').append("<button type='button' class='btn-unbutton' value='" + item.col5 + "' onclick='selectionObjective(" + item.col5 + ")'>More details</button>");
-
+                            //$('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='submit' class='btn-unbutton' value='"+item.col5+"'>More details</button>");
+//                                 $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
                         });
+//                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
+//                        $('#tableobjective tbody tr td:eq(2)').empty();
+//                        $('#tableobjective tbody tr td:eq(2)').append("<input value='"+commentgeneral+"'></input>");   
 
+
+//     $('#tableobjective tbody tr td:eq(4)').on('click', 'tr', 'td:eq(4)', function () {
+//        
+//        var dataObjective = tableObjective.row( this ).data();
+//        dataObjective1 = dataObjective['col5'];
+//        selectionObjective();
+//    } ); 
                     }
                 }
             }
-
+            
+            function downloadPhoto(){
+                
+            }
             function funcionCallBackSaveGeneralComent()
             {
                 if (ajax.readyState === 4) {
@@ -297,7 +314,7 @@
                         var json = JSON.parse(ajax.responseText);
                         var info = JSON.parse(json.info);
                         var foto = JSON.parse(json.prueba);
-
+                        
                         var subjects = JSON.parse(json.sub);
                         //$('#myTab a:first').tab('show');
                         //var prog = JSON.parse(json.prog);
@@ -311,9 +328,9 @@
                             $('#foto').attr('src', '../recursos/img/NotPhoto.png');
                         } else {
                             $('#foto').removeAttr('src');
-                            $('#foto').attr('src', '../recursos/img/' + info.foto);
+                            $('#foto').attr('src', '../recursos/img/'+info.foto);
                         }
-
+                       
                         $('.cell').off('click');
                         treeload(info.level_id, info.id_students);
                         levelarbol = info.level_id;
@@ -453,29 +470,29 @@
                     $('#divCommentSubject').addClass('hidden');
                     $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                     $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
-
+                    
                 }
             }
 
             function saveCommentSubjects() {
-
-                if (window.XMLHttpRequest) //mozilla
+                
+                 if (window.XMLHttpRequest) //mozilla
                 {
                     ajax = new XMLHttpRequest(); //No Internet explorer
                 } else
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-
+                
                 var studentId = $('#studentid').val();
                 var idSubject = $('#subjects option:selected').val();
                 var comment = $('#commentSubject').val();
-
+               
                 var myObj = {};
                 myObj["idSubject"] = idSubject;
                 myObj["idStudent"] = studentId;
                 myObj["comment"] = comment;
-
+                
                 var json = JSON.stringify(myObj);
                 $.ajax({
                     type: 'POST',
@@ -824,7 +841,7 @@
                             <div role="tabpanel" class="col-xs-12 tab-pane in active" id="demographic">
                                 <div class="col-xs-6 text-center containerPhoto">
                                     <div class="cell">
-
+           
                                         <img id="foto" src="../recursos/img/NotPhoto.png" class="foto">
                                     </div>                                        
                                 </div>
@@ -852,7 +869,7 @@
                                 <div class="col-xs-12">
                                     <div class="col-xs-10" >
                                         <Label>Subject</Label>
-                                        <button type='button' class='btn-link editResource' onclick='showCommentSubject()' data-toggle='tooltip' data-placement='bottom' value='edit' id='saveCommentSubject'>
+                                          <button type='button' class='btn-link editResource' onclick='showCommentSubject()' data-toggle='tooltip' data-placement='bottom' value='edit' id='saveCommentSubject'>
                                             <i class='glyphicon glyphicon-chevron-down'></i>
                                         </button>
                                         <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
@@ -865,19 +882,19 @@
                                 </div>
                                 <div class="col-xs-12 hidden" id="divCommentSubject">
                                     <div class="col-xs-10 center-block form-group">
-
-                                        <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject"maxlength="1000"></textarea>
+                                    
+                                    <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject"maxlength="1000"></textarea>
                                     </div>             
                                     <div class=" col-xs-2 ">
                                         <input type="button" name="saveCommentSubject" value="save" class="btn btn-info" id="saveCommentSubject" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
-
+                                   
                                     </div>
                                 </div>
-
+                                
                                 <div class="col-xs-12 hidden" id="divNotObjective">
                                     The selected subject does not have objectives
                                 </div>
-
+                                
                                 <div class="col-xs-12 hidden" id="divTableObjective">
                                     <table id="tableobjective" class="display">
                                         <thead>
