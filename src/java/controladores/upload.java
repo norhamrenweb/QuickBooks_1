@@ -1,7 +1,6 @@
 package controladores;
 
 import Montessori.Resource;
-import controladores.ResourcesControlador;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,10 +43,6 @@ public class upload extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        String url2 = request.getContextPath();
-
-        String url3 = "" + request.getRequestURL();
         String url = "/lessonresources/loadResources.htm?LessonsSelected=" + rLoaded.getLesson_id() + "-" + presentationName;
         String server = "192.168.1.36";
         int port = 21;
@@ -111,18 +106,9 @@ public class upload extends HttpServlet {
         try {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
-//			ftpClient.enterLocalPassiveMode();
-//
-			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            //if(!rCont.existe(name+"-"+ filePart.getSubmittedFileName(), request)){
-//                    File fileToSave = new File(RUTA_FTP +lessonId+"/"+name+"-"+ filePart.getSubmittedFileName());
-//                    Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);   
-//                    //GET VALUES FOR SAVE IN BBDD
-//
-            //String path = name+"-"+ filePart.getSubmittedFileName();
-            // String filename = filePart.getSubmittedFileName();
+
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             String filename = name + "-" + filePart.getSubmittedFileName();
-//                fis = new FileInputStream(filename);
             presentationName = presentationName.replace("/", "_");
             presentationName = presentationName.replace(" ", "-");
             String rutaCompleta = "/MontessoriTesting/'" + lessonId + "-" + presentationName + "'";
@@ -147,12 +133,8 @@ public class upload extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //create output HTML that uses the 
-        //response.reset(); 
-        //response.encodeRedirectURL("http://localhost:8080/QuickBooks_1/lessonresources/loadResources.htm?LessonsSelected=19");
 
         response.sendRedirect(request.getContextPath() + url);
-
     }
 
     @Override
@@ -190,5 +172,5 @@ public class upload extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 }
