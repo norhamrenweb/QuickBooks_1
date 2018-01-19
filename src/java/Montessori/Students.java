@@ -9,6 +9,8 @@ package Montessori;
  *
  * @author nmohamed
  */
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,6 +21,7 @@ import java.util.Date;
 import javax.servlet.ServletContext;
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -65,14 +68,6 @@ public class Students {
         this.foto = foto;
         this.level_id = level_id;
     }
-//    public Students(ServletContext svc) {
-//        this.id_students = 0;
-//        this.nombre_students = "";
-//        this.fecha_nacimiento = "";
-//        this.foto = "";
-//        this.level_id = 0;
-//        this.servlet = svc;
-//    }
 
     public int getId_students() {
         return id_students;
@@ -114,58 +109,75 @@ public class Students {
         this.foto = foto;
     }
     
-//    private Object getBean(String nombreBean,ServletContext servlet){
-//        ApplicationContext contexto = 
-//        WebApplicationContextUtils.getRequiredWebApplicationContext(this.servlet);
-//        Object bean = contexto.getBean(nombreBean);
-//        return bean;
-//    }
-//
-//    private void conectarOracle() throws SQLException{
-//        DriverManagerDataSource drv =
-//                (DriverManagerDataSource)this.getBean("dataSourceAH");
-//        this.cn = drv.getConnection();
-//        this.rs = RowSetProvider.newFactory().createCachedRowSet();
-//    }
-//    
-    /*protected void finalize() throws Throwable{
-        try { this.cn.close(); } 
-        catch (SQLException e) { 
-            System.out.println("Error leyendo Alumnos: " + e);
-        }
-        super.finalize(); 
-    }*/
-    
-//    public ArrayList<Students> getStudents() throws SQLException
-//    {
+public static ArrayList<Students> getStudents(Logger log) throws SQLException
+    {
 //        this.conectarOracle();
-//        ArrayList<Students> listaAlumnos = new ArrayList<>();
-//        try {
-//            String consulta = "SELECT * FROM AH_ZAF.dbo.Students";
-//            this.rs.setCommand(consulta);
-//            this.rs.execute(this.cn);
-//            this.rs.beforeFirst();
-//            while (rs.next())
-//            {
-//                Students alumnos = new Students();
-//                alumnos.setId_students(rs.getInt("StudentID"));
-//                alumnos.setNombre_students(rs.getString("FirstName")+","+rs.getString("LastName"));
-//                alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
-//                alumnos.setFoto(rs.getString("PathToPicture"));
-//                alumnos.setLevel_id(rs.getInt("GradeLevel"));
-//                alumnos.setPlacement("Placement");
-//                alumnos.setSubstatus("Substatus");
-//                listaAlumnos.add(alumnos);
-//            }
-//            //this.finalize();
-//            
-//        } catch (SQLException ex) {
-//            System.out.println("Error leyendo Alumnos: " + ex);
-//        }
-//        this.rs.close();
-//        this.cn.close();
-//        return listaAlumnos;
-//    }
+        ArrayList<Students> listaAlumnos = new ArrayList<>();
+        try {
+            
+             
+            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' order by LastName";
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
+          
+            while (rs.next())
+            {
+                Students alumnos = new Students();
+                alumnos.setId_students(rs.getInt("StudentID"));
+                alumnos.setNombre_students(rs.getString("LastName")+", "+ rs.getString("FirstName")+" "+ rs.getString("MiddleName"));
+                alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
+                alumnos.setFoto(rs.getString("PathToPicture"));
+                alumnos.setLevel_id(rs.getString("GradeLevel"));
+                alumnos.setNextlevel("Placement");
+                alumnos.setSubstatus("Substatus");
+                listaAlumnos.add(alumnos);
+            }
+            //this.finalize();
+            
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex+errors.toString());
+        }
+       
+        return listaAlumnos;
+    }
+
+    public static ArrayList<Students> getStudentslevel(String gradeid,Logger log) throws SQLException {
+        ArrayList<Students> listaAlumnos = new ArrayList<>();
+        String gradelevel = null;
+        try {
+            ResultSet rs1 = DBConect.ah.executeQuery("select GradeLevel from AH_ZAF.dbo.GradeLevels where GradeLevelID =" + gradeid);
+            while (rs1.next()) {
+                gradelevel = rs1.getString("GradeLevel");
+            }
+
+            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel = '" + gradelevel + "'";
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
+
+            while (rs.next()) {
+                Students alumnos = new Students();
+                alumnos.setId_students(rs.getInt("StudentID"));
+                alumnos.setNombre_students(rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName"));
+                alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
+                alumnos.setFoto(rs.getString("PathToPicture"));
+                alumnos.setLevel_id(rs.getString("GradeLevel"));
+                alumnos.setNextlevel(rs.getString("Placement"));
+                alumnos.setSubstatus(rs.getString("Substatus"));
+                listaAlumnos.add(alumnos);
+            }
+            //this.finalize();
+
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+
+        return listaAlumnos;
+
+    }
     
 //    public ArrayList<Students> getStudentsForLevel(int idLevel) throws SQLException{
 //        this.conectarOracle();

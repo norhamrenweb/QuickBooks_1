@@ -85,7 +85,7 @@ public class ProgressbyStudent {
         ModelAndView mv = new ModelAndView("progressbystudent");
         List<Level> grades = new ArrayList();
         try {
-            mv.addObject("listaAlumnos", this.getStudents());
+            mv.addObject("listaAlumnos", Students.getStudents(log));
             ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
 
             Level l = new Level();
@@ -109,37 +109,6 @@ public class ProgressbyStudent {
         return mv;
     }
 
-    public ArrayList<Students> getStudents() throws SQLException {
-//        this.conectarOracle();
-        ArrayList<Students> listaAlumnos = new ArrayList<>();
-        try {
-
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' order by lastname";
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
-
-            while (rs.next()) {
-                Students alumnos = new Students();
-                alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName"));
-                alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
-                alumnos.setFoto(rs.getString("PathToPicture"));
-                alumnos.setLevel_id(rs.getString("GradeLevel"));
-                alumnos.setNextlevel("Placement");
-                alumnos.setSubstatus("Substatus");
-                listaAlumnos.add(alumnos);
-            }
-            //this.finalize();
-
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Alumnos: " + ex);
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex + errors.toString());
-        }
-
-        return listaAlumnos;
-    }
-
     // loads the students based on the selected level
     @RequestMapping("/progressbystudent/studentlistLevel.htm")
     @ResponseBody
@@ -149,7 +118,7 @@ public class ProgressbyStudent {
         List<Students> studentsgrades = new ArrayList();
         String[] levelid = hsr.getParameterValues("seleccion");
         String test = hsr.getParameter("levelStudent");
-        studentsgrades = this.getStudentslevel(levelid[0]);
+        studentsgrades = Students.getStudentslevel(levelid[0],log);
         String data = new Gson().toJson(studentsgrades);
 //        mv.addObject("listaAlumnos",data );
 
@@ -240,42 +209,6 @@ public class ProgressbyStudent {
 
 //        mv.addObject("subjects", this.getSubjects(levelid[0]));
         return mv;
-    }
-
-    public ArrayList<Students> getStudentslevel(String gradeid) throws SQLException {
-        ArrayList<Students> listaAlumnos = new ArrayList<>();
-        String gradelevel = null;
-        try {
-            ResultSet rs1 = DBConect.ah.executeQuery("select GradeLevel from AH_ZAF.dbo.GradeLevels where GradeLevelID =" + gradeid);
-            while (rs1.next()) {
-                gradelevel = rs1.getString("GradeLevel");
-            }
-
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel = '" + gradelevel + "'";
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
-
-            while (rs.next()) {
-                Students alumnos = new Students();
-                alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName"));
-                alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
-                alumnos.setFoto(rs.getString("PathToPicture"));
-                alumnos.setLevel_id(rs.getString("GradeLevel"));
-                alumnos.setNextlevel(rs.getString("Placement"));
-                alumnos.setSubstatus(rs.getString("Substatus"));
-                listaAlumnos.add(alumnos);
-            }
-            //this.finalize();
-
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Alumnos: " + ex);
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex + errors.toString());
-        }
-
-        return listaAlumnos;
-
     }
 
     //OTEHER PAGINE
