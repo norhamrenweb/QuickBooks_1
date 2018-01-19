@@ -18,188 +18,17 @@
         <script>
 
             $(document).ready(function () {
-                var userLang = navigator.language || navigator.userLanguage;
-                var myDate = new Date();
-                //Muestra calendario
-                //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
-                var lessoncreate = '<%= request.getParameter("message")%>';
+
                 $('#generateReport').attr('disabled', true);
-                if (lessoncreate === 'Presentation idea created') {
-                    $('#lessonIdeaCreated').modal({
-                        show: 'false'
-                    });
-                }
-
-                if (lessoncreate === 'Presentation created') {
-                    $('#lessonCreated').modal({
-                        show: 'false'
-                    });
-                }
-
-
-                $("#showPropiertys").click(function () {
-                    $("#contenedorPropiertys").toggleClass('in');
-                    //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
-                });
-                $("#showDate").click(function () {
-                    $("#contenedorDate").toggleClass('in');
-                    //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
-                });
-                $("#showDetails").click(function () {
-                    $("#contenedorDetails").toggleClass('in');
-                    //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
-                });
-                $("#showStudents").click(function () {
-                    $("#contenedorStudents").toggleClass('in');
-                    //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
-                });
-
-                $("#ideaCheck").change(function () {
-                    if ($(this).is(":checked")) {
-                        $('#showDate').addClass("desactivada");
-                        $('#showDate').off('click');
-                        $("#contenedorDate").removeClass('in');
-                        $('#showStudents').addClass("desactivada");
-                        $('#showStudents').off('click');
-                        $("#contenedorStudents").removeClass('in');
-                        if (document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("NameLessons").value === '' || document.getElementById("comments").value === '') {
-                            $('#createOnClick').attr('disabled', true);
-                        } else {
-                            $('#createOnClick').attr('disabled', false);
-                        }
-
-                    } else if ($("#ideaCheck :not(:checked)"))
-                    {
-                        $('#showDate').removeClass("desactivada");
-                        $('#showDate').on('click', function () {
-                            $("#contenedorDate").toggleClass('in');
-                        });
-//                    $("#contenedorDate").removeClass('in');
-                        $('#showStudents').removeClass("desactivada");
-                        $('#showStudents').on('click', function () {
-                            $("#contenedorDate").toggleClass('in');
-                        });
-                        $("#contenedorStudents").addClass('in');
-                        $('#createOnClick').attr('disabled', true);
-
-                        var numAlum = $('#destino option').length;
-                        if (document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
-                            $('#createOnClick').attr('disabled', false);
-                        } else {
-                            $('#createOnClick').attr('disabled', true);
-                        }
-                    }
-                });
-
-                $("#NameLessons,#comments,#objective,#fechaInput,#horainicioInput,#horafinInput").change(function () {
-                    if (document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '') {
-                        if ($("#ideaCheck:checked").length === 1) {
-                            $('#createOnClick').attr('disabled', false);
-                        } else { //no es idea
-                            var numAlum = $('#destino option').length;
-                            if ($('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
-                                $('#createOnClick').attr('disabled', false);
-                            } else {
-                                $('#createOnClick').attr('disabled', true);
-                            }
-                        }
-                    } else {
-                        $('#createOnClick').attr('disabled', true);
-                    }
-                });
 
                 $("#saveEdit").focus(function () {
                     $('#destino option').prop('selected', true);
                 });
 
-                $("#method").on('mouseover', 'option', function (e) {
-
-                    var $e = $(e.target);
-
-                    if ($e.is('option')) {
-                        $('#method').popover('destroy');
-                        $("#method").popover({
-                            animation: 'true',
-                            trigger: 'hover',
-                            placement: 'right',
-                            title: $e.attr("data-title"),
-                            content: $e.attr("data-content")
-                        }).popover('show');
-                    }
-                });
-
-                $('#fecha').datetimepicker({
-                    format: 'YYYY-MM-DD',
-                    locale: userLang.valueOf(),
-                    daysOfWeekDisabled: [0, 6],
-                    useCurrent: false//Important! See issue #1075
-                            //defaultDate: '08:32:33',
-
-
-                });
-
-                $('#horainicio').datetimepicker({
-                    format: 'HH:mm',
-                    locale: userLang.valueOf(),
-                    useCurrent: false, //Important! See issue #1075
-                    stepping: 5
-                });
-
-                $('#horafin').datetimepicker({
-                    format: 'HH:mm',
-                    locale: userLang.valueOf(),
-                    useCurrent: false, //Important! See issue #1075
-                    stepping: 5
-                });
-
-                $("#horainicio").on("dp.change", function (e) {
-                    $('#horafin').data("DateTimePicker").minDate(e.date);
-                });
-
-                $("#horafin").on("dp.change", function (e) {
-                    $('#horainicio').data("DateTimePicker").maxDate(e.date);
-                });
-
-            });
-
-            $().ready(function ()
-            {
-
 
                 $("#generateReport").focus(function () {
                     $('#destino option').prop('selected', true);
                 });
-                //PARA 1 SOLO STUDENT
-                /* $('.pasar').click(function () {
-                 var exist = false;
-                 $('#destino option').each(function () {
-                 if ($('#origen option:selected').val() === $(this).val())
-                 exist = true;
-                 });
-                 
-                 if (!exist) {
-                 $('#destino option').each(function () {
-                 $(this).remove();
-                 });
-                 
-                 $('#origen option:selected').clone().appendTo('#destino');
-                 if ($('#destino option').length > 0)
-                 $('#generateReport').attr('disabled', false);
-                 }
-                 return;
-                 });
-                 
-                 
-                 $('.quitar').click(function () {
-                 !$('#destino option:selected').remove();
-                 $('#destino option').first().prop('selected', true);
-                 
-                 var alumnosSelected = $('#destino option').length;
-                 if (alumnosSelected === 0) {
-                 $('#generateReport').attr('disabled', true);
-                 }
-                 return;
-                 });*/
 
                 $('.pasar').click(function () {
                     var exist = false;
@@ -294,102 +123,6 @@
                 ajax.send("");
             }
 
-            function funcionCallBackSubject()
-            {
-                if (ajax.readyState === 4) {
-                    if (ajax.status === 200) {
-                        document.getElementById("subject").innerHTML = ajax.responseText;
-                    }
-                }
-            }
-            function funcionCallBackObjective()
-            {
-                if (ajax.readyState === 4) {
-                    if (ajax.status === 200) {
-                        document.getElementById("objective").innerHTML = ajax.responseText;
-                    }
-                }
-            }
-            function funcionCallBackLoadTemplateLessons()
-            {
-                if (ajax.readyState === 4) {
-                    if (ajax.status === 200) {
-                        document.getElementById("lessons").innerHTML = ajax.responseText;
-                    }
-                }
-            }
-
-            function funcionCallBackIdeaLessons()
-            {
-                if (ajax.readyState === 4) {
-                    if (ajax.status === 200) {
-                        var json = JSON.parse(ajax.responseText);
-                        var level = json.level;
-                        var subject = JSON.parse(json.subject).id;
-
-                        var objective = JSON.parse(json.objective).id;
-                        var method = JSON.parse(json.method).id;
-                        var content = JSON.parse(json.content);
-                        var subjects = JSON.parse(json.subjectslist);
-                        var objectives = JSON.parse(json.objectiveslist);
-                        var contents = JSON.parse(json.contentslist);
-
-                        $('#level option[value="' + level + '"]').attr("selected", true);
-                        $('#method option[value="' + method + '"]').attr("selected", true);
-                        $('#subject').empty();
-                        var pos1 = subject[0].toString();
-                         $.each(subjects, function (i, item) {
-                            var test = subjects[i].id;
-                            if (typeof test !== "undefined") {
-                                var test1 = test.toString();
-                            }
-                            ;
-                            if (test1 === pos1) {
-                                 $('#subject').append('<option selected value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
-                            } else {
-                                 $('#subject').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
-                            }
-                        });
-                        $('#objective').empty();
-                        var pos1 = objective[0].toString();
-                         $.each(objectives, function (i, item) {
-                            var test = objectives[i].id;
-                            if (typeof test !== "undefined") {
-                                var test1 = test.toString();
-                            }
-                            ;
-                            if (test1 === pos1) {
-                                 $('#objective').append('<option selected value= "' + objectives[i].id + '">' + objectives[i].name + '</option>');
-                            } else {
-                                 $('#objective').append('<option value= "' + objectives[i].id + '">' + objectives[i].name + '</option>');
-                            }
-                        });
-                        $('#content').empty();
-                        var pos1 = content.toString();
-                         $.each(contents, function (i, item) {
-                            var test = contents[i].id;
-                            if (typeof test !== "undefined") {
-                                var test1 = test.toString();
-                            }
-                            ;
-                            if (jQuery.inArray(test1, pos1) !== -1) {
-                                 $('#content').append('<option selected value= "' + contents[i].id + '">' + contents[i].name + '</option>');
-                            } else {
-                                 $('#content').append('<option value= "' + contents[i].id + '">' + contents[i].name + '</option>');
-                            }
-                        });
-                    }
-                }
-            }
-
-            function funcionCallBackContent()
-            {
-                if (ajax.readyState === 4) {
-                    if (ajax.status === 200) {
-                        document.getElementById("content").innerHTML = ajax.responseText;
-                    }
-                }
-            }
 
             function comboSelectionLevel()
             {
@@ -413,80 +146,8 @@
                 ajax.send("");
 
             }
-            function comboSelectionSubject()
-            {
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                }
 
 
-                ajax.onreadystatechange = funcionCallBackObjective;
-                var seleccion2 = document.getElementById("subject").value;
-                ajax.open("POST", "objectivelistSubject.htm?seleccion2=" + seleccion2, true);
-                // $('#objective').val("");
-                ajax.send("");
-
-            }
-            function comboSelectionLoadTemplateLessons()
-            {
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-
-                ajax.onreadystatechange = funcionCallBackLoadTemplateLessons;
-                var seleccionSubject = document.getElementById("subject").value;
-                ajax.open("POST", "namelistSubject.htm?seleccionTemplate=" + seleccionSubject, true);
-                ajax.send("");
-            }
-            function comboSelectionIdeaLessons()
-            {
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-
-                ajax.onreadystatechange = funcionCallBackIdeaLessons;
-                var seleccionidea = document.getElementById("ideas").value;
-                //ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccionTemplate,true);
-                ajax.open("POST", "copyfromIdea.htm?seleccionidea=" + seleccionidea, true);
-                ajax.send("");
-            }
-            function comboSelectionObjective()
-            {
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                var test = document.getElementById("NameLessons").value;
-                var test2 = document.getElementById("comments").checked;
-                if (document.getElementById("ideaCheck").value === 'on' && test !== '' && test2 !== '') {
-                    $('#createOnClick').attr('disabled', false);
-                } else if (document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("destino").length === 0) {
-                    $('#createOnClick').attr('disabled', true);
-                } else {
-                    $('#createOnClick').attr('disabled', false);
-                }
-                ajax.onreadystatechange = funcionCallBackContent;
-                var seleccion3 = document.getElementById("objective").value;
-                ajax.open("POST", "contentlistObjective.htm?seleccion3=" + seleccion3, true);
-                ajax.send("");
-            }
 
         </script>
         <style>
@@ -668,14 +329,6 @@
                                 </select>
                             </div>
 
-                            <!-- para un solo alumno<div class="  hide col-xs-2">
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
-                                    <input id='btnPasar' type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
-                                </div>
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                    <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremove"/>">
-                                </div>
-                            </div>-->
                             <div class="  col-xs-2">
                                 <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
                                     <input id='btnPasar' type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
@@ -699,22 +352,22 @@
                         </div>
                     </div>
                 </fieldset>
-                                <div class="col-xs-12">
-                            <div class="col-xs-3">
-                                <label>Report</label>     
-                            </div>
-                        </div>
-                        <div class="col-xs-12">
-                            <div class="col-xs-3">
-                                <select class="form-control" name="typeReport" id="typeReport" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">              
-                                    <option value="" disabled="true"  disabled="true">Select Type</option>
-                                    <option value="progress_prePrimary" >Progress Pre-Primary</option>
-                                    <option value="progress_Yr1_3" disabled="true">Progress Yr1_3</option>
-                                    <option value="progress_Gr4" >Progress Gr4</option>
-                                    <option value="progress_Gr7" disabled="true" >Academic Gr7</option>                                    
-                                </select>
-                            </div></div>
-                                
+                <div class="col-xs-12">
+                    <div class="col-xs-3">
+                        <label>Report</label>     
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="col-xs-3">
+                        <select class="form-control" name="typeReport" id="typeReport" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">              
+                            <option value="" disabled="true"  disabled="true">Select Type</option>
+                            <option value="progress_prePrimary" >Progress Pre-Primary</option>
+                            <option value="progress_Yr1_3" disabled="true">Progress Yr1_3</option>
+                            <option value="progress_Gr4" >Progress Gr4</option>
+                            <option value="progress_Gr7" disabled="true" >Academic Gr7</option>                                    
+                        </select>
+                    </div></div>
+
                 <div class="hide col-xs-12 text-center">
                     <input type="submit" class="btn btn-success" id="createOnClick" value="<spring:message code="etiq.txtcreate"/>">
                 </div>
@@ -736,25 +389,15 @@
                                 </div>
                         </div>
                 </div>--%>
-        <!--<div class="col-xs-12">
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-          Launch demo modal
-        </button>
-        </div>-->
         <div class="modal fade" id="lessonIdeaCreated" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
                     </div>
                     <div class="modal-body text-center">
                         <H1><%= request.getParameter("message")%></H1>
                     </div>
-                    <!--      <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                          </div>-->
                 </div>
             </div>
         </div>
@@ -768,14 +411,8 @@
                     <div class="modal-body text-center">
                         <H1><%= request.getParameter("message")%></H1>
                     </div>
-                    <!--      <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                          </div>-->
                 </div>
             </div>
         </div>
-
-
-    </body>
+   </body>
 </html>
