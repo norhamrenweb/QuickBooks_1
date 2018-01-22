@@ -123,9 +123,7 @@
                         ;
                         $('#tableobjective').DataTable({
                             destroy: true,
-                            paging: true,
-                            searching: false,
-                            ordering: false,
+                            paging: false,
                             data: json,
                             columns: [
                                 {data: 'col1'},
