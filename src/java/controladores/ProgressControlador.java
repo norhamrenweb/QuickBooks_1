@@ -8,10 +8,8 @@ package controladores;
 import Montessori.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -273,10 +270,10 @@ public class ProgressControlador {
               ResultSet rs = DBConect.eduweb.executeQuery("select * from progress_report where lesson_id ="+lessonid[0]+" AND student_id = '"+studentids[i]+"'");
               if(!rs.next()){
                   if(ratingid != null){
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment,step_id,createby) values (now(),'"+comments[i]+"','"+ratingid+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false,'"+step+"','"+user.getId()+"')");
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment,step_id,createdby) values (now(),'"+comments[i]+"','"+ratingid+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false,'"+step+"','"+user.getId()+"')");
               }
                   else {
-                     DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,lesson_id,student_id,objective_id,generalcomment,step_id,createby) values (now(),'"+comments[i]+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false,'"+step+"','"+user.getId()+"')"); 
+                     DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,lesson_id,student_id,objective_id,generalcomment,step_id,createdby) values (now(),'"+comments[i]+"','"+lessonid[0]+"','"+studentids[i]+"','"+objectiveid[0]+"',false,'"+step+"','"+user.getId()+"')"); 
                   }
               }
               else{

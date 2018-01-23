@@ -190,24 +190,24 @@ var ajax;
                     }
                 }
             }
-  function deleteSelect(LessonsSelected)
-  {
-       if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        }
-        else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
-        ajax.onreadystatechange = funcionCallBackdeleteLesson;
-        ajax.open("POST","deleteLesson.htm?LessonsSelected="+LessonsSelected,true);
-    <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
-        ajax.send("");
-      
-      
-  };
+            function deleteSelect()
+            {
+                var lessonSelect = $('#buttonDelete').val();
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+                ajax.onreadystatechange = funcionCallBackdeleteLesson;
+                ajax.open("POST", "deleteLesson.htm?LessonsSelected=" + lessonSelect, true);
+            <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
+                ajax.send("");
+
+
+            }
     function refresh()
     {
          location.reload();
@@ -283,13 +283,18 @@ var ajax;
                             <td>${lecciones.start}</td>
                             <td>${lecciones.finish}</td>
                             <td>
-                                <div class="col-xs-5">
+                                <div class="col-xs-4">
                                     <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Attendance">
                                 </div>
                                 
-                                <div class="col-xs-5">
+                                <div class="col-xs-4">
                                     <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
                                 </div>
+                                <c:if test="${user.type==0}">
+                                    <div class="col-xs-4">
+                                        <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
+                                    </div>
+                                </c:if>
                             </td>
                         </tr>
                     </c:forEach>
@@ -369,7 +374,7 @@ var ajax;
             
         </div>
       <div class="modal-footer text-center">
-          <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect(value)">Yes</button>
+          <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect()">Yes</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
       </div>
     </div>
