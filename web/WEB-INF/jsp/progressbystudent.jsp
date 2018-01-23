@@ -27,6 +27,7 @@
                 $("#tg").treegrid();
 
                 $('#tableobjective').DataTable();
+
                 table = $('#table_students').DataTable(
                         {
                             "searching": true,
@@ -124,6 +125,8 @@
                         $('#tableobjective').DataTable({
                             destroy: true,
                             paging: false,
+                            searching: false,
+                            ordering: false,
                             data: json,
                             columns: [
                                 {data: 'col1'},
@@ -165,6 +168,8 @@
                             //$('#tableobjective tbody tr:eq('+ i +') td:eq(4)').append("<button type='submit' class='btn-unbutton' value='"+item.col5+"'>More details</button>");
 //                                 $('#tableobjective tbody tr:eq('+ i +') td:eq(4)').text("more details");
                         });
+                        $('#tableobjective').DataTable().destroy();
+                        $('#tableobjective').DataTable();
 //                        var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
 //                        $('#tableobjective tbody tr td:eq(2)').empty();
 //                        $('#tableobjective tbody tr td:eq(2)').append("<input value='"+commentgeneral+"'></input>");   
@@ -175,7 +180,7 @@
 //        var dataObjective = tableObjective.row( this ).data();
 //        dataObjective1 = dataObjective['col5'];
 //        selectionObjective();
-//    } ); 
+//    } );                
                     }
                 }
             }
@@ -222,7 +227,7 @@
                 $.ajax({
                     type: 'POST',
                     url: 'loadtree.htm?levelid=' + level + '&studentid=' + student,
-//            data: json,
+//            data: jsdfsfon,
 //            datatype:"json",
                     contentType: "application/json",
                     success: function (datos) {
@@ -232,19 +237,22 @@
                         $('#tg').treegrid({
 //                    view: myview,        
                             data: prog.children,
+                            
                             idField: 'id',
                             treeField: 'name',
                             fitColumns: true,
                             columns: [[
-                                    {title: 'Name', field: 'name', formatter: function (value) {
-                                            return '<img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/>' + value;
-                                        }},
-                                    {title: 'No.of presentations planned', field: 'noofplannedlessons'},
-                                    {title: 'No.of presentations done', field: 'noofarchivedlessons'},
-                                    {title: 'Progress', field: 'progress', formatter: formatProgress},
-                                    {title: 'Final rating', field: 'rating'}
-                                ]]
+                                   {title: 'Name', field: 'name', width:'40%', formatter: function (value) {
+                                           return ' <img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/> ' +  value;
+                                       }},
+                                   {title: 'No.of presentations planned', field: 'noofplannedlessons', width:'15%'},
+                                   {title: 'No.of presentations done', field: 'noofarchivedlessons', width:'14%'},
+                                   {title: 'Progress', field: 'progress', width:'14%', formatter: formatProgress},
+                                   {title: 'Final rating', field: 'rating', width:'15%'}
+                                ]],
+                            
                         });
+                        $("#tg").treegrid('collapseAll');
                         $('#loadingmessage').hide();
 
 
@@ -679,6 +687,7 @@
             {
                 resize: none;
             }
+            
             .studentarea
             {            
                 height: 500px;
@@ -779,6 +788,16 @@
             {
                 width: 100%;
             }
+             .tree-title {
+               font-size: 12px;
+               display: inline-block;
+               text-decoration: none;
+               vertical-align: top;
+               white-space: normal;
+               padding-right: 45px;
+               height: auto;
+               line-height: 18px;
+           }
         </style>
     </head>
 
