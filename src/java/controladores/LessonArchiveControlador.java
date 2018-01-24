@@ -54,19 +54,24 @@ public class LessonArchiveControlador {
         ModelAndView mv = new ModelAndView("lessonarchive");
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-        mv.addObject("lessonslist", this.getLessons(user.getId(), hsr.getServletContext()));
+        mv.addObject("lessonslist", this.getLessons(user, hsr.getServletContext()));
         mv.addObject("username", user.getName());
 
         return mv;
     }
 
-    public ArrayList<Lessons> getLessons(int userid, ServletContext servlet) throws SQLException {
+    public ArrayList<Lessons> getLessons(User user,ServletContext servlet) throws SQLException {
+        int userid=user.getId();
         ArrayList<Lessons> lessonslist = new ArrayList<>();
         try {
-            
-            String consulta = "SELECT * FROM public.lessons where user_id = " + userid + " and COALESCE(idea, FALSE) = FALSE and archive = true";
+            String consulta;
+            if(user.getType()==1)
+                consulta = "SELECT * FROM public.lessons where user_id = " + userid + " and COALESCE(idea, FALSE) = FALSE and archive = true";
+            else 
+                consulta = "SELECT * FROM public.lessons where COALESCE(idea, FALSE) = FALSE and archive = true";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
-
+            ArrayList<Integer> objectives = new ArrayList<>();
+            ArrayList<Integer> subjects = new ArrayList<>();
             while (rs.next()) {
                 Lessons lesson = new Lessons();
                 //  lesson.setId(rs.getString("id_lessons"));
@@ -76,14 +81,8 @@ public class LessonArchiveControlador {
                 String name = level.fetchName(rs.getInt("level_id"), servlet);
                 level.setName(name);
                 lesson.setLevel(level);
-                Objective sub = new Objective();
-                name = sub.fetchName(rs.getInt("objective_id"), servlet);
-                sub.setName(name);
-                lesson.setObjective(sub);
-                Subject subject = new Subject();
-                name = subject.fetchName(rs.getInt("subject_id"), servlet);
-                subject.setName(name);
-                lesson.setSubject(subject);
+                objectives.add(rs.getInt("objective_id"));
+                subjects.add(rs.getInt("subject_id"));
                 Timestamp stamp = rs.getTimestamp("start");
                 Timestamp finish = rs.getTimestamp("finish");
                 SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -96,7 +95,15 @@ public class LessonArchiveControlador {
                 lesson.setStart(timeStr);
                 lesson.setFinish(timeStr2);
                 lessonslist.add(lesson);
-
+            }
+            
+            for(int i = 0;i<lessonslist.size();i++){
+                Objective sub = new Objective();
+                sub.setName(sub.fetchName(objectives.get(i), servlet));
+                lessonslist.get(i).setObjective(sub);
+                Subject subject = new Subject();
+                subject.setName(subject.fetchName(subjects.get(i), servlet));
+                lessonslist.get(i).setSubject(subject);
             }
 
         } catch (SQLException ex) {
@@ -123,17 +130,19 @@ public class LessonArchiveControlador {
 
             String consulta = "select * FROM public.lessons WHERE id=" + id[0];
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            int idobj = 0;
             while (rs.next()) {
                 Method m = new Method();
-                Objective o = new Objective();
                 jsonObj.put("method", m.fetchName(rs.getInt("method_id"), hsr.getServletContext()));
                 Timestamp date = rs.getTimestamp("date_created");
                 SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
                 String dateStr = sdfDate.format(date);
                 jsonObj.put("datecreated", dateStr);
                 jsonObj.put("comment", rs.getString("comments"));
-                jsonObj.put("objective", o.fetchName(rs.getInt("objective_id"), hsr.getServletContext()));
+                idobj = rs.getInt("objective_id");
             }
+            Objective o = new Objective();
+            jsonObj.put("objective", o.fetchName(idobj, hsr.getServletContext()));
             consulta = "select name from content where id in (select content_id from lesson_content where lesson_id = " + id[0] + ")";
             ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
             while (rs1.next()) {
@@ -175,4 +184,39 @@ public class LessonArchiveControlador {
 
         return jsonObj.toString();
     }
+
+    @RequestMapping("/lessonarchive/deleteLesson.htm")
+    @ResponseBody
+    public String deleteLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+
+        JSONObject jsonObj = new JSONObject();
+        String[] id = hsr.getParameterValues("LessonsSelected");
+        String message = null;
+        try {
+            HttpSession sesion = hsr.getSession();
+            User user = (User) sesion.getAttribute("user");
+            String consulta;
+            if (message == null) {
+                consulta = "DELETE FROM lesson_content WHERE lesson_id=" + id[0];
+                DBConect.eduweb.executeUpdate(consulta);
+                consulta = "DELETE FROM lesson_stud_att WHERE lesson_id=" + id[0];
+                DBConect.eduweb.executeUpdate(consulta);
+                consulta = "DELETE FROM public.lessons WHERE id=" + id[0];
+                DBConect.eduweb.executeUpdate(consulta);
+                message = "Presentation deleted successfully";
+            }
+            //mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
+            //mv.addObject("messageDelete",message);
+            jsonObj.put("message", message);
+        } catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+
+        return jsonObj.toString();
+        //return mv;
+    }
+
 }

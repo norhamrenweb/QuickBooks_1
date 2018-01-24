@@ -6,6 +6,7 @@
 package controladores;
 
 import Montessori.*;
+import static Montessori.DBConect.eduweb;
 import atg.taglib.json.util.JSONObject;
 import com.google.gson.Gson;
 import java.io.PrintWriter;
@@ -232,13 +233,18 @@ public class LessonsListControlador {
     private String fetchNameTeacher(int id, ServletContext servlet) {
         String subjectName = null;
         try {
+            Connection cn;
+            DriverManagerDataSource dataSource = (DriverManagerDataSource) this.getBean("dataSourceAH", servlet);
+            cn = dataSource.getConnection();
+            Statement fetchconect = cn.createStatement(); 
             String consulta = "select lastname,firstname from person where personid = " + id;
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            ResultSet rs = fetchconect.executeQuery(consulta);
 
             while (rs.next()) {
                 subjectName = rs.getString("lastname") + ", " + rs.getString("firstname");
 
             }
+            cn.close();
             //this.finalize();
 
         } catch (SQLException ex) {
@@ -263,10 +269,10 @@ public class LessonsListControlador {
             User user = (User) sesion.getAttribute("user");
             String consulta = "select * FROM public.lessons WHERE id=" + id[0];
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            Objective o = new Objective();
+            int idobj=0;
             while (rs.next()) {
                 Method m = new Method();
-
-                Objective o = new Objective();
                 jsonObj.put("nameteacher", fetchNameTeacher(rs.getInt("user_id"), hsr.getServletContext()));
 
                 jsonObj.put("method", m.fetchName(rs.getInt("method_id"), hsr.getServletContext()));
@@ -275,8 +281,9 @@ public class LessonsListControlador {
                 String dateStr = sdfDate.format(date);
                 jsonObj.put("datecreated", dateStr);
                 jsonObj.put("comment", rs.getString("comments"));
-                jsonObj.put("objective", o.fetchName(rs.getInt("objective_id"), hsr.getServletContext()));
+                idobj=rs.getInt("objective_id");
             }
+            jsonObj.put("objective", o.fetchName(idobj, hsr.getServletContext()));
             consulta = "select name from content where id in (select content_id from lesson_content where lesson_id = " + id[0] + ")";
             ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
             while (rs1.next()) {
@@ -309,6 +316,13 @@ public class LessonsListControlador {
                 record.setStudentname(name);
             }
             jsonObj.put("students", new Gson().toJson(records));
+            consulta = "select name from obj_steps where id="+idobj;
+            ResultSet rs4 = DBConect.eduweb.executeQuery(consulta);
+            ArrayList<String> steps = new ArrayList<>();
+            while(rs4.next()){
+                steps.add(rs4.getString("name"));
+            }
+            jsonObj.put("steps", new Gson().toJson(steps));
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
             StringWriter errors = new StringWriter();

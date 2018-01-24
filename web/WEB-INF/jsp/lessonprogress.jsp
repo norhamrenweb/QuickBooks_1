@@ -46,10 +46,15 @@
                 if (haynullRating !== -1 || haynullAttendance !== -1) {
                     $('#buttonAchived').attr('disabled', true);
                     $('#buttonAchived').parent().attr('disabled', true);
-
+                    $('#buttonAchived2').attr('disabled', true);
+                    $('#buttonAchived2').parent().attr('disabled', true);
+                    $('#buttonAchived')[0].checked=false;
+                    $('#buttonAchived2')[0].checked=false;
                 } else {
                     $('#buttonAchived').attr('disabled', false);
                     $('#buttonAchived').parent().removeAttr('disabled');
+                    $('#buttonAchived2').attr('disabled', false);
+                    $('#buttonAchived2').parent().removeAttr('disabled');
                 }
                 if (lessoncreate === 'Records successfully saved') {
                     $('#myModal').modal({
@@ -57,10 +62,11 @@
                     });
                 }
                 var disable = "${disable}";
-                if (disable === 't')
-                {
-                    $('#buttonAchived').bootstrapToggle('on');
+                if(disable==='t'){
+                    $('#buttonAchived')[0].checked=true;
+                    $('#buttonAchived2')[0].checked=true;
                 }
+                
                 $('#table_progress').DataTable(
                         {
                             "searching": false,
@@ -98,11 +104,16 @@
                     if (haynullRating !== -1 || haynullAttendance !== -1) {
                         $('#buttonAchived').attr('disabled', true);
                         $('#buttonAchived').parent().attr('disabled', true);
-
+                        $('#buttonAchived2').attr('disabled', true);
+                        $('#buttonAchived2').parent().attr('disabled', true);
+                        $('#buttonAchived')[0].checked=false;
+                        $('#buttonAchived2')[0].checked=false;
                     } else {
                         
                         $('#buttonAchived').attr('disabled', false);
                         $('#buttonAchived').parent().removeAttr('disabled');
+                        $('#buttonAchived2').attr('disabled', false);
+                        $('#buttonAchived2').parent().removeAttr('disabled');
                     }
                 });
 
@@ -130,10 +141,15 @@
                     if (haynullRating !== -1 || haynullAttendance !== -1) {
                         $('#buttonAchived').attr('disabled', true);
                         $('#buttonAchived').parent().attr('disabled', true);
-
+                        $('#buttonAchived2').attr('disabled', true);
+                        $('#buttonAchived2').parent().attr('disabled', true);
+                        $('#buttonAchived')[0].checked=false;
+                        $('#buttonAchived2')[0].checked=false;
                     } else {
                         $('#buttonAchived').attr('disabled', false);
                         $('#buttonAchived').parent().removeAttr('disabled', true);
+                        $('#buttonAchived2').attr('disabled', false);
+                        $('#buttonAchived2').parent().removeAttr('disabled', true);
                     }
 
                 });
@@ -153,6 +169,10 @@
 
                     $('#buttonAchived').attr('disabled', true);
                     $('#buttonAchived').parent().attr('disabled', true);
+                    $('#buttonAchived2').attr('disabled', true);
+                    $('#buttonAchived2').parent().attr('disabled', true);
+                    $('#buttonAchived')[0].checked=false;
+                    $('#buttonAchived2')[0].checked=false;
                 });
 
                 $('#subject').change(function () {
@@ -242,8 +262,12 @@
                                 </div>
                             </div>
                         </c:forEach> 
+                        
                     </div>
-
+                    <div class="col-xs-12 text-center">
+                        <input type="checkbox" id="buttonAchived2" onchange="$('#buttonAchived')[0].checked=$('#buttonAchived2')[0].checked;">              
+                        <label> Archived </label>
+                    </div>
                 </fieldset>   
                 <fieldset style="margin-top: 10px;">
                     <legend></legend>
@@ -404,7 +428,8 @@
                     <input type="submit" class="btn btn-success" value="Save" onclick="window.onbeforeunload = null;">
                 </div>
                 <div class="col-xs-4 text-center">
-                    <input type="checkbox" disabled="false" data-width="200px" data-onstyle="success" data-offstyle="warning" data-toggle="toggle" data-on="Archived" data-off="Not Archived" name="buttonAchived" id="buttonAchived">              
+                    <input type="checkbox" name="buttonAchived" id="buttonAchived" onclick="$('#buttonAchived2')[0].checked=$('#buttonAchived')[0].checked">              
+                    <label> Archived </label>
                 </div>
             </form:form>
         </div>

@@ -57,15 +57,19 @@ public class Method {
  public String fetchName(int id, ServletContext servlet)
     { String name = null ;
         try {
-             
+            Connection cn;
+            DriverManagerDataSource dataSource = (DriverManagerDataSource) this.getBean("dataSource", servlet);
+            cn = dataSource.getConnection();
+            Statement fetchconect = cn.createStatement(); 
             String consulta = "SELECT name FROM public.method where id = "+id;
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            ResultSet rs = fetchconect.executeQuery(consulta);
           
             while (rs.next())
             {
                 name = rs.getString("name");
                 
             }
+            cn.close();
             //this.finalize();
             
         } catch (SQLException ex) {
