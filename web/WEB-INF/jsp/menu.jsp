@@ -1,5 +1,4 @@
         <script>
-            var usertype = ${user.type};
             $(document).ready(function () {
                 //Menu lateral
                 $('#nav-expander').on('click', function (e) {
@@ -14,9 +13,6 @@
                     o.preventDefault();
                     $('body').removeClass('nav-expanded');
                 });
-            if(usertype === 1){
-                    $('#barralateral>nav').children().last().prev().prev().addClass("hide");
-                }
             });
               
         </script>
@@ -59,42 +55,41 @@
                 </a>
             </div>
             <div class="col-xs-12 iconosmenulateral">
-                <a href="<c:url value='/createsetting/start.htm'/>" >
-                    <div class="center-block">
-                        <img width="70%" src="<c:url value='/recursos/img/iconos/CreateSettings-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Modify SOW">
-                    </div>
-                </a>
-            </div>
-            <div class="col-xs-12 iconosmenulateral">
                 <a href="<c:url value='/reportControlador/start.htm'/>" >
                     <div class="center-block">
                         <img width="70%" src="<c:url value='/recursos/img/iconos/Reports.svg'/>" data-toggle="tooltip" data-placement="top" title="Reports">
                     </div>
                 </a>
             </div>
-            <div class="col-xs-12 iconosmenulateral">
-                <a href="<c:url value='/setupControlador/start.htm'/>" >
-                    <div class="center-block">
-                        <img width="70%" src="<c:url value='/recursos/img/iconos/Setup-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Setup">
+            <c:choose>
+                <c:when test = "${user.type == 0}">
+                   <div class="col-xs-12 iconosmenulateral">
+                        <a href="<c:url value='/createsetting/start.htm'/>" >
+                            <div class="center-block">
+                                <img width="70%" src="<c:url value='/recursos/img/iconos/CreateSettings-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Modify SOW">
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-
-            <!--            <div class="col-xs-12 iconosmenulateral"><a href="<c:url value="/createsetting/start.htm"/>" ><div class="center-block"><input type="image" src="<c:url value="/recursos/img/iconos/Reports.svg"/>" data-toggle="tooltip" data-placement="top" title="Reports"></div></a></div>-->
-<!--             <div class="col-xs-12">
-                <hr>
-            </div>
-           <div class="col-xs-12 iconosmenulateral">
-                <div class="col-xs-4 center-block text-center contenedorBandera">
-                    <a class="btnBandera" href='datosIdioma.htm?lenguaje=en'><img width="30px" height="20px" src="<c:url value="/recursos/img/iconos/flags/flag_en.png"/>" title="<spring:message code="etiq.txtenglish"/>" alt="<spring:message code="etiq.txtenglish"/>"></a>
-                </div>
-                <div class="col-xs-4 center-block text-center contenedorBandera">
-                    <a class="btnBandera" href='datosIdioma.htm?lenguaje=es'><img width="30px" src="<c:url value="/recursos/img/iconos/flags/flag_es.png"/>" title="<spring:message code="etiq.txtspanish"/>" alt="<spring:message code="etiq.txtspanish"/>"></a>
-                </div>
-                <div class="col-xs-4 center-block text-center contenedorBandera">
-                    <a class="btnBandera" href='datosIdioma.htm?lenguaje=ar'><img width="30px" src="<c:url value="/recursos/img/iconos/flags/flag_ar.png"/>" title="<spring:message code="etiq.txtarabic"/>" alt="<spring:message code="etiq.txtarabic"/>"></a>
-                </div>
-            </div>-->
+                    <div class="col-xs-12 iconosmenulateral">
+                        <a href="<c:url value='/setupControlador/start.htm'/>" >
+                            <div class="center-block">
+                                <img width="70%" src="<c:url value='/recursos/img/iconos/Setup-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Setup">
+                            </div>
+                        </a>
+                    </div>
+                </c:when>
+                <c:when test = "${user.type == 1}">
+                    <div class="col-xs-12 iconosmenulateral">
+                        <a href="<c:url value='/sowdisplay/start.htm'/>" >
+                            <div class="center-block">
+                                <img width="70%" src="<c:url value='/recursos/img/iconos/CreateSettings-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Modify SOW">
+                            </div>
+                        </a>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                </c:otherwise>
+            </c:choose>
         </nav>    
     </div>
 

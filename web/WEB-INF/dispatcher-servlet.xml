@@ -53,9 +53,10 @@
     <bean class="controladores.ProgressbyStudent" id="studentprog"/>
     <bean class="controladores.CreateSettingControlador" id="createsetting"/>
         <bean class="controladores.CreateLessonControlador" id="createlesson"/>
-         <bean class="controladores.LessonsListControlador" id="lessonsList"/>
-         <bean class="controladores.ProgressControlador" id="lessonprogress"/>
-          <bean class="controladores.LessonIdeaControlador" id="lessonidea"/>
+        <bean class="controladores.ConfigurationControlador" id="setup"/>
+        <bean class="controladores.LessonsListControlador" id="lessonsList"/>
+        <bean class="controladores.ProgressControlador" id="lessonprogress"/>
+        <bean class="controladores.LessonIdeaControlador" id="lessonidea"/>
         <bean class="controladores.EditLessonControlador" id="editlesson"/>
         <bean class="controladores.CerrarLogin" id="cerrarLoginController"/>
         <bean class="controladores.ResourcesControlador" id="resources"/>
@@ -124,8 +125,8 @@
                 <prop key="index.htm">indexController</prop>
                 <prop key="userform.htm">homepage</prop>
                 <prop key="suhomepage.htm">homepage</prop>
-                 <prop key="familymap2.htm">map</prop>
-                 
+                <prop key="familymap2.htm">map</prop>
+                <prop key="setup.htm">setup</prop> 
                 <prop key="createlesson.htm">createlesson</prop>
                 <prop key="reportControlador.htm">reportControlador</prop>
                 <prop key="createsetting.htm">createsetting</prop>
