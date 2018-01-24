@@ -316,6 +316,13 @@ public class LessonsListControlador {
                 record.setStudentname(name);
             }
             jsonObj.put("students", new Gson().toJson(records));
+            consulta = "select name from obj_steps where id="+idobj;
+            ResultSet rs4 = DBConect.eduweb.executeQuery(consulta);
+            ArrayList<String> steps = new ArrayList<>();
+            while(rs4.next()){
+                steps.add(rs4.getString("name"));
+            }
+            jsonObj.put("steps", new Gson().toJson(steps));
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
             StringWriter errors = new StringWriter();

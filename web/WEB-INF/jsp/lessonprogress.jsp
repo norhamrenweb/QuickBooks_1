@@ -48,12 +48,13 @@
                     $('#buttonAchived').parent().attr('disabled', true);
                     $('#buttonAchived2').attr('disabled', true);
                     $('#buttonAchived2').parent().attr('disabled', true);
-
+                    $('#buttonAchived')[0].checked=false;
+                    $('#buttonAchived2')[0].checked=false;
                 } else {
                     $('#buttonAchived').attr('disabled', false);
                     $('#buttonAchived').parent().removeAttr('disabled');
-                    $('#buttonAchived2').attr('disabled', true);
-                    $('#buttonAchived2').parent().attr('disabled', true);
+                    $('#buttonAchived2').attr('disabled', false);
+                    $('#buttonAchived2').parent().removeAttr('disabled');
                 }
                 if (lessoncreate === 'Records successfully saved') {
                     $('#myModal').modal({
@@ -105,6 +106,8 @@
                         $('#buttonAchived').parent().attr('disabled', true);
                         $('#buttonAchived2').attr('disabled', true);
                         $('#buttonAchived2').parent().attr('disabled', true);
+                        $('#buttonAchived')[0].checked=false;
+                        $('#buttonAchived2')[0].checked=false;
                     } else {
                         
                         $('#buttonAchived').attr('disabled', false);
@@ -140,7 +143,8 @@
                         $('#buttonAchived').parent().attr('disabled', true);
                         $('#buttonAchived2').attr('disabled', true);
                         $('#buttonAchived2').parent().attr('disabled', true);
-                        
+                        $('#buttonAchived')[0].checked=false;
+                        $('#buttonAchived2')[0].checked=false;
                     } else {
                         $('#buttonAchived').attr('disabled', false);
                         $('#buttonAchived').parent().removeAttr('disabled', true);
@@ -167,6 +171,8 @@
                     $('#buttonAchived').parent().attr('disabled', true);
                     $('#buttonAchived2').attr('disabled', true);
                     $('#buttonAchived2').parent().attr('disabled', true);
+                    $('#buttonAchived')[0].checked=false;
+                    $('#buttonAchived2')[0].checked=false;
                 });
 
                 $('#subject').change(function () {

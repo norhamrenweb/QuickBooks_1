@@ -73,6 +73,7 @@
                         var object = JSON.parse(ajax.responseText);
                         var s = JSON.parse(object.students);
                         var c = JSON.parse(object.contents);
+                        var p = JSON.parse(object.steps);
 
                         $('#nameLessonDetails').empty();
                         $('#nameLessonDetails').append('Details ' + nameLessons);
@@ -85,6 +86,11 @@
                         $('#contentDetails').empty();
                         $.each(c, function (i, content) {
                             $('#contentDetails').append('<li>' + c[i] + '</li>');
+                        });
+                        
+                        $('#steps').empty();
+                        $.each(p, function (i, step) {
+                            $('#steps').append('<li>' + p[i] + '</li>');
                         });
 
 
@@ -336,6 +342,13 @@
                                 </div>
                                 <div class="row">
                                     <ul id="createBy">
+                                    </ul>
+                                </div>
+                                <div class="row title">
+                                    Steps
+                                </div>
+                                <div class="row">
+                                    <ul id="steps">
                                     </ul>
                                 </div>
                             </div>

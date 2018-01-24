@@ -23,7 +23,8 @@
          //Muestra calendario
          //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
          var lessoncreate = '<%= request.getParameter("message") %>';
-    
+     $("#contenedorPropiertys").toggleClass('in');
+     $("#contenedorDetails").toggleClass('in');
      if (lessoncreate === 'Idea Updated' ){
      $('#myModal').modal({
         show: 'false'
@@ -593,7 +594,7 @@ input[type="radio"] .styled:checked + label::after {
 
         <div class="divLoadStudent" id="loadingmessage">
             <div class="text-center"> 
-                <img src='./recursos/img/large_loading.gif'/>
+                <img class="imgLoading" src='./recursos/img/large_loading.gif'/>
             </div>
         </div>
 

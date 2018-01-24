@@ -1308,7 +1308,7 @@ $("#method").on('mouseover', 'option' , function(e) {
     <%---    <%= request.getParameter("message")%>---%>
         <div class="divLoadStudent" id="loadingmessage">
             <div class="text-center"> 
-                <img src='../recursos/img/large_loading.gif'/>
+                <img class="imgLoading" src='../recursos/img/large_loading.gif'/>
             </div>
         </div>
     </body>
