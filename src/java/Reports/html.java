@@ -73,12 +73,9 @@ public class html extends HttpServlet {
             case "progress_prePrimary":
                 return new FactoryProgressReport_Pre_Primary();
 
-            case "progress_Yr1_3":
-                return null;
-
-            case "progress_Gr4":
+            case "progress_Yr1_4":
                 return new FactoryProgressReport_grade4();
-
+                
             case "progress_Gr7":
                 return null;
 

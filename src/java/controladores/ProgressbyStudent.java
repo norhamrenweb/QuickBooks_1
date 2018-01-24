@@ -39,6 +39,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -517,6 +519,7 @@ public class ProgressbyStudent {
                     mapSubject.put(idHash, name9);
                 }
             }
+            
             for (Subject sub : subs) {
                 String[] sid = sub.getId();
                 ResultSet rs = DBConect.eduweb.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.id as objid,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '" + sid[0] + "'");
@@ -561,11 +564,29 @@ public class ProgressbyStudent {
                     }
                 }
             }
-
+            
             String test = new Gson().toJson(steps);
 
             int i = 0;
             int z = 0;
+            
+            //subs.sort(c);
+            //  subs.sort();
+         //   Collections.sort(subs, new Sortbyroll);
+            Collections.sort(subs, new Comparator<Subject>() {
+                @Override
+                public int compare(Subject o1, Subject o2) {          
+                    return  o1.getName().compareTo(o2.getName());
+                }
+            });
+            
+            Collections.sort(steps, new Comparator<DBRecords>() {
+                @Override
+                public int compare(DBRecords o1, DBRecords o2) {
+                   return  o1.getCol2().compareTo(o2.getCol2());
+                }
+            });
+            
             for (Subject x : subs)//subjects)
             {
                 Nodetreegrid<String> nodeC = new Nodetreegrid<String>("L" + i, x.getName(), "", "", "", "");
@@ -842,7 +863,7 @@ public class ProgressbyStudent {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id=" + subjectid[0]);
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id=" + subjectid[0] +"ORDER BY name ASC");
             while (rs1.next()) {
                 String[] ids = new String[1];
                 Objective sub = new Objective();

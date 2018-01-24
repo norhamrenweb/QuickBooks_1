@@ -14,7 +14,7 @@
     <%@ include file="menu.jsp" %>
         
     <head>
-        <title>Archive</title>
+        <title>Completed Presentations</title>
 
     <script type="text/javascript">
     
@@ -252,7 +252,7 @@ var ajax;
         <div class="col-xs-12">
             <div class="col-sm-12" id="maincontainer">
                 <div class="col-sm-12 center-block text-center">
-                    <h2>Archived Presentations</h2>
+                    <h2>Completed Presentations</h2>
                 </div>
             </div>
             <div class="container">
@@ -260,7 +260,7 @@ var ajax;
                     <thead>
                         <tr>
                             <td>id</td>
-                            <td>Lesson Name</td>
+                            <td>Presentation Title</td>
                             <td>Grade Level</td>
                             <td>Subject</td>
                             <td>Objective</td>
@@ -337,7 +337,7 @@ var ajax;
                         
                     </div>
                     <div class="row title">
-                        Content 
+                        Equipment 
                     </div>
                     <div class="row">
                         <ul id="contentDetails">

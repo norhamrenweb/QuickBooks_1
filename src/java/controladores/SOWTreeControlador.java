@@ -39,6 +39,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
@@ -99,9 +101,20 @@ public class SOWTreeControlador {
         Node<String> rootNode = new Node<String>("Subjects", "A", " {\"disabled\":true}");
         try {
 
+            String idHash;
+            String consulta = "SELECT Title,CourseID FROM AH_ZAF.dbo.Courses",name;
+            ResultSet rs4 = DBConect.ah.executeQuery(consulta);
+            HashMap<String, String> mapSubject = new HashMap<String, String>();
+            while(rs4.next()){
+                    name = rs4.getString("Title");
+                    idHash = ""+rs4.getInt("CourseID");
+                    mapSubject.put(idHash,name);	
+            }
             String[] levelid = hsr.getParameterValues("seleccion1");
+            //AQUI TARDA!!
             ArrayList<Subject> subs = this.getSubjects(levelid);
-
+       //     ArrayList<Subject> subs = this.getSubjectsHashMap(mapSubject,levelid);
+//////
             for (Subject sub : subs) {
                 String[] sid = sub.getId();
                 ResultSet rs = DBConect.eduweb.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '" + sid[0] + "'");
@@ -120,15 +133,7 @@ public class SOWTreeControlador {
                 }
             }
             
-            String idHash;
-            String consulta = "SELECT Title,CourseID FROM AH_ZAF.dbo.Courses",name;
-            ResultSet rs4 = DBConect.ah.executeQuery(consulta);
-            HashMap<String, String> mapSubject = new HashMap<String, String>();
-            while(rs4.next()){
-                    name = rs4.getString("Title");
-                    idHash = ""+rs4.getInt("CourseID");
-                    mapSubject.put(idHash,name);	
-            }
+          
             
 ////////////////////// AQUI ES DONDE TARDA
             for (DBRecords x : steps) {
@@ -146,6 +151,20 @@ public class SOWTreeControlador {
 ////////////////////////////////////////////////////////////
             int i = 0;
             int z = 0;
+            
+              Collections.sort(subs, new Comparator<Subject>() {
+                @Override
+                public int compare(Subject o1, Subject o2) {          
+                    return  o1.getName().compareTo(o2.getName());
+                }
+            });
+            
+            Collections.sort(steps, new Comparator<DBRecords>() {
+                @Override
+                public int compare(DBRecords o1, DBRecords o2) {
+                   return  o1.getCol2().compareTo(o2.getCol2());
+                }
+            });
             for (Subject x : subs)//subjects)
             {
 
@@ -228,12 +247,42 @@ public class SOWTreeControlador {
         return obN;
     }
 
+    public ArrayList<Subject> getSubjectsHashMap( HashMap<String, String> mapSubject,String[] levelid) throws SQLException {
+
+        ArrayList<Subject> subjects = new ArrayList<>();
+        ArrayList<Subject> activesubjects = new ArrayList<>();
+        try {
+            
+            ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
+            Subject s = new Subject();
+            s.setName("Select Subject");
+            subjects.add(s);
+
+            while (rs1.next()) {
+                Subject sub = new Subject();
+                String[] ids = new String[1];
+                ids[0] = "" + rs1.getInt("CourseID");
+                sub.setId(ids);
+
+                subjects.add(sub);
+            }
+            for (Subject su : subjects.subList(1, subjects.size())) {;
+                su.setName(mapSubject.get(""+su.getId()[0]));
+                activesubjects.add(su);
+            }
+        } catch (SQLException ex) {
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return activesubjects;
+    }
     public ArrayList<Subject> getSubjects(String[] levelid) throws SQLException {
 
         ArrayList<Subject> subjects = new ArrayList<>();
         ArrayList<Subject> activesubjects = new ArrayList<>();
         try {
-
+            
             ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
             Subject s = new Subject();
             s.setName("Select Subject");
@@ -270,7 +319,7 @@ public class SOWTreeControlador {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id=" + subjectid[0]);
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id=" + subjectid[0] +"ORDER BY name ASC");
 //          Objective s = new Objective();
 //          s.setName("Select Objective");
 //          objectives.add(s);

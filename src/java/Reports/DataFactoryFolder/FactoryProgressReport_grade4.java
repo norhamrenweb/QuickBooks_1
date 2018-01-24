@@ -50,6 +50,8 @@ public class FactoryProgressReport_grade4 extends DataFactory {
             lessons.add("" + rs.getInt("lesson_id"));
         }
         
+        
+        
         //select the subjects of these lessons
         ArrayList<String> subids = new ArrayList<>();
         for (String b : lessons) {
@@ -126,10 +128,28 @@ public class FactoryProgressReport_grade4 extends DataFactory {
                     BeanWithList bean = new BeanWithList(subjectName.get(0), os, finalratings, nameStudent, dob, age, grade, term);
                     
                     coll.add(bean);
-                    coll.add(bean);
                 }
-            }
+            }   
         }
+        
+        
+        coll.clear();
+        ArrayList<String> os4 = new ArrayList<>();
+        ArrayList<String> as4 = new ArrayList<>();
+        os4.add("historia:teacherJuan");
+        os4.add("historia:teacher Laura");
+       os4.add("historia:teacher Juan");
+        os4.add("historia:teacher Laura");
+           os4.add("historia:teacher Juan");
+        os4.add("historia:teacher Laura");
+          as4.add("comentario de matematicas");
+          as4.add("comentario de historia");
+              as4.add("comentario de matematicas");
+          as4.add("comentario de historia");
+              as4.add("comentario de matematicas");
+          as4.add("comentario de historia");
+        if(coll.isEmpty()) coll.add(new BeanWithList(null, os4, as4, nameStudent, dob, age, grade, term));
+       // if(coll.isEmpty()) coll.add(new BeanWithList(null, null, null, nameStudent, dob, age, grade, term));
         return coll;
         // return new JRBeanCollectionDataSource(coll);
         }

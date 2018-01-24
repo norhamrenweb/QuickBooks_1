@@ -926,7 +926,7 @@ border-radius: 10px;
                         </div>
                         <div class="col-xs-12 text-right">
                             <button class=" btn btn-sm" data-toggle="tooltip" data-placement="bottom" id="addLink">
-                                add link or video <i class='glyphicon glyphicon-plus'></i>
+                                Add link or video <i class='glyphicon glyphicon-plus'></i>
                             </button>
                         </div>
                     </div>
@@ -974,7 +974,7 @@ border-radius: 10px;
                         </div>
                         <div class="col-xs-12 text-right">
                             <button class=" btn btn-sm" data-toggle="tooltip" data-placement="bottom" id="addFile">
-                                add file <i class='glyphicon glyphicon-circle-arrow-up'></i>
+                                Upload file <i class='glyphicon glyphicon-circle-arrow-up'></i>
                             </button>
                         </div>
                     </div>

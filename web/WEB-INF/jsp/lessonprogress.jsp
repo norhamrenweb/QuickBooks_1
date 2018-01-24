@@ -264,11 +264,15 @@
                         </c:forEach> 
                         
                     </div>
-                    <div class="col-xs-12 text-center">
+                    <div class="col-xs-12 text-right">
                         <input type="checkbox" id="buttonAchived2" onchange="$('#buttonAchived')[0].checked=$('#buttonAchived2')[0].checked;">              
-                        <label> Archived </label>
+                        <label> Mark as completed </label>
                     </div>
-                </fieldset>   
+                    <div class="col-xs-12 text-center">
+                        <img class="imgUser" src="<c:url value="/recursos/img/iconos/lightbulb-idea.svg"/>"> <label> To mark the presentation as completed, you must fill all the students´ ratings and attendance codes</label>
+                    </div>
+                </fieldset> 
+                    
                 <fieldset style="margin-top: 10px;">
                     <legend></legend>
                     <div class="col-xs-12">
@@ -427,9 +431,9 @@
                 <div class="col-xs-4 text-center">   
                     <input type="submit" class="btn btn-success" value="Save" onclick="window.onbeforeunload = null;">
                 </div>
-                <div class="col-xs-4 text-center">
+                <div class="col-xs-4 text-right">
                     <input type="checkbox" name="buttonAchived" id="buttonAchived" onclick="$('#buttonAchived2')[0].checked=$('#buttonAchived')[0].checked">              
-                    <label> Archived </label>
+                    <label> Mark as completed </label>
                 </div>
             </form:form>
         </div>
