@@ -264,6 +264,7 @@
                         //jQuery("<img/>").prependTo(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").attr({src: '../recursos/js/treeGrid/target.svg', width:'16px', height:'18px'});
                         
                         $("#tg").treegrid('collapseAll');
+                        
                         $('#loadingmessage').hide();
 
 
