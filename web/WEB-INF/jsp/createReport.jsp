@@ -362,8 +362,7 @@
                         <select class="form-control" name="typeReport" id="typeReport" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">              
                             <option value="" disabled="true"  disabled="true">Select Type</option>
                             <option value="progress_prePrimary" >Progress Pre-Primary</option>
-                            <option value="progress_Yr1_3" disabled="true">Progress Yr1_3</option>
-                            <option value="progress_Gr4" >Progress Gr4</option>
+                            <option value="progress_Yr1_4" >Progress Yr1_4</option>
                             <option value="progress_Gr7" disabled="true" >Academic Gr7</option>                                    
                         </select>
                     </div></div>
