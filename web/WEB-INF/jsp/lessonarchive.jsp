@@ -58,7 +58,44 @@ function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
 var ajax;
  function funcionCallBackdetailsLesson()
     {
-           if (ajax.readyState===4){
+         if (ajax.readyState === 4) {
+                    if (ajax.status === 200) {
+                        var object = JSON.parse(ajax.responseText);
+                        var s = JSON.parse(object.students);
+                        var c = JSON.parse(object.contents);
+                        var p = JSON.parse(object.steps);
+
+                        $('#nameLessonDetails').empty();
+                        $('#nameLessonDetails').append('Details ' + nameLessons);
+                        $('#studentarea').append('<table id="detailsStudents" class="table table-striped">');
+                        $.each(s, function (i, student) {
+                            $('#detailsStudents').append('<tr><td class="studentDetails">' + s[i].studentname + '</td></tr>');
+                            $("tr:odd").addClass("par");
+                            $("tr:even").addClass("impar");
+                        });
+                        $('#contentDetails').empty();
+                        $.each(c, function (i, content) {
+                            $('#contentDetails').append('<li>' + c[i] + '</li>');
+                        });
+                        
+                        $('#steps').empty();
+                        $.each(p, function (i, step) {
+                            $('#steps').append('<li>' + p[i] + '</li>');
+                        });
+
+                        $('#methodDetails').empty();
+                        $('#methodDetails').append('<tr><td>' + object.method + '</td></tr>');
+                        $('#commentDetails').empty();
+                        $('#commentDetails').append('<tr><td>' + object.comment + '</td></tr>');
+                        $('#objectivedetails').empty();
+                        $('#objectivedetails').append('<tr><td>' + object.objective + '</td></tr>');
+                        $('#createBy').empty();
+                        $('#createBy').append('<tr><td>' + object.nameteacher + '</td></tr>');
+                        $('#detailsLesson').modal('show');
+
+                    }
+                }
+         /*  if (ajax.readyState===4){
                 if (ajax.status===200){
                    var object = JSON.parse(ajax.responseText);
                    var s = JSON.parse(object.students);
@@ -102,8 +139,8 @@ var ajax;
 //        selectionObjective();
 //    } ); 
                     }
-                }
-            }
+                }*/
+    }
    function rowselect(LessonsSelected)
     {
         //ESTO PARA PINCHAR EN LA FILAvar LessonsSelected = data1;
@@ -324,32 +361,46 @@ var ajax;
                     </div>
                 </div>
                 <div class="col-xs-6">
-                    <div class="row title">
-                        Method
-                    </div>
-                    <div class="row" id="methodDetails">
-                        
-                    </div>
-                    <div class="row title">
-                        Lesson Description
-                    </div>
-                    <div class="row" id="commentDetails">
-                        
-                    </div>
-                    <div class="row title">
-                        Equipment 
-                    </div>
-                    <div class="row">
-                        <ul id="contentDetails">
-                            
-                        </ul>
-                    </div>
-                    <div class="row title">
-                        Objective:   
-                    </div>
-                    <div class="row">
-                        Learn ryhtmes
-                    </div>
+                     <div class="row title">
+                                    Description:
+                                </div>
+                                <div class="row" id="commentDetails">
+
+                                </div>
+                                <div class="row title">
+                                    Objective:   
+                                </div>
+                                <div class="row" id ="objectivedetails">
+
+                                </div>
+                                <div class="row title">
+                                    Method:
+                                </div>
+                                <div class="row" id="methodDetails">
+
+                                </div>
+                                <div class="row title">
+                                    Equipment: 
+                                </div>
+                                <div class="row">
+                                    <ul id="contentDetails">
+
+                                    </ul>
+                                </div>
+                                <div class="row title">
+                                    Created by:
+                                </div>
+                                <div class="row">
+                                    <ul id="createBy">
+                                    </ul>
+                                </div>
+                                <div class="row title">
+                                    Steps:
+                                </div>
+                                <div class="row">
+                                    <ul id="steps">
+                                    </ul>
+                                </div>
                 </div>
             </div>
         </div>

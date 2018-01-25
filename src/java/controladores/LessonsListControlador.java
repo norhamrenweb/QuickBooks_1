@@ -228,23 +228,16 @@ public class LessonsListControlador {
         return mv;
     }
 
-    private String fetchNameTeacher(int id, ServletContext servlet) {
+    public static String fetchNameTeacher(int id, ServletContext servlet) {
         String subjectName = null;
         try {
-            Connection cn;
-            DriverManagerDataSource dataSource = (DriverManagerDataSource) this.getBean("dataSourceAH", servlet);
-            cn = dataSource.getConnection();
-            Statement fetchconect = cn.createStatement(); 
             String consulta = "select lastname,firstname from person where personid = " + id;
-            ResultSet rs = fetchconect.executeQuery(consulta);
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
 
             while (rs.next()) {
                 subjectName = rs.getString("lastname") + ", " + rs.getString("firstname");
 
             }
-            cn.close();
-            //this.finalize();
-
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
         }
@@ -257,7 +250,7 @@ public class LessonsListControlador {
     @ResponseBody
     public String detailsLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 
-        //    ModelAndView mv = new ModelAndView("homepage");
+        //     ModelAndView mv = new ModelAndView("homepage");
         JSONObject jsonObj = new JSONObject();
         String[] id = hsr.getParameterValues("LessonsSelected");
         ArrayList<Progress> records = new ArrayList<>();

@@ -245,11 +245,11 @@
                                           // return ' <img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/> ' +  value;
                                          return  value;
                                        }},
-                                   {title: 'No.of presentations planned', field: 'noofplannedlessons', width:'15%'},
-                                   {title: 'No.of presentations done', field: 'noofarchivedlessons', width:'14%'},
-                                   {title: 'Progress', field: 'progress', width:'14%', formatter: formatProgress},
+                                   {title: '#Present. planned', field: 'noofplannedlessons', width:'16%'},
+                                   {title: '#Present. done', field: 'noofarchivedlessons', width:'16%'},
+                                   {title: 'Progress', field: 'progress', width:'13%', formatter: formatProgress},
                                    {title: 'Final rating', field: 'rating', width:'15%'}
-                                ]],
+                                ]]
                             
                         });
                         $(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").each(function( index ) {
@@ -258,7 +258,7 @@
                             if($(this).parent().parent().parent().attr("node-id")[0] === "L") img ="subject.svg";
                             else if ($(this).parent().parent().parent().attr("node-id")[0] === "C") img ="target.svg";
                             else img ="step.svg";                 
-                            jQuery("<img/>").prependTo($(this)).attr({src: '../recursos/js/treeGrid/'+img+'', width:'16px', height:'18px'});
+                            jQuery("<img/> ").prependTo($(this)).attr({src: '../recursos/js/treeGrid/'+img+'', width:'16px', height:'18px', style: 'padding-right:5px;' });
                         });
                         
                         //jQuery("<img/>").prependTo(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").attr({src: '../recursos/js/treeGrid/target.svg', width:'16px', height:'18px'});
