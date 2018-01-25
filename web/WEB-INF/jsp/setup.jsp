@@ -31,18 +31,27 @@
          <div class="container">
             <h1 class="text-center">Setup</h1>
             <form:form id="formConfig" method ="post" action="save.htm" >
-                <div class="col-xs-12 text-center">
+                <div class="col-xs-4 text-center">
                     <h2>Header Color</h2>
                     <input type="color" id="headcolor" name="headcolor" value="#ff0000" onchange="changecolor()">
                 </div>
-                <div class="col-xs-12 text-center">
+                <div class="col-xs-4 text-center">
                     <h2>Body Color</h2>
                     <input type="color" id="bodycolor" name="bodycolor" value="#ff0000" onchange="changecolor2()">
                 </div>
-                <div class="col-xs-12 text-center">
+                <div class="col-xs-4 text-center">
                     <input type="submit" class="btn btn-success" value="set">
                 </div>
-                <h1>${ruta}</h1>
+            </form:form>
+            <form:form enctype="multipart/form-data" id="formIcono" method ="post" action="/QuickBooks_1/setupicono" >
+                <div class="col-xs-12" style="margin-top: 30px">
+                    <div class="col-xs-4" >
+                        <input type="file" name="fileToUpload" id="icono" accept="image/*">
+                    </div>
+                    <div class="col-xs-4 text-center">
+                        <input type="submit" class="btn btn-success" value="set">
+                    </div>
+                </div>
             </form:form>
         </div>
     </body>

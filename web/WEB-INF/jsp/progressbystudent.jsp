@@ -646,6 +646,11 @@
                         contentType: "application/json",
                         success: function (data) {
                             $('#confirmsave').modal('show');
+                            $("#observationcomments").val(" ");
+                            $("#observationfecha").val("");
+                            $('#observationtype option').filter(function() { 
+                                return ($(this).text() === 'Select type'); //To select Blue
+                            }).prop('selected', true);
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                             console.log(xhr.status);

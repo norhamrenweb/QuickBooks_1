@@ -6,7 +6,6 @@
 package controladores;
 
 import Montessori.*;
-import static Montessori.DBConect.eduweb;
 import atg.taglib.json.util.JSONObject;
 import com.google.gson.Gson;
 import java.io.PrintWriter;
@@ -15,7 +14,6 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
