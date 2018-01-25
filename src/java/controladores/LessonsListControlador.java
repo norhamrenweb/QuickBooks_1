@@ -252,7 +252,7 @@ public class LessonsListControlador {
     @ResponseBody
     public String detailsLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 
-        //    ModelAndView mv = new ModelAndView("homepage");
+        //     ModelAndView mv = new ModelAndView("homepage");
         JSONObject jsonObj = new JSONObject();
         String[] id = hsr.getParameterValues("LessonsSelected");
         ArrayList<Progress> records = new ArrayList<>();
