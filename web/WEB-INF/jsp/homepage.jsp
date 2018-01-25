@@ -312,25 +312,25 @@
                             </div>
                             <div class="col-xs-6">
                                 <div class="row title">
-                                    Description
+                                    Description:
                                 </div>
                                 <div class="row" id="commentDetails">
 
                                 </div>
                                 <div class="row title">
-                                    Objective   
+                                    Objective:   
                                 </div>
                                 <div class="row" id ="objectivedetails">
 
                                 </div>
                                 <div class="row title">
-                                    Method
+                                    Method:
                                 </div>
                                 <div class="row" id="methodDetails">
 
                                 </div>
                                 <div class="row title">
-                                    Equipment 
+                                    Equipment: 
                                 </div>
                                 <div class="row">
                                     <ul id="contentDetails">
@@ -338,14 +338,14 @@
                                     </ul>
                                 </div>
                                 <div class="row title">
-                                    Created by 
+                                    Created by: 
                                 </div>
                                 <div class="row">
                                     <ul id="createBy">
                                     </ul>
                                 </div>
                                 <div class="row title">
-                                    Steps
+                                    Steps:
                                 </div>
                                 <div class="row">
                                     <ul id="steps">
