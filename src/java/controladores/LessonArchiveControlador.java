@@ -119,7 +119,7 @@ public class LessonArchiveControlador {
     @RequestMapping("/lessonarchive/detailsLesson.htm")
     @ResponseBody
     public String detailsLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-         // ModelAndView mv = new ModelAndView("homepage");
+        //    ModelAndView mv = new ModelAndView("homepage");
         JSONObject jsonObj = new JSONObject();
         String[] id = hsr.getParameterValues("LessonsSelected");
         ArrayList<Progress> records = new ArrayList<>();
@@ -127,21 +127,22 @@ public class LessonArchiveControlador {
         try {
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
-
             String consulta = "select * FROM public.lessons WHERE id=" + id[0];
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
-            int idobj = 0;
+            Objective o = new Objective();
+            int idobj=0;
             while (rs.next()) {
                 Method m = new Method();
+                jsonObj.put("nameteacher", LessonsListControlador.fetchNameTeacher(rs.getInt("user_id"), hsr.getServletContext()));
+
                 jsonObj.put("method", m.fetchName(rs.getInt("method_id"), hsr.getServletContext()));
                 Timestamp date = rs.getTimestamp("date_created");
                 SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
                 String dateStr = sdfDate.format(date);
                 jsonObj.put("datecreated", dateStr);
                 jsonObj.put("comment", rs.getString("comments"));
-                idobj = rs.getInt("objective_id");
+                idobj=rs.getInt("objective_id");
             }
-            Objective o = new Objective();
             jsonObj.put("objective", o.fetchName(idobj, hsr.getServletContext()));
             consulta = "select name from content where id in (select content_id from lesson_content where lesson_id = " + id[0] + ")";
             ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
@@ -175,6 +176,13 @@ public class LessonArchiveControlador {
                 record.setStudentname(name);
             }
             jsonObj.put("students", new Gson().toJson(records));
+            consulta = "select name from obj_steps where id="+idobj;
+            ResultSet rs4 = DBConect.eduweb.executeQuery(consulta);
+            ArrayList<String> steps = new ArrayList<>();
+            while(rs4.next()){
+                steps.add(rs4.getString("name"));
+            }
+            jsonObj.put("steps", new Gson().toJson(steps));
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
             StringWriter errors = new StringWriter();
@@ -183,6 +191,7 @@ public class LessonArchiveControlador {
         }
 
         return jsonObj.toString();
+    
     }
 
     @RequestMapping("/lessonarchive/deleteLesson.htm")

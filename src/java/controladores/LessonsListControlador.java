@@ -230,23 +230,16 @@ public class LessonsListControlador {
         return mv;
     }
 
-    private String fetchNameTeacher(int id, ServletContext servlet) {
+    public static String fetchNameTeacher(int id, ServletContext servlet) {
         String subjectName = null;
         try {
-            Connection cn;
-            DriverManagerDataSource dataSource = (DriverManagerDataSource) this.getBean("dataSourceAH", servlet);
-            cn = dataSource.getConnection();
-            Statement fetchconect = cn.createStatement(); 
             String consulta = "select lastname,firstname from person where personid = " + id;
-            ResultSet rs = fetchconect.executeQuery(consulta);
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
 
             while (rs.next()) {
                 subjectName = rs.getString("lastname") + ", " + rs.getString("firstname");
 
             }
-            cn.close();
-            //this.finalize();
-
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
         }
