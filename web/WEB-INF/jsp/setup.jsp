@@ -49,10 +49,20 @@
                         <input type="file" name="fileToUpload" id="icono" accept="image/*">
                     </div>
                     <div class="col-xs-4 text-center">
-                        <input type="submit" class="btn btn-success" value="set">
+                        <input type="submit" onclick="$('#myModal').modal({show: 'true'});" class="btn btn-success" value="set">
                     </div>
                 </div>
             </form:form>
         </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="titleComment"><%= request.getParameter("message")%></h4>
+                    </div>
+                </div>
+            </div>
+        </div>   
     </body>
 </html>
