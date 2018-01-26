@@ -7,8 +7,10 @@ package controladores;
 
 import java.io.*;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,25 +32,28 @@ public class ConfigurationControlador {
         ServletContext context = hsr.getServletContext();
         String appPath = context.getRealPath("") + "recursos/css/estilocolegio.css";
         File archivo = new File(appPath);
+        String headcolor = hsr.getParameter("headcolor");
+        String bodycolor = hsr.getParameter("bodycolor");
         BufferedWriter bw;
-        if(archivo.exists()) {
-            FileWriter escribir = new FileWriter(archivo);
-            String texto = "#infousuario{background-color:"+hsr.getParameter("headcolor")+"}";
-            for(int i=0; i<texto.length();i++){
-                escribir.write(texto.charAt(i));
-            }
-            texto = "body{background-color:"+hsr.getParameter("bodycolor")+"}";
-            for(int i=0; i<texto.length();i++){
-                escribir.write(texto.charAt(i));
-            }
-            escribir.close();
-        } else {
+        if(!archivo.exists()) {
             bw = new BufferedWriter(new FileWriter(archivo));
         }
+        String texto;
+        FileWriter escribir = new FileWriter(archivo);
+        if(headcolor!=null){
+            texto = "#infousuario{background-color:" + headcolor + "}";
+            for (int i = 0; i < texto.length(); i++) {
+                escribir.write(texto.charAt(i));
+            }
+        }
+        if(bodycolor!=null){
+            texto = "body{background-color:" + bodycolor + "}";
+            for (int i = 0; i < texto.length(); i++) {
+                escribir.write(texto.charAt(i));
+            }
+        }
+        escribir.close();
         ModelAndView mv = new ModelAndView("setup");
-        File dir = new File(context.getRealPath(""));
-        System.out.println ("Directorio actual: " + dir.getCanonicalPath());
-        mv.addObject("ruta", dir.getCanonicalPath());
         return mv;
     }
     

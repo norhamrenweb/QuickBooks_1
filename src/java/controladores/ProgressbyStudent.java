@@ -721,7 +721,11 @@ public class ProgressbyStudent {
 
         String[] output = hsr.getParameter("studentid").split("-");
         String studentId = output[0];
-        String nameStudent = "'" + output[1] + "'";
+        String nameStudent = "'" + output[1];
+        for(int i = 2;i<output.length;i++){
+            nameStudent+="-"+output[i];
+        }
+        nameStudent+= "'";
         //    mv.addObject("message","works");
         String message = "works";
         mv.addObject("studentId", studentId);
