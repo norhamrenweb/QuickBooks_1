@@ -47,10 +47,17 @@ public class setupicono extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException {
         //get the file chosen by the user
         Part filePart = request.getPart("fileToUpload");
+        String url;
+        String name = filePart.getName();
+        
         String path = request.getServletContext().getRealPath("")+"/recursos/img/";
         String nombre = "iconoschool"+terminacion(filePart.getSubmittedFileName());
         InputStream initialStream = filePart.getInputStream();
         byte[] buffer = new byte[initialStream.available()];
+        if(buffer.length == 0)
+            url = "/setupControlador/start.htm?message=Select an image";
+        else
+            url = "/setupControlador/start.htm?message=Image succesfully set";
         initialStream.read(buffer);
         File archivo = new File(path+nombre);
         BufferedWriter bw;
@@ -59,6 +66,7 @@ public class setupicono extends HttpServlet {
         }
         OutputStream outStream = new FileOutputStream(archivo);
         outStream.write(buffer);
+        response.sendRedirect(request.getContextPath() + url);
     }
     
     private String terminacion(String nombre){

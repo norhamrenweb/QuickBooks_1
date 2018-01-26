@@ -176,7 +176,7 @@ public class LessonArchiveControlador {
                 record.setStudentname(name);
             }
             jsonObj.put("students", new Gson().toJson(records));
-            consulta = "select name from obj_steps where id="+idobj;
+            consulta = "select name from obj_steps where obj_id="+idobj;
             ResultSet rs4 = DBConect.eduweb.executeQuery(consulta);
             ArrayList<String> steps = new ArrayList<>();
             while(rs4.next()){
