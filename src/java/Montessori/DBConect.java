@@ -25,8 +25,11 @@ public class DBConect {
     
     public static Connection cn;
     public static Connection cn2;
+    public static Connection cn3;
+
     public static Statement eduweb;
     public static Statement ah;
+    public static Statement eduwebBeforeFirst;
     
     private Object getBean(String nombrebean, ServletContext servlet){
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
@@ -39,6 +42,8 @@ public class DBConect {
             cn.close();
         if(cn2!=null)
             cn2.close();
+        if(cn3!=null)
+            cn3.close();
     }
     
     public DBConect (HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -53,6 +58,12 @@ public class DBConect {
         if(this.cn2!=null)
             this.cn2.close();
         this.cn2 = dataSource2.getConnection();
-        this.ah = cn2.createStatement();
+        this.ah = cn2.createStatement();      
+         //connection to comunication
+        DriverManagerDataSource dataSource3 = (DriverManagerDataSource) this.getBean("dataSource", hsr.getServletContext());
+        if(this.cn3!=null)
+            this.cn3.close();
+        this.cn3 = dataSource3.getConnection();
+        eduwebBeforeFirst = this.cn.createStatement(1004,1007);
     }
 }
