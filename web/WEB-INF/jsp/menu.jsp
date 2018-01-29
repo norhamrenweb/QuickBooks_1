@@ -29,7 +29,7 @@
             <div class="col-xs-12 iconosmenulateral">
                 <a href="<c:url value='/lessonarchive/loadLessons.htm'/>">
                     <div class="center-block">
-                        <img width="70%" src="<c:url value='/recursos/img/iconos/Calendar-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Archived">
+                        <img width="70%" src="<c:url value='/recursos/img/iconos/Calendar-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Completed Presentations">
                     </div>
                 </a>
             </div>
@@ -71,18 +71,18 @@
                         </a>
                     </div>
                     <div class="col-xs-12 iconosmenulateral">
-                        <a href="<c:url value='/setupControlador/start.htm'/>" >
+                       <%-- <a href="<c:url value='/setupControlador/start.htm'/>" >
                             <div class="center-block">
                                 <img width="70%" src="<c:url value='/recursos/img/iconos/Setup-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Setup">
                             </div>
-                        </a>
+                        </a>--%>
                     </div>
                 </c:when>
                 <c:when test = "${user.type == 1}">
                     <div class="col-xs-12 iconosmenulateral">
                         <a href="<c:url value='/sowdisplay/start.htm'/>" >
                             <div class="center-block">
-                                <img width="70%" src="<c:url value='/recursos/img/iconos/CreateSettings-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Modify SOW">
+                                <img width="70%" src="<c:url value='/recursos/img/iconos/CreateSettings-01.svg'/>" data-toggle="tooltip" data-placement="top" title="SOW">
                             </div>
                         </a>
                     </div>

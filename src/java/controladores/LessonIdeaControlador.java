@@ -371,7 +371,7 @@ public class LessonIdeaControlador {
            ArrayList<Objective> objectives = new ArrayList<>();
        try {
 
-          ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id="+subjectid[0]);
+          ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='"+subjectid[0]+"' order by name");
 //          Objective s = new Objective();
 //          s.setName("Select Objective");
 //          objectives.add(s);

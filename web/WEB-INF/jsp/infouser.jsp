@@ -93,7 +93,7 @@
 
 <div class="infousuario noPrint" id="infousuario">
     <div class="col-xs-3 text-left">
-        <img src="<c:url value="/recursos/img/iconoschool.png"/>">
+        <%--<img src="<c:url value="/recursos/img/iconoschool.png"/>">--%>
     </div>
     <div class="col-xs-7 text-center">
         <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>
