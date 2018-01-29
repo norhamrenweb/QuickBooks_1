@@ -208,7 +208,8 @@ public class ProgressbyStudent {
         try {
 //will display only if there is a lesson that has a progress record,but if a lesson is only planned will not be displayed
 // the message should appear if an objective has only a general comment
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = " + d.getCol2());
+            ResultSet rs1 = DBConect.eduwebBeforeFirst.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = " + d.getCol2());
+            
             if (!rs1.next()) {
                 String message = "Student does not have progress under the selected objective";//if i change this message must change as well in the jsp
                 mv.addObject("message", message);
@@ -234,7 +235,7 @@ public class ProgressbyStudent {
 
                 finalrating = this.getfinalrating(d.getCol1(), d.getCol2());
                 String consulta = "select min(comment_date) as date from progress_report where student_id =" + d.getCol2() + " and rating_id in (select id from rating where name = 'Presented') and objective_id =" + d.getCol1();
-                ResultSet rs3 = DBConect.eduweb.executeQuery(consulta);
+                ResultSet rs3 = DBConect.eduwebBeforeFirst.executeQuery(consulta);
                 if (rs3.next()) {
                     rs3.beforeFirst();
                     while (rs3.next()) {
@@ -247,7 +248,7 @@ public class ProgressbyStudent {
                     }
                 }
                 consulta = "select min(comment_date) as date from progress_report where student_id =" + d.getCol2() + " and rating_id in (select id from rating where name = 'Attempted') and objective_id =" + d.getCol1();
-                ResultSet rs4 = DBConect.eduweb.executeQuery(consulta);
+                ResultSet rs4 = DBConect.eduwebBeforeFirst.executeQuery(consulta);
                 if (rs4.next()) {
                     rs4.beforeFirst();
                     while (rs4.next()) {
@@ -259,7 +260,7 @@ public class ProgressbyStudent {
                     }
                 }
                 consulta = "select min(comment_date) as date from progress_report where student_id =" + d.getCol2() + " and rating_id in (select id from rating where name = 'Mastered') and objective_id =" + d.getCol1();
-                ResultSet rs5 = DBConect.eduweb.executeQuery(consulta);
+                ResultSet rs5 = DBConect.eduwebBeforeFirst.executeQuery(consulta);
                 if (rs5.next()) {
                     rs5.beforeFirst();
                     while (rs5.next()) {
