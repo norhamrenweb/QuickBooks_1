@@ -27,9 +27,9 @@ import javax.servlet.ServletContext;
  *
  * @author nmoha
  */
-public class FactoryProgressReport_grade4 extends DataFactory {
+public class FactoryAcademicReport_grade7 extends DataFactory {
 
-    public FactoryProgressReport_grade4() {
+    public FactoryAcademicReport_grade7() {
         nameStudent = "";
         dob = "";
         age = "";
@@ -131,6 +131,6 @@ public class FactoryProgressReport_grade4 extends DataFactory {
 
     @Override
     public String getNameReport() {
-        return "progress_report_2017_gr4.jasper";
+        return "Academic_Report_grade7.jasper";
     }
 }
