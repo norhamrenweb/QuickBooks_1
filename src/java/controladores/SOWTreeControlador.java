@@ -305,7 +305,7 @@ public class SOWTreeControlador {
             for (Subject su : subjects.subList(1, subjects.size())) {
                 String[] ids = new String[1];
                 ids = su.getId();
-                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = " + ids[0]);
+                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = '" + ids[0]+"' order by Title");
                 while (rs2.next()) {
                     if (rs2.getBoolean("Active") == true) {
                         su.setName(rs2.getString("Title"));
