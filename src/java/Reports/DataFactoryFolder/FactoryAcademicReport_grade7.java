@@ -27,9 +27,9 @@ import javax.servlet.ServletContext;
  *
  * @author nmoha
  */
-public class FactoryProgressReport_grade4 extends DataFactory {
+public class FactoryAcademicReport_grade7 extends DataFactory {
 
-    public FactoryProgressReport_grade4() {
+    public FactoryAcademicReport_grade7() {
         nameStudent = "";
         dob = "";
         age = "";
@@ -46,21 +46,36 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         ArrayList<String> as4 = new ArrayList<>();
         cargarAlumno(studentId);
         
-        HashMap<String, Profesor> mapTeachers = getTeachers(idStudent);
-        HashMap<String, String> mapComentarios = getComments(idStudent);
-        
-        for (Map.Entry<String, Profesor> entry : mapTeachers.entrySet()) {
-            String key = entry.getKey();
-            Profesor value = entry.getValue();
-            os4.add(value.getAsignatura()+":"+value.getFirstName());
-            
-            if(mapComentarios.containsKey(key)) as4.add(mapComentarios.get(key));
-            else as4.add(" ");
-        }
-      
+        os4.add("obj 1");
+        as4.add("A");
+        os4.add("obj 2");
+        as4.add("P");
+        os4.add("obj 3");
+        as4.add("M");
+        os4.add("obj 4");
+        as4.add("M");
+
         if (coll.isEmpty()) {
-            coll.add(new BeanWithList(null, os4, as4, nameStudent, dob, age, grade, term));
+            coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
         }
+        ArrayList<String> os5 = new ArrayList<>();
+        ArrayList<String> as5 = new ArrayList<>(); 
+        os5.add("obj 7");
+        as5.add("M");
+        os5.add("obj 8");
+        as5.add("P");
+        
+          coll.add(new BeanWithList("Historia:Profesor Juan:40:COMENTARIO DE HISTORIA", os5, as5, nameStudent, dob, age, grade, term));
+                      coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
+
+                                  coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
+
+                                              coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
+
+                                                          coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
+
+                                                                      coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
+
         return coll;
     }
 
@@ -131,6 +146,6 @@ public class FactoryProgressReport_grade4 extends DataFactory {
 
     @Override
     public String getNameReport() {
-        return "progress_report_2017_gr4.jasper";
+        return "Academic_Report_grade7.jasper";
     }
 }

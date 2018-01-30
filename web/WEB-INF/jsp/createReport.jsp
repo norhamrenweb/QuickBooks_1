@@ -363,7 +363,7 @@
                             <option value="" disabled="true"  disabled="true">Select Type</option>
                             <option value="progress_prePrimary" >Progress Pre-Primary</option>
                             <option value="progress_Yr1_4" >Progress Yr1_4</option>
-                            <option value="progress_Gr7" disabled="true" >Academic Gr7</option>                                    
+                            <option value="progress_Gr7" >Academic Gr7</option>                                    
                         </select>
                     </div></div>
 

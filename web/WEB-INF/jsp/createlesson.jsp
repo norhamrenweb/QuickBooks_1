@@ -367,7 +367,9 @@
                         var subjects = JSON.parse(json.subjectslist);
                         var objectives = JSON.parse(json.objectiveslist);
                         var contents = JSON.parse(json.contentslist);
-
+                        var comment = json.comment;
+                        
+                        $("#comments").text(comment);        
                         $('#level option[value="' + level + '"]').attr("selected", true);
                         $('#method option[value="' + method + '"]').attr("selected", true);
                         $('#subject').empty();

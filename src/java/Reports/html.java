@@ -77,7 +77,7 @@ public class html extends HttpServlet {
                 return new FactoryProgressReport_grade4();
                 
             case "progress_Gr7":
-                return null;
+                return new FactoryAcademicReport_grade7();
 
             default:
                 return null;

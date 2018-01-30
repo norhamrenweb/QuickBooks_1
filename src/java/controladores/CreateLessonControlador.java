@@ -340,17 +340,17 @@ public class CreateLessonControlador {
         Objective obj = new Objective();
         Method meth = new Method();
         Level lev = new Level();
+        String comment="";
         int levelid = 0;
         List<String> contents = new ArrayList<>();
         DriverManagerDataSource dataSource;
         try {
-
             String[] oid = new String[1];
             String[] sid = new String[1];
             String[] mid = new String[1];
             String[] cid = new String[1];
 
-            String consulta = "SELECT objective_id,subject_id,level_id,method_id FROM public.lessons where id =" + lessonplanid[0];
+            String consulta = "SELECT objective_id,subject_id,level_id,method_id,comments FROM public.lessons where id =" + lessonplanid[0];
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
 
             while (rs.next()) {
@@ -361,6 +361,7 @@ public class CreateLessonControlador {
                 mid[0] = "" + rs.getInt("method_id");
                 meth.setId(mid);
                 levelid = rs.getInt("level_id");
+                comment = rs.getString("comments");
             }
 
             ResultSet rs2 = DBConect.eduweb.executeQuery("select content_id from public.lesson_content where lesson_id = " + lessonplanid[0]);
@@ -379,6 +380,7 @@ public class CreateLessonControlador {
             json.put("objective", new Gson().toJson(obj));
             json.put("method", new Gson().toJson(meth));
             json.put("content", new Gson().toJson(contents));
+            json.put("comment",comment);
 
         } catch (SQLException ex) {
             System.out.println("Error  " + ex);
@@ -425,7 +427,7 @@ public class CreateLessonControlador {
         for (Subject su : subjects.subList(1, subjects.size())) {
             String[] ids = new String[1];
             ids = su.getId();
-            ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = " + ids[0]);
+            ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = '" + ids[0]+"' order by Title");
             while (rs2.next()) {
                 if (rs2.getBoolean("Active") == true) {
                     su.setName(rs2.getString("Title"));
@@ -439,7 +441,7 @@ public class CreateLessonControlador {
     public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id=" + subjectid[0]);
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0]+"' order by name");
             Objective s = new Objective();
             s.setName("Select Objective");
             objectives.add(s);

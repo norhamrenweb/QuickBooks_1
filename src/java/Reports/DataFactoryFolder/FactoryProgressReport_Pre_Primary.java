@@ -36,8 +36,8 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
 
         String studentId = idStudent;
         String consulta = "";
-
-        ResultSet rs = cargarAlumno(studentId);
+        ResultSet rs;
+        cargarAlumno(studentId);
 
         ArrayList<String> lessons = new ArrayList<>();
         java.util.Vector coll = new java.util.Vector();
