@@ -518,7 +518,7 @@
 				<textFieldExpression><![CDATA[$F{subject}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement key="" x="20" y="25" width="104" height="18" isRemoveLineWhenBlank="true" forecolor="#FFFFFF" uuid="a83cd503-44e2-4b91-967c-ea94f92deaf7">
+				<reportElement key="" positionType="Float" x="20" y="25" width="104" height="18" isRemoveLineWhenBlank="true" forecolor="#FFFFFF" uuid="a83cd503-44e2-4b91-967c-ea94f92deaf7">
 					<printWhenExpression><![CDATA[(($F{subject}.equals("Comments")) ? true: false)]]></printWhenExpression>
 				</reportElement>
 				<textElement>
