@@ -16,6 +16,7 @@
         <title>Welcome</title>
         <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap.css"/>" />
         <link rel="stylesheet" type="text/css" href="<c:url value="/estilotabla.css"/>" />
+        <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/estilocolegio.css" />"/>
     </head>
     <body>
         <div class="col-sm-12" style="margin-top: 10px;">
