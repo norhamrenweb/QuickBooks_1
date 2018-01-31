@@ -19,7 +19,8 @@ public class Observation {
     private String date;
     private String nameTeacher;
     private String dateString;
-
+    private String numSemana;
+    
     public String getNameTeacher() {
         return nameTeacher;
     }
@@ -51,6 +52,15 @@ public class Observation {
         logged_by = o2.getLogged_by();
         studentid = o2.getStudentid();
         nameTeacher = o2.getNameTeacher();
+        numSemana = o2.getNumSemana();
+    }
+
+    public String getNumSemana() {
+        return numSemana;
+    }
+
+    public void setNumSemana(String numSemana) {
+        this.numSemana = numSemana;
     }
 
     public String getCommentDate() {

@@ -29,7 +29,6 @@
 
                     var idCLass = $(this).attr('data-idclass');
                     window.location.replace("<c:url value="/gradebook/loadRecords.htm?term=1&ClassSelected="/>" + idCLass);
-
                 });
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE              
 
@@ -42,7 +41,6 @@
 
 
                 });
-
                 $('#fecha').datetimepicker({
                     format: 'YYYY-MM',
                     locale: userLang.valueOf(),
@@ -51,7 +49,6 @@
                             //defaultDate: '08:32:33',
 
                 });
-
                 $('#observationfecha').datetimepicker({
                     format: 'YYYY-MM-DD',
                     locale: userLang.valueOf(),
@@ -60,13 +57,10 @@
                             //defaultDate: '08:32:33',
 
                 });
-
                 $('#fecha').on('dp.change', function (e) {
                     loadComments();
                 })
                 loadComments();
-
-
                 $('#fecha2').on('dp.change', function (e) {
                     if (($('#observationfecha').val() !== "") && ($('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")) {
                         $('#savecomment').prop("disabled", false);
@@ -74,7 +68,6 @@
                         $('#savecomment').prop("disabled", true);
                     }
                 });
-
                 $('#observationcomments,#observationtype').change(function () {
                     if (($('#observationfecha').val() !== "") && ($('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")) {
                         $('#savecomment').prop("disabled", false);
@@ -99,8 +92,6 @@
                         var object = JSON.parse(ajax.responseText);
                         var s = JSON.parse(object.students);
                         var c = JSON.parse(object.contents);
-
-
                         $('#nameLessonDetails').empty();
                         $('#nameLessonDetails').append('Details ' + nameLessons);
                         //$('#detailsStudents').empty();
@@ -115,8 +106,6 @@
                         $.each(c, function (i, content) {
                             $('#contentDetails').append('<li>' + c[i] + '</li>');
                         });
-
-
                         $('#methodDetails').empty();
                         $('#methodDetails').append('<tr><td>' + object.method + '</td></tr>');
                         $('#commentDetails').empty();
@@ -175,19 +164,15 @@
                 var createDate = $('#editComentario' + id).data('createdate');
                 var type = $('#editComentario' + id).data('type');
                 var commentDate = $('#editComentario' + id).data('commentdate');
-
-
                 $('#observationfecha').val(commentDate);
                 $('#observationtype').val(type);
                 $('#observationcomments').val(comment);
                 $('#idComentario').val(id);
-
                 $('#editComment').modal('show');
             }
             function ConfirmDeleteComentario(val) {
                 $('#deleteObservation').modal('show');
                 $('#buttonDeleteObservation').val(val);
-
             }
             function deleteComentario(id) {
                 if (window.XMLHttpRequest) //mozilla
@@ -209,14 +194,13 @@
                     datatype: "json",
                     contentType: "application/json",
                     success: function (data) {
-                        
+
                         var parentAux = $('#comment' + id).parent();
                         //var j = JSON.parse(data);   
                         if ($('#comment' + id).parent().children().length === 1) {
                             $('#comment' + id).parent().append("<div class='divAdd'>No comments this week</div>");
                         }
-                        $('#comment' + id).remove();                    
-                   
+                        $('#comment' + id).remove();
                         parentAux.children().not(".hide").last().next().removeClass("hide");
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -249,20 +233,29 @@
                     contentType: "application/json",
                     success: function (data) {
                         var j = JSON.parse(data);
-                        var semana = "";
+                        var numSemana = "#semana1";
                         var cont1 = 0;
                         var cont2 = 0;
                         var cont3 = 0;
                         var cont4 = 0;
-                        var oculto = "hide";
+                        var cont5 = 0;
+                        var cont6 = 0;
                         $("#semana1").empty();
                         $("#semana2").empty();
                         $("#semana3").empty();
                         $("#semana4").empty();
-
+                        $("#semana5").empty();
+                        $("#semana6").empty();
+                        $("#semana5").parent().parent().hide();
+                        $("#semana6").parent().parent().hide();
+                        
+                        var weeksCount = weeksInAMonth($("#TXTfecha").val().split("-")[0],$("#TXTfecha").val().split("-")[1]);
+                        if(weeksCount > 4){
+                             $("#semana5").parent().parent().show();
+                             if(weeksCount > 5) $("#semana6").parent().parent().show();
+                        }
                         $.each(j, function (i, value) {
-                            var f = value;
-
+                            var f = value;      
                             $.each(f, function (i2, value2) {
                                 var id = value2.id;
                                 var comentario = value2.observation;
@@ -276,22 +269,58 @@
                                 var visible = "";
                                 var nameTeacher = value2.nameTeacher;
                                 var disable = "";
+                                var dayWeek = value2.numSemana;
                                 var idTeacher = value2.logged_by;
-
                                 if (userId !== idTeacher && userType !== 0) {
                                     disable = "disabled='disabled'";
                                 }
 
-                                if (i <= 7) {
-                                    //semana= "semana1" REDUCIR CODIGO
+                                if (dayWeek === "1") { //PRIMERA SEMANA
                                     cont1 = cont1 + 180;
-                                    if (cont1 > $("#semana1").width()) {
+                                    if (cont1 > $(numSemana).width()) {
                                         visible = "hide";
                                     }
-
+                                } else if (dayWeek === "2") { //SEGUNDA SEMANA
+                                    visible = "";
+                                    numSemana = "#semana2";
+                                    cont2 = cont2 + 180;
+                                    if (cont2 > $(numSemana).width())
+                                    {
+                                        visible = "hide";
+                                    }
+                                } else if (dayWeek === "3") {//TERCERA SEMANA
+                                    visible = "";
+                                    numSemana = "#semana3";
+                                    cont3 = cont3 + 180;
+                                    if (cont3 > $(numSemana).width()) {
+                                        visible = "hide";
+                                    }
+                                } else if (dayWeek === "4") { //CUARTA SEMANA
+                                    visible = "";
+                                    numSemana = "#semana4";
+                                    cont4 = cont4 + 180;
+                                    if (cont4 > $(numSemana).width())
+                                    {
+                                        visible = "hide";
+                                    }
+                                } else if (dayWeek === "5") {//QUINTA SEMANA
+                                    visible = "";
+                                    numSemana = "#semana5";
+                                    cont5 = cont5 + 180;
+                                    if (cont5 > $(numSemana).width()) {
+                                        visible = "hide";
+                                    }
+                                } else { // SEXTA SEMANA
+                                    visible = "";
+                                    numSemana = "#semana6";
+                                    cont6 = cont6 + 180;
+                                    if (cont6 > $(numSemana).width()) {
+                                        visible = "hide";
+                                    }
+                                }
             <%--Create Date: " + fechaCreacion + "<br>\n\
             Type: " + category + "<br>\n\--%>
-                                    $("#semana1").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
+                                $(numSemana).append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
                                 <strong>Date:</strong> " + commentdate + "<br>\n\
                                 <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
@@ -312,100 +341,165 @@
 </div>\n\
 </div>\n\
 </div>");
-                                } else {
-                                    if (i <= 14) {
-                                        //semana= "semana2"
-                                        cont2 = cont2 + 180;
-                                        if (cont2 > $("#semana2").width())
-                                        {
-                                            visible = "hide";
-                                        }
-                                        $("#semana2").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
-                                <strong>Date:</strong> " + commentdate + "<br>\n\
-                                <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
-\n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
-<span class='glyphicon glyphicon-list-alt'></span>\n\
-</button>\n\
-</div>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
-<span class='glyphicon glyphicon-pencil'></span>\n\
-</button>\n\
-</div>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
-<span class=' glyphicon glyphicon-remove'></span>\n\
-</button>\n\
-</div>\n\
-</div>\n\
-</div>");
-                                    } else {
-                                        if (i <= 21) {
-                                            // semana= "semana3"
-                                            cont3 = cont3 + 180;
-                                            if (cont3 > $("#semana3").width()) {
-                                                visible = "hide";
-                                            }
-
-                                            $("#semana3").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
-                                <strong>Date:</strong> " + commentdate + "<br>\n\
-                                <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
-\n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
-<span class='glyphicon glyphicon-list-alt'></span>\n\
-</button>\n\
-</div>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
-<span class='glyphicon glyphicon-pencil'></span>\n\
-</button>\n\
-</div>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
-<span class=' glyphicon glyphicon-remove'></span>\n\
-</button>\n\
-</div>\n\
-</div>\n\
-</div>");
-
-                                        } else {
-                                            //semana= "semana4"
-                                            cont4 = cont4 + 180;
-                                            if (cont4 > $("#semana4").width()) {
-                                                visible = "hide";
-                                            }
-
-                                            $("#semana4").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
-                                <strong>Date:</strong> " + commentdate + "<br>\n\
-                                <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
-\n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
-<span class='glyphicon glyphicon-list-alt'></span>\n\
-</button>\n\
-</div>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
-<span class='glyphicon glyphicon-pencil'></span>\n\
-</button>\n\
-</div>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
-<span class=' glyphicon glyphicon-remove'></span>\n\
-</button>\n\
-</div>\n\
-</div>\n\
-</div>");
-                                        }
-                                    }
-                                }
                             });
+                            /*
+                             var semana = "";
+                             var cont1 = 0;
+                             var cont2 = 0;
+                             var cont3 = 0;
+                             var cont4 = 0;
+                             var oculto = "hide";
+                             $("#semana1").empty();
+                             $("#semana2").empty();
+                             $("#semana3").empty();
+                             $("#semana4").empty();
+                             
+                             
+                             $.each(j, function (i, value) {
+                             var f = value;
+                             
+                             $.each(f, function (i2, value2) {
+                             var id = value2.id;
+                             var comentario = value2.observation;
+                             var comentarioExtenso = '';
+                             if (comentario.length >= 57) {
+                             var comentarioExtenso = '...';
+                             }
+                             var fechaCreacion = value2.date;
+                             var category = value2.type;
+                             var commentdate = value2.commentDate;
+                             var visible = "";
+                             var nameTeacher = value2.nameTeacher;
+                             var disable = "";
+                             var idTeacher = value2.logged_by;
+                             
+                             if (userId !== idTeacher && userType !== 0) {
+                             disable = "disabled='disabled'";
+                             }
+                             
+                             if (i <= 7) {
+                             //semana= "semana1" REDUCIR CODIGO
+                             cont1 = cont1 + 180;
+                             if (cont1 > $("#semana1").width()) {
+                             visible = "hide";
+                             }
+                             
+                             <%--Create Date: " + fechaCreacion + "<br>\n\
+Type: " + category + "<br>\n\--%>
+                             $("#semana1").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
+                             <strong>Date:</strong> " + commentdate + "<br>\n\
+                             <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
+                             \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+                             <span class='glyphicon glyphicon-list-alt'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+                             <span class='glyphicon glyphicon-pencil'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button'  " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
+                             <span class=' glyphicon glyphicon-remove'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             </div>\n\
+                             </div>");
+                             } else {
+                             if (i <= 14) {
+                             //semana= "semana2"
+                             cont2 = cont2 + 180;
+                             if (cont2 > $("#semana2").width())
+                             {
+                             visible = "hide";
+                             }
+                             $("#semana2").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
+                             <strong>Date:</strong> " + commentdate + "<br>\n\
+                             <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
+                             \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+                             <span class='glyphicon glyphicon-list-alt'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+                             <span class='glyphicon glyphicon-pencil'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
+                             <span class=' glyphicon glyphicon-remove'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             </div>\n\
+                             </div>");
+                             } else {
+                             if (i <= 21) {
+                             // semana= "semana3"
+                             cont3 = cont3 + 180;
+                             if (cont3 > $("#semana3").width()) {
+                             visible = "hide";
+                             }
+                             
+                             $("#semana3").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
+                             <strong>Date:</strong> " + commentdate + "<br>\n\
+                             <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
+                             \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+                             <span class='glyphicon glyphicon-list-alt'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+                             <span class='glyphicon glyphicon-pencil'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
+                             <span class=' glyphicon glyphicon-remove'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             </div>\n\
+                             </div>");
+                             
+                             } else {
+                             //semana= "semana4"
+                             cont4 = cont4 + 180;
+                             if (cont4 > $("#semana4").width()) {
+                             visible = "hide";
+                             }
+                             
+                             $("#semana4").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
+                             <strong>Date:</strong> " + commentdate + "<br>\n\
+                             <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
+                             \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+                             <span class='glyphicon glyphicon-list-alt'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+                             <span class='glyphicon glyphicon-pencil'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             <div class='col-xs-4 text-center sinpadding'>\n\
+                             <button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
+                             <span class=' glyphicon glyphicon-remove'></span>\n\
+                             </button>\n\
+                             </div>\n\
+                             </div>\n\
+                             </div>");
+                             }
+                             }
+                             }
+                             });*/
 
                         });
-
                         if (cont1 === 0)
                             $("#semana1").append("<div class='divAdd'>No comments this week</div>");
                         if (cont2 === 0)
@@ -414,6 +508,10 @@
                             $("#semana3").append("<div class='divAdd'>No comments this week</div>");
                         if (cont4 === 0)
                             $("#semana4").append("<div class='divAdd'>No comments this week</div>");
+                        if (cont5 === 0)
+                            $("#semana5").append("<div class='divAdd'>No comments this week</div>");
+                        if (cont6 === 0)
+                            $("#semana6").append("<div class='divAdd'>No comments this week</div>");
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -423,6 +521,22 @@
 
                 });
             }
+            
+            function weeksInAMonth(year, month_number) {
+                            var firstOfMonth = new Date(year, month_number - 1, 1);
+                            var day = firstOfMonth.getDay() || 6;
+                            day = day === 1 ? 0 : day;
+                            if (day) { day-- }
+                            var diff = 7 - day;
+                            var lastOfMonth = new Date(year, month_number, 0);
+                            var lastDate = lastOfMonth.getDate();
+                            if (lastOfMonth.getDay() === 1) {
+                                diff--;
+                            }
+                            var result = Math.ceil((lastDate - diff) / 7);
+                            return result + 1;
+                        };
+                        
             function detailsSelect(LessonsSelected)
             {
                 if (window.XMLHttpRequest) //mozilla
@@ -457,9 +571,6 @@
                             $('#deleteLessonMessage').modal('show'); //  Presentation deleted successfully
                         }
                         ;
-
-
-
                     }
                 }
             }
@@ -477,8 +588,6 @@
                 ajax.open("POST", "deleteLesson.htm?LessonsSelected=" + LessonsSelected, true);
             <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
                 ajax.send("");
-
-
             }
             ;
             function refresh()
@@ -685,11 +794,22 @@
                     <hr>
                 </div>
                 <script>
+                    /* $(window).resize(function () {
+                     loadComments();
+                     
+                     });*/
+    
+                    var resizeId;
                     $(window).resize(function () {
-                        loadComments();
+                        clearTimeout(resizeId);
+                        resizeId = setTimeout(doneResizing, 500);
                     });
 
 
+                    function doneResizing() {
+                         loadComments();
+                    }
+                    
                     function moverDrech(x)
                     {
                         if ($("#semana" + x).children().not(".hide").length > 1) {
@@ -700,7 +820,6 @@
                     function moverIzq(x)
                     {
                         $("#semana" + x).children().not(".hide").prev().removeClass("hide");
-
                         if ($("#semana" + x).children().not(".hide").length * 180 > $("#semana" + x).width()) {
                             $("#semana" + x).children().not(".hide").last().addClass("hide");
                         }
@@ -788,6 +907,46 @@
                     </div>
                 </div>
 
+
+                <div class="col-xs-12 firstWeek sinpadding">
+                    <div class="col-xs-2">
+                        <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
+                            <div class="col-xs-12 sinpadding">
+                                <h4>Fifth Week</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+                        <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('5')"></span>
+                    </div>
+                    <div class="col-xs-8 sinpadding" > 
+                        <div  class="semana3 tam3" id="semana5">
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+                        <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('5')"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 secondWeek sinpadding">
+                    <div class="col-xs-2" >
+                        <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
+                            <div class="col-xs-12 sinpadding">
+                                <h4>Sixth Week</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+                        <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('6')"></span>
+                    </div>
+                    <div class="col-xs-8 sinpadding" > 
+                        <div  class="semana4 tam4" id="semana6">
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+                        <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('6')"></span>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Modal confirm delete-->
@@ -820,7 +979,6 @@
                     var type = $(this).data('type');
                     var commentDate = $(this).data('commentdate');
                     var nameTeacher = $(this).data('nameteacher');
-
                     $('#idCommentDate').text(commentDate);
                     $('#idCreateDate').text(createDate);
                     $('#idTypeComment').text(type);
