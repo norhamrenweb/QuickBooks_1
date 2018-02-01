@@ -15,7 +15,7 @@ import java.util.List;
  * @author nmohamed
  */
 public class Lessons {
-    
+
     private int id;
     private String name;
     private String start;
@@ -27,7 +27,16 @@ public class Lessons {
     private List<String> contentid;
     private int teacherid;
     private Method method;
+    private boolean share;
+    
+    public boolean isShare() {
+        return share;
+    }
 
+    public void setShare(boolean share) {
+        this.share = share;
+    }
+    
     public Method getMethod() {
         return method;
     }
