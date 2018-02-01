@@ -6,6 +6,8 @@
 package controladores;
 
 import Montessori.*;
+import atg.taglib.json.util.JSONArray;
+import atg.taglib.json.util.JSONException;
 import atg.taglib.json.util.JSONObject;
 import com.google.gson.Gson;
 import java.io.PrintWriter;
@@ -55,9 +57,28 @@ public class LessonsListControlador {
         User user = (User) sesion.getAttribute("user");
         mv.addObject("lessonslist", this.getLessons(user, hsr.getServletContext()));
         mv.addObject("username", user.getName());
+        int iduser = ((User)hsr.getSession().getAttribute("user")).getId();
+        mv.addObject("teacherlist",this.getTeachers(iduser));
         return mv;
     }
-//   
+    
+    public static ArrayList<Teacher> getTeachers(int iduser) throws SQLException{
+        String consulta = "select * from Staff where faculty=1";
+        ResultSet rs = DBConect.ah.executeQuery(consulta);
+        ArrayList<Teacher> t = new ArrayList<>();
+        String firstname="",lastname="";
+        int id = 0;
+        while(rs.next()){
+            firstname = rs.getString("firstname");
+            lastname = rs.getString("lastname");
+            id = rs.getInt("StaffID");
+            if(id!=iduser)
+                t.add(new Teacher(lastname+", "+firstname,id));
+        }
+        return t;
+    }
+//  
+    
 
     public ArrayList<Lessons> getLessons(User user, ServletContext servlet) throws SQLException {
 //        this.conectarOracle();
@@ -136,6 +157,47 @@ public class LessonsListControlador {
                 lesson.setDate("" + dateStr);
                 lesson.setStart(timeStr);
                 lesson.setFinish(timeStr2);
+                lesson.setShare(false);
+                lessonslist.add(lesson);
+
+            }
+            consulta = "SELECT * FROM lessons inner join lessonpresentedby on lessonid=id where teacherid=" + user.getId() + " AND COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+            rs = DBConect.eduweb.executeQuery(consulta);
+            while (rs.next()) {
+                Lessons lesson = new Lessons();
+                lesson.setName(rs.getString("name"));
+                lesson.setId(rs.getInt("id"));
+
+                Level level = new Level();
+                int idLevel = rs.getInt("level_id");
+                name = mapLevel.get(idLevel);
+                level.setName(name);
+                lesson.setLevel(level);
+
+                Objective sub = new Objective();
+                int idObjective = rs.getInt("objective_id");
+                name = mapObjective.get(idObjective);
+                sub.setName(name);
+                lesson.setObjective(sub);
+
+                Subject subject = new Subject();
+                int idSubject = rs.getInt("subject_id");
+                name = mapSubject.get(idSubject);
+                subject.setName(name);
+                lesson.setSubject(subject);
+
+                Timestamp stamp = rs.getTimestamp("start");
+                Timestamp finish = rs.getTimestamp("finish");
+                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm a");
+                String dateStr = sdfDate.format(stamp);
+                String timeStr = sdfTime.format(stamp);
+
+                String timeStr2 = sdfTime.format(finish);
+                lesson.setDate("" + dateStr);
+                lesson.setStart(timeStr);
+                lesson.setFinish(timeStr2);
+                lesson.setShare(true);
                 lessonslist.add(lesson);
 
             }
@@ -193,6 +255,7 @@ public class LessonsListControlador {
             //mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
             //mv.addObject("messageDelete",message);
             jsonObj.put("message", message);
+            DBConect.eduweb.executeUpdate("Delete from lessonpresentedby where lessonid="+id[0]); 
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
             StringWriter errors = new StringWriter();
@@ -204,6 +267,54 @@ public class LessonsListControlador {
         //return mv;
     }
 
+    @RequestMapping("/homepage/compartir.htm")
+    @ResponseBody
+    public String compartirLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws JSONException {
+        String obj = hsr.getParameter("obj");
+        JSONObject json = new JSONObject(obj);
+        JSONArray ids = json.getJSONArray("teachers");
+        String idlesson = json.getString("id");
+        
+        try {
+            String consulta;
+            consulta = "delete from lessonpresentedby where lessonid="+idlesson; 
+            DBConect.eduweb.executeUpdate(consulta);
+            for(int i = 0; i < ids.length();i++){
+                consulta = "insert into lessonpresentedby values("+idlesson+","+ids.getString(i)+")";
+                DBConect.eduweb.executeUpdate(consulta);
+            }
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(LessonsListControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            return "error";
+        }
+        return "Succesfully share";
+    }
+    
+    @RequestMapping("/homepage/cargarcompartidos.htm")
+    @ResponseBody
+    public String compartirSelect(HttpServletRequest hsr, HttpServletResponse hsr1) throws JSONException {
+        String idlesson = hsr.getParameter("seleccion");
+        String consulta = "select * from lessonpresentedby where lessonid="+idlesson;
+        ArrayList<Integer> teacherids = new ArrayList<>();
+        ArrayList<Teacher> tlist = new ArrayList<>();
+        try {
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            while(rs.next()){
+                teacherids.add(rs.getInt("teacherid"));
+            }
+            String name;
+            for(Integer s:teacherids){
+                name = fetchNameTeacher(s,hsr.getServletContext());
+                tlist.add(new Teacher(name,s));
+            }
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(LessonsListControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("t", new Gson().toJson(tlist));
+        return jsonObj.toString();
+    }
+    
     @RequestMapping("/homepage/editLesson.htm")
     public ModelAndView editLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         if ((new SessionCheck()).checkSession(hsr)) {
