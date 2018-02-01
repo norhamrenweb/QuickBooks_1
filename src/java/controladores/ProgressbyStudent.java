@@ -847,7 +847,14 @@ public class ProgressbyStudent {
                     oAux.setObservation(rs.getString("comment"));
                     oAux.setType(rs.getString("category"));
                     oAux.setStudentid(Integer.parseInt(studentId));
-                    oAux.setCommentDate("" + rs.getDate("commentdate"));
+                    
+                    Date d =rs.getDate("commentdate");
+                    oAux.setCommentDate("" + d);
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(d);
+                    cal.setMinimalDaysInFirstWeek(1); 
+                    oAux.setNumSemana(""+cal.get(Calendar.WEEK_OF_MONTH));
+                    
                     arrayComments.add(new Observation(oAux));
                 }
 
