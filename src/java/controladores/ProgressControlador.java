@@ -228,7 +228,7 @@ public class ProgressControlador {
                 String note = "idPresentation: " + lessonid[0] + " | namePresentation: " + namePresentation +" | nameTeacher: "+nameTeacher+ " | rating: " + ratings[i];
                 note += " | comment: " + comments[i] + " | attendace: " + attAux + " | work accomplished: " + steps[i];
                 
-                ActivityLog.log(user.getId(), "id: " + studentids[i] + " | studentName: " + studentNames[i], "Update Presentation Progress", note); //crear lesson        
+                ActivityLog.log(user, "id: " + studentids[i] + " | studentName: " + studentNames[i], "Update Presentation Progress", note); //crear lesson        
                 
                 
                 String test = "update lesson_stud_att set attendance = '" + att[i] + "',timestamp= now() where lesson_id = " + lessonid[0] + " AND student_id = '" + studentids[i] + "'";
