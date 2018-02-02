@@ -28,6 +28,7 @@
 
             $(document).ready(function () {
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
+
                 var lessoncreate = '<%= request.getParameter("message")%>';
                 var itemsRating = []; // needs to be outside
                 var itemsAttendance = []; // needs to be outside
@@ -48,8 +49,8 @@
                     $('#buttonAchived').parent().attr('disabled', true);
                     $('#buttonAchived2').attr('disabled', true);
                     $('#buttonAchived2').parent().attr('disabled', true);
-                    $('#buttonAchived')[0].checked=false;
-                    $('#buttonAchived2')[0].checked=false;
+                    $('#buttonAchived')[0].checked = false;
+                    $('#buttonAchived2')[0].checked = false;
                 } else {
                     $('#buttonAchived').attr('disabled', false);
                     $('#buttonAchived').parent().removeAttr('disabled');
@@ -62,11 +63,11 @@
                     });
                 }
                 var disable = "${disable}";
-                if(disable==='t'){
-                    $('#buttonAchived')[0].checked=true;
-                    $('#buttonAchived2')[0].checked=true;
+                if (disable === 't') {
+                    $('#buttonAchived')[0].checked = true;
+                    $('#buttonAchived2')[0].checked = true;
                 }
-                
+
                 $('#table_progress').DataTable(
                         {
                             "searching": false,
@@ -106,10 +107,10 @@
                         $('#buttonAchived').parent().attr('disabled', true);
                         $('#buttonAchived2').attr('disabled', true);
                         $('#buttonAchived2').parent().attr('disabled', true);
-                        $('#buttonAchived')[0].checked=false;
-                        $('#buttonAchived2')[0].checked=false;
+                        $('#buttonAchived')[0].checked = false;
+                        $('#buttonAchived2')[0].checked = false;
                     } else {
-                        
+
                         $('#buttonAchived').attr('disabled', false);
                         $('#buttonAchived').parent().removeAttr('disabled');
                         $('#buttonAchived2').attr('disabled', false);
@@ -143,8 +144,8 @@
                         $('#buttonAchived').parent().attr('disabled', true);
                         $('#buttonAchived2').attr('disabled', true);
                         $('#buttonAchived2').parent().attr('disabled', true);
-                        $('#buttonAchived')[0].checked=false;
-                        $('#buttonAchived2')[0].checked=false;
+                        $('#buttonAchived')[0].checked = false;
+                        $('#buttonAchived2')[0].checked = false;
                     } else {
                         $('#buttonAchived').attr('disabled', false);
                         $('#buttonAchived').parent().removeAttr('disabled', true);
@@ -171,8 +172,8 @@
                     $('#buttonAchived').parent().attr('disabled', true);
                     $('#buttonAchived2').attr('disabled', true);
                     $('#buttonAchived2').parent().attr('disabled', true);
-                    $('#buttonAchived')[0].checked=false;
-                    $('#buttonAchived2')[0].checked=false;
+                    $('#buttonAchived')[0].checked = false;
+                    $('#buttonAchived2')[0].checked = false;
                 });
 
                 $('#subject').change(function () {
@@ -195,6 +196,10 @@
                     }
                 });
 
+                $("#buttonSave").click(function () {
+                    $("#namePresentation").val($("form>fieldset> div> label").first().text());
+                    $("#nameTeacher").val($("form>div>select :selected").text());
+                });
 
             });
         </script>
@@ -238,6 +243,8 @@
 
             <form:form id="formStudents" method ="post" action="saveRecords.htm" >
 
+                <input type="hidden" class="form-control" id="namePresentation" name="namePresentation" value=""/>
+                <input type="hidden" class="form-control" id="nameTeacher" name="nameTeacher" value=""/>
 
                 <fieldset>
                     <legend>Presentation details</legend>
@@ -262,17 +269,17 @@
                                 </div>
                             </div>
                         </c:forEach> 
-                        
+
                     </div>
                     <div class="col-xs-12 text-right">
-                        <input type="checkbox" id="buttonAchived2" onchange="$('#buttonAchived')[0].checked=$('#buttonAchived2')[0].checked;">              
+                        <input type="checkbox" id="buttonAchived2" onchange="$('#buttonAchived')[0].checked = $('#buttonAchived2')[0].checked;">              
                         <label> Mark as completed </label>
                     </div>
                     <div class="col-xs-12 text-center">
                         <img class="imgUser" src="<c:url value="/recursos/img/iconos/lightbulb-idea.svg"/>"> <label> To mark the presentation as completed, you must fill all the students´ ratings and attendance codes</label>
                     </div>
                 </fieldset> 
-                    
+
                 <fieldset style="margin-top: 10px;">
                     <legend></legend>
                     <div class="col-xs-12">
@@ -297,6 +304,7 @@
                                 <c:forEach var="record" items="${attendancelist}" >
 
                                     <tr class="rows">
+                                        <input type="hidden" class="form-control" name="TXTstudentname" value="${record.studentname}"/>
                                         <td hidden="true"><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
                                         <td>${record.studentname}</td>
                                         <td>
@@ -429,10 +437,10 @@
                     </select>
                 </div>
                 <div class="col-xs-4 text-center">   
-                    <input type="submit" class="btn btn-success" value="Save" onclick="window.onbeforeunload = null;">
+                    <input type="submit" id="buttonSave" class="btn btn-success" value="Save" onclick="window.onbeforeunload = null;">
                 </div>
                 <div class="col-xs-4 text-right">
-                    <input type="checkbox" name="buttonAchived" id="buttonAchived" onclick="$('#buttonAchived2')[0].checked=$('#buttonAchived')[0].checked">              
+                    <input type="checkbox" name="buttonAchived" id="buttonAchived" onclick="$('#buttonAchived2')[0].checked = $('#buttonAchived')[0].checked">              
                     <label> Mark as completed </label>
                 </div>
             </form:form>
