@@ -107,7 +107,7 @@ public class Createlesson {
 
             note = "id: " + lessonid + " |" + note + " | comment: " + comment;
 
-            ActivityLog.log(((User) (hsr.getSession().getAttribute("user"))).getId(), "[" + nameStudents + "]", "Create Presentation", note); //crear lesson
+            ActivityLog.log(((User) (hsr.getSession().getAttribute("user"))), "[" + nameStudents + "]", "Create Presentation", note); //crear lesson
 
         } catch (SQLException ex) {
             System.out.println("Error leyendo lessons: " + ex);
@@ -161,7 +161,7 @@ public class Createlesson {
                 ftpClient.mkd(lessonid + "-" + newlessons.getName());
             }
             note = "id: " + lessonid + " |" + note + " | comment: " + comment;
-            ActivityLog.log(((User) (hsr.getSession().getAttribute("user"))).getId(), "[]", "Create Idea", note); //crear lesson
+            ActivityLog.log(((User) (hsr.getSession().getAttribute("user"))), "[]", "Create Idea", note); //crear lesson
             
         } catch (SQLException ex) {
             System.out.println("Error leyendo lessons: " + ex);

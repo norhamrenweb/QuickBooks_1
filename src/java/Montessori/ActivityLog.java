@@ -20,9 +20,9 @@ public class ActivityLog {
 
     static Logger log = Logger.getLogger(ActivityLog.class.getName());
 
-     public static void log(int userid, String studentid, String type,String note) {
+     public static void log(User user, String studentid, String type,String note) {
         try {
-            DBConect.eduweb.executeUpdate("insert into activitylog(userid,studentid,type,date,note) values('" + userid + "','" + studentid + "','" + type + "',now(),'"+note+"')");
+            DBConect.eduweb.executeUpdate("insert into activitylog(userid,username, studentid,type,date,note) values('" + user.getId() + "','" + user.getName() +  "','" + studentid + "','" + type + "',now(),'"+note+"')");
 
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
