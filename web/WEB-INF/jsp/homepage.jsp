@@ -26,7 +26,74 @@
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
 
             <%--      var lessondelete = '<%= request.getParameter("messageDelete") %>'; --%>
+                $('.pasar').click(function () {
+                    var exist = false;
+                    $('#destino option').each(function () {
+                        if ($('#origen option:selected').val() === $(this).val())
+                            exist = true;
+                    });
 
+                    if (!exist)
+                        !$('#origen option:selected').clone().appendTo('#destino');
+
+                    var numAlum = $('#destino option').length;
+                    if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
+                        $('#createOnClick').attr('disabled', false);
+                    } else {
+                        $('#createOnClick').attr('disabled', true);
+                    }
+
+                    $('#destino option').first().prop('selected', true);
+                    return;
+                });
+
+
+                $('.quitar').click(function () {
+                    !$('#destino option:selected').remove();
+                    $('#destino option').first().prop('selected', true);
+
+                    var alumnosSelected = $('#destino option').length;
+                    var objectiveSelected = $('#objective').val();
+                    if (alumnosSelected === 0 || (objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '')) {
+                        $('#createOnClick').attr('disabled', true);
+                    }
+                    return;
+                });
+                $('.pasartodos').click(function () {
+                    $('#origen option').each(function () {
+
+                        var valueInsert = $(this).val();
+                        var exist = false;
+                        $('#destino option').each(function () {
+                            if (valueInsert === $(this).val())
+                                exist = true;
+                        });
+
+                        if (!exist)
+                            $(this).clone().appendTo('#destino');
+
+                        var objectiveSelected = $('#objective').val();
+                        if (objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '') {
+                            $('#createOnClick').attr('disabled', true);
+                        }
+                    });
+
+                    var numAlum = $('#destino option').length;
+                    if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
+                        $('#createOnClick').attr('disabled', false);
+                    } else {
+                        $('#createOnClick').attr('disabled', true);
+                    }
+
+                    $('#destino option').first().prop('selected', true);
+                });
+
+                $('.quitartodos').click(function () {
+                    $('#destino option').each(function () {
+                        $(this).remove();
+                    });
+                    $('#createOnClick').attr('disabled', true);
+                });
 
                 $('#table_id').DataTable({
                     aLengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
@@ -36,14 +103,12 @@
                         {"width": "10%", "targets": [0],
                             "visible": false,
                             "searchable": false},
-                        {"width": "18%", "targets": [1]},
+                        {"width": "15%", "targets": [1]},
                         {"width": "7%", "targets": [2]},
                         {"width": "10%", "targets": [3]},
                         {"width": "10%", "targets": [4]},
-                        {"width": "10%", "targets": [5]},
-                        {"width": "10%", "targets": [6]},
-                        {"width": "10%", "targets": [7]},
-                        {"width": "25%", "targets": [8]}
+                        {"width": "25%", "targets": [5]},
+                        {"width": "33%", "targets": [6]}
 
                     ],
                     responsive: true
@@ -57,12 +122,41 @@
                 });
 
             });
+            
             function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
 
                 $('#lessonDelete').empty();
                 $('#lessonDelete').append(deleteLessonsName);
                 $('#buttonDelete').val(deleteLessonsSelected);
                 $('#deleteLesson').modal('show');
+            }
+            
+            function compartirSelect(id){
+                $.ajax({
+                    type: "POST",
+                    url: "cargarcompartidos.htm?seleccion="+id,
+                    data: id,
+                    dataType: 'text' ,  
+                        success: function(data) {
+                            var obj = JSON.parse(data);
+                            var t = JSON.parse(obj.t);
+                            $('#destino').empty();
+                            $.each(t, function (i, teacher) {
+                                $('#destino').append('<option value="' + t[i].id + '">'
+                                            + t[i].name + '</option>');
+                            });
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr.status);
+                            console.log(xhr.responseText);
+                            console.log(thrownError);
+
+                            $('#compartirmessage').empty();
+                            $('#compartirmessage').append("<h4> Error <h4>");
+                        }
+                });
+                $('#compartirid').val(id);
+                $('#compartirLesson').modal('show');
             }
             //   
             var ajax;
@@ -162,6 +256,8 @@
                     }
                 }
             }
+            
+            
             function deleteSelect()
             {
                 var lessonSelect = $('#buttonDelete').val();
@@ -184,6 +280,35 @@
             function refresh()
             {
                 location.reload();
+            }
+            
+            function compartirajax(){
+                $('#destino option').prop('selected',true);
+                var seleccion=$('#compartirid').val();
+                var teachers=$('#destino').val();
+                var obj={};
+                obj.id=seleccion;
+                obj.teachers=teachers;
+                $.ajax({
+                    type: "POST",
+                    url: "compartir.htm?obj="+JSON.stringify(obj),
+                    data: JSON.stringify(obj),
+                    dataType: 'text' ,  
+                        success: function(data) {
+                            $('#destino').empty();
+                            $('#compartirmessage').empty();
+                            $('#compartirmessage').append("<h4>" + data + "<h4>");
+                            $('#compartirmodal').modal('show');
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr.status);
+                            console.log(xhr.responseText);
+                            console.log(thrownError);
+
+                            $('#compartirmessage').empty();
+                            $('#compartirmessage').append("<h4> Error <h4>");
+                        }
+                });
             }
 
 
@@ -249,8 +374,6 @@
                         <td>Objective</td>
 
                         <td>Date</td>
-                        <td>Start Hour</td>
-                        <td>End Hour</td>
                         <td><spring:message code="etiq.actionlessons"/></td>
                     </tr>
                 </thead>
@@ -258,33 +381,37 @@
                     <c:forEach var="lecciones" items="${lessonslist}" >
                         <tr>
                             <td>${lecciones.id}</td>
-                            <td>${lecciones.name}</td>
+                            <td>
+                                ${lecciones.name}
+                                <c:if test="${lecciones.share==true}">
+                                    <img style="width: 20px" src="<c:url value="/recursos/img/btn/compartido.png"/>">
+                                </c:if>
+                            </td>
                             <td>${lecciones.level.name}</td>
                             <td>${lecciones.subject.name}</td>
                             <td>${lecciones.objective.name}</td>
-                            <td>${lecciones.date}</td>
-                            <td>${lecciones.start}</td>
-                            <td>${lecciones.finish}</td>
+                            <td>${lecciones.date} (${lecciones.start}/${lecciones.finish})</td>
                             <td>
-
-                                <div class="sinpadding text-center">
+                                <div class="col-xs-2 text-center">
                                     <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Progress">
                                 </div>
-                                <div class="sinpadding text-center">
+                                <div class="col-xs-2 text-center">
                                     <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
                                 </div>
-                                <div class="sinpadding text-center">
+                                <div class="col-xs-2 text-center">
                                     <input name="TXTid_lessons_modificar" type="image" src="<c:url value="/recursos/img/btn/btn_Edit.svg"/>" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
                                 </div>
-                                <div class="sinpadding text-center">
+                                <div class="col-xs-2 text-center">
                                     <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
                                 </div>
-                                <div class="sinpadding text-center">
+                                <div class="col-xs-2 text-center">
                                     <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Resources">
                                 </div>
-
+                                <div class="col-xs-2 text-center">
+                                    <input class="resources" name="TXTid_lessons_compartir" type="image" src="<c:url value="/recursos/img/btn/compartir.png"/>" value="${lecciones.id}" id="resources" onclick="compartirSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Resources">
+                                </div>
                             </td>
-                        </tr>
+                        </tr>  
                     </c:forEach>
                 </tbody>
             </table>
@@ -361,6 +488,7 @@
 
             </div>
         </div>
+        
         <!-- Modal confirm delete-->
         <div id="deleteLesson" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -402,6 +530,74 @@
 
             </div>
         </div>
+                    
+        <div id="compartirLesson" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Share presentation:</h4>
+                    </div>
+                        <input type="hidden" id="compartirid" name ="compartirid" value="">
+                        <div id="shareselect" class="modal-body">
+                            <div class="col-xs-12">
+                                <div class="col-xs-4">
+                                    <select class="form-control" size="20" multiple="" name="origen[]" id="origen" style="width: 100% !important;">  
+                                        <c:forEach var="teacher" items="${teacherlist}" >
+                                            <option value="${teacher.id}">${teacher.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+
+                                <div class="col-xs-3">
+                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
+                                        <input type="button" class="btn btn-success btn-block pasar" value="Add »">
+                                    </div>
+                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                        <input type="button" class="btn btn-danger btn-block quitar" value="« Remove">
+                                    </div>
+                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                        <input type="button" class="btn btn-success btn-block pasartodos" value="Add All »">
+                                    </div>
+                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                        <input type="button" class="btn btn-danger btn-block quitartodos" value="« Remove All">
+                                    </div>
+                                    <!--                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                                                    <input type="button" class="btn btn-danger btn-block test" value="test">
+                                                                </div>-->
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <select class="form-control" size="20" multiple="" name="destino[]" id="destino" style="width: 100% !important;">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer text-center">
+                            <input type="button" id="createOnClick" class="btn btn-success" value="Share" data-dismiss="modal" onclick="compartirajax()">
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div id="compartirmodal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> </h4>
+                    </div>
+                    <div id="compartirmessage" class="modal-body">
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
 
     </body>
 </html>

@@ -6,6 +6,8 @@
 package controladores;
 
 import Montessori.*;
+import atg.taglib.json.util.JSONArray;
+import atg.taglib.json.util.JSONException;
 import atg.taglib.json.util.JSONObject;
 import com.google.gson.Gson;
 import static controladores.LessonsListControlador.log;
@@ -56,7 +58,8 @@ public class LessonArchiveControlador {
         User user = (User) sesion.getAttribute("user");
         mv.addObject("lessonslist", this.getLessons(user, hsr.getServletContext()));
         mv.addObject("username", user.getName());
-
+        int iduser = ((User)hsr.getSession().getAttribute("user")).getId();
+        mv.addObject("teacherlist",LessonsListControlador.getTeachers(iduser));
         return mv;
     }
 
@@ -94,9 +97,41 @@ public class LessonArchiveControlador {
                 lesson.setDate("" + dateStr);
                 lesson.setStart(timeStr);
                 lesson.setFinish(timeStr2);
+                lesson.setShare(false);
                 lessonslist.add(lesson);
             }
             
+            if(user.getType()==1){
+                consulta = "SELECT * FROM lessons inner join lessonpresentedby on lessonid=id where teacherid=" + user.getId() + " AND COALESCE(idea, FALSE) = FALSE and archive = true";
+
+                rs = DBConect.eduweb.executeQuery(consulta);
+
+                while (rs.next()) {
+                    Lessons lesson = new Lessons();
+                    //  lesson.setId(rs.getString("id_lessons"));
+                    lesson.setName(rs.getString("name"));
+                    lesson.setId(rs.getInt("id"));
+                    Level level = new Level();
+                    String name = level.fetchName(rs.getInt("level_id"), servlet);
+                    level.setName(name);
+                    lesson.setLevel(level);
+                    objectives.add(rs.getInt("objective_id"));
+                    subjects.add(rs.getInt("subject_id"));
+                    Timestamp stamp = rs.getTimestamp("start");
+                    Timestamp finish = rs.getTimestamp("finish");
+                    SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm:ss a");
+                    String dateStr = sdfDate.format(stamp);
+                    String timeStr = sdfTime.format(stamp);
+
+                    String timeStr2 = sdfTime.format(finish);
+                    lesson.setDate("" + dateStr);
+                    lesson.setStart(timeStr);
+                    lesson.setFinish(timeStr2);
+                    lesson.setShare(true);
+                    lessonslist.add(lesson);
+                }
+            }
             for(int i = 0;i<lessonslist.size();i++){
                 Objective sub = new Objective();
                 sub.setName(sub.fetchName(objectives.get(i), servlet));
@@ -193,6 +228,55 @@ public class LessonArchiveControlador {
         return jsonObj.toString();
     
     }
+    
+    @RequestMapping("/lessonarchive/compartir.htm")
+    @ResponseBody
+    public String compartirLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws JSONException {
+        String obj = hsr.getParameter("obj");
+        JSONObject json = new JSONObject(obj);
+        JSONArray ids = json.getJSONArray("teachers");
+        String idlesson = json.getString("id");
+        
+        try {
+            String consulta;
+            consulta = "delete from lessonpresentedby where lessonid="+idlesson; 
+            DBConect.eduweb.executeUpdate(consulta);
+            for(int i = 0; i < ids.length();i++){
+                consulta = "insert into lessonpresentedby values("+idlesson+","+ids.getString(i)+")";
+                DBConect.eduweb.executeUpdate(consulta);
+            }
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(LessonsListControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            return "error";
+        }
+        return "Succesfully share";
+    }
+    
+    @RequestMapping("/lessonarchive/cargarcompartidos.htm")
+    @ResponseBody
+    public String compartirSelect(HttpServletRequest hsr, HttpServletResponse hsr1) throws JSONException {
+        String idlesson = hsr.getParameter("seleccion");
+        String consulta = "select * from lessonpresentedby where lessonid="+idlesson;
+        ArrayList<Integer> teacherids = new ArrayList<>();
+        ArrayList<Teacher> tlist = new ArrayList<>();
+        try {
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            while(rs.next()){
+                teacherids.add(rs.getInt("teacherid"));
+            }
+            String name;
+            for(Integer s:teacherids){
+                name = LessonsListControlador.fetchNameTeacher(s,hsr.getServletContext());
+                tlist.add(new Teacher(name,s));
+            }
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(LessonsListControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("t", new Gson().toJson(tlist));
+        return jsonObj.toString();
+    }
+    
 
     @RequestMapping("/lessonarchive/deleteLesson.htm")
     @ResponseBody

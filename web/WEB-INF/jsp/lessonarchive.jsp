@@ -47,6 +47,63 @@
     } );
 
     } );
+    function compartirSelect(id){
+        $.ajax({
+            type: "POST",
+            url: "cargarcompartidos.htm?seleccion="+id,
+            data: id,
+            dataType: 'text' ,  
+                success: function(data) {
+                            var obj = JSON.parse(data);
+                            var t = JSON.parse(obj.t);
+                            $('#destino').empty();
+                            $.each(t, function (i, teacher) {
+                                $('#destino').append('<option value="' + t[i].id + '">'
+                                            + t[i].name + '</option>');
+                    });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);
+                    console.log(thrownError);
+
+                    $('#compartirmessage').empty();
+                    $('#compartirmessage').append("<h4> Error <h4>");
+                }
+        });
+        $('#compartirid').val(id);
+        $('#compartirLesson').modal('show');
+    }
+    
+    function compartirajax(){
+        $('#destino option').prop('selected',true);
+            var seleccion=$('#compartirid').val();
+            var teachers=$('#destino').val();
+            var obj={};
+            obj.id=seleccion;
+            obj.teachers=teachers;
+            $.ajax({
+                    type: "POST",
+                    url: "compartir.htm?obj="+JSON.stringify(obj),
+                    data: JSON.stringify(obj),
+                    dataType: 'text' ,  
+                        success: function(data) {
+                            $('#destino').empty();
+                            $('#compartirmessage').empty();
+                            $('#compartirmessage').append("<h4>" + data + "<h4>");
+                            $('#compartirmodal').modal('show');
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr.status);
+                            console.log(xhr.responseText);
+                            console.log(thrownError);
+
+                            $('#compartirmessage').empty();
+                            $('#compartirmessage').append("<h4> Error <h4>");
+            }
+        });
+    }
+    
 function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
 
         $('#lessonDelete').empty();
@@ -56,7 +113,7 @@ function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
 }
 //   
 var ajax;
- function funcionCallBackdetailsLesson()
+function funcionCallBackdetailsLesson()
     {
          if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
@@ -319,7 +376,12 @@ var ajax;
                     <c:forEach var="lecciones" items="${lessonslist}" >
                         <tr>
                             <td>${lecciones.id}</td>
-                            <td>${lecciones.name}</td>
+                            <td>
+                                ${lecciones.name}
+                                <c:if test="${lecciones.share==true}">
+                                    <img style="width: 20px" src="<c:url value="/recursos/img/btn/compartido.png"/>">
+                                </c:if>
+                            </td>
                             <td>${lecciones.level.name}</td>
                             <td>${lecciones.subject.name}</td>
                             <td>${lecciones.objective.name}</td>
@@ -352,116 +414,185 @@ var ajax;
             </div>
         </div>
 <!-- Modal delete-->
-<div id="detailsLesson" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
+        <div id="detailsLesson" class="modal fade" role="dialog">
+          <div class="modal-dialog modal-lg">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header modal-header-details">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 id="nameLessonDetails" class="modal-title">Details</h4>
-      </div>
-        <div class="modal-body">
-            <div class="container-fluid">
-                <div class="col-xs-6">
-                    <div class="row title">
-                        Students
-                    </div>
-                    <div id="studentarea" class="row studentarea">
-         
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header modal-header-details">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 id="nameLessonDetails" class="modal-title">Details</h4>
+              </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="col-xs-6">
+                            <div class="row title">
+                                Students
+                            </div>
+                            <div id="studentarea" class="row studentarea">
+
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                             <div class="row title">
+                                            Description:
+                                        </div>
+                                        <div class="row" id="commentDetails">
+
+                                        </div>
+                                        <div class="row title">
+                                            Objective:   
+                                        </div>
+                                        <div class="row" id ="objectivedetails">
+
+                                        </div>
+                                        <div class="row title">
+                                            Method:
+                                        </div>
+                                        <div class="row" id="methodDetails">
+
+                                        </div>
+                                        <div class="row title">
+                                            Equipment: 
+                                        </div>
+                                        <div class="row">
+                                            <ul id="contentDetails">
+
+                                            </ul>
+                                        </div>
+                                        <div class="row title">
+                                            Created by:
+                                        </div>
+                                        <div class="row">
+                                            <ul id="createBy">
+                                            </ul>
+                                        </div>
+                                        <div class="row title">
+                                            Steps:
+                                        </div>
+                                        <div class="row">
+                                            <ul id="steps">
+                                            </ul>
+                                        </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-xs-6">
-                     <div class="row title">
-                                    Description:
-                                </div>
-                                <div class="row" id="commentDetails">
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
 
-                                </div>
-                                <div class="row title">
-                                    Objective:   
-                                </div>
-                                <div class="row" id ="objectivedetails">
+          </div>
+        </div>
+        <!-- Modal confirm delete-->
+        <div id="deleteLesson" class="modal fade" role="dialog">
+          <div class="modal-dialog">
 
-                                </div>
-                                <div class="row title">
-                                    Method:
-                                </div>
-                                <div class="row" id="methodDetails">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header modal-header-delete">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">are you sure you want to delete?</h4>
+              </div>
+                <div id="lessonDelete" class="modal-body">
 
-                                </div>
-                                <div class="row title">
-                                    Equipment: 
-                                </div>
-                                <div class="row">
-                                    <ul id="contentDetails">
+                </div>
+              <div class="modal-footer text-center">
+                  <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect()">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+              </div>
+            </div>
 
-                                    </ul>
+          </div>
+        </div>
+        <!-- Modal lessons delete -->
+        <div id="deleteLessonMessage" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header modal-header-delete">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+              </div>
+                <div id="lessonDeleteMessage" class="modal-body">
+                    <c:out value='${messageDelete}'/>
+                </div>
+              <div class="modal-footer text-center">
+                  <button type="button" class="btn btn-default" data-dismiss="modal" onclick="refresh()">OK</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+                
+        <div id="compartirLesson" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Share presentation:</h4>
+                    </div>
+                        <input type="hidden" id="compartirid" name ="compartirid" value="">
+                        <div id="shareselect" class="modal-body">
+                            <div class="col-xs-12">
+                                <div class="col-xs-4">
+                                    <select class="form-control" size="20" multiple="" name="origen[]" id="origen" style="width: 100% !important;">  
+                                        <c:forEach var="teacher" items="${teacherlist}" >
+                                            <option value="${teacher.id}">${teacher.name}</option>
+                                        </c:forEach>
+                                    </select>
                                 </div>
-                                <div class="row title">
-                                    Created by:
+
+                                <div class="col-xs-3">
+                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
+                                        <input type="button" class="btn btn-success btn-block pasar" value="Add »">
+                                    </div>
+                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                        <input type="button" class="btn btn-danger btn-block quitar" value="« Remove">
+                                    </div>
+                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                        <input type="button" class="btn btn-success btn-block pasartodos" value="Add All »">
+                                    </div>
+                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                        <input type="button" class="btn btn-danger btn-block quitartodos" value="« Remove All">
+                                    </div>
+                                    <!--                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                                                    <input type="button" class="btn btn-danger btn-block test" value="test">
+                                                                </div>-->
                                 </div>
-                                <div class="row">
-                                    <ul id="createBy">
-                                    </ul>
+
+                                <div class="col-xs-4">
+                                    <select class="form-control" size="20" multiple="" name="destino[]" id="destino" style="width: 100% !important;">
+                                    </select>
                                 </div>
-                                <div class="row title">
-                                    Steps:
-                                </div>
-                                <div class="row">
-                                    <ul id="steps">
-                                    </ul>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer text-center">
+                            <input type="button" id="createOnClick" class="btn btn-success" value="Share" data-dismiss="modal" onclick="compartirajax()">
+                        </div>
                 </div>
             </div>
         </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
+                
+        <div id="compartirmodal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
 
-  </div>
-</div>
-<!-- Modal confirm delete-->
-<div id="deleteLesson" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> </h4>
+                    </div>
+                    <div id="compartirmessage" class="modal-body">
+                        
+                    </div>
+                </div>
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header modal-header-delete">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">are you sure you want to delete?</h4>
-      </div>
-        <div id="lessonDelete" class="modal-body">
-            
+            </div>
         </div>
-      <div class="modal-footer text-center">
-          <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect()">Yes</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-<!-- Modal lessons delete -->
-<div id="deleteLessonMessage" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header modal-header-delete">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title"></h4>
-      </div>
-        <div id="lessonDeleteMessage" class="modal-body">
-            <c:out value='${messageDelete}'/>
-        </div>
-      <div class="modal-footer text-center">
-          <button type="button" class="btn btn-default" data-dismiss="modal" onclick="refresh()">OK</button>
-      </div>
-    </div>
-
-  </div>
-</div>
+                
     </body>
 </html>
