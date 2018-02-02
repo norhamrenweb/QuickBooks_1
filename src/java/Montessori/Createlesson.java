@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -46,13 +47,14 @@ public class Createlesson {
         return beanobject;
     }
 
-    public void newlesson(String[] studentIds, Lessons newlessons) throws SQLException {
+    public void newlesson(HttpServletRequest hsr, String note, String nameStudents, String[] studentIds, Lessons newlessons) throws SQLException {
         String lessonid = null;
         List<String> equipmentids;
         DriverManagerDataSource dataSource;
         FTPClient ftpClient = new FTPClient();
 
         try {
+
             String test = null;
             String server = "192.168.1.36";
             int port = 21;
@@ -60,20 +62,27 @@ public class Createlesson {
             String pass = "david";
             String comment = newlessons.getComments();
             comment = comment.replaceAll("\"", "\"\"");
-            comment = comment.replaceAll("'","''");
+            comment = comment.replaceAll("'", "''");
             if (!newlessons.getMethod().getName().equals("")) {
-                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,method_id,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment+ "','" + newlessons.getMethod().getName() + "',false,0,false)";
+                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,method_id,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment + "','" + newlessons.getMethod().getName() + "',false,0,false)";
             } else {
                 test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment + "',false,0,false)";
             }
+            //(String userid, String studentid, String type,String note)   session.setAttribute("user", user);
+
             DBConect.eduweb.executeUpdate(test, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = DBConect.eduweb.getGeneratedKeys();
             while (rs.next()) {
                 lessonid = "" + rs.getInt(1);
             }
+            String idStudents = "";
 
             for (int i = 0; i <= studentIds.length - 1; i++) {
+                idStudents += studentIds[i];
                 DBConect.eduweb.executeUpdate("insert into lesson_stud_att(lesson_id,student_id) values ('" + lessonid + "','" + studentIds[i] + "')");
+                if (i + 1 <= studentIds.length - 1) {
+                    idStudents += ",";
+                }
             }
             //to avoid null pointer exception incase of lesson without content
             if (newlessons.getContentid() != null) {
@@ -95,6 +104,11 @@ public class Createlesson {
                 lessonName = newlessons.getName().replace(" ", "-");
                 ftpClient.mkd(lessonid + "-" + lessonName);
             }
+
+            note = "id: " + lessonid + " |" + note + " | comment: " + comment;
+
+            ActivityLog.log(((User) (hsr.getSession().getAttribute("user"))).getId(), "[" + nameStudents + "]", "Create Presentation", note); //crear lesson
+
         } catch (SQLException ex) {
             System.out.println("Error leyendo lessons: " + ex);
         } catch (IOException ex) {
@@ -103,7 +117,7 @@ public class Createlesson {
         //          st.executeUpdate("insert into lessons_time(teacher_id,lesson_id,lesson_start,lesson_end) values (5,"+lessonid+",'"+newlessons.getStart()+"','"+newlessons.getFinish()+"')");
     }
 
-    public void newidea(Lessons newlessons) throws SQLException {
+    public void newidea(HttpServletRequest hsr,String note, Lessons newlessons) throws SQLException {
         int lessonid = 0;
         List<String> equipmentids;
         String server = "192.168.1.36";
@@ -113,14 +127,17 @@ public class Createlesson {
         DriverManagerDataSource dataSource;
         FTPClient ftpClient = new FTPClient();
         try {
-           
+            String comment = newlessons.getComments();
+            comment = comment.replaceAll("\"", "\"\"");
+            comment = comment.replaceAll("'", "''");
             String test = null;
             //to avoid null pointer exception when there is no method
             if (newlessons.getMethod().getName() != "") {
-                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,method_id,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getComments() + "','" + newlessons.getMethod().getName() + "',false,0,true)";
+                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,method_id,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + comment + "','" + newlessons.getMethod().getName() + "',false,0,true)";
             } else {
-                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getComments() + "',false,0,true)";
+                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + comment + "',false,0,true)";
             }
+            // ActivityLog.log(); //crear idea
             DBConect.eduweb.executeUpdate(test, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = DBConect.eduweb.getGeneratedKeys();
             while (rs.next()) {
@@ -143,7 +160,9 @@ public class Createlesson {
             if (success) {
                 ftpClient.mkd(lessonid + "-" + newlessons.getName());
             }
-
+            note = "id: " + lessonid + " |" + note + " | comment: " + comment;
+            ActivityLog.log(((User) (hsr.getSession().getAttribute("user"))).getId(), "[]", "Create Idea", note); //crear lesson
+            
         } catch (SQLException ex) {
             System.out.println("Error leyendo lessons: " + ex);
         } catch (IOException ex) {

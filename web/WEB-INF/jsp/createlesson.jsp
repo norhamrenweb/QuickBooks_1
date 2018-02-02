@@ -16,8 +16,10 @@
     <head>
         <title>Create Presentations</title>
         <script>
-
             $(document).ready(function () {
+                
+                
+                
                 //DESELECCIONA Method
                 $("#deselectMethod").click(function () {
                     $("#method option:selected").prop("selected", false);
@@ -95,7 +97,7 @@
                 });
 
                 $("#NameLessons,#comments,#objective,#fechaInput,#horainicioInput,#horafinInput").change(function () {
-                    if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) &&document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '') {
+                    if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '') {
                         if ($("#ideaCheck:checked").length === 1) {
                             $('#createOnClick').attr('disabled', false);
                         } else { //no es idea
@@ -113,8 +115,7 @@
                         $('#NameLessons').parent().addClass("has-error");
                         $('#NameLessons').parent().children().last().removeClass("hide");
                         $('#createOnClick').attr('disabled', true);
-                    }
-                    else{
+                    } else {
                         $('#NameLessons').parent().removeClass("has-error");
                         $('#NameLessons').parent().children().last().addClass("hide");
                     }
@@ -123,9 +124,9 @@
                 $("#createOnClick").focus(function () {
                     $('#destino option').prop('selected', true);
                 });
-                
-               $('#fecha,#horainicio,#horafin').on('dp.change', function (e) {
-                if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) &&document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '') {
+
+                $('#fecha,#horainicio,#horafin').on('dp.change', function (e) {
+                    if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '') {
                         if ($("#ideaCheck:checked").length === 1) {
                             $('#createOnClick').attr('disabled', false);
                         } else { //no es idea
@@ -143,36 +144,35 @@
                         $('#NameLessons').parent().addClass("has-error");
                         $('#NameLessons').parent().children().last().removeClass("hide");
                         $('#createOnClick').attr('disabled', true);
-                    }
-                    else{
+                    } else {
                         $('#NameLessons').parent().removeClass("has-error");
                         $('#NameLessons').parent().children().last().addClass("hide");
                     }
                 });
-               /* $("#NameLessons").change(function () {
-                    if (($("#NameLessons").val().indexOf("'") !== -1) || ($("#NameLessons").val().indexOf("\"") !== -1)) {
-                        $('#NameLessons').parent().addClass("has-error");
-                        $('#NameLessons').parent().children().last().removeClass("hide");
-                        $('#createOnClick').attr('disabled', true);
-                    } else {
-                        $('#NameLessons').parent().removeClass("has-error");
-                        $('#NameLessons').parent().children().last().addClass("hide");
-                        if (document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '') {
-                            if ($("#ideaCheck:checked").length === 1) {
-                                $('#createOnClick').attr('disabled', false);
-                            } else { //no es idea
-                                var numAlum = $('#destino option').length;
-                                if ($('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
-                                    $('#createOnClick').attr('disabled', false);
-                                } else {
-                                    $('#createOnClick').attr('disabled', true);
-                                }
-                            }
-                        } else {
-                            $('#createOnClick').attr('disabled', true);
-                        }
-                    }
-                });*/
+                /* $("#NameLessons").change(function () {
+                 if (($("#NameLessons").val().indexOf("'") !== -1) || ($("#NameLessons").val().indexOf("\"") !== -1)) {
+                 $('#NameLessons').parent().addClass("has-error");
+                 $('#NameLessons').parent().children().last().removeClass("hide");
+                 $('#createOnClick').attr('disabled', true);
+                 } else {
+                 $('#NameLessons').parent().removeClass("has-error");
+                 $('#NameLessons').parent().children().last().addClass("hide");
+                 if (document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '') {
+                 if ($("#ideaCheck:checked").length === 1) {
+                 $('#createOnClick').attr('disabled', false);
+                 } else { //no es idea
+                 var numAlum = $('#destino option').length;
+                 if ($('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
+                 $('#createOnClick').attr('disabled', false);
+                 } else {
+                 $('#createOnClick').attr('disabled', true);
+                 }
+                 }
+                 } else {
+                 $('#createOnClick').attr('disabled', true);
+                 }
+                 }
+                 });*/
                 $("#method").on('mouseover', 'option', function (e) {
 
                     var $e = $(e.target);
@@ -223,7 +223,7 @@
 
             });
 
-            
+
             $().ready(function ()
             {
 
@@ -245,6 +245,15 @@
                     }
 
                     $('#destino option').first().prop('selected', true);
+
+                    $("#studentsName").val("");
+                    $("#destino option").each(function ()
+                    {
+                        $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
+
+                    });
+
+                    // $("#studentsName").val($("#destino").text().trim());
                     return;
                 });
 
@@ -258,6 +267,14 @@
                     if (alumnosSelected === 0 || (objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '')) {
                         $('#createOnClick').attr('disabled', true);
                     }
+                     $("#studentsName").val("");
+                    $("#destino option").each(function ()
+                    {
+                        $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
+
+                    });
+
+                    //  $("#studentsName").val($("#destino").text().trim());
                     return;
                 });
                 $('.pasartodos').click(function () {
@@ -285,7 +302,15 @@
                     } else {
                         $('#createOnClick').attr('disabled', true);
                     }
+                     $("#studentsName").val("");
+                    $("#destino option").each(function ()
+                    {
+                        $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
 
+                    });
+
+
+                    //  $("#studentsName").val($("#destino").text().trim());
                     $('#destino option').first().prop('selected', true);
                 });
 
@@ -294,6 +319,13 @@
                         $(this).remove();
                     });
                     $('#createOnClick').attr('disabled', true);
+                    // $("#studentsName").val($("#destino").text().trim());
+                    $("#studentsName").val("");
+                    $("#destino option").each(function ()
+                    {
+                        $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
+                    });
+
                 });
             });
 
@@ -368,8 +400,8 @@
                         var objectives = JSON.parse(json.objectiveslist);
                         var contents = JSON.parse(json.contentslist);
                         var comment = json.comment;
-                        
-                        $("#comments").text(comment);        
+
+                        $("#comments").text(comment);
                         $('#level option[value="' + level + '"]').attr("selected", true);
                         $('#method option[value="' + method + '"]').attr("selected", true);
                         $('#subject').empty();
@@ -430,7 +462,7 @@
             function comboSelectionLevel()
             {
                 $('#content').empty();
-                if($('#level').val()!==-1){
+                if ($('#level').val() !== -1) {
                     if (window.XMLHttpRequest) //mozilla
                     {
                         ajax = new XMLHttpRequest(); //No Internet explorer
@@ -438,6 +470,7 @@
                     {
                         ajax = new ActiveXObject("Microsoft.XMLHTTP");
                     }
+                    $("#levelName").val($("#level :selected").text());
                     $('#loadingmessage').show();
                     $('#createOnClick').attr('disabled', true);
                     $('#objective').val("");
@@ -454,7 +487,8 @@
             function comboSelectionSubject()
             {
                 $('#content').empty();
-                if($('#subject').val()!==-1){
+                $("#subjectName").val($("#subject :selected").text());
+                if ($('#subject').val() !== -1) {
                     if (window.XMLHttpRequest) //mozilla
                     {
                         ajax = new XMLHttpRequest(); //No Internet explorer
@@ -513,6 +547,7 @@
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
+                $("#objectiveName").val($("#objective :selected").text());
                 var test = document.getElementById("NameLessons").value;
                 var test2 = document.getElementById("comments").checked;
                 if (document.getElementById("ideaCheck").value === 'on' && test !== '' && test2 !== '') {
@@ -760,38 +795,30 @@
                     <div class="form-group collapse" id="contenedorDetails">
                         <div class="col-xs-3 form-group">
                             <label class="control-label"><spring:message code="etiq.txtlevels"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                            <input type="hidden" id="levelName" name="levelName" value = "">
+
                             <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                                 <c:forEach var="levels" items="${gradelevels}">
-                                    <option value="${levels.id[0]}" >${levels.name}</option>
+                                    <option value="${levels.id[0]}"  value="${levels.name}">${levels.name}</option>
                                 </c:forEach>
                             </select>
 
                         </div>
                         <div class="col-xs-3 center-block">
                             <label class="control-label"><spring:message code="etiq.txtsubject"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                            <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
+                            <input type="hidden" id="subjectName" name="subjectName" value = "">                            
 
+                            <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
                                 <c:forEach var="subject" items="${subjects}">
                                     <option value="${subject.id[0]}" data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
-                        <!--                <div class="col-xs-3 center-block text-center">
-                                            <label class="control-label">Select your option</label>
-                                            <div class="btn-group" data-toggle="buttons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">
-                                                <label class="btn btn-primary active disabled">
-                                                    <input type="radio" name="options" id="option1" autocomplete="off" value="option1">Create Lessons
-                                                </label>
-                                                <label class="btn btn-success disabled">
-                                                    <input type="radio" name="options" id="option2" autocomplete="off" value="option2">Load Lessons
-                                                </label>
-                                            </div>
-                        <%--                    <input disabled="true" type="checkbox" data-width="200px" data-onstyle="primary" data-offstyle="success" data-toggle="toggle" data-on="Create Lessons" data-off="Load Lessons" name="TXTloadtemplates" id="LoadTemplates" value="Loadtemplates" onchange="comboSelectionLoadTemplateLessons()">--%>
-                                        </div>-->
-
 
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Objective</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                            <input type="hidden" id="objectiveName" name="objectiveName" value = "">                                                        
+
                             <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
                                 <c:forEach var="objective" items="${objectives}">
                                     <option value="${objective.id[0]}" >${objective.name}</option>
@@ -818,7 +845,7 @@
                                     </c:forEach>
                                 </select>
                             </div>
-                 
+
 
                         </div>    
                         <div class="col-xs-3 center-block form-group">
@@ -859,6 +886,8 @@
                                 </select>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" id="studentsName" name="studentsName" value = "">                                                        
+
                                 <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
                                     <c:forEach var="alumnos" items="${listaAlumnos}">
                                         <option value="${alumnos.id_students}" >${alumnos.nombre_students}</option>
