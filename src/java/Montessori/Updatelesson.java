@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -53,21 +54,25 @@ public class Updatelesson {
 
     }
 
-    public void updatelesson(String[] studentIds, Lessons newlessons) throws SQLException {
-        String lessonid = null;
+    public void updatelesson(HttpServletRequest hsr, String note, String nameStudents,String[] studentIds, Lessons newlessons) throws SQLException {
+        String lessonid = ""+newlessons.getId();
         List<String> equipmentids;
         List<String> oldstuds = new ArrayList<>();
         List<String> addstuds = new ArrayList<>();
         List<String> delstuds = new ArrayList<>();
         DriverManagerDataSource dataSource;
+         String comment = newlessons.getComments();
+            comment = comment.replaceAll("\"", "\"\"");
+            comment = comment.replaceAll("'", "''");
         try {
             
             String test = null;
             if (newlessons.getMethod().getName() != "") {
-                test = "update lessons set name = '" + newlessons.getName() + "',level_id = '" + newlessons.getLevel().getName() + "' ,subject_id = '" + newlessons.getSubject().getName() + "',objective_id= '" + newlessons.getObjective().getName() + "',start ='" + newlessons.getStart() + "',finish='" + newlessons.getFinish() + "',comments='" + newlessons.getComments() + "',method_id='" + newlessons.getMethod().getName() + "' where id ='" + newlessons.getId() + "'";
+                test = "update lessons set name = '" + newlessons.getName() + "',level_id = '" + newlessons.getLevel().getName() + "' ,subject_id = '" + newlessons.getSubject().getName() + "',objective_id= '" + newlessons.getObjective().getName() + "',start ='" + newlessons.getStart() + "',finish='" + newlessons.getFinish() + "',comments='" + comment + "',method_id='" + newlessons.getMethod().getName() + "' where id ='" + newlessons.getId() + "'";
             } else {
-                test = "update lessons set name = '" + newlessons.getName() + "',level_id = '" + newlessons.getLevel().getName() + "' ,subject_id = '" + newlessons.getSubject().getName() + "',objective_id= '" + newlessons.getObjective().getName() + "',start ='" + newlessons.getStart() + "',finish='" + newlessons.getFinish() + "',comments='" + newlessons.getComments() + "' where id ='" + newlessons.getId() + "'";;
+                test = "update lessons set name = '" + newlessons.getName() + "',level_id = '" + newlessons.getLevel().getName() + "' ,subject_id = '" + newlessons.getSubject().getName() + "',objective_id= '" + newlessons.getObjective().getName() + "',start ='" + newlessons.getStart() + "',finish='" + newlessons.getFinish() + "',comments='" + comment + "' where id ='" + newlessons.getId() + "'";;
             }
+            
             DBConect.eduweb.executeUpdate(test);
             String consulta = "select student_id from lesson_stud_att where lesson_id ='" + newlessons.getId() + "'";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
@@ -107,6 +112,10 @@ public class Updatelesson {
                 }
             }
             cleanProgress("" + newlessons.getId());
+            
+            note = "id: " + lessonid + " |" + note + " | comment: " + comment;
+
+            ActivityLog.log(((User) (hsr.getSession().getAttribute("user"))), "[" + nameStudents + "]", "Update Presentation", note); //crear lesson
         } catch (SQLException ex) {
             System.out.println("Error leyendo lessons: " + ex);
         }

@@ -233,12 +233,27 @@ public class CreateLessonControlador {
             Objective objective = new Objective();
             Level level = new Level();
             level.setName(hsr.getParameter("TXTlevel"));
+            String[] gs = hsr.getParameterValues("TXTlevel");
             level.setId(hsr.getParameterValues("TXTlevel"));
+
+            // Object s1 = (hsr.getParameter("TXTlevel"));
+            String s = hsr.getParameter("lessonName");
+
             subject.setName(hsr.getParameter("TXTsubject"));
             subject.setId(hsr.getParameterValues("TXTsubject"));
             objective.setName(hsr.getParameter("TXTobjective"));
             objective.setId(hsr.getParameterValues("TXTobjective"));
             String[] test = hsr.getParameterValues("TXTcontent");
+
+            
+            
+            String lvlName = hsr.getParameter("levelName");
+            String subjectName = hsr.getParameter("subjectName");
+            String objName = hsr.getParameter("objectiveName");
+            String studNames = hsr.getParameter("studentsName");      
+            
+        
+            
             //optional field, avoid null pointer exception
             if (test != null && test.length > 0) {
                 contentids = Arrays.asList(hsr.getParameterValues("TXTcontent"));
@@ -269,9 +284,15 @@ public class CreateLessonControlador {
 
             Createlesson c = new Createlesson(hsr.getServletContext());
             // gives a null pointer exception , need to fix  
+            
+            
+           String note = " name: "+hsr.getParameter("TXTnombreLessons")+" | level: " + lvlName + " | subject: " + subjectName + " | objective: " + objName;
+           note += " | Date: " + hsr.getParameter("TXTfecha") + " | start: " + hsr.getParameter("TXThorainicio") + " | finish: " + hsr.getParameter("TXThorafin");
+
+            
             if (ideaCheck != null) {
                 if (ideaCheck[0].equals("on")) {
-                    c.newidea(newlesson);
+                    c.newidea(hsr,note,newlesson);
                     message = "Presentation idea created";
                 }
             } else {
@@ -279,9 +300,12 @@ public class CreateLessonControlador {
                 java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorafin") + ":00.000");
                 String[] studentIds = hsr.getParameterValues("destino[]");
 
+                
+                    
+                
                 newlesson.setStart("" + timestampstart);
                 newlesson.setFinish("" + timestampend);
-                c.newlesson(studentIds, newlesson);
+                c.newlesson(hsr,note,studNames, studentIds, newlesson);
                 message = "Presentation created";
             }
 
@@ -340,7 +364,7 @@ public class CreateLessonControlador {
         Objective obj = new Objective();
         Method meth = new Method();
         Level lev = new Level();
-        String comment="";
+        String comment = "";
         int levelid = 0;
         List<String> contents = new ArrayList<>();
         DriverManagerDataSource dataSource;
@@ -380,7 +404,7 @@ public class CreateLessonControlador {
             json.put("objective", new Gson().toJson(obj));
             json.put("method", new Gson().toJson(meth));
             json.put("content", new Gson().toJson(contents));
-            json.put("comment",comment);
+            json.put("comment", comment);
 
         } catch (SQLException ex) {
             System.out.println("Error  " + ex);
@@ -427,7 +451,7 @@ public class CreateLessonControlador {
         for (Subject su : subjects.subList(1, subjects.size())) {
             String[] ids = new String[1];
             ids = su.getId();
-            ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = '" + ids[0]+"' order by Title");
+            ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = '" + ids[0] + "' order by Title");
             while (rs2.next()) {
                 if (rs2.getBoolean("Active") == true) {
                     su.setName(rs2.getString("Title"));
@@ -441,7 +465,7 @@ public class CreateLessonControlador {
     public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0]+"' order by name");
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0] + "' order by name");
             Objective s = new Objective();
             s.setName("Select Objective");
             objectives.add(s);

@@ -392,6 +392,15 @@ public class EditLessonControlador {
             objective.setName(hsr.getParameter("TXTobjective"));
             objective.setId(hsr.getParameterValues("TXTobjective"));
             String[] test = hsr.getParameterValues("TXTcontent");
+            
+            String lvlName = hsr.getParameter("levelName");
+            String subjectName = hsr.getParameter("subjectName");
+            String objName = hsr.getParameter("objectiveName");
+            String studNames = hsr.getParameter("studentsName");      
+            
+            String note = " name: "+hsr.getParameter("TXTnombreLessons")+" | level: " + lvlName + " | subject: " + subjectName + " | objective: " + objName;
+            note += " | Date: " + hsr.getParameter("TXTfecha") + " | start: " + hsr.getParameter("TXThorainicio") + " | finish: " + hsr.getParameter("TXThorafin");
+
             //optional field, avoid null pointer exception
             if (test != null && test.length > 0) {
                 contentids = Arrays.asList(hsr.getParameterValues("TXTcontent"));
@@ -443,7 +452,7 @@ public class EditLessonControlador {
 
             newlesson.setStart("" + timestampstart);
             newlesson.setFinish("" + timestampend);
-            c.updatelesson(studentIds, newlesson);
+            c.updatelesson(hsr,note,studNames,studentIds, newlesson);
 //       }
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();

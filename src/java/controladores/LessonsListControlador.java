@@ -149,7 +149,7 @@ public class LessonsListControlador {
                 Timestamp stamp = rs.getTimestamp("start");
                 Timestamp finish = rs.getTimestamp("finish");
                 SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-                SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm a");
+                SimpleDateFormat sdfTime = new SimpleDateFormat("kk:mm");
                 String dateStr = sdfDate.format(stamp);
                 String timeStr = sdfTime.format(stamp);
 
@@ -218,6 +218,8 @@ public class LessonsListControlador {
 
         JSONObject jsonObj = new JSONObject();
         String[] id = hsr.getParameterValues("LessonsSelected");
+        String nombre = hsr.getParameter("LessonsName");
+
         String message = null;
         try {
             HttpSession sesion = hsr.getSession();
@@ -256,6 +258,11 @@ public class LessonsListControlador {
             //mv.addObject("messageDelete",message);
             jsonObj.put("message", message);
             DBConect.eduweb.executeUpdate("Delete from lessonpresentedby where lessonid="+id[0]); 
+            
+            String note = "id: " + id[0] + " | namePresentation: " + nombre;
+               
+            ActivityLog.log(((User) (hsr.getSession().getAttribute("user"))), "", "Delete Presentation", note); //crear lesson
+
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
             StringWriter errors = new StringWriter();

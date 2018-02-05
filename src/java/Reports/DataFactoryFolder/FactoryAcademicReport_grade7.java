@@ -36,16 +36,16 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         grade = "";
         term = "";
     }
-    
+
     @Override
     public Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
-
-        String studentId = idStudent; 
+            // CAMBIAR EL SPLIT 
+        String studentId = idStudent;
         java.util.Vector coll = new java.util.Vector();
         ArrayList<String> os4 = new ArrayList<>();
         ArrayList<String> as4 = new ArrayList<>();
         cargarAlumno(studentId);
-        
+
         os4.add("obj 1");
         as4.add("A");
         os4.add("obj 2");
@@ -56,25 +56,22 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         as4.add("M");
 
         if (coll.isEmpty()) {
-            coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
+            //coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
         }
         ArrayList<String> os5 = new ArrayList<>();
-        ArrayList<String> as5 = new ArrayList<>(); 
+        ArrayList<String> as5 = new ArrayList<>();
         os5.add("obj 7");
         as5.add("M");
         os5.add("obj 8");
         as5.add("P");
-        
-          coll.add(new BeanWithList("Historia:Profesor Juan:40:COMENTARIO DE HISTORIA", os5, as5, nameStudent, dob, age, grade, term));
-                      coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
 
-                                  coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
-
-                                              coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
-
-                                                          coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
-
-                                                                      coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
+        coll.add(new BeanWithList("History:Teacher Smith:40:comment about History ...", os5, as5, nameStudent, dob, age, grade, term));
+        coll.add(new BeanWithList("Computer Science:Teacher Jones:23:comment about Computer ...", os4, as4, nameStudent, dob, age, grade, term));
+        coll.add(new BeanWithList("Chemistry:Teacher Williams:12:comment about Chemistry ...", os4, as4, nameStudent, dob, age, grade, term));
+        coll.add(new BeanWithList("Drawing:Teacher Brown:90:...", os4, as4, nameStudent, dob, age, grade, term));
+        coll.add(new BeanWithList("Economics:Teacher Taylor:80:comment about ...", os4, as4, nameStudent, dob, age, grade, term));
+        coll.add(new BeanWithList("English Language:Teacher Davies:70: ", os4, as4, nameStudent, dob, age, grade, term));
+        coll.add(new BeanWithList("Physics:Teacher Wilson:0:comment about Physics ...", new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
 
         return coll;
     }
@@ -82,9 +79,9 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
     private HashMap<String, String> getComments(String id) throws SQLException {
         HashMap<String, String> mapComment = new HashMap<>();
 
-        try {         
-            String consulta = "select * from subjects_comments where studentid = " + id +"order by date_created DESC";
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);      
+        try {
+            String consulta = "select * from subjects_comments where studentid = " + id + "order by date_created DESC";
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 mapComment.put(rs.getString("subject_id"), rs.getString("comment"));
             }
@@ -101,7 +98,7 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         HashMap<String, Profesor> mapTeachers = new HashMap<>();
         ArrayList<Profesor> listaProfesores = new ArrayList<>();
         HashMap<String, String> mapNames = new HashMap<>();
-        
+
         try {
             ArrayList<Integer> staffids = new ArrayList<>();
             ArrayList<String> classids = new ArrayList<>();
@@ -110,26 +107,27 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             String consulta = "select StaffID, Classes.ClassID , Courses.Title from Roster inner join Classes"
                     + " on Roster.ClassID = Classes.ClassID"
                     + " inner join Courses on  Classes.CourseID = Courses.CourseID"
-                    + "  where Roster.StudentID = " + id +"and Classes.yearid = "+this.yearid;
+                    + "  where Roster.StudentID = " + id + "and Classes.yearid = " + this.yearid;
             ResultSet rs = DBConect.ah.executeQuery(consulta);
             while (rs.next()) {
                 staffids.add(rs.getInt("StaffID"));
                 classids.add(rs.getString("ClassID"));
                 coursesTitles.add(rs.getString("Title"));
             }
-      
+
             consulta = "select FirstName,LastName,Email,PersonID from Person";
             ResultSet rs3 = DBConect.ah.executeQuery(consulta);
             while (rs3.next()) {
-               mapNames.put(rs3.getString("PersonID"),rs3.getString("LastName")+", "+rs3.getString("FirstName"));
+                mapNames.put(rs3.getString("PersonID"), rs3.getString("LastName") + ", " + rs3.getString("FirstName"));
             }
-            
-            for (Integer i : staffids) {  
-                if(mapNames.containsKey(""+i)){
-                    listaProfesores.add(new Profesor(mapNames.get(""+i), "", i, ""));
+
+            for (Integer i : staffids) {
+                if (mapNames.containsKey("" + i)) {
+                    listaProfesores.add(new Profesor(mapNames.get("" + i), "", i, ""));
+                } else {
+                    listaProfesores.add(new Profesor(" ", "", i, ""));
                 }
-                else listaProfesores.add(new Profesor(" ", "", i, ""));
-            }     
+            }
             for (int i = 0; i < listaProfesores.size(); i++) {
                 listaProfesores.get(i).setAsignatura(coursesTitles.get(i));
                 mapTeachers.put(classids.get(i), listaProfesores.get(i));
