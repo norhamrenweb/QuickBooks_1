@@ -122,7 +122,7 @@
                 });
 
             });
-            
+
             function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
 
                 $('#lessonDelete').empty();
@@ -130,30 +130,63 @@
                 $('#buttonDelete').val(deleteLessonsSelected);
                 $('#deleteLesson').modal('show');
             }
-            
-            function compartirSelect(id){
+            function sortTable() {
+                var table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementById("table_id");
+                switching = true;
+                /*Make a loop that will continue until
+                 no switching has been done:*/
+                while (switching) {
+                    //start by saying: no switching is done:
+                    switching = false;
+                    rows = table.getElementsByTagName("TR");
+                    /*Loop through all table rows (except the
+                     first, which contains table headers):*/
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        //start by saying there should be no switching:
+                        shouldSwitch = false;
+                        /*Get the two elements you want to compare,
+                         one from current row and one from the next:*/
+                        x = rows[i].getElementsByTagName("TD")[4];
+                        y = rows[i + 1].getElementsByTagName("TD")[4];
+                        //check if the two rows should switch place:
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            //if so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwitch) {
+                        /*If a switch has been marked, make the switch
+                         and mark that a switch has been done:*/
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    }
+                }
+            }
+            function compartirSelect(id) {
                 $.ajax({
                     type: "POST",
-                    url: "cargarcompartidos.htm?seleccion="+id,
+                    url: "cargarcompartidos.htm?seleccion=" + id,
                     data: id,
-                    dataType: 'text' ,  
-                        success: function(data) {
-                            var obj = JSON.parse(data);
-                            var t = JSON.parse(obj.t);
-                            $('#destino').empty();
-                            $.each(t, function (i, teacher) {
-                                $('#destino').append('<option value="' + t[i].id + '">'
-                                            + t[i].name + '</option>');
-                            });
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                            console.log(xhr.status);
-                            console.log(xhr.responseText);
-                            console.log(thrownError);
+                    dataType: 'text',
+                    success: function (data) {
+                        var obj = JSON.parse(data);
+                        var t = JSON.parse(obj.t);
+                        $('#destino').empty();
+                        $.each(t, function (i, teacher) {
+                            $('#destino').append('<option value="' + t[i].id + '">'
+                                    + t[i].name + '</option>');
+                        });
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
 
-                            $('#compartirmessage').empty();
-                            $('#compartirmessage').append("<h4> Error <h4>");
-                        }
+                        $('#compartirmessage').empty();
+                        $('#compartirmessage').append("<h4> Error <h4>");
+                    }
                 });
                 $('#compartirid').val(id);
                 $('#compartirLesson').modal('show');
@@ -181,7 +214,7 @@
                         $.each(c, function (i, content) {
                             $('#contentDetails').append('<li>' + c[i] + '</li>');
                         });
-                        
+
                         $('#steps').empty();
                         $.each(p, function (i, step) {
                             $('#steps').append('<li>' + p[i] + '</li>');
@@ -241,7 +274,7 @@
             <%--    var lessondeleteconfirm = '<%= request.getParameter("messageDelete") %>'; --%>
                         var lessondeleteconfirm = "";
                         var lessondeleteconfirm = JSON.parse(ajax.responseText);
-                      
+
                         if (lessondeleteconfirm.message === 'Presentation has progress records,it can not be deleted') {
                             $('#lessonDeleteMessage').append('<H1>' + lessondeleteconfirm.message + '</H1>');
                             $('#deleteLessonMessage').modal('show');
@@ -256,8 +289,8 @@
                     }
                 }
             }
-            
-            
+
+
             function deleteSelect()
             {
                 var lessonSelect = $('#buttonDelete').val();
@@ -271,7 +304,7 @@
                 }
 
                 ajax.onreadystatechange = funcionCallBackdeleteLesson;
-                ajax.open("POST", "deleteLesson.htm?LessonsSelected=" + lessonSelect+"&LessonsName="+lessonsName, true);
+                ajax.open("POST", "deleteLesson.htm?LessonsSelected=" + lessonSelect + "&LessonsName=" + lessonsName, true);
             <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
                 ajax.send("");
 
@@ -282,33 +315,33 @@
             {
                 location.reload();
             }
-            
-            function compartirajax(){
-                $('#destino option').prop('selected',true);
-                var seleccion=$('#compartirid').val();
-                var teachers=$('#destino').val();
-                var obj={};
-                obj.id=seleccion;
-                obj.teachers=teachers;
+
+            function compartirajax() {
+                $('#destino option').prop('selected', true);
+                var seleccion = $('#compartirid').val();
+                var teachers = $('#destino').val();
+                var obj = {};
+                obj.id = seleccion;
+                obj.teachers = teachers;
                 $.ajax({
                     type: "POST",
-                    url: "compartir.htm?obj="+JSON.stringify(obj),
+                    url: "compartir.htm?obj=" + JSON.stringify(obj),
                     data: JSON.stringify(obj),
-                    dataType: 'text' ,  
-                        success: function(data) {
-                            $('#destino').empty();
-                            $('#compartirmessage').empty();
-                            $('#compartirmessage').append("<h4>" + data + "<h4>");
-                            $('#compartirmodal').modal('show');
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                            console.log(xhr.status);
-                            console.log(xhr.responseText);
-                            console.log(thrownError);
+                    dataType: 'text',
+                    success: function (data) {
+                        $('#destino').empty();
+                        $('#compartirmessage').empty();
+                        $('#compartirmessage').append("<h4>" + data + "<h4>");
+                        $('#compartirmodal').modal('show');
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
 
-                            $('#compartirmessage').empty();
-                            $('#compartirmessage').append("<h4> Error <h4>");
-                        }
+                        $('#compartirmessage').empty();
+                        $('#compartirmessage').append("<h4> Error <h4>");
+                    }
                 });
             }
 
@@ -391,7 +424,7 @@
                             <td>${lecciones.level.name}</td>
                             <td>${lecciones.subject.name}</td>
                             <td>${lecciones.objective.name}</td>
-                            <td>${lecciones.date} (${lecciones.start}/${lecciones.finish})</td>
+                            <td>${lecciones.date} (${lecciones.start} / ${lecciones.finish})</td>
                             <td>
                                 <div class="col-xs-2 text-center">
                                     <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Progress">
@@ -489,7 +522,7 @@
 
             </div>
         </div>
-        
+
         <!-- Modal confirm delete-->
         <div id="deleteLesson" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -531,7 +564,7 @@
 
             </div>
         </div>
-                    
+
         <div id="compartirLesson" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
 
@@ -541,44 +574,44 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Share presentation:</h4>
                     </div>
-                        <input type="hidden" id="compartirid" name ="compartirid" value="">
-                        <div id="shareselect" class="modal-body">
-                            <div class="col-xs-12">
-                                <div class="col-xs-4">
-                                    <select class="form-control" size="20" multiple="" name="origen[]" id="origen" style="width: 100% !important;">  
-                                        <c:forEach var="teacher" items="${teacherlist}" >
-                                            <option value="${teacher.id}">${teacher.name}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
+                    <input type="hidden" id="compartirid" name ="compartirid" value="">
+                    <div id="shareselect" class="modal-body">
+                        <div class="col-xs-12">
+                            <div class="col-xs-4">
+                                <select class="form-control" size="20" multiple="" name="origen[]" id="origen" style="width: 100% !important;">  
+                                    <c:forEach var="teacher" items="${teacherlist}" >
+                                        <option value="${teacher.id}">${teacher.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
 
-                                <div class="col-xs-3">
-                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
-                                        <input type="button" class="btn btn-success btn-block pasar" value="Add »">
-                                    </div>
-                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                        <input type="button" class="btn btn-danger btn-block quitar" value="« Remove">
-                                    </div>
-                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                        <input type="button" class="btn btn-success btn-block pasartodos" value="Add All »">
-                                    </div>
-                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                        <input type="button" class="btn btn-danger btn-block quitartodos" value="« Remove All">
-                                    </div>
-                                    <!--                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                                                    <input type="button" class="btn btn-danger btn-block test" value="test">
-                                                                </div>-->
+                            <div class="col-xs-3">
+                                <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
+                                    <input type="button" class="btn btn-success btn-block pasar" value="Add »">
                                 </div>
+                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                    <input type="button" class="btn btn-danger btn-block quitar" value="« Remove">
+                                </div>
+                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                    <input type="button" class="btn btn-success btn-block pasartodos" value="Add All »">
+                                </div>
+                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                    <input type="button" class="btn btn-danger btn-block quitartodos" value="« Remove All">
+                                </div>
+                                <!--                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                                                <input type="button" class="btn btn-danger btn-block test" value="test">
+                                                            </div>-->
+                            </div>
 
-                                <div class="col-xs-4">
-                                    <select class="form-control" size="20" multiple="" name="destino[]" id="destino" style="width: 100% !important;">
-                                    </select>
-                                </div>
+                            <div class="col-xs-4">
+                                <select class="form-control" size="20" multiple="" name="destino[]" id="destino" style="width: 100% !important;">
+                                </select>
                             </div>
                         </div>
-                        <div class="modal-footer text-center">
-                            <input type="button" id="createOnClick" class="btn btn-success" value="Share" data-dismiss="modal" onclick="compartirajax()">
-                        </div>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <input type="button" id="createOnClick" class="btn btn-success" value="Share" data-dismiss="modal" onclick="compartirajax()">
+                    </div>
                 </div>
             </div>
         </div>
@@ -592,13 +625,13 @@
                         <h4 class="modal-title"> </h4>
                     </div>
                     <div id="compartirmessage" class="modal-body">
-                        
+
                     </div>
                 </div>
 
             </div>
         </div>
-        
+
 
     </body>
 </html>

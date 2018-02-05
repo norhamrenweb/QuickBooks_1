@@ -149,7 +149,7 @@ public class LessonsListControlador {
                 Timestamp stamp = rs.getTimestamp("start");
                 Timestamp finish = rs.getTimestamp("finish");
                 SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-                SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm a");
+                SimpleDateFormat sdfTime = new SimpleDateFormat("kk:mm");
                 String dateStr = sdfDate.format(stamp);
                 String timeStr = sdfTime.format(stamp);
 
