@@ -638,27 +638,30 @@
                     myObj["type"] = type;
                     myObj["studentid"] = studentId;
                     var json = JSON.stringify(myObj);
-                    $.ajax({
-                        type: 'POST',
-                        url: "savecomment.htm",
-                        data: json,
-                        datatype: "json",
-                        contentType: "application/json",
-                        success: function (data) {
-                            $('#confirmsave').modal('show');
-                            $("#observationcomments").val(" ");
-                            $("#observationfecha").val("");
-                            $('#observationtype option').filter(function() { 
-                                return ($(this).text() === 'Select type'); //To select Blue
-                            }).prop('selected', true);
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                            console.log(xhr.status);
-                            console.log(xhr.responseText);
-                            console.log(thrownError);
+                    var data = new FormData();
+                    data.append("obj",json);
+                    data.append("fileToUpload",$('#fileToUpload')[0].files[0]);
+                    var path = document.location.href;
+                    var i = path.length-1; 
+                    for(var j = 0;j<2;j++){
+                        if(j===1)
+                            path = path.substring(0,i);
+                        while(path[i]!=='/'){
+                            path = path.substring(0,i);
+                            i--;
                         }
-
-                    });
+                    }
+                    path = path + "savecomment";
+                    var request = new XMLHttpRequest();
+                    request.open("POST", path);
+                    request.send(data);
+                    
+                    $('#confirmsave').modal('show');
+                    $("#observationcomments").val(" ");
+                    $("#observationfecha").val("");
+                    $('#observationtype option').filter(function() { 
+                        return ($(this).text() === 'Select type'); //To select Blue
+                    }).prop('selected', true);
                 }
             }
             function showCalendar()
@@ -972,7 +975,10 @@
                                     <label class="control-label">Observation</label>
                                     <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"></textarea>
                                 </div>
-
+                                
+                                <div class="col-xs-12" >
+                                    <input type="file" id="fileToUpload" accept="image/*">
+                                </div>
                                 <div class="col-xs-12 text-center hidden" id="error1">
                                     <label>Please select a student first</label>
                                 </div>
@@ -1036,7 +1042,7 @@
                 </div>
             </div>
         </div>
-
+                    
 
         <div id="modalCommentGeneral">
             <!-- Button trigger modal -->
