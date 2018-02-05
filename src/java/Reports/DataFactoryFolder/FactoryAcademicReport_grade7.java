@@ -65,7 +65,8 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         os5.add("obj 8");
         as5.add("P");
 
-        coll.add(new BeanWithList("History:Teacher Smith:40:comment about History ...", os5, as5, nameStudent, dob, age, grade, term));
+        
+        coll.add(new BeanWithList("History:Teacher Smith:40:comment a::bout History ...", os5, as5, nameStudent, dob, age, grade, term));
         coll.add(new BeanWithList("Computer Science:Teacher Jones:23:comment about Computer ...", os4, as4, nameStudent, dob, age, grade, term));
         coll.add(new BeanWithList("Chemistry:Teacher Williams:12:comment about Chemistry ...", os4, as4, nameStudent, dob, age, grade, term));
         coll.add(new BeanWithList("Drawing:Teacher Brown:90:...", os4, as4, nameStudent, dob, age, grade, term));

@@ -427,7 +427,8 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{_THIS}.split(":")[1]]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{_THIS}.substring($F{_THIS}.indexOf(":")+1)
+]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

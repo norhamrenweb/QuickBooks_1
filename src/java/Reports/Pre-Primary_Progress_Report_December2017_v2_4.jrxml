@@ -286,7 +286,7 @@
 		</band>
 	</title>
 	<detail>
-		<band height="121" splitType="Stretch">
+		<band height="79" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout"/>
 			<componentElement>
 				<reportElement positionType="Float" stretchType="ElementGroupBottom" x="18" y="11" width="556" height="60" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="b6dbf7c4-72eb-439f-8a9e-68089f225ded">

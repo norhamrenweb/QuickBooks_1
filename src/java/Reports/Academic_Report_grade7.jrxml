@@ -446,7 +446,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{subject}.split(":")[3]]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{subject}.substring($F{subject}.indexOf(":",$F{subject}.indexOf(":",$F{subject}.indexOf(":")+1)+1)+1)]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement key="" positionType="Float" stretchType="ElementGroupHeight" x="325" y="30" width="87" height="40" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="057a6cdd-63f7-4eb9-9865-ab220a5acb6b">
