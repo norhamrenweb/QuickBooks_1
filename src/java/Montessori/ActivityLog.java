@@ -21,6 +21,11 @@ public class ActivityLog {
     static Logger log = Logger.getLogger(ActivityLog.class.getName());
 
      public static void log(User user, String studentid, String type,String note) {
+         studentid = studentid.replace("\'", "\'\'");
+         studentid = studentid.replace("\"", "\"\"");
+         note = note.replace("\'", "\'\'");
+         note = note.replace("\"", "\"\"");
+         
         try {
             DBConect.eduweb.executeUpdate("insert into activitylog(userid,username, studentid,type,date,note) values('" + user.getId() + "','" + user.getName() +  "','" + studentid + "','" + type + "',now(),'"+note+"')");
 

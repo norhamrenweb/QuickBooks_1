@@ -261,6 +261,7 @@
             function deleteSelect()
             {
                 var lessonSelect = $('#buttonDelete').val();
+                var lessonsName = $("#lessonDelete").text().trim();
                 if (window.XMLHttpRequest) //mozilla
                 {
                     ajax = new XMLHttpRequest(); //No Internet explorer
@@ -270,7 +271,7 @@
                 }
 
                 ajax.onreadystatechange = funcionCallBackdeleteLesson;
-                ajax.open("POST", "deleteLesson.htm?LessonsSelected=" + lessonSelect, true);
+                ajax.open("POST", "deleteLesson.htm?LessonsSelected=" + lessonSelect+"&LessonsName="+lessonsName, true);
             <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
                 ajax.send("");
 

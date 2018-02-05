@@ -224,9 +224,11 @@ public class ProgressControlador {
                 if (!att[i].equals("0")) {
                     attAux = att[i];
                 }
-
+                String auxArch ="off";
+                if(archived != null) auxArch ="on";
+                    
                 String note = "idPresentation: " + lessonid[0] + " | namePresentation: " + namePresentation +" | nameTeacher: "+nameTeacher+ " | rating: " + ratings[i];
-                note += " | comment: " + comments[i] + " | attendace: " + attAux + " | work accomplished: " + steps[i];
+                note += " | comment: " + comments[i] + " | attendace: " + attAux + " | work accomplished: " + steps[i] + " | archived : " + auxArch;
                 
                 ActivityLog.log(user, "id: " + studentids[i] + " | studentName: " + studentNames[i], "Update Presentation Progress", note); //crear lesson        
                 
