@@ -55,33 +55,34 @@ public class ImageObservation extends HttpServlet {
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-        ftpClient.changeWorkingDirectory(filePath);
-        String s[] = ftpClient.listNames();
-        filePath = s[0];
-        InputStream inStream = ftpClient.retrieveFileStream(s[0]);
-        // obtains ServletContext
-        ServletContext context = request.getServletContext();
-        String appPath = context.getRealPath("");
-        System.out.println("appPath = " + appPath);
+        if(ftpClient.changeWorkingDirectory(filePath)){
+            String s[] = ftpClient.listNames();
+            filePath = s[0];
+            InputStream inStream = ftpClient.retrieveFileStream(s[0]);
+            // obtains ServletContext
+            ServletContext context = request.getServletContext();
+            String appPath = context.getRealPath("");
+            System.out.println("appPath = " + appPath);
 
-        // gets MIME type of the file
-        String mimeType = context.getMimeType(filePath);
-        if (mimeType == null) {
-            // set to binary type if MIME mapping not found
-            mimeType = "application/octet-stream";
+            // gets MIME type of the file
+            String mimeType = context.getMimeType(filePath);
+            if (mimeType == null) {
+                // set to binary type if MIME mapping not found
+                mimeType = "application/octet-stream";
+            }
+            System.out.println("MIME type: " + mimeType);
+
+            // modifies response
+            response.setContentType(mimeType);
+
+            // forces download
+            String headerKey = "Content-Disposition";
+            String headerValue = String.format("attachment; filename=\"%s\"", filePath);
+            response.setHeader(headerKey, headerValue);
+            IOUtils.copy(inStream, response.getOutputStream());
+
+            response.flushBuffer();
         }
-        System.out.println("MIME type: " + mimeType);
-
-        // modifies response
-        response.setContentType(mimeType);
-
-        // forces download
-        String headerKey = "Content-Disposition";
-        String headerValue = String.format("attachment; filename=\"%s\"", filePath);
-        response.setHeader(headerKey, headerValue);
-        IOUtils.copy(inStream, response.getOutputStream());
-
-        response.flushBuffer();
         //response.sendRedirect(request.getContextPath());
     }
 
