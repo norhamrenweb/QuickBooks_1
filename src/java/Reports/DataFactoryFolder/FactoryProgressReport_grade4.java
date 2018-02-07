@@ -92,14 +92,14 @@ public class FactoryProgressReport_grade4 extends DataFactory {
             ArrayList<String> classids = new ArrayList<>();
             ArrayList<String> coursesTitles = new ArrayList<>();
 
-            String consulta = "select StaffID, Classes.ClassID , Courses.Title from Roster inner join Classes"
+            String consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID from Roster inner join Classes"
                     + " on Roster.ClassID = Classes.ClassID"
                     + " inner join Courses on  Classes.CourseID = Courses.CourseID"
-                    + "  where Roster.StudentID = " + id +"and Classes.yearid = "+this.yearid;
+                    + "  where Roster.StudentID = " + id +"and Classes.yearid = "+this.yearid+"and Courses.ReportCard = 1";
             ResultSet rs = DBConect.ah.executeQuery(consulta);
             while (rs.next()) {
                 staffids.add(rs.getInt("StaffID"));
-                classids.add(rs.getString("ClassID"));
+                classids.add(rs.getString("CourseID"));
                 coursesTitles.add(rs.getString("Title"));
             }
       
