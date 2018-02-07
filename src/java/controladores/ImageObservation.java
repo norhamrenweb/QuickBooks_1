@@ -1,20 +1,12 @@
 package controladores;
 
 import Montessori.DBConect;
-import Montessori.Observation;
-import Montessori.Resource;
 import Montessori.User;
 import atg.taglib.json.util.JSONException;
 import atg.taglib.json.util.JSONObject;
-import com.fasterxml.jackson.core.JsonParser;
 import static controladores.ProgressbyStudent.log;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.ResultSet;
@@ -34,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 @WebServlet(name = "savecomment", urlPatterns = {"/savecomment"})
@@ -57,37 +50,40 @@ public class ImageObservation extends HttpServlet {
         String user = "david";
         String pass = "david";
         
-        String filePath = "/MontessoriObservations/" + obsid + "-" + obsdate + "/" + obsid;
+        String filePath = "/MontessoriObservations/" + obsid + "_" + obsdate + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-        int prueba = ftpClient.list(filePath);//probar
-        InputStream inStream = ftpClient.retrieveFileStream(filePath);
-        
-        // obtains ServletContext
-        ServletContext context = request.getServletContext();
-        String appPath = context.getRealPath("");
-        System.out.println("appPath = " + appPath);
+        if(ftpClient.changeWorkingDirectory(filePath)){
+            String s[] = ftpClient.listNames();
+            filePath = s[0];
+            InputStream inStream = ftpClient.retrieveFileStream(s[0]);
+            // obtains ServletContext
+            ServletContext context = request.getServletContext();
+            String appPath = context.getRealPath("");
+            System.out.println("appPath = " + appPath);
 
-        // gets MIME type of the file
-        String mimeType = context.getMimeType(obsid);
-        if (mimeType == null) {
-            // set to binary type if MIME mapping not found
-            mimeType = "application/octet-stream";
+            // gets MIME type of the file
+            String mimeType = context.getMimeType(filePath);
+            if (mimeType == null) {
+                // set to binary type if MIME mapping not found
+                mimeType = "application/octet-stream";
+            }
+            System.out.println("MIME type: " + mimeType);
+
+            // modifies response
+            response.setContentType(mimeType);
+
+            // forces download
+            String headerKey = "Content-Disposition";
+            String headerValue = String.format("attachment; filename=\"%s\"", filePath);
+            response.setHeader(headerKey, headerValue);
+            IOUtils.copy(inStream, response.getOutputStream());
+
+            response.flushBuffer();
         }
-        System.out.println("MIME type: " + mimeType);
-
-        // modifies response
-        response.setContentType(mimeType);
-
-        // forces download
-        String headerKey = "Content-Disposition";
-        String headerValue = String.format("attachment; filename=\"%s\"", obsid);
-        response.setHeader(headerKey, headerValue);
-        IOUtils.copy(inStream, response.getOutputStream());
-
-        response.flushBuffer();
+        //response.sendRedirect(request.getContextPath());
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException, JSONException {
@@ -134,7 +130,8 @@ public class ImageObservation extends HttpServlet {
                 ftpClient.changeWorkingDirectory(idobs + "_" + json.getString("date"));
             }
 
-            ftpClient.storeFile(idobs, fileInputStream);
+            String filename = idobs+"-"+filePart.getSubmittedFileName();
+            ftpClient.storeFile(filename, fileInputStream);
             ftpClient.logout();
 //            Resource r = new Resource();
 //

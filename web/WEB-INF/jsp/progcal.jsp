@@ -260,7 +260,7 @@
                                 var id = value2.id;
                                 var comentario = value2.observation;
                                 var comentarioExtenso = '';
-                                if (comentario.length >= 57) {
+                                if (comentario.length >= 45) {
                                     var comentarioExtenso = '...';
                                 }
                                 var fechaCreacion = value2.date;
@@ -318,187 +318,45 @@
                                         visible = "hide";
                                     }
                                 }
+                                var path = document.location.href;
+                                var i = path.length-1; 
+                                while(path[i]!=='/'){
+                                    path = path.substring(0,i);
+                                    i--;
+                                }
             <%--Create Date: " + fechaCreacion + "<br>\n\
             Type: " + category + "<br>\n\--%>
                                 $(numSemana).append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
-                                <strong>Date:</strong> " + commentdate + "<br>\n\
-                                <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
-\n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
-<span class='glyphicon glyphicon-list-alt'></span>\n\
-</button>\n\
-</div>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
-<span class='glyphicon glyphicon-pencil'></span>\n\
-</button>\n\
-</div>\n\
-<div class='col-xs-4 text-center sinpadding'>\n\
-<button type='button'  " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
-<span class=' glyphicon glyphicon-remove'></span>\n\
-</button>\n\
-</div>\n\
-</div>\n\
-</div>");
+                                <strong>Date:</strong> " + commentdate + " </strong> <br>\n\
+                                <strong>Observation:</strong> " + comentario.substring(0, 45) + " " + comentarioExtenso + "<br>\n\
+                                \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
+                                <div class='col-xs-3 text-center sinpadding'>\n\
+                                <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+                                <span class='glyphicon glyphicon-list-alt'></span>\n\
+                                </button>\n\
+                                </div>\n\
+                                <div class='col-xs-3 text-center sinpadding'>\n\
+                                <button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+                                <span class='glyphicon glyphicon-pencil'></span>\n\
+                                </button>\n\
+                                </div>\n\
+                                <div class='col-xs-3 text-center sinpadding'>\n\
+                                <button type='button'  " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
+                                <span class=' glyphicon glyphicon-remove'></span>\n\
+                                </button>\n\
+                                </div>\n\
+                                <div class='col-xs-3 text-center sinpadding'>\n\
+                                <form class=' text-center form-group' action='"+path+"savecomment' method='GET' enctype=multipart/form-data'>  \n\
+                                <input name='id' type='hidden' value='"+id+"'>\n\
+                                <input name='date' type='hidden' value='"+commentdate+"'>\n\
+                                <button type='submit'  " + disable + " class='btn btn-link' onclick='verPhoto(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='verphoto" + id + "'>\n\
+                                </form>\n\
+                                <span class=' glyphicon glyphicon-remove'></span>\n\
+                                </button>\n\
+                                </div>\n\
+                                </div>\n\
+                                </div>");
                             });
-                            /*
-                             var semana = "";
-                             var cont1 = 0;
-                             var cont2 = 0;
-                             var cont3 = 0;
-                             var cont4 = 0;
-                             var oculto = "hide";
-                             $("#semana1").empty();
-                             $("#semana2").empty();
-                             $("#semana3").empty();
-                             $("#semana4").empty();
-                             
-                             
-                             $.each(j, function (i, value) {
-                             var f = value;
-                             
-                             $.each(f, function (i2, value2) {
-                             var id = value2.id;
-                             var comentario = value2.observation;
-                             var comentarioExtenso = '';
-                             if (comentario.length >= 57) {
-                             var comentarioExtenso = '...';
-                             }
-                             var fechaCreacion = value2.date;
-                             var category = value2.type;
-                             var commentdate = value2.commentDate;
-                             var visible = "";
-                             var nameTeacher = value2.nameTeacher;
-                             var disable = "";
-                             var idTeacher = value2.logged_by;
-                             
-                             if (userId !== idTeacher && userType !== 0) {
-                             disable = "disabled='disabled'";
-                             }
-                             
-                             if (i <= 7) {
-                             //semana= "semana1" REDUCIR CODIGO
-                             cont1 = cont1 + 180;
-                             if (cont1 > $("#semana1").width()) {
-                             visible = "hide";
-                             }
-                             
-                             <%--Create Date: " + fechaCreacion + "<br>\n\
-Type: " + category + "<br>\n\--%>
-                             $("#semana1").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
-                             <strong>Date:</strong> " + commentdate + "<br>\n\
-                             <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
-                             \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
-                             <span class='glyphicon glyphicon-list-alt'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
-                             <span class='glyphicon glyphicon-pencil'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button'  " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
-                             <span class=' glyphicon glyphicon-remove'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             </div>\n\
-                             </div>");
-                             } else {
-                             if (i <= 14) {
-                             //semana= "semana2"
-                             cont2 = cont2 + 180;
-                             if (cont2 > $("#semana2").width())
-                             {
-                             visible = "hide";
-                             }
-                             $("#semana2").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
-                             <strong>Date:</strong> " + commentdate + "<br>\n\
-                             <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
-                             \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
-                             <span class='glyphicon glyphicon-list-alt'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
-                             <span class='glyphicon glyphicon-pencil'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
-                             <span class=' glyphicon glyphicon-remove'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             </div>\n\
-                             </div>");
-                             } else {
-                             if (i <= 21) {
-                             // semana= "semana3"
-                             cont3 = cont3 + 180;
-                             if (cont3 > $("#semana3").width()) {
-                             visible = "hide";
-                             }
-                             
-                             $("#semana3").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
-                             <strong>Date:</strong> " + commentdate + "<br>\n\
-                             <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
-                             \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
-                             <span class='glyphicon glyphicon-list-alt'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
-                             <span class='glyphicon glyphicon-pencil'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
-                             <span class=' glyphicon glyphicon-remove'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             </div>\n\
-                             </div>");
-                             
-                             } else {
-                             //semana= "semana4"
-                             cont4 = cont4 + 180;
-                             if (cont4 > $("#semana4").width()) {
-                             visible = "hide";
-                             }
-                             
-                             $("#semana4").append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
-                             <strong>Date:</strong> " + commentdate + "<br>\n\
-                             <strong>Observation:</strong> " + comentario.substring(0, 57) + " " + comentarioExtenso + "<br>\n\
-                             \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
-                             <span class='glyphicon glyphicon-list-alt'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
-                             <span class='glyphicon glyphicon-pencil'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             <div class='col-xs-4 text-center sinpadding'>\n\
-                             <button type='button' " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
-                             <span class=' glyphicon glyphicon-remove'></span>\n\
-                             </button>\n\
-                             </div>\n\
-                             </div>\n\
-                             </div>");
-                             }
-                             }
-                             }
-                             });*/
-
                         });
                         if (cont1 === 0)
                             $("#semana1").append("<div class='divAdd'>No comments this week</div>");
@@ -593,6 +451,20 @@ Type: " + category + "<br>\n\--%>
             function refresh()
             {
                 location.reload();
+            }
+            
+            function verPhoto(id){
+                var date = $('#cdate'+id).text();
+                var path = document.location.href;
+                var i = path.length-1; 
+                while(path[i]!=='/'){
+                    path = path.substring(0,i);
+                    i--;
+                }
+                path = path + "savecomment?id="+id+"&date="+date;
+                var request = new XMLHttpRequest();
+                request.open("GET", path,true);
+                request.send(null);
             }
 
 
