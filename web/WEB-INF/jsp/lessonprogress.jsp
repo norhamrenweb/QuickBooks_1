@@ -77,8 +77,8 @@
                                 {"width": "4%", "targets": 0},
                                 {"width": "20%", "targets": 1},
                                 {"width": "4%", "targets": 2},
-                                {"width": "30%", "targets": 3},
-                                {"width": "22%", "targets": 4, "orderable": false},
+                                {"width": "40%", "targets": 3},
+                                {"width": "12%", "targets": 4, "orderable": false},
                                 {"width": "20%", "targets": 5, "orderable": false}
                             ]
 
@@ -276,7 +276,7 @@
                         <label> Mark as completed </label>
                     </div>
                     <div class="col-xs-12 text-center">
-                        <img class="imgUser" src="<c:url value="/recursos/img/iconos/lightbulb-idea.svg"/>"> <label> To mark the presentation as completed, you must fill all the students´ ratings and attendance codes</label>
+                        <img style="width:5%" src="<c:url value="/recursos/img/iconos/lightbulb-idea.svg"/>"> <label> To mark the presentation as completed, you must fill all the students´ ratings and attendance codes</label>
                     </div>
                 </fieldset> 
 
@@ -291,7 +291,7 @@
                                     <td>Student Name</td>
                                     <td>Rating</td>
                                     <td>Comment</td>
-                                    <td>Attendance Code 
+                                    <td>Attendance 
                                         <input type="button" class="btn btn-xs btn-info" id="rellenarP" value="Fill P"> 
                                         <input type="button" class="btn btn-xs btn-info" id="rellenar" value="Clear">
                                     </td>
@@ -323,7 +323,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <textarea name="TXTcomment" class="TXTcomment" rows="1">${record.comment}</textarea>
+                                            <textarea name="TXTcomment" class="TXTcomment" rows="2">${record.comment}</textarea>
                                         </td>
                                         <td>
                                             <select id="idSelectAttendance" name="TXTattendance" class="attendance">
