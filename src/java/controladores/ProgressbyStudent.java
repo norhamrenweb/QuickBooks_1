@@ -18,6 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
+import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,6 +54,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
@@ -732,6 +735,64 @@ public class ProgressbyStudent {
         mv.addObject("studentId", studentId);
         mv.addObject("nameStudent", nameStudent);
         return mv;
+    }
+    
+    @RequestMapping("/getimage.htm")
+    @ResponseBody
+    public String getimage(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String obsdate = request.getParameter("date");
+        String obsid = request.getParameter("id");
+        String server = "192.168.1.36";
+        int port = 21;
+        String user = "david";
+        String pass = "david";
+        
+        String filePath = "/MontessoriObservations/" + obsid + "_" + obsdate + "/";
+        FTPClient ftpClient = new FTPClient();
+        ftpClient.connect(server, port);
+        ftpClient.login(user, pass);
+        ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+        
+        if(ftpClient.changeWorkingDirectory(filePath)){
+            JSONObject json = new JSONObject();
+            String s[] = ftpClient.listNames();
+            filePath = s[0];
+            InputStream inStream = ftpClient.retrieveFileStream(s[0]);
+            // obtains ServletContext
+            ServletContext context = request.getServletContext();
+            String appPath = context.getRealPath("");
+            System.out.println("appPath = " + appPath);
+
+            // gets MIME type of the file
+            String mimeType = context.getMimeType(filePath);
+            if (mimeType == null) {
+                // set to binary type if MIME mapping not found
+                mimeType = "application/octet-stream";
+            }
+            
+            //
+
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int nRead;
+            byte[] data = new byte[1024];
+            while ((nRead = inStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+
+            buffer.flush();
+            byte[] buf = buffer.toByteArray();
+            //
+           // byte[] buf = new byte[inStream.available()];
+            inStream.read(buf);
+            String imagen = Base64.encode(buf);
+            json.put("imagen", imagen);
+            json.put("ext",mimeType);
+            ftpClient.disconnect();
+            return json.toString();
+        }
+        ftpClient.disconnect();
+        //response.sendRedirect(request.getContextPath());
+        return "";
     }
 
     public static String getNextDate(String curDate) throws ParseException {
