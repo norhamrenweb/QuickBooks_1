@@ -326,7 +326,7 @@
                                 }
             <%--Create Date: " + fechaCreacion + "<br>\n\
             Type: " + category + "<br>\n\--%>
-                                $(numSemana).append("<div id='comment" + id + "' class='divAdd " + visible + "'>\n\
+                                $(numSemana).append("<div id='comment" + id + "' value='"+commentdate+"' class='divAdd " + visible + "'>\n\
                                 <strong>Date:</strong> " + commentdate + " </strong> <br>\n\
                                 <strong>Observation:</strong> " + comentario.substring(0, 45) + " " + comentarioExtenso + "<br>\n\
                                 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
@@ -346,11 +346,8 @@
                                 </button>\n\
                                 </div>\n\
                                 <div class='col-xs-3 text-center sinpadding'>\n\
-                                <form class=' text-center form-group' action='"+path+"savecomment' method='GET' enctype=multipart/form-data'>  \n\
-                                <input name='id' type='hidden' value='"+id+"'>\n\
-                                <input name='date' type='hidden' value='"+commentdate+"'>\n\
-                                <button type='submit'  " + disable + " class='btn btn-link' onclick='verPhoto(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='verphoto" + id + "'>\n\
-                                </form>\n\
+                                <input type='hidden' id='date"+id+"' value='"+commentdate+"'/>\n\
+                                <button type='button'  " + disable + " onclick='verphoto("+id+")' class='btn btn-link' data-toggle='tooltip' data-placement='bottom' value='delete' id='verphoto" + id + "'>\n\
                                 <span class=' glyphicon glyphicon-remove'></span>\n\
                                 </button>\n\
                                 </div>\n\
@@ -453,20 +450,29 @@
                 location.reload();
             }
             
-            function verPhoto(id){
-                var date = $('#cdate'+id).text();
-                var path = document.location.href;
-                var i = path.length-1; 
-                while(path[i]!=='/'){
-                    path = path.substring(0,i);
-                    i--;
+            function verphoto(id){
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-                path = path + "savecomment?id="+id+"&date="+date;
-                var request = new XMLHttpRequest();
-                request.open("GET", path,true);
-                request.send(null);
-            }
 
+                ajax.onreadystatechange = function(){
+                    if (ajax.readyState === 4 && ajax.status === 200) {
+                        if(ajax.responseText !== ""){
+                            var json = JSON.parse(ajax.responseText);
+                            $('#imagen').attr("src","data:"+json.ext+";base64,"+json.imagen);
+                            $('#modalimagen').modal('show');
+                        }
+                    }
+                };
+                ajax.open("POST", "getimage.htm?id=" + id+"&date="+$('#date'+id).val(), true);
+            <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
+                ajax.send("");
+    
+            }
 
         </script>
         <style>
@@ -971,5 +977,20 @@
 
             </div>
         </div> 
+        
+         
+            <div class="modal fade" id="modalimagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="titleComment"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <img id="imagen" src=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </body>
 </html>
