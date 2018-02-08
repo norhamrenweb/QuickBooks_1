@@ -64,6 +64,7 @@ public class LessonsListControlador {
     
     public static ArrayList<Teacher> getTeachers(int iduser) throws SQLException{
         String consulta = "select * from Staff where faculty=1";
+        if(iduser == -1)consulta = "select * from Staff";
         ResultSet rs = DBConect.ah.executeQuery(consulta);
         ArrayList<Teacher> t = new ArrayList<>();
         String firstname="",lastname="";

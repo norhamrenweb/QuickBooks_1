@@ -52,11 +52,6 @@
                     !$('#destino option:selected').remove();
                     $('#destino option').first().prop('selected', true);
 
-                    var alumnosSelected = $('#destino option').length;
-                    var objectiveSelected = $('#objective').val();
-                    if (alumnosSelected === 0 || (objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '')) {
-                        $('#createOnClick').attr('disabled', true);
-                    }
                     return;
                 });
                 $('.pasartodos').click(function () {
@@ -92,7 +87,6 @@
                     $('#destino option').each(function () {
                         $(this).remove();
                     });
-                    $('#createOnClick').attr('disabled', true);
                 });
 
                 $('#table_id').DataTable({

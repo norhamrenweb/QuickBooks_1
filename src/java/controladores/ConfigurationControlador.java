@@ -5,7 +5,9 @@
  */
 package controladores;
 
+import Montessori.User;
 import java.io.*;
+import java.sql.SQLException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +25,17 @@ import org.springframework.web.servlet.ModelAndView;
 public class ConfigurationControlador {
     
     @RequestMapping("/setupControlador/start.htm")
-    public ModelAndView setup(HttpServletRequest hsr, HttpServletResponse hsr1){
-        return new ModelAndView("setup");
+    public ModelAndView setup(HttpServletRequest hsr, HttpServletResponse hsr1) throws SQLException{
+        
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        }
+        ModelAndView mv = new ModelAndView("setup");
+        int iduser = ((User)hsr.getSession().getAttribute("user")).getId();
+        mv.addObject("teacherlist",LessonsListControlador.getTeachers(-1));
+        return mv;
+        
+    
     }
     
     @RequestMapping("/setupControlador/save.htm")

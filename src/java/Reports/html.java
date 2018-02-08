@@ -5,6 +5,7 @@
  */
 package Reports;
 
+import Montessori.User;
 import Reports.DataFactoryFolder.*;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -69,13 +70,17 @@ import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 public class html extends HttpServlet {
 
     private DataFactory createFactory(String reportType) {
+        if (reportType == null) {
+            return new FactoryActivityLog();
+        }
+
         switch (reportType) {
             case "progress_prePrimary":
                 return new FactoryProgressReport_Pre_Primary();
 
             case "progress_Yr1_4":
                 return new FactoryProgressReport_grade4();
-                
+
             case "progress_Gr7":
                 return new FactoryAcademicReport_grade7();
 
@@ -98,9 +103,12 @@ public class html extends HttpServlet {
         Connection conn = null;
 
         ServletOutputStream os = response.getOutputStream();
+        
         String[] stids = request.getParameterValues("destino[]");
+        
         String reportType = request.getParameter("typeReport");
-
+        String start = request.getParameter("TXThorainicio");
+        String finish = request.getParameter("TXThorafin");
         DefaultJasperReportsContext context = DefaultJasperReportsContext.getInstance();
         JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.xpath.executer.factory",
                 "net.sf.jasperreports.engine.util.xml.JaxenXPathExecuterFactory");
@@ -127,26 +135,45 @@ public class html extends HttpServlet {
 //        map.put("studentid",stids[0]);
 //            map.put("end",enddate);
         //   List<SimpleExporterInput> list = new ArrayList<SimpleExporterInput>();
-
-        JRDataSource datasource = new JRBeanCollectionDataSource(d.getDataSource(stids[0], this.getServletContext()), true);
+        JRDataSource datasource;
+        if(!d.getClass().equals(FactoryActivityLog.class))  datasource = new JRBeanCollectionDataSource(d.getDataSource(stids[0], this.getServletContext()), true);
+        else{    
+            stids = request.getParameterValues("origen[]");
+            datasource = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(((User)request.getSession().getAttribute("user")).getName(),start,finish,stids[0], this.getServletContext()), true);
+        }
+        
         JasperPrint jasperPrint = jasperFillManager.fill(jasperReport, map, datasource);//fill(jasperReport,map, conn);
 
         for (int i = 1; i < stids.length; i++) {
-            JRDataSource datasource2 = new JRBeanCollectionDataSource(d.getDataSource(stids[i], this.getServletContext()), true);
+            JRDataSource datasource2;
+            if(!d.getClass().equals(FactoryActivityLog.class)) 
+                    datasource2 = new JRBeanCollectionDataSource(d.getDataSource(stids[i], this.getServletContext()), true);
+            else{
+                    datasource2 = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(((User)request.getSession().getAttribute("user")).getName(),start,finish,stids[i], this.getServletContext()), true);
+            }
             JasperPrint jasperPrintAux = jasperFillManager.fill(jasperReport, map, datasource2);//fill(jasperReport,map, conn);
             for (int j = 0; j < jasperPrintAux.getPages().size(); j++) {
                 jasperPrint.addPage(jasperPrintAux.getPages().get(j));
             }
         }
 
-        byte[] bites = JasperExportManager.exportReportToPdf(jasperPrint);
-        response.setHeader("Content-disposition", "attachment; filename=Inform.pdf");
-        response.setContentLength(bites.length);
-        os.write(bites);
-        os.close();
 
-
-        /*  exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        if(!d.getClass().equals(FactoryActivityLog.class)){//pdf Reports download
+            
+            byte[] bites = JasperExportManager.exportReportToPdf(jasperPrint);
+            response.setHeader("Content-disposition", "attachment; filename=Inform.pdf");
+            response.setContentLength(bites.length);
+            os.write(bites);
+            os.close();
+        }
+        else{
+            //XML Report Activity Log.
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(new SimpleHtmlExporterOutput(os));
+            exporter.exportReport();
+        }
+        
+ /*  exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
         exporter.setExporterOutput(new SimpleHtmlExporterOutput(os));
          */
         //            exporter.setConfiguration(createHtmlConfiguration());
