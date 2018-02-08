@@ -334,9 +334,6 @@
                         var foto = JSON.parse(json.prueba);
                         
                         var subjects = JSON.parse(json.sub);
-                        //$('#myTab a:first').tab('show');
-                        //var prog = JSON.parse(json.prog);
-                        //first load the demographics
                         $('#gradelevel').text(info.level_id);
                         $('#nextlevel').text(info.nextlevel);
                         $('#student').text(info.nombre_students);
@@ -346,7 +343,7 @@
                             $('#foto').attr('src', '../recursos/img/NotPhoto.png');
                         } else {
                             $('#foto').removeAttr('src');
-                            $('#foto').attr('src', '../recursos/img/'+info.foto);
+                            $('#foto').attr('src', foto);
                         }
                        
                         $('.cell').off('click');
@@ -365,60 +362,10 @@
                         $('#divCommentSubject').addClass('hidden');
                         $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                         $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
-//                    var birthday = info.fecha_nacimiento,
-//                            separador = " ",
-//                            limite = 1, 
-//                            datebirthday = birthday.split(separador,limite);
-//                    
-//                    
-//                    
-//                    $('#BOD').text(datebirthday);
                     }
                 }
             }
             ;
-//        var myview = $.extend({},$.fn.treegrid.defaults.view,{
-//	onBeforeRender:function(target, parentId, data){
-//		$.fn.treegrid.defaults.view.onBeforeRender.call(this,target,parentId,data);
-//		
-//		var data = $(target).treegrid('getData');
-//		
-//		function setData(){  
-//			var todo = [];  
-//			for(var i=0; i<data.length; i++){ 
-//				var node = data[i];
-//				if (!node.setted){
-//					node.setted = true;
-//					todo.push(node); 
-//				}				
-//			}  
-//			while(todo.length){  
-//				var node = todo.shift();  
-//				if (node.children){  
-//					node.state = 'closed';  
-//					node.children1 = node.children;  
-//					node.children = undefined;  
-//					todo = todo.concat(node.children1);  
-//				}  
-//			}  
-//		}  
-//		  
-//		setData(data);  
-//		var tg = $(target);  
-//		var opts = tg.treegrid('options');  
-//		opts.onBeforeExpand = function(row){  
-//			if (row.children1){  
-//				tg.treegrid('append',{  
-//					parent: row[opts.idField],  
-//					data: row.children1  
-//				});  
-//				row.children1 = undefined;  
-//				tg.treegrid('expand', row[opts.idField]);  
-//			}  
-//			return row.children1 == undefined;  
-//		};  
-//	}
-//});
 
 
             function formatProgress(value) {

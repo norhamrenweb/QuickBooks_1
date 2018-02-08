@@ -336,41 +336,45 @@ public class ProgressbyStudent {
     }
 
     public String getImage(String photoName, HttpServletRequest request) throws IOException {
-
-        String ftpUrl = "ftp2.renweb.com";
-        int port = 21;
-        String user = "AH-ZAF";
-        String pass = "e3f14+7mANDp";
-
-        String filePath = "/Pictures/" + photoName;
-        String appPath = "";
-        String savePath = request.getContextPath() + "/photo.jpeg";
-
-        byte[] buffer = new byte[4096];
         try {
             URL url = new URL("ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + photoName);
             URLConnection conn = url.openConnection();
-            InputStream inputStream = conn.getInputStream();
+            InputStream inStream = conn.getInputStream();
+            //***********
 
-            ServletContext context = request.getServletContext();
-            appPath = context.getRealPath("") + "recursos/img/" + photoName;
+            // gets MIME type of the file
+            String mimeType = "";
+            String filepath = url.getPath();
+            int i = filepath.length()-1;
+            while(filepath.charAt(i)!='.'){
+                mimeType=filepath.charAt(i)+mimeType;
+                i--;
+            }
+            mimeType='.'+mimeType;
+            
+            
+            //
 
-            // FileOutputStream outputStream = new FileOutputStream(savePath);
-            FileOutputStream outputStream = new FileOutputStream(appPath);
-
-            int bytesRead = -1;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int nRead;
+            byte[] data = new byte[1024];
+            while ((nRead = inStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
             }
 
-            outputStream.close();
-            inputStream.close();
-
-            System.out.println("File downloaded");
+            buffer.flush();
+            byte[] buf = buffer.toByteArray();
+            //
+           // byte[] buf = new byte[inStream.available()];
+            inStream.read(buf);
+            String imagen = Base64.encode(buf);
+            return "data:image/"+mimeType+";base64,"+imagen;
+            //**********
+            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return appPath;
+        return "";
     }
 
     //load student demographics
