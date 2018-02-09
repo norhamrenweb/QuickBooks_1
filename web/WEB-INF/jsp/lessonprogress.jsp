@@ -25,8 +25,9 @@
                 var textillo = "Changes you made may not be saved.";
                 return textillo;
             };
-
+            
             $(document).ready(function () {
+
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
 
                 var lessoncreate = '<%= request.getParameter("message")%>';

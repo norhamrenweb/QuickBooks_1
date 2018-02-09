@@ -23,7 +23,15 @@
 
             var pestaña = "";
 
+            var userType = ${user.type};
             $(document).ready(function () {
+                $("#saveSupervisorComment").hide();
+                $("#TXTsupervisorComment").prop("disabled",true);
+                //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
+                if (userType === 2) {
+                    $("#saveSupervisorComment").show();
+                    $("#TXTsupervisorComment").prop("disabled",false);
+                }
                 $("#tg").treegrid();
                 $("#saveCommentSubjectButton").prop('disabled', true);
 
@@ -95,8 +103,8 @@
                         $("#saveCommentSubjectButton").prop('disabled', true);
                     } else {
                         $("#saveCommentSubjectButton").prop('disabled', false);
-                        
-                        var idSubjectX = $("#subjects :selected").val()+"$"+$("#studentid").val();
+
+                        var idSubjectX = $("#subjects :selected").val() + "$" + $("#studentid").val();
                         $.ajax({
                             type: 'POST',
                             url: 'getSubjectComment.htm',
@@ -104,7 +112,7 @@
                             contentType: 'text/plain',
                             success: function (data) {
                                 $("#commentSubject").val(data);
-                               
+
                             },
                             error: function (xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.status);
@@ -241,6 +249,56 @@
             var levelarbol;
             var studentarbol;
 
+            function treeload2(prog) {
+                var pActual = $("ul li.active").text().replace(" ", "");
+                $('#loadingmessage').show();
+
+                $('#Objectivestracking').tab('show');
+                $('#tg').empty();
+                $('#tg').treegrid({
+//                    view: myview,        
+                    data: prog.children,
+                    idField: 'id',
+                    treeField: 'name',
+                    fitColumns: true,
+                    columns: [[
+                            {title: 'Name', field: 'name', width: '40%', formatter: function (value) {
+                                    // return ' <img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/> ' +  value;
+                                    return  value;
+                                }},
+                            {title: '#Present. planned', field: 'noofplannedlessons', width: '16%'},
+                            {title: '#Present. done', field: 'noofarchivedlessons', width: '16%'},
+                            {title: 'Progress', field: 'progress', width: '13%', formatter: formatProgress},
+                            {title: 'Final rating', field: 'rating', width: '15%'}
+                        ]]
+
+                });
+                $(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").each(function (index) {
+                    //  console.log( index + ": " + $( this ).text() );
+                    var img;
+                    if ($(this).parent().parent().parent().attr("node-id")[0] === "L")
+                        img = "subject.svg";
+                    else if ($(this).parent().parent().parent().attr("node-id")[0] === "C")
+                        img = "target.svg";
+                    else
+                        img = "step.svg";
+                    jQuery("<img/> ").prependTo($(this)).attr({src: '../recursos/js/treeGrid/' + img + '', width: '16px', height: '18px', style: 'padding-right:5px;'});
+                });
+
+                //jQuery("<img/>").prependTo(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").attr({src: '../recursos/js/treeGrid/target.svg', width:'16px', height:'18px'});
+
+                $("#tg").treegrid('collapseAll');
+
+                $('#loadingmessage').hide();
+
+
+                if (pActual === "")
+                    pActual = "Demographic";
+                $('#' + pActual).tab('show');
+
+
+            }
+
             function treeload(levelid, studentid) {
                 var level;
                 var student;
@@ -364,7 +422,7 @@
                         var json = JSON.parse(ajax.responseText);
                         var info = JSON.parse(json.info);
                         var foto = JSON.parse(json.prueba);
-
+                        var prog = JSON.parse(json.prog);
                         var subjects = JSON.parse(json.sub);
                         $('#gradelevel').text(info.level_id);
                         $('#nextlevel').text(info.nextlevel);
@@ -379,7 +437,9 @@
                         }
 
                         $('.cell').off('click');
-                        treeload(info.level_id, info.id_students);
+
+                        //treeload(info.level_id, info.id_students);
+                        treeload2(prog);
                         levelarbol = info.level_id;
                         studentarbol = info.id_students;
                         //hide the objectives in case a previous student was selected
@@ -682,6 +742,9 @@
         </script>
 
         <style>
+
+
+
             textarea 
             {
                 resize: none;
@@ -785,7 +848,7 @@
             }
             .foto
             {
-                width: 100%;
+                width: 75%;
             }
             .tree-title {
                 font-size: 12px;
@@ -796,6 +859,9 @@
                 padding-right: 45px;
                 height: auto;
                 line-height: 18px;
+            }
+            #myTab > ul > li >a{
+                padding: 10px 9px;
             }
         </style>
     </head>
@@ -850,6 +916,7 @@
                                 <li><a id="Objectivestracking" data-toggle="tab" href="#progress" role="tab">Objectives tracking</a></li>
                                 <li><a id="AcademicProgress" data-toggle="tab" href="#gradebook" role="tab">Academic Progress</a></li>
                                 <li><a id="ClassroomObservation" data-toggle="tab" href="#observations" role="tab">Classroom Observation</a></li>
+                                <li><a id="ClassroomObservation" data-toggle="tab" href="#supervisorComment" role="tab">Supervisor Comment</a></li>
                             </ul>
                         </div>
                         <div class="tab-content">
@@ -988,6 +1055,36 @@
                                     <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View all comments</button>
                                 </div>
                                 <div id="confirmsave" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header modal-header-delete">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">comment saved</h4>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div> 
+
+                            </div>
+                            <div role="tabpanel" class="col-xs-12 tab-pane" id="supervisorComment">
+                                <div class="col-xs-12 text-center">
+                                    <h2>Enter a supervisor comment</h2>
+                                </div>
+                                <div class="col-xs-12 center-block form-group">
+
+                                    <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="add comment" maxlength="1000"></textarea>
+                                </div>
+
+                                <div class="col-xs-12 text-center">
+                                    <button type="button" class="btn btn-info" id="saveSupervisorComment"  value="Save" onclick="saveSupervisorComment()">Save Comment</button>
+                                </div>
+
+
+                                <div id="confirmsaveSupervisorComment" class="modal fade" role="dialog">
                                     <div class="modal-dialog">
 
                                         <!-- Modal content-->

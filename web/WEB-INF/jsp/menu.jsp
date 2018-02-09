@@ -62,7 +62,7 @@
             </a>
         </div>
         <c:choose>
-            <c:when test = "${user.type == 0}">
+            <c:when test = "${user.type == 0 || user.type == 2}">
                 <div class="col-xs-12 iconosmenulateral">
                     <a href="<c:url value='/createsetting/start.htm'/>" >
                         <div class="center-block">

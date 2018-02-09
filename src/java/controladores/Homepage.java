@@ -51,6 +51,7 @@ public class Homepage extends MultiActionController {
         User user = new User();
         int scgrpidTeacher = 0;
         int scgrpidAdmin = 0;
+        int scgrpidSuper = 0;
         boolean result = true;
         LoginVerification login = new LoginVerification();
         if ("QuickBook".equals(hsr.getParameter("txtusuario"))) {
@@ -67,11 +68,14 @@ public class Homepage extends MultiActionController {
 
                 scgrpidTeacher = login.getSecurityGroupID("MontessoriTeacher");
                 scgrpidAdmin = login.getSecurityGroupID("MontessoriAdmin");
-
+                scgrpidSuper = login.getSecurityGroupID("MontessoriHead");
+                
                 if (login.fromGroup(scgrpidAdmin, user.getId())) {
                     user.setType(0);
                 } else if (login.fromGroup(scgrpidTeacher, user.getId())) {
                     user.setType(1);
+                } else if (login.fromGroup(scgrpidSuper, user.getId())) {
+                    user.setType(2);
                 } else {
                     result = false;
                 }
