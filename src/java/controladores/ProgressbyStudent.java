@@ -212,7 +212,7 @@ public class ProgressbyStudent {
 //will display only if there is a lesson that has a progress record,but if a lesson is only planned will not be displayed
 // the message should appear if an objective has only a general comment
             ResultSet rs1 = DBConect.eduwebBeforeFirst.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = " + d.getCol2());
-            
+
             if (!rs1.next()) {
                 String message = "Student does not have progress under the selected objective";//if i change this message must change as well in the jsp
                 mv.addObject("message", message);
@@ -302,7 +302,7 @@ public class ProgressbyStudent {
     @ResponseBody
     public String treeload(HttpServletRequest hsr, HttpServletResponse hsr1) {
         try {
-            return this.loadtree(Integer.parseInt(hsr.getParameter("studentid")), hsr.getServletContext());
+            return this.loadtree(new ArrayList<>(), Integer.parseInt(hsr.getParameter("studentid")), hsr.getServletContext());
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
@@ -337,24 +337,34 @@ public class ProgressbyStudent {
 
     public String getImage(String photoName, HttpServletRequest request) throws IOException {
         try {
-            URL url = new URL("ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + photoName);
+            /*URL url = new URL("ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + photoName);
             URLConnection conn = url.openConnection();
-            InputStream inStream = conn.getInputStream();
+            InputStream inStream = conn.getInputStream();*/
             //***********
 
+            String server = "192.168.1.36";
+            int port = 21;
+            String user = "david";
+            String pass = "david";
+
+            String filepath = "/Pictures/" + photoName;
+            FTPClient ftpClient = new FTPClient();
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            InputStream inStream = ftpClient.retrieveFileStream(filepath);
+            
             // gets MIME type of the file
             String mimeType = "";
-            String filepath = url.getPath();
-            int i = filepath.length()-1;
-            while(filepath.charAt(i)!='.'){
-                mimeType=filepath.charAt(i)+mimeType;
+            //String filepath = url.getPath();
+            int i = filepath.length() - 1;
+            while (filepath.charAt(i) != '.') {
+                mimeType = filepath.charAt(i) + mimeType;
                 i--;
             }
-            mimeType='.'+mimeType;
-            
-            
-            //
+            mimeType = '.' + mimeType;
 
+            //
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             int nRead;
             byte[] data = new byte[1024];
@@ -365,12 +375,12 @@ public class ProgressbyStudent {
             buffer.flush();
             byte[] buf = buffer.toByteArray();
             //
-           // byte[] buf = new byte[inStream.available()];
+            // byte[] buf = new byte[inStream.available()];
             inStream.read(buf);
             String imagen = Base64.encode(buf);
-            return "data:image/"+mimeType+";base64,"+imagen;
+            return "data:image/" + mimeType + ";base64," + imagen;
             //**********
-            
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -404,8 +414,7 @@ public class ProgressbyStudent {
                 student.setNextlevel(rs.getString("NextGradeLevel"));
 
             }
-
-            prueba = getImage(student.getFoto(), hsr);
+        if(student.getFoto() != null) prueba = getImage(student.getFoto(), hsr);
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
             StringWriter errors = new StringWriter();
@@ -421,7 +430,7 @@ public class ProgressbyStudent {
         obj.put("info", info);
         obj.put("sub", sub);
         obj.put("prueba", prueba2);
-        obj.put("prog", this.loadtree(student.getId_students(), hsr.getServletContext()));
+        obj.put("prog", this.loadtree(subjects, student.getId_students(), hsr.getServletContext()));
         return obj.toString();
     }
 
@@ -467,20 +476,18 @@ public class ProgressbyStudent {
         //           return pjson;
     }
 
-    
-            
     @RequestMapping("/progressbystudent/getSubjectComment.htm")
     @ResponseBody
     public String getSubjectComment(@RequestBody String id, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 
         HttpSession sesion = hsr.getSession();
-        String subjectId = id.substring(0,id.indexOf("$"));
-        String studentId = id.substring(id.indexOf("$")+1,id.length());
-        String comment="";
+        String subjectId = id.substring(0, id.indexOf("$"));
+        String studentId = id.substring(id.indexOf("$") + 1, id.length());
+        String comment = "";
         try {
-            String consulta = "select comment from subjects_comments where subject_id = " + subjectId + " and term_id = "+sesion.getAttribute("termId")+" and yearterm_id =" + sesion.getAttribute("yearId") +" and studentid =" + studentId +" order by date_created DESC";
+            String consulta = "select comment from subjects_comments where subject_id = " + subjectId + " and term_id = " + sesion.getAttribute("termId") + " and yearterm_id =" + sesion.getAttribute("yearId") + " and studentid =" + studentId + " order by date_created DESC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
-            if(rs.next()) {
+            if (rs.next()) {
                 comment = rs.getString("comment");
             }
             return comment;
@@ -492,8 +499,8 @@ public class ProgressbyStudent {
         }
 
         return comment;
-    }        
-            
+    }
+
     @RequestMapping("/progressbystudent/saveGeneralcomment.htm")
     @ResponseBody
     public String saveGeneralcomment(@RequestBody DBRecords data, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -508,7 +515,7 @@ public class ProgressbyStudent {
             String consulta = "select id from progress_report where objective_id = " + objectiveid + " and generalcomment = TRUE and student_id ='" + studentid + "'";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             if (!rs.next()) {
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + studentid + "','" + objectiveid + "',true,'" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")");
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + studentid + "','" + objectiveid + "',true,'" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
                 message = "Comment successfully updated";
 
             } else {
@@ -528,9 +535,8 @@ public class ProgressbyStudent {
 
         return obj.toString();
     }
-    
 
-    public String loadtree(int studentid, ServletContext hsr) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
+    public String loadtree(List<Subject> ls, int studentid, ServletContext hsr) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
 
         ModelAndView mv = new ModelAndView("progressbystudent");
         JSONObject json = new JSONObject();
@@ -542,7 +548,11 @@ public class ProgressbyStudent {
         List<Subject> subs = new ArrayList<>();
         Nodetreegrid<String> rootNode = new Nodetreegrid<String>("Subjects", "A", "", "", "", "");
         try {
-            subs = getSubjects(studentid);
+            if (ls.isEmpty()) {
+                subs = getSubjects(studentid);
+            } else {
+                subs = ls;
+            }
 
             String consulta = "select * from Courses";
             ResultSet rs9 = DBConect.ah.executeQuery(consulta);
@@ -555,7 +565,7 @@ public class ProgressbyStudent {
                     mapSubject.put(idHash, name9);
                 }
             }
-            
+
             for (Subject sub : subs) {
                 String[] sid = sub.getId();
                 ResultSet rs = DBConect.eduweb.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.id as objid,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '" + sid[0] + "'");
@@ -600,29 +610,29 @@ public class ProgressbyStudent {
                     }
                 }
             }
-            
+
             String test = new Gson().toJson(steps);
 
             int i = 0;
             int z = 0;
-            
+
             //subs.sort(c);
             //  subs.sort();
-         //   Collections.sort(subs, new Sortbyroll);
+            //   Collections.sort(subs, new Sortbyroll);
             Collections.sort(subs, new Comparator<Subject>() {
                 @Override
-                public int compare(Subject o1, Subject o2) {          
-                    return  o1.getName().compareTo(o2.getName());
+                public int compare(Subject o1, Subject o2) {
+                    return o1.getName().compareTo(o2.getName());
                 }
             });
-            
+
             Collections.sort(steps, new Comparator<DBRecords>() {
                 @Override
                 public int compare(DBRecords o1, DBRecords o2) {
-                   return  o1.getCol2().compareTo(o2.getCol2());
+                    return o1.getCol2().compareTo(o2.getCol2());
                 }
             });
-            
+
             for (Subject x : subs)//subjects)
             {
                 Nodetreegrid<String> nodeC = new Nodetreegrid<String>("L" + i, x.getName(), "", "", "", "");
@@ -718,7 +728,7 @@ public class ProgressbyStudent {
         try {
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
-            DBConect.eduweb.executeUpdate("insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate,term_id,yearterm_id)values('" + user.getId() + "',now(),'" + obs.getObservation() + "','" + obs.getType() + "','" + obs.getStudentid() + "','" + obs.getDate()+"',"  + sesion.getAttribute("termId")+"," + sesion.getAttribute("yearId")  + ")");
+            DBConect.eduweb.executeUpdate("insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate,term_id,yearterm_id)values('" + user.getId() + "',now(),'" + obs.getObservation() + "','" + obs.getType() + "','" + obs.getStudentid() + "','" + obs.getDate() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
 
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
@@ -735,7 +745,7 @@ public class ProgressbyStudent {
         try {
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
-            String test = "insert into subjects_comments(subject_id,date_created,createdby_id,comment,studentid,term_id,yearterm_id)values('" + cSub.getIdSubject() + "',now(),'" + user.getId() + "','" + cSub.getComment() + "','" + cSub.getIdStudent() + "',"+sesion.getAttribute("termId")+","+sesion.getAttribute("yearId")+")";
+            String test = "insert into subjects_comments(subject_id,date_created,createdby_id,comment,studentid,term_id,yearterm_id)values('" + cSub.getIdSubject() + "',now(),'" + user.getId() + "','" + cSub.getComment() + "','" + cSub.getIdStudent() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")";
             DBConect.eduweb.executeUpdate(test);
 
         } catch (SQLException ex) {
@@ -757,17 +767,17 @@ public class ProgressbyStudent {
         String[] output = hsr.getParameter("studentid").split("-");
         String studentId = output[0];
         String nameStudent = "'" + output[1];
-        for(int i = 2;i<output.length;i++){
-            nameStudent+="-"+output[i];
+        for (int i = 2; i < output.length; i++) {
+            nameStudent += "-" + output[i];
         }
-        nameStudent+= "'";
+        nameStudent += "'";
         //    mv.addObject("message","works");
         String message = "works";
         mv.addObject("studentId", studentId);
         mv.addObject("nameStudent", nameStudent);
         return mv;
     }
-    
+
     @RequestMapping("/getimage.htm")
     @ResponseBody
     public String getimage(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -777,14 +787,14 @@ public class ProgressbyStudent {
         int port = 21;
         String user = "david";
         String pass = "david";
-        
+
         String filePath = "/MontessoriObservations/" + obsid + "_" + obsdate + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-        
-        if(ftpClient.changeWorkingDirectory(filePath)){
+
+        if (ftpClient.changeWorkingDirectory(filePath)) {
             JSONObject json = new JSONObject();
             String s[] = ftpClient.listNames();
             filePath = s[0];
@@ -800,9 +810,8 @@ public class ProgressbyStudent {
                 // set to binary type if MIME mapping not found
                 mimeType = "application/octet-stream";
             }
-            
-            //
 
+            //
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             int nRead;
             byte[] data = new byte[1024];
@@ -813,11 +822,11 @@ public class ProgressbyStudent {
             buffer.flush();
             byte[] buf = buffer.toByteArray();
             //
-           // byte[] buf = new byte[inStream.available()];
+            // byte[] buf = new byte[inStream.available()];
             inStream.read(buf);
             String imagen = Base64.encode(buf);
             json.put("imagen", imagen);
-            json.put("ext",mimeType);
+            json.put("ext", mimeType);
             ftpClient.disconnect();
             return json.toString();
         }
@@ -939,14 +948,14 @@ public class ProgressbyStudent {
                     oAux.setObservation(rs.getString("comment"));
                     oAux.setType(rs.getString("category"));
                     oAux.setStudentid(Integer.parseInt(studentId));
-                    
-                    Date d =rs.getDate("commentdate");
+
+                    Date d = rs.getDate("commentdate");
                     oAux.setCommentDate("" + d);
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(d);
-                    cal.setMinimalDaysInFirstWeek(1); 
-                    oAux.setNumSemana(""+cal.get(Calendar.WEEK_OF_MONTH));
-                    
+                    cal.setMinimalDaysInFirstWeek(1);
+                    oAux.setNumSemana("" + cal.get(Calendar.WEEK_OF_MONTH));
+
                     arrayComments.add(new Observation(oAux));
                 }
 
@@ -967,7 +976,7 @@ public class ProgressbyStudent {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id=" + subjectid[0] +"ORDER BY name ASC");
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id=" + subjectid[0] + "ORDER BY name ASC");
             while (rs1.next()) {
                 String[] ids = new String[1];
                 Objective sub = new Objective();
