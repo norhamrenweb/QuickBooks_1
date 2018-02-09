@@ -5,6 +5,7 @@
  */
 package controladores;
 
+import Montessori.CommentObjective;
 import Montessori.DBConect;
 import Montessori.Level;
 import Montessori.Students;
@@ -38,6 +39,9 @@ public class ObservationControlador {
     
     @RequestMapping("/observations/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        }
         ModelAndView mv = new ModelAndView("observations");
         List<Level> grades = new ArrayList();
         try {
@@ -65,15 +69,106 @@ public class ObservationControlador {
         return mv;
     }
     
+    @RequestMapping("/observations/studentslevel.htm")
+    @ResponseBody
+     public String getstudents(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        String id = hsr.getParameter("idgrade");
+        JSONObject json = new JSONObject();
+        String subjects = new Gson().toJson(Students.getStudentslevel(id, log));
+        json.put("subjects", subjects);
+        return json.toString();
+    }
+    
+    /**
+     * funcion que devuelve dado un id de estudiante los subjects
+     * @param hsr
+     * @param hsr1
+     * @return
+     * @throws Exception 
+     */
     @RequestMapping("/observations/subjects.htm")
     @ResponseBody
-    public String subjects(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    public String getsubjects(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String id = hsr.getParameter("idstudent");
         JSONObject json = new JSONObject();
-        JSONArray ar = new JSONArray();
         String subjects = new Gson().toJson(ProgressbyStudent.getSubjects(Integer.parseInt(id)));
         json.put("subjects", subjects);
         return json.toString();
     }
+    
+    /**
+     * Esta funcion devuelve dado un id de un subject sus objetivos
+     * @param hsr
+     * @param hsr1
+     * @return
+     * @throws Exception 
+     */
+    @RequestMapping("/observations/objectives.htm")
+    @ResponseBody
+    public String getobjectives(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        String id[] = hsr.getParameterValues("idsubject");
+        JSONObject json = new JSONObject();
+        String objectives = new Gson().toJson(ProgressbyStudent.getObjectives(id));
+        json.put("objectives", objectives);
+        return json.toString();
+    }
+    
+    
+    /**
+     * funcion que devuelve los comentarios dado un objetivo y un id de estudiante
+     * @param hsr
+     * @param hsr1
+     * @return 
+     */
+    @RequestMapping("/observations/comments.htm")
+    @ResponseBody
+    public String getComments(HttpServletRequest hsr, HttpServletResponse hsr1){
+        String idstudent = hsr.getParameter("idstudent");
+        String idobjective = hsr.getParameter("idobjective");
+        ArrayList<CommentObjective> comments = new ArrayList<>();
+        try {
+            String consulta = "select * from progress_report where objective_id="+idobjective+" and student_id="+idstudent;
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            while(rs.next()){
+                CommentObjective c = 
+                        new CommentObjective(rs.getString("id"),
+                                rs.getString("rating_id"),rs.getString("student_id"),
+                                rs.getString("comment"),rs.getString("comment_date"),
+                                rs.getString("objective_id"),rs.getBoolean("generalcomment"),
+                                rs.getString("step_id"),rs.getString("createdby"),
+                                rs.getString("modifyby"), rs.getString("term_id"),
+                                rs.getString("yearterm_id"));
+                comments.add(c);
+            }
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        return new Gson().toJson(comments);
+    }
+    
+    /**
+     * crea un nuevo comentario
+     * @param hsr
+     * @param hsr1
+     * @return 
+     */
+    @RequestMapping("/observations/newcomment.htm")
+    @ResponseBody
+    public String newComment(HttpServletRequest hsr, HttpServletResponse hsr1){
+        String idstudent = hsr.getParameter("idstudent");
+        String idobjective = hsr.getParameter("idobjective");
+        String comment = hsr.getParameter("comment");
+        try {
+            String consulta = "insert into progress_report (student_id,objective_id,comment,comment_date,generalcomment)"+
+                              "values("+idstudent+","+idobjective+",'"+comment+"',now(),true);";
+            DBConect.eduweb.executeUpdate(consulta);
+            
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            return "error";
+        }
+        return "succes";
+    }
+    
     
 }

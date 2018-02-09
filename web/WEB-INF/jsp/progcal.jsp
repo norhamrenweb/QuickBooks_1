@@ -987,7 +987,7 @@
                             <h4 class="modal-title" id="titleComment"></h4>
                         </div>
                         <div class="modal-body">
-                            <img id="imagen" src=""/>
+                            <img id="imagen" class="foto" src=""/>
                         </div>
                     </div>
                 </div>
