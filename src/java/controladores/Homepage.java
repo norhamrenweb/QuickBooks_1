@@ -75,12 +75,19 @@ public class Homepage extends MultiActionController {
                 } else {
                     result = false;
                 }
-
+                
                 if (result == true) {
                     ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
                     String message = "welcome user";
+                    int termId=1,yearId=1;
+                    ResultSet rs2 = DBConect.ah.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where configschoolid = 1");
+                    while (rs2.next()) {
+                        termId = rs2.getInt("defaulttermid");
+                        yearId = rs2.getInt("defaultyearid");
+                    }
                     session.setAttribute("user", user);
-
+                    session.setAttribute("termId",termId);
+                    session.setAttribute("yearId",yearId);
                     mv.addObject("message", message);
                     return mv;
                 } else {

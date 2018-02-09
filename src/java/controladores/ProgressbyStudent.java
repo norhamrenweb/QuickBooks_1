@@ -131,7 +131,7 @@ public class ProgressbyStudent {
         return data;
     }
 
-    public List<Subject> getSubjects(int studentid) throws SQLException {
+    static List<Subject> getSubjects(int studentid) throws SQLException {
         List<Subject> subjects = new ArrayList<>();
         List<Subject> activesubjects = new ArrayList<>();
         HashMap<String, String> mapSubject = new HashMap<String, String>();
@@ -467,6 +467,33 @@ public class ProgressbyStudent {
         //           return pjson;
     }
 
+    
+            
+    @RequestMapping("/progressbystudent/getSubjectComment.htm")
+    @ResponseBody
+    public String getSubjectComment(@RequestBody String id, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+
+        HttpSession sesion = hsr.getSession();
+        String subjectId = id.substring(0,id.indexOf("$"));
+        String studentId = id.substring(id.indexOf("$")+1,id.length());
+        String comment="";
+        try {
+            String consulta = "select comment from subjects_comments where subject_id = " + subjectId + " and term_id = "+sesion.getAttribute("termId")+" and yearterm_id =" + sesion.getAttribute("yearId") +" and studentid =" + studentId +" order by date_created DESC";
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            if(rs.next()) {
+                comment = rs.getString("comment");
+            }
+            return comment;
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+
+        return comment;
+    }        
+            
     @RequestMapping("/progressbystudent/saveGeneralcomment.htm")
     @ResponseBody
     public String saveGeneralcomment(@RequestBody DBRecords data, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -501,6 +528,7 @@ public class ProgressbyStudent {
 
         return obj.toString();
     }
+    
 
     public String loadtree(int studentid, ServletContext hsr) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
 
@@ -708,7 +736,7 @@ public class ProgressbyStudent {
         try {
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
-            String test = "insert into subjects_comments(subject_id,date_created,createdby_id,comment,studentid)values('" + cSub.getIdSubject() + "',now(),'" + user.getId() + "','" + cSub.getComment() + "','" + cSub.getIdStudent() + "')";
+            String test = "insert into subjects_comments(subject_id,date_created,createdby_id,comment,studentid,term_id,yearterm_id)values('" + cSub.getIdSubject() + "',now(),'" + user.getId() + "','" + cSub.getComment() + "','" + cSub.getIdStudent() + "',"+sesion.getAttribute("termId")+","+sesion.getAttribute("yearId")+")";
             DBConect.eduweb.executeUpdate(test);
 
         } catch (SQLException ex) {
@@ -936,7 +964,7 @@ public class ProgressbyStudent {
         return new Gson().toJson(arrayObservations);
     }
 
-    public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException {
+    static ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
 

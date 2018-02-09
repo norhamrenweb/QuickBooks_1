@@ -25,6 +25,7 @@
 
             $(document).ready(function () {
                 $("#tg").treegrid();
+                $("#saveCommentSubjectButton").prop('disabled', true);
 
                 $('#tableobjective').DataTable();
 
@@ -84,6 +85,34 @@
                         $('#savecomment').prop("disabled", false);
                     } else {
                         $('#savecomment').prop("disabled", true);
+                    }
+                });
+                $("#subjects").change(function () {
+
+
+
+                    if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
+                        $("#saveCommentSubjectButton").prop('disabled', true);
+                    } else {
+                        $("#saveCommentSubjectButton").prop('disabled', false);
+                        
+                        var idSubjectX = $("#subjects :selected").val()+"$"+$("#studentid").val();
+                        $.ajax({
+                            type: 'POST',
+                            url: 'getSubjectComment.htm',
+                            data: idSubjectX,
+                            contentType: 'text/plain',
+                            success: function (data) {
+                                $("#commentSubject").val(data);
+                               
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.status);
+                                console.log(xhr.responseText);
+                                console.log(thrownError);
+                            }
+
+                        });
                     }
                 });
             });
@@ -184,9 +213,9 @@
                     }
                 }
             }
-            
-            function downloadPhoto(){
-                
+
+            function downloadPhoto() {
+
             }
             function funcionCallBackSaveGeneralComent()
             {
@@ -241,30 +270,33 @@
                             treeField: 'name',
                             fitColumns: true,
                             columns: [[
-                                   {title: 'Name', field: 'name', width:'40%', formatter: function (value) {
-                                          // return ' <img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/> ' +  value;
-                                         return  value;
-                                       }},
-                                   {title: '#Present. planned', field: 'noofplannedlessons', width:'16%'},
-                                   {title: '#Present. done', field: 'noofarchivedlessons', width:'16%'},
-                                   {title: 'Progress', field: 'progress', width:'13%', formatter: formatProgress},
-                                   {title: 'Final rating', field: 'rating', width:'15%'}
+                                    {title: 'Name', field: 'name', width: '40%', formatter: function (value) {
+                                            // return ' <img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/> ' +  value;
+                                            return  value;
+                                        }},
+                                    {title: '#Present. planned', field: 'noofplannedlessons', width: '16%'},
+                                    {title: '#Present. done', field: 'noofarchivedlessons', width: '16%'},
+                                    {title: 'Progress', field: 'progress', width: '13%', formatter: formatProgress},
+                                    {title: 'Final rating', field: 'rating', width: '15%'}
                                 ]]
-                            
+
                         });
-                        $(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").each(function( index ) {
-                          //  console.log( index + ": " + $( this ).text() );
+                        $(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").each(function (index) {
+                            //  console.log( index + ": " + $( this ).text() );
                             var img;
-                            if($(this).parent().parent().parent().attr("node-id")[0] === "L") img ="subject.svg";
-                            else if ($(this).parent().parent().parent().attr("node-id")[0] === "C") img ="target.svg";
-                            else img ="step.svg";                 
-                            jQuery("<img/> ").prependTo($(this)).attr({src: '../recursos/js/treeGrid/'+img+'', width:'16px', height:'18px', style: 'padding-right:5px;' });
+                            if ($(this).parent().parent().parent().attr("node-id")[0] === "L")
+                                img = "subject.svg";
+                            else if ($(this).parent().parent().parent().attr("node-id")[0] === "C")
+                                img = "target.svg";
+                            else
+                                img = "step.svg";
+                            jQuery("<img/> ").prependTo($(this)).attr({src: '../recursos/js/treeGrid/' + img + '', width: '16px', height: '18px', style: 'padding-right:5px;'});
                         });
-                        
+
                         //jQuery("<img/>").prependTo(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").attr({src: '../recursos/js/treeGrid/target.svg', width:'16px', height:'18px'});
-                        
+
                         $("#tg").treegrid('collapseAll');
-                        
+
                         $('#loadingmessage').hide();
 
 
@@ -332,7 +364,7 @@
                         var json = JSON.parse(ajax.responseText);
                         var info = JSON.parse(json.info);
                         var foto = JSON.parse(json.prueba);
-                        
+
                         var subjects = JSON.parse(json.sub);
                         $('#gradelevel').text(info.level_id);
                         $('#nextlevel').text(info.nextlevel);
@@ -345,7 +377,7 @@
                             $('#foto').removeAttr('src');
                             $('#foto').attr('src', foto);
                         }
-                       
+
                         $('.cell').off('click');
                         treeload(info.level_id, info.id_students);
                         levelarbol = info.level_id;
@@ -359,7 +391,7 @@
                             if (subjects[i].name !== undefined)
                                 $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                         });
-                        $('#divCommentSubject').addClass('hidden');
+                        $('#divCommentSubject').removeClass('hidden');
                         $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                         $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
                     }
@@ -435,29 +467,29 @@
                     $('#divCommentSubject').addClass('hidden');
                     $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                     $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
-                    
+
                 }
             }
 
             function saveCommentSubjects() {
-                
-                 if (window.XMLHttpRequest) //mozilla
+
+                if (window.XMLHttpRequest) //mozilla
                 {
                     ajax = new XMLHttpRequest(); //No Internet explorer
                 } else
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-                
+
                 var studentId = $('#studentid').val();
                 var idSubject = $('#subjects option:selected').val();
                 var comment = $('#commentSubject').val();
-               
+
                 var myObj = {};
                 myObj["idSubject"] = idSubject;
                 myObj["idStudent"] = studentId;
                 myObj["comment"] = comment;
-                
+
                 var json = JSON.stringify(myObj);
                 $.ajax({
                     type: 'POST',
@@ -466,7 +498,7 @@
                     datatype: "json",
                     contentType: "application/json",
                     success: function (data) {
-                        alert("se guardo correctamente");
+                        $('#confirmsaveSubject').modal('show');
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -586,15 +618,15 @@
                     myObj["studentid"] = studentId;
                     var json = JSON.stringify(myObj);
                     var data = new FormData();
-                    data.append("obj",json);
-                    data.append("fileToUpload",$('#fileToUpload')[0].files[0]);
+                    data.append("obj", json);
+                    data.append("fileToUpload", $('#fileToUpload')[0].files[0]);
                     var path = document.location.href;
-                    var i = path.length-1; 
-                    for(var j = 0;j<2;j++){
-                        if(j===1)
-                            path = path.substring(0,i);
-                        while(path[i]!=='/'){
-                            path = path.substring(0,i);
+                    var i = path.length - 1;
+                    for (var j = 0; j < 2; j++) {
+                        if (j === 1)
+                            path = path.substring(0, i);
+                        while (path[i] !== '/') {
+                            path = path.substring(0, i);
                             i--;
                         }
                     }
@@ -602,11 +634,11 @@
                     var request = new XMLHttpRequest();
                     request.open("POST", path);
                     request.send(data);
-                    
+
                     $('#confirmsave').modal('show');
                     $("#observationcomments").val(" ");
                     $("#observationfecha").val("");
-                    $('#observationtype option').filter(function() { 
+                    $('#observationtype option').filter(function () {
                         return ($(this).text() === 'Select type'); //To select Blue
                     }).prop('selected', true);
                 }
@@ -654,7 +686,7 @@
             {
                 resize: none;
             }
-            
+
             .studentarea
             {            
                 height: 500px;
@@ -755,16 +787,16 @@
             {
                 width: 100%;
             }
-             .tree-title {
-               font-size: 12px;
-               display: inline-block;
-               text-decoration: none;
-               vertical-align: top;
-               white-space: normal;
-               padding-right: 45px;
-               height: auto;
-               line-height: 18px;
-           }
+            .tree-title {
+                font-size: 12px;
+                display: inline-block;
+                text-decoration: none;
+                vertical-align: top;
+                white-space: normal;
+                padding-right: 45px;
+                height: auto;
+                line-height: 18px;
+            }
         </style>
     </head>
 
@@ -825,7 +857,7 @@
                             <div role="tabpanel" class="col-xs-12 tab-pane in active" id="demographic">
                                 <div class="col-xs-6 text-center containerPhoto">
                                     <div class="cell">
-           
+
                                         <img id="foto" src="../recursos/img/NotPhoto.png" class="foto">
                                     </div>                                        
                                 </div>
@@ -853,7 +885,7 @@
                                 <div class="col-xs-12">
                                     <div class="col-xs-10" >
                                         <Label>Subject</Label>
-                                          <button type='button' class='btn-link editResource' onclick='showCommentSubject()' data-toggle='tooltip' data-placement='bottom' value='edit' id='saveCommentSubject'>
+                                        <button type='button' class='btn-link editResource' onclick='showCommentSubject()' data-toggle='tooltip' data-placement='bottom' value='edit' id='saveCommentSubject'>
                                             <i class='glyphicon glyphicon-chevron-down'></i>
                                         </button>
                                         <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
@@ -866,19 +898,19 @@
                                 </div>
                                 <div class="col-xs-12 hidden" id="divCommentSubject">
                                     <div class="col-xs-10 center-block form-group">
-                                    
-                                    <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject"maxlength="1000"></textarea>
+
+                                        <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject"maxlength="1000"></textarea>
                                     </div>             
                                     <div class=" col-xs-2 ">
-                                        <input type="button" name="saveCommentSubject" value="save" class="btn btn-info" id="saveCommentSubject" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
-                                   
+                                        <input type="button" name="saveCommentSubject" value="save" class="btn btn-info" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
+
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-xs-12 hidden" id="divNotObjective">
                                     The selected subject does not have objectives
                                 </div>
-                                
+
                                 <div class="col-xs-12 hidden" id="divTableObjective">
                                     <table id="tableobjective" class="display">
                                         <thead>
@@ -893,6 +925,21 @@
                                     </table>
 
                                 </div>
+                                <div id="confirmsaveSubject" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header modal-header-delete">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">comment saved</h4>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div> 
+
                             </div>
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="observations">
                                 <div class="col-xs-12 text-center">
@@ -922,7 +969,7 @@
                                     <label class="control-label">Observation</label>
                                     <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"></textarea>
                                 </div>
-                                
+
                                 <div class="col-xs-12" >
                                     <input type="file" id="fileToUpload" accept="image/*">
                                 </div>
@@ -989,7 +1036,7 @@
                 </div>
             </div>
         </div>
-                    
+
 
         <div id="modalCommentGeneral">
             <!-- Button trigger modal -->
