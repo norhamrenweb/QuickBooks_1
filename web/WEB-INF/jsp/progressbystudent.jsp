@@ -23,7 +23,15 @@
 
             var pestaña = "";
 
+            var userType = ${user.type};
             $(document).ready(function () {
+                $("#saveSupervisorComment").hide();
+                $("#TXTsupervisorComment").prop("disabled",true);
+                //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
+                if (userType === 2) {
+                    $("#saveSupervisorComment").show();
+                    $("#TXTsupervisorComment").prop("disabled",false);
+                }
                 $("#tg").treegrid();
                 $("#saveCommentSubjectButton").prop('disabled', true);
 
@@ -734,9 +742,9 @@
         </script>
 
         <style>
-            
-           
-            
+
+
+
             textarea 
             {
                 resize: none;
@@ -852,7 +860,7 @@
                 height: auto;
                 line-height: 18px;
             }
-             #myTab > ul > li >a{
+            #myTab > ul > li >a{
                 padding: 10px 9px;
             }
         </style>
@@ -1067,15 +1075,15 @@
                                     <h2>Enter a supervisor comment</h2>
                                 </div>
                                 <div class="col-xs-12 center-block form-group">
-                                    
-                                    <textarea class="form-control" name="TXTdescription" id="supervisorComment" placeholder="add comment" maxlength="1000"></textarea>
+
+                                    <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="add comment" maxlength="1000"></textarea>
                                 </div>
 
                                 <div class="col-xs-12 text-center">
                                     <button type="button" class="btn btn-info" id="saveSupervisorComment"  value="Save" onclick="saveSupervisorComment()">Save Comment</button>
                                 </div>
 
-                              
+
                                 <div id="confirmsaveSupervisorComment" class="modal fade" role="dialog">
                                     <div class="modal-dialog">
 
