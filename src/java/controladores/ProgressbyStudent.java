@@ -508,7 +508,7 @@ public class ProgressbyStudent {
             String consulta = "select id from progress_report where objective_id = " + objectiveid + " and generalcomment = TRUE and student_id ='" + studentid + "'";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             if (!rs.next()) {
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,createdby) values (now(),'" + comment + "','" + studentid + "','" + objectiveid + "',true,'" + user.getId() + "')");
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + studentid + "','" + objectiveid + "',true,'" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")");
                 message = "Comment successfully updated";
 
             } else {
@@ -718,8 +718,7 @@ public class ProgressbyStudent {
         try {
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
-            String test = "insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('" + user.getId() + "',now(),'" + obs.getObservation() + "','" + obs.getType() + "','" + obs.getStudentid() + "','" + obs.getDate() + "')";
-            DBConect.eduweb.executeUpdate("insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('" + user.getId() + "',now(),'" + obs.getObservation() + "','" + obs.getType() + "','" + obs.getStudentid() + "','" + obs.getDate() + "')");
+            DBConect.eduweb.executeUpdate("insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate,term_id,yearterm_id)values('" + user.getId() + "',now(),'" + obs.getObservation() + "','" + obs.getType() + "','" + obs.getStudentid() + "','" + obs.getDate()+"',"  + sesion.getAttribute("termId")+"," + sesion.getAttribute("yearId")  + ")");
 
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();

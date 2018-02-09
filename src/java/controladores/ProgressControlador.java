@@ -267,9 +267,9 @@ public class ProgressControlador {
                 ResultSet rs = DBConect.eduweb.executeQuery("select * from progress_report where lesson_id =" + lessonid[0] + " AND student_id = '" + studentids[i] + "'");
                 if (!rs.next()) {
                     if (ratingid != null) {
-                        DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment,step_id,createdby) values (now(),'" + comments[i] + "','" + ratingid + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "')");
+                        DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comments[i] + "','" + ratingid + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")");
                     } else {
-                        DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,lesson_id,student_id,objective_id,generalcomment,step_id,createdby) values (now(),'" + comments[i] + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "')");
+                        DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,lesson_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comments[i] + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")");
                     }
                 } else if (ratingid != null) {
                     String test = "update progress_report set comment_date = now(),comment = '" + comments[i] + "',rating_id ='" + ratingid + "' ,lesson_id = '" + lessonid[0] + "',student_id = '" + studentids[i] + "',objective_id ='" + objectiveid[0] + "',generalcomment = false ,step_id = '" + step + "' where lesson_id = " + lessonid[0] + " AND student_id = '" + studentids[i] + "'";

@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -54,7 +55,7 @@ public class Createlesson {
         FTPClient ftpClient = new FTPClient();
 
         try {
-
+            HttpSession sesion = hsr.getSession();
             String test = null;
             String server = "192.168.1.36";
             int port = 21;
@@ -64,9 +65,9 @@ public class Createlesson {
             comment = comment.replaceAll("\"", "\"\"");
             comment = comment.replaceAll("'", "''");
             if (!newlessons.getMethod().getName().equals("")) {
-                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,method_id,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment + "','" + newlessons.getMethod().getName() + "',false,0,false)";
+                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,method_id,archive,presentedby,idea ,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment + "','" + newlessons.getMethod().getName() + "',false,0,false,"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")";
             } else {
-                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment + "',false,0,false)";
+                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,archive,presentedby,idea ,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment + "',false,0,false,"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")";
             }
             //(String userid, String studentid, String type,String note)   session.setAttribute("user", user);
 
@@ -127,15 +128,16 @@ public class Createlesson {
         DriverManagerDataSource dataSource;
         FTPClient ftpClient = new FTPClient();
         try {
+            HttpSession sesion = hsr.getSession();
             String comment = newlessons.getComments();
             comment = comment.replaceAll("\"", "\"\"");
             comment = comment.replaceAll("'", "''");
             String test = null;
             //to avoid null pointer exception when there is no method
             if (newlessons.getMethod().getName() != "") {
-                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,method_id,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + comment + "','" + newlessons.getMethod().getName() + "',false,0,true)";
+                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,method_id,archive,presentedby,idea,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + comment + "','" + newlessons.getMethod().getName() + "',false,0,true,"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")";
             } else {
-                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,archive,presentedby,idea) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + comment + "',false,0,true)";
+                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,archive,presentedby,idea,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + comment + "',false,0,true,"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")";
             }
             // ActivityLog.log(); //crear idea
             DBConect.eduweb.executeUpdate(test, Statement.RETURN_GENERATED_KEYS);

@@ -96,7 +96,7 @@ public class ImageObservation extends HttpServlet {
             HttpSession sesion = request.getSession();
             User user = (User) sesion.getAttribute("user");
             String consulta;
-            consulta = "insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate)values('" + user.getId() + "',now(),'" + json.getString("observation") + "','" + json.getString("type")  + "','" + json.getString("studentid") + "','" + json.getString("date") + "')";
+            consulta = "insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate,term_id,yearterm_id)values('" + user.getId() + "',now(),'" + json.getString("observation") + "','" + json.getString("type")  + "','" + json.getString("studentid") + "','" + json.getString("date") + "','" + sesion.getAttribute("termId") +"','" + sesion.getAttribute("yearId") +"')";
             DBConect.eduweb.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = DBConect.eduweb.getGeneratedKeys();
             while(rs.next())
