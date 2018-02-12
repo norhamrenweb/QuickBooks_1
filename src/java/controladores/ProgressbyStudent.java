@@ -353,7 +353,7 @@ public class ProgressbyStudent {
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             InputStream inStream = ftpClient.retrieveFileStream(filepath);
-            
+
             // gets MIME type of the file
             String mimeType = "";
             //String filepath = url.getPath();
@@ -414,7 +414,9 @@ public class ProgressbyStudent {
                 student.setNextlevel(rs.getString("NextGradeLevel"));
 
             }
-        if(student.getFoto() != null) prueba = getImage(student.getFoto(), hsr);
+            if (student.getFoto() != null) {
+                prueba = getImage(student.getFoto(), hsr);
+            }
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
             StringWriter errors = new StringWriter();
@@ -430,8 +432,22 @@ public class ProgressbyStudent {
         obj.put("info", info);
         obj.put("sub", sub);
         obj.put("prueba", prueba2);
+        obj.put("commentHead", this.getCommentHead(student.getId_students()));
         obj.put("prog", this.loadtree(subjects, student.getId_students(), hsr.getServletContext()));
         return obj.toString();
+    }
+
+    private String getCommentHead(int idStudent) {
+        String consulta = " SELECT comment from report_comments where studentid = " + idStudent + " and supercomment = true", res = "";
+        try {
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            while (rs.next()) {
+                res = rs.getString("comment");
+            }
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        return res;
     }
 
     //loads list of objectives final rating & general comments based on the selected subject
@@ -485,7 +501,7 @@ public class ProgressbyStudent {
         String studentId = id.substring(id.indexOf("$") + 1, id.length());
         String comment = "";
         try {
-            String consulta = "select comment from subjects_comments where subject_id = " + subjectId + " and term_id = " + sesion.getAttribute("termId") + " and yearterm_id =" + sesion.getAttribute("yearId") + " and studentid =" + studentId + " order by date_created DESC";
+            String consulta = "select comment from report_comments where subject_id = " + subjectId + " and term_id = " + sesion.getAttribute("termId") + " and yearterm_id =" + sesion.getAttribute("yearId") + " and studentid =" + studentId + " order by date_created DESC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             if (rs.next()) {
                 comment = rs.getString("comment");
@@ -745,7 +761,19 @@ public class ProgressbyStudent {
         try {
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
-            String test = "insert into subjects_comments(subject_id,date_created,createdby_id,comment,studentid,term_id,yearterm_id)values('" + cSub.getIdSubject() + "',now(),'" + user.getId() + "','" + cSub.getComment() + "','" + cSub.getIdStudent() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")";
+            String superComment = "false";
+            String comment = cSub.getComment();
+            comment = comment.replace("'", "\'\'");
+            comment = comment.replace("\"", "\"\"");
+
+            if (cSub.getIdSubject().equals("-1")) {
+                superComment = "true";
+            }
+            String test = "update report_comments set subject_id=" + cSub.getIdSubject() + " , date_created = 'now()' ,createdby_id =" + user.getId() + " ,comment= '"+comment+"',studentid ="+cSub.getIdStudent()+",term_id ="+sesion.getAttribute("termId")+",yearterm_id ="+sesion.getAttribute("yearId")+",supercomment="+superComment +" where yearterm_id ="+sesion.getAttribute("yearId") + " and term_id ="+sesion.getAttribute("termId")+" and subject_id=" + cSub.getIdSubject()+" and supercomment = "+superComment+" and studentid =" + cSub.getIdStudent();
+           
+            if (!DBConect.eduweb.executeQuery("select * from report_comments where yearterm_id ="+sesion.getAttribute("yearId") +" and term_id ="+sesion.getAttribute("termId")+" and createdby_id =" + user.getId()+" and subject_id=" + cSub.getIdSubject()+" and supercomment = "+superComment+" and studentid =" + cSub.getIdStudent()).next()) {
+                test = "insert into report_comments(subject_id,date_created,createdby_id,comment,studentid,term_id,yearterm_id,supercomment)values('" + cSub.getIdSubject() + "',now(),'" + user.getId() + "','" + comment + "','" + cSub.getIdStudent() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + "," + superComment + ")";
+            }
             DBConect.eduweb.executeUpdate(test);
 
         } catch (SQLException ex) {
