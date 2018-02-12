@@ -8,6 +8,10 @@ and open the template in the editor.
     Author     : Jesús Aragón
 */
 
+.foto{
+    width:75% !important;
+}
+
 @media (max-width: 1920px) {
     
 /*ESCALA IMAGEN CARGANDO*/ 
