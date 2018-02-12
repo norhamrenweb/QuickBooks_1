@@ -26,11 +26,11 @@
             var userType = ${user.type};
             $(document).ready(function () {
                 $("#saveSupervisorComment").hide();
-                $("#TXTsupervisorComment").prop("disabled",true);
+                $("#TXTsupervisorComment").prop("disabled", true);
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
                 if (userType === 2) {
                     $("#saveSupervisorComment").show();
-                    $("#TXTsupervisorComment").prop("disabled",false);
+                    $("#TXTsupervisorComment").prop("disabled", false);
                 }
                 $("#tg").treegrid();
                 $("#saveCommentSubjectButton").prop('disabled', true);
@@ -96,11 +96,9 @@
                     }
                 });
                 $("#subjects").change(function () {
-
-
-
                     if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
                         $("#saveCommentSubjectButton").prop('disabled', true);
+                        $("#commentSubject").val("");
                     } else {
                         $("#saveCommentSubjectButton").prop('disabled', false);
 
@@ -222,9 +220,6 @@
                 }
             }
 
-            function downloadPhoto() {
-
-            }
             function funcionCallBackSaveGeneralComent()
             {
                 if (ajax.readyState === 4) {
@@ -422,13 +417,15 @@
                         var json = JSON.parse(ajax.responseText);
                         var info = JSON.parse(json.info);
                         var foto = JSON.parse(json.prueba);
-                        var prog = JSON.parse(json.prog);
+                        var prog = JSON.parse(json.prog);             
                         var subjects = JSON.parse(json.sub);
                         $('#gradelevel').text(info.level_id);
                         $('#nextlevel').text(info.nextlevel);
                         $('#student').text(info.nombre_students);
                         $('#studentid').val(info.id_students);
                         $('#BOD').text(info.fecha_nacimiento);
+                        $("#TXTsupervisorComment").val(json.commentHead);
+                        $("#commentSubject").val("");
                         if (typeof info.foto === 'undefined') {
                             $('#foto').attr('src', '../recursos/img/NotPhoto.png');
                         } else {
@@ -531,6 +528,43 @@
                 }
             }
 
+            function saveSupervisorCommentFunction() {
+
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+                var studentId = $('#studentid').val();
+                var idSubject = "-1";
+                var comment = $("#TXTsupervisorComment").val()
+
+                var myObj = {};
+                myObj["idSubject"] = idSubject;
+                myObj["idStudent"] = studentId;
+                myObj["comment"] = comment;
+
+                var json = JSON.stringify(myObj);
+                $.ajax({
+                    type: 'POST',
+                    url: "saveSubjectComment.htm",
+                    data: json,
+                    datatype: "json",
+                    contentType: "application/json",
+                    success: function (data) {
+                        $('#confirmsaveSupervisorComment').modal('show');
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
+                    }
+
+                });
+            }
             function saveCommentSubjects() {
 
                 if (window.XMLHttpRequest) //mozilla
@@ -916,7 +950,7 @@
                                 <li><a id="Objectivestracking" data-toggle="tab" href="#progress" role="tab">Objectives tracking</a></li>
                                 <li><a id="AcademicProgress" data-toggle="tab" href="#gradebook" role="tab">Academic Progress</a></li>
                                 <li><a id="ClassroomObservation" data-toggle="tab" href="#observations" role="tab">Classroom Observation</a></li>
-                                <li><a id="ClassroomObservation" data-toggle="tab" href="#supervisorComment" role="tab">Supervisor Comment</a></li>
+                                <li><a id="SupervisorComment" data-toggle="tab" href="#supervisorComment" role="tab">Supervisor Comment</a></li>
                             </ul>
                         </div>
                         <div class="tab-content">
@@ -1080,7 +1114,7 @@
                                 </div>
 
                                 <div class="col-xs-12 text-center">
-                                    <button type="button" class="btn btn-info" id="saveSupervisorComment"  value="Save" onclick="saveSupervisorComment()">Save Comment</button>
+                                    <button type="button" class="btn btn-info" id="saveSupervisorComment"  value="Save" onclick="saveSupervisorCommentFunction()">Save Comment</button>
                                 </div>
 
 
