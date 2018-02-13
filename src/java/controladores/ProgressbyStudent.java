@@ -352,35 +352,37 @@ public class ProgressbyStudent {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            //LIMITAR NO EXISTE
+
             InputStream inStream = ftpClient.retrieveFileStream(filepath);
+            if (inStream != null) {
+                // gets MIME type of the file
+                String mimeType = "";
+                //String filepath = url.getPath();
+                int i = filepath.length() - 1;
+                while (filepath.charAt(i) != '.') {
+                    mimeType = filepath.charAt(i) + mimeType;
+                    i--;
+                }
+                mimeType = '.' + mimeType;
 
-            // gets MIME type of the file
-            String mimeType = "";
-            //String filepath = url.getPath();
-            int i = filepath.length() - 1;
-            while (filepath.charAt(i) != '.') {
-                mimeType = filepath.charAt(i) + mimeType;
-                i--;
+                //
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                int nRead;
+                byte[] data = new byte[1024];
+                while ((nRead = inStream.read(data, 0, data.length)) != -1) {
+                    buffer.write(data, 0, nRead);
+                }
+
+                buffer.flush();
+                byte[] buf = buffer.toByteArray();
+                //
+                // byte[] buf = new byte[inStream.available()];
+                inStream.read(buf);
+                String imagen = Base64.encode(buf);
+                return "data:image/" + mimeType + ";base64," + imagen;
+                //**********
             }
-            mimeType = '.' + mimeType;
-
-            //
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            int nRead;
-            byte[] data = new byte[1024];
-            while ((nRead = inStream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-
-            buffer.flush();
-            byte[] buf = buffer.toByteArray();
-            //
-            // byte[] buf = new byte[inStream.available()];
-            inStream.read(buf);
-            String imagen = Base64.encode(buf);
-            return "data:image/" + mimeType + ";base64," + imagen;
-            //**********
-
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -769,9 +771,9 @@ public class ProgressbyStudent {
             if (cSub.getIdSubject().equals("-1")) {
                 superComment = "true";
             }
-            String test = "update report_comments set subject_id=" + cSub.getIdSubject() + " , date_created = 'now()' ,createdby_id =" + user.getId() + " ,comment= '"+comment+"',studentid ="+cSub.getIdStudent()+",term_id ="+sesion.getAttribute("termId")+",yearterm_id ="+sesion.getAttribute("yearId")+",supercomment="+superComment +" where yearterm_id ="+sesion.getAttribute("yearId") + " and term_id ="+sesion.getAttribute("termId")+" and subject_id=" + cSub.getIdSubject()+" and supercomment = "+superComment+" and studentid =" + cSub.getIdStudent();
-           
-            if (!DBConect.eduweb.executeQuery("select * from report_comments where yearterm_id ="+sesion.getAttribute("yearId") +" and term_id ="+sesion.getAttribute("termId")+" and createdby_id =" + user.getId()+" and subject_id=" + cSub.getIdSubject()+" and supercomment = "+superComment+" and studentid =" + cSub.getIdStudent()).next()) {
+            String test = "update report_comments set subject_id=" + cSub.getIdSubject() + " , date_created = 'now()' ,createdby_id =" + user.getId() + " ,comment= '" + comment + "',studentid =" + cSub.getIdStudent() + ",term_id =" + sesion.getAttribute("termId") + ",yearterm_id =" + sesion.getAttribute("yearId") + ",supercomment=" + superComment + " where yearterm_id =" + sesion.getAttribute("yearId") + " and term_id =" + sesion.getAttribute("termId") + " and subject_id=" + cSub.getIdSubject() + " and supercomment = " + superComment + " and studentid =" + cSub.getIdStudent();
+
+            if (!DBConect.eduweb.executeQuery("select * from report_comments where yearterm_id =" + sesion.getAttribute("yearId") + " and term_id =" + sesion.getAttribute("termId") + " and createdby_id =" + user.getId() + " and subject_id=" + cSub.getIdSubject() + " and supercomment = " + superComment + " and studentid =" + cSub.getIdStudent()).next()) {
                 test = "insert into report_comments(subject_id,date_created,createdby_id,comment,studentid,term_id,yearterm_id,supercomment)values('" + cSub.getIdSubject() + "',now(),'" + user.getId() + "','" + comment + "','" + cSub.getIdStudent() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + "," + superComment + ")";
             }
             DBConect.eduweb.executeUpdate(test);

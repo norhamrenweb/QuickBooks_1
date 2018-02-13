@@ -10,6 +10,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<script type='text/javascript' src='/QuickBooks_1/JavaScriptSpellCheck/include.js'></script>
 <!DOCTYPE html>
 <html>
     <%@ include file="infouser.jsp" %>
@@ -25,11 +26,17 @@
                 var textillo = "Changes you made may not be saved.";
                 return textillo;
             };
-            
+
             $(document).ready(function () {
 
+                $('.studentRating').change(function () {
+                    if ($("option:selected", this).val() === "Mastered") {
+                        $(this).parents('.rows').find('.iconsAragon').addClass('icon-Pie_PieIzqSelect');
+                        $(this).parents('.rows').find('.iconsAragon').removeClass('icon-Pie_PieIzqUnSelect');
+                    }
+                    
+                });
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
-
                 var lessoncreate = '<%= request.getParameter("message")%>';
                 var itemsRating = []; // needs to be outside
                 var itemsAttendance = []; // needs to be outside
@@ -86,8 +93,9 @@
                         });
 
             });
-
+            
             $(function () {
+
                 $('select,hi,idSelectAttendance').change(function () {
                     var itemsRating = []; // needs to be outside
                     var itemsAttendance = []; // needs to be outside
@@ -188,12 +196,10 @@
                         $("#lessons").attr("disabled", true);
                         $('#divCrearLessons').removeClass('hidden');
                         $('#divLoadLessons').addClass('hidden');
-//    $("#NameLessons").attr("disabled", true);
                     } else {
                         $("#lessons").attr("disabled", false);
                         $('#divLoadLessons').removeClass('hidden');
                         $('#divCrearLessons').addClass('hidden');
-//    $("#NameLessons").attr("disabled", false);
                     }
                 });
 
@@ -224,15 +230,12 @@
                 font-size: 25px;
                 padding-left: 10px;
             }
-            /*            .progress-bar
-                        {
-                            background-image: linear-gradient(to bottom,#ddd 0,#ddd 100%);
-                        }*/
             .TXTcomment
             {
                 width: 100%;
 
             }
+
         </style>
     </head>
     <body>
@@ -240,8 +243,6 @@
 
         <div class="container">
             <h1 class="text-center">Presentation progress</h1>
-            <p></p>
-
             <form:form id="formStudents" method ="post" action="saveRecords.htm" >
 
                 <input type="hidden" class="form-control" id="namePresentation" name="namePresentation" value=""/>
@@ -284,7 +285,6 @@
                 <fieldset style="margin-top: 10px;">
                     <legend></legend>
                     <div class="col-xs-12">
-
                         <table id="table_progress" class="display" >
                             <thead>
                                 <tr>
@@ -305,121 +305,124 @@
                                 <c:forEach var="record" items="${attendancelist}" >
 
                                     <tr class="rows">
-                                        <input type="hidden" class="form-control" name="TXTstudentname" value="${record.studentname}"/>
-                                        <td hidden="true"><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
-                                        <td>${record.studentname}</td>
-                                        <td>
-                                            <select name="TXTrating" id="hi" class="studentRating rating">
-                                                <c:if test="${empty record.rating}">
-                                                    <option selected></option>
-                                                </c:if>
-                                                <c:if test="${not empty record.rating}">
-                                                    <option selected>${record.rating}</option>
-                                                </c:if>
-                                                <option></option>
-                                                <option>N/A</option>
-                                                <option>Presented</option>
-                                                <option>Attempted</option>
-                                                <option>Mastered</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <textarea name="TXTcomment" class="TXTcomment" rows="2">${record.comment}</textarea>
-                                        </td>
-                                        <td>
-                                            <select id="idSelectAttendance" name="TXTattendance" class="attendance">
-                                                <%--<c:if test="${record.attendancecode eq '0'}">
-                                                    <option value="0" selected> </option>
-                                                    <option value="P">P</option>
-                                                    <option value="A">A</option>
-                                                    <option value="T">T</option>
-                                                </c:if>
-                                                <c:if test="${record.attendancecode}">
-                                                    <option value="${record.attendancecode}" selected>${record.attendancecode}</option>
-                                                    <option value="0"></option>
-                                                    <option value="P">P</option>
-                                                    <option value="A">A</option>
-                                                    <option value="T">T</option>
-                                                </c:if>--%>
-                                                <c:choose>
-                                                    <c:when test="${record.attendancecode=='0'}">
-                                                        <option value="0" selected> </option>
-                                                        <option value="P">P</option>
-                                                        <option value="A">A</option>
-                                                        <option value="T">T</option>
-                                                    </c:when>    
-                                                    <c:otherwise>
-                                                        <option value="${record.attendancecode}" selected>${record.attendancecode}</option>
-                                                        <option value="0"></option>
-                                                        <option value="P">P</option>
-                                                        <option value="A">A</option>
-                                                        <option value="T">T</option>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <script>
-                                                $(document).ready(function () {
-                                                    $('#${record.studentid}').children('.step1').on('click', function () {
-                                                        if ($(this).hasClass("progress-bar-success")) {
-                                                            $(this).removeClass('progress-bar-success');
-                                                        } else {
-                                                            $(this).addClass('progress-bar-success');
-                                                        }
-                                                    });
-                                                    $('#${record.studentid}').children('.step2').on('click', function () {
-                                                        if ($(this).hasClass("progress-bar-info")) {
-                                                            $(this).removeClass('progress-bar-info');
-                                                        } else {
-                                                            $(this).addClass('progress-bar-info');
-                                                        }
-                                                    });
-                                                    $('#${record.studentid}').children('.step3').on('click', function () {
-                                                        if ($(this).hasClass("progress-bar-danger")) {
-                                                            $(this).removeClass('progress-bar-danger');
-                                                        } else {
-                                                            $(this).addClass('progress-bar-danger');
-                                                        }
-                                                    });
-                                                    $('#${record.studentid}').children('.step4').on('click', function () {
-                                                        if ($(this).hasClass("progress-bar-warning")) {
-                                                            $(this).removeClass('progress-bar-warning');
-                                                        } else {
-                                                            $(this).addClass('progress-bar-warning');
+                                <input type="hidden" class="form-control" name="TXTstudentname" value="${record.studentname}"/>
+                                <td hidden="true"><input type="hidden" class="form-control" name="TXTstudentid" value="${record.studentid}"/>${record.studentid}</td>
+                                <td>${record.studentname}</td>
+                                <td>
+                                    <select name="TXTrating" id="hi" class="studentRating rating">
+                                        <c:if test="${empty record.rating}">
+                                            <option selected></option>
+                                        </c:if>
+                                        <c:if test="${not empty record.rating}">
+                                            <option selected>${record.rating}</option>
+                                        </c:if>
+                                        <option></option>
+                                        <option>N/A</option>
+                                        <option>Presented</option>
+                                        <option>Attempted</option>
+                                        <option>Mastered</option>
+                                    </select>
+                                </td>
 
-                                                        }
-                                                    });
+                                <td>
+                                    <textarea id="textInput${record.studentid}" name="TXTcomment" class="TXTcomment" rows="2" spellcheck="true" >${record.comment}</textarea>
+                       
+                                </td>
+                                <td>
+                                    <select id="idSelectAttendance" name="TXTattendance" class="attendance">
+                                        <%--<c:if test="${record.attendancecode eq '0'}">
+                                            <option value="0" selected> </option>
+                                            <option value="P">P</option>
+                                            <option value="A">A</option>
+                                            <option value="T">T</option>
+                                        </c:if>
+                                        <c:if test="${record.attendancecode}">
+                                            <option value="${record.attendancecode}" selected>${record.attendancecode}</option>
+                                            <option value="0"></option>
+                                            <option value="P">P</option>
+                                            <option value="A">A</option>
+                                            <option value="T">T</option>
+                                        </c:if>--%>
+                                        <c:choose>
+                                            <c:when test="${record.attendancecode=='0'}">
+                                                <option value="0" selected> </option>
+                                                <option value="P">P</option>
+                                                <option value="A">A</option>
+                                                <option value="T">T</option>
+                                            </c:when>    
+                                            <c:otherwise>
+                                                <option value="${record.attendancecode}" selected>${record.attendancecode}</option>
+                                                <option value="0"></option>
+                                                <option value="P">P</option>
+                                                <option value="A">A</option>
+                                                <option value="T">T</option>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </select>
+                                </td>
+                                <td>
+                                    <script>
+                                        $(document).ready(function () {
+                                            $('#${record.studentid}').children('.step1').on('click', function () {
+                                                if ($(this).hasClass("progress-bar-success")) {
+                                                    $(this).removeClass('progress-bar-success');
+                                                } else {
+                                                    $(this).addClass('progress-bar-success');
+                                                }
+                                            });
+                                            $('#${record.studentid}').children('.step2').on('click', function () {
+                                                if ($(this).hasClass("progress-bar-info")) {
+                                                    $(this).removeClass('progress-bar-info');
+                                                } else {
+                                                    $(this).addClass('progress-bar-info');
+                                                }
+                                            });
+                                            $('#${record.studentid}').children('.step3').on('click', function () {
+                                                if ($(this).hasClass("progress-bar-danger")) {
+                                                    $(this).removeClass('progress-bar-danger');
+                                                } else {
+                                                    $(this).addClass('progress-bar-danger');
+                                                }
+                                            });
+                                            $('#${record.studentid}').children('.step4').on('click', function () {
+                                                if ($(this).hasClass("progress-bar-warning")) {
+                                                    $(this).removeClass('progress-bar-warning');
+                                                } else {
+                                                    $(this).addClass('progress-bar-warning');
 
-                                                });
+                                                }
+                                            });
 
-                                            </script>
-                                            <div id="${record.studentid}">
-                                                <!--                                            <div class="progress-bar step1" role="progressbar" style="width:25%">
-                                                                                              1
-                                                                                            </div>
-                                                                                            <div class="progress-bar step2" role="progressbar" style="width:25%">
-                                                                                              2
-                                                                                            </div>
-                                                                                            <div class="progress-bar step3" role="progressbar" style="width:25%">
-                                                                                              3
-                                                                                            </div>
-                                                                                            <div class="progress-bar step4" role="progressbar" style="width:25%">
-                                                                                              4
-                                                                                            </div>-->
+                                        });
 
-                                                <%--  <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="remove" data-icon-lib="fa" data-active-icon="fa-heart" data-inactive-icon="fa-heart-o" data-clearable-icon="fa-trash-o" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />--%>
-                                                <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
+                                    </script>
+                                    <div id="${record.studentid}">
+                                        <!--                                            <div class="progress-bar step1" role="progressbar" style="width:25%">
+                                                                                      1
+                                                                                    </div>
+                                                                                    <div class="progress-bar step2" role="progressbar" style="width:25%">
+                                                                                      2
+                                                                                    </div>
+                                                                                    <div class="progress-bar step3" role="progressbar" style="width:25%">
+                                                                                      3
+                                                                                    </div>
+                                                                                    <div class="progress-bar step4" role="progressbar" style="width:25%">
+                                                                                      4
+                                                                                    </div>-->
 
-                                            </div> 
-                                        </td>
-                                    </tr>
-                                </c:forEach>
+                                        <%--  <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="remove" data-icon-lib="fa" data-active-icon="fa-heart" data-inactive-icon="fa-heart-o" data-clearable-icon="fa-trash-o" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />--%>
+                                        <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="${fn:length(steps)}" data-min="1" value="${record.steps}" />
+
+                                    </div> 
+                                </td>
+                                </tr>
+                            </c:forEach>
                             </tbody>
                         </table>
 
                     </div>
                 </fieldset>
+
                 <div class="col-xs-4 text-center">   
                     <label class="control-label">
                         Presented by

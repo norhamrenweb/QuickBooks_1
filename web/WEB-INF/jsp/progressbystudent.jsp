@@ -95,6 +95,8 @@
                         $('#savecomment').prop("disabled", true);
                     }
                 });
+                
+                
                 $("#subjects").change(function () {
                     if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
                         $("#saveCommentSubjectButton").prop('disabled', true);
@@ -426,7 +428,7 @@
                         $('#BOD').text(info.fecha_nacimiento);
                         $("#TXTsupervisorComment").val(json.commentHead);
                         $("#commentSubject").val("");
-                        if (typeof info.foto === 'undefined') {
+                        if (typeof info.foto === 'undefined' || info.foto === "") {
                             $('#foto').attr('src', '../recursos/img/NotPhoto.png');
                         } else {
                             $('#foto').removeAttr('src');
