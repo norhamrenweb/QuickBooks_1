@@ -11,6 +11,8 @@
     <%@ include file="infouser.jsp" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.css"/>"/>
+
         <title>JSP Page</title>
         <script>
             var studentid;
@@ -40,7 +42,7 @@
                     var idob = $('#objectives option:selected').val();
                     var comment = $('#commentcontent').val();
                     if(comment.length > 0)
-                        newcomment(idob,comment);
+                        newcomment(idob,comment,$('[name=steps]').val(),$('[name=TXTrating]').val());
                     else{
                         $('#messagediv').empty();
                         $('#messagediv').append('<h1>Comment field is empty!</h1>');
@@ -50,22 +52,22 @@
                     $('#commentModal').modal('hide');
                 });
                 
-                $('#subjects').on('change', function() {
-                    getobjectives( this.value );
-                    $('#newcomment').attr('disabled', true);
-                });
                 
                 $('#newcomment').on('click', function () {
                     $('#commentModal').modal('show');
                 });
                 
                 $('#subjects').on('change', function() {
-                    getobjectives( this.value );
+                    $('#steps_show').empty();
+                    if(this.value !== 'vacio')
+                        getobjectives( this.value );
                     $('#newcomment').attr('disabled', true);
                 });
                 
                 $('#objectives').on('change', function() {
-                    getcomments( this.value );
+                    $('#steps_show').empty();
+                    if(this.value !== 'vacio')
+                        getcomments( this.value );
                 });
                 
                 $('#grades').on('change', function() {
@@ -73,10 +75,11 @@
                 });
             });
             
-            function newcomment(idobjective,comment){
+            function newcomment(idobjective,comment,steps,rating){
                 $.ajax({
                     type: 'POST',
-                    url: 'newcomment.htm?idstudent='+studentid+'&idobjective='+idobjective+'&comment='+comment,
+                    url: 'newcomment.htm?idstudent='+studentid+'&idobjective='+idobjective+'&comment='+comment
+                        +'&steps='+steps+'&rating='+rating,
                     datatype: "json",
                     contentType: "application/json",
                     success: function (data) {
@@ -119,6 +122,10 @@
                     datatype: "json",
                     contentType: "application/json",
                     success: function (data) {
+                        
+                        $('#steps_show').append("");
+                        //¡CLAVE PARA STEPS!
+                        //$('[data-value=13]').removeClass('hidden');
                         var json = JSON.parse(data);
                         var objectives = JSON.parse(json.objectives);
                         $('#objectives').empty();
@@ -143,6 +150,16 @@
                     success: function (data) {
                         $('#newcomment').attr('disabled', false);
                         var json = JSON.parse(data);
+                        var steps = JSON.parse(json.steps);
+                        $.each(steps, function (i, step) {
+                            $('#steps_show').append('<li>'+step.name+'</li>');
+                        });
+                        for(var i = 0;i < 16;i++){
+                            if(i>steps.length)
+                                $('[data-value='+i+']').addClass('hidden');
+                            else
+                                $('[data-value='+i+']').removeClass('hidden');
+                        }
                         console.log(json);
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -207,6 +224,36 @@
             }
             
         </script>
+              <style>
+
+            .textarea 
+            {
+                resize: none;
+                width: 100%;
+            }
+            i.rating
+            {
+                font-size: 20px;
+            }
+            i.rating-input
+            {
+                height:30px;
+            }
+            .iconsAragon
+            {
+                font-size: 25px;
+                padding-left: 10px;
+            }
+            /*            .progress-bar
+                        {
+                            background-image: linear-gradient(to bottom,#ddd 0,#ddd 100%);
+                        }*/
+            .TXTcomment
+            {
+                width: 100%;
+
+            }
+        </style>
     </head>
     <body>
         <div class="col-xs-2" >
@@ -241,7 +288,7 @@
                         <option>Select level</option>
                     </select>
                 </div>
-                <div class="col-xs-6"></div>
+                <div id="steps_show" class="col-xs-6"></div>
                 <div class="col-xs-3">
                     <select id="objectives">
                         <option>Select objectives</option>
@@ -263,11 +310,15 @@
                     </div>
                     <div class="modal-body text-center">
                         <textarea style="width:100%;" rows="7" id="commentcontent" required="required"></textarea>
+                        <select name="TXTrating" id="hi" class="studentRating rating">
+                            <option></option>
+                            <option>N/A</option>
+                            <option>Presented</option>
+                            <option>Attempted</option>
+                            <option>Mastered</option>
+                        </select>
+                        <input type="number" name="steps" id="some_id" class="rating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="15" data-min="1" value="0" />
                     </div>
-<!--                    <div class="rating-input">
-                        <input type="number" name="your_awesome_parameter" id="some_id" class="rating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="2" data-min="1" value="1,2" />
-                        
-                    </div>-->
                     <div class="modal-footer">
                         <button id="commentbutton" class="btn btn-primary btn-lg" value="Comment">Comment</button>
                     </div>
