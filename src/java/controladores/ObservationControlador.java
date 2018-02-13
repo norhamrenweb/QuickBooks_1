@@ -8,9 +8,12 @@ package controladores;
 import Montessori.CommentObjective;
 import Montessori.DBConect;
 import Montessori.Level;
+import Montessori.Objective;
+import Montessori.Step;
 import Montessori.Students;
 import Montessori.Subject;
 import atg.taglib.json.util.JSONArray;
+import atg.taglib.json.util.JSONException;
 import atg.taglib.json.util.JSONObject;
 import com.google.gson.Gson;
 import static controladores.ProgressbyStudent.log;
@@ -91,7 +94,14 @@ public class ObservationControlador {
     public String getsubjects(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String id = hsr.getParameter("idstudent");
         JSONObject json = new JSONObject();
-        String subjects = new Gson().toJson(ProgressbyStudent.getSubjects(Integer.parseInt(id)));
+        List<Subject> subs = ProgressbyStudent.getSubjects(Integer.parseInt(id));
+        Subject sub = new Subject();
+        sub.setName("Select Subject");
+        String[] s = new String[1];
+        s[0] = "vacio";
+        sub.setId(s);
+        subs.add(0, sub);
+        String subjects = new Gson().toJson(subs);
         json.put("subjects", subjects);
         return json.toString();
     }
@@ -108,7 +118,14 @@ public class ObservationControlador {
     public String getobjectives(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String id[] = hsr.getParameterValues("idsubject");
         JSONObject json = new JSONObject();
-        String objectives = new Gson().toJson(ProgressbyStudent.getObjectives(id));
+        ArrayList<Objective> obj = ProgressbyStudent.getObjectives(id);
+        Objective objective = new Objective();
+        String[] s = new String[1];
+        s[0] = "vacio";
+        objective.setId(s);
+        objective.setName("Select Objective");
+        obj.add(0,objective);
+        String objectives = new Gson().toJson(obj);
         json.put("objectives", objectives);
         return json.toString();
     }
@@ -126,6 +143,7 @@ public class ObservationControlador {
         String idstudent = hsr.getParameter("idstudent");
         String idobjective = hsr.getParameter("idobjective");
         ArrayList<CommentObjective> comments = new ArrayList<>();
+        JSONObject json = new JSONObject();
         try {
             String consulta = "select * from progress_report where objective_id="+idobjective+" and student_id="+idstudent;
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
@@ -140,10 +158,24 @@ public class ObservationControlador {
                                 rs.getString("yearterm_id"));
                 comments.add(c);
             }
+            
+            List<Step> steps = new ArrayList<>();
+            ResultSet rs3 = DBConect.eduweb.executeQuery("select name,id,storder from obj_steps where obj_id =" + idobjective);
+            while (rs3.next()) {
+                Step s = new Step();
+                s.setName(rs3.getString("name"));
+                s.setId("" + rs3.getInt("id"));
+                s.setOrder(rs3.getInt("storder"));
+                steps.add(s);
+            }
+            json.put("steps", new Gson().toJson(steps));
+            json.put("comments",new Gson().toJson(comments));
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (JSONException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        return new Gson().toJson(comments);
+        return json.toString();
     }
     
     /**
