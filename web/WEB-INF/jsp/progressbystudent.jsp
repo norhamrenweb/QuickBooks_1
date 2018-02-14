@@ -779,8 +779,7 @@
 
         <style>
 
-
-
+          
             textarea 
             {
                 resize: none;
@@ -888,10 +887,10 @@
             }
             .tree-title {
                 font-size: 12px;
-                display: inline-block;
+                display: inline-flex;
                 text-decoration: none;
                 vertical-align: top;
-                white-space: normal;
+               
                 padding-right: 45px;
                 height: auto;
                 line-height: 18px;
