@@ -151,6 +151,7 @@
                         $('#newcomment').attr('disabled', false);
                         var json = JSON.parse(data);
                         var steps = JSON.parse(json.steps);
+                        var comments = JSON.parse(json.comments);
                         $.each(steps, function (i, step) {
                             $('#steps_show').append('<li>'+step.name+'</li>');
                         });
@@ -160,7 +161,39 @@
                             else
                                 $('[data-value='+i+']').removeClass('hidden');
                         }
-                        console.log(json);
+                        var j = 0;
+                        $('#semana0').empty();
+                        $('#semana1').empty();
+                        $('#semana2').empty();
+                        $.each(comments,function(i,comment){
+                            if(i%4===0){
+                                if(j===3) j=0;
+                                else j++;
+                            }
+                            var date = comment.comment_date+'';
+                            var rating = "";
+                            if(comment.rating_name !== undefined && 
+                                    comment.rating_name !== "")
+                                rating = '<strong>Rating:</strong>'
+                                    +comment.rating_name;
+                            $('#semana'+j).append('<div class="divAdd" id="'+comment.id+'">'
+                            +'<div>\n\
+                                <strong>Date:</strong>'+date.substring(0,10)
+                            +'</div>\n\
+                            <div>\n\
+                                <strong>Observation: </strong>\n\
+                                <div>'+comment.comment+'</div>'
+                            +'</div>\n\
+                            <div>\n\
+                                '+lastStep(steps,comment.step_id)+'\n\
+                            </div>\n\
+                            <div>\n\
+                                '+rating+'\n\
+                            </div>'        
+                            );
+                            if(comment.generalcomment)
+                                $('#'+comment.id).css({"background-color": "#95b8e7"});;
+                        });
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -168,6 +201,24 @@
                         console.log(thrownError);
                     }
                 });
+            }
+            
+            function lastStep(steps,id){
+                var ret = '';
+                if(id===undefined)
+                    return ret;
+                var i = id.length;
+                while(i>=0&&id.charAt(i)!==','){
+                    i--;
+                }
+                if(id.charAt(i)===',')
+                    i++;
+                var idstep = id.substring(i,id.length);
+                $.each(steps, function (i, step) {
+                    if(step.id === idstep)
+                        ret = step.name;
+                });
+                return '<strong>Last Step:</strong>'+ret;
             }
             
             function getstudents(idgrade){
@@ -253,6 +304,26 @@
                 width: 100%;
 
             }
+            
+            .firstWeek
+            {
+                margin-top: 5px;
+                background-color: #ddd;
+                height: 500px;
+            }
+            
+            .divAdd{
+                color: #777777;
+                height: 150px;
+                width: 200px;
+                background-color: rgba(255,255,255,0.5);
+                margin-right: 10px;
+                font-size: 12px;
+                padding: 5px;
+                display: line;
+                float: left;
+                position: relative;
+            }
         </style>
     </head>
     <body>
@@ -296,9 +367,33 @@
                 </div>
                 
             </div>
-            
-                <button type="button" class="btn btn-primary btn-lg" id="newcomment">New comment</button> 
+            <div class="col-xs-12 firstWeek">
+                <div class="col-xs-12" > 
+                    <div class="col-xs-1">
+                        <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('1')"></span>
+                    </div>
+                    <div class="col-xs-10 sinpadding" >
+                    </div>
+                    <div class="col-xs-1">
+                        <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('1')"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12" style="margin-top:20px;" > 
+                    <div class="semana1 tam1" id="semana0">
+                    </div>
+                </div>
+                <div class="col-xs-12 " > 
+                    <div class="semana1 tam1" id="semana1">
+                    </div>
+                </div>
+                <div class="col-xs-12 " > 
+                    <div class="semana1 tam1" id="semana2">
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg" id="newcomment">New comment</button> 
         </div>
+
         <!--<h1>Hello World!</h1>-->
         
         <div id="commentModal" class="modal fade" role="dialog">
