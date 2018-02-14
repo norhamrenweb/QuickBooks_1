@@ -726,7 +726,7 @@
                         </div>               
                         <div class="col-xs-6 center-block form-group">
                             <label class="control-label">Presentation description</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                            <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"></textarea>
+                            <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"  spellcheck="true"></textarea>
                         </div>
                         <div class="col-xs-6 center-block checkbox checkbox-success">
                             <input class="styled" type="checkbox" id="ideaCheck" name="ideaCheck">

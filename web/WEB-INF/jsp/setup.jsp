@@ -120,6 +120,10 @@
                     $('#generateReport').prop("disabled", true);
 
                 });
+                $("#generateReport").focus(function () {
+                    $('#destino option').prop('selected', true);
+                });
+                
             });
 
             function changecolor() {
@@ -213,7 +217,7 @@
                                 <div class="col-xs-4">
                                     <select class="form-control" size="20" multiple="" name="origen[]" id="origen" style="width: 100% !important;">  
                                         <c:forEach var="teacher" items="${teacherlist}" >
-                                            <option value="${teacher.id}">${teacher.name}</option>
+                                            <option value="${teacher.id}$${teacher.name}">${teacher.name}</option>
                                         </c:forEach>
                                     </select>
                                 </div>

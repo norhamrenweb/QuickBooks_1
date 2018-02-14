@@ -1002,7 +1002,7 @@
                                 <div class="col-xs-12 hidden" id="divCommentSubject">
                                     <div class="col-xs-10 center-block form-group">
 
-                                        <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject"maxlength="1000"></textarea>
+                                        <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject"maxlength="1000"  spellcheck="true"></textarea>
                                     </div>             
                                     <div class=" col-xs-2 ">
                                         <input type="button" name="saveCommentSubject" value="save" class="btn btn-info" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
@@ -1070,7 +1070,7 @@
                                 </div>
                                 <div class="col-xs-12 center-block form-group">
                                     <label class="control-label">Observation</label>
-                                    <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"></textarea>
+                                    <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
                                 </div>
 
                                 <div class="col-xs-12" >
@@ -1112,7 +1112,7 @@
                                 </div>
                                 <div class="col-xs-12 center-block form-group">
 
-                                    <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="add comment" maxlength="1000"></textarea>
+                                    <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
                                 </div>
 
                                 <div class="col-xs-12 text-center">

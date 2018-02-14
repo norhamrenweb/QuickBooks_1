@@ -825,7 +825,7 @@ $("#method").on('mouseover', 'option' , function(e) {
                         </div>
                         <div class="col-xs-7 center-block form-group">
                             <label class="control-label">Description</label>
-                            <textarea type="text" class="form-control" name="TXTnamenewobjective" id="descriptionnewobjective"  placeholder="Description"></textarea>
+                            <textarea type="text" class="form-control" name="TXTnamenewobjective" id="descriptionnewobjective"  placeholder="Description"  spellcheck="true"></textarea>
                         </div>
                      <div class="col-xs-2 center-block form-group">
                             <label class="control-label">Steps</label>

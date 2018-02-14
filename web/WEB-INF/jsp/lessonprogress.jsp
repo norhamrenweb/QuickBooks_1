@@ -326,7 +326,6 @@
 
                                 <td>
                                     <textarea id="textInput${record.studentid}" name="TXTcomment" class="TXTcomment" rows="2" spellcheck="true" >${record.comment}</textarea>
-                       
                                 </td>
                                 <td>
                                     <select id="idSelectAttendance" name="TXTattendance" class="attendance">
