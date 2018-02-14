@@ -51,11 +51,12 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         
         for (Map.Entry<String, Profesor> entry : mapTeachers.entrySet()) {
             String key = entry.getKey();
+            String aux ="Not Comments";
             Profesor value = entry.getValue();
-            os4.add(value.getAsignatura()+":"+value.getFirstName());
             
-            if(mapComentarios.containsKey(key)) as4.add(mapComentarios.get(key));
-            else as4.add(" ");
+            if(mapComentarios.containsKey(key)) aux = mapComentarios.get(key);
+            String auxOs = value.getAsignatura()+"#"+value.getFirstName()+"#"+aux;
+            os4.add(auxOs);
         }
       
         if (coll.isEmpty()) {
@@ -68,7 +69,7 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         HashMap<String, String> mapComment = new HashMap<>();
 
         try {         
-            String consulta = "select * from subjects_comments where studentid = " + id +"order by date_created DESC";
+            String consulta = "select * from report_comments where studentid = " + id +"order by date_created DESC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);      
             while (rs.next()) {
                 mapComment.put(rs.getString("subject_id"), rs.getString("comment"));

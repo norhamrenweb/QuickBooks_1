@@ -114,7 +114,7 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
 
             //obtener comentario del subject
             //  boolean existeComentario = false;
-            consulta = "SELECT comment FROM subjects_comments where subject_id=" + id[0] + " and studentid=" + idStudent + " ORDER BY date_created DESC";
+            consulta = "SELECT comment FROM report_comments where subject_id=" + id[0] + " and studentid=" + idStudent + " ORDER BY date_created DESC";
             ResultSet rs3 = DBConect.eduweb.executeQuery(consulta);
             if (rs3.next()) {
                 //     existeComentario = true;

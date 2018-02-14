@@ -69,7 +69,7 @@
                         </div>
             <div class="col-xs-6 center-block form-group">
                         <label class="control-label">Observation</label>
-                        <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add comment" maxlength="200"></textarea>
+                        <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add comment" maxlength="200"  spellcheck="true"></textarea>
                     </div>
          </div>  
          <div class="col-xs-12 text-center">

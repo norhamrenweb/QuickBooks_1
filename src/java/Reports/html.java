@@ -105,7 +105,6 @@ public class html extends HttpServlet {
         ServletOutputStream os = response.getOutputStream();
         
         String[] stids = request.getParameterValues("destino[]");
-        
         String reportType = request.getParameter("typeReport");
         String start = request.getParameter("TXThorainicio");
         String finish = request.getParameter("TXThorafin");
@@ -138,8 +137,8 @@ public class html extends HttpServlet {
         JRDataSource datasource;
         if(!d.getClass().equals(FactoryActivityLog.class))  datasource = new JRBeanCollectionDataSource(d.getDataSource(stids[0], this.getServletContext()), true);
         else{    
-            stids = request.getParameterValues("origen[]");
             datasource = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(((User)request.getSession().getAttribute("user")).getName(),start,finish,stids[0], this.getServletContext()), true);
+            
         }
         
         JasperPrint jasperPrint = jasperFillManager.fill(jasperReport, map, datasource);//fill(jasperReport,map, conn);

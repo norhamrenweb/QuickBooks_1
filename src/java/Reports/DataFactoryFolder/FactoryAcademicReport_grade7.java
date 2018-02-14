@@ -81,7 +81,7 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         HashMap<String, String> mapComment = new HashMap<>();
 
         try {
-            String consulta = "select * from subjects_comments where studentid = " + id + "order by date_created DESC";
+            String consulta = "select * from report_comments where studentid = " + id + "order by date_created DESC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 mapComment.put(rs.getString("subject_id"), rs.getString("comment"));
