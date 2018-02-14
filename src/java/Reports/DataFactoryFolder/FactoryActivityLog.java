@@ -79,7 +79,8 @@ public class FactoryActivityLog extends DataFactory {
         ArrayList<String> as4 = new ArrayList<>();
 
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-        String idTeacher = idStudent;
+        String idTeacher = idStudent.substring(0,idStudent.indexOf("$"));
+        String nameTeacher = idStudent.substring(idStudent.indexOf("$")+1,idStudent.length());
         Date ini = format.parse(start);
         Date fin = format.parse(finish);
         
@@ -101,7 +102,7 @@ public class FactoryActivityLog extends DataFactory {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
         }
-
+        if(os4.isEmpty()) os4.add(nameTeacher+"#Not Data#Not Data#Not Data#Not Data");
         coll.add(new BeanWithList(null, os4, as4,nameUser, "", ini.toString(), fin.toString(), ""));
 
         return coll;
