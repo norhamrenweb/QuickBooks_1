@@ -31,8 +31,8 @@
 
                 $('.studentRating').change(function () {
                     if ($("option:selected", this).val() === "Mastered") {
-                        $(this).parents('.rows').find('.iconsAragon').addClass('icon-Pie_PieIzqSelect');
-                        $(this).parents('.rows').find('.iconsAragon').removeClass('icon-Pie_PieIzqUnSelect');
+                        $(this).parents('.rows').find('.iconsAragon').not('.fa-null').addClass('icon-Pie_PieIzqSelect');
+                        $(this).parents('.rows').find('.iconsAragon').not('.fa-null').removeClass('icon-Pie_PieIzqUnSelect');
                     }
                     
                 });

@@ -69,7 +69,7 @@ public class Homepage extends MultiActionController {
                 scgrpidTeacher = login.getSecurityGroupID("MontessoriTeacher");
                 scgrpidAdmin = login.getSecurityGroupID("MontessoriAdmin");
                 scgrpidSuper = login.getSecurityGroupID("MontessoriHead");
-                
+
                 if (login.fromGroup(scgrpidAdmin, user.getId())) {
                     user.setType(0);
                 } else if (login.fromGroup(scgrpidTeacher, user.getId())) {
@@ -79,19 +79,32 @@ public class Homepage extends MultiActionController {
                 } else {
                     result = false;
                 }
-                
+
                 if (result == true) {
                     ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
                     String message = "welcome user";
-                    int termId=1,yearId=1;
+                    int termId = 1, yearId = 1;
                     ResultSet rs2 = DBConect.ah.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where configschoolid = 1");
                     while (rs2.next()) {
                         termId = rs2.getInt("defaulttermid");
                         yearId = rs2.getInt("defaultyearid");
                     }
                     session.setAttribute("user", user);
-                    session.setAttribute("termId",termId);
-                    session.setAttribute("yearId",yearId);
+                    session.setAttribute("termId", termId);
+                    session.setAttribute("yearId", yearId);
+
+                    String nameTerm = "", nameYear = "";
+                    ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + termId + " and YearID = " + yearId);
+                    while (rs3.next()) {
+                        nameTerm = "" + rs3.getString("name");
+                    }
+                    ResultSet rs4 = DBConect.ah.executeQuery("select SchoolYear from SchoolYear where yearID = " + yearId);
+                    while (rs4.next()) {
+                        nameYear = "" + rs4.getString("SchoolYear");
+                    }
+
+                    session.setAttribute("termYearName",nameTerm + " / " + nameYear);
+
                     mv.addObject("message", message);
                     return mv;
                 } else {

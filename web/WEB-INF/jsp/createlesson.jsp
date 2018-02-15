@@ -17,9 +17,9 @@
         <title>Create Presentations</title>
         <script>
             $(document).ready(function () {
-                
-                
-                
+
+
+
                 //DESELECCIONA Method
                 $("#deselectMethod").click(function () {
                     $("#method option:selected").prop("selected", false);
@@ -227,6 +227,10 @@
             $().ready(function ()
             {
 
+                $('.required-icon').tooltip({
+                    placement: 'left',
+                    title: 'Required field'
+                });
                 $('.pasar').click(function () {
                     var exist = false;
                     $('#destino option').each(function () {
@@ -267,7 +271,7 @@
                     if (alumnosSelected === 0 || (objectiveSelected === 0 || objectiveSelected === null || objectiveSelected === '')) {
                         $('#createOnClick').attr('disabled', true);
                     }
-                     $("#studentsName").val("");
+                    $("#studentsName").val("");
                     $("#destino option").each(function ()
                     {
                         $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
@@ -302,7 +306,7 @@
                     } else {
                         $('#createOnClick').attr('disabled', true);
                     }
-                     $("#studentsName").val("");
+                    $("#studentsName").val("");
                     $("#destino option").each(function ()
                     {
                         $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
@@ -565,6 +569,12 @@
 
 
 
+            $(function () {
+                $('.required-icon').tooltip({
+                    placement: 'left',
+                    title: 'Required field'
+                });
+            });
         </script>
         <style>
             textarea 
@@ -693,6 +703,7 @@
             }
 
 
+
             input[type="checkbox"].styled:checked + label:after,
             input[type="radio"].styled:checked + label:after {
                 font-family: 'fontprincipal';
@@ -704,6 +715,80 @@
             input[type="radio"] .styled:checked + label::after {
                 color: #fff; }
 
+
+            /*=========================== nuevo */
+
+            .required-field-block {
+                position: relative;   
+            }
+
+            .required-field-block .required-icon {
+                display: inline-block;
+                vertical-align: middle;
+                margin: -0.25em 0.25em 0em;
+                background-color: #E8E8E8;
+                border-color: #E8E8E8;
+                padding: 0.5em 0.8em;
+                color: rgba(0, 0, 0, 0.65);
+                text-transform: uppercase;
+                font-weight: normal;
+                border-radius: 0.325em;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                -ms-box-sizing: border-box;
+                box-sizing: border-box;
+                -webkit-transition: background 0.1s linear;
+                -moz-transition: background 0.1s linear;
+                transition: background 0.1s linear;
+                font-size: 75%;
+            }
+
+            .required-field-block .required-icon {
+                background-color: transparent;
+                position: absolute;
+                top: 0em;
+                right: 0em;
+                z-index: 10;
+                margin: 0em;
+                width: 30px;
+                height: 30px;
+                padding: 0em;
+                text-align: center;
+                -webkit-transition: color 0.2s ease;
+                -moz-transition: color 0.2s ease;
+                transition: color 0.2s ease;
+            }
+
+            .required-field-block .required-icon:after {
+                position: absolute;
+                content: "";
+                right: 1px;
+                top: 1px;
+                z-index: -1;
+                width: 0em;
+                height: 0em;
+                border-top: 0em solid transparent;
+                border-right: 30px solid transparent;
+                border-bottom: 30px solid transparent;
+                border-left: 0em solid transparent;
+                border-right-color: inherit;
+                -webkit-transition: border-color 0.2s ease;
+                -moz-transition: border-color 0.2s ease;
+                transition: border-color 0.2s ease;
+            }
+
+            .required-field-block .required-icon .text {
+                color: #B80000;
+                font-size: 26px;
+                margin: -3px 0 0 12px;
+            }
+
+            .marginSelect{
+                margin-right: 17px !important;
+            }
+            .marginStudents{
+                margin-right: 80% !important;
+            }
         </style>
     </head>
     <body>
@@ -719,14 +804,25 @@
                         </span>
                     </legend>
                     <div class="form-group collapse" id="contenedorPropiertys">
-                        <div class="col-xs-6 center-block form-group">
-                            <label class="control-label">Presentation Name</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                            <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/>">
+                        <div class=" col-xs-6 center-block form-group">
+                            <label class="control-label">Presentation Name</label>
+                            <div class="required-field-block">
+                                <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/> ">
+                                <div class="required-icon">
+                                    <div class="text">*</div>
+                                </div>
+                            </div>
+
                             <span class="help-block hide">Invalid Name (Nor contain special characters)</span>
                         </div>               
                         <div class="col-xs-6 center-block form-group">
-                            <label class="control-label">Presentation description</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                            <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"  spellcheck="true"></textarea>
+                            <label class="control-label">Presentation description</label>
+                            <div class="required-field-block">
+                                <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"  spellcheck="true"></textarea>
+                                <div class="required-icon">
+                                    <div class="text">*</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-xs-6 center-block checkbox checkbox-success">
                             <input class="styled" type="checkbox" id="ideaCheck" name="ideaCheck">
@@ -749,9 +845,14 @@
                     <div class="form-group collapse" id="contenedorDate">
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="fecha">Date</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                                <label class="control-label" for="fecha">Date</label> 
                                 <div class='input-group date' id='fecha'>
-                                    <input id = 'fechaInput'type='text' name="TXTfecha" class="form-control" id="fecha" />
+                                    <div class="required-field-block">
+                                        <input id = 'fechaInput'type='text' name="TXTfecha"  class="form-control" id="fecha" />
+                                        <div class="required-icon">
+                                            <div class="text">*</div>
+                                        </div>
+                                    </div>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -761,9 +862,15 @@
 
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="horainicio">Start hour</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                                <label class="control-label" for="horainicio">Start hour</label> 
                                 <div class='input-group date' id='horainicio'>
-                                    <input  id='horainicioInput' type='text' name="TXThorainicio" class="form-control"/>
+                                    <div class="required-field-block">
+
+                                        <input  id='horainicioInput' type='text' required="required" name="TXThorainicio" class="form-control"/>
+                                        <div class="required-icon">
+                                            <div class="text">*</div>
+                                        </div>
+                                    </div>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -772,9 +879,15 @@
                         </div>
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="horafin">Finish hour</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                                <label class="control-label" for="horafin">Finish hour</label> 
                                 <div class='input-group date' id='horafin'>
-                                    <input id='horafinInput' type='text' name="TXThorafin" class="form-control"/>
+                                    <div class="required-field-block">
+                                        <input id='horafinInput' type='text' required="required" name="TXThorafin" class="form-control"/>
+                                        <div class="required-icon">
+                                            <div class="text">*</div>
+                                        </div>
+                                    </div>
+
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -793,37 +906,58 @@
                         </span>
                     </legend>
                     <div class="form-group collapse" id="contenedorDetails">
-                        <div class="col-xs-3 form-group">
-                            <label class="control-label"><spring:message code="etiq.txtlevels"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                            <input type="hidden" id="levelName" name="levelName" value = "">
+                        <div class="col-xs-3 form-group" >
+                            <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
+                            <input  type="hidden" id="levelName" name="levelName" value = "">
 
-                            <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
-                                <c:forEach var="levels" items="${gradelevels}">
-                                    <option value="${levels.id[0]}"  value="${levels.name}">${levels.name}</option>
-                                </c:forEach>
-                            </select>
+                            <div class="required-field-block">
+                                <select class="form-control required" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
+                                    <c:forEach var="levels" items="${gradelevels}">
+                                        <option value="${levels.id[0]}"  value="${levels.name}">${levels.name}</option>
+                                    </c:forEach>
+                                </select>
+
+                                <div class="required-icon marginSelect">
+                                    <div class="text">*</div>
+                                </div>
+                            </div>
+
 
                         </div>
                         <div class="col-xs-3 center-block">
-                            <label class="control-label"><spring:message code="etiq.txtsubject"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                            <label class="control-label"><spring:message code="etiq.txtsubject"/></label> 
                             <input type="hidden" id="subjectName" name="subjectName" value = "">                            
 
-                            <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
-                                <c:forEach var="subject" items="${subjects}">
-                                    <option value="${subject.id[0]}" data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
-                                </c:forEach>
-                            </select>
+                            <div class="required-field-block">
+                                <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
+                                    <c:forEach var="subject" items="${subjects}">
+                                        <option value="${subject.id[0]}" data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
+                                    </c:forEach>
+                                </select>
+
+                                <div class="required-icon marginSelect">
+                                    <div class="text">*</div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Objective</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                            <label class="control-label">Objective</label>
                             <input type="hidden" id="objectiveName" name="objectiveName" value = "">                                                        
 
-                            <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
-                                <c:forEach var="objective" items="${objectives}">
-                                    <option value="${objective.id[0]}" >${objective.name}</option>
-                                </c:forEach>
-                            </select>
+                            <div class="required-field-block">
+                                <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
+                                    <c:forEach var="objective" items="${objectives}">
+                                        <option value="${objective.id[0]}" >${objective.name}</option>
+                                    </c:forEach>
+                                </select>
+
+                                <div class="required-icon marginSelect">
+                                    <div class="text">*</div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="col-xs-3 center-block form-group">
@@ -866,10 +1000,17 @@
                     </div>
                 </fieldset>
                 <fieldset>
-                    <legend id="showStudents">
-                        Select Learners <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                        <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom"></span>
-                    </legend>
+                    <div class="required-field-block">
+                        <legend id="showStudents">
+                            Select Learners 
+                            <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom"></span>
+                        </legend>
+
+                        <div class="required-icon marginStudents">
+                            <div class="text">*</div>
+                        </div>
+                    </div>
+
                     <div class="form-group collapse in" id="contenedorStudents">
                         <div class="col-xs-12">
                             <div class="col-xs-2"></div>

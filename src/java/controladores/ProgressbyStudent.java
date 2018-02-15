@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
+import static controladores.ReportControlador.log;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -124,7 +125,13 @@ public class ProgressbyStudent {
         List<Students> studentsgrades = new ArrayList();
         String[] levelid = hsr.getParameterValues("seleccion");
         String test = hsr.getParameter("levelStudent");
-        studentsgrades = Students.getStudentslevel(levelid[0], log);
+         if(levelid[0]!= "")
+        {
+            studentsgrades =Students.getStudentslevel(levelid[0],log);
+        }
+        else{
+            studentsgrades = Students.getStudents(log);
+        }
         String data = new Gson().toJson(studentsgrades);
 //        mv.addObject("listaAlumnos",data );
 

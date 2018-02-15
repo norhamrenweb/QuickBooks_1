@@ -338,8 +338,14 @@
                     }
                 });
             }
-
-
+            /*var resizeId;
+            $(window).resize(function () {
+                clearTimeout(resizeId);
+                resizeId = setTimeout(doneResizing, 500);
+            });
+            function doneResizing() {
+                refresh();
+            }*/
         </script>
         <style>
             .sinpadding
