@@ -20,11 +20,11 @@
             var error = ${DatainBBDD};
             $(document).ready(function () {
                 $("#studentsName").val("");
-                    $("#destino option").each(function ()
-                    {
-                        $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
+                $("#destino option").each(function ()
+                {
+                    $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
 
-                    });
+                });
                 $("#objectiveName").val($("#objective :selected").text());
                 $("#subjectName").val($("#subject :selected").text());
                 $("#levelName").val($("#level :selected").text());
@@ -292,7 +292,7 @@
                     } else {
                         $('#saveEdit').attr('disabled', true);
                     }
-$("#studentsName").val("");
+                    $("#studentsName").val("");
                     $("#destino option").each(function ()
                     {
                         $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
@@ -374,7 +374,9 @@ $("#studentsName").val("");
                         var subjects = JSON.parse(json.subjectslist);
                         var objectives = JSON.parse(json.objectiveslist);
                         var contents = JSON.parse(json.contentslist);
+                        var comment = json.comment;
 
+                        $("#comments").text(comment);
                         $('#level option[value="' + level + '"]').attr("selected", true);
                         $('#method option[value="' + method + '"]').attr("selected", true);
                         $('#subject').empty();
@@ -761,8 +763,8 @@ $("#studentsName").val("");
                         <div class="col-xs-3 form-group">
                             <label class="control-label"><spring:message code="etiq.txtlevels"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                             <input type="hidden" id="levelName" name="levelName" value = "">
-  
-                            
+
+
                             <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                                 <c:forEach var="levels" items="${gradelevels}">
                                     <c:if test="${levels.id[0] == data.level.id[0]}">
@@ -775,9 +777,9 @@ $("#studentsName").val("");
                         </div>
                         <div class="col-xs-3 center-block">
                             <label class="control-label"><spring:message code="etiq.txtsubject"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                                                    <input type="hidden" id="subjectName" name="subjectName" value = "">                            
-    
-                            
+                            <input type="hidden" id="subjectName" name="subjectName" value = "">                            
+
+
                             <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
 
                                 <c:forEach var="subject" items="${subjects}">
@@ -793,10 +795,10 @@ $("#studentsName").val("");
 
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Objective</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                                   <input type="hidden" id="objectiveName" name="objectiveName" value = "">                                                        
-                     
-                            
-                            
+                            <input type="hidden" id="objectiveName" name="objectiveName" value = "">                                                        
+
+
+
                             <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
                                 <c:forEach var="objective" items="${objectives}">
                                     <c:if test="${objective.id[0] == data.objective.id[0]}">

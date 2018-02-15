@@ -477,6 +477,7 @@ public class EditLessonControlador {
         Subject sub = new Subject();
         Objective obj = new Objective();
         Method meth = new Method();
+        String comment = "";
         Level lev = new Level();
         int levelid = 0;
         List<String> contents = new ArrayList<>();
@@ -487,7 +488,7 @@ public class EditLessonControlador {
             String[] mid = new String[1];
             String[] cid = new String[1];
 
-            String consulta = "SELECT objective_id,subject_id,level_id,method_id FROM public.lessons where id =" + lessonplanid[0];
+            String consulta = "SELECT objective_id,subject_id,level_id,method_id,comments FROM public.lessons where id =" + lessonplanid[0];
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
 
             while (rs.next()) {
@@ -498,6 +499,7 @@ public class EditLessonControlador {
                 mid[0] = "" + rs.getInt("method_id");
                 meth.setId(mid);
                 levelid = rs.getInt("level_id");
+                comment = rs.getString("comments");
             }
 
             ResultSet rs2 = DBConect.eduweb.executeQuery("select content_id from public.lesson_content where lesson_id = " + lessonplanid[0]);
@@ -516,6 +518,7 @@ public class EditLessonControlador {
             json.put("objective", new Gson().toJson(obj));
             json.put("method", new Gson().toJson(meth));
             json.put("content", new Gson().toJson(contents));
+            json.put("comment", comment);
 
         } catch (SQLException ex) {
             System.out.println("Error  " + ex);
