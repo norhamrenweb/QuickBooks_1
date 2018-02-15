@@ -97,10 +97,10 @@
     </div>
     
     
-    <div class="col-xs-6 text-center">
+    <div class="col-xs-5 text-center">
         <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>
     </div>
-     <div class="col-xs-1 text-center">
+     <div class="col-xs-2 text-center">
         <h3><c:out value="${sessionScope.termYearName}"/></h3>
     </div>
     <div class="col-xs-2 text-right">

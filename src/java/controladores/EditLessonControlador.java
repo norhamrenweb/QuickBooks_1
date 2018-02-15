@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.google.gson.*;
+import static controladores.CreateLessonControlador.log;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
@@ -331,7 +332,11 @@ public class EditLessonControlador {
         List<Students> studentsgrades = new ArrayList();
         String[] levelid = hsr.getParameterValues("seleccion");
         String test = hsr.getParameter("levelStudent");
-        studentsgrades = Students.getStudentslevel(levelid[0], log);
+         if (!levelid[0].equals("-1")) {
+            studentsgrades = Students.getStudentslevel(levelid[0], log);
+        } else {
+            studentsgrades = Students.getStudents(log);
+        }
         mv.addObject("listaAlumnos", studentsgrades);
 
         return mv;

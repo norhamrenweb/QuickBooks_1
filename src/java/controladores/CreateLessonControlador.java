@@ -172,7 +172,7 @@ public class CreateLessonControlador {
         List<Students> studentsgrades = new ArrayList();
         String[] levelid = hsr.getParameterValues("seleccion");
         String test = hsr.getParameter("levelStudent");
-        if (levelid[0] != "") {
+        if (!levelid[0].equals("-1")) {
             studentsgrades = Students.getStudentslevel(levelid[0], log);
         } else {
             studentsgrades = Students.getStudents(log);
