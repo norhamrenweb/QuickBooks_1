@@ -19,6 +19,7 @@ public class CommentObjective {
     private boolean generalcomment;
     private String step_id;
     private String createdby;
+    private String rating_name;
     private String modifyby;
     private String term_id;
     private String yearterm_id;
@@ -36,6 +37,14 @@ public class CommentObjective {
         this.modifyby = modifyby;
         this.term_id = term_id;
         this.yearterm_id = yearterm_id;
+    }
+    
+    public String getRating_name() {
+        return rating_name;
+    }
+
+    public void setRating_name(String rating_name) {
+        this.rating_name = rating_name;
     }
     
     public String getId() {

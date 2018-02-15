@@ -158,6 +158,12 @@ public class ObservationControlador {
                                 rs.getString("yearterm_id"));
                 comments.add(c);
             }
+            for(CommentObjective c:comments){
+                ResultSet rs1 = DBConect.eduweb.executeQuery("select name from rating where id = " + c.getRating_id() + "");
+                while (rs1.next()) {
+                     c.setRating_name(rs1.getString("name"));
+                }
+            }
             
             List<Step> steps = new ArrayList<>();
             ResultSet rs3 = DBConect.eduweb.executeQuery("select name,id,storder from obj_steps where obj_id =" + idobjective);
