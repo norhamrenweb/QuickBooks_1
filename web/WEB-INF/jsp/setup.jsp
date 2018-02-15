@@ -158,6 +158,7 @@
                         <h2>Header Color</h2>
                         <input type="color" id="headcolor" name="headcolor" value="#ff0000" onchange="changecolor()">
                     </div>
+                    
                     <div class="col-xs-4 text-center">
                         <h2>Body Color</h2>
                         <input type="color" id="bodycolor" name="bodycolor" value="#ff0000" onchange="changecolor2()">

@@ -265,7 +265,7 @@
                                 }},
                             {title: '#Present. planned', field: 'noofplannedlessons', width: '16%'},
                             {title: '#Present. done', field: 'noofarchivedlessons', width: '16%'},
-                            {title: 'Progress', field: 'progress', width: '13%', formatter: formatProgress},
+                            {title: 'Progress', field: 'progress', width: '16%', formatter: formatProgress},
                             {title: 'Final rating', field: 'rating', width: '15%'}
                         ]]
 
