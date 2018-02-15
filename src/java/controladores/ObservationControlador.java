@@ -12,6 +12,7 @@ import Montessori.Objective;
 import Montessori.Step;
 import Montessori.Students;
 import Montessori.Subject;
+import Montessori.User;
 import atg.taglib.json.util.JSONArray;
 import atg.taglib.json.util.JSONException;
 import atg.taglib.json.util.JSONObject;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -196,11 +198,39 @@ public class ObservationControlador {
         String idstudent = hsr.getParameter("idstudent");
         String idobjective = hsr.getParameter("idobjective");
         String comment = hsr.getParameter("comment");
+        String rating = hsr.getParameter("rating");
+        String step = hsr.getParameter("step");
+        HttpSession sesion;
+        sesion = hsr.getSession();
+        User user = (User)sesion.getAttribute("user");
+        String ratingid = null;
         try {
-            String consulta = "insert into progress_report (student_id,objective_id,comment,comment_date,generalcomment)"+
-                              "values("+idstudent+","+idobjective+",'"+comment+"',now(),true);";
-            DBConect.eduweb.executeUpdate(consulta);
-            
+            ResultSet rs2 = DBConect.eduweb.executeQuery("select id from obj_steps where obj_id = '" + idobjective + "' order by storder");
+            ArrayList<String> allsteps = new ArrayList();
+            while (rs2.next()) {
+                allsteps.add("" + rs2.getInt("id"));
+            }
+            if (!step.equals("0") && !allsteps.isEmpty() && !step.equals("")) {
+                ArrayList<String> al2 = new ArrayList<String>(allsteps.subList(0, (Integer.parseInt(step))));
+                StringBuilder rString = new StringBuilder();
+
+                String sep = ",";
+                for (String each : al2) {
+                    rString.append(each).append(sep);
+                }
+                step = rString.toString();
+                step = step.substring(0, step.length() - 1);
+            }
+            String consulta = "select id from rating where name = '" + rating + "'";
+            ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
+            while (rs1.next()) {
+                ratingid = "" + rs1.getInt("id");
+            }
+            if (ratingid != null) {
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment+ "','" + ratingid + "','" + idstudent + "','" + idobjective + "',true,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")");
+            } else {
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + idstudent + "','" + idobjective + "',true,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")");
+            }
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             return "error";
@@ -208,5 +238,23 @@ public class ObservationControlador {
         return "succes";
     }
     
+    /**
+     * borra un comentario existente
+     * @param hsr
+     * @param hsr1
+     * @return 
+     */
+    @RequestMapping("/observations/delcomment.htm")
+    @ResponseBody
+    public String delComment(HttpServletRequest hsr, HttpServletResponse hsr1){
+        String id = hsr.getParameter("id");
+        try {
+            DBConect.eduweb.executeUpdate("delete from progress_report where id="+id);
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            return "error";
+        }
+        return "succes";
+    }
     
 }
