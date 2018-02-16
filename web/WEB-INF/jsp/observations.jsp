@@ -35,6 +35,7 @@
                     var data = table.row(this).data();
                     studentid = data.id;
                     getsubjects(data.id);
+                    $('#semana0').empty();
                     $('#newcomment').attr('disabled', true);
                 });
                 
@@ -68,6 +69,7 @@
                 $('#subjects').on('change', function() {
                     $('#steps_show').empty();
                     $('#steps_show2').empty();
+                    $('#semana0').empty();
                     if(this.value !== 'vacio')
                         getobjectives( this.value );
                     $('#newcomment').attr('disabled', true);
@@ -95,6 +97,13 @@
                     success: function (data) {
                         if(data === 'succes'){
                             getcomments(idobjective);
+                            $('#messagediv').empty();
+                            $('#messagediv').append('<h4>Comment create succesfully.</h4>');
+                            $('#myModal').modal('show');
+                        }else{
+                            $('#messagediv').empty();
+                            $('#messagediv').append('<h4>Error</h4>');
+                            $('#myModal').modal('show');
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -115,7 +124,15 @@
                     success: function (data) {
                         if(data === 'succes'){
                             getcomments(idobjective);
+                            $('#messagediv').empty();
+                            $('#messagediv').append('<h4>Edit succesfully.</h4>');
+                            $('#myModal').modal('show');
+                        }else{
+                            $('#messagediv').empty();
+                            $('#messagediv').append('<h4>Error</h4>');
+                            $('#myModal').modal('show');
                         }
+                            
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -198,14 +215,25 @@
                         }
                         var j = 0;
                         $('#semana0').empty();
-                        $('#semana1').empty();
-                        $('#semana2').empty();
                         $.each(comments,function(i,comment){
                             var date = comment.comment_date+'';
                             var cc = comment.comment;
                             if(cc.length > 12)
-                                cc=cc.substring(0,12);
+                                cc=cc.substring(0,20);
                             var rating = "";
+                            var editdelete="";
+                            if(comment.createdby === '${user.id}'){
+                            editdelete='<div class="col-xs-4 text-center sinpadding">'+
+                                '<button onclick="edit('+comment.id+')"  type="button" class="btn btn-link" id="editComentario'+comment.id+'">'+
+                                '<span class="glyphicon glyphicon-pencil"></span>'+
+                                '</button>'+
+                                '</div>'+
+                                '<div class="col-xs-4 text-center sinpadding">'+
+                                '<button type="button" class="btn btn-link" onclick="borrar('+comment.id+')" data-toggle="tooltip" data-placement="bottom" value="delete" id="ConfirmDeleteComentario'+comment.id+'">'+
+                                '<span class=" glyphicon glyphicon-remove"></span>'+
+                                '</button>'+
+                                '</div>';
+                            }
                             if(comment.rating_name !== undefined && 
                                     comment.rating_name !== "")
                                 rating = '<strong>Rating:</strong>'
@@ -230,16 +258,7 @@
                                 '<span class="glyphicon glyphicon-list-alt"></span>'+
                                 '</button>'+
                                 '</div>'+
-                                '<div class="col-xs-4 text-center sinpadding">'+
-                                '<button onclick="edit('+comment.id+')"  type="button" class="btn btn-link" id="editComentario'+comment.id+'">'+
-                                '<span class="glyphicon glyphicon-pencil"></span>'+
-                                '</button>'+
-                                '</div>'+
-                                '<div class="col-xs-4 text-center sinpadding">'+
-                                '<button type="button" class="btn btn-link" onclick="delComment('+comment.id+')" data-toggle="tooltip" data-placement="bottom" value="delete" id="ConfirmDeleteComentario'+comment.id+'">'+
-                                '<span class=" glyphicon glyphicon-remove"></span>'+
-                                '</button>'+
-                                '</div>'+
+                                editdelete+
                                 '</div>'
                             );
                             if(comment.generalcomment)
@@ -255,20 +274,30 @@
             }
             
             function edit(id){
+                $('#idedit').val(id);
                 id=''+id;
                 $.each(comments,function(i,comment){
                     if(comment.id===id){
                         if(comment.step_id !== undefined){
-                            var step = (comment.step_id.split(",").length - 1);
+                            var step = (comment.step_id.split(",").length - 1)+1;
                             $('.editrating [data-value='+step+']').click();
                         }else{
                             $('.editrating .rating-clear').click();
                         }
-                        $('#commentcontent2').text(comment.comment);
+                        $('#commentcontent2').empty();
+                        $('#commentcontent2').val(comment.comment);
                         $('#hi2').val(comment.rating_name);
                     }
                 });
                 $('#editModal').modal('show');
+            }
+            
+            function borrar(id){
+                $('#delcomment').empty();
+                $('#delcomment').append(
+                '<button onclick="delComment('+id+')" class="btn btn-primary btn-lg" data-dismiss="modal" aria-label="Close">Delete</button>'
+                );    
+                $('#deleteModal').modal('show');
             }
             
             function delComment(id){
@@ -499,7 +528,7 @@
                         <input type="number" name="steps" id="some_id" class="rating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="15" data-min="1" value="0" />
                     </div>
                     <div class="modal-footer">
-                        <button id="commentbutton" class="btn btn-primary btn-lg" value="Comment">Comment</button>
+                        <button id="commentbutton" class="btn btn-primary btn-lg" data-dismiss="modal" aria-label="Close" value="Comment">Comment</button>
                     </div>
                 </div>
             </div>
@@ -526,7 +555,24 @@
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" id="idedit">
-                        <button id="editcomment" class="btn btn-primary btn-lg">Edit</button>
+                        <button id="editcomment" class="btn btn-primary btn-lg" data-dismiss="modal" aria-label="Close">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="deleteModal" class="modal fade" role="dialog">
+             <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <p class="modal-title" id="myModalLabel">Delete comment</p>
+                    </div>
+                     <div id="steps_show2" class="col-xs-6"></div>
+                    <div class="modal-body text-center">
+                        <h3>Are you sure?</h3>
+                    </div>
+                    <div class="modal-footer" id="delcomment">
                     </div>
                 </div>
             </div>
