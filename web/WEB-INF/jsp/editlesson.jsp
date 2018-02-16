@@ -376,7 +376,7 @@
                         var contents = JSON.parse(json.contentslist);
                         var comment = json.comment;
 
-                        $("#comments").text(comment);
+                        $("#comments").val(comment);
                         $('#level option[value="' + level + '"]').attr("selected", true);
                         $('#method option[value="' + method + '"]').attr("selected", true);
                         $('#subject').empty();
@@ -488,20 +488,22 @@
 
             function comboSelectionIdeaLessons()
             {
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                
+                    if (window.XMLHttpRequest) //mozilla
+                    {
+                        ajax = new XMLHttpRequest(); //No Internet explorer
+                    } else
+                    {
+                        ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                if ($("#ideas :selected").text() !== "Select an idea") {
+                    $('#loadingmessage').show();
+                    ajax.onreadystatechange = funcionCallBackIdeaLessons;
+                    var seleccionidea = document.getElementById("ideas").value;
+                    //ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccionTemplate,true);
+                    ajax.open("POST", "copyfromIdea.htm?seleccionidea=" + seleccionidea, true);
+                    ajax.send("");
                 }
-
-                $('#loadingmessage').show();
-                ajax.onreadystatechange = funcionCallBackIdeaLessons;
-                var seleccionidea = document.getElementById("ideas").value;
-                //ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccionTemplate,true);
-                ajax.open("POST", "copyfromIdea.htm?seleccionidea=" + seleccionidea, true);
-                ajax.send("");
             }
 
             function comboSelectionObjective()
@@ -809,13 +811,13 @@
                             <div class="form-group">
                                 <label class="control-label" for="fecha">Date</label> 
                                 <div class='input-group date' id='fecha'>
-                                     <div class="required-field-block">
-                                    <input id='fechaInput' type='text' name="TXTfecha" class="form-control" id="fecha" required="required" value="${data.date}"/>
+                                    <div class="required-field-block">
+                                        <input id='fechaInput' type='text' name="TXTfecha" class="form-control" id="fecha" required="required" value="${data.date}"/>
                                         <div class="required-icon">
                                             <div class="text">*</div>
                                         </div>
                                     </div>
-                                    
+
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -827,15 +829,15 @@
                             <div class="form-group">
                                 <label class="control-label" for="horainicio">Start hour</label> 
                                 <div class='input-group date' id='horainicio'>
-                                     <div class="required-field-block">
+                                    <div class="required-field-block">
 
-                                    <input id='horainicioInput' type='text' name="TXThorainicio" class="form-control" required="required"  value="${data.start}"/>
+                                        <input id='horainicioInput' type='text' name="TXThorainicio" class="form-control" required="required"  value="${data.start}"/>
                                         <div class="required-icon">
                                             <div class="text">*</div>
                                         </div>
                                     </div>
-                                    
-                                    
+
+
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -846,8 +848,8 @@
                             <div class="form-group">
                                 <label id='horafinInput' class="control-label" for="horafin">Finish hour</label> 
                                 <div class='input-group date' id='horafin'>
-                                     <div class="required-field-block">
-                                    <input type='text' name="TXThorafin" class="form-control" required="required" value="${data.finish}"/>
+                                    <div class="required-field-block">
+                                        <input type='text' name="TXThorafin" class="form-control" required="required" value="${data.finish}"/>
                                         <div class="required-icon">
                                             <div class="text">*</div>
                                         </div>
@@ -875,69 +877,69 @@
                             <label class="control-label"><spring:message code="etiq.txtlevels"/></label>
                             <input type="hidden" id="levelName" name="levelName" value = "">
 
-                             <div class="required-field-block">
-                               <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
-                                <c:forEach var="levels" items="${gradelevels}">
-                                    <c:if test="${levels.id[0] == data.level.id[0]}">
-                                        <c:set var="mySelectVar" value="selected"></c:set>
-                                    </c:if>
-                                    <option value="${levels.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''}>${levels.name}</option>
-                                    <c:set var="mySelectVar" value=""></c:set>
-                                </c:forEach>
-                            </select>
+                            <div class="required-field-block">
+                                <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
+                                    <c:forEach var="levels" items="${gradelevels}">
+                                        <c:if test="${levels.id[0] == data.level.id[0]}">
+                                            <c:set var="mySelectVar" value="selected"></c:set>
+                                        </c:if>
+                                        <option value="${levels.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''}>${levels.name}</option>
+                                        <c:set var="mySelectVar" value=""></c:set>
+                                    </c:forEach>
+                                </select>
 
                                 <div class="required-icon marginSelect">
                                     <div class="text">*</div>
                                 </div>
                             </div>
 
-                            
+
                         </div>
                         <div class="col-xs-3 center-block">
                             <label class="control-label"><spring:message code="etiq.txtsubject"/></label>
                             <input type="hidden" id="subjectName" name="subjectName" value = "">                            
 
-<div class="required-field-block">
-                               <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
+                            <div class="required-field-block">
+                                <select class="form-control" name="TXTsubject" id="subject"  onchange="comboSelectionSubject()">
 
-                                <c:forEach var="subject" items="${subjects}">
-                                    <c:if test="${subject.id[0] == data.subject.id[0]}">
-                                        <c:set var="mySelectVar" value="selected"></c:set>
-                                    </c:if>
-                                    <option value="${subject.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''} data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
-                                    <c:set var="mySelectVar" value=""></c:set>     
-                                </c:forEach>
+                                    <c:forEach var="subject" items="${subjects}">
+                                        <c:if test="${subject.id[0] == data.subject.id[0]}">
+                                            <c:set var="mySelectVar" value="selected"></c:set>
+                                        </c:if>
+                                        <option value="${subject.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''} data-toggle="tooltip" data-placement="top" title="<spring:message code="etiq.txthome"/>">${subject.name}</option>
+                                        <c:set var="mySelectVar" value=""></c:set>     
+                                    </c:forEach>
 
-                            </select>
+                                </select>
 
                                 <div class="required-icon marginSelect">
                                     <div class="text">*</div>
                                 </div>
                             </div>
-                            
+
                         </div>          
 
                         <div class="col-xs-3 center-block form-group">
                             <label class="control-label">Objective</label>
                             <input type="hidden" id="objectiveName" name="objectiveName" value = "">                                                        
 
- <div class="required-field-block">
+                            <div class="required-field-block">
                                 <select class="form-control" name="TXTobjective" id="objective" onchange="comboSelectionObjective()">
-                                <c:forEach var="objective" items="${objectives}">
-                                    <c:if test="${objective.id[0] == data.objective.id[0]}">
-                                        <c:set var="mySelectVar" value="selected"></c:set>
-                                    </c:if>
-                                    <option value="${objective.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''} >${objective.name}</option>
-                                    <c:set var="mySelectVar" value=""></c:set>     
-                                </c:forEach>
-                            </select>
+                                    <c:forEach var="objective" items="${objectives}">
+                                        <c:if test="${objective.id[0] == data.objective.id[0]}">
+                                            <c:set var="mySelectVar" value="selected"></c:set>
+                                        </c:if>
+                                        <option value="${objective.id[0]}" ${(mySelectVar eq 'selected')?'selected' : ''} >${objective.name}</option>
+                                        <c:set var="mySelectVar" value=""></c:set>     
+                                    </c:forEach>
+                                </select>
 
                                 <div class="required-icon marginSelect">
                                     <div class="text">*</div>
                                 </div>
                             </div>
 
-                           
+
                         </div>
 
                         <div class="col-xs-3 center-block form-group">
@@ -998,7 +1000,7 @@
                     </div>
                 </fieldset>
                 <fieldset>
-                       <div class="required-field-block">
+                    <div class="required-field-block">
                         <legend id="showStudents">
                             Select Learners 
                             <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom"></span>
