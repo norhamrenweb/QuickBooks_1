@@ -405,7 +405,7 @@
                         var contents = JSON.parse(json.contentslist);
                         var comment = json.comment;
 
-                        $("#comments").text(comment);
+                        $("#comments").val(comment);
                         $('#level option[value="' + level + '"]').attr("selected", true);
                         $('#method option[value="' + method + '"]').attr("selected", true);
                         $('#subject').empty();
@@ -527,20 +527,22 @@
             }
             function comboSelectionIdeaLessons()
             {
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+               
+                    if (window.XMLHttpRequest) //mozilla
+                    {
+                        ajax = new XMLHttpRequest(); //No Internet explorer
+                    } else
+                    {
+                        ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                if ($("#ideas :selected").text() !== "Select an idea") {
+                    $('#loadingmessage').show();
+                    ajax.onreadystatechange = funcionCallBackIdeaLessons;
+                    var seleccionidea = document.getElementById("ideas").value;
+                    //ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccionTemplate,true);
+                    ajax.open("POST", "copyfromIdea.htm?seleccionidea=" + seleccionidea, true);
+                    ajax.send("");
                 }
-
-                $('#loadingmessage').show();
-                ajax.onreadystatechange = funcionCallBackIdeaLessons;
-                var seleccionidea = document.getElementById("ideas").value;
-                //ajax.open("POST","createlesson.htm?select=objectivelistSubject&seleccion2="+seleccionTemplate,true);
-                ajax.open("POST", "copyfromIdea.htm?seleccionidea=" + seleccionidea, true);
-                ajax.send("");
             }
             function comboSelectionObjective()
             {
