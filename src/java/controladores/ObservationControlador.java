@@ -198,6 +198,8 @@ public class ObservationControlador {
         String idstudent = hsr.getParameter("idstudent");
         String idobjective = hsr.getParameter("idobjective");
         String comment = hsr.getParameter("comment");
+        comment = comment.replace("'", "\'\'");
+        comment = comment.replace("\"", "\"\"");
         String rating = hsr.getParameter("rating");
         String step = hsr.getParameter("step");
         HttpSession sesion;
@@ -230,6 +232,58 @@ public class ObservationControlador {
                 DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment+ "','" + ratingid + "','" + idstudent + "','" + idobjective + "',true,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")");
             } else {
                 DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + idstudent + "','" + idobjective + "',true,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")");
+            }
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            return "error";
+        }
+        return "succes";
+    }
+    
+    
+    @RequestMapping("/observations/editcomment.htm")
+    @ResponseBody
+    public String editcomment(HttpServletRequest hsr, HttpServletResponse hsr1){
+        String idcomment = hsr.getParameter("idcomment");
+        String idstudent = hsr.getParameter("idstudent");
+        String idobjective = hsr.getParameter("idobjective");
+        String comment = hsr.getParameter("comment");
+        comment = comment.replace("'", "\'\'");
+        comment = comment.replace("\"", "\"\"");
+        String rating = hsr.getParameter("rating");
+        String step = hsr.getParameter("step");
+        HttpSession sesion;
+        sesion = hsr.getSession();
+        User user = (User)sesion.getAttribute("user");
+        String ratingid = null;
+        try {
+            ResultSet rs2 = DBConect.eduweb.executeQuery("select id from obj_steps where obj_id = '" + idobjective + "' order by storder");
+            ArrayList<String> allsteps = new ArrayList();
+            while (rs2.next()) {
+                allsteps.add("" + rs2.getInt("id"));
+            }
+            if (!step.equals("0") && !allsteps.isEmpty() && !step.equals("")) {
+                ArrayList<String> al2 = new ArrayList<String>(allsteps.subList(0, (Integer.parseInt(step))));
+                StringBuilder rString = new StringBuilder();
+
+                String sep = ",";
+                for (String each : al2) {
+                    rString.append(each).append(sep);
+                }
+                step = rString.toString();
+                step = step.substring(0, step.length() - 1);
+            }
+            String consulta = "select id from rating where name = '" + rating + "'";
+            ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
+            while (rs1.next()) {
+                ratingid = "" + rs1.getInt("id");
+            }
+            if (ratingid != null) {
+                consulta = "update progress_report set comment = '" + comment+ "',rating_id='" + ratingid + "' ,student_id='" + idstudent + "',objective_id='" + idobjective + "',step_id='" + step+"' where id="+idcomment;
+                DBConect.eduweb.executeUpdate(consulta);
+            } else {
+                consulta = "update progress_report set comment = '" + comment+ "' ,student_id='" + idstudent + "',objective_id='" + idobjective + "',step_id='" + step+"' where id="+idcomment;
+                DBConect.eduweb.executeUpdate(consulta);
             }
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
