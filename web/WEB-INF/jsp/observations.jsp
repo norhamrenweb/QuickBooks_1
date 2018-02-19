@@ -222,6 +222,7 @@
                                 cc=cc.substring(0,20);
                             var rating = "";
                             var editdelete="";
+                            var color = "";
                             if(comment.createdby === '${user.id}'){
                             editdelete='<div class="col-xs-4 text-center sinpadding">'+
                                 '<button onclick="edit('+comment.id+')"  type="button" class="btn btn-link" id="editComentario'+comment.id+'">'+
@@ -234,6 +235,14 @@
                                 '</button>'+
                                 '</div>';
                             }
+                            if(comment.rating_name==='Mastered')
+                                color='goldenrod';
+                            else if(comment.rating_name==='Presented')
+                                color='darkgreen';
+                            else if(comment.rating_name==='Attempted')
+                                color='blueviolet';
+                            else
+                                color='black';
                             if(comment.rating_name !== undefined && 
                                     comment.rating_name !== "")
                                 rating = '<strong>Rating:</strong>'
@@ -249,7 +258,7 @@
                             <div>\n\
                                 '+lastStep(steps,comment.step_id)+'\n\
                             </div>\n\
-                            <div>\n\
+                            <div style="color:'+color+';">\n\
                                 '+rating+'\n\
                             </div>'+
                             '<div class="col-xs-12 text-center sinpadding optionsObservations">'+
@@ -472,12 +481,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="alumnos" items="${students}" >
-                        <tr>
-                            <td >${alumnos.id_students}</td>
-                            <td >${alumnos.nombre_students}</td>
-                        </tr>
-                    </c:forEach>
+                        <c:forEach var="alumnos" items="${students}" >
+                            <tr>
+                                <td >${alumnos.id_students}</td>
+                                <td >${alumnos.nombre_students}</td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>
