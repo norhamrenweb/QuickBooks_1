@@ -60,7 +60,9 @@
                 $('#fecha').on('dp.change', function (e) {
                     loadComments();
                 })
+
                 loadComments();
+
                 $('#fecha2').on('dp.change', function (e) {
                     if (($('#observationfecha').val() !== "") && ($('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")) {
                         $('#savecomment').prop("disabled", false);
@@ -75,6 +77,15 @@
                         $('#savecomment').prop("disabled", true);
                     }
                 });
+                /*
+                 $('[data-toggle="popover"]').popover({
+                 html: true,
+                 trigger: 'hover',
+                 placement: 'bottom',
+                 content: function(){return '<img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" />';}
+                 });*/
+
+
             });
             function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
 
@@ -118,15 +129,6 @@
             }
 
             function updateComment() {
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-
                 var comments = $('#observationcomments').val();
                 var fecha = $("#observationfecha").val();
                 var tipo = $('#observationtype').val();
@@ -136,27 +138,30 @@
                 myObj["dateString"] = fecha;
                 myObj["type"] = tipo;
                 myObj["id"] = id;
-                var json = JSON.stringify(myObj);
-                $.ajax({
-                    type: 'POST',
-                    url: 'updateComment.htm',
-                    data: json,
-                    datatype: "json",
-                    contentType: "application/json",
-                    success: function (data) {
-                        //var j = JSON.parse(data);
-                        id = data;
-                        //MODIFICAR EL JSON PARA QUE DEVUELVA EL ID OBTENIDO 
-                        $('#editComment').modal('hide');
-                        loadComments();
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        console.log(xhr.status);
-                        console.log(xhr.responseText);
-                        console.log(thrownError);
-                    }
 
-                });
+                var json = JSON.stringify(myObj);
+                var data = new FormData();
+                data.append("obj", json);
+                data.append("fileToUpload", $('#fileToUpload')[0].files[0]);
+                data.append("update", "true");
+                var path = document.location.href;
+                var i = path.length - 1;
+
+                for (var j = 0; j < 1; j++) {
+                    if (j === 1)
+                        path = path.substring(0, i);
+                    while (path[i] !== '/') {
+                        path = path.substring(0, i);
+                        i--;
+                    }
+                }
+                path = path + "savecomment";
+                var request = new XMLHttpRequest();
+                request.open("POST", path);
+                request.send(data);
+                loadComments();
+                $('#editComment').modal('hide');
+                $('#confirmsave').modal('show');
             }
 
             function editComentario(id) {
@@ -174,6 +179,41 @@
                 $('#deleteObservation').modal('show');
                 $('#buttonDeleteObservation').val(val);
             }
+
+            function deletePhoto(id) {
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+                var idComment = $("#deleteFoto").val();
+                var myObj = {};
+                myObj["id"] = idComment;
+                var json = JSON.stringify(myObj);
+                $.ajax({
+                    type: 'POST',
+                    url: 'delFoto.htm',
+                    data: json,
+                    datatype: "json",
+                    contentType: "application/json",
+                    success: function (data) {
+
+                        $('#modalimagen').modal('hide');
+                        $("#verphoto" + idComment).attr("disabled", "true");
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
+                    }
+
+
+                });
+            }
+
             function deleteComentario(id) {
                 if (window.XMLHttpRequest) //mozilla
                 {
@@ -248,14 +288,15 @@
                         $("#semana6").empty();
                         $("#semana5").parent().parent().hide();
                         $("#semana6").parent().parent().hide();
-                        
-                        var weeksCount = weeksInAMonth($("#TXTfecha").val().split("-")[0],$("#TXTfecha").val().split("-")[1]);
-                        if(weeksCount > 4){
-                             $("#semana5").parent().parent().show();
-                             if(weeksCount > 5) $("#semana6").parent().parent().show();
+
+                        var weeksCount = weeksInAMonth($("#TXTfecha").val().split("-")[0], $("#TXTfecha").val().split("-")[1]);
+                        if (weeksCount > 4) {
+                            $("#semana5").parent().parent().show();
+                            if (weeksCount > 5)
+                                $("#semana6").parent().parent().show();
                         }
                         $.each(j, function (i, value) {
-                            var f = value;      
+                            var f = value;
                             $.each(f, function (i2, value2) {
                                 var id = value2.id;
                                 var comentario = value2.observation;
@@ -271,6 +312,12 @@
                                 var disable = "";
                                 var dayWeek = value2.numSemana;
                                 var idTeacher = value2.logged_by;
+                                var booleanFoto = value2.foto;
+
+                                var disableFoto = "";
+
+                                if (booleanFoto === false)
+                                    disableFoto = "disabled='disabled'"
                                 if (userId !== idTeacher && userType !== 0) {
                                     disable = "disabled='disabled'";
                                 }
@@ -319,14 +366,14 @@
                                     }
                                 }
                                 var path = document.location.href;
-                                var i = path.length-1; 
-                                while(path[i]!=='/'){
-                                    path = path.substring(0,i);
+                                var i = path.length - 1;
+                                while (path[i] !== '/') {
+                                    path = path.substring(0, i);
                                     i--;
                                 }
             <%--Create Date: " + fechaCreacion + "<br>\n\
             Type: " + category + "<br>\n\--%>
-                                $(numSemana).append("<div id='comment" + id + "' value='"+commentdate+"' class='divAdd " + visible + "'>\n\
+                                $(numSemana).append("<div id='comment" + id + "' value='" + commentdate + "' class='divAdd " + visible + "'>\n\
                                 <strong>Date:</strong> " + commentdate + " </strong> <br>\n\
                                 <strong>Observation:</strong> " + comentario.substring(0, 45) + " " + comentarioExtenso + "<br>\n\
                                 \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
@@ -346,14 +393,15 @@
                                 </button>\n\
                                 </div>\n\
                                 <div class='col-xs-3 text-center sinpadding'>\n\
-                                <input type='hidden' id='date"+id+"' value='"+commentdate+"'/>\n\
-                                <button type='button'  " + disable + " onclick='verphoto("+id+")' class='btn btn-link' data-toggle='tooltip' data-placement='bottom' value='delete' id='verphoto" + id + "'>\n\
-                                <span class=' glyphicon glyphicon-remove'></span>\n\
+                                <input type='hidden' id='date" + id + "' value='" + commentdate + "'/>\n\
+                                <button type='button'  " + disableFoto + " onclick='verphoto(" + id + ")' class='popOverFoto btn btn-link' data-toggle='tooltip' data-placement='bottom' value='" + id + "' id='verphoto" + id + "'>\n\
+                                <span class=' glyphicon glyphicon-camera'></span>\n\
                                 </button>\n\
                                 </div>\n\
                                 </div>\n\
                                 </div>");
                             });
+
                         });
                         if (cont1 === 0)
                             $("#semana1").append("<div class='divAdd'>No comments this week</div>");
@@ -367,6 +415,36 @@
                             $("#semana5").append("<div class='divAdd'>No comments this week</div>");
                         if (cont6 === 0)
                             $("#semana6").append("<div class='divAdd'>No comments this week</div>");
+
+                        $(".popOverFoto").mouseover(function () {
+                            if ($(this).prop("disabled") === false) {
+                                var id = $(this).val();
+                                var imageTag = '<div class="divFoto" style="position:absolute;">' + '<img class="fotoComment"  id="imgPop" src="" alt="image" height="100" />' + '</div>';
+                                if (window.XMLHttpRequest) //mozilla
+                                {
+                                    ajax = new XMLHttpRequest(); //No Internet explorer
+                                } else
+                                {
+                                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                                }
+
+                                ajax.onreadystatechange = function () {
+                                    if (ajax.readyState === 4 && ajax.status === 200) {
+                                        if (ajax.responseText !== "") {
+                                            var json = JSON.parse(ajax.responseText);
+                                            $('#imgPop').attr("src", "data:" + json.ext + ";base64," + json.imagen);
+                                        }
+                                    }
+                                };
+                                ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
+                                ajax.send("");
+
+                                $(this).parent('div').append(imageTag);
+                            }
+                        });
+                        $(".popOverFoto").mouseleave(function () {
+                            $(this).parent('div').children('div').remove();
+                        });
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -375,23 +453,27 @@
                     }
 
                 });
+
             }
-            
+
             function weeksInAMonth(year, month_number) {
-                            var firstOfMonth = new Date(year, month_number - 1, 1);
-                            var day = firstOfMonth.getDay() || 6;
-                            day = day === 1 ? 0 : day;
-                            if (day) { day-- }
-                            var diff = 7 - day;
-                            var lastOfMonth = new Date(year, month_number, 0);
-                            var lastDate = lastOfMonth.getDate();
-                            if (lastOfMonth.getDay() === 1) {
-                                diff--;
-                            }
-                            var result = Math.ceil((lastDate - diff) / 7);
-                            return result + 1;
-                        };
-                        
+                var firstOfMonth = new Date(year, month_number - 1, 1);
+                var day = firstOfMonth.getDay() || 6;
+                day = day === 1 ? 0 : day;
+                if (day) {
+                    day--
+                }
+                var diff = 7 - day;
+                var lastOfMonth = new Date(year, month_number, 0);
+                var lastDate = lastOfMonth.getDate();
+                if (lastOfMonth.getDay() === 1) {
+                    diff--;
+                }
+                var result = Math.ceil((lastDate - diff) / 7);
+                return result + 1;
+            }
+            ;
+
             function detailsSelect(LessonsSelected)
             {
                 if (window.XMLHttpRequest) //mozilla
@@ -449,8 +531,8 @@
             {
                 location.reload();
             }
-            
-            function verphoto(id){
+
+            function verphoto(id) {
                 if (window.XMLHttpRequest) //mozilla
                 {
                     ajax = new XMLHttpRequest(); //No Internet explorer
@@ -459,24 +541,35 @@
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
 
-                ajax.onreadystatechange = function(){
+                ajax.onreadystatechange = function () {
                     if (ajax.readyState === 4 && ajax.status === 200) {
-                        if(ajax.responseText !== ""){
+                        if (ajax.responseText !== "") {
                             var json = JSON.parse(ajax.responseText);
-                            $('#imagen').attr("src","data:"+json.ext+";base64,"+json.imagen);
+                            $('#imagen').attr("src", "data:" + json.ext + ";base64," + json.imagen);
                             $('#modalimagen').modal('show');
                         }
                     }
                 };
-                ajax.open("POST", "getimage.htm?id=" + id+"&date="+$('#date'+id).val(), true);
+                ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
             <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
                 ajax.send("");
-    
+
+                $("#deleteFoto").val(id);
             }
 
         </script>
         <style>
-
+            .divFoto{
+                position: absolute;
+                width: 230px;
+                z-index: 1;
+                height: 180px;
+            }
+            .fotoComment{
+                width: 100%;
+                height: 100%;
+                box-shadow: 0 15px 10px #777;
+            }
             .moreLess{
                 position: absolute; 
                 height: 225px;
@@ -635,6 +728,9 @@
             {
                 color: #777777 !important;
             }
+            .foto{
+                width: 100% !important;
+            }
         </style>
     </head>
     <body>
@@ -676,7 +772,7 @@
                      loadComments();
                      
                      });*/
-    
+
                     var resizeId;
                     $(window).resize(function () {
                         clearTimeout(resizeId);
@@ -685,9 +781,9 @@
 
 
                     function doneResizing() {
-                         loadComments();
+                        loadComments();
                     }
-                    
+
                     function moverDrech(x)
                     {
                         if ($("#semana" + x).children().not(".hide").length > 1) {
@@ -905,6 +1001,10 @@
                                         </select>
                                     </div>
                                 </div>  
+                                <div class="col-xs-12" >
+                                    <input type="file" id="fileToUpload" accept="image/*">
+                                </div>
+
                                 <div class="col-xs-12 text-center">
                                     <input type="submit" class="btn btn-success" id="savecomment"  value="Save" onclick="updateComment()">
                                 </div>
@@ -914,26 +1014,26 @@
                                 <div class="col-xs-12 text-center hidden" id="error2">
                                     <label>Please make sure to fill all data</label>
                                 </div>
-                                <div id="confirmsave" class="modal fade" role="dialog">
-                                    <div class="modal-dialog">
 
-                                        <!-- Modal content-->
-                                        <div class="modal-content">
-                                            <div class="modal-header modal-header-delete">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title">comment saved</h4>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
                             </div> 
                         </div>
                     </div>
                 </div>
             </div> 
         </div>
+        <div id="confirmsave" class="modal fade" role="dialog">
+            <div class="modal-dialog">
 
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header modal-header-delete">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">comment saved</h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         <div id="showComment" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
 
@@ -977,20 +1077,20 @@
 
             </div>
         </div> 
-        
-         
-            <div class="modal fade" id="modalimagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="titleComment"></h4>
-                        </div>
-                        <div class="modal-body">
-                            <img id="imagen" class="foto" src=""/>
-                        </div>
+
+        <div class="modal fade" id="modalimagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header col ">
+                        <button type="button"  onclick="deletePhoto()" class='btn btn-link'  value='' id='deleteFoto'>Delete</button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="titleComment"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <img id="imagen" class="foto" src=""/>
                     </div>
                 </div>
             </div>
+        </div>
     </body>
 </html>

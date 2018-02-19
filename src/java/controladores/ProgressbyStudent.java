@@ -125,11 +125,9 @@ public class ProgressbyStudent {
         List<Students> studentsgrades = new ArrayList();
         String[] levelid = hsr.getParameterValues("seleccion");
         String test = hsr.getParameter("levelStudent");
-         if(levelid[0]!= "")
-        {
-            studentsgrades =Students.getStudentslevel(levelid[0],log);
-        }
-        else{
+        if (levelid[0] != "") {
+            studentsgrades = Students.getStudentslevel(levelid[0], log);
+        } else {
             studentsgrades = Students.getStudents(log);
         }
         String data = new Gson().toJson(studentsgrades);
@@ -825,7 +823,7 @@ public class ProgressbyStudent {
         String user = "david";
         String pass = "david";
 
-        String filePath = "/MontessoriObservations/" + obsid + "_" + obsdate + "/";
+        String filePath = "/MontessoriObservations/" + obsid + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
@@ -889,6 +887,49 @@ public class ProgressbyStudent {
         ModelAndView mv = new ModelAndView("lessonresources");
         try {
             DBConect.eduweb.executeUpdate("update classobserv set date_created = now(), comment = '" + r.getObservation() + "' ,category = '" + r.getType() + "', commentdate = '" + r.getDateString() + "' where id = '" + r.getId() + "'");
+
+        } catch (SQLException ex) {
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return mv;
+    }
+
+    @RequestMapping("/delFoto.htm")
+    public ModelAndView delFoto(@RequestBody Resource r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        }
+        ModelAndView mv = new ModelAndView("lessonresources");
+        try {
+            String commentId = r.getId();
+
+            String consulta = "update classobserv set foto = false where id = " + commentId;
+            DBConect.eduweb.executeUpdate(consulta);
+
+            String server = "192.168.1.36";
+            int port = 21;
+            String user = "david";
+            String pass = "david";
+
+            FTPClient ftpClient = new FTPClient();
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            ftpClient.mkd("/MontessoriObservations/");
+            String rutaCompleta = "/MontessoriObservations/" + commentId;
+
+            if (!ftpClient.changeWorkingDirectory(rutaCompleta));
+            {
+                ftpClient.changeWorkingDirectory("/MontessoriObservations");
+
+                ftpClient.mkd(commentId);
+                ftpClient.changeWorkingDirectory(commentId);
+                ftpClient.deleteFile(ftpClient.listNames()[0]);             
+            }
+
+            ftpClient.logout();
 
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
@@ -985,7 +1026,7 @@ public class ProgressbyStudent {
                     oAux.setObservation(rs.getString("comment"));
                     oAux.setType(rs.getString("category"));
                     oAux.setStudentid(Integer.parseInt(studentId));
-
+                    oAux.setFoto(rs.getBoolean("foto"));
                     Date d = rs.getDate("commentdate");
                     oAux.setCommentDate("" + d);
                     Calendar cal = Calendar.getInstance();

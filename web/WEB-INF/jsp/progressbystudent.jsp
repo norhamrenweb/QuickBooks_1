@@ -732,8 +732,9 @@
                     request.send(data);
 
                     $('#confirmsave').modal('show');
-                    $("#observationcomments").val(" ");
+                    $("#observationcomments").val("");
                     $("#observationfecha").val("");
+                    $("#fileToUpload").val("");
                     $('#observationtype option').filter(function () {
                         return ($(this).text() === 'Select type'); //To select Blue
                     }).prop('selected', true);

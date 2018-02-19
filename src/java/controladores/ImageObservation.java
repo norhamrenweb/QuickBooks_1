@@ -4,7 +4,6 @@ import Montessori.DBConect;
 import Montessori.User;
 import atg.taglib.json.util.JSONException;
 import atg.taglib.json.util.JSONObject;
-import static controladores.ProgressbyStudent.log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -49,13 +48,13 @@ public class ImageObservation extends HttpServlet {
         int port = 21;
         String user = "david";
         String pass = "david";
-        
+
         String filePath = "/MontessoriObservations/" + obsid + "_" + obsdate + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-        if(ftpClient.changeWorkingDirectory(filePath)){
+        if (ftpClient.changeWorkingDirectory(filePath)) {
             String s[] = ftpClient.listNames();
             filePath = s[0];
             InputStream inStream = ftpClient.retrieveFileStream(s[0]);
@@ -91,22 +90,42 @@ public class ImageObservation extends HttpServlet {
         JSONObject json = new JSONObject(obsjson);
         String idobs = "";
         //get the file chosen by the user
+        String updateComment = request.getParameter("update");
+
+        String photoBoolean = "true";
         Part filePart = request.getPart("fileToUpload");
+        if (filePart.getSubmittedFileName() == null) {
+            photoBoolean = "false";
+        }
         try {
             HttpSession sesion = request.getSession();
             User user = (User) sesion.getAttribute("user");
+
             String consulta;
-            consulta = "insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate,term_id,yearterm_id)values('" + user.getId() + "',now(),'" + json.getString("observation") + "','" + json.getString("type")  + "','" + json.getString("studentid") + "','" + json.getString("date") + "','" + sesion.getAttribute("termId") +"','" + sesion.getAttribute("yearId") +"')";
-            DBConect.eduweb.executeUpdate(consulta,Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = DBConect.eduweb.getGeneratedKeys();
-            while(rs.next())
-                idobs = rs.getString("id");
+            if (updateComment == null) {
+                consulta = "insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate,term_id,yearterm_id,foto)values('" + user.getId() + "',now(),'" + json.getString("observation") + "','" + json.getString("type") + "','" + json.getString("studentid") + "','" + json.getString("date") + "','" + sesion.getAttribute("termId") + "','" + sesion.getAttribute("yearId") + "'," + photoBoolean + ")";
+                DBConect.eduweb.executeUpdate(consulta, Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs = DBConect.eduweb.getGeneratedKeys();
+                while (rs.next()) {
+                    idobs = rs.getString("id");
+                }
+            } else {
+                String photoUpdateBoolean = "";
+                if (filePart.getSubmittedFileName() != null) {
+                    photoUpdateBoolean = ",foto = true ";
+                }
+
+                consulta = "update classobserv set date_created = now(), comment = '" + json.getString("observation") + "' ,category = '" + json.getString("type") + "', commentdate = '" + json.getString("dateString") + "' " + photoUpdateBoolean + " where id = '" + json.getString("id") + "'";
+                DBConect.eduweb.executeUpdate(consulta);
+                idobs = json.getString("id");
+            }
+
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex + errors.toString());
+
         }
-        
+
         ResourcesControlador rCont = new ResourcesControlador();
         //get the InputStream to store the file somewhere
         InputStream fileInputStream = filePart.getInputStream();
@@ -120,19 +139,29 @@ public class ImageObservation extends HttpServlet {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            
             ftpClient.mkd("/MontessoriObservations/");
-            String rutaCompleta = "/MontessoriObservations/'" + idobs + "_" + json.getString("date") + "'";
+            String rutaCompleta = "/MontessoriObservations/" + idobs;
+
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
                 ftpClient.changeWorkingDirectory("/MontessoriObservations");
-                ftpClient.mkd(idobs + "_" + json.getString("date"));
-                ftpClient.changeWorkingDirectory(idobs + "_" + json.getString("date"));
+
+                ftpClient.mkd(idobs);
+                ftpClient.changeWorkingDirectory(idobs);
+                
+                if (filePart.getSubmittedFileName() != null && ftpClient.listNames().length > 0) {
+
+                    ftpClient.deleteFile(ftpClient.listNames()[0]);
+                }
             }
 
-            String filename = idobs+"-"+filePart.getSubmittedFileName();
-            ftpClient.storeFile(filename, fileInputStream);
+            String filename = idobs + "-" + filePart.getSubmittedFileName();
+            if (filePart.getSubmittedFileName() != null) {
+
+                ftpClient.storeFile(filename, fileInputStream);
+            }
             ftpClient.logout();
+
 //            Resource r = new Resource();
 //
 //            r.setLesson_id(lessonId);
@@ -141,20 +170,21 @@ public class ImageObservation extends HttpServlet {
 //            r.setType("File");
 //            String idResource = rCont.addResources(r, request, response);
             // }
-
         } catch (Exception ex) {
             Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private String terminacion(String nombre){
-        String ret="";
-        boolean copiar=false;
-        for(int i = 0; i < nombre.length();i++){
-            if(nombre.charAt(i)=='.')
-                copiar=true;
-            if(copiar)
-                ret+=nombre.charAt(i);
+
+    private String terminacion(String nombre) {
+        String ret = "";
+        boolean copiar = false;
+        for (int i = 0; i < nombre.length(); i++) {
+            if (nombre.charAt(i) == '.') {
+                copiar = true;
+            }
+            if (copiar) {
+                ret += nombre.charAt(i);
+            }
         }
         return ret;
     }

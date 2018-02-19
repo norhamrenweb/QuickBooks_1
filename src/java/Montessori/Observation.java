@@ -20,6 +20,15 @@ public class Observation {
     private String nameTeacher;
     private String dateString;
     private String numSemana;
+    private boolean foto;
+
+    public Boolean getFoto() {
+        return foto;
+    }
+
+    public void setFoto(Boolean foto) {
+        this.foto = foto;
+    }
     
     public String getNameTeacher() {
         return nameTeacher;
@@ -53,6 +62,7 @@ public class Observation {
         studentid = o2.getStudentid();
         nameTeacher = o2.getNameTeacher();
         numSemana = o2.getNumSemana();
+        foto = o2.getFoto();
     }
 
     public String getNumSemana() {
