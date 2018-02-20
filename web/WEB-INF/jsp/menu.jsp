@@ -26,6 +26,13 @@
                 </div>
             </a>
         </div>
+         <div class="col-xs-12 iconosmenulateral">
+            <a href="<c:url value='/observations/start.htm'/>">
+                <div class="center-block">
+                    <img width="70%" src="<c:url value='/recursos/img/iconos/notepad.svg'/>" data-toggle="tooltip" data-placement="top" title="Workspace">
+                </div>
+            </a>
+        </div>
         <div class="col-xs-12 iconosmenulateral">
             <a href="<c:url value='/lessonarchive/loadLessons.htm'/>">
                 <div class="center-block">

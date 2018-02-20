@@ -618,6 +618,7 @@
         </style>
     </head>
     <body>
+        
         <div class="col-xs-2" >
             <select id="grades">
                 <c:forEach var="levels" items="${gradelevels}">
@@ -668,7 +669,7 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
-                <button type="button" id="newcomment" class="btn btn-primary btn-lg">New comment</button>
+                <input class="btn-lg" type="image" id="newcomment" src="<c:url value='/recursos/img/iconos/add-comment(1).svg'/>" width="100px">
             </div>
         </div>
 
