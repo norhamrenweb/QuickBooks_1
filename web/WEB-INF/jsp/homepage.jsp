@@ -338,6 +338,12 @@
                     }
                 });
             }
+            function showCalendar()
+                        {
+        
+                                id = '11343';
+                                window.open("<c:url value="/schedule.htm?id="/>" + id);
+                        }
             /*var resizeId;
             $(window).resize(function () {
                 clearTimeout(resizeId);
@@ -632,6 +638,8 @@
             </div>
         </div>
 
-
+  <div class="col-xs-6 text-center">
+     <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View Schedule</button>
+                                </div>
     </body>
 </html>

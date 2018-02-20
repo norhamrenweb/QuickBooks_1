@@ -61,7 +61,29 @@ public class LessonsListControlador {
         mv.addObject("teacherlist",this.getTeachers(iduser));
         return mv;
     }
-    
+     @RequestMapping("/schedule.htm")
+    public ModelAndView schedule(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        return new ModelAndView("schedule");
+    }
+@RequestMapping("/loadschedule.htm")
+@ResponseBody
+    public String loadschedule(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        String consulta = "SELECT * FROM public.lessons where COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+     ArrayList<JSONObject> lessonslist = new ArrayList<>();
+            while (rs.next()) {
+               JSONObject l = new JSONObject();
+               l.put("title",rs.getString("name"));
+               Timestamp stamp = rs.getTimestamp("start");
+               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+               l.put("start",rs.getTimestamp("start"));//sdfDate.format(stamp));
+               l.put("end",rs.getTimestamp("finish"));//sdfDate.format(stamp));
+               l.put("allDay","false");
+               lessonslist.add(l);
+                }
+            
+        return lessonslist.toString();
+    }
     public static ArrayList<Teacher> getTeachers(int iduser) throws SQLException{
         String consulta = "select * from Staff where faculty=1";
         if(iduser == -1)consulta = "select * from Staff";

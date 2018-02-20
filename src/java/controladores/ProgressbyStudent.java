@@ -215,8 +215,8 @@ public class ProgressbyStudent {
         List<String> attemptdates = new ArrayList<>();
         try {
 //will display only if there is a lesson that has a progress record,but if a lesson is only planned will not be displayed
-// the message should appear if an objective has only a general comment
-            ResultSet rs1 = DBConect.eduwebBeforeFirst.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = " + d.getCol2());
+
+            ResultSet rs1 = DBConect.eduwebBeforeFirst.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = '" + d.getCol2()+"' order by comment_date DESC");
 
             if (!rs1.next()) {
                 String message = "Student does not have progress under the selected objective";//if i change this message must change as well in the jsp
@@ -227,7 +227,12 @@ public class ProgressbyStudent {
                     Progress p = new Progress();
                     p.setComment(rs1.getString("comment"));
                     p.setRating(rs1.getString("ratingname"));
+                    if(rs1.getString("lessonname") != null){
                     p.setLesson_name(rs1.getString("lessonname"));
+                }else
+                    {
+                       p.setLesson_name("") ;// so that null will not appear in the table in case of a general comment
+                    }
                     Timestamp stamp = rs1.getTimestamp("comment_date");
                     SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
                     String dateStr = sdfDate.format(stamp);
@@ -280,9 +285,9 @@ public class ProgressbyStudent {
 
                     }
                 }
-                String prog = new Gson().toJson(progress);
-                String rating = new Gson().toJson(finalrating);
-                JSONObject obj = new JSONObject();
+//                String prog = new Gson().toJson(progress);
+//                String rating = new Gson().toJson(finalrating);
+//                JSONObject obj = new JSONObject();
                 mv.addObject("progress", progress);
                 mv.addObject("finalrating", finalrating);
                 mv.addObject("attempteddate", attempteddate);
@@ -1116,8 +1121,8 @@ public class ProgressbyStudent {
                     + "(select rating_id from progress_report where student_id = '" + studid + "'"
                     + " AND comment_date = (select max(comment_date)   from public.progress_report "
                     + "where student_id = '" + studid + "' AND objective_id = '" + objid + "' "
-                    + "and generalcomment = false and rating_id not in(6,7)) "
-                    + "AND objective_id ='" + objid + "'and generalcomment = false )";
+                    + " and rating_id not in(6,7)) "
+                    + "AND objective_id ='" + objid + "' )";
 
             ResultSet rs2 = DBConect.eduweb.executeQuery(consulta);
             while (rs2.next()) {

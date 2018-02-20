@@ -163,20 +163,20 @@
                 <table id="tablelessons" class="display">
                     <thead>
                         <tr>
-                            <th>Lesson Name</th>
-                            <th>Comment</th>
-                            <th>Comment Date</th>
                             <th>Rating</th>
-                           
+                            <th>Date</th>
+                            <th>Comment</th>
+                            <th>Presentation Name</th>
                         </tr>
                     </thead> 
                     
                     <c:forEach var="p" items="${progress}" >
                         <tr>
-                            <td>${p.lesson_name}</td>
-                            <td>${p.comment}</td>
-                            <td>${p.comment_date}</td> 
                             <td>${p.rating}</td>
+                            <td>${p.comment_date}</td>
+                            <td>${p.comment}</td>
+                             <td>${p.lesson_name}</td>
+                            
                         </tr>
                     </c:forEach>
                     

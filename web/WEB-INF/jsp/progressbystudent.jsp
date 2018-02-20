@@ -191,12 +191,12 @@
                             if (gComment === undefined)
                                 gComment = "";
 //                         var commentgeneral = $('#tableobjective tbody tr td:eq(2)').text();
-                            $('#tableobjective tbody tr:eq(' + i + ') td:eq(2)').empty();
-                            $('#tableobjective tbody tr:eq(' + i + ') td:eq(2)').append("<div class='input-group'>\n\
-                <textarea rows='2' class='form-control commentGeneral' id='comment" + item.col5 + "'>" + gComment + "</textarea>\n\
-<span class='input-group-btn'>\n\
-<button type='button' class='btn btn-default btn-xs' value='" + item.col5 + "' onclick='saveGeneralComment(" + item.col5 + ")'>save</button>\n\
-</span></div>");
+//                            $('#tableobjective tbody tr:eq(' + i + ') td:eq(2)').empty();
+//                            $('#tableobjective tbody tr:eq(' + i + ') td:eq(2)').append("<div class='input-group'>\n\
+//                <textarea rows='2' class='form-control commentGeneral' id='comment" + item.col5 + "'>" + gComment + "</textarea>\n\
+//<span class='input-group-btn'>\n\
+//<button type='button' class='btn btn-default btn-xs' value='" + item.col5 + "' onclick='saveGeneralComment(" + item.col5 + ")'>save</button>\n\
+//</span></div>");
 //                        if(item.col4 === currentTime ){
 //                        $('#tableobjective tbody tr:eq('+ i +') td:eq(3)').append("<div class='input-group'>"+currentTime+"</div>");
 //                        }
@@ -222,26 +222,26 @@
                 }
             }
 
-            function funcionCallBackSaveGeneralComent()
-            {
-                if (ajax.readyState === 4) {
-                    if (ajax.status === 200) {
-
-                        var json = JSON.parse(ajax.responseText);
-                        //console.log(json);
-                        var mensaje = json.message;
-                        if (mensaje === "Comment successfully updated") {
-                            $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);
-                            $('#showModalComment').click();
-                            $('#titleComment').text(mensaje);
-
-                        } else {
-                            $('#showModalComment').click();
-                            $('#titleComment').text(mensaje);
-                        }
-                    }
-                }
-            }
+//            function funcionCallBackSaveGeneralComent()
+//            {
+//                if (ajax.readyState === 4) {
+//                    if (ajax.status === 200) {
+//
+//                        var json = JSON.parse(ajax.responseText);
+//                        //console.log(json);
+//                        var mensaje = json.message;
+//                        if (mensaje === "Comment successfully updated") {
+//                            $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);
+//                            $('#showModalComment').click();
+//                            $('#titleComment').text(mensaje);
+//
+//                        } else {
+//                            $('#showModalComment').click();
+//                            $('#titleComment').text(mensaje);
+//                        }
+//                    }
+//                }
+//            }
 
             var levelarbol;
             var studentarbol;
@@ -364,52 +364,52 @@
                 });
             }
 
-            function saveGeneralComment(objectiveId)
-            {
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-
-                var studentId = $('#studentid').val();
-                var dataCommentGeneral = $('#comment' + objectiveId).val();
-
-                var myObj = {};
-                myObj["col1"] = objectiveId;
-                myObj["col2"] = studentId;
-                myObj["col3"] = dataCommentGeneral;
-                var json = JSON.stringify(myObj);
-                $.ajax({
-                    type: 'POST',
-                    url: 'saveGeneralcomment.htm',
-                    data: json,
-                    datatype: "json",
-                    contentType: "application/json",
-                    success: function (data) {
-                        var j = JSON.parse(data);
-                        var mensaje = j.message;
-                        if (mensaje === "Comment successfully updated") {
-                            $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);
-                            $('#showModalComment').click();
-                            $('#titleComment').text(mensaje);
-
-                        } else {
-                            $('#showModalComment').click();
-                            $('#titleComment').text(mensaje);
-                        }
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        console.log(xhr.status);
-                        console.log(xhr.responseText);
-                        console.log(thrownError);
-                    }
-
-                });
-
-            }
+//            function saveGeneralComment(objectiveId)
+//            {
+//                if (window.XMLHttpRequest) //mozilla
+//                {
+//                    ajax = new XMLHttpRequest(); //No Internet explorer
+//                } else
+//                {
+//                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+//                }
+//
+//                var studentId = $('#studentid').val();
+//                var dataCommentGeneral = $('#comment' + objectiveId).val();
+//
+//                var myObj = {};
+//                myObj["col1"] = objectiveId;
+//                myObj["col2"] = studentId;
+//                myObj["col3"] = dataCommentGeneral;
+//                var json = JSON.stringify(myObj);
+//                $.ajax({
+//                    type: 'POST',
+//                    url: 'saveGeneralcomment.htm',
+//                    data: json,
+//                    datatype: "json",
+//                    contentType: "application/json",
+//                    success: function (data) {
+//                        var j = JSON.parse(data);
+//                        var mensaje = j.message;
+//                        if (mensaje === "Comment successfully updated") {
+//                            $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);
+//                            $('#showModalComment').click();
+//                            $('#titleComment').text(mensaje);
+//
+//                        } else {
+//                            $('#showModalComment').click();
+//                            $('#titleComment').text(mensaje);
+//                        }
+//                    },
+//                    error: function (xhr, ajaxOptions, thrownError) {
+//                        console.log(xhr.status);
+//                        console.log(xhr.responseText);
+//                        console.log(thrownError);
+//                    }
+//
+//                });
+//
+//            }
             function funcionCallBackSelectStudent()
             {
                 if (ajax.readyState === 4) {
@@ -1020,7 +1020,7 @@
                                             <tr>
                                                 <th>Name</th>
                                                 <th>Description</th>
-                                                <th>Comment general</th>
+                                                <th>Most recent comment</th>
                                                 <th>Last update date</th>
                                                 <th></th>
                                             </tr>
