@@ -37,7 +37,7 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         String studentId = idStudent;
         String consulta = "";
         ResultSet rs;
-        cargarAlumno(studentId);
+        cargarAlumno(studentId); // tarda 1
 
         ArrayList<String> lessons = new ArrayList<>();
         java.util.Vector coll = new java.util.Vector();
@@ -134,7 +134,7 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
             }
         }
         // FALTA TERMINAR PODRIAMOS TOMAR LOS SUBJECT_ID DE LOS ALUMNOS QUE SEAN ELECTIVOS Y COMPROBAR QUE NO EXISTAN EN LA UQERY SIGUIENTE
-
+        // tarda 2
         ArrayList<String> os = new ArrayList<>();
         ArrayList<String> as = new ArrayList<>();
         Subject s = new Subject();
@@ -176,7 +176,21 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         return coll;
         // return new JRBeanCollectionDataSource(coll);
     }
+ @Override
+    protected void cargarAlumno(String studentId) throws SQLException {
+        String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentId = '" + studentId + "'";
+        ResultSet rs = DBConect.ah.executeQuery(consulta);
 
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        while (rs.next()) {
+            this.nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName");
+            this.dob = rs.getString("Birthdate");
+            this.dob = dob.split(" ")[0];
+            this.age = "" + (year - Integer.parseInt("" + dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3)));
+            this.grade = rs.getString("GradeLevel");
+        }
+        
+    }
     @Override
     public String getNameReport() {
         return "Pre-Primary_Progress_Report_December2017_v2_4.jasper";

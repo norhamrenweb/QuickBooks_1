@@ -135,12 +135,13 @@ public class html extends HttpServlet {
 //            map.put("end",enddate);
         //   List<SimpleExporterInput> list = new ArrayList<SimpleExporterInput>();
         JRDataSource datasource;
-        if(!d.getClass().equals(FactoryActivityLog.class))  datasource = new JRBeanCollectionDataSource(d.getDataSource(stids[0], this.getServletContext()), true);
+        if(!d.getClass().equals(FactoryActivityLog.class)){
+            datasource = new JRBeanCollectionDataSource(d.getDataSource(stids[0], this.getServletContext()), true);
+        }
         else{    
             datasource = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(((User)request.getSession().getAttribute("user")).getName(),start,finish,stids[0], this.getServletContext()), true);
             
-        }
-        
+        }        
         JasperPrint jasperPrint = jasperFillManager.fill(jasperReport, map, datasource);//fill(jasperReport,map, conn);
 
         for (int i = 1; i < stids.length; i++) {
@@ -164,6 +165,7 @@ public class html extends HttpServlet {
             response.setContentLength(bites.length);
             os.write(bites);
             os.close();
+            
         }
         else{
             //XML Report Activity Log.
