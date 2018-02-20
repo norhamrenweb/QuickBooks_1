@@ -155,13 +155,15 @@
                         i--;
                     }
                 }
+                      loadComments();
+                $('#editComment').modal('hide');
+                $('#confirmsave').modal('show');
                 path = path + "savecomment";
                 var request = new XMLHttpRequest();
                 request.open("POST", path);
                 request.send(data);
-                loadComments();
-                $('#editComment').modal('hide');
-                $('#confirmsave').modal('show');
+                
+          
             }
 
             function editComentario(id) {
@@ -569,6 +571,7 @@
                 width: 100%;
                 height: 100%;
                 box-shadow: 0 15px 10px #777;
+                border-radius: 10px;
             }
             .moreLess{
                 position: absolute; 

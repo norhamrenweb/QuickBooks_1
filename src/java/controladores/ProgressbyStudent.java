@@ -744,7 +744,7 @@ public class ProgressbyStudent {
         return obN;
     }
 
-    @RequestMapping("/progressbystudent/savecomment.htm")
+   /* @RequestMapping("/progressbystudent/savecomment.htm")
     @ResponseBody
     public String savecomment(@RequestBody Observation obs, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         ModelAndView mv = new ModelAndView("progressbystudent");
@@ -760,7 +760,7 @@ public class ProgressbyStudent {
         }
         return "success";
     }
-
+*/
     @RequestMapping("/progressbystudent/saveSubjectComment.htm")
     @ResponseBody
     public String saveSubjectComment(@RequestBody CommentSubject cSub, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {

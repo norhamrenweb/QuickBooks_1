@@ -13,21 +13,19 @@
 <html>
     <%@ include file="infouser.jsp" %>
     <%@ include file="menu.jsp" %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+
     <head>
         <title>Create Presentations</title>
         <script>
 
             $(document).ready(function () {
-
+                // $('#loadingmessage').hide();
                 $('#generateReport').attr('disabled', true);
 
-                $("#saveEdit").focus(function () {
+                $("#generateReport").click(function () {
                     $('#destino option').prop('selected', true);
-                });
-
-
-                $("#generateReport").focus(function () {
-                    $('#destino option').prop('selected', true);
+                    //  $('#loadingmessage').show()
                 });
 
                 $('.pasar').click(function () {
@@ -92,8 +90,25 @@
                     });
                     $('#generateReport').attr('disabled', true);
                 });
+
+
             });
 
+            function showResponse(responseText, statusText, xhr, $form) {
+                // for normal html responses, the first argument to the success callback 
+                // is the XMLHttpRequest object's responseText property 
+
+                // if the ajaxForm method was passed an Options Object with the dataType 
+                // property set to 'xml' then the first argument to the success callback 
+                // is the XMLHttpRequest object's responseXML property 
+
+                // if the ajaxForm method was passed an Options Object with the dataType 
+                // property set to 'json' then the first argument to the success callback 
+                // is the json data object returned by the server 
+
+                //alert('jj'); 
+
+            }
             var ajax;
 
             function funcionCallBackLevelStudent()
@@ -103,6 +118,11 @@
                         document.getElementById("origen").innerHTML = ajax.responseText;
                     }
                 }
+            }
+
+            function ocultarLoading()
+            {
+                $('#loadingmessage').hide();
             }
 
 
@@ -146,7 +166,6 @@
                 ajax.send("");
 
             }
-
 
 
         </script>
@@ -299,7 +318,7 @@
             <h1 class="text-center">Create New Report</h1>
 
             <c:url var="post_url"  value="/html" />
-            <form:form id="formStudents" method ="post" action="${post_url}" >
+            <form:form id="formStudents" method ="post" action="${post_url}"  >
 
                 <fieldset>
                     <legend id="showStudents">
@@ -377,7 +396,11 @@
                 </div>
             </form:form>
         </div>
-
+        <div class="divLoadStudent" id="loadingmessage">
+            <div class="text-center"> 
+                <img class="imgLoading" src='../recursos/img/large_loading2.gif'/>
+            </div>
+        </div>
         <%--        <div class="col-xs-6">
                         <div class="form-group">
                             <label class="control-label"></label>
@@ -413,5 +436,5 @@
                 </div>
             </div>
         </div>
-   </body>
+    </body>
 </html>
