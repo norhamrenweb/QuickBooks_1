@@ -418,7 +418,7 @@
                             <td>
                                 ${lecciones.name}
                                 <c:if test="${lecciones.share==true}">
-                                    <img style="width: 20px" src="<c:url value="/recursos/img/btn/compartido.png"/>">
+                                    <img style="width: 20px" src="<c:url value="/recursos/img/btn/slideshare.svg"/>">
                                 </c:if>
                             </td>
                             <td>${lecciones.level.name}</td>
