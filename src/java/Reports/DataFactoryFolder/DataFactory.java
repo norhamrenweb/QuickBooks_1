@@ -30,11 +30,13 @@ import Montessori.*;
  */
 public abstract class DataFactory {
 
-    String nameStudent, dob, age, grade, term,termid="", yearid="";
+    String nameStudent, dob, age, grade, term, termid = "", yearid = "";
 
     public abstract Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException;
 
     public abstract String getNameReport();
+
+    
 
     protected void cargarAlumno(String studentId) throws SQLException {
         String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentId = '" + studentId + "'";
@@ -48,24 +50,23 @@ public abstract class DataFactory {
             this.age = "" + (year - Integer.parseInt("" + dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3)));
             this.grade = rs.getString("GradeLevel");
         }
-        
-      
+
         ResultSet rs2 = DBConect.ah.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where configschoolid = 1");
         while (rs2.next()) {
             termid = "" + rs2.getInt("defaulttermid");
             yearid = "" + rs2.getInt("defaultyearid");
         }
-        String nameTerm="", nameYear="";
-        
-        ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = "+this.termid+" and YearID = "+this.yearid);
+        String nameTerm = "", nameYear = "";
+
+        ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + this.termid + " and YearID = " + this.yearid);
         while (rs3.next()) {
             nameTerm = "" + rs3.getString("name");
         }
-        ResultSet rs4 = DBConect.ah.executeQuery("select SchoolYear from SchoolYear where yearID = "+this.yearid);
+        ResultSet rs4 = DBConect.ah.executeQuery("select SchoolYear from SchoolYear where yearID = " + this.yearid);
         while (rs4.next()) {
             nameYear = "" + rs4.getString("SchoolYear");
         }
-        
-        this.term = nameTerm+" / "+nameYear;
+
+        this.term = nameTerm + " / " + nameYear;
     }
 }

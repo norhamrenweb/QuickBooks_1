@@ -36,41 +36,69 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         grade = "";
         term = "";
     }
-    
+
     @Override
     public Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
 
-        String studentId = idStudent; 
+        String studentId = idStudent;
         java.util.Vector coll = new java.util.Vector();
         ArrayList<String> os4 = new ArrayList<>();
         ArrayList<String> as4 = new ArrayList<>();
         cargarAlumno(studentId);
-        
+
         HashMap<String, Profesor> mapTeachers = getTeachers(idStudent);
         HashMap<String, String> mapComentarios = getComments(idStudent);
-        
+
         for (Map.Entry<String, Profesor> entry : mapTeachers.entrySet()) {
             String key = entry.getKey();
-            String aux ="No Comments";
+            String aux = "No Comments";
             Profesor value = entry.getValue();
+
+            if (mapComentarios.containsKey(key)) {
+                aux = mapComentarios.get(key);
+            }
             
-            if(mapComentarios.containsKey(key)) aux = mapComentarios.get(key);
-            String auxOs = value.getAsignatura()+"#"+value.getFirstName()+"#"+aux;
+            String nameAsignatura = limpiarNameAsignatura(value.getAsignatura());
+            String auxOs = nameAsignatura + "#" + value.getFirstName() + "#" + aux;
             os4.add(auxOs);
         }
-      
-        if (coll.isEmpty()) {
-            coll.add(new BeanWithList(null, os4, as4, nameStudent, dob, age, grade, term));
-        }
+        os4.add("Head of School#Kim Euston-Brown#" + getSuperComment(idStudent));
+        coll.add(new BeanWithList(null, os4, as4, nameStudent, dob, age, grade, term));       
+        
         return coll;
+    }
+
+     private String limpiarNameAsignatura(String name) {
+         int ini=0;
+         int posEspacio = name.indexOf(" ");
+         if(posEspacio == -1) return name;
+         if (name.substring(0,posEspacio).toUpperCase().contains("GR") || name.substring(0,posEspacio).toUpperCase().contains("JP") || name.substring(0,posEspacio).toUpperCase().contains("PP"))
+             ini = posEspacio+1;
+             
+         return name.substring(ini,name.length());
+     }
+     
+    private String getSuperComment(String idStudent) {
+        try {
+            String consulta = "select * from report_comments where supercomment=true and studentid = " + idStudent;
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+             while (rs.next()) {
+                return rs.getString("comment");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+        }
+        return "";
     }
 
     private HashMap<String, String> getComments(String id) throws SQLException {
         HashMap<String, String> mapComment = new HashMap<>();
 
-        try {         
-            String consulta = "select * from report_comments where studentid = " + id +"order by date_created DESC";
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);      
+        try {
+            String consulta = "select * from report_comments where supercomment=false and studentid = " + id + "order by date_created DESC";
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 mapComment.put(rs.getString("subject_id"), rs.getString("comment"));
             }
@@ -87,7 +115,7 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         HashMap<String, Profesor> mapTeachers = new HashMap<>();
         ArrayList<Profesor> listaProfesores = new ArrayList<>();
         HashMap<String, String> mapNames = new HashMap<>();
-        
+
         try {
             ArrayList<Integer> staffids = new ArrayList<>();
             ArrayList<String> classids = new ArrayList<>();
@@ -96,26 +124,27 @@ public class FactoryProgressReport_grade4 extends DataFactory {
             String consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID from Roster inner join Classes"
                     + " on Roster.ClassID = Classes.ClassID"
                     + " inner join Courses on  Classes.CourseID = Courses.CourseID"
-                    + "  where Roster.StudentID = " + id +"and Classes.yearid = "+this.yearid+"and Courses.ReportCard = 1";
+                    + "  where Roster.StudentID = " + id + "and Classes.yearid = " + this.yearid + "and Courses.ReportCard = 1";
             ResultSet rs = DBConect.ah.executeQuery(consulta);
             while (rs.next()) {
                 staffids.add(rs.getInt("StaffID"));
                 classids.add(rs.getString("CourseID"));
                 coursesTitles.add(rs.getString("Title"));
             }
-      
+
             consulta = "select FirstName,LastName,Email,PersonID from Person";
             ResultSet rs3 = DBConect.ah.executeQuery(consulta);
             while (rs3.next()) {
-               mapNames.put(rs3.getString("PersonID"),rs3.getString("LastName")+", "+rs3.getString("FirstName"));
+                mapNames.put(rs3.getString("PersonID"), rs3.getString("LastName") + ", " + rs3.getString("FirstName"));
             }
-            
-            for (Integer i : staffids) {  
-                if(mapNames.containsKey(""+i)){
-                    listaProfesores.add(new Profesor(mapNames.get(""+i), "", i, ""));
+
+            for (Integer i : staffids) {
+                if (mapNames.containsKey("" + i)) {
+                    listaProfesores.add(new Profesor(mapNames.get("" + i), "", i, ""));
+                } else {
+                    listaProfesores.add(new Profesor(" ", "", i, ""));
                 }
-                else listaProfesores.add(new Profesor(" ", "", i, ""));
-            }     
+            }
             for (int i = 0; i < listaProfesores.size(); i++) {
                 listaProfesores.get(i).setAsignatura(coursesTitles.get(i));
                 mapTeachers.put(classids.get(i), listaProfesores.get(i));
@@ -134,6 +163,5 @@ public class FactoryProgressReport_grade4 extends DataFactory {
     public String getNameReport() {
         return "progress_report_2017_gr4.jasper";
     }
-    
-   
+
 }
