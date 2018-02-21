@@ -51,7 +51,7 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         
         for (Map.Entry<String, Profesor> entry : mapTeachers.entrySet()) {
             String key = entry.getKey();
-            String aux ="Not Comments";
+            String aux ="No Comments";
             Profesor value = entry.getValue();
             
             if(mapComentarios.containsKey(key)) aux = mapComentarios.get(key);
