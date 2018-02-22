@@ -263,7 +263,7 @@ public class LessonsListControlador {
             ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
             while (rs1.next()) {
                 int check = rs1.getInt("rating_id");
-                if (check != 7)//empty rating
+                if (check != 7 && check!= 6)//empty rating or N/A , we could check here as well if the proesentatio has comments, but i think what is important is the rating
                 {
                     message = "Presentation has progress records,it can not be deleted";
                 }
@@ -272,6 +272,8 @@ public class LessonsListControlador {
                 consulta = "DELETE FROM lesson_content WHERE lesson_id=" + id[0];
                 DBConect.eduweb.executeUpdate(consulta);
                 consulta = "DELETE FROM lesson_stud_att WHERE lesson_id=" + id[0];
+                DBConect.eduweb.executeUpdate(consulta);
+                consulta = "DELETE FROM progress_report WHERE lesson_id=" + id[0];//to delete the empty ratings and NAs so not to appear later in reports
                 DBConect.eduweb.executeUpdate(consulta);
                 consulta = "DELETE FROM public.lessons WHERE id=" + id[0];
                 DBConect.eduweb.executeUpdate(consulta);

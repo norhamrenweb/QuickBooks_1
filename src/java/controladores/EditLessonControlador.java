@@ -51,7 +51,7 @@ public class EditLessonControlador {
         try {
             String presentationId = id;
 
-            String consulta = "SELECT lesson_id FROM progress_report WHERE lesson_id = " + presentationId;
+            String consulta = "SELECT lesson_id FROM progress_report WHERE lesson_id = '" + presentationId+"' and (rating_id not in (6,7) or comment <> '')";//incase there was a progress record created and then removed or placed NA
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             if (rs.next()) {
                 return true;
