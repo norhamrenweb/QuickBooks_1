@@ -17,6 +17,7 @@ public class Progress {
     private String comment;
     private String comment_date;
     private String steps;
+    private String createdby;
 
     public String getSteps() {
         return steps;
@@ -82,5 +83,14 @@ public class Progress {
     public void setAttendancecode(String attendancecode) {
         this.attendancecode = attendancecode;
     }
+
+    public String getCreatedby() {
+        return createdby;
+    }
+
+    public void setCreatedby(String createdby) {
+        this.createdby = createdby;
+    }
+    
     
 }

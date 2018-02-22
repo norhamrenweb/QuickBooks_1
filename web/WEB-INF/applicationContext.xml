@@ -10,7 +10,8 @@
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
 <!--must change the ftp path as well,veryimportant
-change the defeinition of the progress view,very important-->
+change the defeinition of the progress view,very important
+    check that the date and time is working fine in the client server-->
 <bean id="dataSource"
     class="org.springframework.jdbc.datasource.DriverManagerDataSource"
    p:driverClassName="org.postgresql.Driver"
