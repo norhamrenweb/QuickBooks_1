@@ -20,9 +20,7 @@
 
             var userId = ${user.id};
 
-
             $(document).ready(function () {
-
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
 
             <%--      var lessondelete = '<%= request.getParameter("messageDelete") %>'; --%>
@@ -106,6 +104,9 @@
 
                     ],
                     responsive: true
+                });
+                $(window).on('resize', function () {
+                    location.reload();
                 });
                 $('#table_datelessons').DataTable();
 

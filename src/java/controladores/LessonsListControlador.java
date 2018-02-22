@@ -65,23 +65,40 @@ public class LessonsListControlador {
     public ModelAndView schedule(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         return new ModelAndView("schedule");
     }
-@RequestMapping("/loadschedule.htm")
-@ResponseBody
+    @RequestMapping("/loadschedule.htm")
+    @ResponseBody
     public String loadschedule(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        String consulta = "SELECT * FROM public.lessons where COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
-     ArrayList<JSONObject> lessonslist = new ArrayList<>();
+        User user = (User) hsr.getSession().getAttribute("user");
+        String consultAux = "";
+        if (user.getType() == 1) {
+            consultAux = "user_id = " + user.getId() + " and";
+        }
+        String consulta = "SELECT * FROM public.lessons where " + consultAux + " COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+        ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+        ArrayList<JSONObject> lessonslist = new ArrayList<>();
+        while (rs.next()) {
+            JSONObject l = new JSONObject();
+            l.put("title", rs.getString("name"));
+            Timestamp stamp = rs.getTimestamp("start");
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+            l.put("start", rs.getTimestamp("start"));//sdfDate.format(stamp));
+            l.put("end", rs.getTimestamp("finish"));//sdfDate.format(stamp));
+            l.put("allDay", "false");
+            l.put("objid",rs.getString("objective_id"));
+            l.put("idteacher", rs.getString("user_id"));
+            lessonslist.add(l);
+        }
+        
+        for(JSONObject l:lessonslist){
+            String idobj = (String)l.get("objid");
+            consulta = "SELECT * FROM public.objective where id="+idobj;
+            rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
-               JSONObject l = new JSONObject();
-               l.put("title",rs.getString("name"));
-               Timestamp stamp = rs.getTimestamp("start");
-               SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-               l.put("start",rs.getTimestamp("start"));//sdfDate.format(stamp));
-               l.put("end",rs.getTimestamp("finish"));//sdfDate.format(stamp));
-               l.put("allDay","false");
-               lessonslist.add(l);
-                }
-            
+                l.put("nameobj", rs.getString("name"));
+            }
+            String nameteacher = fetchNameTeacher(Integer.parseInt(l.getString("idteacher")),hsr.getServletContext());
+            l.put("createdby", nameteacher);
+        }
         return lessonslist.toString();
     }
     public static ArrayList<Teacher> getTeachers(int iduser) throws SQLException{
@@ -399,8 +416,6 @@ public class LessonsListControlador {
         ArrayList<Progress> records = new ArrayList<>();
         ArrayList<String> contents = new ArrayList<>();
         try {
-            HttpSession sesion = hsr.getSession();
-            User user = (User) sesion.getAttribute("user");
             String consulta = "select * FROM public.lessons WHERE id=" + id[0];
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             Objective o = new Objective();

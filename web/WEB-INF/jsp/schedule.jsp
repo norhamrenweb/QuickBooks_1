@@ -15,36 +15,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-</head>
-<body>
     <script>
         $(document).ready(function() {
-
+            
     // page is now ready, initialize the calendar...
- var calendar = $('#calendar').fullCalendar({
-        defaultView: 'month',
-    header:{
-        left:   'title',
-    center: 'agendaWeek,month',
-    right:  'today prev,next'
-    },
-    aspectRatio:'1.8',
-        events: {
-            url: 'loadschedule.htm',
-            type: 'POST', // Send post data
-            error: function() {
-                alert('There was an error while fetching events.');
-            }
-        }
-    });
+        var calendar = $('#calendar').fullCalendar({
+            defaultView: 'month',
+            header:{
+                left:   'title',
+                center: 'agendaWeek,month',
+                right:  'today prev,next'
+            },
+            aspectRatio:'1.8',
+            eventMouseover: function (data, event, view) {
+                tooltip = '<div class="tooltiptopicevent" style="width:auto;background:white;height:auto;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' 
+                        + 'title: ' + ': ' + data.title + '</br>' + 'objective: ' + ': ' + data.nameobj + '</br> createdby: ' + data.createdby + '</div>';
+
+                $("body").append(tooltip);
+                $(this).mouseover(function (e) {
+                    $(this).css('z-index', 10000);
+                    $('.tooltiptopicevent').fadeIn('500');
+                    $('.tooltiptopicevent').fadeTo('10', 1.9);
+                }).mousemove(function (e) {
+                    $('.tooltiptopicevent').css('top', e.pageY + 10);
+                    $('.tooltiptopicevent').css('left', e.pageX + 20);
+                });
+            },
+            eventMouseout: function (data, event, view) {
+                $(this).css('z-index', 8);
+
+                $('.tooltiptopicevent').remove();
+
+            },
+            dayClick: function () {
+                tooltip.hide()
+            },
+            eventResizeStart: function () {
+                tooltip.hide()
+            },
+            eventDragStart: function () {
+                tooltip.hide()
+            },
+            viewDisplay: function () {
+                tooltip.hide()
+            },
+            events: {
+                url: 'loadschedule.htm',
+                type: 'POST', // Send post data
+                error: function() {
+                    alert('There was an error while fetching events.');
+                },
+            },loading: function (bool) {
+                    $('#loadingmessage').show(); // Add your script to show loading
+                },
+                eventAfterAllRender: function (view) {
+                    $('#loadingmessage').hide(); // remove your loading 
+                }
+        });
    
-});
-        </script>
-<div class="container">
-<div id='calendar'></div>
-
-
-</div>
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div id='calendar'></div>
+    </div>
+        
+    <div class="divLoadStudent" id="loadingmessage">
+        <div class="text-center"> 
+            <img class="imgLoading" src='./recursos/img/large_loading2.gif'/>
+        </div>
+    </div>
 </body>
 </html>
