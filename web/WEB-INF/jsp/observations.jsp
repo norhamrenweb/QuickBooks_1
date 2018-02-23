@@ -57,6 +57,33 @@
 
                 });
 
+                var today = new Date();
+                $('#fechaClassroom').datetimepicker({
+                    format: 'YYYY-MM-DD',
+//            locale: userLang.valueOf(),
+                    daysOfWeekDisabled: [0, 6],
+                    maxDate: today,
+                    useCurrent: false//Important! See issue #1075
+                            //defaultDate: '08:32:33',
+
+
+                });
+
+                $('#fechaClassroom').on('dp.change', function (e) {
+                    if (($('#observationfechaClassroom').val() !== "") && ($('#observationcommentsClassRoom').val() !== "") && ($('#observationtypeClassroom').val() !== "")) {
+                        $('#savecommentClassroom').prop("disabled", false);
+                    } else {
+                        $('#savecommentClassroom').prop("disabled", true);
+                    }
+                });
+
+                $('#observationcommentsClassroom,#observationtypeClassroom').change(function () {
+                    if (($('#observationfechaClassroom').val() !== "") && ($('#observationcommentsClassroom').val() !== "") && ($('#observationtypeClassroom').val() !== "")) {
+                        $('#savecommentClassroom').prop("disabled", false);
+                    } else {
+                        $('#savecommentClasroom').prop("disabled", true);
+                    }
+                });
                 //loadComments();
 
                 $('#fecha2').on('dp.change', function (e) {
@@ -221,7 +248,7 @@
                 var path = document.location.href;
                 var i = path.length - 1;
 
-                for (var j = 0; j < 1; j++) {
+                for (var j = 0; j < 2; j++) {
                     if (j === 1)
                         path = path.substring(0, i);
                     while (path[i] !== '/') {
@@ -390,7 +417,7 @@
                                 var dayWeek = value2.numSemana;
                                 var idTeacher = value2.logged_by;
                                 var booleanFoto = value2.foto;
-                                var anchoDiv = 200;
+                                var anchoDiv = 195;
                                 var disableFoto = "";
 
                                 if (booleanFoto === false)
@@ -1052,7 +1079,7 @@
 
 
             function doneResizing() {
-                //   loadComments();
+                   loadComments();
             }
 
             function moverDrech(x)
@@ -1065,7 +1092,7 @@
             function moverIzq(x)
             {
                 $("#semana" + x).children().not(".hide").prev().removeClass("hide");
-                if ($("#semana" + x).children().not(".hide").length * 200 > $("#semana" + x).width()) {
+                if ($("#semana" + x).children().not(".hide").length * 195 >= $("#semana" + x).width()) {
                     $("#semana" + x).children().not(".hide").last().addClass("hide");
                 }
                 if ($("#semana" + x).children().not(".hide").length === 0) {
@@ -1101,6 +1128,57 @@
 
                 });
 
+            }
+
+
+            function saveobservation()
+            {
+                var observation = $("#observationcommentsClassroom").val();
+                var date = $("#observationfechaClassroom").val();
+                var type = $("#observationtypeClassroom :selected").text();
+                var studentId = studentid;
+                if (observation === "" || date === "" || type === "" || studentId === "" || type === "Select type")
+                {
+                    if (studentId === "") {
+                        $('#error1').removeClass('hidden');
+                    } else {
+                        $('#error2').removeClass('hidden');
+                    }
+                } else {
+                    var myObj = {};
+                    myObj["observation"] = observation;
+                    myObj["date"] = date;
+                    myObj["type"] = type;
+                    myObj["studentid"] = studentId;
+                    var json = JSON.stringify(myObj);
+                    var data = new FormData();
+                    data.append("obj", json);
+                    data.append("fileToUpload", $('#fileToUploadClassroom')[0].files[0]);
+                    var path = document.location.href;
+                    var i = path.length - 1;
+                    for (var j = 0; j < 2; j++) {
+                        if (j === 1)
+                            path = path.substring(0, i);
+                        while (path[i] !== '/') {
+                            path = path.substring(0, i);
+                            i--;
+                        }
+                    }
+                    path = path + "savecomment";
+                    var request = new XMLHttpRequest();
+                    request.open("POST", path);
+                    request.send(data);
+
+                    $('#newClassRoomModal').modal('hide');
+                    $('#confirmsaveClassroom').modal('show');
+                    $("#observationcommentsClasroom").val("");
+                    $("#observationfechaClasroom").val("");
+                    $("#fileToUploadClassroom").val("");
+                    $('#observationtypeClasroom option').filter(function () {
+                        return ($(this).text() === 'Select type'); //To select Blue
+                    }).prop('selected', true);
+                    loadComments();
+                }
             }
 
         </script>
@@ -1376,9 +1454,9 @@
             .divAdd{
                 /*color: #777777;*/
                 height: 145px;
-                width: 200px;
+                width: 195px;
                 /* background-color: rgba(255,255,255,0.5);*/
-                margin-right: 10px;
+                
                 font-size: 12px;
                 padding: 5px;
                 display: line;
@@ -1387,7 +1465,7 @@
             }
             .optionsObservationsNotas{
                 position: absolute;
-                top: 75%;
+                top: 82%;
                 left: 0%;
             }
 
@@ -1421,7 +1499,7 @@
             .firstWeek
             {
                 margin-top: 5px;
-                border: #99CC66 solid 2px;
+                border: #99CC66 solid 1px;
                 border-radius: 7px;
                 box-shadow: 0 2px 5px #99CC66;
             }
@@ -1446,7 +1524,7 @@
             .secondWeek
             {
                 margin-top: 5px;
-                border: #808080 solid 2px;
+                border: #808080 solid 1px;
                 border-radius: 7px;
                 box-shadow: 0 2px 5px #808080;
             }
@@ -1867,9 +1945,9 @@
                         <div class="modal-body text-center">
                             <div class="row">
                                 <div class='col-xs-6 form-group'>
-                                    <label class="control-label" for="fecha">Date</label>
-                                    <div class='input-group date' id='fecha'>
-                                        <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
+                                    <label class="control-label" for="fechaClassroom">Date</label>
+                                    <div class='input-group date' id='fechaClassroom'>
+                                        <input type='text' name="TXTfecha" class="form-control" id="observationfechaClassroom"/>
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -1877,7 +1955,7 @@
                                 </div>
                                 <div class="col-xs-6 center-block form-group">
                                     <label class="control-label">Observation type</label>
-                                    <select class="form-control" name="observationtype" id="observationtype" >
+                                    <select class="form-control" name="observationtype" id="observationtypeClassroom" >
                                         <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
                                         <option value="Physical">Physical</option>
                                         <option value="Intellectual">Intellectual</option>
@@ -1889,11 +1967,11 @@
                             </div>
                             <div class="row center-block form-group">
                                 <label class="control-label">Observation</label>
-                                <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
+                                <textarea class="form-control" name="TXTdescription" id="observationcommentsClassroom" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
                             </div>
 
                             <div class="row  center-block form-group" >
-                                <input type="file" id="fileToUpload" accept="image/*">
+                                <input type="file" id="fileToUploadClassroom" accept="image/*">
                             </div>
                             <div class="row text-center hidden" id="error1">
                                 <label>Please select a student first</label>
@@ -1901,35 +1979,32 @@
                             <div class="row text-center hidden" id="error2">
                                 <label>Please make sure to fill all data</label>
                             </div>
-                            <div class="row ">
+                            <div class="row text-center ">
                                 <div class="col-xs-6 text-center">
-                                    <button type="button" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">Save observation</button>
-                                </div>
-
-                                <div class="col-xs-6 text-center">
-                                    <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View all comments</button>
+                                    <button type="button" class="btn btn-success" id="savecommentClassroom"  value="Save" onclick="saveobservation()">Save observation</button>
                                 </div>
                             </div>
-                            <div id="confirmsave" class="modal fade" role="dialog">
-                                <div class="modal-dialog">
 
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header modal-header-delete">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">comment saved</h4>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </div> 
                         </div>
 
                     </div>
                 </div>
             </div>
 
+            <div id="confirmsaveClassroom" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header modal-header-delete">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">comment saved</h4>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div> 
             <!--<h1>Hello World!</h1>-->
 
             <div id="commentModal" class="modal fade" role="dialog">
