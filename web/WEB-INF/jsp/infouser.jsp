@@ -91,7 +91,7 @@
     }
 </script>
 
-<div class="infousuario noPrint" id="infousuario">
+<div class="infousuario noPrint bg-primary" id="infousuario">
     <div class="col-xs-3 text-left">
         <%--<img src="<c:url value="/recursos/img/iconoschool.png"/>">--%>
     </div>

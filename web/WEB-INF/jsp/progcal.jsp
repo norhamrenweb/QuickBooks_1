@@ -155,15 +155,15 @@
                         i--;
                     }
                 }
-                      loadComments();
+                loadComments();
                 $('#editComment').modal('hide');
                 $('#confirmsave').modal('show');
                 path = path + "savecomment";
                 var request = new XMLHttpRequest();
                 request.open("POST", path);
                 request.send(data);
-                
-          
+
+
             }
 
             function editComentario(id) {
@@ -303,7 +303,7 @@
                                 var id = value2.id;
                                 var comentario = value2.observation;
                                 var comentarioExtenso = '';
-                                if (comentario.length >= 45) {
+                                if (comentario.length >= 90) {
                                     var comentarioExtenso = '...';
                                 }
                                 var fechaCreacion = value2.date;
@@ -315,7 +315,7 @@
                                 var dayWeek = value2.numSemana;
                                 var idTeacher = value2.logged_by;
                                 var booleanFoto = value2.foto;
-
+                                var anchoDiv = 200;
                                 var disableFoto = "";
 
                                 if (booleanFoto === false)
@@ -325,14 +325,14 @@
                                 }
 
                                 if (dayWeek === "1") { //PRIMERA SEMANA
-                                    cont1 = cont1 + 180;
+                                    cont1 = cont1 + anchoDiv;
                                     if (cont1 > $(numSemana).width()) {
                                         visible = "hide";
                                     }
                                 } else if (dayWeek === "2") { //SEGUNDA SEMANA
                                     visible = "";
                                     numSemana = "#semana2";
-                                    cont2 = cont2 + 180;
+                                    cont2 = cont2 + anchoDiv;
                                     if (cont2 > $(numSemana).width())
                                     {
                                         visible = "hide";
@@ -340,14 +340,14 @@
                                 } else if (dayWeek === "3") {//TERCERA SEMANA
                                     visible = "";
                                     numSemana = "#semana3";
-                                    cont3 = cont3 + 180;
+                                    cont3 = cont3 + anchoDiv;
                                     if (cont3 > $(numSemana).width()) {
                                         visible = "hide";
                                     }
                                 } else if (dayWeek === "4") { //CUARTA SEMANA
                                     visible = "";
                                     numSemana = "#semana4";
-                                    cont4 = cont4 + 180;
+                                    cont4 = cont4 + anchoDiv;
                                     if (cont4 > $(numSemana).width())
                                     {
                                         visible = "hide";
@@ -355,14 +355,14 @@
                                 } else if (dayWeek === "5") {//QUINTA SEMANA
                                     visible = "";
                                     numSemana = "#semana5";
-                                    cont5 = cont5 + 180;
+                                    cont5 = cont5 + anchoDiv;
                                     if (cont5 > $(numSemana).width()) {
                                         visible = "hide";
                                     }
                                 } else { // SEXTA SEMANA
                                     visible = "";
                                     numSemana = "#semana6";
-                                    cont6 = cont6 + 180;
+                                    cont6 = cont6 + anchoDiv;
                                     if (cont6 > $(numSemana).width()) {
                                         visible = "hide";
                                     }
@@ -376,47 +376,48 @@
             <%--Create Date: " + fechaCreacion + "<br>\n\
             Type: " + category + "<br>\n\--%>
                                 $(numSemana).append("<div id='comment" + id + "' value='" + commentdate + "' class='divAdd " + visible + "'>\n\
-                                <strong>Date:</strong> " + commentdate + " </strong> <br>\n\
-                                <strong>Observation:</strong> " + comentario.substring(0, 45) + " " + comentarioExtenso + "<br>\n\
-                                \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
-                                <div class='col-xs-3 text-center sinpadding'>\n\
-                                <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
-                                <span class='glyphicon glyphicon-list-alt'></span>\n\
-                                </button>\n\
-                                </div>\n\
-                                <div class='col-xs-3 text-center sinpadding'>\n\
-                                <button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
-                                <span class='glyphicon glyphicon-pencil'></span>\n\
-                                </button>\n\
-                                </div>\n\
-                                <div class='col-xs-3 text-center sinpadding'>\n\
-                                <button type='button'  " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
-                                <span class=' glyphicon glyphicon-remove'></span>\n\
-                                </button>\n\
-                                </div>\n\
-                                <div class='col-xs-3 text-center sinpadding'>\n\
-                                <input type='hidden' id='date" + id + "' value='" + commentdate + "'/>\n\
-                                <button type='button'  " + disableFoto + " onclick='verphoto(" + id + ")' class='popOverFoto btn btn-link' data-toggle='tooltip' data-placement='bottom' value='" + id + "' id='verphoto" + id + "'>\n\
-                                <span class=' glyphicon glyphicon-camera'></span>\n\
-                                </button>\n\
-                                </div>\n\
-                                </div>\n\
-                                </div>");
+                                                        <div class='project project-radius project-default'>\n\
+                                                                                <div class='shape'>	\n\
+                                                                                    <div class='shape-text'></div>\n\
+                                                                                </div>\n\
+                                                                                <div class='project-content projectProgcal'>\n\
+                                                                                    \n\<strong>Date:</strong> " + commentdate + " </strong> <br>\n\
+                                                                                    <strong>Observation:</strong> " + comentario.substring(0, 90) + " " + comentarioExtenso + "<br>\n\
+                                                                                    \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
+                                                                                    <div class='col-xs-3 text-center sinpadding'>\n\
+                                                                                    <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
+                                                                                    <span class='glyphicon glyphicon-list-alt'></span>\n\
+                                                                                    </button>\n\
+                                                                                    </div>\n\
+                                                                                    <div class='col-xs-3 text-center sinpadding'>\n\
+                                                                                    <button type='button' " + disable + " class='btn btn-link' data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "' onclick='editComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='edit' id='editComentario" + id + "'>\n\
+                                                                                    <span class='glyphicon glyphicon-pencil'></span>\n\
+                                                                                    </button>\n\
+                                                                                    </div>\n\
+                                                                                    <div class='col-xs-3 text-center sinpadding'>\n\
+                                                                                    <button type='button'  " + disable + " class='btn btn-link' onclick='ConfirmDeleteComentario(" + id + ")' data-toggle='tooltip' data-placement='bottom' value='delete' id='ConfirmDeleteComentario" + id + "'>\n\
+                                                                                    <span class=' glyphicon glyphicon-remove'></span>\n\
+                                                                                    </button>\n\
+                                                                                    </div>\n\
+                                                                                    <div class='col-xs-3 text-center sinpadding'>\n\
+                                                                                    <input type='hidden' id='date" + id + "' value='" + commentdate + "'/>\n\
+                                                                                    <button type='button'  " + disableFoto + " onclick='verphoto(" + id + ")' class='popOverFoto btn btn-link' data-toggle='tooltip' data-placement='bottom' value='" + id + "' id='verphoto" + id + "'>\n\
+                                                                                    <span class=' glyphicon glyphicon-camera'></span></button>\n\</div>\n\</div>\n\</div>\n\</div>\n\</div>");
                             });
 
                         });
                         if (cont1 === 0)
-                            $("#semana1").append("<div class='divAdd'>No comments this week</div>");
+                            $("#semana1").append(divVacio());
                         if (cont2 === 0)
-                            $("#semana2").append("<div class='divAdd'>No comments this week</div>");
+                            $("#semana2").append(divVacio());
                         if (cont3 === 0)
-                            $("#semana3").append("<div class='divAdd'>No comments this week</div>");
+                            $("#semana3").append(divVacio());
                         if (cont4 === 0)
-                            $("#semana4").append("<div class='divAdd'>No comments this week</div>");
+                            $("#semana4").append(divVacio());
                         if (cont5 === 0)
-                            $("#semana5").append("<div class='divAdd'>No comments this week</div>");
+                            $("#semana5").append(divVacio());
                         if (cont6 === 0)
-                            $("#semana6").append("<div class='divAdd'>No comments this week</div>");
+                            $("#semana6").append(divVacio());
 
                         $(".popOverFoto").mouseover(function () {
                             if ($(this).prop("disabled") === false) {
@@ -457,7 +458,17 @@
                 });
 
             }
-
+          
+            function divVacio(){
+             return "<div class='divAdd'><div class='project project-radius project-default'>\n\
+                                                        <div class='shape'>\n\
+                                                            <div class='shape-text'></div>\n\
+                                                        </div>\n\
+                                                        <div class='project-content'>\n\
+                                                        No comments this week\n\
+                                                        </div>\n\
+                                                  </div></div>"
+            }
             function weeksInAMonth(year, month_number) {
                 var firstOfMonth = new Date(year, month_number - 1, 1);
                 var day = firstOfMonth.getDay() || 6;
@@ -561,6 +572,93 @@
 
         </script>
         <style>
+
+            .projectProgcal{
+                padding: 4px !important;
+            }
+            table.dataTable tbody td {
+
+                border-top: solid 1px #ddd;
+            }
+            .shape{    
+                border-style: solid; border-width: 0 70px 40px 0; float:right; height: 0px; width: 0px;
+                -ms-transform:rotate(360deg); /* IE 9 */
+                -o-transform: rotate(360deg);  /* Opera 10.5 */
+                -webkit-transform:rotate(360deg); /* Safari and Chrome */
+                transform:rotate(360deg);
+            }
+
+            .lead {
+
+                font-size: 16px;
+                font-weight: 300;
+                line-height: 1.4;
+                margin-top: 5px;
+
+            }
+
+            .shape-text{
+                color:#fff; font-size:12px; font-weight:bold; position:relative; right:-40px; top:2px; white-space: nowrap;
+                -ms-transform:rotate(30deg); /* IE 9 */
+                -o-transform: rotate(360deg);  /* Opera 10.5 */
+                -webkit-transform:rotate(30deg); /* Safari and Chrome */
+                transform:rotate(30deg);
+            }
+
+            .project {
+                /*min-height:300px;
+               // height:auto;*/
+                width: 100%;
+                height: 100%;
+            }
+
+            .project{
+                background:#fff; border:1px solid #ddd; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /*margin: 15px 0; */overflow:hidden;
+            }
+
+            .project-radius{
+                border-radius:7px;
+            }
+
+            .project-default {    border-color: #999999; }
+            .project-default .shape{
+                border-color: transparent #999999 transparent transparent;
+                border-color: rgba(255,255,255,0) #999999 rgba(255,255,255,0) rgba(255,255,255,0);
+            }
+
+            .project-danger {    border-color: #d9534f; }
+            .project-danger .shape{
+                border-color: transparent #d9534f transparent transparent;
+                border-color: rgba(255,255,255,0) #d9534f rgba(255,255,255,0) rgba(255,255,255,0);
+            }
+
+            .project-success {	border-color: #5cb85c; }
+            .project-success .shape{
+                border-color: transparent #5cb85c transparent transparent;
+                border-color: rgba(255,255,255,0) #5cb85c rgba(255,255,255,0) rgba(255,255,255,0);
+            }
+
+            .project-primary {	border-color: #428bca; }
+            .project-primary .shape{
+                border-color: transparent #428bca transparent transparent;
+                border-color: rgba(255,255,255,0) #428bca rgba(255,255,255,0) rgba(255,255,255,0);
+            }
+
+            .project-info {	border-color: #5bc0de; }
+            .project-info .shape{
+                border-color: transparent #5bc0de transparent transparent;
+                border-color: rgba(255,255,255,0) #5bc0de rgba(255,255,255,0) rgba(255,255,255,0);
+            }
+
+            .project-warning {	border-color: #f0ad4e; }
+            .project-warning .shape{
+                border-color: transparent #f0ad4e transparent transparent;
+                border-color: rgba(255,255,255,0) #f0ad4e rgba(255,255,255,0) rgba(255,255,255,0);
+            }
+
+            .project-content {
+                padding:0 20px 10px;
+            }
             .divFoto{
                 position: absolute;
                 width: 230px;
@@ -654,10 +752,10 @@
                 padding: 5px;
             }
             .divAdd{
-                color: #777777;
-                height: 110px;
-                width: 180px;
-                background-color: rgba(255,255,255,0.5);
+                /*color: #777777;*/
+                height: 145px;
+                width: 200px;
+                /* background-color: rgba(255,255,255,0.5);*/
                 margin-right: 10px;
                 font-size: 12px;
                 padding: 5px;
@@ -667,7 +765,8 @@
             }
             .optionsObservations{
                 position: absolute;
-                bottom: 0px;
+                top: 75%;
+                left: 0%;
             }
 
             .scroll{
@@ -700,7 +799,14 @@
             .firstWeek
             {
                 margin-top: 5px;
-                background-color: #99CC66;
+                border: #99CC66 solid 3px;
+                background-color: #9C63;
+                border-radius: 10px;
+            }
+            h4
+            {
+                color: black;
+                font-size: 20px;
             }
             .collapse {
                 display: none;
@@ -710,7 +816,9 @@
             .secondWeek
             {
                 margin-top: 5px;
-                background-color: #cdcdcd;
+                border: #cdcdcd solid 3px;
+                background-color: #cdcdcd63;;
+                border-radius: 10px;
             }
             .carousel-control
             {
@@ -733,6 +841,9 @@
             }
             .foto{
                 width: 100% !important;
+            }
+            .container{
+                width: 1300px;     
             }
         </style>
     </head>
@@ -797,7 +908,7 @@
                     function moverIzq(x)
                     {
                         $("#semana" + x).children().not(".hide").prev().removeClass("hide");
-                        if ($("#semana" + x).children().not(".hide").length * 180 > $("#semana" + x).width()) {
+                        if ($("#semana" + x).children().not(".hide").length * 200 > $("#semana" + x).width()) {
                             $("#semana" + x).children().not(".hide").last().addClass("hide");
                         }
                         if ($("#semana" + x).children().not(".hide").length === 0) {
