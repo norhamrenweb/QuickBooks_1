@@ -184,7 +184,7 @@
 
                     <div class='col-xs-4'>
                         <div class="form-group">
-                            <label class="control-label" for="horainicio">Start hour</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                            <label class="control-label" for="horainicio">Date From</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                             <div class='input-group date' id='horainicio'>
                                 <input  id='horainicioInput' type='text' name="TXThorainicio" class="form-control"/>
                                 <span class="input-group-addon">
@@ -195,7 +195,7 @@
                     </div>
                     <div class='col-xs-4'>
                         <div class="form-group">
-                            <label class="control-label" for="horafin">Finish hour</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                            <label class="control-label" for="horafin">Date To</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
                             <div class='input-group date' id='horafin'>
                                 <input id='horafinInput' type='text' name="TXThorafin" class="form-control"/>
                                 <span class="input-group-addon">

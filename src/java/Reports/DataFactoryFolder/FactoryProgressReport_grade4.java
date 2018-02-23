@@ -121,10 +121,10 @@ public class FactoryProgressReport_grade4 extends DataFactory {
             ArrayList<String> classids = new ArrayList<>();
             ArrayList<String> coursesTitles = new ArrayList<>();
 
-            String consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID from Roster inner join Classes"
+            String consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"
                     + " on Roster.ClassID = Classes.ClassID"
                     + " inner join Courses on  Classes.CourseID = Courses.CourseID"
-                    + "  where Roster.StudentID = " + id + "and Classes.yearid = " + this.yearid + "and Courses.ReportCard = 1";
+                    + "  where Roster.StudentID = " + id + "and Classes.yearid = " + this.yearid + "and Courses.ReportCard = 1 order by courses.RCPlacement";
             ResultSet rs = DBConect.ah.executeQuery(consulta);
             while (rs.next()) {
                 staffids.add(rs.getInt("StaffID"));

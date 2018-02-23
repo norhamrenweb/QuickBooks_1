@@ -16,7 +16,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
 
     <head>
-        <title>Create Presentations</title>
+        <title>Generate Report</title>
         <script>
 
             $(document).ready(function () {
@@ -315,7 +315,7 @@
     </head>
     <body>
         <div class="container">
-            <h1 class="text-center">Create New Report</h1>
+            <h1 class="text-center">Generate Report</h1>
 
             <c:url var="post_url"  value="/html" />
             <form:form id="formStudents" method ="post" action="${post_url}"  >
