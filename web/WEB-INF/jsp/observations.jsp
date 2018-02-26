@@ -1606,13 +1606,13 @@
             <div class="col-xs-1 sinpadding" >
                 <div class="col-xs-12 text-left sinpadding">
                     <div class="col-xs-5 sinpadding">    
-                        <input id="classroomCommentsButton" class="imgLeft" type="image" value="classroomComments" src="<c:url value='/recursos/img/iconos/add-comment(1).svg'/>" width="100px">
+                        <input id="classroomCommentsButton" title="Class observations" class="imgLeft" type="image" value="classroomComments" src="<c:url value='/recursos/img/iconos/post-it.svg'/>" width="100px">
 
                     </div>
                 </div>
                 <div class="col-xs-12 text-left sinpadding">
                     <div class="col-xs-5 sinpadding">
-                        <input id="dayCommentsButton" class="imgLeft" value="dayComments" type="image"  src="<c:url value='/recursos/img/iconos/add-comment(1).svg'/>" width="100px">
+                        <input id="dayCommentsButton" class="imgLeft" value="dayComments" title="Academics" type="image"  src="<c:url value='/recursos/img/iconos/computer-tool-for-education.svg'/>" width="100px">
                     </div>
                 </div>
                 <div class="col-xs-12 text-left sinpadding" id="divSubjectObjectives">
