@@ -98,8 +98,8 @@
                         {"width": "15%", "targets": [1]},
                         {"width": "7%", "targets": [2]},
                         {"width": "10%", "targets": [3]},
-                        {"width": "10%", "targets": [4]},
-                        {"width": "25%", "targets": [5]},
+                        {"width": "20%", "targets": [4]},
+                        {"width": "15%", "targets": [5]},
                         {"width": "33%", "targets": [6]}
 
                     ],

@@ -423,8 +423,14 @@ public class LessonsListControlador {
             while (rs.next()) {
                 Method m = new Method();
                 jsonObj.put("nameteacher", fetchNameTeacher(rs.getInt("user_id"), hsr.getServletContext()));
-
-                jsonObj.put("method", m.fetchName(rs.getInt("method_id"), hsr.getServletContext()));
+                String method = m.fetchName(rs.getInt("method_id"), hsr.getServletContext());
+                if(method == null){
+                    jsonObj.put("method","" );
+                }
+                else
+                {
+                   jsonObj.put("method",method); 
+                }
                 Timestamp date = rs.getTimestamp("date_created");
                 SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
                 String dateStr = sdfDate.format(date);

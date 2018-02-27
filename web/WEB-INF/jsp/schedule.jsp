@@ -29,7 +29,7 @@
             aspectRatio:'1.8',
             eventMouseover: function (data, event, view) {
                 tooltip = '<div class="tooltiptopicevent" style="width:auto;background:white;height:auto;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' 
-                        + 'title: ' + ': ' + data.title + '</br>' + 'objective: ' + ': ' + data.nameobj + '</br> createdby: ' + data.createdby + '</div>';
+                        + 'Title: ' + ': ' + data.title + '</br>' + 'Objective: ' + ': ' + data.nameobj + '</br> Created by: ' + data.createdby + '</div>';
 
                 $("body").append(tooltip);
                 $(this).mouseover(function (e) {

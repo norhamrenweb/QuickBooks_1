@@ -257,16 +257,17 @@
                     data: prog.children,
                     idField: 'id',
                     treeField: 'name',
-                    fitColumns: true,
+                   fitColumns: true,
+//                    nowrap: false, // this will allow the text wrap but it looks bad
                     columns: [[
-                            {title: 'Name', field: 'name', width: '40%', formatter: function (value) {
+                            {title: 'Name', field: 'name', width: '40%', resizable:'true', formatter: function (value) {
                                     // return ' <img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/> ' +  value;
                                     return  value;
                                 }},
-                            {title: '#Present. planned', field: 'noofplannedlessons', width: '16%'},
-                            {title: '#Present. done', field: 'noofarchivedlessons', width: '16%'},
-                            {title: 'Progress', field: 'progress', width: '16%', formatter: formatProgress},
-                            {title: 'Final rating', field: 'rating', width: '15%'}
+                            {title: '#Present. planned', field: 'noofplannedlessons',resizable:'true', width: '16%'},
+                            {title: '#Present. done', field: 'noofarchivedlessons',resizable:'true', width: '16%'},
+                            {title: 'Progress', field: 'progress', width: '16%',resizable:'true', formatter: formatProgress},
+                            {title: 'Final rating', field: 'rating', width: '15%',resizable:'true'}
                         ]]
 
                 });
