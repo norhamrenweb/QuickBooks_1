@@ -13,6 +13,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.css"/>"/>
 
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
         <title>JSP Page</title>
         <script>
             var ajax;
@@ -56,7 +61,6 @@
                             //defaultDate: '08:32:33',
 
                 });
-
                 var today = new Date();
                 $('#fechaClassroom').datetimepicker({
                     format: 'YYYY-MM-DD',
@@ -68,7 +72,6 @@
 
 
                 });
-
                 $('#fechaClassroom').on('dp.change', function (e) {
                     if (($('#observationfechaClassroom').val() !== "") && ($('#observationcommentsClassRoom').val() !== "") && ($('#observationtypeClassroom').val() !== "")) {
                         $('#savecommentClassroom').prop("disabled", false);
@@ -76,7 +79,6 @@
                         $('#savecommentClassroom').prop("disabled", true);
                     }
                 });
-
                 $('#observationcommentsClassroom,#observationtypeClassroom').change(function () {
                     if (($('#observationfechaClassroom').val() !== "") && ($('#observationcommentsClassroom').val() !== "") && ($('#observationtypeClassroom').val() !== "")) {
                         $('#savecommentClassroom').prop("disabled", false);
@@ -100,7 +102,6 @@
                         $('#savecomment').prop("disabled", true);
                     }
                 });
-
                 $(document).on("click", ".showMoreFuncion", function () {
                     var comment = $(this).data('comment');
                     var createDate = $(this).data('createdate');
@@ -114,7 +115,6 @@
                     $('#idTeacher').text(nameTeacher);
                     $('#showComment').modal('show');
                 });
-
                 ////////////////////////////////////////////NUEVO//////////
                 $("#divHora").hide();
                 $("#subjects").attr("disabled", true);
@@ -122,12 +122,9 @@
                 $("#divNotas").hide();
                 $("#divClassObsv").hide();
                 $("#divSubjectObjectives").hide();
-
                 $('#classroomCommentsButton').attr('disabled', true);
                 $('#dayCommentsButton').attr('disabled', true);
-
                 $('#newcomment').attr('disabled', true);
-
                 table = $('#table_students').DataTable({
                     "searching": true,
                     "paging": false,
@@ -139,6 +136,9 @@
                         {data: 'name'}
                     ]
                 });
+
+                //#62b05d
+                //#5cb85c
                 $('#table_students tbody').on('click', 'tr', function () {
 
                     if ($(this).hasClass('selected')) {
@@ -150,13 +150,17 @@
                     var data = table.row(this).data();
                     studentid = data.id;
                     getsubjects(data.id);
-
-
                     $('#semana0').empty();
+                    $('#divClassObsv').hide();
                     $('#newcomment').attr('disabled', true);
                     $('#classroomCommentsButton').attr('disabled', false);
                     $('#dayCommentsButton').attr('disabled', false);
 
+                    $('#divHora').hide();
+                    $('#divSubjectObjectives').hide();
+
+                    $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
+                    $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
                 });
                 $('#editcomment').on('click', function () {
                     var idob = $('#objectives option:selected').val();
@@ -177,15 +181,12 @@
                     $('#commentcontent').empty();
                     $('#commentModal').modal('hide');
                 });
-
                 $('#newcomment').on('click', function () {
                     $('#commentModal').modal('show');
                 });
-
                 $('#newClassRoom').on('click', function () {
                     $('#newClassRoomModal').modal('show');
                 });
-
                 $('#subjects').on('change', function () {
                     $('#steps_show').empty();
                     $('#steps_show2').empty();
@@ -195,7 +196,6 @@
                     else {
                         $("#objectives").attr("disabled", true);
                         $("#divNotas").hide();
-
                     }
                     $('#newcomment').attr('disabled', true);
                 });
@@ -207,9 +207,21 @@
                 });
                 /*$('#grades').on('change', function () {
                  getstudents(this.value);
-                 });*/
+                 
+                 
+                 });
+                 
+                 *
+                 *
+                 *background-color: #337ab780;
+                 padding: 5px !important;
+                 border-radius: 10px;*/
+
                 $(".imgLeft").on('click', function () {
                     if ($(this).val() === "classroomComments") {
+                        $("#classroomCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5% !important", "border-radius": "10px"});
+                        $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
+
                         $("#divNotas").hide();
                         $("#divClassObsv").show();
                         $("#divSubjectObjectives").hide();
@@ -219,16 +231,18 @@
                             loadComments();
                         });
                     } else {
-                        $("#divHora").hide();
+                        $("#dayCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5%", "border-radius": "10px"});
+                        $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
 
+
+                        $("#divHora").hide();
                         $("#divNotas").show();
                         $("#divClassObsv").hide();
                         $("#divSubjectObjectives").show();
-
                     }
                 });
-            });
 
+            });
             function updateComment() {
                 var comments = $('#observationcomments').val();
                 var fecha = $("#observationfecha").val();
@@ -239,7 +253,6 @@
                 myObj["dateString"] = fecha;
                 myObj["type"] = tipo;
                 myObj["id"] = id;
-
                 var json = JSON.stringify(myObj);
                 var data = new FormData();
                 data.append("obj", json);
@@ -247,7 +260,6 @@
                 data.append("update", "true");
                 var path = document.location.href;
                 var i = path.length - 1;
-
                 for (var j = 0; j < 2; j++) {
                     if (j === 1)
                         path = path.substring(0, i);
@@ -263,8 +275,6 @@
                 var request = new XMLHttpRequest();
                 request.open("POST", path);
                 request.send(data);
-
-
             }
 
             function editComentario(id) {
@@ -342,7 +352,11 @@
                         var parentAux = $('#comment' + id).parent();
                         //var j = JSON.parse(data);   
                         if ($('#comment' + id).parent().children().length === 1) {
-                            $('#comment' + id).parent().append("<div class='divAdd'>No comments this week</div>");
+                            var idSemana = $('#comment' + id).parent().attr('id');
+                            if(idSemana ==="semana1" || idSemana ==="semana2" || idSemana ==="semana3" )
+                                $('#comment' + id).parent().append(divVacio("project-classroom1"));
+                            else 
+                                $('#comment' + id).parent().append(divVacio("project-classroom2"));
                         }
                         $('#comment' + id).remove();
                         parentAux.children().not(".hide").last().next().removeClass("hide");
@@ -392,7 +406,6 @@
                         $("#semana6").empty();
                         $("#semana5").parent().parent().hide();
                         $("#semana6").parent().parent().hide();
-
                         var weeksCount = weeksInAMonth($("#TXTfecha").val().split("-")[0], $("#TXTfecha").val().split("-")[1]);
                         if (weeksCount > 4) {
                             $("#semana5").parent().parent().show();
@@ -419,7 +432,7 @@
                                 var booleanFoto = value2.foto;
                                 var anchoDiv = 195;
                                 var disableFoto = "";
-
+                                var classSemana = "project-classroom1";
                                 if (booleanFoto === false)
                                     disableFoto = "disabled='disabled'"
                                 if (userId !== idTeacher && userType !== 0) {
@@ -431,6 +444,7 @@
                                     if (cont1 > $(numSemana).width()) {
                                         visible = "hide";
                                     }
+
                                 } else if (dayWeek === "2") { //SEGUNDA SEMANA
                                     visible = "";
                                     numSemana = "#semana2";
@@ -439,6 +453,7 @@
                                     {
                                         visible = "hide";
                                     }
+                                    classSemana = "project-classroom2";
                                 } else if (dayWeek === "3") {//TERCERA SEMANA
                                     visible = "";
                                     numSemana = "#semana3";
@@ -446,6 +461,7 @@
                                     if (cont3 > $(numSemana).width()) {
                                         visible = "hide";
                                     }
+                                    classSemana = "project-classroom1";
                                 } else if (dayWeek === "4") { //CUARTA SEMANA
                                     visible = "";
                                     numSemana = "#semana4";
@@ -454,6 +470,7 @@
                                     {
                                         visible = "hide";
                                     }
+                                    classSemana = "project-classroom2";
                                 } else if (dayWeek === "5") {//QUINTA SEMANA
                                     visible = "";
                                     numSemana = "#semana5";
@@ -461,6 +478,7 @@
                                     if (cont5 > $(numSemana).width()) {
                                         visible = "hide";
                                     }
+                                    classSemana = "project-classroom1";
                                 } else { // SEXTA SEMANA
                                     visible = "";
                                     numSemana = "#semana6";
@@ -468,6 +486,7 @@
                                     if (cont6 > $(numSemana).width()) {
                                         visible = "hide";
                                     }
+                                    classSemana = "project-classroom2";
                                 }
                                 var path = document.location.href;
                                 var i = path.length - 1;
@@ -478,7 +497,7 @@
             <%--Create Date: " + fechaCreacion + "<br>\n\
             Type: " + category + "<br>\n\--%>
                                 $(numSemana).append("<div id='comment" + id + "' value='" + commentdate + "' class='divAdd " + visible + "'>\n\
-                                                        <div class='project project-radius project-default'>\n\
+                                                        <div class='project project-radius " + classSemana + "'>\n\
                                                                                 <div class='shape'>	\n\
                                                                                     <div class='shape-text'></div>\n\
                                                                                 </div>\n\
@@ -506,21 +525,19 @@
                                                                                     <button type='button'  " + disableFoto + " onclick='verphoto(" + id + ")' class='popOverFoto btn btn-link' data-toggle='tooltip' data-placement='bottom' value='" + id + "' id='verphoto" + id + "'>\n\
                                                                                     <span class=' glyphicon glyphicon-camera'></span></button>\n\</div>\n\</div>\n\</div>\n\</div>\n\</div>");
                             });
-
                         });
                         if (cont1 === 0)
-                            $("#semana1").append(divVacio());
+                            $("#semana1").append(divVacio("project-classroom1"));
                         if (cont2 === 0)
-                            $("#semana2").append(divVacio());
+                            $("#semana2").append(divVacio("project-classroom2"));
                         if (cont3 === 0)
-                            $("#semana3").append(divVacio());
+                            $("#semana3").append(divVacio("project-classroom1"));
                         if (cont4 === 0)
-                            $("#semana4").append(divVacio());
+                            $("#semana4").append(divVacio("project-classroom2"));
                         if (cont5 === 0)
-                            $("#semana5").append(divVacio());
+                            $("#semana5").append(divVacio("project-classroom1"));
                         if (cont6 === 0)
-                            $("#semana6").append(divVacio());
-
+                            $("#semana6").append(divVacio("project-classroom2"));
                         $(".popOverFoto").mouseover(function () {
                             if ($(this).prop("disabled") === false) {
                                 var id = $(this).val();
@@ -543,7 +560,6 @@
                                 };
                                 ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
                                 ajax.send("");
-
                                 $(this).parent('div').append(imageTag);
                             }
                         });
@@ -558,11 +574,10 @@
                     }
 
                 });
-
             }
 
-            function divVacio() {
-                return "<div class='divAdd'><div class='project project-radius project-default'>\n\
+            function divVacio(classDiv) {
+                return "<div class='divAdd'><div class='project project-radius " + classDiv + "'>\n\
                                                         <div class='shape'>\n\
                                                             <div class='shape-text'></div>\n\
                                                         </div>\n\
@@ -588,7 +603,6 @@
                 return result + 1;
             }
             ;
-
             function detailsSelect(LessonsSelected)
             {
                 if (window.XMLHttpRequest) //mozilla
@@ -668,7 +682,6 @@
                 ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
             <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
                 ajax.send("");
-
                 $("#deleteFoto").val(id);
             }
             /////////////////////////////////////////////
@@ -744,7 +757,6 @@
                         $("#subjects").attr("disabled", false);
                         $("#objectives").attr("disabled", true);
                         $("#divNotas").hide();
-
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -773,8 +785,6 @@
                         });
                         $("#objectives").attr("disabled", false);
                         $("#divNotas").hide();
-
-
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -820,7 +830,6 @@
                             editdelete = "";
                             var color = "";
                             var colorRating = "";
-
                             var editdelete = '<div class="col-xs-4 text-center sinpadding">' +
                                     '<button onclick="edit(' + comment.id + ')"  type="button" class="btn btn-link" id="editComentario' + comment.id + '">' +
                                     '<span class="glyphicon glyphicon-pencil"></span>' +
@@ -831,19 +840,19 @@
                                     '<span class=" glyphicon glyphicon-remove"></span>' +
                                     '</button>' +
                                     '</div>';
-
-                            if (comment.rating_name === 'Mastered')
-                                // color = 'goldenrod';
+                            if (comment.rating_name === 'Mastered') {
+                                color = '#3d9941';
                                 colorRating = "success";
-                            else if (comment.rating_name === 'Presented')
-                                //  color = 'darkgreen';
+                            } else if (comment.rating_name === 'Presented') {
+                                color = '#755cda';
                                 colorRating = "warning";
-                            else if (comment.rating_name === 'Attempted')
-                                // color = 'blueviolet';
+                            } else if (comment.rating_name === 'Attempted') {
+                                color = '#4c5e74';
                                 colorRating = "primary";
-                            else
+                            } else {
                                 colorRating = "default";
-                            // color = 'black';
+                                color = '#999999';
+                            }
                             if (comment.rating_name !== undefined &&
                                     comment.rating_name !== "")
                                 rating = '<strong>Rating:</strong>'
@@ -880,7 +889,7 @@
                                                             <div class='shape-text'></div>\n\
                                                         </div>\n\
                                                         <div class='project-content'>\n\
-                                                            <h3 class='lead'> <strong>" + comment.rating_name + "</strong><br>" + date.substring(0, 10) + "         <span class='badge badge-pill badge-success'>Presentation</span></h3>\n\
+                                                            <h3 class='lead'> <strong style='color:" + color + "'>" + comment.rating_name + "</strong><br>" + date.substring(0, 10) + "         <span class='badge badge-pill badge-success'>Presentation</span></h3>\n\
                                                                 <p><strong>Observation: </strong>" + cc + "\
                                                                     <div>" + lastStep(steps, comment.step_id) + "\n\
                                                                     </div>\n\
@@ -900,14 +909,11 @@
                                 $("#" + comment.id + " div span").first().text("General")
 
                             $('#' + comment.id + " div span").first().css({"background-color": "black"});
-
                             if (comment.createdby !== '${user.id}') {
                                 $("#editComentario" + comment.id).attr("disabled", "true");
                                 $("#ConfirmDeleteComentario" + comment.id).attr("disabled", "true");
                             }
                         });
-
-
                         $("#divNotas").show();
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -1076,10 +1082,8 @@
                 clearTimeout(resizeId);
                 resizeId = setTimeout(doneResizing, 500);
             });
-
-
             function doneResizing() {
-                   loadComments();
+                loadComments();
             }
 
             function moverDrech(x)
@@ -1112,13 +1116,20 @@
                     success: function (data) {
                         var json = JSON.parse(data);
                         //var table = $('#table_students').DataTable();
-                        table.clear();
+                        $('#classroomCommentsButton').attr('disabled', true);
+                        $('#dayCommentsButton').attr('disabled', true);
+                        $("#divClassObsv").hide();
+                        $("#divNotas").hide();
 
+                        $('#divHora').hide();
+                        $('#divSubjectObjectives').hide();
+
+                        $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
+                        $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
+                        table.clear();
                         $.each(json, function (i) {
                             table.row.add({'id': json[i].id_students, 'name': json[i].nombre_students}).draw();
-
                         });
-
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -1127,7 +1138,6 @@
                     }
 
                 });
-
             }
 
 
@@ -1168,7 +1178,6 @@
                     var request = new XMLHttpRequest();
                     request.open("POST", path);
                     request.send(data);
-
                     $('#newClassRoomModal').modal('hide');
                     $('#confirmsaveClassroom').modal('show');
                     $("#observationcommentsClasroom").val("");
@@ -1235,6 +1244,19 @@
                 border-radius:7px;
             }
 
+
+            .project-classroom1 {    border-color: #fb8f03; }
+            .project-classroom1 .shape{
+                border-color: transparent #fb8f03 transparent transparent;
+                border-color: rgba(255,255,255,0) #fb8f03 rgba(255,255,255,0) rgba(255,255,255,0);
+            }
+
+            .project-classroom2 {    border-color: #337ab7; }
+            .project-classroom2 .shape{
+                border-color: transparent #337ab7 transparent transparent;
+                border-color: rgba(255,255,255,0) #337ab7 rgba(255,255,255,0) rgba(255,255,255,0);
+            }
+
             .project-default {    border-color: #999999; }
             .project-default .shape{
                 border-color: transparent #999999 transparent transparent;
@@ -1247,16 +1269,16 @@
                 border-color: rgba(255,255,255,0) #d9534f rgba(255,255,255,0) rgba(255,255,255,0);
             }
 
-            .project-success {	border-color: #5cb85c; }
+            .project-success {	border-color: #3d9941; }
             .project-success .shape{
-                border-color: transparent #5cb85c transparent transparent;
-                border-color: rgba(255,255,255,0) #5cb85c rgba(255,255,255,0) rgba(255,255,255,0);
+                border-color: transparent #3d9941 transparent transparent;
+                border-color: rgba(255,255,255,0) #3d9941 rgba(255,255,255,0) rgba(255,255,255,0);
             }
 
-            .project-primary {	border-color: #428bca; }
+            .project-primary {	border-color: #4c5e74; }
             .project-primary .shape{
-                border-color: transparent #428bca transparent transparent;
-                border-color: rgba(255,255,255,0) #428bca rgba(255,255,255,0) rgba(255,255,255,0);
+                border-color: transparent #4c5e74 transparent transparent;
+                border-color: rgba(255,255,255,0) #4c5e74 rgba(255,255,255,0) rgba(255,255,255,0);
             }
 
             .project-info {	border-color: #5bc0de; }
@@ -1265,10 +1287,10 @@
                 border-color: rgba(255,255,255,0) #5bc0de rgba(255,255,255,0) rgba(255,255,255,0);
             }
 
-            .project-warning {	border-color: #f0ad4e; }
+            .project-warning {	border-color: #755cda; }
             .project-warning .shape{
-                border-color: transparent #f0ad4e transparent transparent;
-                border-color: rgba(255,255,255,0) #f0ad4e rgba(255,255,255,0) rgba(255,255,255,0);
+                border-color: transparent #755cda transparent transparent;
+                border-color: rgba(255,255,255,0) #755cda rgba(255,255,255,0) rgba(255,255,255,0);
             }
 
             .project-content {
@@ -1456,7 +1478,7 @@
                 height: 145px;
                 width: 195px;
                 /* background-color: rgba(255,255,255,0.5);*/
-                
+
                 font-size: 12px;
                 padding: 5px;
                 display: line;
@@ -1499,17 +1521,17 @@
             .firstWeek
             {
                 margin-top: 5px;
-                border: #99CC66 solid 1px;
+                border: #fb8f03 solid 1px;
                 border-radius: 7px;
-                box-shadow: 0 2px 5px #99CC66;
+                box-shadow: 0 2px 5px #fb8f03;
             }
             .firstWeek h4{
-                color:  #99CC66;
+                color:  #fb8f03;
                 font-size: x-large;
                 font-weight: bolder;
             }
             .firstWeek span{
-                color:  #99CC66 !important;
+                color:  #fb8f03 !important;
             }
             /* h4
              {
@@ -1524,19 +1546,19 @@
             .secondWeek
             {
                 margin-top: 5px;
-                border: #808080 solid 1px;
+                border: #337ab7 solid 1px;
                 border-radius: 7px;
-                box-shadow: 0 2px 5px #808080;
+                box-shadow: 0 2px 5px #337ab7;
             }
 
             .secondWeek h4{
-                color:  #808080;
+                color:  #337ab7;
                 font-size: x-large;
                 font-weight: bolder;
             }
 
             .secondWeek span{
-                color:  #808080 !important;
+                color:  #337ab7 !important;
             }
 
             .carousel-control
@@ -1575,7 +1597,7 @@
 
                 <div class="col-xs-12">
                     <label>Filter</label>
-                    <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
+                    <select class="form-control " name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
                         <c:forEach var="levels" items="${gradelevels}">
                             <option value="${levels.id[0]}">${levels.name}</option>
                         </c:forEach>
@@ -1616,13 +1638,13 @@
                     </div>
                 </div>
                 <div class="col-xs-12 text-left sinpadding" id="divSubjectObjectives">
-                    <div class="col-xs-12 marginTop sinpadding">
+                    <div class="col-xs-12 marginTop sinpadding custom-select">
                         <select id="subjects">
                             <option>Select Subject</option>
                         </select>
                     </div>
-                    <div class="col-xs-12 marginTop sinpadding">
-                        <select id="objectives">
+                    <div class="col-xs-12 marginTop sinpadding custom-select">
+                        <select id="objectives" class="custom-select">
                             <option>Select Objectives</option>
                         </select>
                     </div>
@@ -1831,7 +1853,7 @@
                                         </div>
 
                                         <div class="col-xs-12 text-center">
-                                            <input type="submit" class="btn btn-success" id="savecomment"  value="Save" onclick="updateComment()">
+                                            <input type="submit" class="btn btn-primary" id="savecomment"  value="Save" onclick="updateComment()">
                                         </div>
                                         <div class="col-xs-12 text-center hidden" id="error1">
                                             <label>Please select a student first</label>
@@ -1918,7 +1940,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 text-right">
-                    <input class="btn-lg newcomment" type="image" id="newClassRoom" src="<c:url value='/recursos/img/iconos/Reports.svg'/>" width="100px">
+                    <input class="btn-lg newcomment" type="image" id="newClassRoom" src="<c:url value='/recursos/img/iconos/add-comment(1).svg'/>" width="100px">
                 </div>
             </div>
             <div class="col-xs-8" id="divNotas">
@@ -1981,7 +2003,7 @@
                             </div>
                             <div class="row text-center ">
                                 <div class="col-xs-6 text-center">
-                                    <button type="button" class="btn btn-success" id="savecommentClassroom"  value="Save" onclick="saveobservation()">Save observation</button>
+                                    <button type="button" class="btn btn-primary" id="savecommentClassroom"  value="Save" onclick="saveobservation()">Save observation</button>
                                 </div>
                             </div>
 

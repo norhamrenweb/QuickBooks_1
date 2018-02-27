@@ -113,11 +113,11 @@
                     }
                     if (($("#NameLessons").val().indexOf("'") !== -1) || ($("#NameLessons").val().indexOf("\"") !== -1)) {
                         $('#NameLessons').parent().addClass("has-error");
-                        $('#NameLessons').parent().children().last().removeClass("hide");
+                        $('#NameLessons').parent().parent().children().last().removeClass("hide");
                         $('#createOnClick').attr('disabled', true);
                     } else {
                         $('#NameLessons').parent().removeClass("has-error");
-                        $('#NameLessons').parent().children().last().addClass("hide");
+                        $('#NameLessons').parent().parent().children().last().addClass("hide");
                     }
                 });
 
@@ -142,11 +142,11 @@
                     }
                     if (($("#NameLessons").val().indexOf("'") !== -1) || ($("#NameLessons").val().indexOf("\"") !== -1)) {
                         $('#NameLessons').parent().addClass("has-error");
-                        $('#NameLessons').parent().children().last().removeClass("hide");
+                        $('#NameLessons').parent().parent().children().last().removeClass("hide");
                         $('#createOnClick').attr('disabled', true);
                     } else {
                         $('#NameLessons').parent().removeClass("has-error");
-                        $('#NameLessons').parent().children().last().addClass("hide");
+                        $('#NameLessons').parent().parent().children().last().addClass("hide");
                     }
                 });
                 /* $("#NameLessons").change(function () {
@@ -527,14 +527,14 @@
             }
             function comboSelectionIdeaLessons()
             {
-               
-                    if (window.XMLHttpRequest) //mozilla
-                    {
-                        ajax = new XMLHttpRequest(); //No Internet explorer
-                    } else
-                    {
-                        ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                    }
+
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
                 if ($("#ideas :selected").text() !== "Select an idea") {
                     $('#loadingmessage').show();
                     ajax.onreadystatechange = funcionCallBackIdeaLessons;
@@ -790,6 +790,10 @@
             }
             .marginStudents{
                 margin-right: 80% !important;
+            }
+            .help-block {
+
+                color: #a94442;
             }
         </style>
     </head>
