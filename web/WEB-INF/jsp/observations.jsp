@@ -352,7 +352,11 @@
                         var parentAux = $('#comment' + id).parent();
                         //var j = JSON.parse(data);   
                         if ($('#comment' + id).parent().children().length === 1) {
-                            $('#comment' + id).parent().append("<div class='divAdd'>No comments this week</div>");
+                            var idSemana = $('#comment' + id).parent().attr('id');
+                            if(idSemana ==="semana1" || idSemana ==="semana2" || idSemana ==="semana3" )
+                                $('#comment' + id).parent().append(divVacio("project-classroom1"));
+                            else 
+                                $('#comment' + id).parent().append(divVacio("project-classroom2"));
                         }
                         $('#comment' + id).remove();
                         parentAux.children().not(".hide").last().next().removeClass("hide");
