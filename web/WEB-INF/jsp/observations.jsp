@@ -2068,14 +2068,20 @@
             <!--<h1>Hello World!</h1>-->
 
             <div id="commentModal" class="modal fade" role="dialog">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">New comment</h4>
+                            <h4 class="modal-title" id="myModalLabel">New Comment</h4>
                         </div>
-                        <div id="steps_show" class="col-xs-6"></div>
-                        <div class="modal-body text-center">
+                        <div class="modal-body text-center clearfix">
+                            <div class="col-xs-6">
+                            <div class="col-xs-12">
+                            <label>Steps</label>
+                            </div>
+                            <div id="steps_show" class="col-xs-12 text-left"></div>
+                            </div>
+                            <div class="col-xs-6">
                             <textarea style="width:100%;" rows="7" id="commentcontent" required="required"></textarea>
                             <select name="TXTrating" id="hi" class="studentRating rating">
                                 <option></option>
@@ -2085,9 +2091,10 @@
                                 <option value="Mastered">Mastered</option>
                             </select>
                             <input type="number" name="steps" id="some_id" class="rating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="15" data-min="1" value="0" />
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button id="commentbutton" class="btn btn-primary btn-lg" data-dismiss="modal" aria-label="Close" value="Comment">Comment</button>
+                            <button id="commentbutton" class="btn btn-primary" data-dismiss="modal" aria-label="Close" value="Comment">Comment</button>
                         </div>
                     </div>
                 </div>
