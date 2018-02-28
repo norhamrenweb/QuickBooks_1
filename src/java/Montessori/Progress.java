@@ -18,7 +18,7 @@ public class Progress {
     private String comment_date;
     private String steps;
     private String createdby;
-
+    
     public String getSteps() {
         return steps;
     }
