@@ -113,6 +113,32 @@
                     }
                 });
 
+                 $("#objective").change(function () {
+                    if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("level").value !== 'Select level' && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '') {
+                        if ($("#ideaCheck:checked").length === 1) {
+                            $('#saveEdit').attr('disabled', false);
+                        } else { //no es idea
+                            var numAlum = $('#destino option').length;
+                            if ($('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
+                                $('#saveEdit').attr('disabled', false);
+                            } else {
+                                $('#saveEdit').attr('disabled', true);
+                            }
+                        }
+                    } else {
+                        $('#saveEdit').attr('disabled', true);
+                    }
+                    if (($("#NameLessons").val().indexOf("'") !== -1) || ($("#NameLessons").val().indexOf("\"") !== -1)) {
+                        $('#NameLessons').parent().addClass("has-error");
+                        $('#NameLessons').parent().children().last().removeClass("hide");
+                        $('#createOnClick').attr('disabled', true);
+                    } else {
+                        $('#NameLessons').parent().removeClass("has-error");
+                        $('#NameLessons').parent().children().last().addClass("hide");
+                    }
+                    
+                });
+                
                 $("#saveEdit").focus(function () {
                     $('#destino option').prop('selected', true);
                 });
@@ -224,14 +250,16 @@
             $().ready(function ()
             {
                 $('.pasar').click(function () {
-                    var exist = false;
-                    $('#destino option').each(function () {
-                        if ($('#origen option:selected').val() === $(this).val())
-                            exist = true;
+                   $('#origen option:selected').each(function () {
+                        var exist = false;
+                        var value1 = $(this);
+                        $('#destino option').each(function (i, value2) {
+                            if (value1.val() === value2.value)
+                                exist = true;
+                        });
+                        if (!exist)
+                           $("#destino").append(" <option value='" + value1.val() + "' >" + value1.text().trim() + "</option>")
                     });
-
-                    if (!exist)
-                        !$('#origen option:selected').clone().appendTo('#destino');
 
                     var numAlum = $('#destino option').length;
                     if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
