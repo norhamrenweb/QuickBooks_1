@@ -472,9 +472,11 @@ public class ProgressbyStudent {
     public String objGeneralcomments(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String selection = hsr.getParameter("selection");
         String[] data = selection.split(",");
+        HttpSession sesion = hsr.getSession();
         String subjectid = data[0];
         String studentid = data[1];
         List<DBRecords> result = new ArrayList<>();
+        String comment = "";
         try {
             String consulta = " SELECT id,name,description from objective where subject_id = " + subjectid;
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
@@ -487,14 +489,20 @@ public class ProgressbyStudent {
             }
             for (DBRecords r : result) {
 
-                consulta = "SELECT * FROM progress_report where objective_id =" + r.getCol5() + "AND generalcomment = TRUE AND student_id =" + studentid;
+                consulta = "SELECT comment,comment_date FROM progress_report where objective_id =" + r.getCol5() + "AND comment_date in(select max(comment_date) from progress_report where objective_id =" + r.getCol5() + "AND student_id ='" + studentid+"')AND student_id =" + studentid;
                 ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
                 while (rs1.next()) {
                     r.setCol3(rs1.getString("comment"));
                     r.setCol4("" + rs1.getDate("comment_date"));
 
                 }
-
+           
+            }
+            consulta = "select comment from report_comments where subject_id = " + subjectid + " and term_id = " + sesion.getAttribute("termId") + " and yearterm_id =" + sesion.getAttribute("yearId") + " and studentid =" + studentid + " order by date_created DESC";
+            ResultSet rs2 = DBConect.eduweb.executeQuery(consulta);
+            
+            if (rs2.next()) {
+                comment=rs2.getString("comment"); 
             }
 
         } catch (SQLException ex) {
@@ -503,35 +511,39 @@ public class ProgressbyStudent {
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
-        String off = new Gson().toJson(result);
+        String objs = new Gson().toJson(result);
+        JSONObject info = new JSONObject();
+        info.put("objs", objs);
+        info.put("comment",comment);
+        String off = info.toString();
         return off;
         //           return pjson;
     }
 
-    @RequestMapping("/progressbystudent/getSubjectComment.htm")
-    @ResponseBody
-    public String getSubjectComment(@RequestBody String id, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-
-        HttpSession sesion = hsr.getSession();
-        String subjectId = id.substring(0, id.indexOf("$"));
-        String studentId = id.substring(id.indexOf("$") + 1, id.length());
-        String comment = "";
-        try {
-            String consulta = "select comment from report_comments where subject_id = " + subjectId + " and term_id = " + sesion.getAttribute("termId") + " and yearterm_id =" + sesion.getAttribute("yearId") + " and studentid =" + studentId + " order by date_created DESC";
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
-            if (rs.next()) {
-                comment = rs.getString("comment");
-            }
-            return comment;
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Alumnos: " + ex);
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex + errors.toString());
-        }
-
-        return comment;
-    }
+//    @RequestMapping("/progressbystudent/getSubjectComment.htm")
+//    @ResponseBody
+//    public String getSubjectComment(@RequestBody String id, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+//
+//        HttpSession sesion = hsr.getSession();
+//        String subjectId = id.substring(0, id.indexOf("$"));
+//        String studentId = id.substring(id.indexOf("$") + 1, id.length());
+//        String comment = "";
+//        try {
+//            String consulta = "select comment from report_comments where subject_id = " + subjectId + " and term_id = " + sesion.getAttribute("termId") + " and yearterm_id =" + sesion.getAttribute("yearId") + " and studentid =" + studentId + " order by date_created DESC";
+//            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+//            if (rs.next()) {
+//                comment = rs.getString("comment");
+//            }
+//            return comment;
+//        } catch (SQLException ex) {
+//            System.out.println("Error leyendo Alumnos: " + ex);
+//            StringWriter errors = new StringWriter();
+//            ex.printStackTrace(new PrintWriter(errors));
+//            log.error(ex + errors.toString());
+//        }
+//
+//        return comment;
+//    }
 
     @RequestMapping("/progressbystudent/saveGeneralcomment.htm")
     @ResponseBody

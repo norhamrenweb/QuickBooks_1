@@ -97,32 +97,32 @@
                 });
                 
                 
-                $("#subjects").change(function () {
-                    if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
-                        $("#saveCommentSubjectButton").prop('disabled', true);
-                        $("#commentSubject").val("");
-                    } else {
-                        $("#saveCommentSubjectButton").prop('disabled', false);
-
-                        var idSubjectX = $("#subjects :selected").val() + "$" + $("#studentid").val();
-                        $.ajax({
-                            type: 'POST',
-                            url: 'getSubjectComment.htm',
-                            data: idSubjectX,
-                            contentType: 'text/plain',
-                            success: function (data) {
-                                $("#commentSubject").val(data);
-
-                            },
-                            error: function (xhr, ajaxOptions, thrownError) {
-                                console.log(xhr.status);
-                                console.log(xhr.responseText);
-                                console.log(thrownError);
-                            }
-
-                        });
-                    }
-                });
+//                $("#subjects").change(function () {
+//                    if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
+//                        $("#saveCommentSubjectButton").prop('disabled', true);
+//                        $("#commentSubject").val("");
+//                    } else {
+//                        $("#saveCommentSubjectButton").prop('disabled', false);
+//
+//                        var idSubjectX = $("#subjects :selected").val() + "$" + $("#studentid").val();
+//                        $.ajax({
+//                            type: 'POST',
+//                            url: 'getSubjectComment.htm',
+//                            data: idSubjectX,
+//                            contentType: 'text/plain',
+//                            success: function (data) {
+//                                $("#commentSubject").val(data);
+//
+//                            },
+//                            error: function (xhr, ajaxOptions, thrownError) {
+//                                console.log(xhr.status);
+//                                console.log(xhr.responseText);
+//                                console.log(thrownError);
+//                            }
+//
+//                        });
+//                    }
+//                });
             });
 
 
@@ -149,8 +149,8 @@
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
                         var json = JSON.parse(ajax.responseText);
-
-                        if (json.length === 0) {
+                        var objs = JSON.parse(json.objs);    
+                        if (objs.length === 0) {
                             $('#divTableObjective').addClass('hidden');
                             $('#divNotObjective').removeClass('hidden');
 
@@ -159,12 +159,16 @@
                             $('#divTableObjective').removeClass('hidden');
                         }
                         ;
+                       
+                        $("#saveCommentSubjectButton").prop('disabled', false);
+                        $("#commentSubject").val(json.comment);
+                    
                         $('#tableobjective').DataTable({
                             destroy: true,
                             paging: false,
                             searching: false,
                             ordering: false,
-                            data: json,
+                            data: objs,
                             columns: [
                                 {data: 'col1'},
                                 {data: 'col2'},
@@ -186,7 +190,7 @@
 
                         //var tableObjective = $('#tableobjective').DataTable();
 
-                        $.each(json, function (i, item) {
+                        $.each(objs, function (i, item) {
                             var gComment = item.col3;
                             if (gComment === undefined)
                                 gComment = "";
@@ -220,7 +224,8 @@
 //    } );                
                     }
                 }
-            }
+                }
+            
 
 //            function funcionCallBackSaveGeneralComent()
 //            {
@@ -421,7 +426,7 @@
                         var info = JSON.parse(json.info);
                         var foto = JSON.parse(json.prueba);
                         var prog = JSON.parse(json.prog);             
-                        var subjects = JSON.parse(json.sub);
+                    var subjects = JSON.parse(json.sub);
                         $('#gradelevel').text(info.level_id);
                         $('#nextlevel').text(info.nextlevel);
                         $('#student').text(info.nombre_students);
@@ -667,6 +672,11 @@
 
             function loadobjGeneralcomments()
             {
+                 if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
+                        $("#saveCommentSubjectButton").prop('disabled', true);
+                        $("#commentSubject").val("");
+                         $('#divTableObjective').addClass('hidden');
+                    }else{
                 if (window.XMLHttpRequest) //mozilla
                 {
                     ajax = new XMLHttpRequest(); //No Internet explorer
@@ -692,7 +702,7 @@
                 var selectStudent = document.getElementById("studentid").value;
                 ajax.open("POST", "objGeneralcomments.htm?selection=" + selectSubject + "," + selectStudent, true);
                 ajax.send("");
-
+                }
             }
             function saveobservation()
             {
