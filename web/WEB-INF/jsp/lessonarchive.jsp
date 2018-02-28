@@ -396,11 +396,12 @@ function funcionCallBackdetailsLesson()
                                 <div class="col-xs-3">
                                     <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
                                 </div>
-                                <c:if test="${user.type==0 || user.type ==2}">
+                               <%-- the user can not delete an archived presentation,must unarchive and remove progress records first--%>
+                               <%-- <c:if test="${user.type==0 || user.type ==2}">
                                     <div class="col-xs-3">
                                         <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
                                     </div>
-                                </c:if>
+                                </c:if>--%>
                                 <div class="col-xs-3">
                                     <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Resources">
                                 </div>

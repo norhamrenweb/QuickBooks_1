@@ -18,7 +18,7 @@
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-        <title>JSP Page</title>
+        <title>Workspace</title>
         <script>
             var ajax;
             var userId = ${user.id};
@@ -802,6 +802,7 @@
                     contentType: "application/json",
                     success: function (data) {
                         $('#newcomment').attr('disabled', false);
+                        $('#recommend').attr('disabled', false);
                         var json = JSON.parse(data);
                         var steps = JSON.parse(json.steps);
                         comments = JSON.parse(json.comments);
@@ -1647,6 +1648,9 @@
                         <select id="objectives" class="custom-select">
                             <option>Select Objectives</option>
                         </select>
+                    </div>
+                    <div class="col-xs-12 marginTop sinpadding custom-select">
+                        <input type="checkbox" name="recommend" id="recommend" value="recommend" disabled="true"> Recommend for next presentation
                     </div>
                 </div>
                 <div id="divHora" class='col-xs-12'>
