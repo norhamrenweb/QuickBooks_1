@@ -18,9 +18,17 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.google.gson.*;
+import static controladores.ProgressbyStudent.getNextDate;
+import static controladores.ProgressbyStudent.log;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +36,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  *
@@ -245,15 +254,11 @@ public class CreateLessonControlador {
             objective.setId(hsr.getParameterValues("TXTobjective"));
             String[] test = hsr.getParameterValues("TXTcontent");
 
-            
-            
             String lvlName = hsr.getParameter("levelName");
             String subjectName = hsr.getParameter("subjectName");
             String objName = hsr.getParameter("objectiveName");
-            String studNames = hsr.getParameter("studentsName");      
-            
-        
-            
+            String studNames = hsr.getParameter("studentsName");
+
             //optional field, avoid null pointer exception
             if (test != null && test.length > 0) {
                 contentids = Arrays.asList(hsr.getParameterValues("TXTcontent"));
@@ -284,15 +289,13 @@ public class CreateLessonControlador {
 
             Createlesson c = new Createlesson(hsr.getServletContext());
             // gives a null pointer exception , need to fix  
-            
-            
-           String note = " name: "+hsr.getParameter("TXTnombreLessons")+" | level: " + lvlName + " | subject: " + subjectName + " | objective: " + objName;
-           note += " | Date: " + hsr.getParameter("TXTfecha") + " | start: " + hsr.getParameter("TXThorainicio") + " | finish: " + hsr.getParameter("TXThorafin");
 
-            
+            String note = " name: " + hsr.getParameter("TXTnombreLessons") + " | level: " + lvlName + " | subject: " + subjectName + " | objective: " + objName;
+            note += " | Date: " + hsr.getParameter("TXTfecha") + " | start: " + hsr.getParameter("TXThorainicio") + " | finish: " + hsr.getParameter("TXThorafin");
+
             if (ideaCheck != null) {
                 if (ideaCheck[0].equals("on")) {
-                    c.newidea(hsr,note,newlesson);
+                    c.newidea(hsr, note, newlesson);
                     message = "Presentation idea created";
                 }
             } else {
@@ -300,12 +303,9 @@ public class CreateLessonControlador {
                 java.sql.Timestamp timestampend = java.sql.Timestamp.valueOf(hsr.getParameter("TXTfecha") + " " + hsr.getParameter("TXThorafin") + ":00.000");
                 String[] studentIds = hsr.getParameterValues("destino[]");
 
-                
-                    
-                
                 newlesson.setStart("" + timestampstart);
                 newlesson.setFinish("" + timestampend);
-                c.newlesson(hsr,note,studNames, studentIds, newlesson);
+                c.newlesson(hsr, note, studNames, studentIds, newlesson);
                 message = "Presentation created";
             }
 
@@ -417,11 +417,25 @@ public class CreateLessonControlador {
         ids[0] = "" + levelid;
         json.put("objectiveslist", new Gson().toJson(this.getObjectives(sub.getId())));
         json.put("contentslist", new Gson().toJson(this.getContent(obj.getId())));
-
         json.put("subjectslist", new Gson().toJson(this.getSubjects(ids)));
 
         return json.toString();
 
+    }
+
+    @RequestMapping("/createlesson/loadRecommend.htm")
+    @ResponseBody
+    public String loadRecommend(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+
+        int objId = r.getId();
+        ArrayList<String> studentIds = new ArrayList<>();
+
+        ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where id_objective=" + objId);
+        while (rs2.next()) {//existe
+            studentIds.add("" + rs2.getInt("id_student"));
+        }
+
+        return new Gson().toJson(studentIds);
     }
 
     public ArrayList<Subject> getSubjects(String[] levelid) throws SQLException {
