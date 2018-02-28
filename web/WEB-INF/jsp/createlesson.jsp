@@ -17,19 +17,19 @@
         <title>Create Presentations</title>
         <script>
             var mapStudents = new Map();
-            
+
             $(document).ready(function () {
-                
+
                 $('#origen option').each(function () {
-                     mapStudents[$(this).val()] = $(this).text();
-                 });
+                    mapStudents[$(this).val()] = $(this).text();
+                });
                 //DESELECCIONA Method
                 $("#deselectMethod").click(function () {
                     $("#method option:selected").prop("selected", false);
                 });
                 var userLang = navigator.language || navigator.userLanguage;
                 var myDate = new Date();
-                
+
                 //Muestra calendario
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
                 var lessoncreate = '<%= request.getParameter("message")%>';
@@ -165,8 +165,15 @@
                         contentType: "application/json",
                         success: function (data) {
                             var datos = JSON.parse(data);
-                            $("#recommendStudent").append(" <option value='10115' >Prass-Brink, Samuel</option>")
-                            
+                            $("#recommendStudent label").remove();
+                            $("#recommendStudent br").remove();
+                            for (i = 0; i < datos.length; i++) {
+                                // $("#recommendStudent").append(" <option value='"+datos[i]+"' >"+mapStudents[datos[i]]+"</option>")  
+                                $("#recommendStudent").append("<label class='form-check-label'>\n\
+                                                                <input class='form-check-input' type='checkbox' value='" + datos[i] + "' checked> \n\
+                                                                    " + mapStudents[datos[i]] + "    \n\
+                                                            </label><br>");
+                            }
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                             console.log(xhr.status);
@@ -176,6 +183,42 @@
 
 
                     });
+                });
+                $("#btnRecommend").click(function () {
+
+
+                    $("#recommendStudent label input:checked").each(function () {
+                        var exist = false;
+                        var value1 = $(this);
+                        $('#destino option').each(function (index, value2) {
+                            if (value1.val() === value2.value)
+                                exist = true;
+
+                        });
+                        if (!exist) {
+                            $("#destino").append(" <option value='" + value1.val() + "' >" + value1.parent().text().trim() + "</option>")
+                        }
+                    });
+
+                    var numAlum = $('#destino option').length;
+                    if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
+                        $('#createOnClick').attr('disabled', false);
+                    } else {
+                        $('#createOnClick').attr('disabled', true);
+                    }
+
+
+                    $('#destino option').first().prop('selected', true);
+
+                    $("#studentsName").val("");
+                    $("#destino option").each(function ()
+                    {
+                        $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
+
+                    });
+
+                    // $("#studentsName").val($("#destino").text().trim());
+                    return;
                 });
 
                 /* $("#NameLessons").change(function () {
@@ -261,14 +304,17 @@
                     title: 'Required field'
                 });
                 $('.pasar').click(function () {
-                    var exist = false;
-                    $('#destino option').each(function () {
-                        if ($('#origen option:selected').val() === $(this).val())
-                            exist = true;
+                    $('#origen option:selected').each(function () {
+                        var exist = false;
+                        var value1 = $(this);
+                        $('#destino option').each(function (i, value2) {
+                            if (value1.val() === value2.value)
+                                exist = true;
+                        });
+                        if (!exist)
+                           $("#destino").append(" <option value='" + value1.val() + "' >" + value1.text().trim() + "</option>")
                     });
 
-                    if (!exist)
-                        !$('#origen option:selected').clone().appendTo('#destino');
 
                     var numAlum = $('#destino option').length;
                     if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
@@ -608,6 +654,9 @@
             });
         </script>
         <style>
+            #recommendStudent label{
+                font-weight: normal !important;
+            }
             textarea 
             {
                 resize: none;
@@ -1160,15 +1209,14 @@
                     </div>
                     <div class="modal-body text-center">
                         <div class="row">
-                            <div class="col-xs-offset-2 col-xs-8">
-                            <select class="form-control" size="20" multiple name="recommendName" id="recommendStudent" style="width: 100% !important;">
-                            </select>
+                            <div class="col-xs-offset-3 col-xs-6 form-check text-left" name="recommendName" id="recommendStudent">
+
                             </div>
                         </div>
-                          <div class="row">
+                        <div class="row">
                             <div class="text-center">
-                            <input id='btnRecommend' type="button" class="btn btn-primary" value="Save"/>
-                         </div>
+                                <input id='btnRecommend' type="button" class="btn btn-primary" value="Save"/>
+                            </div>
                         </div>
                     </div>
                     <!--      <div class="modal-footer">
