@@ -167,6 +167,7 @@
                             <th>Date</th>
                             <th>Comment</th>
                             <th>Presentation Name</th>
+                            <th>Created By</th>
                         </tr>
                     </thead> 
                     
@@ -176,7 +177,7 @@
                             <td>${p.comment_date}</td>
                             <td>${p.comment}</td>
                              <td>${p.lesson_name}</td>
-                            
+                             <td>${p.createdby}</td>
                         </tr>
                     </c:forEach>
                     

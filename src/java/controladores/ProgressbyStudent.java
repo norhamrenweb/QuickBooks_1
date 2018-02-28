@@ -216,7 +216,7 @@ public class ProgressbyStudent {
         try {
 //will display only if there is a lesson that has a progress record,but if a lesson is only planned will not be displayed
 
-            ResultSet rs1 = DBConect.eduwebBeforeFirst.executeQuery("select comment,comment_date,ratingname,lessonname from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = '" + d.getCol2()+"' order by comment_date DESC");
+            ResultSet rs1 = DBConect.eduwebBeforeFirst.executeQuery("select comment,comment_date,ratingname,lessonname,createdby from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = '" + d.getCol2()+"' order by comment_date DESC");
 
             if (!rs1.next()) {
                 String message = "Student does not have progress under the selected objective";//if i change this message must change as well in the jsp
@@ -225,6 +225,7 @@ public class ProgressbyStudent {
                 rs1.beforeFirst();
                 while (rs1.next()) {
                     Progress p = new Progress();
+                    p.setCreatedby(""+rs1.getInt("createdby"));
                     p.setComment(rs1.getString("comment"));
                     p.setRating(rs1.getString("ratingname"));
                     if(rs1.getString("lessonname") != null){
