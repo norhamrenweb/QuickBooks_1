@@ -16,16 +16,20 @@
     <head>
         <title>Create Presentations</title>
         <script>
+            var mapStudents = new Map();
+            
             $(document).ready(function () {
-
-
-
+                
+                $('#origen option').each(function () {
+                     mapStudents[$(this).val()] = $(this).text();
+                 });
                 //DESELECCIONA Method
                 $("#deselectMethod").click(function () {
                     $("#method option:selected").prop("selected", false);
                 });
                 var userLang = navigator.language || navigator.userLanguage;
                 var myDate = new Date();
+                
                 //Muestra calendario
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
                 var lessoncreate = '<%= request.getParameter("message")%>';
@@ -149,6 +153,31 @@
                         $('#NameLessons').parent().parent().children().last().addClass("hide");
                     }
                 });
+                $("#linkRecommend").click(function () {
+                    var myObj = {};
+                    myObj["id"] = $("#objective :selected").val()
+                    var json = JSON.stringify(myObj);
+                    $.ajax({
+                        type: 'POST',
+                        url: 'loadRecommend.htm',
+                        data: json,
+                        datatype: "json",
+                        contentType: "application/json",
+                        success: function (data) {
+                            var datos = JSON.parse(data);
+                            $("#recommendStudent").append(" <option value='10115' >Prass-Brink, Samuel</option>")
+                            
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr.status);
+                            console.log(xhr.responseText);
+                            console.log(thrownError);
+                        }
+
+
+                    });
+                });
+
                 /* $("#NameLessons").change(function () {
                  if (($("#NameLessons").val().indexOf("'") !== -1) || ($("#NameLessons").val().indexOf("\"") !== -1)) {
                  $('#NameLessons').parent().addClass("has-error");
@@ -964,7 +993,7 @@
                                 </div>
                             </div>
                             <div>
-                                <a data-toggle="modal" href="#recommendations" class="disabled">Recommended Students<br>for this objective</a>
+                                <a id="linkRecommend" data-toggle="modal" href="#recommendations" class="disabled">Recommended Students<br>for this objective</a>
                             </div>    
                         </div>
 
@@ -1122,15 +1151,25 @@
                 </div>
             </div>
         </div>
-            <div class="modal fade" id="recommendations" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" id="recommendations" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
+                        <h4 class="modal-title"> Students to select</h4>
                     </div>
                     <div class="modal-body text-center">
-                       students to select
+                        <div class="row">
+                            <div class="col-xs-offset-2 col-xs-8">
+                            <select class="form-control" size="20" multiple name="recommendName" id="recommendStudent" style="width: 100% !important;">
+                            </select>
+                            </div>
+                        </div>
+                          <div class="row">
+                            <div class="text-center">
+                            <input id='btnRecommend' type="button" class="btn btn-primary" value="Save"/>
+                         </div>
+                        </div>
                     </div>
                     <!--      <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -1138,7 +1177,7 @@
                           </div>-->
                 </div>
             </div>
-             </div>
+        </div>
         <div class="divLoadStudent" id="loadingmessage">
             <div class="text-center"> 
                 <img class="imgLoading" src='../recursos/img/large_loading.gif'/>

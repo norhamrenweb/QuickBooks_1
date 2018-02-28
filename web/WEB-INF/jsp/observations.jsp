@@ -102,6 +102,7 @@
                         $('#savecomment').prop("disabled", true);
                     }
                 });
+
                 $(document).on("click", ".showMoreFuncion", function () {
                     var comment = $(this).data('comment');
                     var createDate = $(this).data('createdate');
@@ -162,12 +163,38 @@
                     $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
                     $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
                 });
+
+                $('#recommend').on('click', function () {
+                    var myObj = {};
+                    myObj["id"] = $('#objectives option:selected').val();
+                    myObj["name"] = studentid;
+                    var json = JSON.stringify(myObj);
+                    $.ajax({
+                        type: 'POST',
+                        url: 'recommendStudent.htm',
+                        data: json,
+                        datatype: "json",
+                        contentType: "application/json",
+                        success: function (data) {
+                            
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr.status);
+                            console.log(xhr.responseText);
+                            console.log(thrownError);
+                        }
+
+
+                    });
+                });
+
                 $('#editcomment').on('click', function () {
                     var idob = $('#objectives option:selected').val();
                     var comment = $('#commentcontent2').val();
                     var idcomment = $('#idedit').val();
                     editcomment(idcomment, idob, comment, $('[name=steps2]').val(), $('[name=TXTrating2]').val());
                 });
+
                 $('#commentbutton').on('click', function () {
                     var idob = $('#objectives option:selected').val();
                     var comment = $('#commentcontent').val();
@@ -233,12 +260,14 @@
                     } else {
                         $("#dayCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5%", "border-radius": "10px"});
                         $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
-
+                        
 
                         $("#divHora").hide();
                         $("#divNotas").show();
                         $("#divClassObsv").hide();
                         $("#divSubjectObjectives").show();
+                        $("#objectives :selected").text("Select Objective");
+                        $("#recommend").prop("checked","");
                     }
                 });
 
@@ -353,9 +382,9 @@
                         //var j = JSON.parse(data);   
                         if ($('#comment' + id).parent().children().length === 1) {
                             var idSemana = $('#comment' + id).parent().attr('id');
-                            if(idSemana ==="semana1" || idSemana ==="semana2" || idSemana ==="semana3" )
+                            if (idSemana === "semana1" || idSemana === "semana2" || idSemana === "semana3")
                                 $('#comment' + id).parent().append(divVacio("project-classroom1"));
-                            else 
+                            else
                                 $('#comment' + id).parent().append(divVacio("project-classroom2"));
                         }
                         $('#comment' + id).remove();
@@ -805,7 +834,9 @@
                         $('#recommend').attr('disabled', false);
                         var json = JSON.parse(data);
                         var steps = JSON.parse(json.steps);
-                        comments = JSON.parse(json.comments);
+                        var comments = JSON.parse(json.comments);
+                        var recommend = JSON.parse(json.recommend);
+                        
                         $('#steps_show').empty();
                         $('#steps_show2').empty();
                         $.each(steps, function (i, step) {
@@ -916,6 +947,9 @@
                             }
                         });
                         $("#divNotas").show();
+                        
+                        if(recommend === true) $("#recommend").prop("checked","true");
+                        else $("#recommend").prop("checked","");
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);

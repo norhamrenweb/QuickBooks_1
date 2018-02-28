@@ -196,8 +196,15 @@ public class ObservationControlador {
                 s.setOrder(rs3.getInt("storder"));
                 steps.add(s);
             }
+            String recommend = "false";
+            
+            ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where  id_student = " + idstudent + " and id_objective="+idobjective);        
+            if(rs2.next()) recommend = "true";
+            
+            
             json.put("steps", new Gson().toJson(steps));
             json.put("comments", new Gson().toJson(comments));
+            json.put("recommend",recommend);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (JSONException ex) {
@@ -445,8 +452,33 @@ public class ObservationControlador {
 
         return data;
     }
-    
-    
+
+    @RequestMapping("/observations/recommendStudent.htm")
+    @ResponseBody
+    public String recommendStudent(@RequestBody Resource r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+
+        try {
+            String objId = r.getId();
+            String studentId = r.getName();
+            HttpSession sesion =  hsr.getSession();
+            String termid = ""+sesion.getAttribute("termId");
+            String yearterm_id = ""+sesion.getAttribute("yearId");
+           
+            String consulta = "insert into recommendations(id_student,id_objective,term_id,yearterm_id) values ("+studentId+","+objId+","+termid + "," + yearterm_id + ")";
+            ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where  id_student = " + studentId + " and id_objective="+objId);        
+            if(rs2.next()){//existe
+                consulta = "delete from recommendations where id_student = " + studentId + " and id_objective="+objId;
+            }
+            DBConect.eduweb.executeUpdate(consulta);
+                   
+        } catch (SQLException ex) {
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return "success";
+    }
+
     @RequestMapping("/observations/delFoto.htm")
     public ModelAndView delFoto(@RequestBody Resource r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         if ((new SessionCheck()).checkSession(hsr)) {
@@ -477,7 +509,7 @@ public class ObservationControlador {
 
                 ftpClient.mkd(commentId);
                 ftpClient.changeWorkingDirectory(commentId);
-                ftpClient.deleteFile(ftpClient.listNames()[0]);             
+                ftpClient.deleteFile(ftpClient.listNames()[0]);
             }
 
             ftpClient.logout();
@@ -489,7 +521,7 @@ public class ObservationControlador {
         }
         return mv;
     }
-    
+
     @RequestMapping("/observations/editcomment.htm")
     @ResponseBody
     public String editcomment(HttpServletRequest hsr, HttpServletResponse hsr1) {
