@@ -15,6 +15,9 @@ public class Profesor {
     private int id;
     private String email;
     private String asignatura;
+
+
+    private String classId;
     
     
     public Profesor(String firstName, String lastName, int id, String email) {
@@ -22,6 +25,14 @@ public class Profesor {
         this.lastName = lastName;
         this.id = id;
         this.email = email;
+    }
+
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
     }
     
     public Profesor(String firstName, String lastName, int id, String email,String asig) {
@@ -32,6 +43,14 @@ public class Profesor {
         this.asignatura=asig;
     }
 
+     public Profesor(String firstName, String lastName, int id, String email,String asig,String ci) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.id = id;
+        this.email = email;
+        this.asignatura=asig;
+        this.classId = ci;
+    }
     public String getAsignatura() {
         return asignatura;
     }

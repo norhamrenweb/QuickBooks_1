@@ -9,6 +9,7 @@ import Montessori.*;
 import Montessori.Objective;
 import Montessori.Students;
 import Montessori.Subject;
+import Reports.DataFactoryFolder.Profesor;
 import atg.taglib.json.util.JSONException;
 import atg.taglib.json.util.JSONObject;
 import com.fasterxml.jackson.core.JsonEncoding;
@@ -197,6 +198,7 @@ public class ProgressbyStudent {
         return mv;
     }
 
+     
     //OTEHER PAGINE
     @RequestMapping("/progressdetails.htm")
     @ResponseBody
@@ -204,6 +206,7 @@ public class ProgressbyStudent {
         if ((new SessionCheck()).checkSession(hsr)) {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
+        
         ModelAndView mv = new ModelAndView("progressdetails");
         Objective o = new Objective();
         servlet = hsr.getServletContext();
@@ -225,7 +228,7 @@ public class ProgressbyStudent {
                 rs1.beforeFirst();
                 while (rs1.next()) {
                     Progress p = new Progress();
-                    p.setCreatedby(""+rs1.getInt("createdby"));
+                    p.setCreatedby(fetchTeacher(rs1.getInt("createdby"),hsr));
                     p.setComment(rs1.getString("comment"));
                     p.setRating(rs1.getString("ratingname"));
                     if(rs1.getString("lessonname") != null){
