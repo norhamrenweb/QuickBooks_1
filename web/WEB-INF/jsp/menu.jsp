@@ -27,7 +27,7 @@
             </a>
         </div>
          <div class="col-xs-12 iconosmenulateral">
-            <a href="<c:url value='/observations/start.htm'/>">
+            <a href="<c:url value='/observations/start.htm'/>" target="_blank">
                 <div class="center-block">
                     <img width="70%" src="<c:url value='/recursos/img/iconos/notepad.svg'/>" data-toggle="tooltip" data-placement="top" title="Workspace">
                 </div>
