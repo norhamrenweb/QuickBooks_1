@@ -19,7 +19,7 @@
             var mapStudents = new Map();
 
             $(document).ready(function () {
-
+                $("#linkRecommend").hide();
                 $('#origen option').each(function () {
                     mapStudents[$(this).val()] = $(this).text();
                 });
@@ -65,6 +65,7 @@
 
                 $("#ideaCheck").change(function () {
                     if ($(this).is(":checked")) {
+                         $("#linkRecommend").hide();
                         $('#showDate').addClass("desactivada");
                         $('#showDate').off('click');
                         $("#contenedorDate").removeClass('in');
@@ -123,6 +124,11 @@
                         $('#NameLessons').parent().removeClass("has-error");
                         $('#NameLessons').parent().parent().children().last().addClass("hide");
                     }
+                    if($(this).prop("id") === "objective" && $(this).val() !== "")
+                        $("#linkRecommend").show();
+                    else 
+                        $("#linkRecommend").hide();
+                        
                 });
 
                 $("#createOnClick").focus(function () {
@@ -554,7 +560,7 @@
                     $('#createOnClick').attr('disabled', true);
                     $('#objective').val("");
                     $('#subject').val("");
-
+                    $("#linkRecommend").hide();
                     ajax.onreadystatechange = funcionCallBackSubject;
                     var seleccion1 = document.getElementById("level").value;
                     ajax.open("POST", "subjectlistLevel.htm?seleccion1=" + seleccion1, true);
@@ -567,6 +573,7 @@
             {
                 $('#content').empty();
                 $("#subjectName").val($("#subject :selected").text());
+                $("#linkRecommend").hide();
                 if ($('#subject').val() !== -1) {
                     if (window.XMLHttpRequest) //mozilla
                     {
@@ -628,6 +635,7 @@
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
+                 $("#linkRecommend").hide();
                 $("#objectiveName").val($("#objective :selected").text());
                 var test = document.getElementById("NameLessons").value;
                 var test2 = document.getElementById("comments").checked;
