@@ -83,7 +83,7 @@
                     if (($('#observationfechaClassroom').val() !== "") && ($('#observationcommentsClassroom').val() !== "") && ($('#observationtypeClassroom').val() !== "")) {
                         $('#savecommentClassroom').prop("disabled", false);
                     } else {
-                        $('#savecommentClasroom').prop("disabled", true);
+                        $('#savecommentClassroom').prop("disabled", true);
                     }
                 });
                 //loadComments();
@@ -159,7 +159,7 @@
 
                     $('#divHora').hide();
                     $('#divSubjectObjectives').hide();
-
+                    $("#objectives").val("vacio");
                     $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
                     $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
                 });
@@ -176,7 +176,7 @@
                         datatype: "json",
                         contentType: "application/json",
                         success: function (data) {
-                            
+
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                             console.log(xhr.status);
@@ -209,9 +209,13 @@
                     $('#commentModal').modal('hide');
                 });
                 $('#newcomment').on('click', function () {
+                    $("#commentcontent").val("");
                     $('#commentModal').modal('show');
                 });
                 $('#newClassRoom').on('click', function () {
+                    $("#observationcommentsClassroom").val("");
+                    $("#observationtypeClassroom").val("");
+                    $("#savecommentClassroom").prop("disabled","true");
                     $('#newClassRoomModal').modal('show');
                 });
                 $('#subjects').on('change', function () {
@@ -260,14 +264,14 @@
                     } else {
                         $("#dayCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5%", "border-radius": "10px"});
                         $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
-                        
+
 
                         $("#divHora").hide();
                         $("#divNotas").show();
                         $("#divClassObsv").hide();
                         $("#divSubjectObjectives").show();
-                        $("#objectives :selected").text("Select Objective");
-                        $("#recommend").prop("checked","");
+                        //$("#objectives").val("vacio")
+                        $("#recommend").prop("checked", "");
                     }
                 });
 
@@ -298,7 +302,7 @@
                     }
                 }
                 loadComments();
-                $('#editComment').modal('hide');
+                $('#editCommentModal').modal('hide');
                 $('#confirmsave').modal('show');
                 path = path + "savecomment";
                 var request = new XMLHttpRequest();
@@ -315,7 +319,7 @@
                 $('#observationtype').val(type);
                 $('#observationcomments').val(comment);
                 $('#idComentario').val(id);
-                $('#editComment').modal('show');
+                $('#editCommentModal').modal('show');
             }
             function ConfirmDeleteComentario(val) {
                 $('#deleteObservation').modal('show');
@@ -447,7 +451,7 @@
                                 var id = value2.id;
                                 var comentario = value2.observation;
                                 var comentarioExtenso = '';
-                                if (comentario.length >= 90) {
+                                if (comentario.length >= 86) {
                                     var comentarioExtenso = '...';
                                 }
                                 var fechaCreacion = value2.date;
@@ -532,7 +536,7 @@
                                                                                 </div>\n\
                                                                                 <div class='project-content projectProgcal'>\n\
                                                                                     \n\<strong>Date:</strong> " + commentdate + " </strong> <br>\n\
-                                                                                    <strong>Observation:</strong> " + comentario.substring(0, 90) + " " + comentarioExtenso + "<br>\n\
+                                                                                    <strong>Observation:</strong> " + comentario.substring(0, 86) + " " + comentarioExtenso + "<br>\n\
                                                                                     \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
                                                                                     <div class='col-xs-3 text-center sinpadding'>\n\
                                                                                     <button type='button' class='btn btn-link showMoreFuncion'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
@@ -834,9 +838,9 @@
                         $('#recommend').attr('disabled', false);
                         var json = JSON.parse(data);
                         var steps = JSON.parse(json.steps);
-                        var comments = JSON.parse(json.comments);
+                        comments = JSON.parse(json.comments);
                         var recommend = JSON.parse(json.recommend);
-                        
+
                         $('#steps_show').empty();
                         $('#steps_show2').empty();
                         $.each(steps, function (i, step) {
@@ -854,10 +858,7 @@
                         $.each(comments, function (i, comment) {
                             var date = comment.comment_date + '';
                             var cc = comment.comment;
-                            if (cc.length > 123) {
-                                cc = cc.substring(0, 123);
-                                cc += "...";
-                            }
+
                             var rating = "";
                             editdelete = "";
                             var color = "";
@@ -913,8 +914,11 @@
                              '</div>'
                              );*/
 
-
-
+                            var tresPuntosComment = "...", tresPuntosStep = "...", textLastStep = lastStep(steps, comment.step_id);
+                            if (cc.length < 120)
+                                tresPuntosComment = "";
+                            if (textLastStep.length < 70)
+                                tresPuntosStep = "";
                             $('#semana0').append("<div class='divAddNotas' id='" + comment.id + "'> \n\
                                                     <div class='project project-radius project-" + colorRating + "'>\n\
                                                         <div class='shape'>	\n\
@@ -922,8 +926,8 @@
                                                         </div>\n\
                                                         <div class='project-content'>\n\
                                                             <h3 class='lead'> <strong style='color:" + color + "'>" + comment.rating_name + "</strong><br>" + date.substring(0, 10) + "         <span class='badge badge-pill badge-success'>Presentation</span></h3>\n\
-                                                                <p><strong>Observation: </strong>" + cc + "\
-                                                                    <div>" + lastStep(steps, comment.step_id) + "\n\
+                                                                <p><strong>Observation: </strong>" + cc.substring(0, 120) + " " + tresPuntosComment + "\
+                                                                    <div><strong>Last Step: </strong>" + textLastStep.substring(0, 70) + " " + tresPuntosStep + "\n\
                                                                     </div>\n\
                                                                 \n\
                                                                 </p>\n\
@@ -936,6 +940,7 @@
                                     "</div>\n\
                                                         </div>\n\
                                                     </div>\n\
+                                                    <div id='datos" + comment.id + "' class='hide' data-comment='" + cc + "' data-step='" + textLastStep + "'></div>\n\
                                                 </div>");
                             if (comment.generalcomment)
                                 $("#" + comment.id + " div span").first().text("General")
@@ -947,9 +952,11 @@
                             }
                         });
                         $("#divNotas").show();
-                        
-                        if(recommend === true) $("#recommend").prop("checked","true");
-                        else $("#recommend").prop("checked","");
+
+                        if (recommend === true)
+                            $("#recommend").prop("checked", "true");
+                        else
+                            $("#recommend").prop("checked", "");
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -975,6 +982,7 @@
                         $('#hi2').val(comment.rating_name);
                     }
                 });
+                //$('#commentcontent2').val($("#datos"+id).data("comment"));
                 $('#editModal').modal('show');
             }
 
@@ -1033,7 +1041,8 @@
                     if (step.id === idstep)
                         ret = step.name;
                 });
-                return '<strong>Last Step: </strong>' + ret;
+
+                return ret;
             }
             /*
              function getstudents(idgrade) {
@@ -1112,15 +1121,15 @@
              });
              }
              */
-            var resizeId;
-            $(window).resize(function () {
-                clearTimeout(resizeId);
-                resizeId = setTimeout(doneResizing, 500);
-            });
-            function doneResizing() {
-                loadComments();
-            }
-
+            /* var resizeId;
+             $(window).resize(function () {
+             clearTimeout(resizeId);
+             resizeId = setTimeout(doneResizing, 500);
+             });
+             function doneResizing() {
+             loadComments();
+             }
+             */
             function moverDrech(x)
             {
                 if ($("#semana" + x).children().not(".hide").length > 1) {
@@ -1158,7 +1167,7 @@
 
                         $('#divHora').hide();
                         $('#divSubjectObjectives').hide();
-
+                        $("#objectives").val("vacio");
                         $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
                         $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
                         table.clear();
@@ -1847,12 +1856,12 @@
                         </div>
                     </div>
 
-                    <div id="editComment" class="modal fade" role="dialog">
+                    <div id="editCommentModal" class="modal fade" role="dialog">
                         <input type='text' name="TXTfecha" class="hide" id="idComentario"/>
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
 
-                                <div class="modal-header modal-header-details">
+                                <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     <h2>Enter a classroom observation</h2>
                                 </div>
@@ -1911,7 +1920,7 @@
 
                         <!-- Modal content-->
                         <div class="modal-content">
-                            <div class="modal-header modal-header-delete">
+                            <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 <h4 class="modal-title">comment saved</h4>
                             </div>
@@ -1924,7 +1933,7 @@
 
                         <!-- Modal content-->
                         <div class="modal-content">
-                            <div class="modal-header modal-header-details">
+                            <div class="modal-header ">
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 <h4 class="modal-title">More Information</h4>
                             </div>
@@ -2056,7 +2065,7 @@
 
                     <!-- Modal content-->
                     <div class="modal-content">
-                        <div class="modal-header modal-header-delete">
+                        <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">comment saved</h4>
                         </div>
@@ -2076,21 +2085,21 @@
                         </div>
                         <div class="modal-body text-center clearfix">
                             <div class="col-xs-6">
-                            <div class="col-xs-12">
-                            <label>Steps</label>
-                            </div>
-                            <div id="steps_show" class="col-xs-12 text-left"></div>
+                                <div class="col-xs-12">
+                                    <label>Steps</label>
+                                </div>
+                                <div id="steps_show" class="col-xs-12 text-left"></div>
                             </div>
                             <div class="col-xs-6">
-                            <textarea style="width:100%;" rows="7" id="commentcontent" required="required"></textarea>
-                            <select name="TXTrating" id="hi" class="studentRating rating">
-                                <option></option>
-                                <option value="N/A">N/A</option>
-                                <option value="Presented">Presented</option>
-                                <option value="Attempted">Attempted</option>
-                                <option value="Mastered">Mastered</option>
-                            </select>
-                            <input type="number" name="steps" id="some_id" class="rating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="15" data-min="1" value="0" />
+                                <textarea style="width:100%;" rows="7" id="commentcontent" required="required"></textarea>
+                                <select name="TXTrating" id="hi" class="studentRating rating">
+                                    <option></option>
+                                    <option value="N/A">N/A</option>
+                                    <option value="Presented">Presented</option>
+                                    <option value="Attempted">Attempted</option>
+                                    <option value="Mastered">Mastered</option>
+                                </select>
+                                <input type="number" name="steps" id="some_id" class="rating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="15" data-min="1" value="0" />
                             </div>
                         </div>
                         <div class="modal-footer">
