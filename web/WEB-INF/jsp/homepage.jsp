@@ -105,15 +105,15 @@
                     ],
                     responsive: true
                 });
-/*
-                var resizeId;
-                $(window).resize(function () {
-                    clearTimeout(resizeId);
-                    resizeId = setTimeout(doneResizing, 500);
-                });
-                function doneResizing() {
-                    refresh();
-                }*/
+                /*
+                 var resizeId;
+                 $(window).resize(function () {
+                 clearTimeout(resizeId);
+                 resizeId = setTimeout(doneResizing, 500);
+                 });
+                 function doneResizing() {
+                 refresh();
+                 }*/
 
 
                 $('#table_datelessons').DataTable();
@@ -123,7 +123,12 @@
                     data = table.row(this).data();
                     nameLessons = data[1];
                 });
-
+              //  var nP = localStorage.getItem("numberPage");
+                var nP = window.name;
+                if(nP === "") nP = 0;
+                
+                $("#table_id").DataTable().page(Number(nP)).draw( 'page' )
+                
             });
 
             function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
@@ -132,6 +137,7 @@
                 $('#lessonDelete').append(deleteLessonsName);
                 $('#buttonDelete').val(deleteLessonsSelected);
                 $('#deleteLesson').modal('show');
+
             }
             function sortTable() {
                 var table, rows, switching, i, x, y, shouldSwitch;
@@ -279,11 +285,15 @@
                         var lessondeleteconfirm = JSON.parse(ajax.responseText);
 
                         if (lessondeleteconfirm.message === 'Presentation has progress records,it can not be deleted') {
+                            $('#lessonDeleteMessage').empty();
                             $('#lessonDeleteMessage').append('<H1>' + lessondeleteconfirm.message + '</H1>');
                             $('#deleteLessonMessage').modal('show');
                         } else {
+                            $('#lessonDeleteMessage').empty();
                             $('#lessonDeleteMessage').append('<H1>' + lessondeleteconfirm.message + '</H1>');
                             $('#deleteLessonMessage').modal('show'); //  Presentation deleted successfully
+
+                            refresh();
                         }
                         ;
 
@@ -305,14 +315,18 @@
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-
-                $("#table_id").DataTable().row($("#delete"+lessonSelect).parent().parent()).node().remove();
+               // localStorage.setItem("numberPage", $("#table_id").DataTable().page());
+                window.name = $("#table_id").DataTable().page();
+                // $("#table_id").DataTable().page(5).draw( 'page' )
+                
+                // $("#table_id").DataTable().row($("#delete"+lessonSelect).parent().parent()).node().remove();
                 ajax.onreadystatechange = funcionCallBackdeleteLesson;
                 ajax.open("POST", "deleteLesson.htm?LessonsSelected=" + lessonSelect + "&LessonsName=" + lessonsName, true);
             <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
                 ajax.send("");
+                //   refresh();
             }
-            
+
             ;
             function refresh()
             {
@@ -403,7 +417,6 @@
             {
                 background-color: #CC6666;
             }
-            /*$("#table_id").DataTable().page(5).draw( 'page' )*/
         </style>
     </head>
     <body>
