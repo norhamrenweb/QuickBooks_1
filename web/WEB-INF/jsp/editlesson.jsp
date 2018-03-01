@@ -18,8 +18,13 @@
         <script>
 
             var error = ${DatainBBDD};
+            var mapStudents = new Map();
             $(document).ready(function () {
+                $("#linkRecommend").show();
                 $("#studentsName").val("");
+                $('#origen option').each(function () {
+                    mapStudents[$(this).val()] = $(this).text();
+                });
                 $("#destino option").each(function ()
                 {
                     $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
@@ -111,9 +116,13 @@
                         $('#NameLessons').parent().removeClass("has-error");
                         $('#NameLessons').parent().children().last().addClass("hide");
                     }
+                    if ($(this).prop("id") === "objective" && $(this).val() !== "")
+                        $("#linkRecommend").show();
+                    else
+                        $("#linkRecommend").hide();
                 });
 
-                 $("#objective").change(function () {
+                $("#objective").change(function () {
                     if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("level").value !== 'Select level' && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '') {
                         if ($("#ideaCheck:checked").length === 1) {
                             $('#saveEdit').attr('disabled', false);
@@ -136,9 +145,9 @@
                         $('#NameLessons').parent().removeClass("has-error");
                         $('#NameLessons').parent().children().last().addClass("hide");
                     }
-                    
+
                 });
-                
+
                 $("#saveEdit").focus(function () {
                     $('#destino option').prop('selected', true);
                 });
@@ -244,13 +253,81 @@
                         $('#NameLessons').parent().children().last().addClass("hide");
                     }
                 });
+              $("#linkRecommend").click(function () {
+                var myObj = {};
+                myObj["id"] = $("#objective :selected").val()
+                var json = JSON.stringify(myObj);
+                $.ajax({
+                    type: 'POST',
+                    url: 'loadRecommend.htm',
+                    data: json,
+                    datatype: "json",
+                    contentType: "application/json",
+                    success: function (data) {
+                        var datos = JSON.parse(data);
+                        $("#recommendStudent label").remove();
+                        $("#recommendStudent br").remove();
+                        for (i = 0; i < datos.length; i++) {
+                            // $("#recommendStudent").append(" <option value='"+datos[i]+"' >"+mapStudents[datos[i]]+"</option>")  
+                            $("#recommendStudent").append("<label class='form-check-label'>\n\
+                                                                <input class='form-check-input' type='checkbox' value='" + datos[i] + "' checked> \n\
+                                                                    " + mapStudents[datos[i]] + "    \n\
+                                                            </label><br>");
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
+                    }
+
+
+                });
+            });
+            $("#btnRecommend").click(function () {
+
+
+                $("#recommendStudent label input:checked").each(function () {
+                    var exist = false;
+                    var value1 = $(this);
+                    $('#destino option').each(function (index, value2) {
+                        if (value1.val() === value2.value)
+                            exist = true;
+
+                    });
+                    if (!exist) {
+                        $("#destino").append(" <option value='" + value1.val() + "' >" + value1.parent().text().trim() + "</option>")
+                    }
+                });
+
+                var numAlum = $('#destino option').length;
+                if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
+                    $('#createOnClick').attr('disabled', false);
+                } else {
+                    $('#createOnClick').attr('disabled', true);
+                }
+
+
+                $('#destino option').first().prop('selected', true);
+
+                $("#studentsName").val("");
+                $("#destino option").each(function ()
+                {
+                    $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
+
+                });
+
+                // $("#studentsName").val($("#destino").text().trim());
+                return;
             });
 
+});
+          
 
             $().ready(function ()
             {
                 $('.pasar').click(function () {
-                   $('#origen option:selected').each(function () {
+                    $('#origen option:selected').each(function () {
                         var exist = false;
                         var value1 = $(this);
                         $('#destino option').each(function (i, value2) {
@@ -258,7 +335,7 @@
                                 exist = true;
                         });
                         if (!exist)
-                           $("#destino").append(" <option value='" + value1.val() + "' >" + value1.text().trim() + "</option>")
+                            $("#destino").append(" <option value='" + value1.val() + "' >" + value1.text().trim() + "</option>")
                     });
 
                     var numAlum = $('#destino option').length;
@@ -482,6 +559,7 @@
                     $('#createOnClick').attr('disabled', true);
                     $('#objective').val("");
                     $('#subject').val("");
+                    $("#linkRecommend").hide();
 
                     ajax.onreadystatechange = funcionCallBackSubject;
                     var seleccion1 = document.getElementById("level").value;
@@ -495,7 +573,7 @@
             {
                 $('#content').empty();
                 $("#subjectName").val($("#subject :selected").text());
-
+                $("#linkRecommend").hide();
                 if ($('#subject').val() !== -1) {
                     if (window.XMLHttpRequest) //mozilla
                     {
@@ -516,14 +594,14 @@
 
             function comboSelectionIdeaLessons()
             {
-                
-                    if (window.XMLHttpRequest) //mozilla
-                    {
-                        ajax = new XMLHttpRequest(); //No Internet explorer
-                    } else
-                    {
-                        ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                    }
+
+                if (window.XMLHttpRequest) //mozilla
+                {
+                    ajax = new XMLHttpRequest(); //No Internet explorer
+                } else
+                {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                }
                 if ($("#ideas :selected").text() !== "Select an idea") {
                     $('#loadingmessage').show();
                     ajax.onreadystatechange = funcionCallBackIdeaLessons;
@@ -565,6 +643,9 @@
             });
         </script>
         <style>
+            #recommendStudent label{
+                font-weight: normal !important;
+            }
             textarea 
             {
                 resize: none;
@@ -966,7 +1047,9 @@
                                     <div class="text">*</div>
                                 </div>
                             </div>
-
+                            <div>
+                                <a id="linkRecommend" data-toggle="modal" href="#recommendations" class="disabled">Recommended Students<br>for this objective</a>
+                            </div> 
 
                         </div>
 
@@ -1130,7 +1213,32 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="recommendations" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"> Students to select</h4>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div class="row">
+                            <div class="col-xs-offset-3 col-xs-6 form-check text-left" name="recommendName" id="recommendStudent">
 
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-center">
+                                <input id='btnRecommend' type="button" class="btn btn-primary" value="Save"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!--      <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                          </div>-->
+                </div>
+            </div>
+        </div>
         <div class="divLoadStudent" id="loadingmessage">
             <div class="text-center"> 
                 <img class="imgLoading" src='../recursos/img/large_loading.gif'/>

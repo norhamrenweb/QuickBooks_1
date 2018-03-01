@@ -65,7 +65,7 @@
 
                 $("#ideaCheck").change(function () {
                     if ($(this).is(":checked")) {
-                         $("#linkRecommend").hide();
+                        
                         $('#showDate').addClass("desactivada");
                         $('#showDate').off('click');
                         $("#contenedorDate").removeClass('in');
@@ -635,7 +635,6 @@
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-                 $("#linkRecommend").hide();
                 $("#objectiveName").val($("#objective :selected").text());
                 var test = document.getElementById("NameLessons").value;
                 var test2 = document.getElementById("comments").checked;

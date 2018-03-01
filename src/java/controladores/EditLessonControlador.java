@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  *
@@ -64,6 +65,21 @@ public class EditLessonControlador {
         return false;
     }
 
+     @RequestMapping("/editlesson/loadRecommend.htm")
+    @ResponseBody
+    public String loadRecommend(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+
+        int objId = r.getId();
+        ArrayList<String> studentIds = new ArrayList<>();
+
+        ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where id_objective=" + objId);
+        while (rs2.next()) {//existe
+            studentIds.add("" + rs2.getInt("id_student"));
+        }
+
+        return new Gson().toJson(studentIds);
+    }
+    
     @RequestMapping("/editlesson/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         ModelAndView mv = new ModelAndView("editlesson");
