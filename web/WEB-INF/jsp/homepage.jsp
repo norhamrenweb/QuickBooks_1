@@ -105,9 +105,17 @@
                     ],
                     responsive: true
                 });
-                $(window).on('resize', function () {
-                    location.reload();
+/*
+                var resizeId;
+                $(window).resize(function () {
+                    clearTimeout(resizeId);
+                    resizeId = setTimeout(doneResizing, 500);
                 });
+                function doneResizing() {
+                    refresh();
+                }*/
+
+
                 $('#table_datelessons').DataTable();
 
                 $('#table_id tbody').on('click', 'tr', function () {
@@ -298,13 +306,13 @@
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
 
+                $("#table_id").DataTable().row($("#delete"+lessonSelect).parent().parent()).node().remove();
                 ajax.onreadystatechange = funcionCallBackdeleteLesson;
                 ajax.open("POST", "deleteLesson.htm?LessonsSelected=" + lessonSelect + "&LessonsName=" + lessonsName, true);
             <%-- window.open("<c:url value="/homepage/deleteLesson.htm?LessonsSelected="/>"+LessonsSelected); --%>
                 ajax.send("");
-
-
             }
+            
             ;
             function refresh()
             {
@@ -341,18 +349,18 @@
             }
             function showCalendar()
                         {
-        
+
                                 id = '11343';
                                 window.open("<c:url value="/schedule.htm?id="/>" + id);
                         }
             /*var resizeId;
-            $(window).resize(function () {
-                clearTimeout(resizeId);
-                resizeId = setTimeout(doneResizing, 500);
-            });
-            function doneResizing() {
-                refresh();
-            }*/
+             $(window).resize(function () {
+             clearTimeout(resizeId);
+             resizeId = setTimeout(doneResizing, 500);
+             });
+             function doneResizing() {
+             refresh();
+             }*/
         </script>
         <style>
             .sinpadding
@@ -395,6 +403,7 @@
             {
                 background-color: #CC6666;
             }
+            /*$("#table_id").DataTable().page(5).draw( 'page' )*/
         </style>
     </head>
     <body>
@@ -443,7 +452,7 @@
                                     <input name="TXTid_lessons_modificar" type="image" src="<c:url value="/recursos/img/btn/btn_Edit.svg"/>" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
                                 </div>
                                 <div class="col-xs-2 text-center">
-                                    <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
+                                    <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete${lecciones.id}" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
                                 </div>
                                 <div class="col-xs-2 text-center">
                                     <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Resources">
@@ -565,7 +574,7 @@
                         <c:out value='${messageDelete}'/>
                     </div>
                     <div class="modal-footer text-center">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="refresh()">OK</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
                     </div>
                 </div>
 
@@ -639,8 +648,8 @@
             </div>
         </div>
 
-  <div class="col-xs-6 text-center">
-     <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View Schedule</button>
-                                </div>
+        <div class="col-xs-6 text-center">
+            <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View Schedule</button>
+        </div>
     </body>
 </html>

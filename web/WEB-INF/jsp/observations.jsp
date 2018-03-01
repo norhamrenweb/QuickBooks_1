@@ -215,7 +215,7 @@
                 $('#newClassRoom').on('click', function () {
                     $("#observationcommentsClassroom").val("");
                     $("#observationtypeClassroom").val("");
-                    $("#savecommentClassroom").prop("disabled","true");
+                    $("#savecommentClassroom").prop("disabled", "true");
                     $('#newClassRoomModal').modal('show');
                 });
                 $('#subjects').on('change', function () {
@@ -1121,15 +1121,15 @@
              });
              }
              */
-            /* var resizeId;
-             $(window).resize(function () {
-             clearTimeout(resizeId);
-             resizeId = setTimeout(doneResizing, 500);
-             });
-             function doneResizing() {
-             loadComments();
-             }
-             */
+            var resizeId;
+            $(window).resize(function () {
+                clearTimeout(resizeId);
+                resizeId = setTimeout(doneResizing, 500);
+            });
+            function doneResizing() {
+                loadComments();
+            }
+
             function moverDrech(x)
             {
                 if ($("#semana" + x).children().not(".hide").length > 1) {
