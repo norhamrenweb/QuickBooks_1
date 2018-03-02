@@ -149,7 +149,7 @@
 
         <div class="container">
             <button type="button" class="btn btn-primary" onclick="mostrarActivityLog()">Activity Log</button>
-            <button type="button" class="btn btn-primary" onclick="mostrarSetup()">Setup</button>
+<!--            <button type="button" class="btn btn-primary" onclick="mostrarSetup()">Setup</button>-->
 
             <div id="setup" class="col-xs-12">
                 <h1 class="text-center">Setup</h1>

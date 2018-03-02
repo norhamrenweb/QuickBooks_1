@@ -88,7 +88,20 @@ public class LessonsListControlador {
             l.put("idteacher", rs.getString("user_id"));
             lessonslist.add(l);
         }
-        
+        consulta = "SELECT * FROM lessons inner join lessonpresentedby on lessonid=id where teacherid=" + user.getId() + " AND COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+        rs = DBConect.eduweb.executeQuery(consulta);
+        while (rs.next()) {
+               JSONObject l = new JSONObject();
+                  l.put("title", rs.getString("name"));
+              Timestamp stamp = rs.getTimestamp("start");
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+            l.put("start", rs.getTimestamp("start"));//sdfDate.format(stamp));
+            l.put("end", rs.getTimestamp("finish"));//sdfDate.format(stamp));
+            l.put("allDay", "false");
+            l.put("objid",rs.getString("objective_id"));
+            l.put("idteacher", rs.getString("user_id"));
+            lessonslist.add(l);
+        }
         for(JSONObject l:lessonslist){
             String idobj = (String)l.get("objid");
             consulta = "SELECT * FROM public.objective where id="+idobj;
@@ -336,7 +349,7 @@ public class LessonsListControlador {
             java.util.logging.Logger.getLogger(LessonsListControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             return "error";
         }
-        return "Succesfully share";
+        return "Presentation shared successfully";
     }
     
     @RequestMapping("/homepage/cargarcompartidos.htm")
