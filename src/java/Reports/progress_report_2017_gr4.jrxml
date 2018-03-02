@@ -241,7 +241,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true" isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[PROGRESS REPORT - December 2017]]></text>
+				<text><![CDATA[PROGRESS REPORT]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="147" y="67" width="50" height="19" uuid="a6ed17bd-7e05-430c-a739-9ce93c98ccea"/>
