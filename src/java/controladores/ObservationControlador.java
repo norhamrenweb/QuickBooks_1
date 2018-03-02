@@ -167,7 +167,7 @@ public class ObservationControlador {
         ArrayList<CommentObjective> comments = new ArrayList<>();
         JSONObject json = new JSONObject();
         try {
-            String consulta = "select * from progress_report where objective_id=" + idobjective + " and student_id=" + idstudent;
+            String consulta = "select * from progress_report where objective_id=" + idobjective + " and student_id=" + idstudent + " ORDER BY comment_date DESC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 CommentObjective c
@@ -369,6 +369,23 @@ public class ObservationControlador {
 
             String consulta = "delete from classobserv where id = " + commentId;
             DBConect.eduweb.executeUpdate(consulta);
+                     String server = "192.168.1.36";
+            int port = 21;
+            String user = "david";
+            String pass = "david";
+
+            FTPClient ftpClient = new FTPClient();
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+
+            
+            ftpClient.changeWorkingDirectory("/MontessoriObservations");
+            ftpClient.mkd(commentId);
+            ftpClient.changeWorkingDirectory(commentId);
+            if(ftpClient.listNames().length > 0) ftpClient.deleteFile(ftpClient.listNames()[0]);
+            
+            ftpClient.changeWorkingDirectory("/MontessoriObservations");
+            ftpClient.removeDirectory(commentId);
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));

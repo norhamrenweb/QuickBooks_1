@@ -443,36 +443,56 @@ public class CreateLessonControlador {
         ArrayList<Subject> subjects = new ArrayList<>();
         ArrayList<Subject> activesubjects = new ArrayList<>();
 
-        ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
-        Subject s = new Subject();
-        s.setName("Select Subject");
-        subjects.add(s);
+        HashMap<String, String> mapSubject = new HashMap<String, String>();
+        String termid = null;
+        String yearid = null;
 
-        while (rs1.next()) {
+        try {
+            ResultSet rs = DBConect.ah.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where configschoolid = 1");
+            while (rs.next()) {
+                termid = "" + rs.getInt("defaulttermid");
+                yearid = "" + rs.getInt("defaultyearid");
+            }
+            ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from courses where courses.active = 1 " );// the term and year need to be dynamic, check with vincent
+
+            String name9, id;
+            while (rs1.next()) {
+                name9 = rs1.getString("Title");
+                id = rs1.getString("CourseID");
+                mapSubject.put(id, name9);
+            }
+
+            ResultSet rs4 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
+
+            while (rs4.next()) {
+                Subject sub = new Subject();
+                String[] ids = new String[1];
+                ids[0] = "" + rs4.getInt("CourseID");
+                sub.setId(ids);
+                subjects.add(sub);
+            }
+
+            String[] aux = new String[1];
+            aux[0] = "-1";
             Subject sub = new Subject();
-            String[] ids = new String[1];
-            ids[0] = "" + rs1.getInt("CourseID");
-            sub.setId(ids);
+            sub.setId(aux);
+            sub.setName("Select subject");
+            activesubjects.add(sub);
 
-            subjects.add(sub);
-        }
-        String[] aux = new String[1];
-        aux[0] = "-1";
-        Subject sub = new Subject();
-        sub.setId(aux);
-        sub.setName("Select subject");
-        activesubjects.add(sub);
-        for (Subject su : subjects.subList(1, subjects.size())) {
-            String[] ids = new String[1];
-            ids = su.getId();
-            ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = '" + ids[0] + "' order by Title");
-            while (rs2.next()) {
-                if (rs2.getBoolean("Active") == true) {
-                    su.setName(rs2.getString("Title"));
-                    activesubjects.add(su);
+            for (int i = 1; i < subjects.size(); i++) {
+                if (mapSubject.containsKey(subjects.get(i).getId()[0])) {
+                    subjects.get(i).setName(mapSubject.get(subjects.get(i).getId()[0]));
+                    activesubjects.add(subjects.get(i));
                 }
             }
+
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Subjects: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
         }
+
         return activesubjects;
     }
 

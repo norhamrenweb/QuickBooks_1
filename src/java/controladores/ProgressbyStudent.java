@@ -198,7 +198,6 @@ public class ProgressbyStudent {
         return mv;
     }
 
-     
     //OTEHER PAGINE
     @RequestMapping("/progressdetails.htm")
     @ResponseBody
@@ -206,7 +205,7 @@ public class ProgressbyStudent {
         if ((new SessionCheck()).checkSession(hsr)) {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
-        
+
         ModelAndView mv = new ModelAndView("progressdetails");
         Objective o = new Objective();
         servlet = hsr.getServletContext();
@@ -219,7 +218,7 @@ public class ProgressbyStudent {
         try {
 //will display only if there is a lesson that has a progress record,but if a lesson is only planned will not be displayed
 
-            ResultSet rs1 = DBConect.eduwebBeforeFirst.executeQuery("select comment,comment_date,ratingname,lessonname,createdby from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = '" + d.getCol2()+"' order by comment_date DESC");
+            ResultSet rs1 = DBConect.eduwebBeforeFirst.executeQuery("select comment,comment_date,ratingname,lessonname,createdby from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = '" + d.getCol2() + "' order by comment_date DESC");
 
             if (!rs1.next()) {
                 String message = "Student does not have progress under the selected objective";//if i change this message must change as well in the jsp
@@ -228,14 +227,13 @@ public class ProgressbyStudent {
                 rs1.beforeFirst();
                 while (rs1.next()) {
                     Progress p = new Progress();
-                    p.setCreatedby(fetchTeacher(rs1.getInt("createdby"),hsr));
+                    p.setCreatedby(fetchTeacher(rs1.getInt("createdby"), hsr));
                     p.setComment(rs1.getString("comment"));
                     p.setRating(rs1.getString("ratingname"));
-                    if(rs1.getString("lessonname") != null){
-                    p.setLesson_name(rs1.getString("lessonname"));
-                }else
-                    {
-                       p.setLesson_name("") ;// so that null will not appear in the table in case of a general comment
+                    if (rs1.getString("lessonname") != null) {
+                        p.setLesson_name(rs1.getString("lessonname"));
+                    } else {
+                        p.setLesson_name("");// so that null will not appear in the table in case of a general comment
                     }
                     Timestamp stamp = rs1.getTimestamp("comment_date");
                     SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -489,20 +487,20 @@ public class ProgressbyStudent {
             }
             for (DBRecords r : result) {
 
-                consulta = "SELECT comment,comment_date FROM progress_report where objective_id =" + r.getCol5() + "AND comment_date in(select max(comment_date) from progress_report where objective_id =" + r.getCol5() + "AND student_id ='" + studentid+"')AND student_id =" + studentid;
+                consulta = "SELECT comment,comment_date FROM progress_report where objective_id =" + r.getCol5() + "AND comment_date in(select max(comment_date) from progress_report where objective_id =" + r.getCol5() + "AND student_id ='" + studentid + "')AND student_id =" + studentid;
                 ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
                 while (rs1.next()) {
                     r.setCol3(rs1.getString("comment"));
                     r.setCol4("" + rs1.getDate("comment_date"));
 
                 }
-           
+
             }
             consulta = "select comment from report_comments where subject_id = " + subjectid + " and term_id = " + sesion.getAttribute("termId") + " and yearterm_id =" + sesion.getAttribute("yearId") + " and studentid =" + studentid + " order by date_created DESC";
             ResultSet rs2 = DBConect.eduweb.executeQuery(consulta);
-            
+
             if (rs2.next()) {
-                comment=rs2.getString("comment"); 
+                comment = rs2.getString("comment");
             }
 
         } catch (SQLException ex) {
@@ -514,7 +512,7 @@ public class ProgressbyStudent {
         String objs = new Gson().toJson(result);
         JSONObject info = new JSONObject();
         info.put("objs", objs);
-        info.put("comment",comment);
+        info.put("comment", comment);
         String off = info.toString();
         return off;
         //           return pjson;
@@ -544,7 +542,6 @@ public class ProgressbyStudent {
 //
 //        return comment;
 //    }
-
     @RequestMapping("/progressbystudent/saveGeneralcomment.htm")
     @ResponseBody
     public String saveGeneralcomment(@RequestBody DBRecords data, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -616,7 +613,7 @@ public class ProgressbyStudent {
 
                 while (rs.next()) {
                     DBRecords l = new DBRecords();
-                    l.setCol1("" + rs.getInt("id"));// step id  
+                    l.setCol1("" + rs.getInt("id"));// step id
                     l.setCol2(rs.getString("name"));// step name
                     l.setCol4(rs.getString("obj"));// objective name
                     l.setCol3("" + rs.getInt("subject_id"));// subjectid
@@ -765,7 +762,7 @@ public class ProgressbyStudent {
         return obN;
     }
 
-   /* @RequestMapping("/progressbystudent/savecomment.htm")
+    /* @RequestMapping("/progressbystudent/savecomment.htm")
     @ResponseBody
     public String savecomment(@RequestBody Observation obs, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         ModelAndView mv = new ModelAndView("progressbystudent");
@@ -781,7 +778,7 @@ public class ProgressbyStudent {
         }
         return "success";
     }
-*/
+     */
     @RequestMapping("/progressbystudent/saveSubjectComment.htm")
     @ResponseBody
     public String saveSubjectComment(@RequestBody CommentSubject cSub, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -947,7 +944,7 @@ public class ProgressbyStudent {
 
                 ftpClient.mkd(commentId);
                 ftpClient.changeWorkingDirectory(commentId);
-                ftpClient.deleteFile(ftpClient.listNames()[0]);             
+                ftpClient.deleteFile(ftpClient.listNames()[0]);
             }
 
             ftpClient.logout();
@@ -968,8 +965,25 @@ public class ProgressbyStudent {
         ModelAndView mv = new ModelAndView("lessonresources");
         try {
             String commentId = r.getId();
-
             String consulta = "delete from classobserv where id = " + commentId;
+
+            String server = "192.168.1.36";
+            int port = 21;
+            String user = "david";
+            String pass = "david";
+
+            FTPClient ftpClient = new FTPClient();
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+
+            ftpClient.changeWorkingDirectory("/MontessoriObservations");
+            ftpClient.mkd(commentId);
+            ftpClient.changeWorkingDirectory(commentId);
+            ftpClient.deleteFile(ftpClient.listNames()[0]);
+            
+            ftpClient.removeDirectory("/MontessoriObservations/" + commentId);
+            ftpClient.logout();
+
             DBConect.eduweb.executeUpdate(consulta);
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
@@ -1005,7 +1019,7 @@ public class ProgressbyStudent {
             mapPersons.put(studentID, LastName + ", " + first);
         }
 
-        DateFormat formatoFecha;// = new SimpleDateFormat("M/d/yyyy");   
+        DateFormat formatoFecha;// = new SimpleDateFormat("M/d/yyyy");
         String date = r.getDateString() + "-01";
 
         LocalDate convertedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-M-d"));

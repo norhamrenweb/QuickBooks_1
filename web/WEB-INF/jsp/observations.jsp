@@ -197,7 +197,7 @@
 
                 $('#commentbutton').on('click', function () {
                     var idob = $('#objectives option:selected').val();
-                    var comment = $('#commentcontent').val();
+                    var comment = $('#commentcontent').val().trim();
                     if (comment.length > 0)
                         newcomment(idob, comment, $('[name=steps]').val(), $('[name=TXTrating]').val());
                     else {
@@ -1121,14 +1121,14 @@
              });
              }
              */
-            var resizeId;
+            /*var resizeId;
             $(window).resize(function () {
                 clearTimeout(resizeId);
                 resizeId = setTimeout(doneResizing, 500);
             });
             function doneResizing() {
                 loadComments();
-            }
+            }*/
 
             function moverDrech(x)
             {
