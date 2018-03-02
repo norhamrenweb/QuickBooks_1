@@ -23,8 +23,18 @@ public class CommentObjective {
     private String modifyby;
     private String term_id;
     private String yearterm_id;
+    private String color;
+    private String createdbyName;
+
+    public String getCreatedbyName() {
+        return createdbyName;
+    }
+
+    public void setCreatedbyName(String createdbyName) {
+        this.createdbyName = createdbyName;
+    }
     
-    public CommentObjective(String id, String rating_id, String student_id, String comment, String comment_date, String objective_id, boolean generalcomment, String step_id, String createdby, String modifyby, String term_id, String yearterm_id) {
+    public CommentObjective(String id, String rating_id, String student_id, String comment, String comment_date, String objective_id, boolean generalcomment, String step_id, String createdby, String modifyby, String term_id, String yearterm_id,String c,String owner) {
         this.id = id;
         this.rating_id = rating_id;
         this.student_id = student_id;
@@ -37,8 +47,17 @@ public class CommentObjective {
         this.modifyby = modifyby;
         this.term_id = term_id;
         this.yearterm_id = yearterm_id;
+        this.createdbyName = owner;
+        this.color = c;
     }
     
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
     public String getRating_name() {
         return rating_name;
     }

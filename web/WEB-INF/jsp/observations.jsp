@@ -233,8 +233,10 @@
                 $('#objectives').on('change', function () {
                     $('#steps_show').empty();
                     $('#steps_show2').empty();
-                    if (this.value !== 'vacio')
+                    if (this.value !== 'vacio') {
+                        $("#newcomment").show()
                         getcomments(this.value);
+                    }
                 });
                 /*$('#grades').on('change', function () {
                  getstudents(this.value);
@@ -252,7 +254,7 @@
                     if ($(this).val() === "classroomComments") {
                         $("#classroomCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5% !important", "border-radius": "10px"});
                         $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
-
+                        $("#newcomment").hide();
                         $("#divNotas").hide();
                         $("#divClassObsv").show();
                         $("#divSubjectObjectives").hide();
@@ -265,7 +267,7 @@
                         $("#dayCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5%", "border-radius": "10px"});
                         $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
 
-
+                        $("#newcomment").hide()
                         $("#divHora").hide();
                         $("#divNotas").show();
                         $("#divClassObsv").hide();
@@ -873,46 +875,27 @@
                                     '<span class=" glyphicon glyphicon-remove"></span>' +
                                     '</button>' +
                                     '</div>';
-                            if (comment.rating_name === 'Mastered') {
-                                color = '#3d9941';
-                                colorRating = "success";
-                            } else if (comment.rating_name === 'Presented') {
-                                color = '#755cda';
-                                colorRating = "warning";
-                            } else if (comment.rating_name === 'Attempted') {
-                                color = '#4c5e74';
-                                colorRating = "primary";
-                            } else {
-                                colorRating = "default";
-                                color = '#999999';
-                            }
+                            /*if (comment.rating_name === 'Mastered') {
+                             color = comment.color;
+                             colorRating = "success";
+                             } else if (comment.rating_name === 'Presented') {
+                             color = comment.color;
+                             colorRating = "warning";
+                             } else if (comment.rating_name === 'Attempted') {
+                             color = comment.color;
+                             colorRating = "primary";
+                             } else {
+                             colorRating = "default";
+                             color = comment.color;
+                             }*/
+
+                            colorRating = "warning";
+                            color = comment.color;
+
                             if (comment.rating_name !== undefined &&
                                     comment.rating_name !== "")
                                 rating = '<strong>Rating:</strong>'
                                         + comment.rating_name;
-                            /*$('#semana0').append('<div class="divAdd" id="' + comment.id + '">'
-                             + '<div>\n\
-                             <strong>Date:</strong>' + date.substring(0, 10)
-                             + '</div>\n\
-                             <div>\n\
-                             <strong>Observation: </strong>\n\
-                             <div>' + cc + '</div>'
-                             + '</div>\n\
-                             <div>\n\
-                             ' + lastStep(steps, comment.step_id) + '\n\
-                             </div>\n\
-                             <div style="color:' + color + ';">\n\
-                             ' + rating + '\n\
-                             </div>' +
-                             '<div class="col-xs-12 text-center sinpadding optionsObservations">' +
-                             '<div class="col-xs-4 text-center sinpadding">' +
-                             '<button onclick="mostrarComentario(' + comment.id + ')" type="button" class="btn btn-link showMore">' +
-                             '<span class="glyphicon glyphicon-list-alt"></span>' +
-                             '</button>' +
-                             '</div>' +
-                             editdelete +
-                             '</div>'
-                             );*/
 
                             var tresPuntosComment = "...", tresPuntosStep = "...", textLastStep = lastStep(steps, comment.step_id);
                             if (cc.length < 120)
@@ -921,12 +904,12 @@
                                 tresPuntosStep = "";
                             $('#semana0').append("<div class='divAddNotas' id='" + comment.id + "'> \n\
                                                     <div class='project project-radius project-" + colorRating + "'>\n\
-                                                        <div class='shape'>	\n\
+                                                        <div class='shape' id='"+comment.id+"shape'>	\n\
                                                             <div class='shape-text'></div>\n\
                                                         </div>\n\
                                                         <div class='project-content'>\n\
                                                             <h3 class='lead'> <strong style='color:" + color + "'>" + comment.rating_name + "</strong><br>" + date.substring(0, 10) + "         <span class='badge badge-pill badge-success'>Presentation</span></h3>\n\
-                                                                <p><strong>Observation: </strong>" + cc.substring(0, 120) + " " + tresPuntosComment + "\
+                                                                <p><strong>Comment: </strong>" + cc.substring(0, 120) + " " + tresPuntosComment + "\
                                                                     <div><strong>Last Step: </strong>" + textLastStep.substring(0, 70) + " " + tresPuntosStep + "\n\
                                                                     </div>\n\
                                                                 \n\
@@ -940,7 +923,7 @@
                                     "</div>\n\
                                                         </div>\n\
                                                     </div>\n\
-                                                    <div id='datos" + comment.id + "' class='hide' data-comment='" + cc + "' data-step='" + textLastStep + "'></div>\n\
+                                                    <div id='datos" + comment.id + "' class='hide' data-comment='" + cc + "' data-step='" + textLastStep + "' data-created='" + comment.createdbyName + "'></div>\n\
                                                 </div>");
                             if (comment.generalcomment)
                                 $("#" + comment.id + " div span").first().text("General")
@@ -950,6 +933,10 @@
                                 $("#editComentario" + comment.id).attr("disabled", "true");
                                 $("#ConfirmDeleteComentario" + comment.id).attr("disabled", "true");
                             }
+                            
+                            $('#' + comment.id+ " div").css("border-color", color);
+                            $('#' + comment.id + "shape").css("border-color", "transparent " + color + " transparent transparent");
+                            $('#' + comment.id + "shape").css("border-color", "rgba(255,255,255,0) " + color + " rgba(255,255,255,0) rgba(255,255,255,0)");
                         });
                         $("#divNotas").show();
 
@@ -1020,7 +1007,7 @@
                     if (comment.id === id) {
                         /* $('#commentcomplete').append('<div><h4>Comment</h4></div>\n\
                          <div>' + comment.comment + '</div');*/
-                        $('#commentcomplete').append('<div>' + comment.comment + '</div');
+                        $('#commentcomplete').append("<div class='row'>" + comment.comment + "</div");
                         $('#completemodal').modal('show');
                     }
                 });
@@ -1122,13 +1109,13 @@
              }
              */
             /*var resizeId;
-            $(window).resize(function () {
-                clearTimeout(resizeId);
-                resizeId = setTimeout(doneResizing, 500);
-            });
-            function doneResizing() {
-                loadComments();
-            }*/
+             $(window).resize(function () {
+             clearTimeout(resizeId);
+             resizeId = setTimeout(doneResizing, 500);
+             });
+             function doneResizing() {
+             loadComments();
+             }*/
 
             function moverDrech(x)
             {
@@ -2171,7 +2158,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Comment</h4>
+                            <h4 class="modal-title" id="myModalLabel">Details</h4>
                         </div>
                         <div id="commentcomplete" class="modal-body text-center">
                         </div>

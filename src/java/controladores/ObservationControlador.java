@@ -167,7 +167,18 @@ public class ObservationControlador {
         ArrayList<CommentObjective> comments = new ArrayList<>();
         JSONObject json = new JSONObject();
         try {
-            String consulta = "select * from progress_report where objective_id=" + idobjective + " and student_id=" + idstudent + " ORDER BY comment_date DESC";
+            ResultSet rs7 = DBConect.ah.executeQuery("select lastname,firstname,personid from person");
+            // ResultSet rs4 = st.executeQuery(consulta);
+            HashMap<String, String> mapPersons = new HashMap<String, String>();
+            String first, LastName, studentID;
+            while (rs7.next()) {
+                first = rs7.getString("firstName");
+                LastName = rs7.getString("lastName");
+                studentID = rs7.getString("personid");
+                mapPersons.put(studentID, LastName + ", " + first);
+            }
+
+            String consulta = "select * from progress_report inner join rating on progress_report.rating_id = rating.id where objective_id=" + idobjective + " and student_id=" + idstudent + " ORDER BY comment_date DESC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 CommentObjective c
@@ -177,7 +188,7 @@ public class ObservationControlador {
                                 rs.getString("objective_id"), rs.getBoolean("generalcomment"),
                                 rs.getString("step_id"), rs.getString("createdby"),
                                 rs.getString("modifyby"), rs.getString("term_id"),
-                                rs.getString("yearterm_id"));
+                                rs.getString("yearterm_id"), rs.getString("colorcode"),mapPersons.get(rs.getString("createdby")));
                 comments.add(c);
             }
             for (CommentObjective c : comments) {
@@ -197,14 +208,15 @@ public class ObservationControlador {
                 steps.add(s);
             }
             String recommend = "false";
-            
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where  id_student = " + idstudent + " and id_objective="+idobjective);        
-            if(rs2.next()) recommend = "true";
-            
-            
+
+            ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where  id_student = " + idstudent + " and id_objective=" + idobjective);
+            if (rs2.next()) {
+                recommend = "true";
+            }
+
             json.put("steps", new Gson().toJson(steps));
             json.put("comments", new Gson().toJson(comments));
-            json.put("recommend",recommend);
+            json.put("recommend", recommend);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (JSONException ex) {
@@ -369,7 +381,7 @@ public class ObservationControlador {
 
             String consulta = "delete from classobserv where id = " + commentId;
             DBConect.eduweb.executeUpdate(consulta);
-                     String server = "192.168.1.36";
+            String server = "192.168.1.36";
             int port = 21;
             String user = "david";
             String pass = "david";
@@ -378,12 +390,13 @@ public class ObservationControlador {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
 
-            
             ftpClient.changeWorkingDirectory("/MontessoriObservations");
             ftpClient.mkd(commentId);
             ftpClient.changeWorkingDirectory(commentId);
-            if(ftpClient.listNames().length > 0) ftpClient.deleteFile(ftpClient.listNames()[0]);
-            
+            if (ftpClient.listNames().length > 0) {
+                ftpClient.deleteFile(ftpClient.listNames()[0]);
+            }
+
             ftpClient.changeWorkingDirectory("/MontessoriObservations");
             ftpClient.removeDirectory(commentId);
         } catch (SQLException ex) {
@@ -477,17 +490,17 @@ public class ObservationControlador {
         try {
             String objId = r.getId();
             String studentId = r.getName();
-            HttpSession sesion =  hsr.getSession();
-            String termid = ""+sesion.getAttribute("termId");
-            String yearterm_id = ""+sesion.getAttribute("yearId");
-           
-            String consulta = "insert into recommendations(id_student,id_objective,term_id,yearterm_id) values ("+studentId+","+objId+","+termid + "," + yearterm_id + ")";
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where  id_student = " + studentId + " and id_objective="+objId);        
-            if(rs2.next()){//existe
-                consulta = "delete from recommendations where id_student = " + studentId + " and id_objective="+objId;
+            HttpSession sesion = hsr.getSession();
+            String termid = "" + sesion.getAttribute("termId");
+            String yearterm_id = "" + sesion.getAttribute("yearId");
+
+            String consulta = "insert into recommendations(id_student,id_objective,term_id,yearterm_id) values (" + studentId + "," + objId + "," + termid + "," + yearterm_id + ")";
+            ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where  id_student = " + studentId + " and id_objective=" + objId);
+            if (rs2.next()) {//existe
+                consulta = "delete from recommendations where id_student = " + studentId + " and id_objective=" + objId;
             }
             DBConect.eduweb.executeUpdate(consulta);
-                   
+
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
