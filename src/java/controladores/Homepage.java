@@ -10,9 +10,12 @@ package controladores;
  * @author nmohamed
  */
 import Montessori.*;
+import Reports.DataFactoryFolder.Profesor;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,9 +52,7 @@ public class Homepage extends MultiActionController {
         c = new DBConect(hsr, hsr1);
         HttpSession session = hsr.getSession();
         User user = new User();
-        int scgrpidTeacher = 0;
-        int scgrpidAdmin = 0;
-        int scgrpidSuper = 0;
+
         boolean result = true;
         LoginVerification login = new LoginVerification();
         if ("QuickBook".equals(hsr.getParameter("txtusuario"))) {
@@ -59,65 +60,89 @@ public class Homepage extends MultiActionController {
             return mv;
         } else {
             user = login.consultUserDB(hsr.getParameter("txtusuario"), hsr.getParameter("txtpassword"));
-            if (user.getId() == 0) {
-                ModelAndView mv = new ModelAndView("userform");
-                String message = "Username or password incorrect";
+        }
+
+        if (user.getId() == 0) {
+            ModelAndView mv = new ModelAndView("userform");
+            String message = "Username or password incorrect";
+            mv.addObject("message", message);
+            return mv;
+        } else {
+
+            HashMap<Integer, String> mapGroups = login.getSecurityGroupID();
+            int userGroup = login.fromGroup(user.getId());
+
+            if (mapGroups.containsKey(userGroup)) {
+                String groupName = mapGroups.get(userGroup);
+                switch (groupName) {
+                    case "MontessoriTeacher":
+                        user.setType(1);
+                        break;
+                    case "MontessoriAdmin":
+                        user.setType(0);
+                        break;
+                    case "MontessoriHead":
+                        user.setType(2);
+                        break;
+                }
+            } else {
+                result = false;
+            }
+            /*int scgrpidTeacher = mapGroups.get("MontessoriTeacher");
+            int scgrpidAdmin = mapGroups.get("MontessoriAdmin");
+            int scgrpidSuper = mapGroups.get("MontessoriHead");*/
+
+// AQUI ES/*
+
+            /* scgrpidTeacher = login.getSecurityGroupID("MontessoriTeacher");
+            scgrpidAdmin = login.getSecurityGroupID("MontessoriAdmin");
+            scgrpidSuper = login.getSecurityGroupID("MontessoriHead");
+///////////////////
+            if (login.fromGroup(scgrpidAdmin, user.getId())) {
+                user.setType(0);
+            } else if (login.fromGroup(scgrpidTeacher, user.getId())) {
+                user.setType(1);
+            } else if (login.fromGroup(scgrpidSuper, user.getId())) {
+                user.setType(2);
+            } else {
+                result = false;
+            }*/
+            if (result == true) {
+                ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
+                String message = "welcome user";
+                int termId = 1, yearId = 1;
+                ResultSet rs2 = DBConect.ah.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where configschoolid = 1");
+                while (rs2.next()) {
+                    termId = rs2.getInt("defaulttermid");
+                    yearId = rs2.getInt("defaultyearid");
+                }
+                session.setAttribute("user", user);
+                session.setAttribute("termId", termId);
+                session.setAttribute("yearId", yearId);
+
+                String nameTerm = "", nameYear = "";
+                ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + termId + " and YearID = " + yearId);
+                while (rs3.next()) {
+                    nameTerm = "" + rs3.getString("name");
+                }
+                ResultSet rs4 = DBConect.ah.executeQuery("select SchoolYear from SchoolYear where yearID = " + yearId);
+                while (rs4.next()) {
+                    nameYear = "" + rs4.getString("SchoolYear");
+                }
+
+                session.setAttribute("termYearName", nameTerm + " / " + nameYear);
+
                 mv.addObject("message", message);
                 return mv;
             } else {
-
-                scgrpidTeacher = login.getSecurityGroupID("MontessoriTeacher");
-                scgrpidAdmin = login.getSecurityGroupID("MontessoriAdmin");
-                scgrpidSuper = login.getSecurityGroupID("MontessoriHead");
-
-                if (login.fromGroup(scgrpidAdmin, user.getId())) {
-                    user.setType(0);
-                } else if (login.fromGroup(scgrpidTeacher, user.getId())) {
-                    user.setType(1);
-                } else if (login.fromGroup(scgrpidSuper, user.getId())) {
-                    user.setType(2);
-                } else {
-                    result = false;
-                }
-
-                if (result == true) {
-                    ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
-                    String message = "welcome user";
-                    int termId = 1, yearId = 1;
-                    ResultSet rs2 = DBConect.ah.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where configschoolid = 1");
-                    while (rs2.next()) {
-                        termId = rs2.getInt("defaulttermid");
-                        yearId = rs2.getInt("defaultyearid");
-                    }
-                    session.setAttribute("user", user);
-                    session.setAttribute("termId", termId);
-                    session.setAttribute("yearId", yearId);
-
-                    String nameTerm = "", nameYear = "";
-                    ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + termId + " and YearID = " + yearId);
-                    while (rs3.next()) {
-                        nameTerm = "" + rs3.getString("name");
-                    }
-                    ResultSet rs4 = DBConect.ah.executeQuery("select SchoolYear from SchoolYear where yearID = " + yearId);
-                    while (rs4.next()) {
-                        nameYear = "" + rs4.getString("SchoolYear");
-                    }
-
-                    session.setAttribute("termYearName",nameTerm + " / " + nameYear);
-
-                    mv.addObject("message", message);
-                    return mv;
-                } else {
-                    ModelAndView mv = new ModelAndView("userform");
-                    String message = "Username or Password incorrect";
-                    mv.addObject("message", message);
-                    return mv;
-                }
+                ModelAndView mv = new ModelAndView("userform");
+                String message = "Username or Password incorrect";
+                mv.addObject("message", message);
+                return mv;
             }
         }
 
     }
-   
 
     public ModelAndView save(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         ModelAndView mv = new ModelAndView("suhomepage");

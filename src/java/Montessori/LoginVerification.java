@@ -18,6 +18,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 public class LoginVerification {
     
     public LoginVerification(){}
@@ -60,6 +61,7 @@ public class LoginVerification {
         String query = "select username,PersonID from Person where username = '"+user+"' and pswd = HASHBYTES('MD5', CONVERT(nvarchar(4000),'"+password+"'));";
      
          ResultSet rs = SQLQuery(query);
+         //ResultSet rs = DBConect.ah.executeQuery(query);
          if(!rs.next()) 
          {u=new User();//TARDO
                  u.setId(0);}
@@ -74,21 +76,49 @@ public class LoginVerification {
 
             }}
         return u;
-    }
+    }/*
     public int getSecurityGroupID(String name) throws SQLException{
         int sgid = 0;
         String query ="select groupid from SecurityGroups where Name like '"+name+"'";
-         ResultSet rs = SQLQuery(query);
+        // ResultSet rs = SQLQuery(query);
+        ResultSet rs = DBConect.ah.executeQuery(query);
             while(rs.next()){
                 sgid = rs.getInt(1);
             }
         return sgid;
+    }*/
+    
+    public HashMap getSecurityGroupID() throws SQLException{
+     
+        HashMap<Integer,String> mapGroups = new HashMap<Integer,String>();
+               
+        String query ="select groupid,Name from SecurityGroups";
+        // ResultSet rs = SQLQuery(query);
+        ResultSet rs = DBConect.ah.executeQuery(query);
+        while(rs.next()){
+            mapGroups.put(rs.getInt("groupid"),rs.getString("Name")); 
+        }
+            
+        return mapGroups;
+    }
+    
+     public int fromGroup(int staffid) throws SQLException{
+        int aux  = -1;
+        String query = "select groupid from SecurityGroupMembership where StaffID = " + staffid;
+       // ResultSet rs = SQLQuery(query);
+       ResultSet rs = DBConect.ah.executeQuery(query);
+            while(rs.next()){
+                aux = rs.getInt("groupid");
+            }
+      
+        return aux;
     }
     
     public boolean fromGroup(int groupid, int staffid) throws SQLException{
         boolean aux  = false;
         String query = "select * from SecurityGroupMembership where groupid = "+groupid+" and StaffID = " + staffid;
-        ResultSet rs = SQLQuery(query);
+       // ResultSet rs = SQLQuery(query);
+       ResultSet rs = DBConect.ah.executeQuery(query);
             while(rs.next()){
                 aux = true;
             }
