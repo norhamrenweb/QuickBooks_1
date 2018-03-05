@@ -14,6 +14,7 @@ import Montessori.Resource;
 import Montessori.Step;
 import Montessori.Students;
 import Montessori.Subject;
+import Montessori.Teacher;
 import Montessori.User;
 import atg.taglib.json.util.JSONArray;
 import atg.taglib.json.util.JSONException;
@@ -64,6 +65,7 @@ public class ObservationControlador {
         if ((new SessionCheck()).checkSession(hsr)) {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
+         HashMap<String, String> mapPersons = new HashMap<String, String>();
         ModelAndView mv = new ModelAndView("observations");
         List<Level> grades = new ArrayList();
         try {
@@ -81,13 +83,27 @@ public class ObservationControlador {
                 x.setName(rs.getString("GradeLevel"));
                 grades.add(x);
             }
+            
+            ResultSet rs7 = DBConect.ah.executeQuery("select * from Staff");
+            // ResultSet rs4 = st.executeQuery(consulta);
+           
+            String first, lastName, staffID;
+            while (rs7.next()) {
+                first = rs7.getString("firstName");
+                lastName = rs7.getString("lastName");
+                staffID = rs7.getString("personid");
+                mapPersons.put(staffID, lastName + ", " + first);
+            }
+
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
+        
         mv.addObject("gradelevels", grades);
         mv.addObject("students", Students.getStudents(log));
+        mv.addObject("teachers",new Gson().toJson(mapPersons));
         return mv;
     }
 
@@ -167,17 +183,6 @@ public class ObservationControlador {
         ArrayList<CommentObjective> comments = new ArrayList<>();
         JSONObject json = new JSONObject();
         try {
-            ResultSet rs7 = DBConect.ah.executeQuery("select lastname,firstname,personid from person");
-            // ResultSet rs4 = st.executeQuery(consulta);
-            HashMap<String, String> mapPersons = new HashMap<String, String>();
-            String first, LastName, studentID;
-            while (rs7.next()) {
-                first = rs7.getString("firstName");
-                LastName = rs7.getString("lastName");
-                studentID = rs7.getString("personid");
-                mapPersons.put(studentID, LastName + ", " + first);
-            }
-
             String consulta = "select * from progress_report inner join rating on progress_report.rating_id = rating.id where objective_id=" + idobjective + " and student_id=" + idstudent + " ORDER BY comment_date DESC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
@@ -188,7 +193,7 @@ public class ObservationControlador {
                                 rs.getString("objective_id"), rs.getBoolean("generalcomment"),
                                 rs.getString("step_id"), rs.getString("createdby"),
                                 rs.getString("modifyby"), rs.getString("term_id"),
-                                rs.getString("yearterm_id"), rs.getString("colorcode"),mapPersons.get(rs.getString("createdby")));
+                                rs.getString("yearterm_id"), rs.getString("colorcode"));
                 comments.add(c);
             }
             for (CommentObjective c : comments) {

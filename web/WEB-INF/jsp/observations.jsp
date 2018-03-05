@@ -25,6 +25,8 @@
             var userType = ${user.type};
             var studentid;
             var comments;
+            var mapTeachers = ${teachers};
+            
             $(document).ready(function () {
                 $("#infousuario").addClass("navbar-fixed-top");
                 ////////////////////////////////////////////NUEVO//////////
@@ -923,7 +925,7 @@
                                     "</div>\n\
                                                         </div>\n\
                                                     </div>\n\
-                                                    <div id='datos" + comment.id + "' class='hide' data-comment='" + cc + "' data-step='" + textLastStep + "' data-created='" + comment.createdbyName + "'></div>\n\
+                                                    <div id='datos" + comment.id + "' class='hide' data-comment='" + cc + "' data-step='" + textLastStep + "' data-created='" + comment.createdby + "'></div>\n\
                                                 </div>");
                             if (comment.generalcomment)
                                 $("#" + comment.id + " div span").first().text("General")
@@ -1007,7 +1009,7 @@
                     if (comment.id === id) {
                         /* $('#commentcomplete').append('<div><h4>Comment</h4></div>\n\
                          <div>' + comment.comment + '</div');*/
-                        $('#commentcomplete').append("<div class='row'>" + comment.comment + "</div");
+                        $('#commentcomplete').append("<div class='row'><strong>Created by: </strong>"+mapTeachers[Number(comment.createdby)]+"</div><div class='row'><strong>Comment: </strong> " + comment.comment + "</div");
                         $('#completemodal').modal('show');
                     }
                 });
@@ -1619,6 +1621,8 @@
     </head>
     <body>
         <div class="row">
+            
+            
             <div class="col-xs-2" >
                 <!--<select id="grades">
                 <c:forEach var="levels" items="${gradelevels}">
@@ -2160,7 +2164,7 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="myModalLabel">Details</h4>
                         </div>
-                        <div id="commentcomplete" class="modal-body text-center">
+                        <div id="commentcomplete" class="modal-body text-left " style="margin:5px;">
                         </div>
                     </div>
                 </div>
