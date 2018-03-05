@@ -124,7 +124,7 @@
                         $('#NameLessons').parent().removeClass("has-error");
                         $('#NameLessons').parent().parent().children().last().addClass("hide");
                     }
-                    if($(this).prop("id") === "objective" && $(this).val() !== "")
+                    if($(this).prop("id") === "objective" && $(this).val() !== "" && !$('#ideaCheck').is(':checked'))
                         $("#linkRecommend").show();
                     else 
                         $("#linkRecommend").hide();
@@ -222,7 +222,7 @@
                         $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
 
                     });
-
+                        $('#recommendations').modal('toggle');
                     // $("#studentsName").val($("#destino").text().trim());
                     return;
                 });
@@ -898,13 +898,13 @@
                         <div class=" col-xs-6 center-block form-group">
                             <label class="control-label">Presentation Name</label>
                             <div class="required-field-block">
-                                <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code="etiq.namelessons"/> ">
+                                <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="add name">
                                 <div class="required-icon">
                                     <div class="text">*</div>
                                 </div>
                             </div>
 
-                            <span class="help-block hide">Invalid Name (Nor contain special characters)</span>
+                            <span class="help-block hide">Invalid Name (contains special characters)</span>
                         </div>               
                         <div class="col-xs-6 center-block form-group">
                             <label class="control-label">Presentation description</label>
@@ -1222,7 +1222,7 @@
                         </div>
                         <div class="row">
                             <div class="text-center">
-                                <input id='btnRecommend' type="button" class="btn btn-primary" value="Save"/>
+                                <input id='btnRecommend' type="button" class="btn btn-primary" value="Add"/>
                             </div>
                         </div>
                     </div>

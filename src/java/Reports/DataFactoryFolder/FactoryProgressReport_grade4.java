@@ -144,7 +144,7 @@ public class FactoryProgressReport_grade4 extends DataFactory {
             consulta = "select FirstName,LastName,Email,PersonID from Person";
             ResultSet rs3 = DBConect.ah.executeQuery(consulta);
             while (rs3.next()) {
-                mapNames.put(rs3.getString("PersonID"), rs3.getString("FirstName") + ", " + rs3.getString("LastName"));
+                mapNames.put(rs3.getString("PersonID"), rs3.getString("FirstName") + " " + rs3.getString("LastName"));
             }
 
             for (Integer i : staffids) {
