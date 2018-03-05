@@ -64,6 +64,6 @@ public class DBConect {
         if(this.cn3!=null)
             this.cn3.close();
         this.cn3 = dataSource3.getConnection();
-        eduwebBeforeFirst = this.cn.createStatement(1004,1007);
+        eduwebBeforeFirst = this.cn3.createStatement(1004,1007);
     }
 }

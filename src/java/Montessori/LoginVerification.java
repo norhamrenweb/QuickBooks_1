@@ -60,8 +60,8 @@ public class LoginVerification {
        //user = 'shahad' and pswd = 'shahad1234' group = Spring
         String query = "select username,PersonID from Person where username = '"+user+"' and pswd = HASHBYTES('MD5', CONVERT(nvarchar(4000),'"+password+"'));";
      
-         ResultSet rs = SQLQuery(query);
-         //ResultSet rs = DBConect.ah.executeQuery(query);
+        ResultSet rs = SQLQuery(query);
+        // ResultSet rs = DBConect.ahBeforeFirst.executeQuery(query);
          if(!rs.next()) 
          {u=new User();//TARDO
                  u.setId(0);}
