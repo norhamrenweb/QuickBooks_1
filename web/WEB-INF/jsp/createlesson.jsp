@@ -23,7 +23,7 @@
                 $('#origen option').each(function () {
                     mapStudents[$(this).val()] = $(this).text();
                 });
-                //DESELECCIONA Method
+                //DESELECCIONA Methodd
                 $("#deselectMethod").click(function () {
                     $("#method option:selected").prop("selected", false);
                 });
