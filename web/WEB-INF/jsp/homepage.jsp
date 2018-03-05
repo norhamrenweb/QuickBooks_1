@@ -105,15 +105,15 @@
                     ],
                     responsive: true
                 });
-                /*
-                 var resizeId;
-                 $(window).resize(function () {
-                 clearTimeout(resizeId);
-                 resizeId = setTimeout(doneResizing, 500);
-                 });
-                 function doneResizing() {
-                 refresh();
-                 }*/
+
+                var resizeId;
+                $(window).resize(function () {
+                    clearTimeout(resizeId);
+                    resizeId = setTimeout(doneResizing, 500);
+                });
+                function doneResizing() {
+                    refresh();
+                }
 
 
                 $('#table_datelessons').DataTable();
@@ -123,12 +123,13 @@
                     data = table.row(this).data();
                     nameLessons = data[1];
                 });
-              //  var nP = localStorage.getItem("numberPage");
+                //  var nP = localStorage.getItem("numberPage");
                 var nP = window.name;
-                if(nP === "") nP = 0;
-                
-                $("#table_id").DataTable().page(Number(nP)).draw( 'page' )
-                
+                if (nP === "")
+                    nP = 0;
+
+                $("#table_id").DataTable().page(Number(nP)).draw('page')
+
             });
 
             function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
@@ -315,10 +316,10 @@
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-               // localStorage.setItem("numberPage", $("#table_id").DataTable().page());
+                // localStorage.setItem("numberPage", $("#table_id").DataTable().page());
                 window.name = $("#table_id").DataTable().page();
                 // $("#table_id").DataTable().page(5).draw( 'page' )
-                
+
                 // $("#table_id").DataTable().row($("#delete"+lessonSelect).parent().parent()).node().remove();
                 ajax.onreadystatechange = funcionCallBackdeleteLesson;
                 ajax.open("POST", "deleteLesson.htm?LessonsSelected=" + lessonSelect + "&LessonsName=" + lessonsName, true);
@@ -332,7 +333,7 @@
             {
                 location.reload();
             }
-
+ 
             function compartirajax() {
                 $('#destino option').prop('selected', true);
                 var seleccion = $('#compartirid').val();
