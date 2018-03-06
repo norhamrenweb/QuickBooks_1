@@ -625,8 +625,46 @@ public class ProgressbyStudent {
 
                 }
             }
-
+            
+            /*consulta = "select comment_date,step_id,step_id,objective_id from progress_report a where comment_date = (select max(comment_date) from public.progress_report where student_id = a.objective_id and generalcomment = false) and generalcomment = false and student_id ='" + studentid + "'";
+            ResultSet rs7 = DBConect.ah.executeQuery(consulta);
+            String name7, idHash7;
+            HashMap<String, String> mapSubject = new HashMap<String, String>();
+            while (rs9.next()) {
+                if (rs9.getBoolean("Active")) {
+                    name9 = rs9.getString("Title");
+                    idHash = rs9.getString("CourseID");
+                    mapSubject.put(idHash, name9);
+                }
+            }
+            
             for (DBRecords x : steps) {
+                Subject s = new Subject();
+                String id = null;
+                id = x.getCol3();
+                String t = mapSubject.get(id);
+                x.setCol3(t);
+                if (!subjects.contains(x.getCol3())) {
+                    subjects.add(x.getCol3());
+                }
+                ResultSet rs5 = DBConect.eduweb.executeQuery();
+                if (rs5.next()) {
+                    String stsdone = rs5.getString("step_id");
+                    if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
+                        List<String> ste = Arrays.asList(stsdone.split(","));
+
+                        if (ste.contains(x.getCol1())) {
+                            x.setCol5("100");
+                        } else {
+                            x.setCol5("0");
+                        }
+
+                    }
+                }
+            }
+            */
+            //tarda1 
+           for (DBRecords x : steps) {
                 Subject s = new Subject();
                 String id = null;
                 id = x.getCol3();
@@ -668,7 +706,7 @@ public class ProgressbyStudent {
             });
 
             
-
+            //aqui 2
             for (Subject x : subs)//subjects)
             {
                 Nodetreegrid<String> nodeC = new Nodetreegrid<String>("L" + i, x.getName(), "", "", "", "");
@@ -691,7 +729,6 @@ public class ProgressbyStudent {
                                 String[] match = y.getId();
                                 if (k.getCol6().equalsIgnoreCase(match[0])) {
                                     Nodetreegrid<String> nodeB = new Nodetreegrid<String>(k.getCol1(), k.getCol2(), "", "", "", k.getCol5());
-
                                     nodeA.addChild(nodeB);
                                 }
                             }
