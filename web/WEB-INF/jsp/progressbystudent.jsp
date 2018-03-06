@@ -95,8 +95,8 @@
                         $('#savecomment').prop("disabled", true);
                     }
                 });
-                
-                
+
+
 //                $("#subjects").change(function () {
 //                    if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
 //                        $("#saveCommentSubjectButton").prop('disabled', true);
@@ -149,7 +149,7 @@
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
                         var json = JSON.parse(ajax.responseText);
-                        var objs = JSON.parse(json.objs);    
+                        var objs = JSON.parse(json.objs);
                         if (objs.length === 0) {
                             $('#divTableObjective').addClass('hidden');
                             $('#divNotObjective').removeClass('hidden');
@@ -159,10 +159,10 @@
                             $('#divTableObjective').removeClass('hidden');
                         }
                         ;
-                       
+
                         $("#saveCommentSubjectButton").prop('disabled', false);
                         $("#commentSubject").val(json.comment);
-                    
+
                         $('#tableobjective').DataTable({
                             destroy: true,
                             paging: false,
@@ -224,8 +224,8 @@
 //    } );                
                     }
                 }
-                }
-            
+            }
+
 
 //            function funcionCallBackSaveGeneralComent()
 //            {
@@ -251,6 +251,7 @@
             var levelarbol;
             var studentarbol;
 
+
             function treeload2(prog) {
                 var pActual = $("ul li.active").text().replace(" ", "");
                 $('#loadingmessage').show();
@@ -262,17 +263,17 @@
                     data: prog.children,
                     idField: 'id',
                     treeField: 'name',
-                   fitColumns: true,
+                    fitColumns: true,
 //                    nowrap: false, // this will allow the text wrap but it looks bad
                     columns: [[
-                            {title: 'Name', field: 'name', width: '40%', resizable:'true', formatter: function (value) {
+                            {title: 'Name', field: 'name', width: '63%', resizable: 'true', formatter: function (value) {
                                     // return ' <img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/> ' +  value;
                                     return  value;
                                 }},
-                            {title: '#Present. planned', field: 'noofplannedlessons',resizable:'true', width: '16%'},
-                            {title: '#Present. done', field: 'noofarchivedlessons',resizable:'true', width: '16%'},
-                            {title: 'Progress', field: 'progress', width: '16%',resizable:'true', formatter: formatProgress},
-                            {title: 'Final rating', field: 'rating', width: '15%',resizable:'true'}
+                            {title: 'PP', field: 'noofplannedlessons', resizable: 'true', width: '5%', align: 'center'},
+                            {title: 'PD', field: 'noofarchivedlessons', resizable: 'true', width: '5%', align: 'center'},
+                            {title: 'Progress', field: 'progress', width: '16%', resizable: 'true', align: 'center', formatter: formatProgress},
+                            {title: 'Final rating', field: 'rating', width: '14%', resizable: 'true', align: 'center'}
                         ]]
 
                 });
@@ -294,6 +295,9 @@
 
                 $('#loadingmessage').hide();
 
+                $('.datagrid-row').mouseover(function () {
+                  $(this).attr("title", $(this).first().children().first().children().last().children().last().text());
+                });
 
                 if (pActual === "")
                     pActual = "Demographic";
@@ -302,120 +306,6 @@
 
             }
 
-            function treeload(levelid, studentid) {
-                var level;
-                var student;
-                if (levelid === -1) {
-                    level = levelarbol;
-                    student = studentarbol;
-                } else {
-                    level = levelid;
-                    student = studentid;
-                }
-                var pActual = $("ul li.active").text().replace(" ", "");
-                $('#loadingmessage').show();
-                $.ajax({
-                    type: 'POST',
-                    url: 'loadtree.htm?levelid=' + level + '&studentid=' + student,
-//            data: jsdfsfon,
-//            datatype:"json",
-                    contentType: "application/json",
-                    success: function (datos) {
-                        var prog = JSON.parse(datos);
-                        $('#Objectivestracking').tab('show');
-                        $('#tg').empty();
-                        $('#tg').treegrid({
-//                    view: myview,        
-                            data: prog.children,
-                            idField: 'id',
-                            treeField: 'name',
-                            fitColumns: true,
-                            columns: [[
-                                    {title: 'Name', field: 'name', width: '40%', formatter: function (value) {
-                                            // return ' <img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/> ' +  value;
-                                            return  value;
-                                        }},
-                                    {title: '#Present. planned', field: 'noofplannedlessons', width: '16%'},
-                                    {title: '#Present. done', field: 'noofarchivedlessons', width: '16%'},
-                                    {title: 'Progress', field: 'progress', width: '13%', formatter: formatProgress},
-                                    {title: 'Final rating', field: 'rating', width: '15%'}
-                                ]]
-
-                        });
-                        $(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").each(function (index) {
-                            //  console.log( index + ": " + $( this ).text() );
-                            var img;
-                            if ($(this).parent().parent().parent().attr("node-id")[0] === "L")
-                                img = "subject.svg";
-                            else if ($(this).parent().parent().parent().attr("node-id")[0] === "C")
-                                img = "target.svg";
-                            else
-                                img = "step.svg";
-                            jQuery("<img/> ").prependTo($(this)).attr({src: '../recursos/js/treeGrid/' + img + '', width: '16px', height: '18px', style: 'padding-right:5px;'});
-                        });
-
-                        //jQuery("<img/>").prependTo(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").attr({src: '../recursos/js/treeGrid/target.svg', width:'16px', height:'18px'});
-
-                        $("#tg").treegrid('collapseAll');
-
-                        $('#loadingmessage').hide();
-
-
-                        if (pActual === "")
-                            pActual = "Demographic";
-                        $('#' + pActual).tab('show');
-                    }, error: function () {
-                        $('#loadingmessage').hide();
-                    }
-                });
-            }
-
-//            function saveGeneralComment(objectiveId)
-//            {
-//                if (window.XMLHttpRequest) //mozilla
-//                {
-//                    ajax = new XMLHttpRequest(); //No Internet explorer
-//                } else
-//                {
-//                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
-//                }
-//
-//                var studentId = $('#studentid').val();
-//                var dataCommentGeneral = $('#comment' + objectiveId).val();
-//
-//                var myObj = {};
-//                myObj["col1"] = objectiveId;
-//                myObj["col2"] = studentId;
-//                myObj["col3"] = dataCommentGeneral;
-//                var json = JSON.stringify(myObj);
-//                $.ajax({
-//                    type: 'POST',
-//                    url: 'saveGeneralcomment.htm',
-//                    data: json,
-//                    datatype: "json",
-//                    contentType: "application/json",
-//                    success: function (data) {
-//                        var j = JSON.parse(data);
-//                        var mensaje = j.message;
-//                        if (mensaje === "Comment successfully updated") {
-//                            $('#tableobjective tbody tr').find(':button.btn-xs[value="' + json.objectiveid + '"]').parent().parent().parent().siblings('td:eq(2)').text(currentTime);
-//                            $('#showModalComment').click();
-//                            $('#titleComment').text(mensaje);
-//
-//                        } else {
-//                            $('#showModalComment').click();
-//                            $('#titleComment').text(mensaje);
-//                        }
-//                    },
-//                    error: function (xhr, ajaxOptions, thrownError) {
-//                        console.log(xhr.status);
-//                        console.log(xhr.responseText);
-//                        console.log(thrownError);
-//                    }
-//
-//                });
-//
-//            }
             function funcionCallBackSelectStudent()
             {
                 if (ajax.readyState === 4) {
@@ -425,8 +315,8 @@
                         var json = JSON.parse(ajax.responseText);
                         var info = JSON.parse(json.info);
                         var foto = JSON.parse(json.prueba);
-                        var prog = JSON.parse(json.prog);             
-                    var subjects = JSON.parse(json.sub);
+                        var prog = JSON.parse(json.prog);
+                        var subjects = JSON.parse(json.sub);
                         $('#gradelevel').text(info.level_id);
                         $('#nextlevel').text(info.nextlevel);
                         $('#student').text(info.nombre_students);
@@ -672,18 +562,18 @@
 
             function loadobjGeneralcomments()
             {
-                 if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
-                        $("#saveCommentSubjectButton").prop('disabled', true);
-                        $("#commentSubject").val("");
-                         $('#divTableObjective').addClass('hidden');
-                    }else{
-                if (window.XMLHttpRequest) //mozilla
-                {
-                    ajax = new XMLHttpRequest(); //No Internet explorer
-                } else
-                {
-                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                }
+                if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
+                    $("#saveCommentSubjectButton").prop('disabled', true);
+                    $("#commentSubject").val("");
+                    $('#divTableObjective').addClass('hidden');
+                } else {
+                    if (window.XMLHttpRequest) //mozilla
+                    {
+                        ajax = new XMLHttpRequest(); //No Internet explorer
+                    } else
+                    {
+                        ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
 //        var selectSubject = document.getElementById("subjects").value; 
 //       var selectStudent = document.getElementById("studentid").value;
 //        var d = { selectSubject:selectSubject, studentid:selectStudent};
@@ -696,12 +586,12 @@
 //            success: funcionCallBackloadGeneralcomments
 //          
 //        });
-                ajax.onreadystatechange = funcionCallBackloadGeneralcomments;
+                    ajax.onreadystatechange = funcionCallBackloadGeneralcomments;
 
-                var selectSubject = document.getElementById("subjects").value;
-                var selectStudent = document.getElementById("studentid").value;
-                ajax.open("POST", "objGeneralcomments.htm?selection=" + selectSubject + "," + selectStudent, true);
-                ajax.send("");
+                    var selectSubject = document.getElementById("subjects").value;
+                    var selectStudent = document.getElementById("studentid").value;
+                    ajax.open("POST", "objGeneralcomments.htm?selection=" + selectSubject + "," + selectStudent, true);
+                    ajax.send("");
                 }
             }
             function saveobservation()
@@ -791,7 +681,7 @@
 
         <style>
 
-          
+
             textarea 
             {
                 resize: none;
@@ -902,7 +792,7 @@
                 display: inline-flex;
                 text-decoration: none;
                 vertical-align: top;
-               
+
                 padding-right: 45px;
                 height: auto;
                 line-height: 18px;
@@ -992,7 +882,13 @@
                             </div>
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="progress">
                                 <div class="col-xs-12">
-                                    <table id="tg" class="easyui-treegrid"></table>
+                                    <div class="row"><p class="text-info"><Strong>PP:</Strong> Presentation planned.</p></div>
+                                    <div class="row"><p class="text-info"><Strong>PD:</Strong> Presentation done.</p></div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="row">
+                                        <table id="tg" class="easyui-treegrid"></table>
+                                    </div>
                                 </div>     
                             </div>
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="gradebook">
