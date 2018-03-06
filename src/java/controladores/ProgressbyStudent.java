@@ -609,7 +609,7 @@ public class ProgressbyStudent {
 
             for (Subject sub : subs) {
                 String[] sid = sub.getId();
-                ResultSet rs = DBConect.eduweb.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.id as objid,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '" + sid[0] + "'");
+                ResultSet rs = DBConect.eduweb.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.id as objid,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '" + sid[0] + "' order by obj_steps.storder ASC");
 
                 while (rs.next()) {
                     DBRecords l = new DBRecords();
@@ -667,12 +667,7 @@ public class ProgressbyStudent {
                 }
             });
 
-            Collections.sort(steps, new Comparator<DBRecords>() {
-                @Override
-                public int compare(DBRecords o1, DBRecords o2) {
-                    return o1.getCol2().compareTo(o2.getCol2());
-                }
-            });
+            
 
             for (Subject x : subs)//subjects)
             {
