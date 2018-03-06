@@ -625,19 +625,20 @@ public class ProgressbyStudent {
 
                 }
             }
-            
-            /*consulta = "select comment_date,step_id,step_id,objective_id from progress_report a where comment_date = (select max(comment_date) from public.progress_report where student_id = a.objective_id and generalcomment = false) and generalcomment = false and student_id ='" + studentid + "'";
+
+            consulta = "select comment_date,step_id,step_id,objective_id from progress_report a where comment_date = (select max(comment_date) from public.progress_report where student_id = a.objective_id and generalcomment = false) and generalcomment = false and student_id ='" + studentid + "'";
             ResultSet rs7 = DBConect.ah.executeQuery(consulta);
-            String name7, idHash7;
-            HashMap<String, String> mapSubject = new HashMap<String, String>();
-            while (rs9.next()) {
+            HashMap<String, String> mapDBR = new HashMap<String, String>();
+
+            while (rs7.next()) {
                 if (rs9.getBoolean("Active")) {
-                    name9 = rs9.getString("Title");
-                    idHash = rs9.getString("CourseID");
-                    mapSubject.put(idHash, name9);
+                    String stsdone = rs7.getString("step_id");
+                    if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
+                        mapDBR.put(stsdone, "");
+                    }
                 }
             }
-            
+
             for (DBRecords x : steps) {
                 Subject s = new Subject();
                 String id = null;
@@ -647,22 +648,15 @@ public class ProgressbyStudent {
                 if (!subjects.contains(x.getCol3())) {
                     subjects.add(x.getCol3());
                 }
-                ResultSet rs5 = DBConect.eduweb.executeQuery();
-                if (rs5.next()) {
-                    String stsdone = rs5.getString("step_id");
-                    if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
-                        List<String> ste = Arrays.asList(stsdone.split(","));
-
-                        if (ste.contains(x.getCol1())) {
-                            x.setCol5("100");
-                        } else {
-                            x.setCol5("0");
-                        }
-
-                    }
+                if (mapDBR.containsKey(x.getCol1())) {
+                    x.setCol5("100");
+                } else {
+                    x.setCol5("0");
                 }
             }
-            */
+
+            
+            /*
             //tarda1 
            for (DBRecords x : steps) {
                 Subject s = new Subject();
@@ -688,8 +682,7 @@ public class ProgressbyStudent {
 
                     }
                 }
-            }
-
+            }*/
             String test = new Gson().toJson(steps);
 
             int i = 0;
@@ -705,7 +698,6 @@ public class ProgressbyStudent {
                 }
             });
 
-            
             //aqui 2
             for (Subject x : subs)//subjects)
             {
@@ -1012,7 +1004,7 @@ public class ProgressbyStudent {
             ftpClient.mkd(commentId);
             ftpClient.changeWorkingDirectory(commentId);
             ftpClient.deleteFile(ftpClient.listNames()[0]);
-            
+
             ftpClient.removeDirectory("/MontessoriObservations/" + commentId);
             ftpClient.logout();
 
