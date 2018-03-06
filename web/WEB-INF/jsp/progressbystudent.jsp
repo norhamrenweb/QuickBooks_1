@@ -254,26 +254,26 @@
 
             function treeload2(prog) {
                 var pActual = $("ul li.active").text().replace(" ", "");
-                $('#loadingmessage').show();
+                
 
                 $('#Objectivestracking').tab('show');
                 $('#tg').empty();
                 $('#tg').treegrid({
-//                    view: myview,        
+                    initialState: 'collapsed',        
                     data: prog.children,
                     idField: 'id',
                     treeField: 'name',
                     fitColumns: true,
 //                    nowrap: false, // this will allow the text wrap but it looks bad
                     columns: [[
-                            {title: 'Name', field: 'name', width: '63%', resizable: 'true', formatter: function (value) {
+                            {title: 'Name', field: 'name', width: '63%',  formatter: function (value) {
                                     // return ' <img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/> ' +  value;
                                     return  value;
                                 }},
-                            {title: 'PP', field: 'noofplannedlessons', resizable: 'true', width: '5%', align: 'center'},
-                            {title: 'PD', field: 'noofarchivedlessons', resizable: 'true', width: '5%', align: 'center'},
-                            {title: 'Progress', field: 'progress', width: '16%', resizable: 'true', align: 'center', formatter: formatProgress},
-                            {title: 'Final rating', field: 'rating', width: '14%', resizable: 'true', align: 'center'}
+                            {title: 'PP', field: 'noofplannedlessons',width: '5%', align: 'center'},
+                            {title: 'PD', field: 'noofarchivedlessons', width: '5%', align: 'center'},
+                            {title: 'Progress', field: 'progress', width: '16%',  align: 'center', formatter: formatProgress},
+                            {title: 'Final rating', field: 'rating', width: '14%', align: 'center'}
                         ]]
 
                 });
@@ -291,7 +291,7 @@
 
                 //jQuery("<img/>").prependTo(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").attr({src: '../recursos/js/treeGrid/target.svg', width:'16px', height:'18px'});
 
-                $("#tg").treegrid('collapseAll');
+                //$("#tg").treegrid('collapseAll');
 
                 $('#loadingmessage').hide();
 
