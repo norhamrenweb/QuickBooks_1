@@ -65,7 +65,6 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         }
 
         for (Subject x : subjects) {
-            
             String[] id = x.getId();
             ArrayList<String> os = new ArrayList<>();
             for (String b : lessons) {

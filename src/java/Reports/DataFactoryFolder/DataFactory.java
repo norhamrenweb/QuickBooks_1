@@ -23,6 +23,9 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import Montessori.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.TreeMap;
 
 /**
  *
@@ -37,7 +40,8 @@ public abstract class DataFactory {
     public abstract String getNameReport();
 
     
-
+  
+     
     protected void cargarAlumno(String studentId) throws SQLException {
         String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentId = '" + studentId + "'";
         ResultSet rs = DBConect.ah.executeQuery(consulta);

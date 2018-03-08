@@ -625,18 +625,17 @@ public class ProgressbyStudent {
 
                 }
             }
-
-            consulta = "select comment_date,step_id,step_id,objective_id from progress_report a where comment_date = (select max(comment_date) from public.progress_report where student_id = a.objective_id and generalcomment = false) and generalcomment = false and student_id ='" + studentid + "'";
-            ResultSet rs7 = DBConect.ah.executeQuery(consulta);
+            consulta = "select * from progress_report a where comment_date = (select max(comment_date) from public.progress_report where objective_id = a.objective_id and generalcomment = false and student_id ='" + studentid + "') and generalcomment = false and student_id ='" + studentid + "'";
+            ResultSet rs7 = DBConect.eduweb.executeQuery(consulta);
             HashMap<String, String> mapDBR = new HashMap<String, String>();
 
             while (rs7.next()) {
-                if (rs9.getBoolean("Active")) {
-                    String stsdone = rs7.getString("step_id");
-                    if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
-                        mapDBR.put(stsdone, "");
-                    }
+
+                String stsdone = rs7.getString("step_id");
+                if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
+                    mapDBR.put(stsdone, "");
                 }
+
             }
 
             for (DBRecords x : steps) {
@@ -655,7 +654,6 @@ public class ProgressbyStudent {
                 }
             }
 
-            
             /*
             //tarda1 
            for (DBRecords x : steps) {
@@ -698,16 +696,20 @@ public class ProgressbyStudent {
                 }
             });
 
+            HashMap<String, String> plannedLess = getnoofplannedlessons();
+            HashMap<String, String> archiveLess = getnoofarchivedlessons();
+            HashMap<String, String> finalRatings = getfinalrating();
+            HashMap<String, String> percents = getpercent();
             //aqui 2
             for (Subject x : subs)//subjects)
             {
                 Nodetreegrid<String> nodeC = new Nodetreegrid<String>("L" + i, x.getName(), "", "", "", "");
                 rootNode.addChild(nodeC);
                 i++;
-                ArrayList<Objective> obj = this.getObjectives(x.getId());
+                ArrayList<Objective> obj = getObjectives(x.getId());
                 for (Objective y : obj) {
                     String[] id = y.getId();
-                    Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C" + z, y.getName(), this.getfinalrating(id[0], "" + studentid), this.getnoofplannedlessons(id[0], "" + studentid), this.getnoofarchivedlessons(id[0], "" + studentid), this.getpercent(id[0], "" + studentid));
+                    Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C" + z, y.getName(), finalRatings.get(studentid + "_" + id[0]), plannedLess.get(studentid + "_" + id[0]), archiveLess.get(studentid + "_" + id[0]),percents.get(studentid + "_" + id[0]) /*this.getpercent(id[0],""+studentid)*/);
                     nodeC.addChild(nodeA);
                     z++;
                     for (DBRecords l : steps) {
@@ -1130,6 +1132,83 @@ public class ProgressbyStudent {
             log.error(ex + errors.toString());
         }
         return objectives;
+    }
+
+    private HashMap<String, String> getnoofplannedlessons() throws SQLException {
+        HashMap<String, String> result = new HashMap<>();
+        try {
+            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT student_id,objective_id,count(*) from (SELECT * FROM lesson_stud_att left join lessons on lesson_stud_att.lesson_id = lessons.id where COALESCE(lessons.archive, FALSE) = FALSE) b group by b.student_id,b.objective_id;");
+            while (rs1.next()) {
+                result.put(rs1.getInt("student_id") + "_" + rs1.getInt("objective_id"), "" + rs1.getInt("count"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return result;
+    }
+
+    private HashMap<String, String> getnoofarchivedlessons() throws SQLException {
+        HashMap<String, String> result = new HashMap<>();
+        try {
+            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT student_id,objective_id,count(*) from (SELECT * FROM lesson_stud_att left join lessons on lesson_stud_att.lesson_id = lessons.id where archive = TRUE) b group by b.student_id,b.objective_id;");
+            while (rs1.next()) {
+                result.put(rs1.getInt("student_id") + "_" + rs1.getInt("objective_id"), "" + rs1.getInt("count"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return result;
+    }
+
+    private HashMap<String, String> getfinalrating() throws SQLException {
+        HashMap<String, String> result = new HashMap<>();
+        try {
+            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT rating.name,student_id,objective_id FROM rating inner join (select rating_id,student_id,objective_id from progress_report a where comment_date = (select max(comment_date) from progress_report \n"
+                    + "                                                        where student_id = a.student_id AND objective_id =a.objective_id and rating_id not in(6,7))) c ON id = c.rating_id");
+            while (rs1.next()) {
+                result.put(rs1.getInt("student_id") + "_" + rs1.getInt("objective_id"), rs1.getString("name"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return result;
+    }
+
+    private HashMap<String, String> getpercent() throws SQLException {
+        HashMap<String, String> result = new HashMap<>();
+        HashMap<Integer, Integer> auxTotal = new HashMap<>();
+
+        try {
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select count(id),obj_id from obj_steps group by obj_id");
+            while (rs1.next()) {
+                auxTotal.put(rs1.getInt("obj_id"), rs1.getInt("count"));
+            }
+
+            ResultSet rs2 = DBConect.eduweb.executeQuery("select comment_date,step_id,objective_id,student_id from progress_report a where comment_date = (select max(comment_date) from public.progress_report where student_id = a.student_id AND objective_id = a.objective_id and generalcomment = false) and generalcomment = false");
+            while (rs2.next()) {
+                String stsdone = rs2.getString("step_id");
+                if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
+                    List<String> ste = Arrays.asList(stsdone.split(","));
+                    double percent = (ste.size() * 100) / auxTotal.get(rs2.getInt("objective_id"));
+                    result.put(rs2.getInt("student_id") + "_" + rs2.getInt("objective_id"), "" + percent);
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return result;
     }
 
     public String getnoofplannedlessons(String objid, String studid) throws SQLException {

@@ -17,6 +17,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import javax.servlet.ServletContext;
 import javax.sql.rowset.CachedRowSet;
@@ -123,7 +125,7 @@ public static ArrayList<Students> getStudents(Logger log) throws SQLException
             {
                 Students alumnos = new Students();
                 alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("LastName")+", "+ rs.getString("FirstName")+" "+ rs.getString("MiddleName"));
+                alumnos.setNombre_students(rs.getString("FirstName")+" "+ rs.getString("MiddleName") + " "+rs.getString("LastName") );
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
@@ -132,7 +134,11 @@ public static ArrayList<Students> getStudents(Logger log) throws SQLException
                 listaAlumnos.add(alumnos);
             }
             //this.finalize();
-            
+             Collections.sort(listaAlumnos, new Comparator<Students>() {
+                @Override
+                public int compare(Students o1, Students o2) {
+                    return o1.getNombre_students().compareTo(o2.getNombre_students());                }
+            });
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
             StringWriter errors = new StringWriter();
@@ -158,7 +164,7 @@ public static ArrayList<Students> getStudents(Logger log) throws SQLException
             while (rs.next()) {
                 Students alumnos = new Students();
                 alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName"));
+                alumnos.setNombre_students(rs.getString("FirstName")+" "+ rs.getString("MiddleName") + " "+rs.getString("LastName"));
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
@@ -166,8 +172,13 @@ public static ArrayList<Students> getStudents(Logger log) throws SQLException
                 alumnos.setSubstatus(rs.getString("Substatus"));
                 listaAlumnos.add(alumnos);
             }
+            
             //this.finalize();
-
+           Collections.sort(listaAlumnos, new Comparator<Students>() {
+                @Override
+                public int compare(Students o1, Students o2) {
+                    return o1.getNombre_students().compareTo(o2.getNombre_students());                }
+            });
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
             StringWriter errors = new StringWriter();
@@ -178,6 +189,8 @@ public static ArrayList<Students> getStudents(Logger log) throws SQLException
         return listaAlumnos;
 
     }
+    
+   
     
 //    public ArrayList<Students> getStudentsForLevel(int idLevel) throws SQLException{
 //        this.conectarOracle();
