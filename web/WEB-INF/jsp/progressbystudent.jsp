@@ -255,7 +255,6 @@
             function treeload2(prog) {
                 var pActual = $("ul li.active").text().replace(" ", "");
                 
-
                 $('#Objectivestracking').tab('show');
                 $('#tg').empty();
                 $('#tg').treegrid({
@@ -291,10 +290,11 @@
 
                 //jQuery("<img/>").prependTo(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").attr({src: '../recursos/js/treeGrid/target.svg', width:'16px', height:'18px'});
 
-                //$("#tg").treegrid('collapseAll');
-
+                //
+                
+            
                 $('#loadingmessage').hide();
-
+                $("#tg").treegrid('collapseAll');
                 $('.datagrid-row').mouseover(function () {
                   $(this).attr("title", $(this).first().children().first().children().last().children().last().text());
                 });
