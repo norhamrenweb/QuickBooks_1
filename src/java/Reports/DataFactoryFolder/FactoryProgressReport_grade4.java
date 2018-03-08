@@ -72,18 +72,7 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         return coll;
     }
 
-    private String limpiarNameAsignatura(String name) {
-        int ini = 0;
-        int posEspacio = name.indexOf(" ");
-        if (posEspacio == -1) {
-            return name;
-        }
-        if (name.substring(0, posEspacio).toUpperCase().contains("GR") || name.substring(0, posEspacio).toUpperCase().contains("JP") || name.substring(0, posEspacio).toUpperCase().contains("PP")) {
-            ini = posEspacio + 1;
-        }
-
-        return name.substring(ini, name.length());
-    }
+   
 
     private String getSuperComment(String idStudent) {
         try {
@@ -97,7 +86,7 @@ public class FactoryProgressReport_grade4 extends DataFactory {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
         }
-        return "";
+        return "No comments";
     }
 
     private HashMap<String, String> getComments(String id) throws SQLException {
@@ -118,56 +107,7 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         return mapComment;
     }
 
-    private TreeMap<Integer, Profesor> getTeachers(String id) throws SQLException {
-        TreeMap<Integer, Profesor> mapTeachers = new TreeMap<>();
-        ArrayList<Profesor> listaProfesores = new ArrayList<>();
-        TreeMap<String, String> mapNames = new TreeMap<>();
-
-        try {
-            ArrayList<Integer> staffids = new ArrayList<>();
-            ArrayList<String> classids = new ArrayList<>();
-            ArrayList<String> coursesTitles = new ArrayList<>();
-            ArrayList<Integer> rcs = new ArrayList<>();
-
-            String consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"
-                    + " on Roster.ClassID = Classes.ClassID"
-                    + " inner join Courses on  Classes.CourseID = Courses.CourseID"
-                    + "  where Roster.StudentID = " + id + "and Classes.yearid = " + this.yearid + "and Courses.ReportCard = 1 order by courses.RCPlacement";
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
-            while (rs.next()) {
-                staffids.add(rs.getInt("StaffID"));
-                classids.add(rs.getString("CourseID"));
-                coursesTitles.add(rs.getString("Title"));
-                rcs.add(rs.getInt("RCPlacement"));
-            }
-
-            consulta = "select FirstName,LastName,Email,PersonID from Person";
-            ResultSet rs3 = DBConect.ah.executeQuery(consulta);
-            while (rs3.next()) {
-                mapNames.put(rs3.getString("PersonID"), rs3.getString("FirstName") + " " + rs3.getString("LastName"));
-            }
-
-            for (Integer i : staffids) {
-                if (mapNames.containsKey("" + i)) {
-                    listaProfesores.add(new Profesor(mapNames.get("" + i), "", i, ""));
-                } else {
-                    listaProfesores.add(new Profesor(" ", "", i, ""));
-                }
-            }
-            for (int i = 0; i < listaProfesores.size(); i++) {
-                listaProfesores.get(i).setAsignatura(coursesTitles.get(i));
-                listaProfesores.get(i).setClassId(classids.get(i));
-                mapTeachers.put(rcs.get(i), listaProfesores.get(i));
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Alumnos: " + ex);
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-        }
-
-        return mapTeachers;
-    }
+   
 
 
     @Override

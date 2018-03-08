@@ -40,56 +40,78 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
 
     @Override
     public Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
-        
-        String studentId = idStudent;     
+
+        String studentId = idStudent;
         java.util.Vector coll = new java.util.Vector();
         ArrayList<String> os4 = new ArrayList<>();
         ArrayList<String> as4 = new ArrayList<>();
         cargarAlumno(studentId);
-        
+
         TreeMap<Integer, Profesor> mapTeachers = getTeachers(idStudent);
         HashMap<String, String> mapComentarios = getComments(idStudent);
-        
-        String s ="";
-        
-        
-        
-        // CAMBIAR EL SPLIT 
-        /*String studentId = idStudent;
-        java.util.Vector coll = new java.util.Vector();
-        ArrayList<String> os4 = new ArrayList<>();
-        ArrayList<String> as4 = new ArrayList<>();
-        cargarAlumno(studentId);
 
-        os4.add("obj 1");
-        as4.add("A");
-        os4.add("obj 2");
-        as4.add("P");
-        os4.add("obj 3");
-        as4.add("M");
-        os4.add("obj 4");
-        as4.add("M");
-
-        if (coll.isEmpty()) {
-            //coll.add(new BeanWithList("Matematicas:Profesor ALex:20:COMENTARIO DE MATEMATICAS", os4, as4, nameStudent, dob, age, grade, term));
+        ArrayList<String> lessons = new ArrayList<>();
+        ResultSet rs;
+        rs = DBConect.eduweb.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
+        while (rs.next()) {
+            lessons.add("" + rs.getInt("lesson_id"));
         }
-        ArrayList<String> os5 = new ArrayList<>();
-        ArrayList<String> as5 = new ArrayList<>();
-        os5.add("obj 7");
-        as5.add("M");
-        os5.add("obj 8");
-        as5.add("P");
 
-        
-        coll.add(new BeanWithList("History:Teacher Smith:40:comment a::bout History ...",new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
-        coll.add(new BeanWithList("Computer Science:Teacher Jones:23:comment about Computer ...", new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
-        coll.add(new BeanWithList("Chemistry:Teacher Williams:12:comment about Chemistry ...", os5, as5, nameStudent, dob, age, grade, term));
-        coll.add(new BeanWithList("Drawing:Teacher Brown:90:...", os4, as4, nameStudent, dob, age, grade, term));
-        coll.add(new BeanWithList("Economics:Teacher Taylor:80:comment about ...", os4, as4, nameStudent, dob, age, grade, term));
-        coll.add(new BeanWithList("English Language:Teacher Davies:70: ", os4, as4, nameStudent, dob, age, grade, term));
-        coll.add(new BeanWithList("Physics:Teacher Wilson:0:comment about Physics ...", new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
-*/
+        for (Map.Entry<Integer, Profesor> entry : mapTeachers.entrySet()) {
+            String key = entry.getValue().getClassId();
+            String aux = "No Comments";
+            Profesor value = entry.getValue();
+
+            if (mapComentarios.containsKey(key)) {
+                aux = mapComentarios.get(key);
+            }
+            os4 = new ArrayList<>();
+            as4 = new ArrayList<>();
+            os4 = getSkills(key);
+            String nameAsignatura = limpiarNameAsignatura(value.getAsignatura());
+            String auxOs = nameAsignatura + ":" + value.getFirstName() + ": :" + aux;
+            for (int i = 0; i < os4.size(); i++) {
+                as4.add("");
+            }
+
+            //coll.add(new BeanWithList("History:Teacher Smith:40:comment a::bout History ...",new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
+            coll.add(new BeanWithList(auxOs, os4, as4, nameStudent, dob, age, grade, term));
+
+        }
+        coll.add(new BeanWithList("Head of School:Kim Euston-Brown: :" + getSuperComment(idStudent), new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
         return coll;
+    }
+
+    private String getSuperComment(String idStudent) {
+        try {
+            String consulta = "select * from report_comments where supercomment=true and studentid = " + idStudent;
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            while (rs.next()) {
+                return rs.getString("comment");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+        }
+        return "No Comments";
+    }
+
+    private ArrayList<String> getSkills(String courseId) throws SQLException {
+        ArrayList<String> aux = new ArrayList<>();
+        try {
+            String consulta = "select * from SS_Subjects where SS_Subjects.CourseID = " + courseId;
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            while (rs.next()) {
+                aux.add(rs.getString("Subject"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+        }
+
+        return aux;
     }
 
     private HashMap<String, String> getComments(String id) throws SQLException {
@@ -108,58 +130,6 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         }
 
         return mapComment;
-    }
-
-  
-    private TreeMap<Integer, Profesor> getTeachers(String id) throws SQLException {
-        TreeMap<Integer, Profesor> mapTeachers = new TreeMap<>();
-        ArrayList<Profesor> listaProfesores = new ArrayList<>();
-        TreeMap<String, String> mapNames = new TreeMap<>();
-
-        try {
-            ArrayList<Integer> staffids = new ArrayList<>();
-            ArrayList<String> classids = new ArrayList<>();
-            ArrayList<String> coursesTitles = new ArrayList<>();
-            ArrayList<Integer> rcs = new ArrayList<>();
-
-            String consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"
-                    + " on Roster.ClassID = Classes.ClassID"
-                    + " inner join Courses on  Classes.CourseID = Courses.CourseID"
-                    + "  where Roster.StudentID = " + id + "and Classes.yearid = " + this.yearid + "and Courses.ReportCard = 1 order by courses.RCPlacement";
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
-            while (rs.next()) {
-                staffids.add(rs.getInt("StaffID"));
-                classids.add(rs.getString("CourseID"));
-                coursesTitles.add(rs.getString("Title"));
-                rcs.add(rs.getInt("RCPlacement"));
-            }
-
-            consulta = "select FirstName,LastName,Email,PersonID from Person";
-            ResultSet rs3 = DBConect.ah.executeQuery(consulta);
-            while (rs3.next()) {
-                mapNames.put(rs3.getString("PersonID"), rs3.getString("FirstName") + " " + rs3.getString("LastName"));
-            }
-
-            for (Integer i : staffids) {
-                if (mapNames.containsKey("" + i)) {
-                    listaProfesores.add(new Profesor(mapNames.get("" + i), "", i, ""));
-                } else {
-                    listaProfesores.add(new Profesor(" ", "", i, ""));
-                }
-            }
-            for (int i = 0; i < listaProfesores.size(); i++) {
-                listaProfesores.get(i).setAsignatura(coursesTitles.get(i));
-                listaProfesores.get(i).setClassId(classids.get(i));
-                mapTeachers.put(rcs.get(i), listaProfesores.get(i));
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Alumnos: " + ex);
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-        }
-
-        return mapTeachers;
     }
 
     @Override
