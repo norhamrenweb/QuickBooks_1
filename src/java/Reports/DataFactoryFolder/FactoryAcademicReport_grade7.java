@@ -69,7 +69,7 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             as4 = new ArrayList<>();
             os4 = getSkills(key);
             String nameAsignatura = limpiarNameAsignatura(value.getAsignatura());
-            String auxOs = nameAsignatura + ":" + value.getFirstName() + ": :" + aux;
+            String auxOs = nameAsignatura + "#" + value.getFirstName() + "# #" + aux;
             for (int i = 0; i < os4.size(); i++) {
                 as4.add("");
             }
@@ -78,7 +78,7 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             coll.add(new BeanWithList(auxOs, os4, as4, nameStudent, dob, age, grade, term));
 
         }
-        coll.add(new BeanWithList("Head of School:Kim Euston-Brown: :" + getSuperComment(idStudent), new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
+        coll.add(new BeanWithList("Head of School#Kim Euston-Brown# #" + getSuperComment(idStudent), new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
         return coll;
     }
 

@@ -414,7 +414,7 @@
 		</band>
 	</title>
 	<detail>
-		<band height="70" splitType="Stretch">
+		<band height="72" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 			<rectangle>
 				<reportElement x="500" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" forecolor="#343F4E" backcolor="#FFFFFF" uuid="ef1d7f7f-c0eb-43ca-b643-4ad5c249ec28"/>
@@ -427,15 +427,11 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{subject}.split(":")[0]]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{subject}.split("#")[0]]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="32" y="13" width="100" height="20" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" uuid="75d6d2c2-685d-42c3-a886-20bf478ae51a"/>
-				<textFieldExpression><![CDATA[$F{subject}.split(":")[1]]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="512" y="6" width="56" height="20" isPrintWhenDetailOverflows="true" forecolor="#343F4E" uuid="881a6144-198c-49b2-b713-2af46e3f7a76"/>
-				<textFieldExpression><![CDATA[$F{subject}.split(":")[2] +" %"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{subject}.split("#")[1]]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement stretchType="ElementGroupHeight" x="30" y="30" width="532" height="40" isPrintWhenDetailOverflows="true" uuid="615996bb-79d2-4b88-acbc-29bf5637cad0"/>
@@ -446,7 +442,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{subject}.substring($F{subject}.indexOf(":",$F{subject}.indexOf(":",$F{subject}.indexOf(":")+1)+1)+1)]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{subject}.substring($F{subject}.indexOf("#",$F{subject}.indexOf("#",$F{subject}.indexOf("#")+1)+1)+1)]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement key="" positionType="Float" stretchType="ElementGroupHeight" x="325" y="30" width="87" height="40" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="057a6cdd-63f7-4eb9-9865-ab220a5acb6b">
@@ -503,10 +499,11 @@
 						<jr:tableHeader style="Table 10_TH" height="10" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="30" height="10" forecolor="#FFFFFF" uuid="619b74cc-c02a-439a-86ee-95de00afd3a9"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+									<font size="7" pdfEncoding=""/>
+									<paragraph lineSpacing="1_1_2"/>
 								</textElement>
-								<text><![CDATA[1]]></text>
+								<text><![CDATA[l]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 10_TD" height="30">
@@ -527,10 +524,11 @@
 						<jr:tableHeader style="Table 10_TH" height="10" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="30" height="10" forecolor="#FFFFFF" uuid="ebd890cf-12f0-4ae1-aeb4-3fefe5ad9f87"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+									<font size="7"/>
+									<paragraph lineSpacing="1_1_2" lineSpacingSize="1.0"/>
 								</textElement>
-								<text><![CDATA[2]]></text>
+								<text><![CDATA[ll]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 10_TD" height="30">
@@ -551,10 +549,11 @@
 						<jr:tableHeader style="Table 10_TH" height="10" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="30" height="10" forecolor="#FFFFFF" uuid="16bb3ba3-63f8-4b59-a413-1fcece9fb0ec"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+									<font size="7"/>
+									<paragraph lineSpacing="1_1_2"/>
 								</textElement>
-								<text><![CDATA[P]]></text>
+								<text><![CDATA[&#8226]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 10_TD" height="30">
@@ -576,10 +575,11 @@
 						<jr:tableHeader style="Table 10_TH" height="10" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="30" height="10" forecolor="#FFFFFF" uuid="0e221039-2fe7-4b13-a884-145503137859"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+									<font size="7"/>
+									<paragraph lineSpacing="1_1_2"/>
 								</textElement>
-								<text><![CDATA[A]]></text>
+								<text><![CDATA[&#8226 &#8226]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 10_TD" height="30">
@@ -607,10 +607,11 @@
 							</box>
 							<staticText>
 								<reportElement x="0" y="0" width="30" height="10" forecolor="#FFFFFF" uuid="bf1ed40b-d952-4c2d-8c7b-7e1feeda1538"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+									<font size="7"/>
+									<paragraph lineSpacing="1_1_2"/>
 								</textElement>
-								<text><![CDATA[M]]></text>
+								<text><![CDATA[&#8226 &#8226 &#8226]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 10_TD" height="30">
@@ -629,13 +630,26 @@
 					</jr:column>
 				</jr:table>
 			</componentElement>
+			<staticText>
+				<reportElement x="500" y="0" width="62" height="30" uuid="7ffee74b-a50c-4277-82a1-e57417aa7d99"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[%]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="10">
+		<band height="16">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="595" height="10" uuid="8d594f97-1893-4176-b6bb-445a4fb21e46"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom">
+				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="595" height="8" uuid="8d594f97-1893-4176-b6bb-445a4fb21e46"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="html">
+					<font size="5.1"/>
+				</textElement>
+				<text><![CDATA[EXPLANATION OF CODES: l Not yet assessed, ll Needs further support, &#8226 Striving - Making great efforts to achieve mastery, &#8226 &#8226 Competent - necessary ability, skill and knowledge, &#8226 &#8226 &#8226 Extended - beyond required level]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="8" width="595" height="8" uuid="572bd0c7-f6cc-4e4e-a307-fe0e4f98f59b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="6"/>
 				</textElement>
 				<text><![CDATA[3 Auburn Road Kenilworth 7708 ~ T 021 797 7872 ~ F 021 797 1931 ~ info@auburnhouse.co.za ~ www.auburnhouse.co.za]]></text>
@@ -677,6 +691,13 @@
 					<font size="6"/>
 				</textElement>
 				<text><![CDATA[3 Auburn Road Kenilworth 7708 ~ T 021 797 7872 ~ F 021 797 1931 ~ info@auburnhouse.co.za ~ www.auburnhouse.co.za]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="92" width="595" height="8" uuid="2a0633d1-371f-4ee3-9017-4ae984458b4e"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="html">
+					<font size="5.1"/>
+				</textElement>
+				<text><![CDATA[EXPLANATION OF CODES: l Not yet assessed, ll Needs further support, &#8226 Striving - Making great efforts to achieve mastery, &#8226 &#8226 Competent - necessary ability, skill and knowledge, &#8226 &#8226 &#8226 Extended - beyond required level]]></text>
 			</staticText>
 		</band>
 	</lastPageFooter>

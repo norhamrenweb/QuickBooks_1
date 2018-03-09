@@ -15,10 +15,7 @@ public class Profesor {
     private int id;
     private String email;
     private String asignatura;
-
-
     private String classId;
-    
     
     public Profesor(String firstName, String lastName, int id, String email) {
         this.firstName = firstName;
