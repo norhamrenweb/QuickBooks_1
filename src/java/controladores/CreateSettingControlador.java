@@ -239,10 +239,18 @@ public class CreateSettingControlador {
         String message = null;
         try {
             String[] obid = obj.getId();
-            String consulta = "update objective set name = '" + obj.getName() + "',description ='" + obj.getDescription() + "'where id =" + obid[0];
+            String name,descrip;
+            name = obj.getName().replace("'", "\'\'");
+            name = name.replace("\"", "\"\"");
+            
+            descrip =  obj.getDescription().replace("'", "\'\'");
+            descrip = descrip.replace("\"", "\"\"");
+            
+            String consulta = "update objective set name = '" + name + "',description ='" + descrip + "'where id =" + obid[0];
             DBConect.eduweb.executeUpdate(consulta);
             message = "Objective edited successfully";
             Step s = new Step();
+        
             s.compareandupdate(obj.getSteps(), obj.getId(), hsr.getServletContext());
             ResultSet rs = DBConect.eduweb.executeQuery("select * from objective where subject_id = " + sid[0]);
             while (rs.next()) {
