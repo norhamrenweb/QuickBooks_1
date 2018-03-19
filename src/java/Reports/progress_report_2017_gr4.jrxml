@@ -235,78 +235,78 @@
 		<fieldDescription><![CDATA[term]]></fieldDescription>
 	</field>
 	<title>
-		<band height="169" splitType="Stretch">
+		<band height="138" splitType="Stretch">
 			<staticText>
-				<reportElement x="129" y="26" width="445" height="40" uuid="d73b92eb-824d-49eb-af8c-7e18641fd4a1"/>
+				<reportElement x="129" y="3" width="445" height="40" uuid="d73b92eb-824d-49eb-af8c-7e18641fd4a1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[PROGRESS REPORT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="147" y="67" width="50" height="19" uuid="a6ed17bd-7e05-430c-a739-9ce93c98ccea"/>
+				<reportElement x="147" y="44" width="50" height="19" uuid="a6ed17bd-7e05-430c-a739-9ce93c98ccea"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Name:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="199" y="69" width="375" height="18" uuid="00b7fbb6-8552-47ac-9f68-e44efe63b3a1"/>
+				<reportElement x="199" y="46" width="375" height="18" uuid="00b7fbb6-8552-47ac-9f68-e44efe63b3a1"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="147" y="90" width="50" height="19" uuid="126768f1-cea3-4c21-b8ff-d98604b1bca9"/>
+				<reportElement x="147" y="67" width="50" height="19" uuid="126768f1-cea3-4c21-b8ff-d98604b1bca9"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[D.O.B:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="199" y="92" width="207" height="18" uuid="950b6f51-c490-4c4d-84e7-fdec1cde05ce"/>
+				<reportElement x="199" y="69" width="207" height="18" uuid="950b6f51-c490-4c4d-84e7-fdec1cde05ce"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dob}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="148" y="113" width="49" height="19" uuid="d1229727-748d-46a9-a4ca-b715d6a684b5"/>
+				<reportElement x="148" y="90" width="49" height="19" uuid="d1229727-748d-46a9-a4ca-b715d6a684b5"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Grade:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="148" y="136" width="142" height="19" uuid="56866954-24ac-45f8-875e-71b287af8257"/>
+				<reportElement x="148" y="113" width="142" height="19" uuid="56866954-24ac-45f8-875e-71b287af8257"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Academic Term/Year: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="200" y="115" width="207" height="18" uuid="62fa4c11-4718-4bae-8a0b-3effa8333935"/>
+				<reportElement x="200" y="92" width="207" height="18" uuid="62fa4c11-4718-4bae-8a0b-3effa8333935"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{grade}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="293" y="138" width="207" height="18" uuid="6c320971-2b82-4558-a7fa-da2e0b4510b1"/>
+				<reportElement x="293" y="115" width="207" height="18" uuid="6c320971-2b82-4558-a7fa-da2e0b4510b1"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{term}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="20" y="40" width="127" height="114" uuid="1000a543-6871-480f-8ab6-1c4e08b873f6"/>
+				<reportElement x="20" y="17" width="127" height="114" uuid="1000a543-6871-480f-8ab6-1c4e08b873f6"/>
 				<imageExpression><![CDATA["https://ah-zaf.client.renweb.com/ftp/ah-zaf/Customization/-96/AuburnHouse.PNG"]]></imageExpression>
 			</image>
 		</band>
 	</title>
 	<detail>
-		<band height="90" splitType="Stretch">
+		<band height="78" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout"/>
 			<componentElement>
 				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="29" y="0" width="537" height="62" isRemoveLineWhenBlank="true" uuid="ecd09e57-5e15-4b04-90b1-4b9b046a1e2a">
@@ -442,36 +442,36 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="111">
+		<band height="90">
 			<staticText>
-				<reportElement positionType="Float" x="123" y="39" width="90" height="24" uuid="aaa84c8f-9771-4074-98b4-d175a75eab14"/>
+				<reportElement positionType="Float" x="123" y="29" width="90" height="24" uuid="aaa84c8f-9771-4074-98b4-d175a75eab14"/>
 				<textElement textAlignment="Left">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Class Teacher 				]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="362" y="36" width="144" height="24" uuid="53c4fd6a-bd02-480d-ae68-9db7c050d0f3"/>
+				<reportElement positionType="Float" x="362" y="26" width="144" height="24" uuid="53c4fd6a-bd02-480d-ae68-9db7c050d0f3"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Kim Euston-Brown]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="392" y="61" width="90" height="24" uuid="ce41668f-e44f-4231-95d9-124b43c865af"/>
+				<reportElement positionType="Float" x="392" y="51" width="90" height="24" uuid="ce41668f-e44f-4231-95d9-124b43c865af"/>
 				<textElement textAlignment="Left">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Head ofSchool]]></text>
 			</staticText>
 			<line>
-				<reportElement positionType="Float" x="326" y="35" width="209" height="1" uuid="35c19a3f-a816-4fc5-9ac0-1bb9803f3893"/>
+				<reportElement positionType="Float" x="326" y="25" width="209" height="1" uuid="35c19a3f-a816-4fc5-9ac0-1bb9803f3893"/>
 			</line>
 			<line>
-				<reportElement positionType="Float" x="59" y="35" width="209" height="1" uuid="5cd2f908-d8f9-4d58-acc2-23a1ae7dfdbc"/>
+				<reportElement positionType="Float" x="59" y="25" width="209" height="1" uuid="5cd2f908-d8f9-4d58-acc2-23a1ae7dfdbc"/>
 			</line>
 			<staticText>
-				<reportElement positionType="Float" x="0" y="93" width="595" height="18" uuid="90bd3034-7c0b-4e44-bccc-59cc6395076b"/>
+				<reportElement positionType="Float" x="0" y="72" width="595" height="18" uuid="90bd3034-7c0b-4e44-bccc-59cc6395076b"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[3 Auburn Road Kenilworth 7708 ~ T 021 797 7872 ~ F 021 797 1931 ~ info@auburnhouse.co.za ~ www.auburnhouse.co.za]]></text>
 			</staticText>
