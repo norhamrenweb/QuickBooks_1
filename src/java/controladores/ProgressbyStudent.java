@@ -152,7 +152,7 @@ public class ProgressbyStudent {
             }
             ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
                     + "                 inner join courses on courses.courseid=classes.courseid\n"
-                    + "                  where roster.studentid = " + studentid + " and roster.enrolled" + termid + "= 1 and courses.active = 1 and courses.reportcard = 1 and classes.yearid = '" + yearid + "' order by courses.rcplacement DESC");// the term and year need to be dynamic, check with vincent
+                    + "                  where roster.studentid = " + studentid + " and roster.enrolled=1 and " + termid + "= 1 and courses.active = 1 and courses.reportcard = 1 and classes.yearid = '" + yearid + "' order by courses.rcplacement DESC");// the term and year need to be dynamic, check with vincent
 
             String name9, id;
             while (rs1.next()) {
