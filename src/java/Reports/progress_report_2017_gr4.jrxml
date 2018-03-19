@@ -400,7 +400,7 @@
 									<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#030303"/>
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#030303"/>
 								</box>
-								<textElement textAlignment="Left" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="12" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Comments]]></text>
@@ -421,7 +421,7 @@
 									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
+								<textElement textAlignment="Justified" verticalAlignment="Middle">
 									<paragraph lineSpacing="Single"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{_THIS}.substring($F{_THIS}.indexOf("#",$F{_THIS}.indexOf("#")+1)+1)]]></textFieldExpression>
