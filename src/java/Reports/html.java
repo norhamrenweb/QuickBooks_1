@@ -55,12 +55,15 @@ import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.HtmlExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 //import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.export.Exporter;
 import net.sf.jasperreports.export.HtmlExporterOutput;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 
 /**
  *
@@ -103,7 +106,7 @@ public class html extends HttpServlet {
         Connection conn = null;
 
         ServletOutputStream os = response.getOutputStream();
-        
+
         String[] stids = request.getParameterValues("destino[]");
         String reportType = request.getParameter("typeReport");
         String start = request.getParameter("TXThorainicio");
@@ -135,21 +138,20 @@ public class html extends HttpServlet {
 //            map.put("end",enddate);
         //   List<SimpleExporterInput> list = new ArrayList<SimpleExporterInput>();
         JRDataSource datasource;
-        if(!d.getClass().equals(FactoryActivityLog.class)){
+        if (!d.getClass().equals(FactoryActivityLog.class)) {
             datasource = new JRBeanCollectionDataSource(d.getDataSource(stids[0], this.getServletContext()), true);
+        } else {
+            datasource = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(((User) request.getSession().getAttribute("user")).getName(), start, finish, stids[0], this.getServletContext()), true);
+
         }
-        else{    
-            datasource = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(((User)request.getSession().getAttribute("user")).getName(),start,finish,stids[0], this.getServletContext()), true);
-            
-        }        
         JasperPrint jasperPrint = jasperFillManager.fill(jasperReport, map, datasource);//fill(jasperReport,map, conn);
 
         for (int i = 1; i < stids.length; i++) {
             JRDataSource datasource2;
-            if(!d.getClass().equals(FactoryActivityLog.class)) 
-                    datasource2 = new JRBeanCollectionDataSource(d.getDataSource(stids[i], this.getServletContext()), true);
-            else{
-                    datasource2 = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(((User)request.getSession().getAttribute("user")).getName(),start,finish,stids[i], this.getServletContext()), true);
+            if (!d.getClass().equals(FactoryActivityLog.class)) {
+                datasource2 = new JRBeanCollectionDataSource(d.getDataSource(stids[i], this.getServletContext()), true);
+            } else {
+                datasource2 = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(((User) request.getSession().getAttribute("user")).getName(), start, finish, stids[i], this.getServletContext()), true);
             }
             JasperPrint jasperPrintAux = jasperFillManager.fill(jasperReport, map, datasource2);//fill(jasperReport,map, conn);
             for (int j = 0; j < jasperPrintAux.getPages().size(); j++) {
@@ -157,24 +159,34 @@ public class html extends HttpServlet {
             }
         }
 
-
-        if(!d.getClass().equals(FactoryActivityLog.class)){//pdf Reports download
-            
+        if (!d.getClass().equals(FactoryActivityLog.class)) {//pdf Reports download
+            /*
             byte[] bites = JasperExportManager.exportReportToPdf(jasperPrint);
             response.setHeader("Content-disposition", "attachment; filename=Inform.pdf");
             response.setContentLength(bites.length);
             os.write(bites);
-            os.close();
-            
-        }
-        else{
+            os.close();*/
+
+ 
+            response.setHeader("Content-disposition", "attachment; filename=Inform.doc");
+           // response.setContentType("application/octet-stream");
+            //response.setContentLength(4096);
+            JRDocxExporter exporter2 = new JRDocxExporter();
+
+            exporter2.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter2.setExporterOutput(new SimpleOutputStreamExporterOutput(os));
+
+         
+            exporter2.exportReport();
+
+        } else {
             //XML Report Activity Log.
             exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
             exporter.setExporterOutput(new SimpleHtmlExporterOutput(os));
             exporter.exportReport();
         }
-        
- /*  exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+
+        /*  exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
         exporter.setExporterOutput(new SimpleHtmlExporterOutput(os));
          */
         //            exporter.setConfiguration(createHtmlConfiguration());
