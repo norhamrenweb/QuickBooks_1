@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+import java.util.Base64;
 import static controladores.ReportControlador.log;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
@@ -391,7 +391,7 @@ public class ProgressbyStudent {
                 //
                 // byte[] buf = new byte[inStream.available()];
                 inStream.read(buf);
-                String imagen = Base64.encode(buf);
+                 String imagen = Base64.getEncoder().encodeToString(buf);
                 return "data:image/" + mimeType + ";base64," + imagen;
                 //**********
             }
@@ -903,7 +903,7 @@ public class ProgressbyStudent {
             //
             // byte[] buf = new byte[inStream.available()];
             inStream.read(buf);
-            String imagen = Base64.encode(buf);
+            String imagen = Base64.getEncoder().encodeToString(buf);
             json.put("imagen", imagen);
             json.put("ext", mimeType);
             ftpClient.disconnect();
