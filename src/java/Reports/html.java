@@ -160,14 +160,14 @@ public class html extends HttpServlet {
         }
 
         if (!d.getClass().equals(FactoryActivityLog.class)) {//pdf Reports download
-            /*
+            
             byte[] bites = JasperExportManager.exportReportToPdf(jasperPrint);
             response.setHeader("Content-disposition", "attachment; filename=Inform.pdf");
             response.setContentLength(bites.length);
             os.write(bites);
-            os.close();*/
+            os.close();
 
- 
+ /*
             response.setHeader("Content-disposition", "attachment; filename=Inform.doc");
            // response.setContentType("application/octet-stream");
             //response.setContentLength(4096);
@@ -177,7 +177,7 @@ public class html extends HttpServlet {
             exporter2.setExporterOutput(new SimpleOutputStreamExporterOutput(os));
 
          
-            exporter2.exportReport();
+            exporter2.exportReport();*/
 
         } else {
             //XML Report Activity Log.

@@ -66,8 +66,17 @@ public class FactoryProgressReport_grade4 extends DataFactory {
             String auxOs = nameAsignatura + "#" + value.getFirstName() + "#" + aux;
             os4.add(auxOs);
         }
+        term = term.replace("Q", "T");
         os4.add("Head of School#Kim Euston-Brown#" + getSuperComment(idStudent));
-        coll.add(new BeanWithList(null, os4, as4, nameStudent, dob, age, grade, term));
+        
+        String nameTutor="#";
+        String consulta = "select firstName,lastName from(select StaffID from classes inner join roster on roster.classid = classes.classid where homeroom = 1 and roster.studentid = "+idStudent+" and roster.enrolled1 = 1 and classes.yearid ="+yearid+") a inner join person on a.StaffID= person.personid";
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            while (rs.next()) {
+               nameTutor += rs.getString("firstName") +" "+ rs.getString("lastName") ;
+            }
+        
+        coll.add(new BeanWithList(null, os4, as4, nameStudent, dob, age, grade, term+nameTutor));
 
         return coll;
     }
@@ -93,7 +102,7 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         HashMap<String, String> mapComment = new HashMap<>();
 
         try {
-            String consulta = "select * from report_comments where supercomment=false and studentid = " + id + "order by date_created ASC";
+            String consulta = "select * from report_comments where supercomment=false and studentid = " + id + " order by date_created ASC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 mapComment.put(rs.getString("subject_id"), rs.getString("comment"));
