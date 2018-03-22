@@ -20,7 +20,8 @@ import atg.taglib.json.util.JSONArray;
 import atg.taglib.json.util.JSONException;
 import atg.taglib.json.util.JSONObject;
 import com.google.gson.Gson;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+//import com.sun.org.apache.xml.internal.security.utils.Base64;
+import java.util.Base64;
 import static controladores.ProgressbyStudent.log;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -458,7 +459,7 @@ public class ObservationControlador {
             //
             // byte[] buf = new byte[inStream.available()];
             inStream.read(buf);
-            String imagen = Base64.encode(buf);
+             String imagen = Base64.getEncoder().encodeToString(buf);
             json.put("imagen", imagen);
             json.put("ext", mimeType);
             ftpClient.disconnect();
