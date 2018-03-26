@@ -36,12 +36,8 @@ public abstract class DataFactory {
     String nameStudent, dob, age, grade, term, termid = "", yearid = "";
 
     public abstract Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException;
-
     public abstract String getNameReport();
 
-    
-  
-     
     protected void cargarAlumno(String studentId) throws SQLException {
         String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentId = '" + studentId + "'";
         ResultSet rs = DBConect.ah.executeQuery(consulta);

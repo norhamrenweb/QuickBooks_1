@@ -103,14 +103,17 @@ public class Step {
             }
 
             for (Step x : newsteps) {
+                String name;
+                name = x.getName().replace("'", "\'\'");
+                name = name.replace("\"", "\"\"");
                 if (x.getId().equals("0")) {
                     //add new step
-                    DBConect.eduweb.executeUpdate("insert into obj_steps(name,storder,obj_id) values('" + x.getName() + "','" + x.getOrder() + "','" + objid[0] + "')");
+                    DBConect.eduweb.executeUpdate("insert into obj_steps(name,storder,obj_id) values('" + name + "','" + x.getOrder() + "','" + objid[0] + "')");
                 } else {
                     for (Step y : old) {
                         if (y.getId().equals(x.getId())) {
                             //update step
-                            DBConect.eduweb.executeUpdate("update obj_steps set name = '" + x.getName() + "',storder= '" + x.getOrder() + "' where id = " + x.getId());
+                            DBConect.eduweb.executeUpdate("update obj_steps set name = '" + name + "',storder= '" + x.getOrder() + "' where id = " + x.getId());
                             break;
                         }
                     }

@@ -159,7 +159,7 @@ public class html extends HttpServlet {
             }
         }
 
-        if (!d.getClass().equals(FactoryActivityLog.class)) {//pdf Reports download
+        if (!d.getClass().equals(FactoryActivityLog.class)) {//pdf Reports download      
             
             byte[] bites = JasperExportManager.exportReportToPdf(jasperPrint);
             response.setHeader("Content-disposition", "attachment; filename=Inform.pdf");

@@ -454,7 +454,7 @@
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Class Teacher 				]]></text>
+				<text><![CDATA[Lead Teacher 				]]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="326" y="29" width="215" height="34" uuid="53c4fd6a-bd02-480d-ae68-9db7c050d0f3"/>
