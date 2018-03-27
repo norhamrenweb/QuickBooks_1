@@ -55,7 +55,7 @@ public class LessonsListControlador {
         ModelAndView mv = new ModelAndView("homepage");
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-        mv.addObject("lessonslist", this.getLessons(user, hsr.getServletContext()));
+        mv.addObject("lessonslist", this.getLessons(sesion,user, hsr.getServletContext()));
         mv.addObject("username", user.getName());
         int iduser = ((User)hsr.getSession().getAttribute("user")).getId();
         mv.addObject("teacherlist",this.getTeachers(iduser));
@@ -133,9 +133,11 @@ public class LessonsListControlador {
 //  
     
 
-    public ArrayList<Lessons> getLessons(User user, ServletContext servlet) throws SQLException {
+    public ArrayList<Lessons> getLessons(HttpSession sesion, User user, ServletContext servlet) throws SQLException {
 //        this.conectarOracle();
         ArrayList<Lessons> lessonslist = new ArrayList<>();
+        int yearid = (int)sesion.getAttribute("yearId");
+        int termid = (int)sesion.getAttribute("termId");
         try {
 
             String consulta = "SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels";
@@ -170,10 +172,12 @@ public class LessonsListControlador {
 
             String consultAux = "";
             if (user.getType() == 1) {
-                consultAux = "user_id = " + user.getId() + " and";
+                consultAux = "term_id="+termid+" and " + "yearterm_id="+yearid+" and "+"user_id = " + user.getId() + " and ";
+            }else{
+                consultAux = "term_id="+termid+" and " + "yearterm_id="+yearid+" and ";
             }
 
-            consulta = "SELECT * FROM public.lessons where " + consultAux + " COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+            consulta = "SELECT * FROM public.lessons where "+ consultAux + " COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
 
             while (rs.next()) {
@@ -214,7 +218,10 @@ public class LessonsListControlador {
                 lessonslist.add(lesson);
 
             }
-            consulta = "SELECT * FROM lessons inner join lessonpresentedby on lessonid=id where teacherid=" + user.getId() + " AND COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+            
+            consultAux = "term_id="+termid+" and " + "yearterm_id="+yearid + " and ";
+            
+            consulta = "SELECT * FROM lessons inner join lessonpresentedby on lessonid=id where "+consultAux+" teacherid=" + user.getId() + " AND COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
             rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 Lessons lesson = new Lessons();
@@ -390,7 +397,7 @@ public class LessonsListControlador {
 
             String consulta = "DELETE FROM public.lessons WHERE id=" + id[0];
             DBConect.eduweb.executeUpdate(consulta);
-            mv.addObject("lessonslist", this.getLessons(user, hsr.getServletContext()));
+            mv.addObject("lessonslist", this.getLessons(sesion,                                       user, hsr.getServletContext()));
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
             StringWriter errors = new StringWriter();

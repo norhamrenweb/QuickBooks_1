@@ -3,6 +3,8 @@
     Created on : 12-jul-2016, 16:23:16
     Author     : Jesús Aragón
 --%>
+<%@page import="Montessori.Tupla"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page session="true" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -86,9 +88,60 @@
 //    $(document).ready(function () {
 //        $('logoutmodal').hide();
 //    });
-    function logout(){
-        document.location.href = "<c:url value="/cerrarLogin.htm"/>";
-    }
+        var ajax;
+        function terms(){
+            
+            if (window.XMLHttpRequest) //mozilla
+            {
+                ajax = new XMLHttpRequest(); //No Internet explorer
+            } else
+            {
+                ajax = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            ajax.onreadystatechange = CallBackYear;
+            var seleccion = $('#yearSelect option:selected').val();
+            var url = "<c:url value="/getyear.htm"/>?id=" + seleccion;
+            ajax.open("POST", url , true);
+            ajax.send("");
+        }
+        
+        function CallBackYear()
+        {
+            if (ajax.readyState === 4 && ajax.status === 200) {
+                $('#termSelect').empty();
+                var jsonObj = JSON.parse(ajax.responseText);
+                for (var i in jsonObj) {
+                    $('#termSelect').append("<option value='" + jsonObj[i].x + "'>"
+                            + jsonObj[i].y + "</option>");
+                }
+            }
+        }
+        
+        function changeTermYear(){
+            if (window.XMLHttpRequest) //mozilla
+            {
+                ajax = new XMLHttpRequest(); //No Internet explorer
+            } else
+            {
+                ajax = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            ajax.onreadystatechange = function(){
+                if (ajax.readyState === 4 && ajax.status === 200) {
+                    window.location.reload();
+                }
+            };
+            var seleccion = $('#yearSelect option:selected').val();
+            var term = $('#termSelect option:selected').val();
+            var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + seleccion+"&termid="+term;
+            ajax.open("POST", url , true);
+            ajax.send("");
+        }
+        
+        function logout(){
+            document.location.href = "<c:url value="/cerrarLogin.htm"/>";
+        }
 </script>
 
 <div class="infousuario noPrint bg-primary" id="infousuario">
@@ -101,7 +154,7 @@
         <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>
     </div>
      <div class="col-xs-2 text-center">
-        <h3><c:out value="${sessionScope.termYearName}"/></h3>
+         <button onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
     </div>
     <div class="col-xs-2 text-right">
         <!--<a href="<c:url value="/cerrarLogin.htm"/>" role="button" aria-haspopup="true" aria-expanded="false"><img class="imgUser" src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>-->
@@ -109,7 +162,31 @@
     </div>
 </div>    
 
+<div id="yearTermModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        
+        
+            <div class="modal-content">
+                <c:url var="post_url" value="/changeTermYear.htm"/>
+                <%
+                    ArrayList<Tupla<Integer,String>> years = (ArrayList<Tupla<Integer,String>>) session.getAttribute("yearsids");
+                    out.println("<select id='yearSelect' onchange='terms()'>");
+                    for(Tupla<Integer,String> t:years){
+                        out.println("<option value='"+t.x+"'>"+t.y+"</option>");
+                    }
+                    out.println("</select>");
+                %>
+                <select id ="termSelect">
 
+                </select>
+                <button id="buttonYear" onclick="changeTermYear()" type="submit" class="btn btn-success" data-dismiss="modal">Change</button>
+            </div>  
+            <div class="modal-footer text-center">
+                <button id="buttonYear" type="submit" class="btn btn-success" data-dismiss="modal" >Change</button>
+            </div>
+        
+    </div>
+</div>
 
 
 <div id="logoutmodal" class="modal fade" role="dialog">

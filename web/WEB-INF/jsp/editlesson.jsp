@@ -450,7 +450,12 @@
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
                         $('#loadingmessage').hide();
-                        document.getElementById("subject").innerHTML = ajax.responseText;
+                        $('#subject').empty();
+                        var json = JSON.parse(ajax.responseText);
+                        for(i in json){
+                           $('#subject').append("<option value='"
+                                   +json[i].id[0]+"'>"+json[i].name+"</option>"); 
+                        }
                     }
                 }
             }
@@ -458,7 +463,17 @@
             {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
-                        document.getElementById("objective").innerHTML = ajax.responseText;
+                        var json = JSON.parse(ajax.responseText);
+                        $('#objective').empty();
+                        for(var i=0; i< json.length;i+=1){
+                            if(i === 0)
+                                $('#objective').append("<option value='"
+                                    +-1+"'>"+json[i].name+"</option>");
+                            else
+                                $('#objective').append("<option value='"
+                                    +json[i].id[0]+"'>"+json[i].name+"</option>");
+                            
+                        }
                     }
                 }
             }
@@ -534,7 +549,11 @@
             {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
-                        document.getElementById("content").innerHTML = ajax.responseText;
+                        $('#content').empty();
+                        var json = JSON.parse(ajax.responseText);
+                        for(var i=0;i < json.length;i+=1)
+                            $('#content').append("<option value='"+json[i].id[0]+"'>"
+                                +json[i].name+"</option>");
                     }
                 }
             }

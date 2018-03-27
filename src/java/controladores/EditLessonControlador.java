@@ -359,37 +359,20 @@ public class EditLessonControlador {
     }
 
     @RequestMapping("/editlesson/subjectlistLevel.htm")
-    public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if ((new SessionCheck()).checkSession(hsr)) {
-            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-        }
-        ModelAndView mv = new ModelAndView("editlesson");
-        mv.addObject("subjects", this.getSubjects(hsr.getParameterValues("seleccion1")));
-
-        return mv;
+    @ResponseBody
+    public String subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        return (new Gson()).toJson(this.getSubjects(hsr.getParameterValues("seleccion1")));
     }
 
     @RequestMapping("/editlesson/objectivelistSubject.htm")
-    public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if ((new SessionCheck()).checkSession(hsr)) {
-            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-        }
-        ModelAndView mv = new ModelAndView("editlesson");
-        mv.addObject("objectives", this.getObjectives(hsr.getParameterValues("seleccion2")));
-
-        return mv;
+    @ResponseBody
+    public String objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        return (new Gson()).toJson(this.getObjectives(hsr.getParameterValues("seleccion2")));
     }
 
     @RequestMapping("/editlesson/contentlistObjective.htm")
-    public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if ((new SessionCheck()).checkSession(hsr)) {
-            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-        }
-        ModelAndView mv = new ModelAndView("editlesson");
-
-        mv.addObject("contents", this.getContent(hsr.getParameterValues("seleccion3")));
-
-        return mv;
+    public String contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        return (new Gson()).toJson(this.getContent(hsr.getParameterValues("seleccion3")));
     }
 
     @RequestMapping("/editlesson/save.htm")

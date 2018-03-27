@@ -11,11 +11,14 @@ package controladores;
  */
 import Montessori.*;
 import Reports.DataFactoryFolder.Profesor;
+import com.google.gson.Gson;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +29,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
@@ -51,8 +55,10 @@ public class Homepage extends MultiActionController {
         DBConect.close();
         c = new DBConect(hsr, hsr1);
         HttpSession session = hsr.getSession();
+        session.setAttribute("yearsids", this.getYears());
+        
         User user = new User();
-
+        
         boolean result = true;
         LoginVerification login = new LoginVerification();
         if ("QuickBook".equals(hsr.getParameter("txtusuario"))) {
@@ -119,7 +125,7 @@ public class Homepage extends MultiActionController {
                 session.setAttribute("user", user);
                 session.setAttribute("termId", termId);
                 session.setAttribute("yearId", yearId);
-
+                
                 String nameTerm = "", nameYear = "";
                 ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + termId + " and YearID = " + yearId);
                 while (rs3.next()) {
@@ -144,6 +150,69 @@ public class Homepage extends MultiActionController {
 
     }
 
+    public ArrayList<Tupla<Integer,String>> getYears(){
+        ArrayList<Tupla<Integer,String>> ret = new ArrayList<>();
+        String consulta="select * from SchoolYear";
+        try {
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            while(rs.next()){
+                int yearid = rs.getInt("yearid");
+                String yearName = rs.getString("SchoolYear");
+                ret.add(new Tupla<>(yearid,yearName));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Homepage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        return ret;
+    } 
+    
+    @RequestMapping("/getyear.htm")
+    @ResponseBody
+    public String getTermYear(HttpServletRequest hsr, HttpServletResponse hsr1){
+        ArrayList<Tupla<Integer,String>> ret = new ArrayList<>();
+        String consulta="select * from SchoolTerm where YearID="+hsr.getParameter("id");
+        try {
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            while(rs.next()){
+                int yearid = rs.getInt("TermID");
+                String yearName = rs.getString("Name");
+                ret.add(new Tupla<>(yearid,yearName));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Homepage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        return (new Gson()).toJson(ret);
+    } 
+    
+    @RequestMapping("/changeTermYear.htm")
+    public ModelAndView changeTermAndYear(HttpServletRequest hsr, HttpServletResponse hsr1){
+        int yearid = Integer.parseInt(hsr.getParameter("yearid"));
+        int termid = Integer.parseInt(hsr.getParameter("termid"));
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        } else {
+            String nameTerm = "", nameYear = "";
+            try{
+                ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + termid + " and YearID = " + yearid);
+                while (rs3.next()) {
+                    nameTerm = "" + rs3.getString("name");
+                }
+                ResultSet rs4 = DBConect.ah.executeQuery("select SchoolYear from SchoolYear where yearID = " + yearid);
+                while (rs4.next()) {
+                    nameYear = "" + rs4.getString("SchoolYear");
+                }
+            }catch(Exception e){
+                
+            }
+            hsr.getSession().removeAttribute("yearId");
+            hsr.getSession().removeAttribute("termId");
+            hsr.getSession().setAttribute("termYearName", nameTerm + " / " + nameYear);
+            hsr.getSession().setAttribute("yearId", yearid);
+            hsr.getSession().setAttribute("termId", termid);
+            return new ModelAndView("redirect:/homepage/loadLessons.htm");
+        }
+    }
+    
     public ModelAndView save(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         ModelAndView mv = new ModelAndView("suhomepage");
         String qbdburl = hsr.getParameter("qbdburl");
