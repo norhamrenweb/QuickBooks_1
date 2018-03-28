@@ -135,7 +135,12 @@ public class CreateSettingControlador {
         try {
             String subjectid = null;
             subjectid = hsr.getParameter("seleccion2");
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id,description from public.objective where subject_id=" + subjectid + " order by name");
+            String consulta = "select name,id,description from public.objective "
+                    + "where subject_id=" + subjectid 
+                    + " and year_id=" + hsr.getSession().getAttribute("yearId")
+                    + " and term_id=" + hsr.getSession().getAttribute("termId")
+                    + "order by name";
+            ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
             while (rs1.next()) {
                 String[] ids = new String[1];
                 Objective sub = new Objective();
