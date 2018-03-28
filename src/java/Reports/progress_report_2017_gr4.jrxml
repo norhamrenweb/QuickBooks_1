@@ -330,6 +330,7 @@
 					</datasetRun>
 					<jr:column width="140" uuid="18c4ab30-a3eb-474b-92b6-a8e8b10d8408">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<property name="com.jaspersoft.studio.layout"/>
 						<jr:tableHeader style="Table 2_TH" height="30" rowSpan="1">
 							<box>
 								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -353,6 +354,7 @@
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 2_TD" height="40">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 							<box>
 								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -361,7 +363,7 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true">
-								<reportElement stretchType="ContainerBottom" x="0" y="0" width="140" height="20" uuid="25028b89-a0f5-4ff3-8b7a-7d65c2e78b1d"/>
+								<reportElement stretchType="ContainerBottom" x="0" y="0" width="140" height="40" uuid="25028b89-a0f5-4ff3-8b7a-7d65c2e78b1d"/>
 								<box>
 									<pen lineColor="#204F16"/>
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#204F16"/>
@@ -369,26 +371,10 @@
 									<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#204F16"/>
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#204F16"/>
 								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="12" isBold="true" isUnderline="true"/>
-									<paragraph lineSpacing="Single"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+									<font size="13" isBold="false" isUnderline="false"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{_THIS}.split("#")[0]]]></textFieldExpression>
-							</textField>
-							<textField>
-								<reportElement positionType="FixRelativeToBottom" stretchType="ElementGroupBottom" x="0" y="20" width="140" height="20" backcolor="#CC0502" uuid="5c963c42-6d7d-499a-bff2-78e80d500c1a"/>
-								<box>
-									<pen lineColor="#E30602"/>
-									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#E30602"/>
-									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#E30602"/>
-									<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#E30602"/>
-									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#E30602"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Top">
-									<font size="12" isBold="false" isUnderline="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{_THIS}.split("#")[1]]]></textFieldExpression>
+								<textFieldExpression><![CDATA["<u><b>"+$F{_THIS}.split("#")[0] + "</u></b><br>"+$F{_THIS}.split("#")[1] ]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
