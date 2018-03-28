@@ -56,22 +56,26 @@ public class LessonArchiveControlador {
         ModelAndView mv = new ModelAndView("lessonarchive");
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-        mv.addObject("lessonslist", this.getLessons(user, hsr.getServletContext()));
+        mv.addObject("lessonslist", this.getLessons(user, hsr));
         mv.addObject("username", user.getName());
         int iduser = ((User)hsr.getSession().getAttribute("user")).getId();
         mv.addObject("teacherlist",LessonsListControlador.getTeachers(iduser));
         return mv;
     }
 
-    public ArrayList<Lessons> getLessons(User user,ServletContext servlet) throws SQLException {
+    public ArrayList<Lessons> getLessons(User user,HttpServletRequest hsr) throws SQLException {
+        ServletContext servlet = hsr.getServletContext();
         int userid=user.getId();
         ArrayList<Lessons> lessonslist = new ArrayList<>();
         try {
             String consulta;
             if(user.getType()==1)
-                consulta = "SELECT * FROM public.lessons where user_id = " + userid + " and COALESCE(idea, FALSE) = FALSE and archive = true";
+                consulta = "SELECT * FROM public.lessons where user_id = " + userid + " and COALESCE(idea, FALSE) = FALSE and archive = true "  + 
+                        " and yearterm_id=" + hsr.getSession().getAttribute("yearId")  + " and term_id=" + hsr.getSession().getAttribute("termId");
             else 
-                consulta = "SELECT * FROM public.lessons where COALESCE(idea, FALSE) = FALSE and archive = true";
+                consulta = "SELECT * FROM public.lessons where COALESCE(idea, FALSE) = FALSE and archive = true" + 
+                        " and yearterm_id=" + hsr.getSession().getAttribute("yearId")  + " and term_id=" + hsr.getSession().getAttribute("termId");
+            
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             ArrayList<Integer> objectives = new ArrayList<>();
             ArrayList<Integer> subjects = new ArrayList<>();

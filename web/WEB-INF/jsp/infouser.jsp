@@ -20,11 +20,11 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.svg"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.eot"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.wott"/>">
-    
+
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/style.css" />"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/menu-lateral.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap.min.css"/>"/>
-<%--    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/calendar.css"/>"/>--%>
+    <%--    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/calendar.css"/>"/>--%>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap-theme.min.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap-datetimepicker.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/bootstrap-toggle.css"/>"/>
@@ -44,8 +44,8 @@
     <script type="text/javascript" src="<c:url value="/recursos/starrating/bootstrap-rating-input.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/bootstrap.js" />"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/jquery-ui-1.11.4.custom/jquery-ui.js" />"></script>
-    
-   <script type="text/javascript" src="<c:url value="/recursos/js/tree/jstree.js" />"></script>
+
+    <script type="text/javascript" src="<c:url value="/recursos/js/tree/jstree.js" />"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/tree/jstree.checkbox.js" />"></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/tree/jstree.search.js" />"></script>
 
@@ -61,7 +61,7 @@
     <script type="text/javascript" src="<c:url value="/recursos/fullcalendar/fullcalendar.js"/>"></script>
     <!--        CKEDITOR-->
     <script type="text/javascript" src="<c:url value="/recursos/js/ckeditor.js"/>"></script>
-    
+
     <!--        DATATABLES-->
     <%--        <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/dataTables/dataTables.bootstrap.css"/>" />--%>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/dataTables/dataTables.foundation.css"/>" />
@@ -72,7 +72,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/dataTables/jquery.dataTables.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/dataTables/jquery.dataTables_themeroller.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/estilocolegio.css" />"/>
-    
+
     <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/jquery.dataTables.js"/>" ></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/dataTables.bootstrap.js"/>" ></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/dataTables.bootstrap4.js"/>" ></script>
@@ -88,73 +88,73 @@
 //    $(document).ready(function () {
 //        $('logoutmodal').hide();
 //    });
-        var ajax;
-        function terms(){
-            
-            if (window.XMLHttpRequest) //mozilla
-            {
-                ajax = new XMLHttpRequest(); //No Internet explorer
-            } else
-            {
-                ajax = new ActiveXObject("Microsoft.XMLHTTP");
-            }
+    var ajax;
+    function terms() {
 
-            ajax.onreadystatechange = CallBackYear;
-            var seleccion = $('#yearSelect option:selected').val();
-            var url = "<c:url value="/getyear.htm"/>?id=" + seleccion;
-            ajax.open("POST", url , true);
-            ajax.send("");
-        }
-        
-        function CallBackYear()
+        if (window.XMLHttpRequest) //mozilla
         {
-            if (ajax.readyState === 4 && ajax.status === 200) {
-                $('#termSelect').empty();
-                var jsonObj = JSON.parse(ajax.responseText);
-                for (var i in jsonObj) {
-                    $('#termSelect').append("<option value='" + jsonObj[i].x + "'>"
-                            + jsonObj[i].y + "</option>");
-                }
-            }
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        } else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
-        
-        function changeTermYear(){
-            if (window.XMLHttpRequest) //mozilla
-            {
-                ajax = new XMLHttpRequest(); //No Internet explorer
-            } else
-            {
-                ajax = new ActiveXObject("Microsoft.XMLHTTP");
-            }
 
-            ajax.onreadystatechange = function(){
-                if (ajax.readyState === 4 && ajax.status === 200) {
-                    window.location.reload();
-                }
-            };
-            var seleccion = $('#yearSelect option:selected').val();
-            var term = $('#termSelect option:selected').val();
-            var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + seleccion+"&termid="+term;
-            ajax.open("POST", url , true);
-            ajax.send("");
+        ajax.onreadystatechange = CallBackYear;
+        var seleccion = $('#yearSelect option:selected').val();
+        var url = "<c:url value="/getyear.htm"/>?id=" + seleccion;
+        ajax.open("POST", url, true);
+        ajax.send("");
+    }
+
+    function CallBackYear()
+    {
+        if (ajax.readyState === 4 && ajax.status === 200) {
+            $('#termSelect').empty();
+            var jsonObj = JSON.parse(ajax.responseText);
+            for (var i in jsonObj) {
+                $('#termSelect').append("<option value='" + jsonObj[i].x + "'>"
+                        + jsonObj[i].y + "</option>");
+            }
         }
-        
-        function logout(){
-            document.location.href = "<c:url value="/cerrarLogin.htm"/>";
+    }
+
+    function changeTermYear() {
+        if (window.XMLHttpRequest) //mozilla
+        {
+            ajax = new XMLHttpRequest(); //No Internet explorer
+        } else
+        {
+            ajax = new ActiveXObject("Microsoft.XMLHTTP");
         }
+
+        ajax.onreadystatechange = function () {
+            if (ajax.readyState === 4 && ajax.status === 200) {
+                window.location.reload();
+            }
+        };
+        var seleccion = $('#yearSelect option:selected').val();
+        var term = $('#termSelect option:selected').val();
+        var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + seleccion + "&termid=" + term;
+        ajax.open("POST", url, true);
+        ajax.send("");
+    }
+
+    function logout() {
+        document.location.href = "<c:url value="/cerrarLogin.htm"/>";
+    }
 </script>
 
 <div class="infousuario noPrint bg-primary" id="infousuario">
     <div class="col-xs-3 text-left">
         <%--<img src="<c:url value="/recursos/img/iconoschool.png"/>">--%>
     </div>
-    
-    
+
+
     <div class="col-xs-5 text-center">
         <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>
     </div>
-     <div class="col-xs-2 text-center">
-         <button onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
+    <div class="col-xs-2 text-center">
+        <button id="btnYearmTerm" onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
     </div>
     <div class="col-xs-2 text-right">
         <!--<a href="<c:url value="/cerrarLogin.htm"/>" role="button" aria-haspopup="true" aria-expanded="false"><img class="imgUser" src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>-->
@@ -164,46 +164,60 @@
 
 <div id="yearTermModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-        
-        
-            <div class="modal-content">
-                <c:url var="post_url" value="/changeTermYear.htm"/>
-                <%
-                    ArrayList<Tupla<Integer,String>> years = (ArrayList<Tupla<Integer,String>>) session.getAttribute("yearsids");
-                    out.println("<select id='yearSelect' onchange='terms()'>");
-                    for(Tupla<Integer,String> t:years){
-                        out.println("<option value='"+t.x+"'>"+t.y+"</option>");
+        <div class="modal-content">
+            <div>
+                <select id="yearSelect" onchange="terms()">
+                </select>         
+                <script>
+                    var yearId = ${yearId};
+                    var termId = ${termId};
+                    var listYear = ${yearsids};
+
+                    for (var i = 0; i < listYear.length; ++i) {
+                          $("#yearSelect").append("<option value='" + listYear[i].x + "'>" + listYear[i].y + "</option>");
                     }
-                    out.println("</select>");
-                %>
+                    
+                    var my_options = $("#yearSelect option");
+                    my_options.sort(function (a, b) {
+                        if (a.text > b.text)
+                            return 1;
+                        if (a.text < b.text)
+                            return -1;
+                        return 0
+                    })
+
+                    $("#yearSelect").empty().append(my_options);
+                    $("#yearSelect").val(yearId);
+                    terms();
+                    $("#termSelect").val(termId);
+
+                </script>
+
                 <select id ="termSelect">
 
                 </select>
-                <button id="buttonYear" onclick="changeTermYear()" type="submit" class="btn btn-success" data-dismiss="modal">Change</button>
-            </div>  
-            <div class="modal-footer text-center">
-                <button id="buttonYear" type="submit" class="btn btn-success" data-dismiss="modal" >Change</button>
             </div>
-        
+            <button id="buttonYear" onclick="changeTermYear()" type="submit" class="btn btn-primary" data-dismiss="modal">Change</button>
+        </div>  
     </div>
 </div>
 
 
 <div id="logoutmodal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+    <div class="modal-dialog">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header modal-header-delete">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">are you sure you want to logout?</h4>
-      </div>
-      <div class="modal-footer text-center">
-        <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="logout()">Yes</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-      </div>
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header modal-header-delete">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">are you sure you want to logout?</h4>
+            </div>
+            <div class="modal-footer text-center">
+                <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="logout()">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+        </div>
+
     </div>
-
-  </div>
 </div>
 

@@ -55,7 +55,9 @@ public class Homepage extends MultiActionController {
         DBConect.close();
         c = new DBConect(hsr, hsr1);
         HttpSession session = hsr.getSession();
-        session.setAttribute("yearsids", this.getYears());
+        String schoolCode = "AH";
+           
+        session.setAttribute("yearsids", new Gson().toJson(this.getYears(schoolCode)));
         
         User user = new User();
         
@@ -94,25 +96,6 @@ public class Homepage extends MultiActionController {
             } else {
                 result = false;
             }
-            /*int scgrpidTeacher = mapGroups.get("MontessoriTeacher");
-            int scgrpidAdmin = mapGroups.get("MontessoriAdmin");
-            int scgrpidSuper = mapGroups.get("MontessoriHead");*/
-
-// AQUI ES/*
-
-            /* scgrpidTeacher = login.getSecurityGroupID("MontessoriTeacher");
-            scgrpidAdmin = login.getSecurityGroupID("MontessoriAdmin");
-            scgrpidSuper = login.getSecurityGroupID("MontessoriHead");
-///////////////////
-            if (login.fromGroup(scgrpidAdmin, user.getId())) {
-                user.setType(0);
-            } else if (login.fromGroup(scgrpidTeacher, user.getId())) {
-                user.setType(1);
-            } else if (login.fromGroup(scgrpidSuper, user.getId())) {
-                user.setType(2);
-            } else {
-                result = false;
-            }*/
             if (result == true) {
                 ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
                 String message = "welcome user";
@@ -136,8 +119,8 @@ public class Homepage extends MultiActionController {
                     nameYear = "" + rs4.getString("SchoolYear");
                 }
 
-                session.setAttribute("termYearName", nameTerm + " / " + nameYear);
-
+                session.setAttribute("termYearName", nameTerm + " / " + nameYear);     
+            
                 mv.addObject("message", message);
                 return mv;
             } else {
@@ -150,9 +133,9 @@ public class Homepage extends MultiActionController {
 
     }
 
-    public ArrayList<Tupla<Integer,String>> getYears(){
+    public ArrayList<Tupla<Integer,String>> getYears(String schoolCode){
         ArrayList<Tupla<Integer,String>> ret = new ArrayList<>();
-        String consulta="select * from SchoolYear";
+        String consulta="select * from SchoolYear where SchoolCode ='"+schoolCode+"'";
         try {
             ResultSet rs = DBConect.ah.executeQuery(consulta);
             while(rs.next()){

@@ -14,8 +14,8 @@ import java.util.List;
  *
  * @author nmohamed
  */
-public class Lessons {
 
+public class Lessons {
     private int id;
     private String name;
     private String start;
@@ -83,8 +83,6 @@ public class Lessons {
         this.contentid = contentid;
     }
 
-    
-
     public Level getLevel() {
         return level;
     }
@@ -127,10 +125,6 @@ public class Lessons {
         this.subject = subject;
     }
 
-   
-
-  
-
     public String getDate() {
         return date;
     }
@@ -138,8 +132,6 @@ public class Lessons {
     public void setDate(String date) {
         this.date = date;
     }
-   
-
     public boolean isTemplate() {
         return template;
     }
@@ -163,9 +155,5 @@ public class Lessons {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-   
-    
-    
+    }     
 }

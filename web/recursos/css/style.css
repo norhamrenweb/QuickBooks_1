@@ -150,8 +150,8 @@ div {
 }
 
 .chart {
-  width: 100%; 
-  height: 600px;
+    width: 100%; 
+    height: 600px;
 }
 .contenedorAlumno{
     background-color: #99CC66; /*color colegio*/ 
@@ -177,127 +177,143 @@ div {
     background-color: #99CC66;
 }
 .btn-naranja{
-     background-color: #99CC66;
+    background-color: #99CC66;
 }
 .infousuario{
-                color: white;
-                position: relative;
-                background-color: #dff0d8;
-                width: 100%;
-                min-height: 100px;
-                display: block;
-                float: left;
-                margin-bottom: 20px;
-                padding-top: 5px;
-                padding-right: 20px;
-                padding-left: 20px;
-                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            }
-            .dropdown
-            {
-                list-style: none;  
-            }
-            /*MENU LATERAL*/
-            .btnBandera
-            {
-                padding-left: 2px;
-                padding-right: 2px;
-                margin-left: 0px;
-                margin-right: 0px;
-            }
-            .contenedorBandera
-            {
-                padding-left: 0px;
-                padding-right: 0px;
-            }
-            hr{
-                padding-top: 8px;
-                padding-bottom: 8px;
-                color: white;
-                size: 2px;
-                margin-top: 0px;
-                margin-bottom: 0px;
-            }
-            /*TERMINA MENU LATERAL*/
-            /*PROGRESSBYSTUDENT*/
-            textarea 
-            {
-            resize: none;
-            }
-            .studentarea
-            {            
-            height: 500px;
-            width: 100%;
-            overflow-y: scroll;
-            }
-            .nameStudent
-            {
-            background-color: #D0D2D3;
-            border-radius: 10px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            min-height: 40px;
-            }
-            .tab-pane
-            {
-                padding-top: 20px;
-            }
-            .sinpadding
-            {
-                padding: 0px !important;
-            }
-            .containerPhoto
-            {
-                display: table;
-/*                background-color: lightgray;*/
-                border-right: 1px #D0D2D3 double;
-                min-height: 300px;
-            }
-            .cell{
-                display: table-cell;
-                vertical-align: middle;
-            }
-            #divTableObjective{
-                margin-top: 20px;
-            }
-            .label-demographic{
-                background-color: lightgray;
-                text-align: center;
-                padding: 5px;
-                border-top-left-radius: 10px;
-                border-top-right-radius: 10px;
-                margin-bottom: 0px;
-            }
-            .demographic{
-                border: 1px solid lightgray;
-                padding: 5px;
-                margin-bottom: 10px;
-                min-height: 32px;
-            }
-            .btn-unbutton{
-                background-color: Transparent;
-                background-repeat:no-repeat;
-                border: none;
-                cursor:pointer;
-                overflow: hidden;
-                outline:none;
-            }
-            .divLoadStudent{
-                background-color: Transparent;
-                position: fixed;
-                top: 20%;
-                right: 0;
-                bottom: 20%;
-                left: 0;
-                z-index: 1050;
-                display: none;
-                overflow: hidden;
-                -webkit-overflow-scrolling: touch;
-                outline: 0;
-            }
-            /*TERMINA PROGRESSBYSTUDENT*/
+    color: white;
+    position: relative;
+    background-color: #dff0d8;
+    width: 100%;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: left;
+    margin-bottom: 20px;
+    padding-top: 5px;
+    padding-right: 20px;
+    padding-left: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.dropdown
+{
+    list-style: none;  
+}
+/*MENU LATERAL*/
+.btnBandera
+{
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.contenedorBandera
+{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+hr{
+    padding-top: 8px;
+    padding-bottom: 8px;
+    color: white;
+    size: 2px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+/*TERMINA MENU LATERAL*/
+/*PROGRESSBYSTUDENT*/
+textarea 
+{
+    resize: none;
+}
+.studentarea
+{            
+    height: 500px;
+    width: 100%;
+    overflow-y: scroll;
+}
+.nameStudent
+{
+    background-color: #D0D2D3;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    min-height: 40px;
+}
+.tab-pane
+{
+    padding-top: 20px;
+}
+.sinpadding
+{
+    padding: 0px !important;
+}
+.containerPhoto
+{
+    display: table;
+    /*                background-color: lightgray;*/
+    border-right: 1px #D0D2D3 double;
+    min-height: 300px;
+}
+.cell{
+    display: table-cell;
+    vertical-align: middle;
+}
+#divTableObjective{
+    margin-top: 20px;
+}
+.label-demographic{
+    background-color: lightgray;
+    text-align: center;
+    padding: 5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin-bottom: 0px;
+}
+.demographic{
+    border: 1px solid lightgray;
+    padding: 5px;
+    margin-bottom: 10px;
+    min-height: 32px;
+}
+.btn-unbutton{
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+.divLoadStudent{
+    background-color: Transparent;
+    position: fixed;
+    top: 20%;
+    right: 0;
+    bottom: 20%;
+    left: 0;
+    z-index: 1050;
+    display: none;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+#yearTermModal .modal-content{
+    display: flex;
+    align-items: center;
+    height: 50px;
+    justify-content: space-around;
+}
+#btnYearmTerm{
+    color: #666;
+}
+
+#commentSubject{
+    height: 150px !important;
+}
+/*TERMINA PROGRESSBYSTUDENT*/
 /*.tooltip > .tooltip-arrow {
   top: 0;
   left: 50%;
