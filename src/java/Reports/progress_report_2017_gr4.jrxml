@@ -412,7 +412,6 @@
 							<textField isStretchWithOverflow="true">
 								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="397" height="30" uuid="5e167e4c-778d-4873-b630-2bb4b7970689">
 									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
-									<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
 									<property name="com.jaspersoft.studio.unit.spacingAfter" value="cm"/>
 								</reportElement>
 								<box>
@@ -422,7 +421,7 @@
 									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Justified" verticalAlignment="Middle">
-									<paragraph lineSpacing="Single" lineSpacingSize="1.0" leftIndent="5" rightIndent="2" spacingBefore="3" spacingAfter="5"/>
+									<paragraph lineSpacing="Single" lineSpacingSize="1.0" leftIndent="5" rightIndent="10" spacingBefore="2" spacingAfter="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{_THIS}.substring($F{_THIS}.indexOf("#",$F{_THIS}.indexOf("#")+1)+1)]]></textFieldExpression>
 							</textField>
