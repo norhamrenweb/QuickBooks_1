@@ -184,8 +184,8 @@ public class EditLessonControlador {
         
              */
             mv.addObject("data", data); //TARDA MUCHISMO
-            ArrayList<Objective> test = this.getObjectives(data.getSubject().getId());
-            mv.addObject("objectives", this.getObjectives(data.getSubject().getId()));
+            ArrayList<Objective> test = CreateLessonControlador.getObjectives(hsr.getSession(),data.getSubject().getId());
+            mv.addObject("objectives", CreateLessonControlador.getObjectives(hsr.getSession(),data.getSubject().getId()));
             mv.addObject("contents", this.getContent(data.getObjective().getId()));
             mv.addObject("subjects", this.getSubjects(data.getLevel().getId()));
             List<Lessons> ideas = new ArrayList();
@@ -288,33 +288,6 @@ public class EditLessonControlador {
         return activesubjects;
     }
 
-    public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException {
-        ArrayList<Objective> objectives = new ArrayList<>();
-        try {
-
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id= '" + subjectid[0]+"' order by name");
-//          Objective s = new Objective();
-//          s.setName("Select Objective");
-//          objectives.add(s);
-
-            while (rs1.next()) {
-                String[] ids = new String[1];
-                Objective sub = new Objective();
-                ids[0] = "" + rs1.getInt("id");
-                sub.setId(ids);
-                sub.setName(rs1.getString("name"));
-                objectives.add(sub);
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Objectives: " + ex);
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex + errors.toString());
-        }
-        return objectives;
-    }
-
     public ArrayList<Content> getContent(String[] objectiveid) throws SQLException {
         ArrayList<Content> contents = new ArrayList<>();
         try {
@@ -367,7 +340,7 @@ public class EditLessonControlador {
     @RequestMapping("/editlesson/objectivelistSubject.htm")
     @ResponseBody
     public String objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        return (new Gson()).toJson(this.getObjectives(hsr.getParameterValues("seleccion2")));
+        return (new Gson()).toJson(CreateLessonControlador.getObjectives(hsr.getSession(),hsr.getParameterValues("seleccion2")));
     }
 
     @RequestMapping("/editlesson/contentlistObjective.htm")
@@ -533,7 +506,7 @@ public class EditLessonControlador {
         String hi = json.toString();
         String[] ids = new String[1];
         ids[0] = "" + levelid;
-        json.put("objectiveslist", new Gson().toJson(this.getObjectives(sub.getId())));
+        json.put("objectiveslist", new Gson().toJson(CreateLessonControlador.getObjectives(hsr.getSession(),sub.getId())));
         json.put("contentslist", new Gson().toJson(this.getContent(obj.getId())));
 
         json.put("subjectslist", new Gson().toJson(this.getSubjects(ids)));

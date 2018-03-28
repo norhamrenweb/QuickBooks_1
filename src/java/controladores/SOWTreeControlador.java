@@ -43,6 +43,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 /**
@@ -120,7 +121,13 @@ public class SOWTreeControlador {
 //////
             for (Subject sub : subs) {
                 String[] sid = sub.getId();
-                ResultSet rs = DBConect.eduweb.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '" + sid[0] + "'");
+                consulta = "select obj_steps.id,obj_steps.name,objective.name as "
+                                + "obj ,objective.subject_id from obj_steps inner join objective "
+                                + "on obj_steps.obj_id = objective.id "
+                                + "where objective.subject_id = '" + sid[0] + "' "
+                                + "and objective.year_id="+hsr.getSession().getAttribute("yearId")
+                                +" and objective.term_id="+hsr.getSession().getAttribute("termId");
+                ResultSet rs = DBConect.eduweb.executeQuery(consulta);
 
                 while (rs.next()) {
                     DBRecords l = new DBRecords();
@@ -172,7 +179,7 @@ public class SOWTreeControlador {
                 Node<String> nodeC = new Node<String>(x.getName(), "L" + i, " {\"disabled\":true}");
                 rootNode.addChild(nodeC);
                 i++;
-                ArrayList<Objective> obj = this.getObjectives(x.getId());
+                ArrayList<Objective> obj = this.getObjectives(hsr.getSession(),x.getId());
                 for (Objective y : obj) {
 
                     Node<String> nodeA = new Node<String>(y.getName(), "C" + z, " {\"disabled\":true}");
@@ -321,11 +328,13 @@ public class SOWTreeControlador {
         return activesubjects;
     }
 
-    public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException {
+    public ArrayList<Objective> getObjectives(HttpSession session,String[] subjectid) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id=" + subjectid[0] + "ORDER BY name ASC");
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective "
+                    + "where subject_id=" + subjectid[0] + " and year_id="
+                    + session.getAttribute("yearId") +" and term_id="+session.getAttribute("termId")+" ORDER BY name ASC");
 //          Objective s = new Objective();
 //          s.setName("Select Objective");
 //          objectives.add(s);

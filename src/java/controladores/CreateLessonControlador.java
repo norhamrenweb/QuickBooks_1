@@ -200,7 +200,7 @@ public class CreateLessonControlador {
     @RequestMapping("/createlesson/objectivelistSubject.htm")
     @ResponseBody
     public String objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        return (new Gson()).toJson(this.getObjectives(hsr.getParameterValues("seleccion2")));
+        return (new Gson()).toJson(this.getObjectives(hsr.getSession(),hsr.getParameterValues("seleccion2")));
     }
 
     @RequestMapping("/createlesson/contentlistObjective.htm")
@@ -397,7 +397,7 @@ public class CreateLessonControlador {
         String hi = json.toString();
         String[] ids = new String[1];
         ids[0] = "" + levelid;
-        json.put("objectiveslist", new Gson().toJson(this.getObjectives(sub.getId())));
+        json.put("objectiveslist", new Gson().toJson(this.getObjectives(hsr.getSession(),sub.getId())));
         json.put("contentslist", new Gson().toJson(this.getContent(obj.getId())));
         json.put("subjectslist", new Gson().toJson(this.getSubjects(ids)));
 
@@ -478,10 +478,14 @@ public class CreateLessonControlador {
         return activesubjects;
     }
 
-    public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException {
+    public static ArrayList<Objective> getObjectives(HttpSession session,String[] subjectid) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0] + "' order by name");
+            String consulta = "select name,id from public.objective where subject_id='" + subjectid[0] + "' and "
+                    + "year_id=" + session.getAttribute("yearId")
+                    + " and term_id=" + session.getAttribute("termId")
+                    + " order by name";
+            ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
             Objective s = new Objective();
             s.setName("Select Objective");
             objectives.add(s);
