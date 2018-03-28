@@ -57,31 +57,31 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="Table 2_TH" mode="Opaque" backcolor="#31618F">
+	<style name="Table 2_TH" mode="Opaque" backcolor="#287A43">
 		<box>
-			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
 	<style name="Table 2_TD" mode="Opaque" backcolor="#FFFFFF">
 		<box>
-			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
 	<style name="Table 2_CH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
-			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
 	<style name="Table 3_TH" mode="Opaque" backcolor="#FFF8DC">
@@ -197,6 +197,7 @@
 			<![CDATA[]]>
 		</queryString>
 		<field name="_THIS" class="java.lang.String"/>
+		<group name="Group1"/>
 	</subDataset>
 	<subDataset name="Dataset2" uuid="67e575e7-496b-456c-be01-207b569c3758">
 		<queryString>
@@ -251,7 +252,7 @@
 				<text><![CDATA[Name:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="199" y="46" width="375" height="18" uuid="00b7fbb6-8552-47ac-9f68-e44efe63b3a1"/>
+				<reportElement x="314" y="43" width="375" height="18" uuid="00b7fbb6-8552-47ac-9f68-e44efe63b3a1"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -265,7 +266,7 @@
 				<text><![CDATA[D.O.B:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="199" y="69" width="207" height="18" uuid="950b6f51-c490-4c4d-84e7-fdec1cde05ce"/>
+				<reportElement x="314" y="66" width="207" height="18" uuid="950b6f51-c490-4c4d-84e7-fdec1cde05ce"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -286,7 +287,7 @@
 				<text><![CDATA[Academic Term/Year: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="200" y="92" width="207" height="18" uuid="62fa4c11-4718-4bae-8a0b-3effa8333935"/>
+				<reportElement x="314" y="89" width="207" height="18" uuid="62fa4c11-4718-4bae-8a0b-3effa8333935"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -315,7 +316,7 @@
 		<band height="78" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout"/>
 			<componentElement>
-				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="29" y="0" width="537" height="62" isRemoveLineWhenBlank="true" uuid="ecd09e57-5e15-4b04-90b1-4b9b046a1e2a">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="29" y="0" width="537" height="70" isRemoveLineWhenBlank="true" uuid="ecd09e57-5e15-4b04-90b1-4b9b046a1e2a">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -351,7 +352,8 @@
 								<text><![CDATA[Subject and Teacher]]></text>
 							</staticText>
 						</jr:tableHeader>
-						<jr:detailCell style="Table 2_TD" height="32">
+						<jr:detailCell style="Table 2_TD" height="40">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 							<box>
 								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -359,12 +361,13 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true">
-								<reportElement stretchType="ContainerHeight" x="0" y="0" width="140" height="16" uuid="25028b89-a0f5-4ff3-8b7a-7d65c2e78b1d"/>
+								<reportElement stretchType="ContainerBottom" x="0" y="0" width="140" height="20" uuid="25028b89-a0f5-4ff3-8b7a-7d65c2e78b1d"/>
 								<box>
-									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<pen lineColor="#204F16"/>
+									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#204F16"/>
+									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#204F16"/>
+									<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#204F16"/>
+									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#204F16"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="12" isBold="true" isUnderline="true"/>
@@ -372,15 +375,16 @@
 								</textElement>
 								<textFieldExpression><![CDATA[$F{_THIS}.split("#")[0]]]></textFieldExpression>
 							</textField>
-							<textField isStretchWithOverflow="true">
-								<reportElement stretchType="ContainerHeight" x="0" y="16" width="140" height="16" uuid="5c963c42-6d7d-499a-bff2-78e80d500c1a"/>
+							<textField>
+								<reportElement positionType="FixRelativeToBottom" stretchType="ElementGroupBottom" x="0" y="20" width="140" height="20" backcolor="#CC0502" uuid="5c963c42-6d7d-499a-bff2-78e80d500c1a"/>
 								<box>
-									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<pen lineColor="#E30602"/>
+									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#E30602"/>
+									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#E30602"/>
+									<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#E30602"/>
+									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#E30602"/>
 								</box>
-								<textElement textAlignment="Center" verticalAlignment="Bottom">
+								<textElement textAlignment="Center" verticalAlignment="Top">
 									<font size="12" isBold="false" isUnderline="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
@@ -412,7 +416,7 @@
 								<text><![CDATA[Comments]]></text>
 							</staticText>
 						</jr:tableHeader>
-						<jr:detailCell style="Table 2_TD" height="32">
+						<jr:detailCell style="Table 2_TD" height="40">
 							<box>
 								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -420,8 +424,10 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true">
-								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="397" height="32" uuid="5e167e4c-778d-4873-b630-2bb4b7970689">
-									<property name="com.jaspersoft.studio.unit.rightIndent" value="cm"/>
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="397" height="40" uuid="5e167e4c-778d-4873-b630-2bb4b7970689">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+									<property name="com.jaspersoft.studio.unit.spacingBefore" value="cm"/>
+									<property name="com.jaspersoft.studio.unit.spacingAfter" value="cm"/>
 								</reportElement>
 								<box>
 									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -429,8 +435,8 @@
 									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement textAlignment="Justified" verticalAlignment="Top">
-									<paragraph lineSpacing="Single" lineSpacingSize="1.0" leftIndent="5" rightIndent="5"/>
+								<textElement textAlignment="Justified" verticalAlignment="Middle">
+									<paragraph lineSpacing="Single" lineSpacingSize="1.0" leftIndent="5" rightIndent="10" spacingBefore="5" spacingAfter="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{_THIS}.substring($F{_THIS}.indexOf("#",$F{_THIS}.indexOf("#")+1)+1)]]></textFieldExpression>
 							</textField>
