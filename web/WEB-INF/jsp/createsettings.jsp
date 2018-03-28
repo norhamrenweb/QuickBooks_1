@@ -139,7 +139,12 @@ $("#method").on('mouseover', 'option' , function(e) {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
                         $('#loadingmessage').hide();
-                        document.getElementById("subject").innerHTML = ajax.responseText;
+                        var json = JSON.parse(ajax.responseText);
+                        $('#subject').empty();
+                        for(var i in json){
+                            $('#subject').append("<option value='"+json[i].id[0]+"'>"
+                                    +json[i].name+"</option>");
+                        }
                         //Activamos el select de subject
                         var levelValue = $('#level').select("selected").val();
                         if( levelValue !== "?"){
@@ -154,7 +159,12 @@ $("#method").on('mouseover', 'option' , function(e) {
             {
                 if (ajax.readyState === 4) {
                     if (ajax.status === 200) {
-                        document.getElementById("objective").innerHTML = ajax.responseText;
+                        var json = JSON.parse(ajax.responseText);
+                        $('#objective').empty();
+                        for(var i in json){
+                            $('#objective').append("<option value='"+json[i].id[0]+"'>"
+                                    +json[i].name+"</option>");
+                        }
                     }
                 }
             }

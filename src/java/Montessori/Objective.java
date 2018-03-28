@@ -21,7 +21,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author nmohamed
  */
 public class Objective {
-        private ServletContext servlet;
+    private ServletContext servlet;
     private String description;
     private String finalrating;
     private int progress;
@@ -30,7 +30,7 @@ public class Objective {
     private List<Step> steps;
     private int nooflessonsplanned;
     private int nooflessonsdone;
- Connection cn;
+    Connection cn;
 
     public String getFinalrating() {
         return finalrating;

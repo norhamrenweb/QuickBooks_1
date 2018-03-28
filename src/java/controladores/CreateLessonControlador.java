@@ -192,39 +192,21 @@ public class CreateLessonControlador {
     }
 
     @RequestMapping("/createlesson/subjectlistLevel.htm")
-    public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if ((new SessionCheck()).checkSession(hsr)) {
-            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-        }
-        ModelAndView mv = new ModelAndView("createlesson");
-        mv.addObject("subjects", this.getSubjects(hsr.getParameterValues("seleccion1")));
-
-        return mv;
+    @ResponseBody
+    public String subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        return (new Gson()).toJson(this.getSubjects(hsr.getParameterValues("seleccion1")));
     }
 
     @RequestMapping("/createlesson/objectivelistSubject.htm")
-    public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if ((new SessionCheck()).checkSession(hsr)) {
-            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-        }
-        ModelAndView mv = new ModelAndView("createlesson");
-
-        //    mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
-        mv.addObject("objectives", this.getObjectives(hsr.getParameterValues("seleccion2")));
-
-        return mv;
+    @ResponseBody
+    public String objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        return (new Gson()).toJson(this.getObjectives(hsr.getParameterValues("seleccion2")));
     }
 
     @RequestMapping("/createlesson/contentlistObjective.htm")
-    public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if ((new SessionCheck()).checkSession(hsr)) {
-            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-        }
-        ModelAndView mv = new ModelAndView("createlesson");
-
-        mv.addObject("contents", this.getContent(hsr.getParameterValues("seleccion3")));
-
-        return mv;
+    @ResponseBody
+    public String contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        return (new Gson()).toJson(this.getContent(hsr.getParameterValues("seleccion3")));
     }
 
     @RequestMapping("/createlesson/createlesson.htm")

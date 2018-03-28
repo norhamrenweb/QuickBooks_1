@@ -90,12 +90,8 @@ public class CreateSettingControlador {
     }
 
     @RequestMapping("/createsetting/subjectlistLevel.htm")
-
-    public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if ((new SessionCheck()).checkSession(hsr)) {
-            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-        }
-        ModelAndView mv = new ModelAndView("createsettings");
+    @ResponseBody
+    public String subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         List<Subject> subjects = new ArrayList<>();
         List<Subject> activesubjects = new ArrayList<>();
         try {
@@ -113,7 +109,7 @@ public class CreateSettingControlador {
             for (Subject su : subjects.subList(1, subjects.size())) {
                 String[] ids = new String[1];
                 ids = su.getId();
-                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = " + ids[0]);
+                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = " + ids[0]+" order by Title");
                 while (rs2.next()) {
                     if (rs2.getBoolean("Active") == true) {
                         su.setName(rs2.getString("Title"));
@@ -122,7 +118,6 @@ public class CreateSettingControlador {
 
                 }
             }
-
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
             StringWriter errors = new StringWriter();
@@ -130,22 +125,17 @@ public class CreateSettingControlador {
             log.error(ex + errors.toString());
         }
 
-        mv.addObject("subjects", activesubjects);
-
-        return mv;
+        return (new Gson()).toJson(activesubjects);
     }
 
     @RequestMapping("/createsetting/objectivelistSubject.htm")
-    public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if ((new SessionCheck()).checkSession(hsr)) {
-            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-        }
-        ModelAndView mv = new ModelAndView("createsettings");
+    @ResponseBody
+    public String objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         List<Objective> objectives = new ArrayList<>();
         try {
             String subjectid = null;
             subjectid = hsr.getParameter("seleccion2");
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id,description from public.objective where subject_id=" + subjectid);
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id,description from public.objective where subject_id=" + subjectid + " order by name");
             while (rs1.next()) {
                 String[] ids = new String[1];
                 Objective sub = new Objective();
@@ -162,11 +152,8 @@ public class CreateSettingControlador {
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
-
-        mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
-        mv.addObject("objectives", objectives);
-
-        return mv;
+        
+        return (new Gson()).toJson(objectives);
     }
 
     @RequestMapping(value = "/createsetting/contentlistObjective.htm")
@@ -179,7 +166,7 @@ public class CreateSettingControlador {
         try {
             String objectiveid = hsr.getParameter("seleccion3");
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id,description FROM content where content.id IN (select objective_content.content_id from objective_content where objective_content.objective_id = '" + objectiveid + "')");
+            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id,description FROM content where content.id IN (select objective_content.content_id from objective_content where objective_content.objective_id = '" + objectiveid + "') order by name");
 
             while (rs1.next()) {
                 String[] ids = new String[1];
@@ -281,7 +268,9 @@ public class CreateSettingControlador {
         Objective o = new Objective();
         try {
             String[] subid = ob.getId();
-            String consulta = "insert into objective(name,description,subject_id) values('" + ob.getName() + "','" + ob.getDescription() + "','" + subid[0] + "')";
+            String consulta = "insert into objective(name,description,subject_id,year_id,term_id) values('" 
+                    + ob.getName() + "','" + ob.getDescription() + "','" + subid[0] + "','"+hsr.getSession().getAttribute("yearId")+
+                    "','"+hsr.getSession().getAttribute("termId")+"')";
             DBConect.eduweb.executeUpdate(consulta, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = DBConect.eduweb.getGeneratedKeys();
             String[] id = new String[1];
