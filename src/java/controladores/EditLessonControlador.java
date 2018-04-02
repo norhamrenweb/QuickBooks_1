@@ -344,6 +344,7 @@ public class EditLessonControlador {
     }
 
     @RequestMapping("/editlesson/contentlistObjective.htm")
+    @ResponseBody
     public String contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         return (new Gson()).toJson(this.getContent(hsr.getParameterValues("seleccion3")));
     }
