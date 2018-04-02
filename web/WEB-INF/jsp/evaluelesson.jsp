@@ -26,7 +26,7 @@
 <!--<link rel="stylesheet" type="text/css" href="/DataTables/datatables.css">
  
 <script type="text/javascript" charset="utf8" src="/DataTables/datatables.js"></script>-->
-<!--<link href="recursos/css/dataTables/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
+<!--<link href="recursos/css /dataTables/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
 <link href="recursos/css/dataTables/dataTables.bootstrap4.css" rel="stylesheet" type="text/css"/>
 <link href="recursos/css/dataTables/dataTables.foundation.css" rel="stylesheet" type="text/css"/>
 <link href="recursos/css/dataTables/dataTables.jqueryui.css" rel="stylesheet" type="text/css"/>
