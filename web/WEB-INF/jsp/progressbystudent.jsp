@@ -22,9 +22,10 @@
 
 
             var pestaña = "";
-
             var userType = ${user.type};
             $(document).ready(function () {
+                //$("#commentLength").text($("#commentSubject").val().length);
+
                 $("#saveSupervisorComment").hide();
                 $("#TXTsupervisorComment").prop("disabled", true);
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
@@ -34,9 +35,9 @@
                 }
                 $("#tg").treegrid();
                 $("#saveCommentSubjectButton").prop('disabled', true);
-
+                $("#commentSubject").hide();
+                 $("#commentLength").hide();
                 $('#tableobjective').DataTable();
-
                 table = $('#table_students').DataTable(
                         {
                             "searching": true,
@@ -49,25 +50,19 @@
                                 {data: 'name'}
                             ]
                         });
-
                 $('#myTab ul li').on('click', function () {
                     pestaña = $(this).text();
                 });
-
+                commentSubject
                 $('#table_students tbody').on('click', 'tr', function () {
 
                     data = table.row(this).data();
                     data1 = data.id;
                     //  $('#arbol').tab('show');
                     selectionStudent();
-
-
-
                     $('#divProgress').removeClass("hidden");
                     $('#savecomment').prop("disabled", true);
-
                 });
-
                 var today = new Date();
                 $('#fecha').datetimepicker({
                     format: 'YYYY-MM-DD',
@@ -79,13 +74,15 @@
 
 
                 });
-
                 $('#fecha').on('dp.change', function (e) {
                     if (($('#observationfecha').val() !== "") && ($('#observationcomments').val() !== "") && ($('#observationtype').val() !== "")) {
                         $('#savecomment').prop("disabled", false);
                     } else {
                         $('#savecomment').prop("disabled", true);
                     }
+                });
+                $('#commentSubject').keyup(function (e) {
+                    $("#commentLength").text($("#commentSubject").val().length);
                 });
 
                 $('#observationcomments,#observationtype').change(function () {
@@ -95,8 +92,6 @@
                         $('#savecomment').prop("disabled", true);
                     }
                 });
-
-
 //                $("#subjects").change(function () {
 //                    if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
 //                        $("#saveCommentSubjectButton").prop('disabled', true);
@@ -124,17 +119,13 @@
 //                    }
 //                });
             });
-
-
             var ajax;
             var d = new Date();
-
             var month = d.getMonth() + 1;
             var day = d.getDate();
             var hour = d.getHours();
             var minute = d.getMinutes();
             var second = d.getSeconds();
-
             var currentTime = d.getFullYear() + '-' +
                     (('' + month).length < 2 ? '0' : '') + month + '-' +
                     (('' + day).length < 2 ? '0' : '') + day + ' ' +
@@ -153,16 +144,16 @@
                         if (objs.length === 0) {
                             $('#divTableObjective').addClass('hidden');
                             $('#divNotObjective').removeClass('hidden');
-
                         } else {
                             $('#divNotObjective').addClass('hidden');
                             $('#divTableObjective').removeClass('hidden');
                         }
                         ;
-
                         $("#saveCommentSubjectButton").prop('disabled', false);
+                        $("#commentSubject").show();
+                        $("#commentLength").show();
                         $("#commentSubject").val(json.comment);
-
+                        $("#commentLength").text($("#commentSubject").val().length);
                         $('#tableobjective').DataTable({
                             destroy: true,
                             paging: false,
@@ -187,7 +178,6 @@
                                 {width: 100, targets: 0}
                             ]
                         });
-
                         //var tableObjective = $('#tableobjective').DataTable();
 
                         $.each(objs, function (i, item) {
@@ -250,28 +240,25 @@
 
             var levelarbol;
             var studentarbol;
-
-
             function treeload2(prog) {
                 var pActual = $("ul li.active").text().replace(" ", "");
-                
                 $('#Objectivestracking').tab('show');
                 $('#tg').empty();
                 $('#tg').treegrid({
-                    initialState: 'collapsed',        
+                    initialState: 'collapsed',
                     data: prog.children,
                     idField: 'id',
                     treeField: 'name',
                     fitColumns: true,
 //                    nowrap: false, // this will allow the text wrap but it looks bad
                     columns: [[
-                            {title: 'Name', field: 'name', width: '63%',  formatter: function (value) {
+                            {title: 'Name', field: 'name', width: '63%', formatter: function (value) {
                                     // return ' <img src="<c:url value='/recursos/js/treeGrid/target.svg'/>" style="width:16px;height:18px;vertical-align:bottom"/> ' +  value;
                                     return  value;
                                 }},
-                            {title: 'PP', field: 'noofplannedlessons',width: '5%', align: 'center'},
+                            {title: 'PP', field: 'noofplannedlessons', width: '5%', align: 'center'},
                             {title: 'PD', field: 'noofarchivedlessons', width: '5%', align: 'center'},
-                            {title: 'Progress', field: 'progress', width: '16%',  align: 'center', formatter: formatProgress},
+                            {title: 'Progress', field: 'progress', width: '16%', align: 'center', formatter: formatProgress},
                             {title: 'Final rating', field: 'rating', width: '14%', align: 'center'}
                         ]]
 
@@ -287,23 +274,19 @@
                         img = "step.svg";
                     jQuery("<img/> ").prependTo($(this)).attr({src: '../recursos/js/treeGrid/' + img + '', width: '16px', height: '18px', style: 'padding-right:5px;'});
                 });
-
                 //jQuery("<img/>").prependTo(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").attr({src: '../recursos/js/treeGrid/target.svg', width:'16px', height:'18px'});
 
                 //
-                
-            
+
+
                 $('#loadingmessage').hide();
                 $("#tg").treegrid('collapseAll');
                 $('.datagrid-row').mouseover(function () {
-                  $(this).attr("title", $(this).first().children().first().children().last().children().last().text());
+                    $(this).attr("title", $(this).first().children().first().children().last().children().last().text());
                 });
-
                 if (pActual === "")
                     pActual = "Demographic";
                 $('#' + pActual).tab('show');
-
-
             }
 
             function funcionCallBackSelectStudent()
@@ -332,13 +315,12 @@
                         }
 
                         $('.cell').off('click');
-
                         //treeload(info.level_id, info.id_students);
                         treeload2(prog);
                         levelarbol = info.level_id;
                         studentarbol = info.id_students;
                         //hide the objectives in case a previous student was selected
-                        $('#divTableObjective').addClass('hidden');//to avoid having the general comments of the previous selected student
+                        $('#divTableObjective').addClass('hidden'); //to avoid having the general comments of the previous selected student
                         $('#divNotObjective').addClass('hidden');
                         $('#subjects').empty();
                         $('#subjects').append('<option>Select Subject</option>');
@@ -353,8 +335,6 @@
                 }
             }
             ;
-
-
             function formatProgress(value) {
                 if (value) {
                     var s = '<div style="width:100%;border:1px solid #ccc">' +
@@ -378,12 +358,9 @@
                         var json = JSON.parse(data);
                         //var table = $('#table_students').DataTable();
                         table.clear();
-
                         $.each(json, function (i) {
                             table.row.add({'id': json[i].id_students, 'name': json[i].nombre_students}).draw();
-
                         });
-
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -392,7 +369,6 @@
                     }
 
                 });
-
             }
 
             function comboSelectionLevel()
@@ -409,9 +385,7 @@
                 ajax.onreadystatechange = funcionCallBackSubject;
                 var seleccion1 = document.getElementById("level").value;
                 ajax.open("POST", "progressbystudent.htm?option=subjectlistLevel&seleccion1=" + seleccion1, true);
-
                 ajax.send("");
-
             }
             function showCommentSubject() {
                 if ($('#divCommentSubject').hasClass('hidden')) {
@@ -422,7 +396,6 @@
                     $('#divCommentSubject').addClass('hidden');
                     $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                     $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
-
                 }
             }
 
@@ -444,7 +417,6 @@
                 myObj["idSubject"] = idSubject;
                 myObj["idStudent"] = studentId;
                 myObj["comment"] = comment;
-
                 var json = JSON.stringify(myObj);
                 $.ajax({
                     type: 'POST',
@@ -476,12 +448,10 @@
                 var studentId = $('#studentid').val();
                 var idSubject = $('#subjects option:selected').val();
                 var comment = $('#commentSubject').val();
-
                 var myObj = {};
                 myObj["idSubject"] = idSubject;
                 myObj["idStudent"] = studentId;
                 myObj["comment"] = comment;
-
                 var json = JSON.stringify(myObj);
                 $.ajax({
                     type: 'POST',
@@ -511,15 +481,12 @@
                 {
                     ajax = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-                $('#loadingmessage').show();  // show the loading message.
+                $('#loadingmessage').show(); // show the loading message.
                 //$('#createOnClick').attr('disabled', true);
                 ajax.onreadystatechange = funcionCallBackSelectStudent;
-
                 //  var selectStudent = document.getElementsByClassName("nameStudent").value;
                 ajax.open("POST", "studentPage.htm?selectStudent=" + selectStudent, true);
-
                 ajax.send("");
-
             }
 
             function selectionObjective(dataObjective1)
@@ -529,11 +496,11 @@
                 var gradelevel = $("#gradelevel").text();
                 var subject = $("#subjects :selected").text();
                 var myObj = {};
-                myObj["col1"] = selectObjective;//objectiveid
-                myObj["col2"] = data1;//studentid
-                myObj["col3"] = selectStudent;//studentname
-                myObj["col4"] = gradelevel;//gradelevel
-                myObj["col5"] = subject;//subject
+                myObj["col1"] = selectObjective; //objectiveid
+                myObj["col2"] = data1; //studentid
+                myObj["col3"] = selectStudent; //studentname
+                myObj["col4"] = gradelevel; //gradelevel
+                myObj["col5"] = subject; //subject
                 var json = JSON.stringify(myObj);
                 $.ajax({
                     type: 'POST',
@@ -557,13 +524,14 @@
                     }
 
                 });
-
             }
 
             function loadobjGeneralcomments()
             {
                 if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
                     $("#saveCommentSubjectButton").prop('disabled', true);
+                    $("#commentSubject").hide();
+                    $("#commentLength").hide();
                     $("#commentSubject").val("");
                     $('#divTableObjective').addClass('hidden');
                 } else {
@@ -587,7 +555,6 @@
 //          
 //        });
                     ajax.onreadystatechange = funcionCallBackloadGeneralcomments;
-
                     var selectSubject = document.getElementById("subjects").value;
                     var selectStudent = document.getElementById("studentid").value;
                     ajax.open("POST", "objGeneralcomments.htm?selection=" + selectSubject + "," + selectStudent, true);
@@ -631,7 +598,6 @@
                     var request = new XMLHttpRequest();
                     request.open("POST", path);
                     request.send(data);
-
                     $('#confirmsave').modal('show');
                     $("#observationcomments").val("");
                     $("#observationfecha").val("");
@@ -662,7 +628,6 @@
 //        $('#LoadTemplates').attr("disabled",false);
                     $('#LoadTemplates').children().removeClass("disabled");
                 });
-
                 $('#LoadTemplates').change(function () {
                     if ($("input:radio[name='options']:checked").val() === 'option1') {
                         $("#lessons").attr("disabled", true);
@@ -911,9 +876,13 @@
 
                                         <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject"maxlength="1000"  spellcheck="true"></textarea>
                                     </div>             
-                                    <div class=" col-xs-2 ">
-                                        <input type="button" name="saveCommentSubject" value="save" class="btn btn-info" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
+                                    <div class=" col-xs-2" id="saveLengthDiv">
+                                        <div class="col-xs-12">
+                                            <input type="button" name="saveCommentSubject" value="save" class="btn btn-info" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
+                                        </div>
+                                        <div class="col-xs-12" id="commentLength">
 
+                                        </div>
                                     </div>
                                 </div>
 

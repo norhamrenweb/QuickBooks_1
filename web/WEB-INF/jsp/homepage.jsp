@@ -35,7 +35,7 @@
                         !$('#origen option:selected').clone().appendTo('#destino');
 
                     var numAlum = $('#destino option').length;
-                    if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
+                    if (numAlum > 0) {
                         $('#createOnClick').attr('disabled', false);
                     } else {
                         $('#createOnClick').attr('disabled', true);
@@ -338,6 +338,7 @@
                 $('#destino option').prop('selected', true);
                 var seleccion = $('#compartirid').val();
                 var teachers = $('#destino').val();
+                if(teachers === null) teachers =[];
                 var obj = {};
                 obj.id = seleccion;
                 obj.teachers = teachers;
@@ -561,7 +562,7 @@
                 <div class="modal-content">
                     <div class="modal-header modal-header-delete">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">are you sure you want to delete?</h4>
+                        <h4 class="modal-title">Are you sure you want to delete?</h4>
                     </div>
                     <div id="lessonDelete" class="modal-body">
 

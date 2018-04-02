@@ -302,9 +302,9 @@ textarea
 
 #yearTermModal .modal-content{
     display: flex;
-    align-items: center;
-    height: 50px;
-    justify-content: space-around;
+    align-items: last baseline;
+    height: 100px;
+    justify-content: center;
 }
 #btnYearmTerm{
     color: #666;
@@ -312,6 +312,13 @@ textarea
 
 #commentSubject{
     height: 150px !important;
+}
+
+#saveLengthDiv{
+    height: 150px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
 }
 /*TERMINA PROGRESSBYSTUDENT*/
 /*.tooltip > .tooltip-arrow {

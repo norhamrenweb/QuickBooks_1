@@ -55,16 +55,18 @@ public class LessonsListControlador {
         ModelAndView mv = new ModelAndView("homepage");
         HttpSession sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
-        mv.addObject("lessonslist", this.getLessons(sesion,user, hsr.getServletContext()));
+        mv.addObject("lessonslist", this.getLessons(sesion, user, hsr.getServletContext()));
         mv.addObject("username", user.getName());
-        int iduser = ((User)hsr.getSession().getAttribute("user")).getId();
-        mv.addObject("teacherlist",this.getTeachers(iduser));
+        int iduser = ((User) hsr.getSession().getAttribute("user")).getId();
+        mv.addObject("teacherlist", this.getTeachers(iduser));
         return mv;
     }
-     @RequestMapping("/schedule.htm")
+
+    @RequestMapping("/schedule.htm")
     public ModelAndView schedule(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         return new ModelAndView("schedule");
     }
+
     @RequestMapping("/loadschedule.htm")
     @ResponseBody
     public String loadschedule(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -84,60 +86,66 @@ public class LessonsListControlador {
             l.put("start", rs.getTimestamp("start"));//sdfDate.format(stamp));
             l.put("end", rs.getTimestamp("finish"));//sdfDate.format(stamp));
             l.put("allDay", "false");
-            l.put("objid",rs.getString("objective_id"));
+            l.put("objid", rs.getString("objective_id"));
             l.put("idteacher", rs.getString("user_id"));
             lessonslist.add(l);
         }
         consulta = "SELECT * FROM lessons inner join lessonpresentedby on lessonid=id where teacherid=" + user.getId() + " AND COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
         rs = DBConect.eduweb.executeQuery(consulta);
         while (rs.next()) {
-               JSONObject l = new JSONObject();
-                  l.put("title", rs.getString("name"));
-              Timestamp stamp = rs.getTimestamp("start");
+            JSONObject l = new JSONObject();
+            l.put("title", rs.getString("name"));
+            Timestamp stamp = rs.getTimestamp("start");
             SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
             l.put("start", rs.getTimestamp("start"));//sdfDate.format(stamp));
             l.put("end", rs.getTimestamp("finish"));//sdfDate.format(stamp));
             l.put("allDay", "false");
-            l.put("objid",rs.getString("objective_id"));
+            l.put("objid", rs.getString("objective_id"));
             l.put("idteacher", rs.getString("user_id"));
             lessonslist.add(l);
         }
-        for(JSONObject l:lessonslist){
-            String idobj = (String)l.get("objid");
-            consulta = "SELECT * FROM public.objective where id="+idobj;
+        for (JSONObject l : lessonslist) {
+            String idobj = (String) l.get("objid");
+            consulta = "SELECT * FROM public.objective where id=" + idobj;
             rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 l.put("nameobj", rs.getString("name"));
             }
-            String nameteacher = fetchNameTeacher(Integer.parseInt(l.getString("idteacher")),hsr.getServletContext());
+            String nameteacher = fetchNameTeacher(Integer.parseInt(l.getString("idteacher")), hsr.getServletContext());
             l.put("createdby", nameteacher);
         }
         return lessonslist.toString();
     }
-    public static ArrayList<Teacher> getTeachers(int iduser) throws SQLException{
-        String consulta = "select * from Staff where faculty=1";
-        if(iduser == -1)consulta = "select * from Staff";
+
+    public static ArrayList<Teacher> getTeachers(int iduser) throws SQLException {
+        LoginVerification login = new LoginVerification();
+        HashMap<Integer, String> mapGroups = login.getSecurityGroupID();
+
+        String consulta = "select distinct firstname,lastname,Staff.StaffID,GroupID from Staff inner join SecurityGroupMembership on Staff.StaffID = SecurityGroupMembership.StaffId order by firstname,lastname";
+        //  if(iduser == -1) consulta = "select distinct firstname,lastname,Staff.StaffID,GroupID from Staff inner join SecurityGroupMembership on Staff.StaffID = SecurityGroupMembership.StaffId order by firstname,lastname";
         ResultSet rs = DBConect.ah.executeQuery(consulta);
         ArrayList<Teacher> t = new ArrayList<>();
-        String firstname="",lastname="";
-        int id = 0;
-        while(rs.next()){
+        String firstname = "", lastname = "";
+        int id, groupId;
+        while (rs.next()) {
             firstname = rs.getString("firstname");
             lastname = rs.getString("lastname");
             id = rs.getInt("StaffID");
-            if(id!=iduser)
-                t.add(new Teacher(lastname+", "+firstname,id));
+            groupId = rs.getInt("GroupID");
+            if (id != iduser && mapGroups.get(groupId).equals("MontessoriTeacher")) 
+                t.add(new Teacher(lastname + ", " + firstname, id));
+            
         }
+
         return t;
     }
 //  
-    
 
     public ArrayList<Lessons> getLessons(HttpSession sesion, User user, ServletContext servlet) throws SQLException {
 //        this.conectarOracle();
         ArrayList<Lessons> lessonslist = new ArrayList<>();
-        int yearid = (int)sesion.getAttribute("yearId");
-        int termid = (int)sesion.getAttribute("termId");
+        int yearid = (int) sesion.getAttribute("yearId");
+        int termid = (int) sesion.getAttribute("termId");
         try {
 
             String consulta = "SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels";
@@ -172,12 +180,12 @@ public class LessonsListControlador {
 
             String consultAux = "";
             if (user.getType() == 1) {
-                consultAux = "term_id="+termid+" and " + "yearterm_id="+yearid+" and "+"user_id = " + user.getId() + " and ";
-            }else{
-                consultAux = "term_id="+termid+" and " + "yearterm_id="+yearid+" and ";
+                consultAux = "term_id=" + termid + " and " + "yearterm_id=" + yearid + " and " + "user_id = " + user.getId() + " and ";
+            } else {
+                consultAux = "term_id=" + termid + " and " + "yearterm_id=" + yearid + " and ";
             }
 
-            consulta = "SELECT * FROM public.lessons where "+ consultAux + " COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+            consulta = "SELECT * FROM public.lessons where " + consultAux + " COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
 
             while (rs.next()) {
@@ -218,10 +226,10 @@ public class LessonsListControlador {
                 lessonslist.add(lesson);
 
             }
-            
-            consultAux = "term_id="+termid+" and " + "yearterm_id="+yearid + " and ";
-            
-            consulta = "SELECT * FROM lessons inner join lessonpresentedby on lessonid=id where "+consultAux+" teacherid=" + user.getId() + " AND COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+
+            consultAux = "term_id=" + termid + " and " + "yearterm_id=" + yearid + " and ";
+
+            consulta = "SELECT * FROM lessons inner join lessonpresentedby on lessonid=id where " + consultAux + " teacherid=" + user.getId() + " AND COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
             rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 Lessons lesson = new Lessons();
@@ -300,7 +308,7 @@ public class LessonsListControlador {
             ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
             while (rs1.next()) {
                 int check = rs1.getInt("rating_id");
-                if (check != 7 && check!= 6)//empty rating or N/A , we could check here as well if the proesentatio has comments, but i think what is important is the rating
+                if (check != 7 && check != 6)//empty rating or N/A , we could check here as well if the proesentatio has comments, but i think what is important is the rating
                 {
                     message = "Presentation has progress records,it can not be deleted";
                 }
@@ -319,10 +327,10 @@ public class LessonsListControlador {
             //mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
             //mv.addObject("messageDelete",message);
             jsonObj.put("message", message);
-            DBConect.eduweb.executeUpdate("Delete from lessonpresentedby where lessonid="+id[0]); 
-            
+            DBConect.eduweb.executeUpdate("Delete from lessonpresentedby where lessonid=" + id[0]);
+
             String note = "id: " + id[0] + " | namePresentation: " + nombre;
-               
+
             ActivityLog.log(((User) (hsr.getSession().getAttribute("user"))), "", "Delete Presentation", note); //crear lesson
 
         } catch (SQLException ex) {
@@ -343,13 +351,13 @@ public class LessonsListControlador {
         JSONObject json = new JSONObject(obj);
         JSONArray ids = json.getJSONArray("teachers");
         String idlesson = json.getString("id");
-        
+
         try {
             String consulta;
-            consulta = "delete from lessonpresentedby where lessonid="+idlesson; 
+            consulta = "delete from lessonpresentedby where lessonid=" + idlesson;
             DBConect.eduweb.executeUpdate(consulta);
-            for(int i = 0; i < ids.length();i++){
-                consulta = "insert into lessonpresentedby values("+idlesson+","+ids.getString(i)+")";
+            for (int i = 0; i < ids.length(); i++) {
+                consulta = "insert into lessonpresentedby values(" + idlesson + "," + ids.getString(i) + ")";
                 DBConect.eduweb.executeUpdate(consulta);
             }
         } catch (SQLException ex) {
@@ -358,23 +366,23 @@ public class LessonsListControlador {
         }
         return "Presentation shared successfully";
     }
-    
+
     @RequestMapping("/homepage/cargarcompartidos.htm")
     @ResponseBody
     public String compartirSelect(HttpServletRequest hsr, HttpServletResponse hsr1) throws JSONException {
         String idlesson = hsr.getParameter("seleccion");
-        String consulta = "select * from lessonpresentedby where lessonid="+idlesson;
+        String consulta = "select * from lessonpresentedby where lessonid=" + idlesson;
         ArrayList<Integer> teacherids = new ArrayList<>();
         ArrayList<Teacher> tlist = new ArrayList<>();
         try {
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
-            while(rs.next()){
+            while (rs.next()) {
                 teacherids.add(rs.getInt("teacherid"));
             }
             String name;
-            for(Integer s:teacherids){
-                name = fetchNameTeacher(s,hsr.getServletContext());
-                tlist.add(new Teacher(name,s));
+            for (Integer s : teacherids) {
+                name = fetchNameTeacher(s, hsr.getServletContext());
+                tlist.add(new Teacher(name, s));
             }
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(LessonsListControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -383,7 +391,7 @@ public class LessonsListControlador {
         jsonObj.put("t", new Gson().toJson(tlist));
         return jsonObj.toString();
     }
-    
+
     @RequestMapping("/homepage/editLesson.htm")
     public ModelAndView editLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         if ((new SessionCheck()).checkSession(hsr)) {
@@ -397,7 +405,7 @@ public class LessonsListControlador {
 
             String consulta = "DELETE FROM public.lessons WHERE id=" + id[0];
             DBConect.eduweb.executeUpdate(consulta);
-            mv.addObject("lessonslist", this.getLessons(sesion,                                       user, hsr.getServletContext()));
+            mv.addObject("lessonslist", this.getLessons(sesion, user, hsr.getServletContext()));
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
             StringWriter errors = new StringWriter();
@@ -439,24 +447,22 @@ public class LessonsListControlador {
             String consulta = "select * FROM public.lessons WHERE id=" + id[0];
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             Objective o = new Objective();
-            int idobj=0;
+            int idobj = 0;
             while (rs.next()) {
                 Method m = new Method();
                 jsonObj.put("nameteacher", fetchNameTeacher(rs.getInt("user_id"), hsr.getServletContext()));
                 String method = m.fetchName(rs.getInt("method_id"), hsr.getServletContext());
-                if(method == null){
-                    jsonObj.put("method","" );
-                }
-                else
-                {
-                   jsonObj.put("method",method); 
+                if (method == null) {
+                    jsonObj.put("method", "");
+                } else {
+                    jsonObj.put("method", method);
                 }
                 Timestamp date = rs.getTimestamp("date_created");
                 SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
                 String dateStr = sdfDate.format(date);
                 jsonObj.put("datecreated", dateStr);
                 jsonObj.put("comment", rs.getString("comments"));
-                idobj=rs.getInt("objective_id");
+                idobj = rs.getInt("objective_id");
             }
             jsonObj.put("objective", o.fetchName(idobj, hsr.getServletContext()));
             consulta = "select name from content where id in (select content_id from lesson_content where lesson_id = " + id[0] + ")";
@@ -491,10 +497,10 @@ public class LessonsListControlador {
                 record.setStudentname(name);
             }
             jsonObj.put("students", new Gson().toJson(records));
-            consulta = "select name from obj_steps where obj_id="+idobj;
+            consulta = "select name from obj_steps where obj_id=" + idobj;
             ResultSet rs4 = DBConect.eduweb.executeQuery(consulta);
             ArrayList<String> steps = new ArrayList<>();
-            while(rs4.next()){
+            while (rs4.next()) {
                 steps.add(rs4.getString("name"));
             }
             jsonObj.put("steps", new Gson().toJson(steps));
