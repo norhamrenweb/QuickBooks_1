@@ -36,7 +36,7 @@
                 $("#tg").treegrid();
                 $("#saveCommentSubjectButton").prop('disabled', true);
                 $("#commentSubject").hide();
-                 $("#commentLength").hide();
+                $("#commentLength").hide();
                 $('#tableobjective').DataTable();
                 table = $('#table_students').DataTable(
                         {
@@ -92,6 +92,11 @@
                         $('#savecomment').prop("disabled", true);
                     }
                 });
+                
+                  $( window ).resize(function() {
+                    $('#tg').datagrid("resize");
+                    
+                  });
 //                $("#subjects").change(function () {
 //                    if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
 //                        $("#saveCommentSubjectButton").prop('disabled', true);
@@ -272,7 +277,35 @@
                         img = "target.svg";
                     else
                         img = "step.svg";
+
+                    var text = $(this).text();
+                    var fontSize = 12;
+                    var fontHeight = 1.58;
+                    var MAX_CHAR_ROW =  Math.round(parseInt($(this).parent().css("width"))/(fontSize/fontHeight)) - 7;
+                    
+
+                    if (text.length > MAX_CHAR_ROW) {
+                        var aux = 0;
+                        var textIzq = "", textDer = "";
+
+                        for (var i = 0; i < text.length; ++i) {
+                            if (text[i] === " ")
+                                aux = i;
+                            if (i !== 0 && i % MAX_CHAR_ROW === 0) {
+                                textDer = text.substr(aux, (text.length));
+                                textIzq = text.substr(0, aux);
+                                // text = textIzq +" <br> "+ textDer;
+
+                                $(this).html(textIzq + '<br>' + textDer);
+                                //  $(this).text(text);
+                                $(this).css("height");
+                                $(this).css("height", $(this).css("height") * 2);
+
+                            }
+                        }
+                    }
                     jQuery("<img/> ").prependTo($(this)).attr({src: '../recursos/js/treeGrid/' + img + '', width: '16px', height: '18px', style: 'padding-right:5px;'});
+
                 });
                 //jQuery("<img/>").prependTo(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").attr({src: '../recursos/js/treeGrid/target.svg', width:'16px', height:'18px'});
 
@@ -287,6 +320,8 @@
                 if (pActual === "")
                     pActual = "Demographic";
                 $('#' + pActual).tab('show');
+                
+              
             }
 
             function funcionCallBackSelectStudent()
