@@ -223,6 +223,7 @@ public class LessonsListControlador {
                 lesson.setStart(timeStr);
                 lesson.setFinish(timeStr2);
                 lesson.setShare(false);
+                lesson.setTeacherid(rs.getInt("user_id"));
                 lessonslist.add(lesson);
 
             }
@@ -266,6 +267,7 @@ public class LessonsListControlador {
                 lesson.setStart(timeStr);
                 lesson.setFinish(timeStr2);
                 lesson.setShare(true);
+                lesson.setTeacherid(rs.getInt("user_id"));
                 lessonslist.add(lesson);
 
             }

@@ -174,7 +174,10 @@
                     }
                 }
             }
-            function compartirSelect(id) {
+            function compartirSelect(id,idTeacher) {
+                $('#origen option').show();
+                $('#origen').find("[value="+idTeacher+"]").hide();
+                
                 $.ajax({
                     type: "POST",
                     url: "cargarcompartidos.htm?seleccion=" + id,
@@ -185,8 +188,8 @@
                         var t = JSON.parse(obj.t);
                         $('#destino').empty();
                         $.each(t, function (i, teacher) {
-                            $('#destino').append('<option value="' + t[i].id + '">'
-                                    + t[i].name + '</option>');
+                            if( t[i].id !== idTeacher)
+                                $('#destino').append('<option value="' + t[i].id + '">'+ t[i].name + '</option>');
                         });
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -444,7 +447,7 @@
                 </thead>
                 <tbody>
                     <c:forEach var="lecciones" items="${lessonslist}" >
-                        <tr>
+                        <tr data-createdBy="${lecciones.teacherid}">
                             <td>${lecciones.id}</td>
                             <td>
                                 ${lecciones.name}
@@ -473,7 +476,7 @@
                                     <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Resources">
                                 </div>
                                 <div class="col-xs-2 text-center">
-                                    <input class="resources" name="TXTid_lessons_compartir" type="image" src="<c:url value="/recursos/img/btn/compartir.png"/>" value="${lecciones.id}" id="resources" onclick="compartirSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Resources">
+                                    <input class="resources" name="TXTid_lessons_compartir" type="image" src="<c:url value="/recursos/img/btn/compartir.png"/>" value="${lecciones.id}" id="resources" onclick="compartirSelect(${lecciones.id},${lecciones.teacherid})" width="40px" data-placement="bottom" title="Resources">
                                 </div>
                             </td>
                         </tr>  
