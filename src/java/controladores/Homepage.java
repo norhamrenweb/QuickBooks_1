@@ -55,7 +55,7 @@ public class Homepage extends MultiActionController {
         DBConect.close();
         c = new DBConect(hsr, hsr1);
         HttpSession session = hsr.getSession();
-        String schoolCode = "AH";
+        String schoolCode = "GCS1";
            
         session.setAttribute("yearsids", new Gson().toJson(this.getYears(schoolCode)));
         
