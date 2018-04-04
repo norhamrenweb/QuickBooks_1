@@ -118,7 +118,7 @@ public static ArrayList<Students> getStudents(Logger log) throws SQLException
         try {
             
              
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' order by LastName";
+            String consulta = "SELECT * FROM Students where Status = 'Enrolled' order by LastName";
             ResultSet rs = DBConect.ah.executeQuery(consulta);
           
             while (rs.next())
@@ -153,12 +153,12 @@ public static ArrayList<Students> getStudents(Logger log) throws SQLException
         ArrayList<Students> listaAlumnos = new ArrayList<>();
         String gradelevel = null;
         try {
-            ResultSet rs1 = DBConect.ah.executeQuery("select GradeLevel from AH_ZAF.dbo.GradeLevels where GradeLevelID =" + gradeid);
+            ResultSet rs1 = DBConect.ah.executeQuery("select GradeLevel from GradeLevels where GradeLevelID =" + gradeid);
             while (rs1.next()) {
                 gradelevel = rs1.getString("GradeLevel");
             }
 
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where Status = 'Enrolled' and GradeLevel = '" + gradelevel + "'";
+            String consulta = "SELECT * FROM Students where Status = 'Enrolled' and GradeLevel = '" + gradelevel + "'";
             ResultSet rs = DBConect.ah.executeQuery(consulta);
 
             while (rs.next()) {
