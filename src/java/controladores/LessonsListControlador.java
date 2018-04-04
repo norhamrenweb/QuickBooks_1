@@ -148,7 +148,7 @@ public class LessonsListControlador {
         int termid = (int) sesion.getAttribute("termId");
         try {
 
-            String consulta = "SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels";
+            String consulta = "SELECT GradeLevel,GradeLevelID FROM GradeLevels";
             ResultSet rs2 = DBConect.ah.executeQuery(consulta);
             HashMap<Integer, String> mapLevel = new HashMap<Integer, String>();
             String name;
@@ -169,7 +169,7 @@ public class LessonsListControlador {
                 mapObjective.put(id, name);
             }
 
-            consulta = "SELECT Title,CourseID FROM AH_ZAF.dbo.Courses";
+            consulta = "SELECT Title,CourseID FROM Courses";
             ResultSet rs4 = DBConect.ah.executeQuery(consulta);
             HashMap<Integer, String> mapSubject = new HashMap<Integer, String>();
             while (rs4.next()) {
@@ -482,7 +482,7 @@ public class LessonsListControlador {
                 att.setStudentid(rs2.getInt("student_id"));
                 records.add(att);
             }
-            consulta = "SELECT FirstName,LastName,MiddleName,StudentID FROM AH_ZAF.dbo.Students ";
+            consulta = "SELECT FirstName,LastName,MiddleName,StudentID FROM Students ";
             ResultSet rs3 = DBConect.ah.executeQuery(consulta);
             HashMap<String, String> map = new HashMap<String, String>();
             String first, LastName, middle, studentID;

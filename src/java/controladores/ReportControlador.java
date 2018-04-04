@@ -51,7 +51,7 @@ public class ReportControlador {
         try {
             List<Lessons> ideas = new ArrayList();
             mv.addObject("listaAlumnos", Students.getStudents(log));
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
             List<Level> grades = new ArrayList();
             Level l = new Level();
             l.setName("Select level");

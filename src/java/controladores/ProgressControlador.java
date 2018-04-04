@@ -100,12 +100,12 @@ public class ProgressControlador {
             mv.addObject("lessondetailes", lesson);
             mv.addObject("disable", disable);
             mv.addObject("steps", steps);
-            consulta = "select LastName,FirstName,MiddleName,PersonID from Person where PersonID in (select PersonID from Staff where Faculty = 1) order by LastName";
+            consulta = "select LastName,FirstName,MiddleName,PersonID from Person where PersonID in (select PersonID from Staff where Faculty = 1) order by FirstName";
             ResultSet rs2 = DBConect.ah.executeQuery(consulta);
             while (rs2.next()) {
                 Students s = new Students();
                 s.setId_students(rs2.getInt("PersonID"));
-                s.setNombre_students(rs2.getString("LastName") + ", " + rs2.getString("FirstName") + " " + rs2.getString("MiddleName"));
+                s.setNombre_students( rs2.getString("FirstName") + " " + rs2.getString("MiddleName") + " "+rs2.getString("LastName"));
                 if (teacher.getId_students() == s.getId_students()) {
                     teacher.setNombre_students(s.getNombre_students());
                 }
@@ -162,7 +162,7 @@ public class ProgressControlador {
                     }
                 }
             }
-            consulta = "SELECT FirstName,LastName,MiddleName,StudentID FROM AH_ZAF.dbo.Students ";
+            consulta = "SELECT FirstName,LastName,MiddleName,StudentID FROM Students ";
             ResultSet rs2 = DBConect.ah.executeQuery(consulta);
             HashMap<String, String> map = new HashMap<String, String>();
             String first, LastName, middle, studentID;
@@ -171,7 +171,7 @@ public class ProgressControlador {
                 LastName = rs2.getString("LastName");
                 middle = rs2.getString("MiddleName");
                 studentID = rs2.getString("StudentID");
-                map.put(studentID, LastName + ", " + first + " " + middle);
+                map.put(studentID, first + " " + middle + " " + LastName);
             }
             for (Progress record : records) {
                 String id = "" + record.getStudentid();

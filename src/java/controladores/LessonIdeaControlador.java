@@ -61,7 +61,7 @@ public class LessonIdeaControlador {
                return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         ModelAndView mv = new ModelAndView("lessonidea");
     try{
-        ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
         List <Level> grades = new ArrayList();
         Level l = new Level();
         l.setName("Select level");
@@ -259,7 +259,7 @@ public class LessonIdeaControlador {
                  mv.addObject("contents",this.getContent(data.getObjective().getId()));
                mv.addObject("subjects",this.getSubjects(data.getLevel().getId()));
          List <Lessons> ideas = new ArrayList();
-        ResultSet rs4 = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        ResultSet rs4 = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
         List <Level> grades = new ArrayList();
         Level le = new Level();
         le.setName("Select level");

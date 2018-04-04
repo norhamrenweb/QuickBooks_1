@@ -198,7 +198,7 @@ public class LessonArchiveControlador {
                 att.setStudentid(rs2.getInt("student_id"));
                 records.add(att);
             }
-            consulta = "SELECT FirstName,LastName,MiddleName,StudentID FROM AH_ZAF.dbo.Students ";
+            consulta = "SELECT FirstName,LastName,MiddleName,StudentID FROM Students ";
             ResultSet rs3 = DBConect.ah.executeQuery(consulta);
             HashMap<String, String> map = new HashMap<String, String>();
             String first, LastName, middle, studentID;

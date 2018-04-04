@@ -95,7 +95,7 @@ public class ProgressbyStudent {
         List<Level> grades = new ArrayList();
         try {
             mv.addObject("listaAlumnos", Students.getStudents(log));
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
 
             Level l = new Level();
             l.setName("Select level");
@@ -152,7 +152,7 @@ public class ProgressbyStudent {
             }
             ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
                     + "                 inner join courses on courses.courseid=classes.courseid\n"
-                    + "                  where roster.studentid = " + studentid + " and roster.enrolled=1 and " + termid + "= 1 and courses.active = 1 and courses.reportcard = 1 and classes.yearid = '" + yearid + "' order by courses.rcplacement DESC");// the term and year need to be dynamic, check with vincent
+                    + "                  where roster.studentid = " + studentid + " and roster.enrolled"+termid+"=1 and courses.active = 1 and courses.reportcard = 1 and classes.yearid = '" + yearid + "' order by courses.rcplacement DESC");// the term and year need to be dynamic, check with vincent
 
             String name9, id;
             while (rs1.next()) {
@@ -415,7 +415,7 @@ public class ProgressbyStudent {
         //String prueba = "";
         String prueba = "";
         try {
-            String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentID = " + studentIds[0];
+            String consulta = "SELECT * FROM Students where StudentID = " + studentIds[0];
             ResultSet rs = DBConect.ah.executeQuery(consulta);
 
             while (rs.next()) {

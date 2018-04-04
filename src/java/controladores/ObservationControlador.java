@@ -71,7 +71,7 @@ public class ObservationControlador {
         List<Level> grades = new ArrayList();
         try {
             mv.addObject("listaAlumnos", Students.getStudents(log));
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
 
             Level l = new Level();
             l.setName("Select level");

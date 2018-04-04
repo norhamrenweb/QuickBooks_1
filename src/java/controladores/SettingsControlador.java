@@ -40,7 +40,7 @@ public class SettingsControlador extends MultiActionController {
 
         ModelAndView mv = new ModelAndView("settings");
 
-        ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+        ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
         List<Level> grades = new ArrayList();
         Level l = new Level();
         l.setName("Select level");

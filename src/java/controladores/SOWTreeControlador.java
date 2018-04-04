@@ -68,7 +68,7 @@ public class SOWTreeControlador {
         }
         ModelAndView mv = new ModelAndView("sowdisplay");
         try {
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
             List<Level> grades = new ArrayList();
             Level l = new Level();
             l.setName("Select level");
@@ -103,7 +103,7 @@ public class SOWTreeControlador {
         try {
 
             String idHash;
-            String consulta = "SELECT Title,Active,CourseID FROM AH_ZAF.dbo.Courses", name;
+            String consulta = "SELECT Title,Active,CourseID FROM Courses", name;
             ResultSet rs4 = DBConect.ah.executeQuery(consulta);
             HashMap<String, String> mapSubject = new HashMap<String, String>();
 
@@ -124,9 +124,9 @@ public class SOWTreeControlador {
                 consulta = "select obj_steps.id,obj_steps.name,objective.name as "
                                 + "obj ,objective.subject_id from obj_steps inner join objective "
                                 + "on obj_steps.obj_id = objective.id "
-                                + "where objective.subject_id = '" + sid[0] + "' "
-                                + "and objective.year_id="+hsr.getSession().getAttribute("yearId")
-                                +" and objective.term_id="+hsr.getSession().getAttribute("termId");
+                                + "where objective.subject_id = '" + sid[0] + "' ";//need to think how we will apply the term in the objective
+//                                + "and objective.year_id="+hsr.getSession().getAttribute("yearId")
+//                                +" and objective.term_id="+hsr.getSession().getAttribute("termId");
                 ResultSet rs = DBConect.eduweb.executeQuery(consulta);
 
                 while (rs.next()) {
@@ -333,11 +333,11 @@ public class SOWTreeControlador {
         try {
 
             ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective "
-                    + "where subject_id=" + subjectid[0] + " and year_id="
-                    + session.getAttribute("yearId") +" and term_id="+session.getAttribute("termId")+" ORDER BY name ASC");
-//          Objective s = new Objective();
-//          s.setName("Select Objective");
-//          objectives.add(s);
+                    + "where subject_id=" + subjectid[0] + 
+//                    " and year_id="
+//                    + session.getAttribute("yearId") +" and term_id="+session.getAttribute("termId")+
+                    " ORDER BY name ASC");
+
 
             while (rs1.next()) {
                 String[] ids = new String[1];
