@@ -61,7 +61,7 @@ public class Subject {
     public String fetchName(int id, ServletContext servlet) {
         String subjectName = null;
         try {
-            String consulta = "SELECT Title FROM AH_ZAF.dbo.Courses where CourseID = " + id;
+            String consulta = "SELECT Title FROM Courses where CourseID = " + id;
             ResultSet rs = DBConect.ah.executeQuery(consulta);
 
             while (rs.next()) {
@@ -82,7 +82,7 @@ public class Subject {
         ArrayList<String> subjectName = new ArrayList<String>();
         try {
 
-            String consulta = "SELECT Title,Elective FROM AH_ZAF.dbo.Courses where CourseID = " + id;
+            String consulta = "SELECT Title,Elective FROM Courses where CourseID = " + id;
             ResultSet rs = DBConect.ah.executeQuery(consulta);
 
             while (rs.next()) {
