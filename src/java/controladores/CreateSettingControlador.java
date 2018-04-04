@@ -50,7 +50,7 @@ public class CreateSettingControlador {
         }
         ModelAndView mv = new ModelAndView("createsettings");
         try {
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
             List<Level> grades = new ArrayList();
             Level l = new Level();
             l.setName("Select level");
@@ -137,8 +137,8 @@ public class CreateSettingControlador {
             subjectid = hsr.getParameter("seleccion2");
             String consulta = "select name,id,description from public.objective "
                     + "where subject_id=" + subjectid 
-                    + " and year_id=" + hsr.getSession().getAttribute("yearId")
-                    + " and term_id=" + hsr.getSession().getAttribute("termId")
+//                    + " and year_id=" + hsr.getSession().getAttribute("yearId")
+//                    + " and term_id=" + hsr.getSession().getAttribute("termId")
                     + "order by name";
             ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
             while (rs1.next()) {
