@@ -54,7 +54,7 @@ public class Level {
     { String levelName = null ;
         try {
              
-            String consulta = "SELECT GradeLevel FROM AH_ZAF.dbo.GradeLevels where GradeLevelID = "+id;
+            String consulta = "SELECT GradeLevel FROM GradeLevels where GradeLevelID = "+id;
             ResultSet rs = DBConect.ah.executeQuery(consulta);
           
             while (rs.next())
