@@ -882,8 +882,8 @@
                             </div>
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="progress">
                                 <div class="col-xs-12">
-                                    <div class="row"><p class="text-info"><Strong>PP:</Strong> Presentation planned.</p></div>
-                                    <div class="row"><p class="text-info"><Strong>PD:</Strong> Presentation done.</p></div>
+                                    <div class="row"><p class="text-info"><Strong>PP:</Strong> Presentations planned.</p></div>
+                                    <div class="row"><p class="text-info"><Strong>PD:</Strong> Presentations done.</p></div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="row">
