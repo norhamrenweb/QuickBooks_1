@@ -152,7 +152,7 @@ public class EditLessonControlador {
                 stud.add(learner);
 
             }
-            ResultSet rs7 = DBConect.ah.executeQuery("SELECT FirstName,LastName,StudentID FROM AH_ZAF.dbo.Students ORDER BY LastName DESC");
+            ResultSet rs7 = DBConect.ah.executeQuery("SELECT FirstName,LastName,StudentID FROM Students ORDER BY LastName DESC");
             // ResultSet rs4 = st.executeQuery(consulta);
             HashMap<String, String> mapStudents = new HashMap<String, String>();
             String first, LastName, studentID;
@@ -164,7 +164,7 @@ public class EditLessonControlador {
             }
 
             for (Students y : stud) {
-                /* ResultSet rs4 =st2.executeQuery("SELECT FirstName,LastName FROM AH_ZAF.dbo.Students where StudentID = '"+y.getId_students()+"'");
+                /* ResultSet rs4 =st2.executeQuery("SELECT FirstName,LastName FROM Students where StudentID = '"+y.getId_students()+"'");
            while(rs4.next())
            {*/
                 y.setNombre_students(mapStudents.get("" + y.getId_students()));
@@ -190,7 +190,7 @@ public class EditLessonControlador {
             mv.addObject("subjects", this.getSubjects(data.getLevel().getId()));
             List<Lessons> ideas = new ArrayList();
             mv.addObject("listaAlumnos", Students.getStudents(log)); //tarda muchisimo
-            ResultSet rs4 = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM AH_ZAF.dbo.GradeLevels");
+            ResultSet rs4 = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
             List<Level> grades = new ArrayList();
             Level le = new Level();
             le.setName("Select level");
