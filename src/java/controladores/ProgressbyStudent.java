@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package controladores;
-
+//x
 import Montessori.*;
 import Montessori.Objective;
 import Montessori.Students;
@@ -152,7 +152,7 @@ public class ProgressbyStudent {
             }
             ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
                     + "                 inner join courses on courses.courseid=classes.courseid\n"
-                    + "                  where roster.studentid = " + studentid + " and roster.enrolled"+termid+"=1 and courses.active = 1 and courses.reportcard = 1 and classes.yearid = '" + yearid + "' order by courses.rcplacement DESC");// the term and year need to be dynamic, check with vincent
+                    + "                  where roster.studentid = " + studentid + " and roster.enrolled" + termid + "=1 and courses.active = 1 and courses.reportcard = 1 and classes.yearid = '" + yearid + "' order by courses.rcplacement DESC");// the term and year need to be dynamic, check with vincent
 
             String name9, id;
             while (rs1.next()) {
@@ -391,7 +391,7 @@ public class ProgressbyStudent {
                 //
                 // byte[] buf = new byte[inStream.available()];
                 inStream.read(buf);
-                 String imagen = Base64.getEncoder().encodeToString(buf);
+                String imagen = Base64.getEncoder().encodeToString(buf);
                 return "data:image/" + mimeType + ";base64," + imagen;
                 //**********
             }
@@ -630,10 +630,14 @@ public class ProgressbyStudent {
             HashMap<String, String> mapDBR = new HashMap<String, String>();
 
             while (rs7.next()) {
-
                 String stsdone = rs7.getString("step_id");
                 if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
-                    mapDBR.put(stsdone, "");
+
+                    String[] stepsDone = stsdone.split(",");
+                    for (String sDone : stepsDone) {
+                        mapDBR.put(sDone, "");
+                    }
+
                 }
 
             }
@@ -709,7 +713,7 @@ public class ProgressbyStudent {
                 ArrayList<Objective> obj = getObjectives(x.getId());
                 for (Objective y : obj) {
                     String[] id = y.getId();
-                    Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C" + z, y.getName(), finalRatings.get(studentid + "_" + id[0]), plannedLess.get(studentid + "_" + id[0]), archiveLess.get(studentid + "_" + id[0]),percents.get(studentid + "_" + id[0]) /*this.getpercent(id[0],""+studentid)*/);
+                    Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C" + z, y.getName(), finalRatings.get(studentid + "_" + id[0]), plannedLess.get(studentid + "_" + id[0]), archiveLess.get(studentid + "_" + id[0]), percents.get(studentid + "_" + id[0]) /*this.getpercent(id[0],""+studentid)*/);
                     nodeC.addChild(nodeA);
                     z++;
                     for (DBRecords l : steps) {
