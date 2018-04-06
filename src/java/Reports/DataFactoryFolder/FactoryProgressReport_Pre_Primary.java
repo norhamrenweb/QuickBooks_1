@@ -177,7 +177,7 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
     }
  @Override
     protected void cargarAlumno(String studentId) throws SQLException {
-        String consulta = "SELECT * FROM AH_ZAF.dbo.Students where StudentId = '" + studentId + "'";
+        String consulta = "SELECT * FROM Students where StudentId = '" + studentId + "'";
         ResultSet rs = DBConect.ah.executeQuery(consulta);
 
         int year = Calendar.getInstance().get(Calendar.YEAR);

@@ -734,7 +734,7 @@
                         if (data === 'succes') {
                             getcomments(idobjective);
                             $('#messagediv').empty();
-                            $('#messagediv').append('<h4>Comment create succesfully.</h4>');
+                            $('#messagediv').append('<h4>Comment added successfully.</h4>');
                             $('#myModal').modal('show');
                         } else {
                             $('#messagediv').empty();
