@@ -36,8 +36,9 @@
                     var idCLass = $(this).attr('data-idclass');
                     window.location.replace("<c:url value="/gradebook/loadRecords.htm?term=1&ClassSelected="/>" + idCLass);
                 });
-                //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE              
-
+                //VARIABLE CUANDO   HEMOS CREADO UNA LESSONS CORRECTAMENTE              
+                //f
+                
                 $('#fecha2').datetimepicker({
                     format: 'YYYY-MM-DD',
 //            locale: userLang.valueOf(),
