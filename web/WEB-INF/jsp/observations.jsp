@@ -212,6 +212,8 @@
                 });
                 $('#newcomment').on('click', function () {
                     $("#commentcontent").val("");
+                    $("#hi").val("");
+                    $(".rating-clear").click();
                     $('#commentModal').modal('show');
                 });
                 $('#newClassRoom').on('click', function () {
