@@ -215,6 +215,7 @@
                     $("#commentcontent").val("");
                     $("#hi").val("");
                     $(".rating-clear").click();
+                    $("#myNewCommentTitle").text($("#objectives :selected").text());
                     $('#commentModal').modal('show');
                 });
                 $('#newClassRoom').on('click', function () {
@@ -2077,7 +2078,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">New Comment</h4>
+                            <h4 class="modal-title" id="myNewCommentTitle"></h4>
                         </div>
                         <div class="modal-body text-center clearfix">
                             <div class="col-xs-6">
@@ -2088,7 +2089,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <textarea style="width:100%;" rows="7" id="commentcontent" required="required"></textarea>
-                                <select name="TXTrating" id="hi" class="studentRating rating">
+                                <select name="TXTrating" id="hi" class="studentRating rating" style="margin-top:10px">
                                     <option></option>
                                     <option value="N/A">N/A</option>
                                     <option value="Presented">Presented</option>
