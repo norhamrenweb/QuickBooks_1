@@ -271,11 +271,12 @@ public class CreateSettingControlador {
     public String addObjective(@RequestBody Objective ob, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String message = null;
         Objective o = new Objective();
+        String termIds = ob.getFinalrating();
         try {
             String[] subid = ob.getId();
             String consulta = "insert into objective(name,description,subject_id,year_id,term_id) values('" 
                     + ob.getName() + "','" + ob.getDescription() + "','" + subid[0] + "','"+hsr.getSession().getAttribute("yearId")+
-                    "','"+hsr.getSession().getAttribute("termId")+"')";
+                    "','"+termIds+"')";
             DBConect.eduweb.executeUpdate(consulta, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = DBConect.eduweb.getGeneratedKeys();
             String[] id = new String[1];
