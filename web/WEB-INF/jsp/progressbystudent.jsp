@@ -289,7 +289,7 @@
                             {title: 'PP', field: 'noofplannedlessons', width: '5%', align: 'center'},
                             {title: 'PD', field: 'noofarchivedlessons', width: '5%', align: 'center'},
                             {title: 'Progress', field: 'progress', width: '16%', align: 'center', formatter: formatProgress},
-                            {title: 'Final rating', field: 'rating', width: '14%', align: 'center'}
+                            {title: 'Final rating', field: 'rating', width: '13.5%', align: 'center'}
                         ]]
 
                 });
@@ -408,9 +408,9 @@
                         $("#divTerms").empty();
                         
                         $("#termSelect option").each(function () {
-                           $("#divTerms").append("<div class='radio'><label><input  onclick='selectTreeByTerm(" + $(this).attr("value") + ")' type='radio' name='opt'" + $(this).attr("value") + "'>" + $(this).text() + "</label></div>");
+                           $("#divTerms").append("<div class='radio' style='margin-left: 5%;'><label><input  onclick='selectTreeByTerm(" + $(this).attr("value") + ")' type='radio' name='opt'" + $(this).attr("value") + "'>" + $(this).text() + "</label></div>");
                         });
-                        $("#divTerms").append("<div class='radio'><label><input onclick='selectTreeByTerm(-1)' type='radio' name='opt' vlaue='all' checked>All</label></div>");
+                        $("#divTerms").append("<div class='radio' style='margin-left: 5%;'><label><input onclick='selectTreeByTerm(-1)' type='radio' name='opt' vlaue='all' checked>All</label></div>");
                                      
                     }
                 }
@@ -960,7 +960,7 @@
                                         <!--<p class="text-info"><Strong>PD:</Strong> Presentations done.</p>-->
                                         <div class="row" style="display: flex;justify-content: space-between;">
                                             <p class="col-xs-4 text-info"><strong>PD:</strong> Presentations done.</p>
-                                            <div class="col-xs-8" id="divTerms" style="display: flex;justify-content: space-between;align-items: baseline;">
+                                            <div class="col-xs-8" id="divTerms" style="display: flex;justify-content: end;align-items: baseline;">
                                                 
                                                 <!--<div class="form-check">
                                                     <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" type="radio">
