@@ -397,15 +397,21 @@
                     $("#ObjectivesTermsError").hide();
                     saveaddObjective();
                 } else {//error
-                    if($("#namenewobjective").val() === "")
+                    if($("#namenewobjective").val() === ""){
                         $("#NameObjectiveError").show();
-                    else
+                        $("#NameObjectiveError").parent().children("input").css("border","solid 1px red");
+                    }
+                    else{
                         $("#NameObjectiveError").hide();
-                    
-                    if($("#ObjectivesTerms label input:checked").length === 0)
+                       $("#NameObjectiveError").parent().children("input").css("border","solid 1px #ccc")
+                    }
+                    if($("#ObjectivesTerms label input:checked").length === 0){
                         $("#ObjectivesTermsError").show();
-                    else
+                        $("#NameObjectiveError").parent().children("input").css("border","solid 1px red")
+                    }
+                    else{
                         $("#ObjectivesTermsError").hide();
+                    }
                 }
             }
             function saveaddObjective()
@@ -879,7 +885,7 @@
                     <div class="col-xs-3 center-block form-group" id="addObjective">
                         <label class="control-label">Name new objective</label>
                         <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name" >
-                        <div class="col-xs-12" id="NameObjectiveError" style="color:red">Selected a term please</div>
+                        <div id="NameObjectiveError" style="color:red">Selected a term please</div>
 
                     </div>
                     <div class="col-xs-7 center-block form-group">
