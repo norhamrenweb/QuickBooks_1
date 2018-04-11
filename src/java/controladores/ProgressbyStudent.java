@@ -5,6 +5,7 @@
  */
 package controladores;
 //x
+
 import Montessori.*;
 import Montessori.Objective;
 import Montessori.Students;
@@ -135,6 +136,22 @@ public class ProgressbyStudent {
 //        mv.addObject("listaAlumnos",data );
 
         return data;
+    }
+
+    @RequestMapping("/progressbystudent/selectTreeByTerm.htm")
+    @ResponseBody
+    public String selectTreeByTerm(@RequestBody CommentSubject cSub, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+
+        /*
+              var myObj = {};
+                myObj["idSubject"] = idSubject; //termId
+                myObj["idStudent"] = studentId; // studentId
+         */
+        String idTerm = cSub.getIdSubject();
+        int studentId = Integer.parseInt(cSub.getIdStudent());
+        List<Subject> subjects = getSubjects(studentId);
+
+        return this.loadtree(subjects, studentId, hsr.getServletContext(), idTerm);
     }
 
     static List<Subject> getSubjects(int studentid) throws SQLException {
@@ -314,7 +331,7 @@ public class ProgressbyStudent {
     @ResponseBody
     public String treeload(HttpServletRequest hsr, HttpServletResponse hsr1) {
         try {
-            return this.loadtree(new ArrayList<>(), Integer.parseInt(hsr.getParameter("studentid")), hsr.getServletContext());
+            return this.loadtree(new ArrayList<>(), Integer.parseInt(hsr.getParameter("studentid")), hsr.getServletContext(), "-1");
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
@@ -447,7 +464,7 @@ public class ProgressbyStudent {
         obj.put("sub", sub);
         obj.put("prueba", prueba2);
         obj.put("commentHead", this.getCommentHead(student.getId_students()));
-        obj.put("prog", this.loadtree(subjects, student.getId_students(), hsr.getServletContext()));
+        obj.put("prog", this.loadtree(subjects, student.getId_students(), hsr.getServletContext(), "-1"));
         return obj.toString();
     }
 
@@ -577,7 +594,7 @@ public class ProgressbyStudent {
         return obj.toString();
     }
 
-    public String loadtree(List<Subject> ls, int studentid, ServletContext hsr) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
+    public String loadtree(List<Subject> ls, int studentid, ServletContext hsr, String idTerm) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
 
         ModelAndView mv = new ModelAndView("progressbystudent");
         JSONObject json = new JSONObject();
@@ -588,6 +605,7 @@ public class ProgressbyStudent {
         HashMap<String, String> mapSubject = new HashMap<String, String>();
         List<Subject> subs = new ArrayList<>();
         Nodetreegrid<String> rootNode = new Nodetreegrid<String>("Subjects", "A", "", "", "", "");
+
         try {
             if (ls.isEmpty()) {
                 subs = getSubjects(studentid);
@@ -609,20 +627,24 @@ public class ProgressbyStudent {
 
             for (Subject sub : subs) {
                 String[] sid = sub.getId();
-                ResultSet rs = DBConect.eduweb.executeQuery("select obj_steps.id,obj_steps.name,objective.name as obj ,objective.id as objid,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '" + sid[0] + "' order by obj_steps.storder ASC");
+                ResultSet rs = DBConect.eduweb.executeQuery("select objective.term_id, obj_steps.id,obj_steps.name,objective.name as obj ,objective.id as objid,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '" + sid[0] + "' order by obj_steps.storder ASC");
 
                 while (rs.next()) {
-                    DBRecords l = new DBRecords();
-                    l.setCol1("" + rs.getInt("id"));// step id
-                    l.setCol2(rs.getString("name"));// step name
-                    l.setCol4(rs.getString("obj"));// objective name
-                    l.setCol3("" + rs.getInt("subject_id"));// subjectid
-                    l.setCol6("" + rs.getInt("objid"));//will only be used to get other data,then later will be the progress 100% of the objective
-                    if (!objectives.contains(rs.getString("obj"))) {
-                        objectives.add(rs.getString("obj"));
-                    }
-                    steps.add(l);
+                    String aux = rs.getString("term_id");
+                    String[] termIds = aux.split(",");
 
+                    if (idTerm.equals("-1") || comprobarTerm(termIds, idTerm)) {
+                        DBRecords l = new DBRecords();
+                        l.setCol1("" + rs.getInt("id"));// step id
+                        l.setCol2(rs.getString("name"));// step name
+                        l.setCol4(rs.getString("obj"));// objective name
+                        l.setCol3("" + rs.getInt("subject_id"));// subjectid
+                        l.setCol6("" + rs.getInt("objid"));//will only be used to get other data,then later will be the progress 100% of the objective
+                        if (!objectives.contains(rs.getString("obj"))) {
+                            objectives.add(rs.getString("obj"));
+                        }
+                        steps.add(l);
+                    }
                 }
             }
             consulta = "select * from progress_report a where comment_date = (select max(comment_date) from public.progress_report where objective_id = a.objective_id and generalcomment = false and student_id ='" + studentid + "') and generalcomment = false and student_id ='" + studentid + "'";
@@ -710,7 +732,7 @@ public class ProgressbyStudent {
                 Nodetreegrid<String> nodeC = new Nodetreegrid<String>("L" + i, x.getName(), "", "", "", "");
                 rootNode.addChild(nodeC);
                 i++;
-                ArrayList<Objective> obj = getObjectives(x.getId());
+                ArrayList<Objective> obj = this.getObjectivesTree(x.getId(), idTerm);
                 for (Objective y : obj) {
                     String[] id = y.getId();
                     Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C" + z, y.getName(), finalRatings.get(studentid + "_" + id[0]), plannedLess.get(studentid + "_" + id[0]), archiveLess.get(studentid + "_" + id[0]), percents.get(studentid + "_" + id[0]) /*this.getpercent(id[0],""+studentid)*/);
@@ -749,6 +771,45 @@ public class ProgressbyStudent {
         String test2 = this.generateJSONfromTree(tree);
 
         return test2;
+    }
+
+
+    private ArrayList<Objective> getObjectivesTree(String[] subjectid, String termId) throws SQLException {
+        ArrayList<Objective> objectives = new ArrayList<>();
+        try {
+
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select objective.term_id,name,id from public.objective where subject_id=" + subjectid[0] + "ORDER BY name ASC");
+            while (rs1.next()) {
+                String aux = rs1.getString("term_id");
+                String[] termIds = aux.split(",");
+
+                if (termId.equals("-1") || comprobarTerm(termIds, termId)) {
+                    String[] ids = new String[1];
+                    Objective sub = new Objective();
+                    ids[0] = "" + rs1.getInt("id");
+                    sub.setId(ids);
+                    sub.setName(rs1.getString("name"));
+                    objectives.add(sub);
+                }
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Objectives: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return objectives;
+    }
+
+    private boolean comprobarTerm(String[] termIds, String termSelected) {
+        for (int i = 0; i < termIds.length; i++) {
+            if (termIds[i].equals(termSelected)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public String generateJSONfromTree(TreeGrid tree) throws IOException, JSONException {

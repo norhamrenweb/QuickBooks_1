@@ -26,6 +26,31 @@
             $(document).ready(function () {
                 //$("#commentLength").text($("#commentSubject").val().length);
 
+
+                /* <div class="col-xs-7" id="divTerms" style="display: flex;justify-content: space-evenly;">
+                 <div class="form-check">
+                 <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" type="radio">
+                 <label class="form-check-label" for="exampleRadios1">Term1</label>
+                 </div>
+                 <div class="form-check">
+                 <input class="form-check-input" name="exampleRadios" id="exampleRadios2" value="option2" type="radio">
+                 <label class="form-check-label" for="exampleRadios2">Term2</label>
+                 </div>
+                 <div class="form-check">
+                 <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" type="radio">
+                 <label class="form-check-label" for="exampleRadios1">Term3</label>
+                 </div>
+                 <div class="form-check">
+                 <input class="form-check-input" name="exampleRadios" id="exampleRadios2" value="option2" type="radio">
+                 <label class="form-check-label" for="exampleRadios2">Term4</label>
+                 </div>
+                 <div class="form-check">
+                 <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" checked="" type="radio">
+                 <label class="form-check-label" for="exampleRadios1">All</label>
+                 </div>
+                 </div>*/
+
+
                 $("#saveSupervisorComment").hide();
                 $("#TXTsupervisorComment").prop("disabled", true);
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
@@ -92,11 +117,11 @@
                         $('#savecomment').prop("disabled", true);
                     }
                 });
-                
-                  $( window ).resize(function() {
+
+                $(window).resize(function () {
                     $('#tg').datagrid("resize");
-                    
-                  });
+
+                });
 //                $("#subjects").change(function () {
 //                    if ($("#subjects :selected").text() === "Select Subject" || $("#subjects :selected").text() === "") {
 //                        $("#saveCommentSubjectButton").prop('disabled', true);
@@ -281,8 +306,8 @@
                     var text = $(this).text();
                     var fontSize = 12;
                     var fontHeight = 1.58;
-                    var MAX_CHAR_ROW =  Math.round(parseInt($(this).parent().css("width"))/(fontSize/fontHeight)) - 7;
-                    
+                    var MAX_CHAR_ROW = Math.round(parseInt($(this).parent().css("width")) / (fontSize / fontHeight)) - 7;
+
 
                     if (text.length > MAX_CHAR_ROW) {
                         var aux = 0;
@@ -320,8 +345,8 @@
                 if (pActual === "")
                     pActual = "Demographic";
                 $('#' + pActual).tab('show');
-                
-              
+
+
             }
 
             function funcionCallBackSelectStudent()
@@ -366,10 +391,58 @@
                         $('#divCommentSubject').removeClass('hidden');
                         $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                         $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
+
+                        /*var radioButtonCode="";
+                        $("#divTerms").empty();
+                        
+                        
+                        $("#termSelect option").each(function () {
+                           radioButtonCode +="<label class='radio-inline'><input type='radio' name='opt" + $(this).attr("value") + "'>" + $(this).text() + "</label> ";
+                        });
+                        radioButtonCode += "<label class='radio-inline'><input type='radio' name='optAll'>All</label>";
+                        
+                        $("#divTerms").append("<form>"+radioButtonCode+"</form>");*/
+                
+
+
+                        $("#divTerms").empty();
+                        
+                        $("#termSelect option").each(function () {
+                           $("#divTerms").append("<div class='radio'><label><input  onclick='selectTreeByTerm(" + $(this).attr("value") + ")' type='radio' name='opt'" + $(this).attr("value") + "'>" + $(this).text() + "</label></div>");
+                        });
+                        $("#divTerms").append("<div class='radio'><label><input onclick='selectTreeByTerm(-1)' type='radio' name='opt' vlaue='all' checked>All</label></div>");
+                                     
                     }
                 }
             }
             ;
+            function selectTreeByTerm(value){
+                
+                var studentId = $('#studentid').val();
+                var idSubject = value;
+
+                var myObj = {};
+                myObj["idSubject"] = idSubject; //termId
+                myObj["idStudent"] = studentId; // studentId
+                var json = JSON.stringify(myObj);
+                $.ajax({
+                    type: 'POST',
+                    url: "selectTreeByTerm.htm",
+                    data: json,
+                    datatype: "json",
+                    contentType: "application/json",
+                    success: function (data) {
+                        var prog = JSON.parse(data);
+                        treeload2(prog);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
+                    }
+
+                });
+            }
             function formatProgress(value) {
                 if (value) {
                     var s = '<div style="width:100%;border:1px solid #ccc">' +
@@ -883,10 +956,38 @@
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="progress">
                                 <div class="col-xs-12">
                                     <div class="row"><p class="text-info"><Strong>PP:</Strong> Presentations planned.</p></div>
-                                    <div class="row"><p class="text-info"><Strong>PD:</Strong> Presentations done.</p></div>
+                                    <div class="row">
+                                        <!--<p class="text-info"><Strong>PD:</Strong> Presentations done.</p>-->
+                                        <div class="row" style="display: flex;justify-content: space-between;">
+                                            <p class="col-xs-4 text-info"><strong>PD:</strong> Presentations done.</p>
+                                            <div class="col-xs-8" id="divTerms" style="display: flex;justify-content: space-between;align-items: baseline;">
+                                                
+                                                <!--<div class="form-check">
+                                                    <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" type="radio">
+                                                    <label class="form-check-label" for="exampleRadios1">Term1</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" name="exampleRadios" id="exampleRadios2" value="option2" type="radio">
+                                                    <label class="form-check-label" for="exampleRadios2">Term2</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" type="radio">
+                                                    <label class="form-check-label" for="exampleRadios1">Term3</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" name="exampleRadios" id="exampleRadios2" value="option2" type="radio">
+                                                    <label class="form-check-label" for="exampleRadios2">Term4</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" checked="" type="radio">
+                                                    <label class="form-check-label" for="exampleRadios1">All</label>
+                                                </div>-->
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-xs-12">
-                                    <div class="row">
+                                    <div class="row" id="containerTG">
                                         <table id="tg" class="easyui-treegrid"></table>
                                     </div>
                                 </div>     
