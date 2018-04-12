@@ -85,9 +85,11 @@
 </head>
 
 <script>
-//    $(document).ready(function () {
-//        $('logoutmodal').hide();
-//    });
+    $(document).ready(function () {
+        if(sesioninterval !== 0)
+            setInterval(function(){alert("Your session is going to be end by 5 min, Please click OK and continue")}, 3000000);
+    });
+    
     var ajax;
     function terms() {
 
