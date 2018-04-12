@@ -170,7 +170,6 @@ public class CreateSettingControlador {
         Objective objective = new Objective();
         try {
             String objectiveid = hsr.getParameter("seleccion3");
-
             ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id,description FROM content where content.id IN (select objective_content.content_id from objective_content where objective_content.objective_id = '" + objectiveid + "') order by name");
 
             while (rs1.next()) {
@@ -183,12 +182,12 @@ public class CreateSettingControlador {
                 contents.add(eq);
             }
             String id = hsr.getParameter("seleccion3");
-
-            ResultSet rs2 = DBConect.eduweb.executeQuery("SELECT name,description FROM public.objective where id =" + id);
+            ResultSet rs2 = DBConect.eduweb.executeQuery("SELECT name,description,term_id FROM public.objective where id =" + id);
 
             while (rs2.next()) {
                 objective.setName(rs2.getString("name"));
                 objective.setDescription(rs2.getString("description"));
+                objective.setFinalrating(rs2.getString("term_id"));
             }
 
             ResultSet rs3 = DBConect.eduweb.executeQuery("SELECT count(id) as nooflessons FROM public.lessons where objective_id =" + id);
@@ -228,6 +227,8 @@ public class CreateSettingControlador {
     public String editObjective(@RequestBody Objective obj, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         List<Objective> objectives = new ArrayList<>();
         String[] sid = hsr.getParameterValues("sid");
+        String termIds = obj.getFinalrating();
+        
         String message = null;
         try {
             String[] obid = obj.getId();
@@ -238,7 +239,7 @@ public class CreateSettingControlador {
             descrip =  obj.getDescription().replace("'", "\'\'");
             descrip = descrip.replace("\"", "\"\"");
             
-            String consulta = "update objective set name = '" + name + "',description ='" + descrip + "'where id =" + obid[0];
+            String consulta = "update objective set term_id = '" + termIds + "' ,name = '" + name + "',description ='" + descrip + "'where id =" + obid[0];
             DBConect.eduweb.executeUpdate(consulta);
             message = "Objective edited successfully";
             Step s = new Step();

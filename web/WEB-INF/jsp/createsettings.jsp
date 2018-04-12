@@ -22,7 +22,8 @@
             $(document).ready(function () {
                 $("#NameObjectiveError").hide();
                 $("#ObjectivesTermsError").hide();
-
+                $("#NameObjectiveErrorEdit").hide();
+                $("#ObjectivesTermsErrorEdit").hide();
 //  var i=1;
 //  
 // $("#add_row").click(function(){
@@ -268,11 +269,21 @@
                 function display(data) {
                     var json = JSON.parse(data);
                     var objective = JSON.parse(json.objective);
+
+                    //objective.finalrating = tiene los ids de los terms para el editar
+                    
                     var content = JSON.parse(json.content);
                     if (objective.nooflessons !== 'NaN') {
                         $('#nooflessons').text("This objective is currently linked to " + objective.nooflessonsplanned + " presentations");
                     }
                     ;
+                    
+                    var arrayTermsIds = objective.finalrating.split(',');
+                    $("#ObjectivesTermsEdit label>input").prop("checked",false);
+                    for(var i= 0;i<arrayTermsIds.length;i++){
+                        $("#ObjectivesTermsEdit label>input[name='"+arrayTermsIds[i]+"']").prop("checked",true);
+                    }
+                    
                     $('#steps').children().remove();
                     steps = objective.steps;
                     $.each(steps, function (i, item) {
@@ -321,8 +332,8 @@
                     if (contentValue !== null, contentValue !== "") {
                         //$('#addContent').attr("disabled", true);
                         $('#delContent').attr("disabled", true);
-                    }
-                    ;
+                    };
+                    
                     //Añadimos los content del objective
                     $('#content').empty();
                     $.each(content, function (i, item) {
@@ -395,21 +406,20 @@
                 if ($("#namenewobjective").val() !== "" && $("#ObjectivesTerms label input:checked").length > 0) {
                     $("#NameObjectiveError").hide();
                     $("#ObjectivesTermsError").hide();
+                    $("#NameObjectiveError").parent().children("input").css("border", "solid 1px #ccc");
                     saveaddObjective();
                 } else {//error
-                    if($("#namenewobjective").val() === ""){
+                    if ($("#namenewobjective").val() === "") {
                         $("#NameObjectiveError").show();
-                        $("#NameObjectiveError").parent().children("input").css("border","solid 1px red");
-                    }
-                    else{
+                        $("#NameObjectiveError").parent().children("input").css("border", "solid 1px red");
+                    } else {
                         $("#NameObjectiveError").hide();
-                       $("#NameObjectiveError").parent().children("input").css("border","solid 1px #ccc")
+                        $("#NameObjectiveError").parent().children("input").css("border", "solid 1px #ccc");
                     }
-                    if($("#ObjectivesTerms label input:checked").length === 0){
+                    if ($("#ObjectivesTerms label input:checked").length === 0) {
                         $("#ObjectivesTermsError").show();
-                        $("#NameObjectiveError").parent().children("input").css("border","solid 1px red")
-                    }
-                    else{
+                        $("#NameObjectiveError").parent().children("input").css("border", "solid 1px red");
+                    } else {
                         $("#ObjectivesTermsError").hide();
                     }
                 }
@@ -458,6 +468,30 @@
                 });
             }
 
+            function saveCheckEditObjective() {
+                //correcto
+                if ($("#editNameObjective").val() !== "" && $("#ObjectivesTermsEdit label input:checked").length > 0) {
+                    $("#NameObjectiveErrorEdit").hide();
+                    $("#ObjectivesTermsErrorEdit").hide();
+                    $("#NameObjectiveErrorEdit").parent().children("input").css("border", "solid 1px #ccc");
+                    saveeditObjective();
+                } else {//error
+                    if ($("#namenewobjective").val() === "") {
+                        $("#NameObjectiveErrorEdit").show();
+                        $("#NameObjectiveErrorEdit").parent().children("input").css("border", "solid 1px red");
+                    } else {
+                        $("#NameObjectiveErrorEdit").hide();
+                        $("#NameObjectiveErrorEdit").parent().children("input").css("border", "solid 1px #ccc");
+                    }
+                    if ($("#ObjectivesTermsEdit label input:checked").length === 0) {
+                        $("#ObjectivesTermsErrorEdit").show();
+                        $("#NameObjectiveErrorEdit").parent().children("input").css("border", "solid 1px red");
+                    } else {
+                        $("#ObjectivesTermsErrorEdit").hide();
+                    }
+                }
+            }
+
             function saveeditObjective()
             {
 
@@ -465,9 +499,21 @@
                 var name = document.getElementById("editNameObjective").value;
                 var description = document.getElementById("editDescriptionObjective").value;
                 var subjectid = document.getElementById("subject").value;
+
+                var termIds = "";
+
+                for (var i = 0; i < $("#ObjectivesTermsEdit label input:checked").length; i++) {
+                    termIds += $("#ObjectivesTermsEdit label input:checked")[i].name;
+
+                    if (i < $("#ObjectivesTermsEdit label input:checked").length - 1)
+                        termIds += ",";
+                } // utilizare la variable finalrating ya que es un string y no se utiliza
+
+
                 var myObj = {};
                 myObj["name"] = name;
                 myObj["description"] = description;
+                myObj["finalrating"] = termIds;
                 myObj["id"] = [seleccion];
                 myObj["steps"] = steps;
                 var json = JSON.stringify(myObj);
@@ -706,6 +752,12 @@
                     $('#formAddcontent').addClass("hidden");
                     $('#formEditcontent').addClass("hidden");
                     $('#editDescriptionObjective').focus();
+
+                    $("#ObjectivesTermsEdit").empty();
+                    $("#termSelect option").each(function () {
+                        $("#ObjectivesTermsEdit").append("<label class='checkbox-inline'><input checked='true' type='checkbox' name='" + $(this).attr("value") + "'>" + $(this).text() + "</label>");
+                    });
+
                     $('#objectiveSelectedForEdit').text($('#subject option:selected').text());
                 });
                 $('#content').click(function () {
@@ -885,7 +937,7 @@
                     <div class="col-xs-3 center-block form-group" id="addObjective">
                         <label class="control-label">Name new objective</label>
                         <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name" >
-                        <div id="NameObjectiveError" style="color:red">Selected a term please</div>
+                        <div id="NameObjectiveError" style="color:red">Write a name</div>
 
                     </div>
                     <div class="col-xs-7 center-block form-group">
@@ -909,16 +961,18 @@
                     </div>
                 </fieldset>
                 <fieldset class="hidden" id="formEditobjetive">
-
                     <legend>Edit objective in <span id="objectiveSelectedForEdit"></span></legend>
                         <%--Edit objective--%>
                     <div class="col-xs-3 center-block form-group" id="addObjective">
                         <label class="control-label">Edit objective</label>
                         <input type="text" class="form-control" name="TXTeditNameObjective" id="editNameObjective"  placeholder="Name">
+                        <div id="NameObjectiveErrorEdit" style="color:red">Write a name</div>
                     </div>
                     <div class="col-xs-4 center-block form-group">
                         <label class="control-label">Description</label>
                         <textarea type="text" class="form-control" rows="5" name="TXTeditDescriptionObjective" id="editDescriptionObjective"  placeholder="Description"></textarea>
+                        <div class="col-xs-12" id="ObjectivesTermsEdit"></div>
+                        <div class="col-xs-12" id="ObjectivesTermsErrorEdit"  style="color:red">Selected a term please</div>
                     </div>
                     <div class="col-xs-2 center-block form-group">
                         <label class="control-label">Steps</label>
@@ -930,7 +984,7 @@
                             <input type="button" name="EditObjectiveSteps" value="Edit Steps" class="btn btn-success" id="editObjectiveSteps" data-target=".bs-example-modal-lg" onclick="stepsEdit()"/>
                         </div>
                         <div class="col-xs-4 center-block form-group paddingLabel">
-                            <input type="button" name="AddObjective" value="Save" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveeditObjective()"/>
+                            <input type="button" name="AddObjective" value="Save" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveCheckEditObjective()"/>
                         </div>
                     </div>
                     <div class="col-xs-3 center-block form-group" id="addObjective">
