@@ -72,6 +72,8 @@
                         $('#showStudents').addClass("desactivada");
                         $('#showStudents').off('click');
                         $("#contenedorStudents").removeClass('in');
+                         $("#horainicioInput").removeAttr('required');
+                        $("#horafinInput").removeAttr('required');
                         if (document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("NameLessons").value === '' || document.getElementById("comments").value === '') {
                             $('#createOnClick').attr('disabled', true);
                         } else {
