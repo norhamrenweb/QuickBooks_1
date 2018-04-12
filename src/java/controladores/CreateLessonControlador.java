@@ -481,9 +481,9 @@ public class CreateLessonControlador {
     public static ArrayList<Objective> getObjectives(HttpSession session,String[] subjectid) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
-            String consulta = "select name,id from public.objective where subject_id='" + subjectid[0] + "' and "
-                    + "year_id=" + session.getAttribute("yearId")
-                    + " and term_id=" + session.getAttribute("termId")
+            String consulta = "select name,id from public.objective where subject_id='" + subjectid[0] + "' "
+//                    + " and year_id=" + session.getAttribute("yearId")
+//                    + " and term_id=" + session.getAttribute("termId")
                     + " order by name";
             ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
             Objective s = new Objective();
