@@ -24,6 +24,8 @@
                 $("#ObjectivesTermsError").hide();
                 $("#NameObjectiveErrorEdit").hide();
                 $("#ObjectivesTermsErrorEdit").hide();
+
+
 //  var i=1;
 //  
 // $("#add_row").click(function(){
@@ -271,19 +273,23 @@
                     var objective = JSON.parse(json.objective);
 
                     //objective.finalrating = tiene los ids de los terms para el editar
-                    
+
                     var content = JSON.parse(json.content);
                     if (objective.nooflessons !== 'NaN') {
                         $('#nooflessons').text("This objective is currently linked to " + objective.nooflessonsplanned + " presentations");
                     }
                     ;
-                    
+
+                    $("#ObjectivesTermsEdit").empty();
+                    $("#termSelect option").each(function () {
+                        $("#ObjectivesTermsEdit").append("<label class='checkbox-inline'><input checked='true' type='checkbox' name='" + $(this).attr("value") + "'>" + $(this).text() + "</label>");
+                    });
                     var arrayTermsIds = objective.finalrating.split(',');
-                    $("#ObjectivesTermsEdit label>input").prop("checked",false);
-                    for(var i= 0;i<arrayTermsIds.length;i++){
-                        $("#ObjectivesTermsEdit label>input[name='"+arrayTermsIds[i]+"']").prop("checked",true);
+                    $("#ObjectivesTermsEdit label>input").prop("checked", false);
+                    for (var i = 0; i < arrayTermsIds.length; i++) {
+                        $("#ObjectivesTermsEdit label>input[name='" + arrayTermsIds[i] + "']").prop("checked", true);
                     }
-                    
+
                     $('#steps').children().remove();
                     steps = objective.steps;
                     $.each(steps, function (i, item) {
@@ -332,8 +338,9 @@
                     if (contentValue !== null, contentValue !== "") {
                         //$('#addContent').attr("disabled", true);
                         $('#delContent').attr("disabled", true);
-                    };
-                    
+                    }
+                    ;
+
                     //Añadimos los content del objective
                     $('#content').empty();
                     $.each(content, function (i, item) {
@@ -752,12 +759,6 @@
                     $('#formAddcontent').addClass("hidden");
                     $('#formEditcontent').addClass("hidden");
                     $('#editDescriptionObjective').focus();
-
-                    $("#ObjectivesTermsEdit").empty();
-                    $("#termSelect option").each(function () {
-                        $("#ObjectivesTermsEdit").append("<label class='checkbox-inline'><input checked='true' type='checkbox' name='" + $(this).attr("value") + "'>" + $(this).text() + "</label>");
-                    });
-
                     $('#objectiveSelectedForEdit').text($('#subject option:selected').text());
                 });
                 $('#content').click(function () {
