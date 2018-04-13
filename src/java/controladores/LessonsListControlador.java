@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -348,11 +349,13 @@ public class LessonsListControlador {
 
     @RequestMapping("/homepage/compartir.htm")
     @ResponseBody
-    public String compartirLesson(HttpServletRequest hsr, HttpServletResponse hsr1) throws JSONException {
-        String obj = hsr.getParameter("obj");
-        JSONObject json = new JSONObject(obj);
-        JSONArray ids = json.getJSONArray("teachers");
-        String idlesson = json.getString("id");
+    public String compartirLesson(@RequestBody ObjetoCompartir obj,HttpServletRequest hsr, HttpServletResponse hsr1) throws JSONException {
+//        String obj = hsr.getParameter("obj");
+//        JSONObject json = new JSONObject(obj);
+//        JSONArray ids = json.getJSONArray("teachers");
+//        String idlesson = json.getString("id");
+            JSONArray ids = obj.getTeachers();
+             String idlesson =obj.getId();
 
         try {
             String consulta;

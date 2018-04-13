@@ -347,9 +347,10 @@
                 obj.teachers = teachers;
                 $.ajax({
                     type: "POST",
-                    url: "compartir.htm?obj=" + JSON.stringify(obj),
+                    url: "compartir.htm",// + JSON.stringify(obj),
                     data: JSON.stringify(obj),
-                    dataType: 'text',
+                    datatype: "json",
+                    contentType: "application/json",
                     success: function (data) {
                         $('#destino').empty();
                         $('#compartirmessage').empty();
