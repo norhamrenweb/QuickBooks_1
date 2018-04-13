@@ -72,11 +72,18 @@ public class LessonsListControlador {
     @ResponseBody
     public String loadschedule(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         User user = (User) hsr.getSession().getAttribute("user");
+
+        String idTerm = hsr.getParameter("termId");
+
+        String[] parts = idTerm.split("-");
+        String idYear = parts[1];
+        idTerm = parts[0];
+
         String consultAux = "";
         if (user.getType() == 1) {
             consultAux = "user_id = " + user.getId() + " and";
         }
-        String consulta = "SELECT * FROM public.lessons where " + consultAux + " COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+        String consulta = "SELECT * FROM public.lessons where " + consultAux + " COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE and term_id= " + idTerm + " and " + "yearterm_id=" + idYear;
         ResultSet rs = DBConect.eduweb.executeQuery(consulta);
         ArrayList<JSONObject> lessonslist = new ArrayList<>();
         while (rs.next()) {
@@ -89,9 +96,11 @@ public class LessonsListControlador {
             l.put("allDay", "false");
             l.put("objid", rs.getString("objective_id"));
             l.put("idteacher", rs.getString("user_id"));
+            l.put("gradeLevel", rs.getInt("level_id"));
+            l.put("share", false);
             lessonslist.add(l);
         }
-        consulta = "SELECT * FROM lessons inner join lessonpresentedby on lessonid=id where teacherid=" + user.getId() + " AND COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE";
+        consulta = "SELECT * FROM lessons inner join lessonpresentedby on lessonid=id where teacherid=" + user.getId() + " AND COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE  and term_id= " + idTerm + " and " + "yearterm_id=" + idYear;
         rs = DBConect.eduweb.executeQuery(consulta);
         while (rs.next()) {
             JSONObject l = new JSONObject();
@@ -103,6 +112,8 @@ public class LessonsListControlador {
             l.put("allDay", "false");
             l.put("objid", rs.getString("objective_id"));
             l.put("idteacher", rs.getString("user_id"));
+            l.put("gradeLevel", rs.getInt("level_id"));
+            l.put("share", true);
             lessonslist.add(l);
         }
         for (JSONObject l : lessonslist) {
@@ -133,9 +144,10 @@ public class LessonsListControlador {
             lastname = rs.getString("lastname");
             id = rs.getInt("StaffID");
             groupId = rs.getInt("GroupID");
-            if (id != iduser && mapGroups.get(groupId).equals("MontessoriTeacher")) 
+            if (id != iduser && mapGroups.get(groupId).equals("MontessoriTeacher")) {
                 t.add(new Teacher(lastname + ", " + firstname, id));
-            
+            }
+
         }
 
         return t;
@@ -349,13 +361,13 @@ public class LessonsListControlador {
 
     @RequestMapping("/homepage/compartir.htm")
     @ResponseBody
-    public String compartirLesson(@RequestBody ObjetoCompartir obj,HttpServletRequest hsr, HttpServletResponse hsr1) throws JSONException {
+    public String compartirLesson(@RequestBody ObjetoCompartir obj, HttpServletRequest hsr, HttpServletResponse hsr1) throws JSONException {
 //        String obj = hsr.getParameter("obj");
 //        JSONObject json = new JSONObject(obj);
 //        JSONArray ids = json.getJSONArray("teachers");
 //        String idlesson = json.getString("id");
-            JSONArray ids = obj.getTeachers();
-             String idlesson =obj.getId();
+        JSONArray ids = obj.getTeachers();
+        String idlesson = obj.getId();
 
         try {
             String consulta;

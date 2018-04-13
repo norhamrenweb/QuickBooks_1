@@ -77,6 +77,9 @@
                         $('#showStudents').off('click');
                         $("#contenedorStudents").removeClass('in');
 
+                        $("#horainicioInput").removeAttr('required');
+                        $("#horafinInput").removeAttr('required');
+
                     } else if ($("#ideaCheck :not(:checked)"))
                     {
                         $('#showDate').removeClass("desactivada");
@@ -88,6 +91,9 @@
                         $('#showStudents').on('click', function () {
                             $("#contenedorDate").toggleClass('in');
                         });
+
+                        $("#horainicioInput").attr('required', '');
+                        $("#horafinInput").attr('required', '');
                         $("#contenedorStudents").addClass('in');
                     }
                 });
@@ -253,76 +259,76 @@
                         $('#NameLessons').parent().children().last().addClass("hide");
                     }
                 });
-              $("#linkRecommend").click(function () {
-                var myObj = {};
-                myObj["id"] = $("#objective :selected").val()
-                var json = JSON.stringify(myObj);
-                $.ajax({
-                    type: 'POST',
-                    url: 'loadRecommend.htm',
-                    data: json,
-                    datatype: "json",
-                    contentType: "application/json",
-                    success: function (data) {
-                        var datos = JSON.parse(data);
-                        $("#recommendStudent label").remove();
-                        $("#recommendStudent br").remove();
-                        for (i = 0; i < datos.length; i++) {
-                            // $("#recommendStudent").append(" <option value='"+datos[i]+"' >"+mapStudents[datos[i]]+"</option>")  
-                            $("#recommendStudent").append("<label class='form-check-label'>\n\
+                $("#linkRecommend").click(function () {
+                    var myObj = {};
+                    myObj["id"] = $("#objective :selected").val()
+                    var json = JSON.stringify(myObj);
+                    $.ajax({
+                        type: 'POST',
+                        url: 'loadRecommend.htm',
+                        data: json,
+                        datatype: "json",
+                        contentType: "application/json",
+                        success: function (data) {
+                            var datos = JSON.parse(data);
+                            $("#recommendStudent label").remove();
+                            $("#recommendStudent br").remove();
+                            for (i = 0; i < datos.length; i++) {
+                                // $("#recommendStudent").append(" <option value='"+datos[i]+"' >"+mapStudents[datos[i]]+"</option>")  
+                                $("#recommendStudent").append("<label class='form-check-label'>\n\
                                                                 <input class='form-check-input' type='checkbox' value='" + datos[i] + "' checked> \n\
                                                                     " + mapStudents[datos[i]] + "    \n\
                                                             </label><br>");
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr.status);
+                            console.log(xhr.responseText);
+                            console.log(thrownError);
                         }
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        console.log(xhr.status);
-                        console.log(xhr.responseText);
-                        console.log(thrownError);
-                    }
 
-
-                });
-            });
-            $("#btnRecommend").click(function () {
-
-
-                $("#recommendStudent label input:checked").each(function () {
-                    var exist = false;
-                    var value1 = $(this);
-                    $('#destino option').each(function (index, value2) {
-                        if (value1.val() === value2.value)
-                            exist = true;
 
                     });
-                    if (!exist) {
-                        $("#destino").append(" <option value='" + value1.val() + "' >" + value1.parent().text().trim() + "</option>")
+                });
+                $("#btnRecommend").click(function () {
+
+
+                    $("#recommendStudent label input:checked").each(function () {
+                        var exist = false;
+                        var value1 = $(this);
+                        $('#destino option').each(function (index, value2) {
+                            if (value1.val() === value2.value)
+                                exist = true;
+
+                        });
+                        if (!exist) {
+                            $("#destino").append(" <option value='" + value1.val() + "' >" + value1.parent().text().trim() + "</option>")
+                        }
+                    });
+
+                    var numAlum = $('#destino option').length;
+                    if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
+                        $('#createOnClick').attr('disabled', false);
+                    } else {
+                        $('#createOnClick').attr('disabled', true);
                     }
+
+
+                    $('#destino option').first().prop('selected', true);
+
+                    $("#studentsName").val("");
+                    $("#destino option").each(function ()
+                    {
+                        $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
+
+                    });
+
+                    // $("#studentsName").val($("#destino").text().trim());
+                    return;
                 });
 
-                var numAlum = $('#destino option').length;
-                if (($("#NameLessons").val().indexOf("'") === -1) && ($("#NameLessons").val().indexOf("\"") === -1) && document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
-                    $('#createOnClick').attr('disabled', false);
-                } else {
-                    $('#createOnClick').attr('disabled', true);
-                }
-
-
-                $('#destino option').first().prop('selected', true);
-
-                $("#studentsName").val("");
-                $("#destino option").each(function ()
-                {
-                    $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
-
-                });
-
-                // $("#studentsName").val($("#destino").text().trim());
-                return;
             });
 
-});
-          
 
             $().ready(function ()
             {
@@ -452,9 +458,9 @@
                         $('#loadingmessage').hide();
                         $('#subject').empty();
                         var json = JSON.parse(ajax.responseText);
-                        for(i in json){
-                           $('#subject').append("<option value='"
-                                   +json[i].id[0]+"'>"+json[i].name+"</option>"); 
+                        for (i in json) {
+                            $('#subject').append("<option value='"
+                                    + json[i].id[0] + "'>" + json[i].name + "</option>");
                         }
                     }
                 }
@@ -465,14 +471,14 @@
                     if (ajax.status === 200) {
                         var json = JSON.parse(ajax.responseText);
                         $('#objective').empty();
-                        for(var i=0; i< json.length;i+=1){
-                            if(i === 0)
+                        for (var i = 0; i < json.length; i += 1) {
+                            if (i === 0)
                                 $('#objective').append("<option value='"
-                                    +-1+"'>"+json[i].name+"</option>");
+                                        + -1 + "'>" + json[i].name + "</option>");
                             else
                                 $('#objective').append("<option value='"
-                                    +json[i].id[0]+"'>"+json[i].name+"</option>");
-                            
+                                        + json[i].id[0] + "'>" + json[i].name + "</option>");
+
                         }
                     }
                 }
@@ -551,9 +557,9 @@
                     if (ajax.status === 200) {
                         $('#content').empty();
                         var json = JSON.parse(ajax.responseText);
-                        for(var i=0;i < json.length;i+=1)
-                            $('#content').append("<option value='"+json[i].id[0]+"'>"
-                                +json[i].name+"</option>");
+                        for (var i = 0; i < json.length; i += 1)
+                            $('#content').append("<option value='" + json[i].id[0] + "'>"
+                                    + json[i].name + "</option>");
                     }
                 }
             }
