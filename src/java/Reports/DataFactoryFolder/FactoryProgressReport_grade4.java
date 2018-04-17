@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -42,7 +43,7 @@ public class FactoryProgressReport_grade4 extends DataFactory {
     }
 
     @Override
-    public Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
+    public Collection getDataSource(HttpServletRequest hsr, String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
 
         String studentId = idStudent;
         java.util.Vector coll = new java.util.Vector();

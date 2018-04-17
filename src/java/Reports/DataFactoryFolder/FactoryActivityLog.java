@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.net.ntp.TimeStamp;
 
 /**
@@ -45,7 +46,7 @@ public class FactoryActivityLog extends DataFactory {
     }
 
     @Override
-    public Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
+    public Collection getDataSource(HttpServletRequest hsr,  String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
         /*
         String studentId = idStudent; 
         java.util.Vector coll = new java.util.Vector();
@@ -72,7 +73,7 @@ public class FactoryActivityLog extends DataFactory {
         return null;
     }
 
-    public static Collection getDataSource(String nameUser,String start, String finish, String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException, ParseException {
+    public static Collection getDataSource(HttpServletRequest hsr, String nameUser,String start, String finish, String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException, ParseException {
 
         java.util.Vector coll = new java.util.Vector();
         ArrayList<String> os4 = new ArrayList<>();

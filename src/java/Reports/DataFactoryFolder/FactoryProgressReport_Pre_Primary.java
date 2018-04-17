@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -32,13 +33,17 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         term = "";
     }
 
-    public Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
+    public Collection getDataSource(HttpServletRequest hsr, String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
 
         String studentId = idStudent;
         String consulta = "";
         ResultSet rs;
         cargarAlumno(studentId); // tarda 1
 
+        String f = ""+hsr.getSession().getAttribute("yearId");
+        Object v =hsr.getSession().getAttribute("termId");
+
+        
         ArrayList<String> lessons = new ArrayList<>();
         java.util.Vector coll = new java.util.Vector();
         ArrayList<Subject> subjects = new ArrayList<>();
@@ -175,7 +180,8 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         return coll;
         // return new JRBeanCollectionDataSource(coll);
     }
- @Override
+
+    @Override
     protected void cargarAlumno(String studentId) throws SQLException {
         String consulta = "SELECT * FROM Students where StudentId = '" + studentId + "'";
         ResultSet rs = DBConect.ah.executeQuery(consulta);
@@ -188,8 +194,9 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
             this.age = "" + (year - Integer.parseInt("" + dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3)));
             this.grade = rs.getString("GradeLevel");
         }
-        
+
     }
+
     @Override
     public String getNameReport() {
         return "Pre-Primary_Progress_Report_December2017_v2_4.jasper";
