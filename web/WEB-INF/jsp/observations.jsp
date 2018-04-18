@@ -15,7 +15,7 @@
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-
+        <link rel="manifest" href="manifest.webapp">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
         <title>Workspace</title>
@@ -1231,13 +1231,13 @@
             function startDictation() {
 
 
-                if ('webkitSpeechRecognition' in window) {
+               // if ('webkitSpeechRecognition' in window) {
 
 
-                      //  if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                   if (window.hasOwnProperty('webkitSpeechRecognition')) {
 
-                   var recognition = SpeechRecognition || webkitSpeechRecognition;
-                    //var recognition = new webkitSpeechRecognition();
+                  // var recognition = SpeechRecognition || webkitSpeechRecognition;
+                    var recognition = new webkitSpeechRecognition();
                     recognition.continuous = false;
                     recognition.interimResults = false;
 

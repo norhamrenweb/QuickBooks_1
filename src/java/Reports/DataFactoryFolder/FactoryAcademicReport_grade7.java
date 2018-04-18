@@ -89,8 +89,6 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             for (int i = 0; i < os4.size(); i++) {
                 as4.add("");
             }
-
-            //coll.add(new BeanWithList("History:Teacher Smith:40:comment a::bout History ...",new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
             coll.add(new BeanWithList(auxOs, os4, as4, nameStudent, dob, age, grade, term));
 
         }
