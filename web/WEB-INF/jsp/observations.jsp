@@ -15,7 +15,7 @@
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-
+        <link rel="manifest" href="manifest.webapp">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
         <title>Workspace</title>
@@ -26,7 +26,7 @@
             var studentid;
             var comments;
             var mapTeachers = ${teachers};
-            
+
             $(document).ready(function () {
                 $("#infousuario").addClass("navbar-fixed-top");
                 ////////////////////////////////////////////NUEVO//////////
@@ -38,7 +38,7 @@
                 });
                 //VARIABLE CUANDO   HEMOS CREADO UNA LESSONS CORRECTAMENTE              
                 //f
-                
+
                 $('#fecha2').datetimepicker({
                     format: 'YYYY-MM-DD',
 //            locale: userLang.valueOf(),
@@ -910,7 +910,7 @@
                                 tresPuntosStep = "";
                             $('#semana0').append("<div class='divAddNotas' id='" + comment.id + "'> \n\
                                                     <div class='project project-radius project-" + colorRating + "'>\n\
-                                                        <div class='shape' id='"+comment.id+"shape'>	\n\
+                                                        <div class='shape' id='" + comment.id + "shape'>	\n\
                                                             <div class='shape-text'></div>\n\
                                                         </div>\n\
                                                         <div class='project-content'>\n\
@@ -939,8 +939,8 @@
                                 $("#editComentario" + comment.id).attr("disabled", "true");
                                 $("#ConfirmDeleteComentario" + comment.id).attr("disabled", "true");
                             }
-                            
-                            $('#' + comment.id+ " div").css("border-color", color);
+
+                            $('#' + comment.id + " div").css("border-color", color);
                             $('#' + comment.id + "shape").css("border-color", "transparent " + color + " transparent transparent");
                             $('#' + comment.id + "shape").css("border-color", "rgba(255,255,255,0) " + color + " rgba(255,255,255,0) rgba(255,255,255,0)");
                         });
@@ -1013,7 +1013,7 @@
                     if (comment.id === id) {
                         /* $('#commentcomplete').append('<div><h4>Comment</h4></div>\n\
                          <div>' + comment.comment + '</div');*/
-                        $('#commentcomplete').append("<div class='row'><strong>Created by: </strong>"+mapTeachers[Number(comment.createdby)]+"</div><div class='row'><strong>Comment: </strong> " + comment.comment + "</div");
+                        $('#commentcomplete').append("<div class='row'><strong>Created by: </strong>" + mapTeachers[Number(comment.createdby)] + "</div><div class='row'><strong>Comment: </strong> " + comment.comment + "</div");
                         $('#completemodal').modal('show');
                     }
                 });
@@ -1227,8 +1227,44 @@
                 }
             }
 
+
+            function startDictation() {
+
+
+               // if ('webkitSpeechRecognition' in window) {
+
+
+                   if (window.hasOwnProperty('webkitSpeechRecognition')) {
+
+                  // var recognition = SpeechRecognition || webkitSpeechRecognition;
+                    var recognition = new webkitSpeechRecognition();
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+
+                    recognition.lang = "es-ES";
+                    recognition.start();
+
+                    recognition.onresult = function (e) {
+                        document.getElementById('commentcontent').value
+                                = e.results[0][0].transcript;
+                        recognition.stop();
+                    };
+
+                    recognition.onerror = function (e) {
+                        recognition.stop();
+                    }
+
+                }
+           }
+
         </script>
         <style>
+
+            .speech {border: 1px solid #DDD; width: 300px; padding: 0; margin: 0}
+            .speech input {border: 0; width: 240px; display: inline-block; height: 30px;}
+            .speech img {float: right; width: 40px }
+
+
             body{
                 margin-top: 120px;
             }
@@ -1625,8 +1661,8 @@
     </head>
     <body>
         <div class="row">
-            
-            
+
+
             <div class="col-xs-2" >
                 <!--<select id="grades">
                 <c:forEach var="levels" items="${gradelevels}">
@@ -2088,7 +2124,12 @@
                                 <div id="steps_show" class="col-xs-12 text-left"></div>
                             </div>
                             <div class="col-xs-6">
-                                <textarea style="width:100%;" rows="7" id="commentcontent" required="required"></textarea>
+
+
+                                <div class="speech">
+                                    <textarea style="width:100%;" rows="7" id="commentcontent" required="required"></textarea>
+                                    <img onclick="startDictation()" src="//i.imgur.com/cHidSVu.gif" />
+                                </div>
                                 <select name="TXTrating" id="hi" class="studentRating rating" style="margin-top:10px">
                                     <option></option>
                                     <option value="N/A">N/A</option>

@@ -139,9 +139,9 @@ public class html extends HttpServlet {
         //   List<SimpleExporterInput> list = new ArrayList<SimpleExporterInput>();
         JRDataSource datasource;
         if (!d.getClass().equals(FactoryActivityLog.class)) {
-            datasource = new JRBeanCollectionDataSource(d.getDataSource(stids[0], this.getServletContext()), true);
+            datasource = new JRBeanCollectionDataSource(d.getDataSource(request,stids[0], this.getServletContext()), true);
         } else {
-            datasource = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(((User) request.getSession().getAttribute("user")).getName(), start, finish, stids[0], this.getServletContext()), true);
+            datasource = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(request,((User) request.getSession().getAttribute("user")).getName(), start, finish, stids[0], this.getServletContext()), true);
 
         }
         JasperPrint jasperPrint = jasperFillManager.fill(jasperReport, map, datasource);//fill(jasperReport,map, conn);
@@ -149,9 +149,9 @@ public class html extends HttpServlet {
         for (int i = 1; i < stids.length; i++) {
             JRDataSource datasource2;
             if (!d.getClass().equals(FactoryActivityLog.class)) {
-                datasource2 = new JRBeanCollectionDataSource(d.getDataSource(stids[i], this.getServletContext()), true);
+                datasource2 = new JRBeanCollectionDataSource(d.getDataSource(request,stids[i], this.getServletContext()), true);
             } else {
-                datasource2 = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(((User) request.getSession().getAttribute("user")).getName(), start, finish, stids[i], this.getServletContext()), true);
+                datasource2 = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(request,((User) request.getSession().getAttribute("user")).getName(), start, finish, stids[i], this.getServletContext()), true);
             }
             JasperPrint jasperPrintAux = jasperFillManager.fill(jasperReport, map, datasource2);//fill(jasperReport,map, conn);
             for (int j = 0; j < jasperPrintAux.getPages().size(); j++) {

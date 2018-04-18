@@ -72,7 +72,7 @@
                         $('#showStudents').addClass("desactivada");
                         $('#showStudents').off('click');
                         $("#contenedorStudents").removeClass('in');
-                         $("#horainicioInput").removeAttr('required');
+                        $("#horainicioInput").removeAttr('required');
                         $("#horafinInput").removeAttr('required');
                         if (document.getElementById("objective").value === 0 || document.getElementById("objective").value === '' || document.getElementById("NameLessons").value === '' || document.getElementById("comments").value === '') {
                             $('#createOnClick').attr('disabled', true);
@@ -93,6 +93,9 @@
                         });
                         $("#contenedorStudents").addClass('in');
                         $('#createOnClick').attr('disabled', true);
+                        
+                        $("#horainicioInput").attr('required','');
+                        $("#horafinInput").attr('required','');
 
                         var numAlum = $('#destino option').length;
                         if (document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {

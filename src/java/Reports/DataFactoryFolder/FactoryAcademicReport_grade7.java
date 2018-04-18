@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -39,7 +40,7 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
     }
 
     @Override
-    public Collection getDataSource(String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
+    public Collection getDataSource(HttpServletRequest hsr, String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
 
         String studentId = idStudent;
         java.util.Vector coll = new java.util.Vector();
@@ -47,8 +48,23 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         ArrayList<String> as4 = new ArrayList<>();
         cargarAlumno(studentId);
 
-        TreeMap<Integer, Profesor> mapTeachers = getTeachers(idStudent);
-        HashMap<String, String> mapComentarios = getComments(idStudent);
+        String yearId = "" + hsr.getSession().getAttribute("yearId");
+        String termId = "" + hsr.getSession().getAttribute("termId");
+
+        String nameTerm = "", nameYear = "";
+        ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + termId + " and YearID = " + yearId);
+        while (rs3.next()) {
+            nameTerm = "" + rs3.getString("name");
+        }
+        ResultSet rs4 = DBConect.ah.executeQuery("select SchoolYear from SchoolYear where yearID = " + yearId);
+        while (rs4.next()) {
+            nameYear = "" + rs4.getString("SchoolYear");
+        }
+
+        this.term = nameTerm + " / " + nameYear;
+
+        TreeMap<Integer, Profesor> mapTeachers = getTeachers(yearId, termId, idStudent);
+        HashMap<String, String> mapComentarios = getComments(yearId, termId, idStudent);
 
         ArrayList<String> lessons = new ArrayList<>();
         ResultSet rs;
@@ -73,16 +89,14 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             for (int i = 0; i < os4.size(); i++) {
                 as4.add("");
             }
-
-            //coll.add(new BeanWithList("History:Teacher Smith:40:comment a::bout History ...",new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
             coll.add(new BeanWithList(auxOs, os4, as4, nameStudent, dob, age, grade, term));
 
         }
-        coll.add(new BeanWithList("Head of School#Kim Euston-Brown# #" + getSuperComment(idStudent), new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
+        coll.add(new BeanWithList("Head of School#Kim Euston-Brown# #" + getSuperComment(yearId, termId, idStudent), new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
         return coll;
     }
 
-    private String getSuperComment(String idStudent) {
+    private String getSuperComment(String yearId, String termId, String idStudent) {
         try {
             String consulta = "select * from report_comments where supercomment=true and studentid = " + idStudent;
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
@@ -114,11 +128,11 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         return aux;
     }
 
-    private HashMap<String, String> getComments(String id) throws SQLException {
+    private HashMap<String, String> getComments(String yearId, String termId, String id) throws SQLException {
         HashMap<String, String> mapComment = new HashMap<>();
 
         try {
-            String consulta = "select * from report_comments where studentid = " + id + "order by date_created DESC";
+            String consulta = "select * from report_comments where supercomment=false and studentid = " + id + " and term_id = " + termId + " and yearterm_id=" + yearId + "order by date_created DESC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 mapComment.put(rs.getString("subject_id"), rs.getString("comment"));
