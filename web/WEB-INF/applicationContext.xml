@@ -18,7 +18,7 @@ change the defeinition of the progress view,very important
         p:url="jdbc:postgresql://192.168.1.3:5432/LessonsDemo" 
         p:username="eduweb"
         p:password="Madrid2016"/>
-<!--must change the ftp path as well,veryimportant, also change the school code inside Homepage controlador-->
+<!--must change the ftp path as well,veryimportant, also change the school code inside Homepage controlador also in Login verification calss-->
 <bean id="dataSourceAH" class="org.springframework.jdbc.datasource.DriverManagerDataSource"
         p:driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
         p:url="jdbc:sqlserver://rwi-spain.odbc.renweb.com\rwi_spain:1433;databaseName=rwi_spain"
