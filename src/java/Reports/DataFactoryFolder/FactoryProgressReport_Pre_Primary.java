@@ -40,14 +40,15 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         ResultSet rs;
         cargarAlumno(studentId); // tarda 1
 
-        String f = ""+hsr.getSession().getAttribute("yearId");
-        Object v =hsr.getSession().getAttribute("termId");
+        String yearId = "" + hsr.getSession().getAttribute("yearId");
+        String termId  = ""+hsr.getSession().getAttribute("termId");
 
-        
         ArrayList<String> lessons = new ArrayList<>();
         java.util.Vector coll = new java.util.Vector();
         ArrayList<Subject> subjects = new ArrayList<>();
-        rs = DBConect.eduweb.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
+        //  rs = DBConect.eduweb.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
+        rs = DBConect.eduweb.executeQuery("SELECT * from lesson_stud_att inner join lessons on lessons.id = lesson_stud_att.lesson_id where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' ' "
+                + "and term_id = "+termId+" and yearterm_id = "+yearId);
         while (rs.next()) {
             lessons.add("" + rs.getInt("lesson_id"));
         }

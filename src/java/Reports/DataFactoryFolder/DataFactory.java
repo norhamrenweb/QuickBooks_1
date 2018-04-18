@@ -83,7 +83,7 @@ public abstract class DataFactory {
         return name.substring(ini, name.length());
     }
      
-      protected TreeMap<Integer, Profesor> getTeachers(String id) throws SQLException {
+      protected TreeMap<Integer, Profesor> getTeachers(String yearId,String termId,String id) throws SQLException {
         TreeMap<Integer, Profesor> mapTeachers = new TreeMap<>();
         ArrayList<Profesor> listaProfesores = new ArrayList<>();
         TreeMap<String, String> mapNames = new TreeMap<>();
@@ -97,7 +97,7 @@ public abstract class DataFactory {
             String consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"
                     + " on Roster.ClassID = Classes.ClassID"
                     + " inner join Courses on  Classes.CourseID = Courses.CourseID"
-                    + "  where Roster.StudentID = " + id + "and Classes.yearid = " + this.yearid + "and Courses.ReportCard = 1 order by courses.RCPlacement";
+                    + "  where Roster.StudentID = " + id + " and Classes.Term"+termId+"= 'true' and Classes.yearid = " + yearId + " and Courses.ReportCard = 1 order by courses.RCPlacement";
             ResultSet rs = DBConect.ah.executeQuery(consulta);
             while (rs.next()) {
                 staffids.add(rs.getInt("StaffID"));

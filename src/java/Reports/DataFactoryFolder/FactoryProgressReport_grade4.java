@@ -51,8 +51,11 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         ArrayList<String> as4 = new ArrayList<>();
         cargarAlumno(studentId);
 
-        TreeMap<Integer, Profesor> mapTeachers = getTeachers(idStudent);
-        HashMap<String, String> mapComentarios = getComments(idStudent);
+        String yearId = "" + hsr.getSession().getAttribute("yearId");
+        String termId = "" + hsr.getSession().getAttribute("termId");
+
+        TreeMap<Integer, Profesor> mapTeachers = getTeachers(yearId, termId,idStudent);
+        HashMap<String, String> mapComentarios = getComments(yearId, termId, idStudent);
 
         for (Map.Entry<Integer, Profesor> entry : mapTeachers.entrySet()) {
             String key = entry.getValue().getClassId();
@@ -67,26 +70,37 @@ public class FactoryProgressReport_grade4 extends DataFactory {
             String auxOs = nameAsignatura + "#" + value.getFirstName() + "#" + aux;
             os4.add(auxOs);
         }
+        
+        String nameTerm="",nameYear="";
+        ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + termId + " and YearID = " + yearId);
+        while (rs3.next()) {
+            nameTerm = "" + rs3.getString("name");
+        }
+        ResultSet rs4 = DBConect.ah.executeQuery("select SchoolYear from SchoolYear where yearID = " + yearId);
+        while (rs4.next()) {
+            nameYear = "" + rs4.getString("SchoolYear");
+        }
+
+        this.term = nameTerm + " / " + nameYear;
+
         term = term.replace("Q", "T");
-        os4.add("Head of School#Kim Euston-Brown#" + getSuperComment(idStudent));
-        
-        String nameTutor="#";
-        String consulta = "select firstName,lastName from(select StaffID from classes inner join roster on roster.classid = classes.classid where homeroom = 1 and roster.studentid = "+idStudent+" and roster.enrolled1 = 1 and classes.yearid ="+yearid+") a inner join person on a.StaffID= person.personid";
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
-            while (rs.next()) {
-               nameTutor += rs.getString("firstName") +" "+ rs.getString("lastName") ;
-            }
-        
-        coll.add(new BeanWithList(null, os4, as4, nameStudent, dob, age, grade, term+nameTutor));
+        os4.add("Head of School#Kim Euston-Brown#" + getSuperComment(yearId, termId, idStudent));
+
+        String nameTutor = "#Tutor";
+        String consulta = "select firstName,lastName from(select StaffID from classes inner join roster on roster.classid = classes.classid where homeroom = 1 and roster.studentid = " + idStudent + " and roster.enrolled1 = 1 and classes.yearid =" + yearid + ") a inner join person on a.StaffID= person.personid";
+        ResultSet rs = DBConect.ah.executeQuery(consulta);
+        while (rs.next()) {
+            nameTutor = "#" + rs.getString("firstName") + " " + rs.getString("lastName");
+        }
+
+        coll.add(new BeanWithList(null, os4, as4, nameStudent, dob, age, grade, term + nameTutor));
 
         return coll;
     }
 
-   
-
-    private String getSuperComment(String idStudent) {
+    private String getSuperComment(String yearId, String termId, String idStudent) {
         try {
-            String consulta = "select * from report_comments where supercomment=true and studentid = " + idStudent;
+            String consulta = "select * from report_comments where supercomment=true and studentid = " + idStudent + "and term_id = " + termId + " and yearterm_id=" + yearId;
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 return rs.getString("comment");
@@ -99,11 +113,11 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         return "No comments";
     }
 
-    private HashMap<String, String> getComments(String id) throws SQLException {
+    private HashMap<String, String> getComments(String yearId, String termId, String id) throws SQLException {
         HashMap<String, String> mapComment = new HashMap<>();
 
         try {
-            String consulta = "select * from report_comments where supercomment=false and studentid = " + id + " order by date_created ASC";
+            String consulta = "select * from report_comments where supercomment=false and studentid = " + id + " and term_id = " + termId + " and yearterm_id=" + yearId + " order by date_created ASC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 mapComment.put(rs.getString("subject_id"), rs.getString("comment"));
@@ -116,9 +130,6 @@ public class FactoryProgressReport_grade4 extends DataFactory {
 
         return mapComment;
     }
-
-   
-
 
     @Override
     public String getNameReport() {
