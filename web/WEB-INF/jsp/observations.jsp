@@ -1191,7 +1191,6 @@
 
             function moverDrech(x)
             {
-
                 var rightHides = $("#semana2").parent().next().children("span").children().text().trim().split("+")[1];
                 var leftHides = $("#semana2").parent().prev().children("span").children().text().trim().split("+")[1];
                 var rightHides = parseInt(rightHides);
@@ -1213,9 +1212,6 @@
                         }
                     }
                 }
-
-
-
                 //  < span class = "glyphicon glyphicon-chevron-left carousel-control" onclick = "moverIzq(" + x + ")" > < /span>
                 ///< span class = "glyphicon glyphicon-chevron-right carousel-control" onclick = "moverDrech(" + x + ")" > < /span>
 
@@ -1226,7 +1222,6 @@
                  $("#semana" + x).parent().next().children("div").text();
                  $(semana).parent().next().append("<div  style='text-align:  center;'>+" + numHides+"</div>");
                  **/
-
             }
             function moverIzq(x)
             {

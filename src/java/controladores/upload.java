@@ -81,7 +81,7 @@ public class upload extends HttpServlet {
         IOUtils.copy(inStream, response.getOutputStream());
 
         response.flushBuffer();
-        response.sendRedirect(request.getContextPath() + url);
+     //  response.sendRedirect(request.getContextPath() + url);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException {
