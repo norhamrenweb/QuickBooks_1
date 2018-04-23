@@ -159,12 +159,20 @@
                     $('#newcomment').attr('disabled', true);
                     $('#classroomCommentsButton').attr('disabled', false);
                     $('#dayCommentsButton').attr('disabled', false);
-
                     $('#divHora').hide();
                     $('#divSubjectObjectives').hide();
                     $("#objectives").val("vacio");
                     $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
                     $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
+
+
+                    $("#classroomCommentsButton").click();
+                    $("#newcomment").hide();
+                    $("#divHora").hide();
+                    $("#divNotas").show();
+                    $("#divClassObsv").hide();
+                    $("#divSubjectObjectives").show();
+                    $("#recommend").prop("checked", "");
                 });
 
                 $('#recommend').on('click', function () {
@@ -312,6 +320,8 @@
 
 
             });
+
+
             function updateComment() {
                 var comments = $('#observationcomments').val();
                 var fecha = $("#observationfecha").val();
@@ -502,10 +512,15 @@
                                 var anchoDiv = 195;
                                 var disableFoto = "";
                                 var classSemana = "project-classroom1";
-                                if (booleanFoto === false)
+                                var colorDisabled = "";
+
+                                if (booleanFoto === false) {
                                     disableFoto = "disabled='disabled'"
+                                    colorDisabled = "style='color:  #666666 !important;'";
+                                }
                                 if (userId !== idTeacher && userType !== 0) {
                                     disable = "disabled='disabled'";
+                                    colorDisabled = "style='color:  #666666 !important;'";
                                 }
 
                                 if (dayWeek === "1") { //PRIMERA SEMANA
@@ -592,9 +607,15 @@
                                                                                     <div class='col-xs-3 text-center sinpadding'>\n\
                                                                                     <input type='hidden' id='date" + id + "' value='" + commentdate + "'/>\n\
                                                                                     <button type='button'  " + disableFoto + " onclick='verphoto(" + id + ")' class='popOverFoto btn btn-link' data-toggle='tooltip' data-placement='bottom' value='" + id + "' id='verphoto" + id + "'>\n\
-                                                                                    <span class=' glyphicon glyphicon-camera'></span></button>\n\</div>\n\</div>\n\</div>\n\</div>\n\</div>");
+                                                                                    <span class=' glyphicon glyphicon-camera' " + colorDisabled + "></span></button>\n\</div>\n\</div>\n\</div>\n\</div>\n\</div>");
                             });
+                            //aqui meter los q no se muestran
+
+
                         });
+
+
+                        showsCountHides();
                         if (cont1 === 0)
                             $("#semana1").append(divVacio("project-classroom1"));
                         if (cont2 === 0)
@@ -643,6 +664,23 @@
                     }
 
                 });
+            }
+
+            function showsCountHides() {
+                for (var i = 1; i < 7; i++) {
+                    var semana = "#semana" + i;
+                    var numHides = $(semana + " .hide").length;
+
+                    $(semana).parent().next().children().children().remove();
+                    $(semana).parent().prev().children().children().remove();
+
+                    if ($(semana + " .hide").length > 0)
+                        $(semana).parent().next().children().append("<div  style='text-align:  center;'>+" + numHides + "</div>");
+                    else
+                        $(semana).parent().next().children().append("<div  style='text-align:  center;'>+0</div>");
+
+                    $(semana).parent().prev().children().append("<div  style='text-align:  center;'>+0</div>");
+                }
             }
 
             function divVacio(classDiv) {
@@ -1153,20 +1191,97 @@
 
             function moverDrech(x)
             {
-                if ($("#semana" + x).children().not(".hide").length > 1) {
-                    $("#semana" + x).children().not(".hide").next().removeClass("hide");
-                    $("#semana" + x).children().not(".hide").first().addClass("hide");
+
+                var rightHides = $("#semana2").parent().next().children("span").children().text().trim().split("+")[1];
+                var leftHides = $("#semana2").parent().prev().children("span").children().text().trim().split("+")[1];
+                var rightHides = parseInt(rightHides);
+                var leftHides = parseInt(leftHides);
+
+                if (!isNaN(rightHides)) {
+                    if ($("#semana" + x).children().not(".hide").length > 1) {
+                        $("#semana" + x).children().not(".hide").next().removeClass("hide");
+                        $("#semana" + x).children().not(".hide").first().addClass("hide");
+                        if (rightHides > 0)
+                            rightHides--;
+                        $("#semana" + x).parent().next().children("span").children().text("+" + rightHides);
+                        if (!isNaN(leftHides)) {
+                            leftHides++;
+                            $("#semana" + x).parent().prev().children("span").children().text("+" + leftHides);
+
+                        } else {
+                            $("#semana" + x).parent().prev().children("span").children().text("+1");
+                        }
+                    }
                 }
+
+
+
+                //  < span class = "glyphicon glyphicon-chevron-left carousel-control" onclick = "moverIzq(" + x + ")" > < /span>
+                ///< span class = "glyphicon glyphicon-chevron-right carousel-control" onclick = "moverDrech(" + x + ")" > < /span>
+
+                //derecha  $("#semana" + x).parent().next().text().trim().split("+")[1]
+                //izquierda $("#semana" + x).parent().prev().text().trim().split("+")[1]
+
+                /*   $("#semana" + x).parent().prev().children("div").text();
+                 $("#semana" + x).parent().next().children("div").text();
+                 $(semana).parent().next().append("<div  style='text-align:  center;'>+" + numHides+"</div>");
+                 **/
+
             }
             function moverIzq(x)
             {
-                $("#semana" + x).children().not(".hide").prev().removeClass("hide");
-                if ($("#semana" + x).children().not(".hide").length * 195 >= $("#semana" + x).width()) {
-                    $("#semana" + x).children().not(".hide").last().addClass("hide");
+
+                var rightHides = $("#semana2").parent().next().children("span").children().text().trim().split("+")[1];
+                var leftHides = $("#semana2").parent().prev().children("span").children().text().trim().split("+")[1];
+                var rightHides = parseInt(rightHides);
+                var leftHides = parseInt(leftHides);
+
+                /* if (!isNaN(rightHides)) {
+                 
+                 $("#semana" + x).children().not(".hide").prev().removeClass("hide");
+                 if ($("#semana" + x).children().not(".hide").length * 195 >= $("#semana" + x).width()) {
+                 $("#semana" + x).children().not(".hide").last().addClass("hide");
+                 }
+                 if ($("#semana" + x).children().not(".hide").length === 0) {
+                 $("#semana" + x).children().last().removeClass("hide");
+                 }
+                 
+                 if (!isNaN(leftHides)) {
+                 if (leftHides > 0)
+                 leftHides--;
+                 $("#semana" + x).parent().next().children("span").children().text("+" + leftHides);
+                 rightHides++;
+                 $("#semana" + x).parent().prev().children("span").children().text("+" + rightHides);
+                 
+                 } else {
+                 $("#semana" + x).parent().next().children("span").children().text("+1");
+                 }
+                 
+                 }*/
+
+                if (!isNaN(leftHides) && leftHides > 0) {
+
+                    $("#semana" + x).children().not(".hide").prev().removeClass("hide");
+                    if ($("#semana" + x).children().not(".hide").length * 195 >= $("#semana" + x).width()) {
+                        $("#semana" + x).children().not(".hide").last().addClass("hide");
+                    }
+                    if ($("#semana" + x).children().not(".hide").length === 0) {
+                        $("#semana" + x).children().last().removeClass("hide");
+                    }
+
+                    if (leftHides > 0)
+                        leftHides--;
+                    $("#semana" + x).parent().prev().children("span").children().text("+" + leftHides);
+                    if (!isNaN(rightHides)) {
+                        rightHides++;
+                        $("#semana" + x).parent().next().children("span").children().text("+" + rightHides);
+
+                    } else {
+                        $("#semana" + x).parent().next().children("span").children().text("+1");
+                    }
+
                 }
-                if ($("#semana" + x).children().not(".hide").length === 0) {
-                    $("#semana" + x).children().last().removeClass("hide");
-                }
+
             }
 
             function comboSelectionLevelStudent()
@@ -1456,13 +1571,10 @@
             }
             .optionsObservations{
                 position: absolute;
-                top: 78%;
+                top: 42%;
                 left: 8%;
                 width: 85%;
             }
-
-
-
             #objectives,#subjects{
                 width: 100%;
             }
@@ -1476,9 +1588,9 @@
             }
             .newcomment{
                 position: fixed;
-                top: 15%;
-                left: 90%;
-
+                top: 88%;
+                left: 7%;
+                background-color: white;
             }
             .divFoto{
                 position: absolute;
@@ -1635,6 +1747,10 @@
                 position: relative;
                 top: 50px;
             }
+            .firstWeek .col-xs-1{
+                color:  #fb8f03 !important;
+            }
+
             /* h4
              {
                  color: black;
@@ -1660,9 +1776,13 @@
                 margin: 0px;
             }
 
+            .secondWeek .col-xs-1{
+                color:  #337ab7 !important;
+            }
+
             .secondWeek span{
                 color:  #337ab7 !important;
-                 position: relative;
+                position: relative;
                 top: 50px;
             }
 
@@ -1687,6 +1807,9 @@
             }
             .foto{
                 width: 100% !important;
+            }
+            .uk-form-small{
+                width: 50% !important;
             }
 
         </style>
@@ -1771,18 +1894,19 @@
             <div class="col-xs-9 col-md-10" >
                 <div class="col-xs-12">
                     <ul class="nav nav-tabs">
-                        <li class="active">
+                        <li >
                             <a data-toggle="tab" id="classroomCommentsButton">
                                 Classroom observations
+                                <img style="width: 10%;" src='../recursos/img/iconos/computer-tool-for-education.svg' alt="Academics observations">
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a data-toggle="tab" id="dayCommentsButton">
+                                Academics observations
                                 <img style="width: 5%;" src='../recursos/img/iconos/post-it.svg' alt="Classroom observations">
                             </a>
                         </li>
-                        <li >
-                            <a data-toggle="tab" id="dayCommentsButton">
-                                Academics observations
-                                <img style="width: 5%;" src='../recursos/img/iconos/computer-tool-for-education.svg' alt="Academics observations">
-                            </a>
-                        </li>
+
                     </ul>
                 </div>
                 <div class="col-xs-12">
@@ -2135,7 +2259,7 @@
                     <input class="btn-lg newcomment" type="image" id="newClassRoom" src="<c:url value='/recursos/img/iconos/add-comment(1).svg'/>" width="100px">
                 </div>
             </div>
-            <div class="col-xs-8" id="divNotas">
+            <div class="col-xs-8 col-md-10" id="divNotas">
 
                 <div class="col-xs-12 firstWeekNotas ">
                     <div class="col-xs-12 sinpadding" > 
@@ -2195,7 +2319,7 @@
                                 <label>Please make sure to fill all data</label>
                             </div>
                             <div class="row text-center ">
-                                <div class="col-xs-6 text-center">
+                                <div class="col-xs-12 text-center">
                                     <button type="button" class="btn btn-primary" id="savecommentClassroom"  value="Save" onclick="saveobservation()">Save observation</button>
                                 </div>
                             </div>
