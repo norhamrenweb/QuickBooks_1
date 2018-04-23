@@ -300,11 +300,15 @@ textarea
     outline: 0;
 }
 
-#yearTermModal .modal-content{
-    display: flex;
-    align-items: last baseline;
-    height: 100px;
-    justify-content: center;
+#yearTermModal .modal-content div{
+    background-color: white;
+    margin-top: 2%;
+    margin-bottom: 5%;
+    border-radius: 10px;
+}
+
+#yearTermModal .modal-content div .form-group{
+    margin-bottom: 0px;
 }
 #btnYearmTerm{
     color: #666;
@@ -320,6 +324,7 @@ textarea
     flex-direction: column !important;
     justify-content: space-between !important;
 }
+
 /*TERMINA PROGRESSBYSTUDENT*/
 /*.tooltip > .tooltip-arrow {
   top: 0;
