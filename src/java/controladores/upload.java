@@ -132,7 +132,7 @@ public class upload extends HttpServlet {
             Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        response.sendRedirect(request.getContextPath() + url);
+        response.sendRedirect(request.getContextPath() + url); // solucionar esto para que refresque correctamente.
     }
 
     @Override
