@@ -95,7 +95,7 @@
     </style>
     <body>
         <ul class="legend">
-            <li><span class="share"></span> Share presentations </li>
+            <li><span class="share"></span> Shared presentations </li>
         </ul>
         <div class="container">
             <div id='calendar'></div>

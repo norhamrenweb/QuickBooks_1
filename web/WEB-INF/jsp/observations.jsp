@@ -1241,7 +1241,7 @@
                     recognition.continuous = false;
                     recognition.interimResults = false;
 
-                    recognition.lang = "es-ES";
+                    recognition.lang = "en-EN";
                     recognition.start();
 
                     recognition.onresult = function (e) {

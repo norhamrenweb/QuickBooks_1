@@ -96,7 +96,8 @@ public class LessonsListControlador {
             l.put("allDay", "false");
             l.put("objid", rs.getString("objective_id"));
             l.put("idteacher", rs.getString("user_id"));
-            l.put("gradeLevel", rs.getInt("level_id"));
+            Level g = new Level();
+            l.put("gradeLevel",g.fetchName(rs.getInt("level_id"),hsr.getServletContext()) );
             l.put("share", false);
             lessonslist.add(l);
         }
@@ -112,7 +113,8 @@ public class LessonsListControlador {
             l.put("allDay", "false");
             l.put("objid", rs.getString("objective_id"));
             l.put("idteacher", rs.getString("user_id"));
-            l.put("gradeLevel", rs.getInt("level_id"));
+             Level g = new Level();
+            l.put("gradeLevel", g.fetchName(rs.getInt("level_id"),hsr.getServletContext()));
             l.put("share", true);
             lessonslist.add(l);
         }

@@ -37,7 +37,7 @@ try {
     
     myDriver = new cdata.jdbc.quickbooks.QuickBooksDriver();
        
-     conn = DriverManager.getConnection(config.getQbdburl());//"jdbc:quickbooks:user=Admin;password=Admin;URL=http://localhost:8166");//Runsync.qbdburl);//
+     conn = DriverManager.getConnection(config.getQbdburl(),config.getQbdbuser(),config.getQbdbpswd());//"jdbc:quickbooks:user=Admin;password=Admin;URL=http://localhost:8166");//Runsync.qbdburl);//
        
         statementQB = conn.createStatement();
         }catch (SQLException ex) {

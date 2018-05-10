@@ -32,7 +32,7 @@ public class GetConfig {
     
     myDriver = new cdata.jdbc.quickbooks.QuickBooksDriver();
        
-     conn = DriverManager.getConnection("jdbc:postgresql://192.168.1.191:5432/postgres","postgres","rapunzel");//"jdbc:quickbooks:user=Admin;password=Admin;URL=http://localhost:8166");//Runsync.qbdburl);//
+     conn = DriverManager.getConnection("jdbc:postgresql://192.168.1.3:5432/postgres","postgres","Madrid2016");//"jdbc:quickbooks:user=Admin;password=Admin;URL=http://localhost:8166");//Runsync.qbdburl);//
        
         statement = conn.createStatement();
           ResultSet rs = statement.executeQuery("Select * from syncconfig");

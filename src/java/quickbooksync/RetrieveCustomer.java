@@ -59,7 +59,7 @@ log.error(ex+errors.toString());
        
         
         ResultSet rs;
-       rs = connectRW.statementRW.executeQuery("Select * from public.family");//228. FamilyConfig table in renweb
+       rs = connectRW.statementRW.executeQuery("Select * from FamilyConfig");//228. FamilyConfig table in renweb
         
         while(rs.next())
         {
