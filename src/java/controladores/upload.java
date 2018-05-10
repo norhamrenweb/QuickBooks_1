@@ -81,7 +81,7 @@ public class upload extends HttpServlet {
         IOUtils.copy(inStream, response.getOutputStream());
 
         response.flushBuffer();
-        response.sendRedirect(request.getContextPath() + url);
+     //  response.sendRedirect(request.getContextPath() + url);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException {
@@ -132,7 +132,7 @@ public class upload extends HttpServlet {
             Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        response.sendRedirect(request.getContextPath() + url);
+        response.sendRedirect(request.getContextPath() + url); // solucionar esto para que refresque correctamente.
     }
 
     @Override

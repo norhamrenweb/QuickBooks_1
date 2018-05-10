@@ -444,7 +444,8 @@
                     if (i < $("#ObjectivesTerms label input:checked").length - 1)
                         termIds += ",";
                 } // utilizare la variable finalrating ya que es un string y no se utiliza
-
+                termIds +="#"+yearId;//como ultimo pasare el yearId separado por #
+                
                 var myObj = {};
                 myObj["name"] = name;
                 myObj["finalrating"] = termIds;

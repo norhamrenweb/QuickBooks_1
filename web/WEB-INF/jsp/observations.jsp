@@ -159,12 +159,20 @@
                     $('#newcomment').attr('disabled', true);
                     $('#classroomCommentsButton').attr('disabled', false);
                     $('#dayCommentsButton').attr('disabled', false);
-
                     $('#divHora').hide();
                     $('#divSubjectObjectives').hide();
                     $("#objectives").val("vacio");
                     $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
                     $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
+
+
+                    $("#classroomCommentsButton").click();
+                    $("#newcomment").hide();
+                    $("#divHora").hide();
+                    $("#divNotas").show();
+                    $("#divClassObsv").hide();
+                    $("#divSubjectObjectives").show();
+                    $("#recommend").prop("checked", "");
                 });
 
                 $('#recommend').on('click', function () {
@@ -256,34 +264,64 @@
                  padding: 5px !important;
                  border-radius: 10px;*/
 
-                $(".imgLeft").on('click', function () {
-                    if ($(this).val() === "classroomComments") {
-                        $("#classroomCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5% !important", "border-radius": "10px"});
-                        $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
-                        $("#newcomment").hide();
-                        $("#divNotas").hide();
-                        $("#divClassObsv").show();
-                        $("#divSubjectObjectives").hide();
-                        $("#divHora").show();
-                        loadComments();
-                        $('#fecha').on('dp.change', function (e) {
-                            loadComments();
-                        });
-                    } else {
-                        $("#dayCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5%", "border-radius": "10px"});
-                        $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
+                /*$(".imgLeft").on('click', function () {
+                 if ($(this).val() === "classroomComments") {
+                 $("#classroomCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5% !important", "border-radius": "10px"});
+                 $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
+                 $("#newcomment").hide();
+                 $("#divNotas").hide();
+                 $("#divClassObsv").show();
+                 $("#divSubjectObjectives").hide();
+                 $("#divHora").show();
+                 loadComments();
+                 $('#fecha').on('dp.change', function (e) {
+                 loadComments();
+                 });
+                 } else {
+                 $("#dayCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5%", "border-radius": "10px"});
+                 $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
+                 
+                 $("#newcomment").hide()
+                 $("#divHora").hide();
+                 $("#divNotas").show();
+                 $("#divClassObsv").hide();
+                 $("#divSubjectObjectives").show();
+                 //$("#objectives").val("vacio")
+                 $("#recommend").prop("checked", "");
+                 }
+                 });*/
 
-                        $("#newcomment").hide()
-                        $("#divHora").hide();
-                        $("#divNotas").show();
-                        $("#divClassObsv").hide();
-                        $("#divSubjectObjectives").show();
-                        //$("#objectives").val("vacio")
-                        $("#recommend").prop("checked", "");
-                    }
+                $("#dayCommentsButton").on('click', function () {
+                    //$("#classroomCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5% !important", "border-radius": "10px"});
+                    //$("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
+                    $("#newcomment").hide();
+                    $("#divNotas").hide();
+                    $("#divClassObsv").show();
+                    $("#divSubjectObjectives").hide();
+                    $("#divHora").show();
+                    loadComments();
+                    $('#fecha').on('dp.change', function (e) {
+                        loadComments();
+                    });
                 });
 
+                $("#classroomCommentsButton").on('click', function () {
+                    //$("#dayCommentsButton").parent().css({"background-color": "rgba(51, 122, 183, 0.48)", "padding": "5%", "border-radius": "10px"});
+                    // $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
+                    $("#newcomment").hide()
+                    $("#divHora").hide();
+                    $("#divNotas").show();
+                    $("#divClassObsv").hide();
+                    $("#divSubjectObjectives").show();
+                    //$("#objectives").val("vacio")
+                    $("#recommend").prop("checked", "");
+                });
+
+
+
             });
+
+
             function updateComment() {
                 var comments = $('#observationcomments').val();
                 var fecha = $("#observationfecha").val();
@@ -474,10 +512,15 @@
                                 var anchoDiv = 195;
                                 var disableFoto = "";
                                 var classSemana = "project-classroom1";
-                                if (booleanFoto === false)
+                                var colorDisabled = "";
+
+                                if (booleanFoto === false) {
                                     disableFoto = "disabled='disabled'"
+                                    colorDisabled = "style='color:  #666666 !important;'";
+                                }
                                 if (userId !== idTeacher && userType !== 0) {
                                     disable = "disabled='disabled'";
+                                    colorDisabled = "style='color:  #666666 !important;'";
                                 }
 
                                 if (dayWeek === "1") { //PRIMERA SEMANA
@@ -564,9 +607,15 @@
                                                                                     <div class='col-xs-3 text-center sinpadding'>\n\
                                                                                     <input type='hidden' id='date" + id + "' value='" + commentdate + "'/>\n\
                                                                                     <button type='button'  " + disableFoto + " onclick='verphoto(" + id + ")' class='popOverFoto btn btn-link' data-toggle='tooltip' data-placement='bottom' value='" + id + "' id='verphoto" + id + "'>\n\
-                                                                                    <span class=' glyphicon glyphicon-camera'></span></button>\n\</div>\n\</div>\n\</div>\n\</div>\n\</div>");
+                                                                                    <span class=' glyphicon glyphicon-camera' " + colorDisabled + "></span></button>\n\</div>\n\</div>\n\</div>\n\</div>\n\</div>");
                             });
+                            //aqui meter los q no se muestran
+
+
                         });
+
+
+                        showsCountHides();
                         if (cont1 === 0)
                             $("#semana1").append(divVacio("project-classroom1"));
                         if (cont2 === 0)
@@ -615,6 +664,23 @@
                     }
 
                 });
+            }
+
+            function showsCountHides() {
+                for (var i = 1; i < 7; i++) {
+                    var semana = "#semana" + i;
+                    var numHides = $(semana + " .hide").length;
+
+                    $(semana).parent().next().children().children().remove();
+                    $(semana).parent().prev().children().children().remove();
+
+                    if ($(semana + " .hide").length > 0)
+                        $(semana).parent().next().children().append("<div  style='text-align:  center;'>+" + numHides + "</div>");
+                    else
+                        $(semana).parent().next().children().append("<div  style='text-align:  center;'>+0</div>");
+
+                    $(semana).parent().prev().children().append("<div  style='text-align:  center;'>+0</div>");
+                }
             }
 
             function divVacio(classDiv) {
@@ -1125,20 +1191,92 @@
 
             function moverDrech(x)
             {
-                if ($("#semana" + x).children().not(".hide").length > 1) {
-                    $("#semana" + x).children().not(".hide").next().removeClass("hide");
-                    $("#semana" + x).children().not(".hide").first().addClass("hide");
+                var rightHides = $("#semana2").parent().next().children("span").children().text().trim().split("+")[1];
+                var leftHides = $("#semana2").parent().prev().children("span").children().text().trim().split("+")[1];
+                var rightHides = parseInt(rightHides);
+                var leftHides = parseInt(leftHides);
+
+                if (!isNaN(rightHides)) {
+                    if ($("#semana" + x).children().not(".hide").length > 1) {
+                        $("#semana" + x).children().not(".hide").next().removeClass("hide");
+                        $("#semana" + x).children().not(".hide").first().addClass("hide");
+                        if (rightHides > 0)
+                            rightHides--;
+                        $("#semana" + x).parent().next().children("span").children().text("+" + rightHides);
+                        if (!isNaN(leftHides)) {
+                            leftHides++;
+                            $("#semana" + x).parent().prev().children("span").children().text("+" + leftHides);
+
+                        } else {
+                            $("#semana" + x).parent().prev().children("span").children().text("+1");
+                        }
+                    }
                 }
+                //  < span class = "glyphicon glyphicon-chevron-left carousel-control" onclick = "moverIzq(" + x + ")" > < /span>
+                ///< span class = "glyphicon glyphicon-chevron-right carousel-control" onclick = "moverDrech(" + x + ")" > < /span>
+
+                //derecha  $("#semana" + x).parent().next().text().trim().split("+")[1]
+                //izquierda $("#semana" + x).parent().prev().text().trim().split("+")[1]
+
+                /*   $("#semana" + x).parent().prev().children("div").text();
+                 $("#semana" + x).parent().next().children("div").text();
+                 $(semana).parent().next().append("<div  style='text-align:  center;'>+" + numHides+"</div>");
+                 **/
             }
             function moverIzq(x)
             {
-                $("#semana" + x).children().not(".hide").prev().removeClass("hide");
-                if ($("#semana" + x).children().not(".hide").length * 195 >= $("#semana" + x).width()) {
-                    $("#semana" + x).children().not(".hide").last().addClass("hide");
+
+                var rightHides = $("#semana2").parent().next().children("span").children().text().trim().split("+")[1];
+                var leftHides = $("#semana2").parent().prev().children("span").children().text().trim().split("+")[1];
+                var rightHides = parseInt(rightHides);
+                var leftHides = parseInt(leftHides);
+
+                /* if (!isNaN(rightHides)) {
+                 
+                 $("#semana" + x).children().not(".hide").prev().removeClass("hide");
+                 if ($("#semana" + x).children().not(".hide").length * 195 >= $("#semana" + x).width()) {
+                 $("#semana" + x).children().not(".hide").last().addClass("hide");
+                 }
+                 if ($("#semana" + x).children().not(".hide").length === 0) {
+                 $("#semana" + x).children().last().removeClass("hide");
+                 }
+                 
+                 if (!isNaN(leftHides)) {
+                 if (leftHides > 0)
+                 leftHides--;
+                 $("#semana" + x).parent().next().children("span").children().text("+" + leftHides);
+                 rightHides++;
+                 $("#semana" + x).parent().prev().children("span").children().text("+" + rightHides);
+                 
+                 } else {
+                 $("#semana" + x).parent().next().children("span").children().text("+1");
+                 }
+                 
+                 }*/
+
+                if (!isNaN(leftHides) && leftHides > 0) {
+
+                    $("#semana" + x).children().not(".hide").prev().removeClass("hide");
+                    if ($("#semana" + x).children().not(".hide").length * 195 >= $("#semana" + x).width()) {
+                        $("#semana" + x).children().not(".hide").last().addClass("hide");
+                    }
+                    if ($("#semana" + x).children().not(".hide").length === 0) {
+                        $("#semana" + x).children().last().removeClass("hide");
+                    }
+
+                    if (leftHides > 0)
+                        leftHides--;
+                    $("#semana" + x).parent().prev().children("span").children().text("+" + leftHides);
+                    if (!isNaN(rightHides)) {
+                        rightHides++;
+                        $("#semana" + x).parent().next().children("span").children().text("+" + rightHides);
+
+                    } else {
+                        $("#semana" + x).parent().next().children("span").children().text("+1");
+                    }
+
                 }
-                if ($("#semana" + x).children().not(".hide").length === 0) {
-                    $("#semana" + x).children().last().removeClass("hide");
-                }
+
             }
 
             function comboSelectionLevelStudent()
@@ -1428,15 +1566,10 @@
             }
             .optionsObservations{
                 position: absolute;
-                top: 78%;
+                top: 42%;
                 left: 8%;
                 width: 85%;
             }
-
-            .imgLeft{
-                width: 100%;
-            }
-
             #objectives,#subjects{
                 width: 100%;
             }
@@ -1450,9 +1583,9 @@
             }
             .newcomment{
                 position: fixed;
-                top: 15%;
-                left: 90%;
-
+                top: 88%;
+                left: 7%;
+                background-color: white;
             }
             .divFoto{
                 position: absolute;
@@ -1602,10 +1735,17 @@
                 color:  #fb8f03;
                 font-size: x-large;
                 font-weight: bolder;
+                margin: 0px;
             }
             .firstWeek span{
                 color:  #fb8f03 !important;
+                position: relative;
+                top: 50px;
             }
+            .firstWeek .col-xs-1{
+                color:  #fb8f03 !important;
+            }
+
             /* h4
              {
                  color: black;
@@ -1628,10 +1768,17 @@
                 color:  #337ab7;
                 font-size: x-large;
                 font-weight: bolder;
+                margin: 0px;
+            }
+
+            .secondWeek .col-xs-1{
+                color:  #337ab7 !important;
             }
 
             .secondWeek span{
                 color:  #337ab7 !important;
+                position: relative;
+                top: 50px;
             }
 
             .carousel-control
@@ -1656,14 +1803,15 @@
             .foto{
                 width: 100% !important;
             }
+            .uk-form-small{
+                width: 50% !important;
+            }
 
         </style>
     </head>
     <body>
-        <div class="row">
-
-
-            <div class="col-xs-2" >
+        <div class="row"><!-- inicio tabla students-->
+            <div class="col-xs-3 col-md-2" >
                 <!--<select id="grades">
                 <c:forEach var="levels" items="${gradelevels}">
                     <option value="${levels.id[0]}">${levels.name}</option>
@@ -1696,11 +1844,10 @@
                         </tbody>
                     </table>
                 </div>
+            </div> <!-- fin tabla students-->
 
 
-
-            </div>
-            <div class="col-xs-1 sinpadding" >
+            <!--<div class="col-xs-1 sinpadding" >
                 <div class="col-xs-12 text-left sinpadding">
                     <div class="col-xs-5 sinpadding">    
                         <input id="classroomCommentsButton" title="Class observations" class="imgLeft" type="image" value="classroomComments" src="<c:url value='/recursos/img/iconos/post-it.svg'/>" width="100px">
@@ -1738,175 +1885,275 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-8" id="divClassObsv">
-                <input type="hidden" id="lessonid" name="lessonid" value = ${studentId}>
-                <input type="hidden" id="nameStudent" name="nameStudent" value = ${nameStudent}>
+            </div>-->
+            <div class="col-xs-9 col-md-10" >
                 <div class="col-xs-12">
-                    <div class="container col-xs-12">
+                    <ul class="nav nav-tabs">
+                        <li >
+                            <a data-toggle="tab" id="classroomCommentsButton">
+                                Classroom observations
+                                <img style="width: 10%;" src='../recursos/img/iconos/computer-tool-for-education.svg' alt="Academics observations">
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a data-toggle="tab" id="dayCommentsButton">
+                                Academics observations
+                                <img style="width: 5%;" src='../recursos/img/iconos/post-it.svg' alt="Classroom observations">
+                            </a>
+                        </li>
 
-                        <div class="col-xs-12 firstWeek sinpadding">
-                            <div class="col-xs-2" >
-                                <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
-                                    <div class="col-xs-12 sinpadding">
-                                        <h4>First Week</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('1')"></span>
-                            </div>
-                            <div class="col-xs-8 sinpadding" > 
-                                <div class="tam1" id="semana1">
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('1')"></span>
-                            </div>
+                    </ul>
+                </div>
+                <div class="col-xs-12">
+                    <div class="col-xs-12 text-left sinpadding" id="divSubjectObjectives">
+                        <div class="col-xs-12 col-md-5">
+                            <select id="subjects">
+                                <option>Select Subject</option>
+                            </select>
                         </div>
-                        <div class="col-xs-12 secondWeek sinpadding">
-                            <div class="col-xs-2">
-                                <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
-                                    <div class="col-xs-12 sinpadding">
-                                        <h4>Second Week</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('2')"></span>
-                            </div>
-                            <div class="col-xs-8 sinpadding" > 
-                                <div  class="semana2 tam2" id="semana2">
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('2')"></span>
-                            </div>
+                        <div class="col-xs-12 col-md-5">
+                            <select id="objectives" class="custom-select">
+                                <option>Select Objectives</option>
+                            </select>
                         </div>
-
-                        <div class="col-xs-12 firstWeek sinpadding">
-                            <div class="col-xs-2">
-                                <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
-                                    <div class="col-xs-12 sinpadding">
-                                        <h4>Third Week</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('3')"></span>
-                            </div>
-                            <div class="col-xs-8 sinpadding" > 
-                                <div  class="semana3 tam3" id="semana3">
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('3')"></span>
-                            </div>
+                        <div class="col-xs-12 col-md-5">
+                            <input type="checkbox" name="recommend" id="recommend" value="recommend" disabled="true"> Recommend for next presentation
                         </div>
-                        <div class="col-xs-12 secondWeek sinpadding">
-                            <div class="col-xs-2" >
-                                <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
-                                    <div class="col-xs-12 sinpadding">
-                                        <h4>Fourth Week</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('4')"></span>
-                            </div>
-                            <div class="col-xs-8 sinpadding" > 
-                                <div  class="semana4 tam4" id="semana4">
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('4')"></span>
-                            </div>
-                        </div>
-
-
-                        <div class="col-xs-12 firstWeek sinpadding">
-                            <div class="col-xs-2">
-                                <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
-                                    <div class="col-xs-12 sinpadding">
-                                        <h4>Fifth Week</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('5')"></span>
-                            </div>
-                            <div class="col-xs-8 sinpadding" > 
-                                <div  class="semana3 tam3" id="semana5">
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('5')"></span>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 secondWeek sinpadding">
-                            <div class="col-xs-2" >
-                                <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
-                                    <div class="col-xs-12 sinpadding">
-                                        <h4>Sixth Week</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('6')"></span>
-                            </div>
-                            <div class="col-xs-8 sinpadding" > 
-                                <div  class="semana4 tam4" id="semana6">
-                                </div>
-                            </div>
-                            <div class="col-xs-1">
-                                <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('6')"></span>
-                            </div>
-                        </div>
-
                     </div>
-
-                    <!-- Modal confirm delete-->
-                    <div id="deleteObservation" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header modal-header-delete">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">are you sure you want to delete?</h4>
-                                </div>
-                                <div id="lessonDelete" class="modal-body">
-
-                                </div>
-                                <div class="modal-footer text-center">
-                                    <button id="buttonDeleteObservation" type="button" class="btn btn-danger" data-dismiss="modal" onclick='deleteComentario(value)' value="">Yes</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                </div>
+                    <div id="divHora" class='col-xs-12'>
+                        <div class="form-group">
+                            <label class="control-label" for="fecha">Date</label>
+                            <div class='input-group date' id='fecha'>
+                                <input type='text' name="TXTfecha" class="form-control" id="TXTfecha" onselect="loadComments()"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-xs-12 sinpadding" >
+                    <div class="col-xs-12 text-left sinpadding">
+                        <div class="col-xs-5 sinpadding">    
+                            <input id="classroomCommentsButton" title="Class observations" class="imgLeft" type="image" value="classroomComments" src="<c:url value='/recursos/img/iconos/post-it.svg'/>" width="100px">
 
                         </div>
                     </div>
+                    <div class="col-xs-12 text-left sinpadding">
+                        <div class="col-xs-5 sinpadding">
+                            <input id="dayCommentsButton" class="imgLeft" value="dayComments" title="Academics" type="image"  src="<c:url value='/recursos/img/iconos/computer-tool-for-education.svg'/>" width="100px">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 text-left sinpadding" id="divSubjectObjectives">
+                        <div class="col-xs-12 marginTop sinpadding custom-select">
+                            <select id="subjects">
+                                <option>Select Subject</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-12 marginTop sinpadding custom-select">
+                            <select id="objectives" class="custom-select">
+                                <option>Select Objectives</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-12 marginTop sinpadding custom-select">
+                            <input type="checkbox" name="recommend" id="recommend" value="recommend" disabled="true"> Recommend for next presentation
+                        </div>
+                    </div>
+                    <div id="divHora" class='col-xs-12'>
+                        <div class="form-group">
+                            <label class="control-label" for="fecha">Date</label>
+                            <div class='input-group date' id='fecha'>
+                                <input type='text' name="TXTfecha" class="form-control" id="TXTfecha" onselect="loadComments()"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
 
-                    <div id="editCommentModal" class="modal fade" role="dialog">
-                        <input type='text' name="TXTfecha" class="hide" id="idComentario"/>
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
 
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h2>Enter a classroom observation</h2>
+                <div class="col-xs-12" id="divClassObsv">
+                    <input type="hidden" id="lessonid" name="lessonid" value = ${studentId}>
+                    <input type="hidden" id="nameStudent" name="nameStudent" value = ${nameStudent}>
+                    <div class="col-xs-12">
+                        <div class="container col-xs-12">
+
+                            <div class="col-xs-12 firstWeek sinpadding">
+                                <div class="col-xs-12" >
+                                    <div class="col-xs-12 sinpadding" data-idclass="1919" style="margin-top: 5px;">
+                                        <div class="col-xs-12 sinpadding">
+                                            <h4>First Week</h4>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="modal-body">
-                                    <div class="container-fluid">
-                                        <div id="contenedorDate">
-                                            <div class='col-xs-4'>
-                                                <div class="form-group">
-                                                    <label class="control-label" for="fecha">Comment Date</label>
-                                                    <div class='input-group date' id='fecha2'>
-                                                        <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
-                                                        <span class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-calendar"></span>
-                                                        </span>
+                                <div class="col-xs-12">
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('1')"></span>
+                                    </div>
+                                    <div class="col-xs-10 sinpadding" > 
+                                        <div class="tam1" id="semana1">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('1')"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 secondWeek sinpadding">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-12  sinpadding" data-idclass="1919"  style="margin-top: 5px;">
+                                        <div class="col-xs-12 sinpadding">
+                                            <h4>Second Week</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('2')"></span>
+                                    </div>
+                                    <div class="col-xs-10 sinpadding" > 
+                                        <div  class="semana2 tam2" id="semana2">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('2')"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 firstWeek sinpadding">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-12 sinpadding" data-idclass="1919"  style="margin-top: 5px;">
+                                        <div class="col-xs-12 sinpadding">
+                                            <h4>Third Week</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('3')"></span>
+                                    </div>
+                                    <div class="col-xs-10 sinpadding" > 
+                                        <div  class="semana3 tam3" id="semana3">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('3')"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 secondWeek sinpadding">
+                                <div class="col-xs-12" >
+                                    <div class="col-xs-12 divClass sinpadding" data-idclass="1919"  style="margin-top: 5px;">
+                                        <div class="col-xs-12 sinpadding">
+                                            <h4>Fourth Week</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('4')"></span>
+                                    </div>
+                                    <div class="col-xs-10 sinpadding" > 
+                                        <div  class="semana4 tam4" id="semana4">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('4')"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-xs-12 firstWeek sinpadding">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-12 divClass sinpadding" data-idclass="1919" style="margin-top: 5px;">
+                                        <div class="col-xs-12 sinpadding">
+                                            <h4>Fifth Week</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('5')"></span>
+                                    </div>
+                                    <div class="col-xs-10 sinpadding" > 
+                                        <div  class="semana3 tam3" id="semana5">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('5')"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 secondWeek sinpadding">
+                                <div class="col-xs-12" >
+                                    <div class="col-xs-12 divClass sinpadding" data-idclass="1919" style="margin-top: 5px;">
+                                        <div class="col-xs-12 sinpadding">
+                                            <h4>Sixth Week</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-left carousel-control" onclick="moverIzq('6')"></span>
+                                    </div>
+                                    <div class="col-xs-10 sinpadding" > 
+                                        <div  class="semana4 tam4" id="semana6">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-chevron-right carousel-control" onclick="moverDrech('6')"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Modal confirm delete-->
+                        <div id="deleteObservation" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header modal-header-delete">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">are you sure you want to delete?</h4>
+                                    </div>
+                                    <div id="lessonDelete" class="modal-body">
+
+                                    </div>
+                                    <div class="modal-footer text-center">
+                                        <button id="buttonDeleteObservation" type="button" class="btn btn-danger" data-dismiss="modal" onclick='deleteComentario(value)' value="">Yes</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="editCommentModal" class="modal fade" role="dialog">
+                            <input type='text' name="TXTfecha" class="hide" id="idComentario"/>
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h2>Enter a classroom observation</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <div id="contenedorDate">
+                                                <div class='col-xs-4'>
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="fecha">Comment Date</label>
+                                                        <div class='input-group date' id='fecha2'>
+                                                            <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1914,38 +2161,23 @@
                                                 <label class="control-label">Observation</label>
                                                 <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
                                             </div>
-                                            <div class="col-xs-6 center-block form-group">
-                                                <label class="control-label">Observation type</label>
-                                                <select class="form-control" name="observationtype" id="observationtype" >
-                                                    <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
-                                                    <option value="Physical">Physical</option>
-                                                    <option value="Intellectual">Intellectual</option>
-                                                    <option value="Literacy">Literacy</option>
-                                                    <option value="Emotional">Emotional</option>
-                                                    <option value="Social">Social</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
+
+                                            <div class="col-xs-12 text-center">
+                                                <input type="submit" class="btn btn-primary" id="savecomment"  value="Save" onclick="updateComment()">
                                             </div>
-                                        </div>  
-                                        <div class="col-xs-12" >
-                                            <input type="file" id="fileToUpload" accept="image/*">
-                                        </div>
+                                            <div class="col-xs-12 text-center hidden" id="error1">
+                                                <label>Please select a student first</label>
+                                            </div>
+                                            <div class="col-xs-12 text-center hidden" id="error2">
+                                                <label>Please make sure to fill all data</label>
+                                            </div>
 
-                                        <div class="col-xs-12 text-center">
-                                            <input type="submit" class="btn btn-primary" id="savecomment"  value="Save" onclick="updateComment()">
-                                        </div>
-                                        <div class="col-xs-12 text-center hidden" id="error1">
-                                            <label>Please select a student first</label>
-                                        </div>
-                                        <div class="col-xs-12 text-center hidden" id="error2">
-                                            <label>Please make sure to fill all data</label>
-                                        </div>
-
-                                    </div> 
+                                        </div> 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div> 
+                        </div> 
+                    </div>
                 </div>
                 <div id="confirmsave" class="modal fade" role="dialog">
                     <div class="modal-dialog">
@@ -2022,7 +2254,7 @@
                     <input class="btn-lg newcomment" type="image" id="newClassRoom" src="<c:url value='/recursos/img/iconos/add-comment(1).svg'/>" width="100px">
                 </div>
             </div>
-            <div class="col-xs-8" id="divNotas">
+            <div class="col-xs-8 col-md-10" id="divNotas">
 
                 <div class="col-xs-12 firstWeekNotas ">
                     <div class="col-xs-12 sinpadding" > 
@@ -2082,7 +2314,7 @@
                                 <label>Please make sure to fill all data</label>
                             </div>
                             <div class="row text-center ">
-                                <div class="col-xs-6 text-center">
+                                <div class="col-xs-12 text-center">
                                     <button type="button" class="btn btn-primary" id="savecommentClassroom"  value="Save" onclick="saveobservation()">Save observation</button>
                                 </div>
                             </div>

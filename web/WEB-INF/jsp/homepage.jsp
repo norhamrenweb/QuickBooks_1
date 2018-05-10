@@ -461,22 +461,22 @@
                             <td>${lecciones.objective.name}</td>
                             <td>${lecciones.date} (${lecciones.start} / ${lecciones.finish})</td>
                             <td>
-                                <div class="col-xs-2 text-center">
+                                <div class="col-xs-4 col-md-2 text-center">
                                     <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Progress">
                                 </div>
-                                <div class="col-xs-2 text-center">
+                                <div class="col-xs-4 col-md-2 text-center">
                                     <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
                                 </div>
-                                <div class="col-xs-2 text-center">
+                                <div class="col-xs-4 col-md-2 text-center">
                                     <input name="TXTid_lessons_modificar" type="image" src="<c:url value="/recursos/img/btn/btn_Edit.svg"/>" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
                                 </div>
-                                <div class="col-xs-2 text-center">
+                                <div class="col-xs-4 col-md-2 text-center">
                                     <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete${lecciones.id}" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
                                 </div>
-                                <div class="col-xs-2 text-center">
+                                <div class="col-xs-4 col-md-2 text-center">
                                     <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Resources">
                                 </div>
-                                <div class="col-xs-2 text-center">
+                                <div class="col-xs-4 col-md-2 text-center">
                                     <input class="resources" name="TXTid_lessons_compartir" type="image" src="<c:url value="/recursos/img/btn/compartir.png"/>" value="${lecciones.id}" id="resources" onclick="compartirSelect(${lecciones.id},${lecciones.teacherid})" width="40px" data-placement="bottom" title="Share">
                                 </div>
                             </td>

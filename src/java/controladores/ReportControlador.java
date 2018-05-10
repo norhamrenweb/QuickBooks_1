@@ -76,8 +76,7 @@ public class ReportControlador {
      
      @RequestMapping("/reportControlador/studentlistLevel.htm")
     public ModelAndView studentlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if((new SessionCheck()).checkSession(hsr))
-           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+
         ModelAndView mv = new ModelAndView("createlesson");
         List <Students> studentsgrades = new ArrayList();
         String[] levelid = hsr.getParameterValues("seleccion");

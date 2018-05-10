@@ -86,9 +86,11 @@
 
 <script>
     $(document).ready(function () {
-        setInterval(function(){alert("Your session is going to be end by 5 min, Please click OK and continue")}, 3000000);
+        setInterval(function () {
+            alert("Your session is going to be end by 5 min, Please click OK and continue")
+        }, 3000000);
     });
-    
+
     var ajax;
     function terms() {
 
@@ -166,48 +168,54 @@
 <div id="yearTermModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="form-group">
-                <label for="yearSelect">Year</label>
-                <select class="form-control" id="yearSelect" onchange="terms()">
-                </select> 
-            </div>  
+            <div class="col-xs-12 col-md-12">
+                <div class="col-xs-12 col-md-5">
+                    <div class="form-group">
+                        <label for="yearSelect">Year</label>
+                        <select class="form-control" id="yearSelect" onchange="terms()">
+                        </select> 
+                    </div>  
+                </div>
+                <script>
+                    var yearId = ${yearId};
+                    var termId = ${termId};
+                    var listYear = ${yearsids};
 
-            <script>
-                var yearId = ${yearId};
-                var termId = ${termId};
-                var listYear = ${yearsids};
+                    for (var i = 0; i < listYear.length; ++i) {
+                        $("#yearSelect").append("<option value='" + listYear[i].x + "'>" + listYear[i].y + "</option>");
+                    }
 
-                for (var i = 0; i < listYear.length; ++i) {
-                    $("#yearSelect").append("<option value='" + listYear[i].x + "'>" + listYear[i].y + "</option>");
-                }
+                    var my_options = $("#yearSelect option");
+                    my_options.sort(function (a, b) {
+                        if (a.text > b.text)
+                            return 1;
+                        if (a.text < b.text)
+                            return -1;
+                        return 0
+                    })
 
-                var my_options = $("#yearSelect option");
-                my_options.sort(function (a, b) {
-                    if (a.text > b.text)
-                        return 1;
-                    if (a.text < b.text)
-                        return -1;
-                    return 0
-                })
+                    $("#yearSelect").empty().append(my_options);
+                    $("#yearSelect").val(yearId);
+                    terms();
+                    $("#termSelect").val(termId);
 
-                $("#yearSelect").empty().append(my_options);
-                $("#yearSelect").val(yearId);
-                terms();
-                $("#termSelect").val(termId);
-
-            </script>
-
-            <div class="form-group">
-                <label for="yearSelect">Term</label>
-                <select class="form-control" id ="termSelect">
-
-                </select>
-            </div> 
-            <button id="buttonYear" onclick="changeTermYear()" style="margin-left: 30px" type="submit" class="btn btn-primary" data-dismiss="modal">Change</button>
-        </div>
-
-    </div>  
-</div>
+                </script>
+                <div class="col-xs-12 col-md-5">
+                    <div class="form-group">
+                        <label for="termSelect">Term</label>
+                        <select class="form-control" id ="termSelect">
+                        </select>
+                    </div> 
+                </div>
+                <div class="col-xs-12 col-md-2" style="padding: 0px;">
+                    <div class="form-group">
+                        <label for="buttonYear">&nbsp</label>
+                        <button id="buttonYear" onclick="changeTermYear()" type="submit" class="form-control btn btn-primary" data-dismiss="modal">Change</button>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </div>
 </div>
 
 
