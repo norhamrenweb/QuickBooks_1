@@ -120,12 +120,21 @@
                     $('#showComment').modal('show');
                 });
                 ////////////////////////////////////////////NUEVO//////////
+
+                /*   $("#newClassRoom").show();
+                 $("#newcomment").hide();
+                 */
+                $("#commentsContainer").hide();
+                $("#newcomment").hide();
+                $("#newClassRoom").hide();
+
                 $("#divHora").hide();
                 $("#subjects").attr("disabled", true);
                 $("#objectives").attr("disabled", true);
                 $("#divNotas").hide();
                 $("#divClassObsv").hide();
                 $("#divSubjectObjectives").hide();
+
                 $('#classroomCommentsButton').attr('disabled', true);
                 $('#dayCommentsButton').attr('disabled', true);
                 $('#newcomment').attr('disabled', true);
@@ -173,6 +182,10 @@
                     $("#divClassObsv").hide();
                     $("#divSubjectObjectives").show();
                     $("#recommend").prop("checked", "");
+
+                    $("#commentsContainer").show();
+              /*      $("#newClassRoom").show();
+                    $("#newcomment").hide();*/
                 });
 
                 $('#recommend').on('click', function () {
@@ -299,6 +312,10 @@
                     $("#divClassObsv").show();
                     $("#divSubjectObjectives").hide();
                     $("#divHora").show();
+
+                    $("#newClassRoom").show();
+                    $("#newcomment").hide();
+
                     loadComments();
                     $('#fecha').on('dp.change', function (e) {
                         loadComments();
@@ -315,6 +332,10 @@
                     $("#divSubjectObjectives").show();
                     //$("#objectives").val("vacio")
                     $("#recommend").prop("checked", "");
+
+                   /*$("#newcomment").show();*/
+                    $("#newClassRoom").hide();
+
                 });
 
 
@@ -1369,12 +1390,12 @@
             function startDictation() {
 
 
-               // if ('webkitSpeechRecognition' in window) {
+                // if ('webkitSpeechRecognition' in window) {
 
 
-                   if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                if (window.hasOwnProperty('webkitSpeechRecognition')) {
 
-                  // var recognition = SpeechRecognition || webkitSpeechRecognition;
+                    // var recognition = SpeechRecognition || webkitSpeechRecognition;
                     var recognition = new webkitSpeechRecognition();
                     recognition.continuous = false;
                     recognition.interimResults = false;
@@ -1393,7 +1414,7 @@
                     }
 
                 }
-           }
+            }
 
         </script>
         <style>
@@ -1886,19 +1907,20 @@
                     </div>
                 </div>
             </div>-->
-            <div class="col-xs-9 col-md-10" >
+            <div class="col-xs-9 col-md-10" id="commentsContainer">
                 <div class="col-xs-12">
                     <ul class="nav nav-tabs">
                         <li >
                             <a data-toggle="tab" id="classroomCommentsButton">
-                                Classroom observations
-                                <img style="width: 10%;" src='../recursos/img/iconos/computer-tool-for-education.svg' alt="Academics observations">
+                                Academics observations
+                                <img style="width: 5%;" src='../recursos/img/iconos/post-it.svg' alt="Classroom observations" alt="Academics observations">
                             </a>
                         </li>
+
                         <li class="active">
                             <a data-toggle="tab" id="dayCommentsButton">
-                                Academics observations
-                                <img style="width: 5%;" src='../recursos/img/iconos/post-it.svg' alt="Classroom observations">
+                                Classroom observations 
+                                <img style="width: 10%;" src='../recursos/img/iconos/computer-tool-for-education.svg' alt="Academics observations" >
                             </a>
                         </li>
 
