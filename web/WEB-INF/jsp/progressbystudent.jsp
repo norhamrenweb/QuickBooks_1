@@ -393,31 +393,31 @@
                         $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
 
                         /*var radioButtonCode="";
-                        $("#divTerms").empty();
-                        
-                        
-                        $("#termSelect option").each(function () {
-                           radioButtonCode +="<label class='radio-inline'><input type='radio' name='opt" + $(this).attr("value") + "'>" + $(this).text() + "</label> ";
-                        });
-                        radioButtonCode += "<label class='radio-inline'><input type='radio' name='optAll'>All</label>";
-                        
-                        $("#divTerms").append("<form>"+radioButtonCode+"</form>");*/
-                
+                         $("#divTerms").empty();
+                         
+                         
+                         $("#termSelect option").each(function () {
+                         radioButtonCode +="<label class='radio-inline'><input type='radio' name='opt" + $(this).attr("value") + "'>" + $(this).text() + "</label> ";
+                         });
+                         radioButtonCode += "<label class='radio-inline'><input type='radio' name='optAll'>All</label>";
+                         
+                         $("#divTerms").append("<form>"+radioButtonCode+"</form>");*/
 
 
+
                         $("#divTerms").empty();
-                        
+
                         $("#termSelect option").each(function () {
-                           $("#divTerms").append("<div class='radio' style='margin-left: 5%;'><label><input  onclick='selectTreeByTerm(" + $(this).attr("value") + ")' type='radio' name='opt'" + $(this).attr("value") + "'>" + $(this).text() + "</label></div>");
+                            $("#divTerms").append("<div class='radio' style='margin-left: 5%;'><label><input  onclick='selectTreeByTerm(" + $(this).attr("value") + ")' type='radio' name='opt'" + $(this).attr("value") + "'>" + $(this).text() + "</label></div>");
                         });
                         $("#divTerms").append("<div class='radio' style='margin-left: 5%;'><label><input onclick='selectTreeByTerm(-1)' type='radio' name='opt' vlaue='all' checked>All</label></div>");
-                                     
+
                     }
                 }
             }
             ;
-            function selectTreeByTerm(value){
-                
+            function selectTreeByTerm(value) {
+
                 var studentId = $('#studentid').val();
                 var idSubject = value;
 
@@ -722,6 +722,49 @@
                                 id = id + "-" + nameStudent;
                                 window.open("<c:url value="/progcal.htm?studentid="/>" + id);
                         }
+
+            function loadObjectiveReport() {
+                var seleccion = $("#subjectsReports").val();
+                $("#listObjectiveReport tbody").empty();
+                if (seleccion !== "Select Subject") {
+                    $.ajax({
+                        type: "POST",
+                        url: "objectiveListReport.htm?seleccion=" + seleccion,
+                        data: seleccion,
+                        dataType: 'text',
+                        success: function (data) {
+                            var json = JSON.parse(data);
+                            for (var i = 0; i < json.length; i++) {
+                                $("#listObjectiveReport tbody").append("<tr><td>" + json[i].col1 + "</td>\n\
+                                <td>\n\
+                                    <select>\n\
+                                    <option>N/A</option>\n\
+                                    <option>Presented</option>\n\
+                                    <option>Attempted</option>\n\
+                                    <option>Mastered</option>\n\
+                                    </select>\n\
+                                </td>\n\
+                                <td>\n\
+                                    <select>\n\
+                                    <option>Not yet assessed</option>\n\
+                                    <option>Needs further support</option>\n\
+                                    <option>Striving</option>\n\
+                                    <option>Competent</option>\n\
+                                    <option>Extended</option>\n\
+                                    </select>\n\
+                                    </td>\n\
+                            </tr>")
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr.status);
+                            console.log(xhr.responseText);
+                            console.log(thrownError);
+                        }
+
+                    });
+                }
+            }
 //  function funcionCallBacksavecomment(){
 //        if (ajax.readyState===4){
 //                if (ajax.status===200){
@@ -926,7 +969,7 @@
                                 <li><a id="Objectivestracking" data-toggle="tab" href="#progress" role="tab">Objectives tracking</a></li>
                                 <li><a id="AcademicProgress" data-toggle="tab" href="#gradebook" role="tab">Academic Progress</a></li>
                                 <li><a id="ClassroomObservation" data-toggle="tab" href="#observations" role="tab">Classroom Observation</a></li>
-                                <li><a id="SupervisorComment" data-toggle="tab" href="#supervisorComment" role="tab">Supervisor Comment</a></li>
+                                <li><a id="SupervisorComment" data-toggle="tab" href="#supervisorComment" role="tab">Report Card</a></li>
                             </ul>
                         </div>
                         <div class="tab-content">
@@ -961,7 +1004,7 @@
                                         <div class="row" style="display: flex;justify-content: space-between;">
                                             <p class="col-xs-4 text-info"><strong>PD:</strong> Presentations done.</p>
                                             <div class="col-xs-8" id="divTerms" style="display: flex;justify-content: end;align-items: baseline;">
-                                                
+
                                                 <!--<div class="form-check">
                                                     <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" type="radio">
                                                     <label class="form-check-label" for="exampleRadios1">Term1</label>
@@ -1123,8 +1166,59 @@
                                     <h2>Enter a supervisor comment</h2>
                                 </div>
                                 <div class="col-xs-12 center-block form-group">
-
                                     <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
+                                </div>
+                                <div id="divReport" class="col-xs-12 text-center">
+                                    <div class="col-xs-12">
+                                        <div class="col-xs-7">
+                                            <select class="form-control" id="subjectsReports" onchange="loadObjectiveReport()">
+                                                <option>Select Subject</option>
+                                                <option value="374">Physical Education</option>
+                                                <option value="410">Drama</option>
+                                                <option value="368">Life Skills</option>
+                                                <option value="405">Social and Emotional Development</option>
+                                                <option value="356">Creative Movement</option>
+                                                <option value="371">Music</option>
+                                                <option value="354">Art</option>
+                                                <option value="404">Fine Motor Skills</option>
+                                                <option value="403">Gross Motor Skills</option>
+                                                <option value="389">History</option>
+                                                <option value="386">Biology</option>
+                                                <option value="377">Physical Science</option>
+                                                <option value="362">Knowledge and Understanding of the World</option>
+                                                <option value="348">Mathematics</option>
+                                                <option value="380">Xhosa</option>
+                                                <option value="351">Afrikaans</option>
+                                                <option value="365">English</option>
+                                                <option value="305">Lunch and Play time</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-5">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label for="staticEmail" class="col-sm-2 col-form-label">Grade</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" readonly class="form-control-plaintext" id="gradeSubject" value="">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class=" col-xs-12">
+                                        <table class="table table-bordered" id="listObjectiveReport">
+                                            <thead>
+                                                <tr>
+                                                    <th>Objective</th>
+                                                    <th>Rating</th>
+                                                    <th>Level</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
                                 </div>
 
                                 <div class="col-xs-12 text-center">

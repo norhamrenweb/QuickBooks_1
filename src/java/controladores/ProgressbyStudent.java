@@ -202,6 +202,37 @@ public class ProgressbyStudent {
         return activesubjects;
     }
 
+    @RequestMapping("/progressbystudent/objectiveListReport.htm")
+    @ResponseBody
+    public String objectivesReportCard(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        String selection = hsr.getParameter("seleccion");
+        String[] data = selection.split(",");
+        String subjectid = data[0];
+        List<DBRecords> result = new ArrayList<>();
+        
+        try {
+            String consulta = " SELECT id,name,description from objective where subject_id = " + subjectid +" order by name ASC";
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            while (rs.next()) {
+                DBRecords r = new DBRecords();
+                r.setCol1(rs.getString("name"));
+                r.setCol2(rs.getString("description"));
+                r.setCol5("" + rs.getInt("id"));
+                result.add(r);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+       
+        return new Gson().toJson(result);
+    }
+    
+    
+
     //loads list of subjects based on selected level
     @RequestMapping("/progressbystudent/subjectlistLevel.htm")
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -772,7 +803,6 @@ public class ProgressbyStudent {
 
         return test2;
     }
-
 
     private ArrayList<Objective> getObjectivesTree(String[] subjectid, String termId) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
