@@ -1219,9 +1219,9 @@
                                         </table>
                                     </div>
 
-                                </div>
+                                </div> 
 
-                                <div class="col-xs-12 text-center">
+                                <div class="col-xs-12  text-center">
                                     <button type="button" class="btn btn-info" id="saveSupervisorComment"  value="Save" onclick="saveSupervisorCommentFunction()">Save Comment</button>
                                 </div>
 
