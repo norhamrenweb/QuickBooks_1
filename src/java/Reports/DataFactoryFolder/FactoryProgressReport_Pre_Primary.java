@@ -74,7 +74,9 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
             String[] id = x.getId();
             ArrayList<String> os = new ArrayList<>();
             for (String b : lessons) {
-                ResultSet rs1 = DBConect.eduweb.executeQuery("select objective_id from lessons where id = " + b + " and subject_id =" + id[0]);
+           //     select * from lessons inner join objective on lessons.objective_id = objective.id where lessons.id = 129 and lessons.subject_id = 383 and objective.name like 'R%'
+                ResultSet rs1 = DBConect.eduweb.executeQuery("select * from lessons inner join objective on lessons.objective_id = objective.id "
+                        + "where lessons.id = " + b + " and lessons.subject_id =" + id[0] + "and (objective.name like 'R_%' or objective.name like 'r_%')");
                 while (rs1.next()) {
                     if (!os.contains("" + rs1.getInt("objective_id"))) {
                         os.add("" + rs1.getInt("objective_id"));
