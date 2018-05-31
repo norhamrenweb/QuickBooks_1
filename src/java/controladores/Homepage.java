@@ -168,11 +168,12 @@ public class Homepage extends MultiActionController {
     } 
     
     @RequestMapping("/changeTermYear.htm")
-    public ModelAndView changeTermAndYear(HttpServletRequest hsr, HttpServletResponse hsr1){
+    @ResponseBody
+    public String changeTermAndYear(HttpServletRequest hsr, HttpServletResponse hsr1){
         int yearid = Integer.parseInt(hsr.getParameter("yearid"));
         int termid = Integer.parseInt(hsr.getParameter("termid"));
         if ((new SessionCheck()).checkSession(hsr)) {
-            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+            return "ERROR";
         } else {
             String nameTerm = "", nameYear = "";
             try{
@@ -192,7 +193,8 @@ public class Homepage extends MultiActionController {
             hsr.getSession().setAttribute("termYearName", nameTerm + " / " + nameYear);
             hsr.getSession().setAttribute("yearId", yearid);
             hsr.getSession().setAttribute("termId", termid);
-            return new ModelAndView("redirect:/homepage/loadLessons.htm");
+            
+            return "OK";
         }
     }
     

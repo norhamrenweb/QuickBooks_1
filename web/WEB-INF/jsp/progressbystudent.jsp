@@ -24,6 +24,8 @@
             var pestaña = "";
             var userType = ${user.type};
             $(document).ready(function () {
+
+
                 //$("#commentLength").text($("#commentSubject").val().length);
 
 
@@ -78,7 +80,7 @@
                 $('#myTab ul li').on('click', function () {
                     pestaña = $(this).text();
                 });
-                commentSubject
+
                 $('#table_students tbody').on('click', 'tr', function () {
 
                     data = table.row(this).data();
@@ -165,6 +167,93 @@
 
 
 
+            function changeTermYear() {
+                var year = $('#yearSelect option:selected').val();
+                var term = $('#termSelect option:selected').val();
+                var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
+                var nameYearAndTerm = $('#termSelect option:selected').text() + " / " + $('#yearSelect option:selected').text();
+                $('#loadingmessage').show();
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    contentType: "application/json",
+                    success: function (data) {
+                        $('#btnYearmTerm').text(nameYearAndTerm);
+                        // alert("progress by student");
+                        chargeDataStudent();
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
+                    }
+
+                });
+            }
+            function chargeDataStudent() {
+                var idStudent = $("#studentid").val();
+                if (idStudent !== undefined && idStudent !== "") {
+//  ajax.open("POST", "studentPage.htm?selectStudent=" + selectStudent, true);
+                    $.ajax({
+                        type: 'POST',
+                        url: 'studentPage.htm?selectStudent=' + idStudent,
+                        contentType: "application/json",
+                        success: function (data) {
+                            var json = JSON.parse(data);
+                            var info = JSON.parse(json.info);
+                            var foto = JSON.parse(json.prueba);
+                            var prog = JSON.parse(json.prog);
+                            var subjects = JSON.parse(json.sub);
+                            $('#gradelevel').text(info.level_id);
+                            $('#nextlevel').text(info.nextlevel);
+                            $('#student').text(info.nombre_students);
+                            $('#studentid').val(info.id_students);
+                            $('#BOD').text(info.fecha_nacimiento);
+                            $("#TXTsupervisorComment").val(json.commentHead);
+                            $("#commentSubject").val("");
+                            if (typeof info.foto === 'undefined' || info.foto === "") {
+                                $('#foto').attr('src', '../recursos/img/NotPhoto.png');
+                            } else {
+                                $('#foto').removeAttr('src');
+                                $('#foto').attr('src', foto);
+                            }
+
+                            $('.cell').off('click');
+                            //treeload(info.level_id, info.id_students);
+                            treeload2(prog);
+                            levelarbol = info.level_id;
+                            studentarbol = info.id_students;
+                            //hide the objectives in case a previous student was selected
+                            $('#divTableObjective').addClass('hidden'); //to avoid having the general comments of the previous selected student
+                            $('#divNotObjective').addClass('hidden');
+                            $('#subjects').empty();
+                            $('#subjects').append('<option>Select Subject</option>');
+                            $.each(subjects, function (i, item) {
+                                if (subjects[i].name !== undefined)
+                                    $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
+                            });
+                            $('#divCommentSubject').removeClass('hidden');
+                            $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
+                            $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
+                            $("#divTerms").empty();
+
+                            $("#termSelect option").each(function () {
+                                $("#divTerms").append("<div class='radio' style='margin-left: 5%;'><label><input  onclick='selectTreeByTerm(" + $(this).attr("value") + ")' type='radio' name='opt'" + $(this).attr("value") + "'>" + $(this).text() + "</label></div>");
+                            });
+                            $("#divTerms").append("<div class='radio' style='margin-left: 5%;'><label><input onclick='selectTreeByTerm(-1)' type='radio' name='opt' vlaue='all' checked>All</label></div>");
+
+                            $('#loadingmessage').hide();
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr.status);
+                            console.log(xhr.responseText);
+                            console.log(thrownError);
+                        }
+
+                    });
+                }
+            }
             function funcionCallBackloadGeneralcomments()
             {
                 if (ajax.readyState === 4) {
@@ -338,7 +427,7 @@
 
 
                 $('#loadingmessage').hide();
-                $("#tg").treegrid('collapseAll');
+                // $("#tg").treegrid('collapseAll');
                 $('.datagrid-row').mouseover(function () {
                     $(this).attr("title", $(this).first().children().first().children().last().children().last().text());
                 });
@@ -738,7 +827,8 @@
                                 $("#listObjectiveReport tbody").append("<tr><td>" + json[i].col1 + "</td>\n\
                                 <td>\n\
                                     <select>\n\
-                                    <option>N/A</option>\n\
+                                 loadobjGeneralcomments()\n\
+   <option>N/A</option>\n\
                                     <option>Presented</option>\n\
                                     <option>Attempted</option>\n\
                                     <option>Mastered</option>\n\
@@ -916,6 +1006,9 @@
             #myTab > ul > li >a{
                 padding: 10px 9px;
             }
+            #table_students{
+                width: 100% !important;
+            }
         </style>
     </head>
 
@@ -969,7 +1062,7 @@
                                 <li><a id="Objectivestracking" data-toggle="tab" href="#progress" role="tab">Objectives tracking</a></li>
                                 <li><a id="AcademicProgress" data-toggle="tab" href="#gradebook" role="tab">Academic Progress</a></li>
                                 <li><a id="ClassroomObservation" data-toggle="tab" href="#observations" role="tab">Classroom Observation</a></li>
-                                <li><a id="SupervisorComment" data-toggle="tab" href="#supervisorComment" role="tab">Report Card</a></li>
+                                <li><a id="ReportCard" data-toggle="tab" href="#supervisorComment" role="tab">Report Card</a></li>
                             </ul>
                         </div>
                         <div class="tab-content">

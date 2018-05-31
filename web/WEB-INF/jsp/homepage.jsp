@@ -24,6 +24,8 @@
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
 
             <%--      var lessondelete = '<%= request.getParameter("messageDelete") %>'; --%>
+
+
                 $('.pasar').click(function () {
                     var exist = false;
                     $('#destino option').each(function () {
@@ -98,23 +100,23 @@
                         {"width": "15%", "targets": [1]},
                         {"width": "7%", "targets": [2]},
                         {"width": "10%", "targets": [3]},
-                        {"width": "20%", "targets": [4]},
+                        {"width": "15%", "targets": [4]},
                         {"width": "15%", "targets": [5]},
-                        {"width": "33%", "targets": [6]}
+                        {"width": "38%", "targets": [6]}
 
                     ],
                     responsive: true
                 });
 
-                var resizeId;
-                $(window).resize(function () {
-                    clearTimeout(resizeId);
-                    resizeId = setTimeout(doneResizing, 500);
-                });
-                function doneResizing() {
-                    refresh();
-                }
-
+                /*var resizeId;
+                 $(window).resize(function () {
+                 clearTimeout(resizeId);
+                 resizeId = setTimeout(doneResizing, 500);
+                 });
+                 function doneResizing() {
+                 refresh();
+                 }
+                 */
 
                 $('#table_datelessons').DataTable();
 
@@ -131,6 +133,29 @@
                 $("#table_id").DataTable().page(Number(nP)).draw('page')
 
             });
+            function changeTermYear() {
+                var year = $('#yearSelect option:selected').val();
+                var term = $('#termSelect option:selected').val();
+                var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
+                var nameYearAndTerm = $('#termSelect option:selected').text() + " / " + $('#yearSelect option:selected').text();
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    contentType: "application/json",
+                    success: function (data) {
+                        $('#btnYearmTerm').text(nameYearAndTerm);
+                        refresh();
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
+                    }
+
+                });
+            }
+
 
             function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {
 
@@ -174,10 +199,10 @@
                     }
                 }
             }
-            function compartirSelect(id,idTeacher) {
+            function compartirSelect(id, idTeacher) {
                 $('#origen option').show();
-                $('#origen').find("[value="+idTeacher+"]").hide();
-                
+                $('#origen').find("[value=" + idTeacher + "]").hide();
+
                 $.ajax({
                     type: "POST",
                     url: "cargarcompartidos.htm?seleccion=" + id,
@@ -188,8 +213,8 @@
                         var t = JSON.parse(obj.t);
                         $('#destino').empty();
                         $.each(t, function (i, teacher) {
-                            if( t[i].id !== idTeacher)
-                                $('#destino').append('<option value="' + t[i].id + '">'+ t[i].name + '</option>');
+                            if (t[i].id !== idTeacher)
+                                $('#destino').append('<option value="' + t[i].id + '">' + t[i].name + '</option>');
                         });
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -336,18 +361,19 @@
             {
                 location.reload();
             }
- 
+
             function compartirajax() {
                 $('#destino option').prop('selected', true);
                 var seleccion = $('#compartirid').val();
                 var teachers = $('#destino').val();
-                if(teachers === null) teachers =[];
+                if (teachers === null)
+                    teachers = [];
                 var obj = {};
                 obj.id = seleccion;
                 obj.teachers = teachers;
                 $.ajax({
                     type: "POST",
-                    url: "compartir.htm",// + JSON.stringify(obj),
+                    url: "compartir.htm", // + JSON.stringify(obj),
                     data: JSON.stringify(obj),
                     datatype: "json",
                     contentType: "application/json",
@@ -381,8 +407,19 @@
              function doneResizing() {
              refresh();
              }*/
+
         </script>
         <style>
+            #table_id_wrapper{
+                font-size: small;
+            }
+            .uk-form-small{
+                min-height: 0px;
+            }
+
+            #table_id{
+                width: 100% !important;
+            }
             .sinpadding
             {
                 padding-left: 4px;

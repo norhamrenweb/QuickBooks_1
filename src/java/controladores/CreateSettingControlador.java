@@ -273,19 +273,20 @@ public class CreateSettingControlador {
         String message = null;
         Objective o = new Objective();
         String termIds = ob.getFinalrating();
-        String yearId = termIds.split("#")[1]; 
-        termIds = termIds.split("#")[0];
+        String yearId = ""+hsr.getSession().getAttribute("yearId"); 
+     //   termIds = termIds.split("#")[0];
+   //  termIds = termIds;
+        boolean reportCard = ob.isReportCard();
         
         try {
             String[] subid = ob.getId();
-            String consulta = "insert into objective(name,description,subject_id,year_id,term_id) values('" 
+            String consulta = "insert into objective(name,description,subject_id,year_id,term_id,reportcard) values('" 
                     + ob.getName() + "','" + ob.getDescription() + "','" + subid[0] + "','"+yearId+
-                    "','"+termIds+"')";
+                    "','"+termIds+ "','"+reportCard+"')";
             DBConect.eduweb.executeUpdate(consulta, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = DBConect.eduweb.getGeneratedKeys();
             String[] id = new String[1];
             while (rs.next()) {
-
                 id[0] = "" + rs.getInt(1);
                 o.setId(id);
             }
