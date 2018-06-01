@@ -201,21 +201,76 @@ public class ProgressbyStudent {
     @ResponseBody
     public String objectivesReportCard(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String selection = hsr.getParameter("seleccion");
+        String studentId = hsr.getParameter("studId");
         String[] data = selection.split(",");
         String subjectid = data[0];
         List<DBRecords> result = new ArrayList<>();
         String yearid = "" + hsr.getSession().getAttribute("yearId");
         String termid = "" + hsr.getSession().getAttribute("termId");
+        JSONObject obj = new JSONObject();
 
+        /**
+         * TOCARA CAMBIAR DE QUERY PRIMERA VERSION SELECT
+         * name,rating_id,level_id,student_id from objective left join (select *
+         * from progress_report where student_id = 12) b on (objective.id =
+         * b.objective_id) where objective.reportcard= 'true' and
+         * objective.year_id= 59 and objective.subject_id = 348
+         *
+         *
+         * VERSION 2 SELECT name,rating_id,level_id from objective left join
+         * (select * from progress_report where student_id = 10115) b on
+         * (objective.id = b.objective_id) where objective.reportcard= 'true'
+         * and objective.year_id= 59 and objective.subject_id = 348
+         *
+         *
+         */
         try {
-            String consulta = " SELECT * from objective where reportcard= 'true' and year_id= " + yearid + " and subject_id = " + subjectid + " order by name ASC";
+            String consulta = "SELECT name,rating_id,level_id,objective.term_id from objective left join \n"
+                    + "(select * from progress_report where student_id = " + studentId + ") b\n"
+                    + " on (objective.id = b.objective_id) where  objective.reportcard= 'true' and \n"
+                    + "objective.year_id= " + yearid + " and objective.subject_id = " + subjectid;
+
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+
+             while (rs.next()) {
+                String[] s = rs.getString("term_id").split(",");
+                boolean encontro = false;
+                int i = 0;
+                while (!encontro && i < s.length) {
+                    if (termid.equals("" + s[i])) {
+                        encontro = true;
+                    } else {
+                        i++;
+                    }
+                }
+                if (encontro) {
+                    DBRecords r = new DBRecords();
+                    r.setCol1(rs.getString("name"));
+                    
+                    Integer rId = rs.getInt("rating_id");
+                    if(rId == 0){
+                        rId = 7;
+                    }
+                    
+                    r.setCol2(""+rId);
+                    
+                    Integer lId = rs.getInt("level_id");
+                     if(lId == 0){
+                        lId = 6;
+                    }
+ 
+                    r.setCol5("" + lId);
+                    result.add(r);
+                }
+             }
+            /*String consulta = " SELECT * from objective where reportcard= 'true' and year_id= " + yearid + " and subject_id = " + subjectid + " order by name ASC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 String[] s = rs.getString("term_id").split(",");
                 boolean encontro = false;
                 int i = 0;
                 while (!encontro && i < s.length) {
-                    if (termid.equals(""+s[i])) {
+                    if (termid.equals("" + s[i])) {
                         encontro = true;
                     } else {
                         i++;
@@ -228,16 +283,17 @@ public class ProgressbyStudent {
                     r.setCol5("" + rs.getInt("id"));
                     result.add(r);
                 }
-            }
-
+            }*/
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
-
-        return new Gson().toJson(result);
+        obj.put("result", new Gson().toJson(result));
+        obj.put("ratings", new Gson().toJson(getRatings()));
+        obj.put("levels", new Gson().toJson(getLevels()));
+        return obj.toString();
     }
 
     //loads list of subjects based on selected level
@@ -503,7 +559,54 @@ public class ProgressbyStudent {
         obj.put("prueba", prueba2);
         obj.put("commentHead", this.getCommentHead(student.getId_students(), hsr));
         obj.put("prog", this.loadtree(getAllSubjectsYear(student.getId_students(), hsr), student.getId_students(), hsr, "-1"));
+
         return obj.toString();
+    }
+
+    private ArrayList<String[]> getRatings() {
+        ArrayList<String[]> ratings = new ArrayList<>();
+
+        try {
+            String consulta = " SELECT DISTINCT * from rating ";
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            while (rs.next()) {
+                String[] auxString = new String[2];
+                auxString[0] = "" + rs.getInt(1);
+                auxString[1] = rs.getString(2);
+                ratings.add(auxString);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+
+        return ratings;
+    }
+
+    private ArrayList<String[]> getLevels() {
+        ArrayList<String[]> levels = new ArrayList<>();
+
+        try {
+            String consulta = " SELECT DISTINCT * from levels ";
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            while (rs.next()) {
+                String[] auxString = new String[2];
+                auxString[0] = "" + rs.getInt(1);
+                auxString[1] = rs.getString(2);
+                levels.add(auxString);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+
+        return levels;
     }
 
     private List<Subject> getAllSubjectsYear(int studentid, HttpServletRequest hsr) throws SQLException {
@@ -577,9 +680,9 @@ public class ProgressbyStudent {
         try {
             String yearid = "" + hsr.getSession().getAttribute("yearId");
             String termid = "" + hsr.getSession().getAttribute("termId");
-        
+
             String consulta = " SELECT id,name,description from objective where "
-                    + "year_id= "+yearid+" and term_id= '"+termid+ "' and subject_id= " + subjectid;
+                    + "year_id= " + yearid + " and term_id= '" + termid + "' and subject_id= " + subjectid;
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 DBRecords r = new DBRecords();

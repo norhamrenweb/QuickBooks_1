@@ -212,16 +212,21 @@
                             $('#BOD').text(info.fecha_nacimiento);
                             $("#TXTsupervisorComment").val(json.commentHead);
                             $("#commentSubject").val("");
-                            if (typeof info.foto === 'undefined' || info.foto === "") {
-                                $('#foto').attr('src', '../recursos/img/NotPhoto.png');
-                            } else {
-                                $('#foto').removeAttr('src');
-                                $('#foto').attr('src', foto);
-                            }
+                            /* if (typeof info.foto === 'undefined' || info.foto === "") {
+                             $('#foto').attr('src', '../recursos/img/NotPhoto.png');
+                             } else {
+                             $('#foto').removeAttr('src');
+                             $('#foto').attr('src', foto);
+                             }
+                             */
+                            $("#listObjectiveReport tbody").empty();
+                            $("#subjectsReports").val(-1)
+
+
 
                             $('.cell').off('click');
                             //treeload(info.level_id, info.id_students);
-                            treeload2(prog);
+                            ///  treeload2(prog);
                             levelarbol = info.level_id;
                             studentarbol = info.id_students;
                             //hide the objectives in case a previous student was selected
@@ -233,6 +238,13 @@
                                 if (subjects[i].name !== undefined)
                                     $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                             });
+
+
+                            $.each(subjects, function (i, item) {
+                                if (subjects[i].name !== undefined)
+                                    $('#subjectsReports').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
+                            });
+
                             $('#divCommentSubject').removeClass('hidden');
                             $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                             $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
@@ -477,6 +489,12 @@
                             if (subjects[i].name !== undefined)
                                 $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                         });
+
+                        $.each(subjects, function (i, item) {
+                            if (subjects[i].name !== undefined)
+                                $('#subjectsReports').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
+                        });
+
                         $('#divCommentSubject').removeClass('hidden');
                         $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                         $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
@@ -814,33 +832,32 @@
 
             function loadObjectiveReport() {
                 var seleccion = $("#subjectsReports").val();
+                var stdId = $("#studentid").val();
+
                 $("#listObjectiveReport tbody").empty();
                 if (seleccion !== "Select Subject") {
                     $.ajax({
                         type: "POST",
-                        url: "objectiveListReport.htm?seleccion=" + seleccion,
+                        url: "objectiveListReport.htm?seleccion=" + seleccion + "&studId=" + stdId,
                         data: seleccion,
                         dataType: 'text',
                         success: function (data) {
                             var json = JSON.parse(data);
-                            for (var i = 0; i < json.length; i++) {
-                                $("#listObjectiveReport tbody").append("<tr><td>" + json[i].col1 + "</td>\n\
+                            var info = JSON.parse(json.result);
+                            var ratings = JSON.parse(json.ratings);
+                            var levels = JSON.parse(json.levels);
+
+
+                            for (var i = 0; i < info.length; i++) {
+                                $("#listObjectiveReport tbody").append("<tr><td>" + info[i].col1 + "</td>\n\
                                 <td>\n\
                                     <select>\n\
-                                 loadobjGeneralcomments()\n\
-   <option>N/A</option>\n\
-                                    <option>Presented</option>\n\
-                                    <option>Attempted</option>\n\
-                                    <option>Mastered</option>\n\
+                                    " + generateOptionsRatings(ratings, info[i].col2) + "\n\
                                     </select>\n\
                                 </td>\n\
                                 <td>\n\
                                     <select>\n\
-                                    <option>Not yet assessed</option>\n\
-                                    <option>Needs further support</option>\n\
-                                    <option>Striving</option>\n\
-                                    <option>Competent</option>\n\
-                                    <option>Extended</option>\n\
+                                     " + generateOptionsLevels(levels, info[i].col5) + "\n\
                                     </select>\n\
                                     </td>\n\
                             </tr>")
@@ -854,6 +871,28 @@
 
                     });
                 }
+            }
+            function generateOptionsRatings(ratings, idRating) {
+                var aux = "";
+                var selected = "";
+                for (var i = 0; i < ratings.length; i++) {
+                    if (ratings[i][0] === idRating)
+                        selected = "selected=''";
+                    aux += "<option " + selected + " value='" + ratings[i][0] + "'>" + ratings[i][1] + "</option>";
+                    selected = "";
+                }
+                return aux;
+            }
+            function generateOptionsLevels(levels, idLevel) {
+                var aux = "";
+                var selected = "";
+                for (var i = 0; i < levels.length; i++) {
+                    if (levels[i][0] === idLevel)
+                        selected = "selected=''";
+                    aux += "<option " + selected + " value='" + levels[i][0] + "'>" + levels[i][1] + "</option>";
+                    selected = "";
+                }
+                return aux;
             }
 //  function funcionCallBacksavecomment(){
 //        if (ajax.readyState===4){
@@ -1265,8 +1304,8 @@
                                     <div class="col-xs-12">
                                         <div class="col-xs-7">
                                             <select class="form-control" id="subjectsReports" onchange="loadObjectiveReport()">
-                                                <option>Select Subject</option>
-                                                <option value="374">Physical Education</option>
+                                                <option value="-1">Select Subject</option>
+                                                <!--<option value="374">Physical Education</option>
                                                 <option value="410">Drama</option>
                                                 <option value="368">Life Skills</option>
                                                 <option value="405">Social and Emotional Development</option>
@@ -1283,7 +1322,7 @@
                                                 <option value="380">Xhosa</option>
                                                 <option value="351">Afrikaans</option>
                                                 <option value="365">English</option>
-                                                <option value="305">Lunch and Play time</option>
+                                                <option value="305">Lunch and Play time</option>-->
                                             </select>
                                         </div>
                                         <div class="col-xs-5">
@@ -1291,7 +1330,7 @@
                                                 <div class="form-group row">
                                                     <label for="staticEmail" class="col-sm-2 col-form-label">Grade</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" readonly class="form-control-plaintext" id="gradeSubject" value="">
+                                                        <input disabled="" type="text" readonly class="form-control-plaintext" id="gradeSubject" value="">
                                                     </div>
                                                 </div>
                                             </form>

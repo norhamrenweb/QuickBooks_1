@@ -279,6 +279,8 @@ public class CreateSettingControlador {
         boolean reportCard = ob.isReportCard();
         
         try {
+            
+            
             String[] subid = ob.getId();
             String consulta = "insert into objective(name,description,subject_id,year_id,term_id,reportcard) values('" 
                     + ob.getName() + "','" + ob.getDescription() + "','" + subid[0] + "','"+yearId+
@@ -298,6 +300,8 @@ public class CreateSettingControlador {
             o.setDescription(ob.getDescription());
             o.setName(ob.getName());
             o.setSteps(ob.getSteps());
+
+            //SELECT * FROM "public".progress_report;
 
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
