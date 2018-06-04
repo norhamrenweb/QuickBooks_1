@@ -25,8 +25,8 @@
                     <div class="container " style="margin-top: 10%; margin-bottom: 10%;">
 
                     <div class="panel panel-success" style="max-width: 35%;" align="left">
-                        <div class="panel-heading form-group fondoGris">
-                            <img class="img-responsive center-block" src="recursos/img/logoeduweb.png" alt="logo"/>
+                        <div class=" form-group fondoGris">
+                            <img class="img-responsive center-block" src="recursos/img/iconos/logoBamboo_Inicio.svg" alt="logo"/>
                         </div>
                         <div class="panel-body" >
                             <form name ="form1" action="userform.htm?opcion=login" method="post" >
