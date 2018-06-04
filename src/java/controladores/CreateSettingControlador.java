@@ -50,7 +50,7 @@ public class CreateSettingControlador {
         }
         ModelAndView mv = new ModelAndView("createsettings");
         try {
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
+            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels order by GradeLevel ASC ");
             List<Level> grades = new ArrayList();
             Level l = new Level();
             l.setName("Select level");
@@ -97,27 +97,28 @@ public class CreateSettingControlador {
         try {
             String[] levelid = new String[1];
             levelid = hsr.getParameterValues("seleccion1");
-            ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
+            ResultSet rs1 = DBConect.ah.executeQuery("select title,courseid from courses where active = 1 and courseid in (select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID = " + levelid[0] + "))order by title asc");
+            //ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
             while (rs1.next()) {
                 Subject sub = new Subject();
                 String[] ids = new String[1];
-                ids[0] = "" + rs1.getInt("CourseID");
+                ids[0] = "" + rs1.getInt("courseid");
                 sub.setId(ids);
-
+                sub.setName(rs1.getString("title"));
                 subjects.add(sub);
             }
-            for (Subject su : subjects.subList(1, subjects.size())) {
-                String[] ids = new String[1];
-                ids = su.getId();
-                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = " + ids[0]+" order by Title");
-                while (rs2.next()) {
-                    if (rs2.getBoolean("Active") == true) {
-                        su.setName(rs2.getString("Title"));
-                        activesubjects.add(su);
-                    }
-
-                }
-            }
+//            for (Subject su : subjects.subList(1, subjects.size())) {
+//                String[] ids = new String[1];
+//                ids = su.getId();
+//                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = " + ids[0]+" order by Title ASC");
+//                while (rs2.next()) {
+//                    if (rs2.getBoolean("Active") == true) {
+//                        su.setName(rs2.getString("Title"));
+//                        activesubjects.add(su);
+//                    }
+//
+//                }
+//            }
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
             StringWriter errors = new StringWriter();
@@ -125,7 +126,8 @@ public class CreateSettingControlador {
             log.error(ex + errors.toString());
         }
 
-        return (new Gson()).toJson(activesubjects);
+       // return (new Gson()).toJson(activesubjects);
+       return (new Gson()).toJson(subjects);
     }
 
     @RequestMapping("/createsetting/objectivelistSubject.htm")

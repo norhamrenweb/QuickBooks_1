@@ -681,7 +681,7 @@ public class ProgressbyStudent {
             String termid = "" + hsr.getSession().getAttribute("termId");
 
             String consulta = " SELECT id,name,description from objective where "
-                    + "year_id= " + yearid + " and term_id= '" + termid + "' and subject_id= " + subjectid;
+                    + "year_id= " + yearid + " and term_id like '%" + termid + "%' and subject_id= '" + subjectid+"' and reportcard <> true";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 DBRecords r = new DBRecords();
@@ -969,7 +969,7 @@ public class ProgressbyStudent {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select objective.term_id,name,id from public.objective where subject_id=" + subjectid[0] + "ORDER BY name ASC");
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select objective.term_id,name,id from public.objective where subject_id=" + subjectid[0] + " and reportcard <> true ORDER BY name ASC");
             while (rs1.next()) {
                 String aux = rs1.getString("term_id");
                 String[] termIds = aux.split(",");
@@ -1401,7 +1401,7 @@ public class ProgressbyStudent {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id=" + subjectid[0] + "ORDER BY name ASC");
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0] + "' and reportcard <> true ORDER BY name ASC");
             while (rs1.next()) {
                 String[] ids = new String[1];
                 Objective sub = new Objective();
