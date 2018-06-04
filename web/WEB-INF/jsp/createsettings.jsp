@@ -26,6 +26,18 @@
                 $("#ObjectivesTermsErrorEdit").hide();
 
 
+                $("#checkReportCard").click(function () {
+                    if ($("#checkReportCard:checked").length > 0) {
+                        $("#newsteps").empty();
+                        $("#addObjectiveSteps").parent().parent().prev().hide();
+                        $("#addObjectiveSteps").hide();
+                    }
+                    else{
+                         $("#addObjectiveSteps").parent().parent().prev().show();
+                        $("#addObjectiveSteps").show();
+                    }
+                });
+
 //  var i=1;
 //  
 // $("#add_row").click(function(){
@@ -284,6 +296,7 @@
                     $("#termSelect option").each(function () {
                         $("#ObjectivesTermsEdit").append("<label class='checkbox-inline'><input checked='true' type='checkbox' name='" + $(this).attr("value") + "'>" + $(this).text() + "</label>");
                     });
+                    
                     var arrayTermsIds = objective.finalrating.split(',');
                     $("#ObjectivesTermsEdit label>input").prop("checked", false);
                     for (var i = 0; i < arrayTermsIds.length; i++) {
@@ -346,6 +359,27 @@
                     $.each(content, function (i, item) {
                         $('#content').append('<option value ="' + content[i].id + '" title ="' + content[i].description + '">' + content[i].name + '</option>');
                     });
+                    
+                    if(objective.reportCard === true){
+                        $('#checkEditReportCard').prop("checked", true);
+                        $('#checkEditReportCard').prop("disabled", true);
+                        $('#addContent').prop("disabled", true);
+                        
+                        
+                        $("#newsteps").empty();
+                        $("#editObjectiveSteps").parent().parent().prev().hide();
+                        $("#editObjectiveSteps").hide();
+                        $("#nooflessons").hide();
+                        $("#checkEditReportCard").parent().parent().show();
+                    }
+                    else{
+                        $("#checkEditReportCard").parent().parent().hide();
+                        $("#editObjectiveSteps").parent().parent().prev().show();
+                        $('#addContent').prop("disabled", false);
+                        $("#editObjectiveSteps").show();
+                        $("#nooflessons").show();
+      
+                    }
                 }
             }
             function comboSelectionContent()
@@ -445,11 +479,11 @@
                         termIds += ",";
                 } // utilizare la variable finalrating ya que es un string y no se utiliza
                 //termIds +="#"+yearId;//como ultimo pasare el yearId separado por #
-                
-                if($("#checkReportCard:checked").length > 0){
+
+                if ($("#checkReportCard:checked").length > 0) {
                     checkReportCard = true;
                 }
-               
+
                 var myObj = {};
                 myObj["name"] = name;
                 myObj["finalrating"] = termIds;
@@ -948,7 +982,7 @@
                             <div id="NameObjectiveError" style="color:red">Write a name</div>
                         </div>
                         <div class="col-xs-12"> 
-                           <label class='checkbox-inline'><input id="checkReportCard" type='checkbox' name='checkReportCard'>Use in Report Card</label>
+                            <label class='checkbox-inline'><input id="checkReportCard" type='checkbox' name='checkReportCard'>Use in Report Card</label>
                         </div>
                     </div>
                     <div class="col-xs-7 center-block form-group">
@@ -975,9 +1009,14 @@
                     <legend>Edit objective in <span id="objectiveSelectedForEdit"></span></legend>
                         <%--Edit objective--%>
                     <div class="col-xs-3 center-block form-group" id="addObjective">
-                        <label class="control-label">Edit objective</label>
-                        <input type="text" class="form-control" name="TXTeditNameObjective" id="editNameObjective"  placeholder="Name">
-                        <div id="NameObjectiveErrorEdit" style="color:red">Write a name</div>
+                        <div class="col-xs-12">
+                            <label class="control-label">Edit objective</label>
+                            <input type="text" class="form-control" name="TXTeditNameObjective" id="editNameObjective"  placeholder="Name">
+                            <div id="NameObjectiveErrorEdit" style="color:red">Write a name</div>
+                        </div>
+                        <div class="col-xs-12"> 
+                            <label class='checkbox-inline'><input id="checkEditReportCard" type='checkbox' name='checkReportCard'>Use in Report Card</label>
+                        </div>
                     </div>
                     <div class="col-xs-4 center-block form-group">
                         <label class="control-label">Description</label>

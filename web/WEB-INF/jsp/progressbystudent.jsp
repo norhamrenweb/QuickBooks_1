@@ -494,6 +494,7 @@
                                 $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                         });
 
+                        $("#subjectsReports").empty();
                         $.each(subjects, function (i, item) {
                             if (subjects[i].name !== undefined)
                                 $('#subjectsReports').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
@@ -503,8 +504,8 @@
                         $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                         $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
 
- $("#listObjectiveReport tbody").empty();
- $("#subjectsReports").val(-1);
+                        $("#listObjectiveReport tbody").empty();
+                        $("#subjectsReports").val(-1);
                         /*var radioButtonCode="";
                          $("#divTerms").empty();
                          

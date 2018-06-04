@@ -182,12 +182,13 @@ public class CreateSettingControlador {
                 contents.add(eq);
             }
             String id = hsr.getParameter("seleccion3");
-            ResultSet rs2 = DBConect.eduweb.executeQuery("SELECT name,description,term_id FROM public.objective where id =" + id);
+            ResultSet rs2 = DBConect.eduweb.executeQuery("SELECT reportcard,name,description,term_id FROM public.objective where id =" + id);
 
             while (rs2.next()) {
                 objective.setName(rs2.getString("name"));
                 objective.setDescription(rs2.getString("description"));
                 objective.setFinalrating(rs2.getString("term_id"));
+                objective.setReportCard(rs2.getBoolean("reportcard"));
             }
 
             ResultSet rs3 = DBConect.eduweb.executeQuery("SELECT count(id) as nooflessons FROM public.lessons where objective_id =" + id);
@@ -217,7 +218,6 @@ public class CreateSettingControlador {
         String objjson = new Gson().toJson(objective);
         obj.put("content", contentjson);
         obj.put("objective", objjson);
-
         return obj.toString();
     }
 

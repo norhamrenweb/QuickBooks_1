@@ -32,6 +32,7 @@ public class Objective {
     private int nooflessonsdone;
     private boolean reportCard;
     Connection cn;
+    
 
     public boolean isReportCard() {
         return reportCard;
