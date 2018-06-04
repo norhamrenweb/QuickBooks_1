@@ -150,6 +150,8 @@
 //                        });
 //                    }
 //                });
+
+
             });
             var ajax;
             var d = new Date();
@@ -240,6 +242,8 @@
                             });
 
 
+                            $('#subjectsReports').empty();
+                            $('#subjectsReports').append('<option value ="-1">Select Subject</option>');
                             $.each(subjects, function (i, item) {
                                 if (subjects[i].name !== undefined)
                                     $('#subjectsReports').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
@@ -499,6 +503,8 @@
                         $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                         $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
 
+ $("#listObjectiveReport tbody").empty();
+ $("#subjectsReports").val(-1);
                         /*var radioButtonCode="";
                          $("#divTerms").empty();
                          
@@ -851,17 +857,20 @@
                             for (var i = 0; i < info.length; i++) {
                                 $("#listObjectiveReport tbody").append("<tr><td>" + info[i].col1 + "</td>\n\
                                 <td>\n\
-                                    <select>\n\
+                                    <select data='" + info[i].col3 + "' class='ratingReport reportGrades'>\n\
                                     " + generateOptionsRatings(ratings, info[i].col2) + "\n\
                                     </select>\n\
                                 </td>\n\
                                 <td>\n\
-                                    <select>\n\
+                                    <select data='" + info[i].col3 + "' class='selectReport reportGrades'>\n\
                                      " + generateOptionsLevels(levels, info[i].col5) + "\n\
                                     </select>\n\
                                     </td>\n\
                             </tr>")
                             }
+                            $(".reportGrades").change(function () {
+                                saveObjectiveReport($(this));
+                            });
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                             console.log(xhr.status);
@@ -871,6 +880,46 @@
 
                     });
                 }
+            }
+
+            /*
+             myObj["col5"] = subject; //subject
+             var json = JSON.stringify(myObj);
+             $.ajax({
+             type: 'POST',
+             url: '<c:url value="/progressdetails.htm"/>',
+             data: json,
+             datatype: "json",*/
+
+            function saveObjectiveReport(target) {
+                var newSeleccion = target.val();
+                var objectiveId = target.attr("data");
+                var rating_select = "level_id";
+                if (target.hasClass("ratingReport"))
+                    rating_select = "rating_id";
+
+                var myObj = {};
+                myObj["col1"] = newSeleccion; //nueva seleccion
+                myObj["col2"] = objectiveId; // objective id
+                myObj["col3"] = rating_select; // name column
+                myObj["col4"] = $("#studentid").val();
+                var json = JSON.stringify(myObj);
+                $.ajax({
+                    type: "POST",
+                    url: "updateObjectivesReport.htm",
+                    data: json,
+                    contentType:  "application/json",
+                    datatype: "json",
+                    success: function (data) {
+                        var f = "fd";
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
+                    }
+
+                });
             }
             function generateOptionsRatings(ratings, idRating) {
                 var aux = "";

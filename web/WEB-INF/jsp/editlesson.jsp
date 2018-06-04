@@ -17,6 +17,7 @@
         <title>Edit Presentation</title>
         <script>
 
+
             var error = ${DatainBBDD};
             var mapStudents = new Map();
             $(document).ready(function () {

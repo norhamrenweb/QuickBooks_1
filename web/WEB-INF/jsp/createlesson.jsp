@@ -18,6 +18,7 @@
         <script>
             var mapStudents = new Map();
 
+
             $(document).ready(function () {
                 $("#linkRecommend").hide();
                 $('#origen option').each(function () {

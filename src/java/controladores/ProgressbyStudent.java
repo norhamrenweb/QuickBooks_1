@@ -225,7 +225,7 @@ public class ProgressbyStudent {
          *
          */
         try {
-            String consulta = "SELECT name,rating_id,level_id,objective.term_id from objective left join \n"
+            String consulta = "SELECT objective.id,name,rating_id,level_id,objective.term_id from objective left join \n"
                     + "(select * from progress_report where student_id = " + studentId + ") b\n"
                     + " on (objective.id = b.objective_id) where  objective.reportcard= 'true' and \n"
                     + "objective.year_id= " + yearid + " and objective.subject_id = " + subjectid;
@@ -246,19 +246,18 @@ public class ProgressbyStudent {
                 if (encontro) {
                     DBRecords r = new DBRecords();
                     r.setCol1(rs.getString("name"));
+                    r.setCol3(rs.getString("id"));
                     
                     Integer rId = rs.getInt("rating_id");
                     if(rId == 0){
                         rId = 7;
-                    }
-                    
-                    r.setCol2(""+rId);
+                    }     
+                    r.setCol2(""+rId);      
                     
                     Integer lId = rs.getInt("level_id");
-                     if(lId == 0){
+                    if(lId == 0){
                         lId = 6;
                     }
- 
                     r.setCol5("" + lId);
                     result.add(r);
                 }
@@ -1092,6 +1091,36 @@ public class ProgressbyStudent {
         return "success";
     }
 
+    @RequestMapping("/progressbystudent/updateObjectivesReport.htm")
+    @ResponseBody
+    public String updateObjectivesReport(@RequestBody DBRecords dbRec, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        String newId = dbRec.getCol1();
+        String id_objective = dbRec.getCol2();
+        String nameColumn = dbRec.getCol3();
+        String idStudent = dbRec.getCol4();
+        String yearid = "" + hsr.getSession().getAttribute("yearId");
+        String termid = "" + hsr.getSession().getAttribute("termId");
+        
+        ModelAndView mv = new ModelAndView("progressbystudent");
+        try { 
+            String test = "update progress_report set "+nameColumn+"=" + newId + ",comment_date = now() where yearterm_id =" +  yearid  + " and term_id =" +termid+ " and objective_id=" + id_objective +" and student_id="+idStudent ;
+       //     String ifTest= "select * from progress_report where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective +" and student_id="+idStudent;
+           
+            if (!DBConect.eduweb.executeQuery("select * from progress_report where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective +" and student_id="+idStudent).next()) {
+                test = "insert into progress_report(comment_date,"+nameColumn+",objective_id,yearterm_id,term_id,student_id)values(now(),"+newId+","+id_objective+","+yearid+","+termid+","+idStudent+")";
+            }
+            DBConect.eduweb.executeUpdate(test);
+
+        } catch (SQLException ex) {
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return "success";
+    }
+    
+    
     @RequestMapping("/progcal.htm")
     @ResponseBody
     public ModelAndView progcal(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
