@@ -424,7 +424,7 @@ a.nav-expander {
   text-transform: uppercase;
   text-align: center;
   vertical-align: middle;
-  bottom: 30%;
+  bottom: 42%;
   transition: left 0.3s ease-in-out 0s;  /* changed */
   
   height: 130px;
@@ -465,7 +465,7 @@ nav {
   left: -30%;
   padding-top: 1%;     /* changed */
   font-size: 15px;
-  top: 20%;
+  top: 15%;
   width: 10%;
   z-index: 2000;
  

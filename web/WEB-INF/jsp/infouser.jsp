@@ -192,7 +192,7 @@
     }
 </script>
 
-<div class="infousuario noPrint bg-primary" id="infousuario">
+<div class="infousuario noPrint " id="infousuario" style="background-color: #76c472;">
     <div class="col-xs-3 text-left">
         <%--<img src="<c:url value="/recursos/img/iconoschool.png"/>">--%>
     </div>
@@ -202,7 +202,7 @@
         <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>
     </div>
     <div class="col-xs-2 text-center">
-        <button id="btnYearmTerm" onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
+        <button class="btn" id="btnYearmTerm" onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
     </div>
     <div class="col-xs-2 text-right">
         <!--<a href="<c:url value="/cerrarLogin.htm"/>" role="button" aria-haspopup="true" aria-expanded="false"><img class="imgUser" src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>-->
