@@ -184,7 +184,7 @@ div {
     position: relative;
     background-color: #dff0d8;
     width: 100%;
-    min-height: 100px;
+    min-height: 12%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -337,3 +337,25 @@ textarea
     background-color: #cc0000;
 }*/
 
+/*Cambios estilos 04 06 2018*/
+    /*OBSERVATIONS.JSP*/
+    .pestanas
+    {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .iconosPestanas
+    {
+        height: 90%;
+        margin-left: 20px;
+    }
+    /*Correccion para que la primera pestaña aparezca como seleccionada*/
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: white ; 
+    border-bottom-width: 2px !important;
+    
+    }

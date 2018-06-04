@@ -85,13 +85,36 @@
 </head>
 
 <script>
+
+    var ajax;
     $(document).ready(function () {
         setInterval(function () {
             alert("Your session is going to be end by 5 min, Please click OK and continue")
         }, 3000000);
-    });
 
-    var ajax;
+        var yearId = ${yearId};
+        var termId = ${termId};
+        var listYear = ${yearsids};
+
+        for (var i = 0; i < listYear.length; ++i) {
+            $("#yearSelect").append("<option value='" + listYear[i].x + "'>" + listYear[i].y + "</option>");
+        }
+
+        var my_options = $("#yearSelect option");
+        my_options.sort(function (a, b) {
+            if (a.text > b.text)
+                return 1;
+            if (a.text < b.text)
+                return -1;
+            return 0
+        })
+
+        $("#yearSelect").empty().append(my_options);
+        $("#yearSelect").val(yearId);
+        terms();
+        $("#termSelect").val(termId);
+
+    });
     function terms() {
 
         if (window.XMLHttpRequest) //mozilla
@@ -109,6 +132,28 @@
         ajax.send("");
     }
 
+    function changeTermYear() {
+                var year = $('#yearSelect option:selected').val();
+                var term = $('#termSelect option:selected').val();
+                var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
+                var nameYearAndTerm = $('#termSelect option:selected').text() + " / " + $('#yearSelect option:selected').text();
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    contentType: "application/json",
+                    success: function (data) {
+                        $('#btnYearmTerm').text(nameYearAndTerm);
+                        refresh();
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
+                    }
+
+                });
+            }
     function CallBackYear()
     {
         if (ajax.readyState === 4 && ajax.status === 200) {
@@ -120,27 +165,27 @@
             }
         }
     }
-
-    function changeTermYear() {
-        if (window.XMLHttpRequest) //mozilla
-        {
-            ajax = new XMLHttpRequest(); //No Internet explorer
-        } else
-        {
-            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        ajax.onreadystatechange = function () {
-            if (ajax.readyState === 4 && ajax.status === 200) {
-                window.location.reload();
-            }
-        };
-        var seleccion = $('#yearSelect option:selected').val();
-        var term = $('#termSelect option:selected').val();
-        var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + seleccion + "&termid=" + term;
-        ajax.open("POST", url, true);
-        ajax.send("");
-    }
+   
+        /*
+         if (window.XMLHttpRequest) //mozilla
+         {
+         ajax = new XMLHttpRequest(); //No Internet explorer
+         } else
+         {
+         ajax = new ActiveXObject("Microsoft.XMLHTTP");
+         }
+         
+         ajax.onreadystatechange = function () {
+         if (ajax.readyState === 4 && ajax.status === 200) {
+         window.location.reload();
+         }
+         };
+         var seleccion = $('#yearSelect option:selected').val();
+         var term = $('#termSelect option:selected').val();
+         var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + seleccion + "&termid=" + term;
+         ajax.open("POST", url, true);
+         ajax.send("");
+    }*/
 
     function logout() {
         document.location.href = "<c:url value="/cerrarLogin.htm"/>";
@@ -175,31 +220,7 @@
                         <select class="form-control" id="yearSelect" onchange="terms()">
                         </select> 
                     </div>  
-                </div>
-                <script>
-                    var yearId = ${yearId};
-                    var termId = ${termId};
-                    var listYear = ${yearsids};
-
-                    for (var i = 0; i < listYear.length; ++i) {
-                        $("#yearSelect").append("<option value='" + listYear[i].x + "'>" + listYear[i].y + "</option>");
-                    }
-
-                    var my_options = $("#yearSelect option");
-                    my_options.sort(function (a, b) {
-                        if (a.text > b.text)
-                            return 1;
-                        if (a.text < b.text)
-                            return -1;
-                        return 0
-                    })
-
-                    $("#yearSelect").empty().append(my_options);
-                    $("#yearSelect").val(yearId);
-                    terms();
-                    $("#termSelect").val(termId);
-
-                </script>
+                </div>   
                 <div class="col-xs-12 col-md-5">
                     <div class="form-group">
                         <label for="termSelect">Term</label>

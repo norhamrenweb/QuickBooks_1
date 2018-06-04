@@ -19,6 +19,7 @@
         <title>Generate Report</title>
         <script>
 
+
             $(document).ready(function () {
                 // $('#loadingmessage').hide();
                 $('#generateReport').attr('disabled', true);

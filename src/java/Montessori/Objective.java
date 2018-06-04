@@ -30,8 +30,18 @@ public class Objective {
     private List<Step> steps;
     private int nooflessonsplanned;
     private int nooflessonsdone;
+    private boolean reportCard;
     Connection cn;
 
+    public boolean isReportCard() {
+        return reportCard;
+    }
+
+    public void setReportCard(boolean reportCard) {
+        this.reportCard = reportCard;
+    }
+
+    
     public String getFinalrating() {
         return finalrating;
     }

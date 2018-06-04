@@ -149,24 +149,19 @@ public class ProgressbyStudent {
          */
         String idTerm = cSub.getIdSubject();
         int studentId = Integer.parseInt(cSub.getIdStudent());
-        List<Subject> subjects = getSubjects(studentId);
+        List<Subject> subjects = getSubjects(studentId, hsr);
 
-        return this.loadtree(subjects, studentId, hsr.getServletContext(), idTerm);
+        return this.loadtree(subjects, studentId, hsr, idTerm);
     }
 
-    static List<Subject> getSubjects(int studentid) throws SQLException {
+    static List<Subject> getSubjects(int studentid, HttpServletRequest hsr) throws SQLException {
         List<Subject> subjects = new ArrayList<>();
         List<Subject> activesubjects = new ArrayList<>();
         HashMap<String, String> mapSubject = new HashMap<String, String>();
-        String termid = null;
-        String yearid = null;
+        String yearid = "" + hsr.getSession().getAttribute("yearId");
+        String termid = "" + hsr.getSession().getAttribute("termId");
 
         try {
-            ResultSet rs = DBConect.ah.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where configschoolid = 1");
-            while (rs.next()) {
-                termid = "" + rs.getInt("defaulttermid");
-                yearid = "" + rs.getInt("defaultyearid");
-            }
             ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
                     + "                 inner join courses on courses.courseid=classes.courseid\n"
                     + "                  where roster.studentid = " + studentid + " and roster.enrolled" + termid + "=1 and courses.active = 1 and courses.reportcard = 1 and classes.yearid = '" + yearid + "' order by courses.rcplacement DESC");// the term and year need to be dynamic, check with vincent
@@ -206,32 +201,99 @@ public class ProgressbyStudent {
     @ResponseBody
     public String objectivesReportCard(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String selection = hsr.getParameter("seleccion");
+        String studentId = hsr.getParameter("studId");
         String[] data = selection.split(",");
         String subjectid = data[0];
         List<DBRecords> result = new ArrayList<>();
-        
+        String yearid = "" + hsr.getSession().getAttribute("yearId");
+        String termid = "" + hsr.getSession().getAttribute("termId");
+        JSONObject obj = new JSONObject();
+
+        /**
+         * TOCARA CAMBIAR DE QUERY PRIMERA VERSION SELECT
+         * name,rating_id,level_id,student_id from objective left join (select *
+         * from progress_report where student_id = 12) b on (objective.id =
+         * b.objective_id) where objective.reportcard= 'true' and
+         * objective.year_id= 59 and objective.subject_id = 348
+         *
+         *
+         * VERSION 2 SELECT name,rating_id,level_id from objective left join
+         * (select * from progress_report where student_id = 10115) b on
+         * (objective.id = b.objective_id) where objective.reportcard= 'true'
+         * and objective.year_id= 59 and objective.subject_id = 348
+         *
+         *
+         */
         try {
-            String consulta = " SELECT id,name,description from objective where subject_id = " + subjectid +" order by name ASC";
+            String consulta = "SELECT objective.id,name,rating_id,level_id,objective.term_id from objective left join \n"
+                    + "(select * from progress_report where student_id = " + studentId + ") b\n"
+                    + " on (objective.id = b.objective_id) where  objective.reportcard= 'true' and \n"
+                    + "objective.year_id= " + yearid + " and objective.subject_id = " + subjectid;
+
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+
+             while (rs.next()) {
+                String[] s = rs.getString("term_id").split(",");
+                boolean encontro = false;
+                int i = 0;
+                while (!encontro && i < s.length) {
+                    if (termid.equals("" + s[i])) {
+                        encontro = true;
+                    } else {
+                        i++;
+                    }
+                }
+                if (encontro) {
+                    DBRecords r = new DBRecords();
+                    r.setCol1(rs.getString("name"));
+                    r.setCol3(rs.getString("id"));
+                    
+                    Integer rId = rs.getInt("rating_id");
+                    if(rId == 0){
+                        rId = 7;
+                    }     
+                    r.setCol2(""+rId);      
+                    
+                    Integer lId = rs.getInt("level_id");
+                    if(lId == 0){
+                        lId = 6;
+                    }
+                    r.setCol5("" + lId);
+                    result.add(r);
+                }
+             }
+            /*String consulta = " SELECT * from objective where reportcard= 'true' and year_id= " + yearid + " and subject_id = " + subjectid + " order by name ASC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
-                DBRecords r = new DBRecords();
-                r.setCol1(rs.getString("name"));
-                r.setCol2(rs.getString("description"));
-                r.setCol5("" + rs.getInt("id"));
-                result.add(r);
-            }
-
+                String[] s = rs.getString("term_id").split(",");
+                boolean encontro = false;
+                int i = 0;
+                while (!encontro && i < s.length) {
+                    if (termid.equals("" + s[i])) {
+                        encontro = true;
+                    } else {
+                        i++;
+                    }
+                }
+                if (encontro) {
+                    DBRecords r = new DBRecords();
+                    r.setCol1(rs.getString("name"));
+                    r.setCol2(rs.getString("description"));
+                    r.setCol5("" + rs.getInt("id"));
+                    result.add(r);
+                }
+            }*/
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
-       
-        return new Gson().toJson(result);
+        obj.put("result", new Gson().toJson(result));
+        obj.put("ratings", new Gson().toJson(getRatings()));
+        obj.put("levels", new Gson().toJson(getLevels()));
+        return obj.toString();
     }
-    
-    
 
     //loads list of subjects based on selected level
     @RequestMapping("/progressbystudent/subjectlistLevel.htm")
@@ -362,7 +424,7 @@ public class ProgressbyStudent {
     @ResponseBody
     public String treeload(HttpServletRequest hsr, HttpServletResponse hsr1) {
         try {
-            return this.loadtree(new ArrayList<>(), Integer.parseInt(hsr.getParameter("studentid")), hsr.getServletContext(), "-1");
+            return this.loadtree(new ArrayList<>(), Integer.parseInt(hsr.getParameter("studentid")), hsr, "-1");
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
@@ -487,20 +549,111 @@ public class ProgressbyStudent {
         }
 
         // List<Subject> subjects = new ArrayList<>();
-        subjects = this.getSubjects(student.getId_students());
+        subjects = getSubjects(student.getId_students(), hsr);
         String info = new Gson().toJson(student);
         String sub = new Gson().toJson(subjects);
         String prueba2 = new Gson().toJson(prueba);
         obj.put("info", info);
         obj.put("sub", sub);
         obj.put("prueba", prueba2);
-        obj.put("commentHead", this.getCommentHead(student.getId_students()));
-        obj.put("prog", this.loadtree(subjects, student.getId_students(), hsr.getServletContext(), "-1"));
+        obj.put("commentHead", this.getCommentHead(student.getId_students(), hsr));
+        obj.put("prog", this.loadtree(getAllSubjectsYear(student.getId_students(), hsr), student.getId_students(), hsr, "-1"));
+
         return obj.toString();
     }
 
-    private String getCommentHead(int idStudent) {
-        String consulta = " SELECT comment from report_comments where studentid = " + idStudent + " and supercomment = true", res = "";
+    private ArrayList<String[]> getRatings() {
+        ArrayList<String[]> ratings = new ArrayList<>();
+
+        try {
+            String consulta = " SELECT DISTINCT * from rating ";
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            while (rs.next()) {
+                String[] auxString = new String[2];
+                auxString[0] = "" + rs.getInt(1);
+                auxString[1] = rs.getString(2);
+                ratings.add(auxString);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+
+        return ratings;
+    }
+
+    private ArrayList<String[]> getLevels() {
+        ArrayList<String[]> levels = new ArrayList<>();
+
+        try {
+            String consulta = " SELECT DISTINCT * from levels ";
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            while (rs.next()) {
+                String[] auxString = new String[2];
+                auxString[0] = "" + rs.getInt(1);
+                auxString[1] = rs.getString(2);
+                levels.add(auxString);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+
+        return levels;
+    }
+
+    private List<Subject> getAllSubjectsYear(int studentid, HttpServletRequest hsr) throws SQLException {
+        List<Subject> subjects = new ArrayList<>();
+        List<Subject> activesubjects = new ArrayList<>();
+        HashMap<String, String> mapSubject = new HashMap<String, String>();
+        String yearid = "" + hsr.getSession().getAttribute("yearId");
+
+        try {
+            ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
+                    + "                 inner join courses on courses.courseid=classes.courseid\n"
+                    + "                  where roster.studentid = " + studentid + " and courses.active = 1 and courses.reportcard = 1 and classes.yearid = '" + yearid + "' order by courses.rcplacement DESC");// the term and year need to be dynamic, check with vincent
+
+            String name9, id;
+            while (rs1.next()) {
+                Subject sub = new Subject();
+                String[] ids = new String[1];
+                ids[0] = "" + rs1.getInt("CourseID");
+                sub.setId(ids);
+                subjects.add(sub);
+
+                name9 = rs1.getString("Title");
+                id = rs1.getString("CourseID");
+                mapSubject.put(id, name9);
+
+            }
+
+            for (int i = 0; i < subjects.size(); i++) {
+                String[] ids = new String[1];
+                ids = subjects.get(i).getId();
+                subjects.get(i).setName(mapSubject.get(ids[0]));
+                activesubjects.add(subjects.get(i));
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Subjects: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+
+        return activesubjects;
+    }
+
+    private String getCommentHead(int idStudent, HttpServletRequest hsr) {
+        String yearid = "" + hsr.getSession().getAttribute("yearId");
+        String termid = "" + hsr.getSession().getAttribute("termId");
+        String consulta = " SELECT comment from report_comments where yearterm_id =" + yearid + " and term_id= " + termid + " and studentid = " + idStudent + " and supercomment = true", res = "";
         try {
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
@@ -524,7 +677,11 @@ public class ProgressbyStudent {
         List<DBRecords> result = new ArrayList<>();
         String comment = "";
         try {
-            String consulta = " SELECT id,name,description from objective where subject_id = " + subjectid;
+            String yearid = "" + hsr.getSession().getAttribute("yearId");
+            String termid = "" + hsr.getSession().getAttribute("termId");
+
+            String consulta = " SELECT id,name,description from objective where "
+                    + "year_id= " + yearid + " and term_id= '" + termid + "' and subject_id= " + subjectid;
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 DBRecords r = new DBRecords();
@@ -625,7 +782,7 @@ public class ProgressbyStudent {
         return obj.toString();
     }
 
-    public String loadtree(List<Subject> ls, int studentid, ServletContext hsr, String idTerm) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
+    public String loadtree(List<Subject> ls, int studentid, HttpServletRequest hsr, String idTerm) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
 
         ModelAndView mv = new ModelAndView("progressbystudent");
         JSONObject json = new JSONObject();
@@ -639,7 +796,7 @@ public class ProgressbyStudent {
 
         try {
             if (ls.isEmpty()) {
-                subs = getSubjects(studentid);
+                subs = getSubjects(studentid, hsr);
             } else {
                 subs = ls;
             }
@@ -658,7 +815,11 @@ public class ProgressbyStudent {
 
             for (Subject sub : subs) {
                 String[] sid = sub.getId();
-                ResultSet rs = DBConect.eduweb.executeQuery("select objective.term_id , obj_steps.id,obj_steps.name,objective.name as obj ,objective.id as objid,objective.subject_id from obj_steps inner join objective on obj_steps.obj_id = objective.id where objective.subject_id = '" + sid[0] + "' order by obj_steps.storder ASC");
+                String consulta3 = "select objective.term_id , obj_steps.id,obj_steps.name,objective.name as obj ,objective.id as objid,objective.subject_id "
+                        + "from obj_steps inner join objective on obj_steps.obj_id = objective.id "
+                        + "where objective.subject_id = '" + sid[0] + "' order by obj_steps.storder ASC";
+
+                ResultSet rs = DBConect.eduweb.executeQuery(consulta3);
 
                 while (rs.next()) {
                     String aux = rs.getString("term_id");
@@ -930,6 +1091,36 @@ public class ProgressbyStudent {
         return "success";
     }
 
+    @RequestMapping("/progressbystudent/updateObjectivesReport.htm")
+    @ResponseBody
+    public String updateObjectivesReport(@RequestBody DBRecords dbRec, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        
+        String newId = dbRec.getCol1();
+        String id_objective = dbRec.getCol2();
+        String nameColumn = dbRec.getCol3();
+        String idStudent = dbRec.getCol4();
+        String yearid = "" + hsr.getSession().getAttribute("yearId");
+        String termid = "" + hsr.getSession().getAttribute("termId");
+        
+        ModelAndView mv = new ModelAndView("progressbystudent");
+        try { 
+            String test = "update progress_report set "+nameColumn+"=" + newId + ",comment_date = now() where yearterm_id =" +  yearid  + " and term_id =" +termid+ " and objective_id=" + id_objective +" and student_id="+idStudent ;
+       //     String ifTest= "select * from progress_report where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective +" and student_id="+idStudent;
+           
+            if (!DBConect.eduweb.executeQuery("select * from progress_report where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective +" and student_id="+idStudent).next()) {
+                test = "insert into progress_report(comment_date,"+nameColumn+",objective_id,yearterm_id,term_id,student_id)values(now(),"+newId+","+id_objective+","+yearid+","+termid+","+idStudent+")";
+            }
+            DBConect.eduweb.executeUpdate(test);
+
+        } catch (SQLException ex) {
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return "success";
+    }
+    
+    
     @RequestMapping("/progcal.htm")
     @ResponseBody
     public ModelAndView progcal(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {

@@ -437,15 +437,19 @@
                 var description = document.getElementById("descriptionnewobjective").value;
                 var subjectid = document.getElementById("subject").value;
                 var termIds = "";
-
+                var checkReportCard = false;
                 for (var i = 0; i < $("#ObjectivesTerms label input:checked").length; i++) {
                     termIds += $("#ObjectivesTerms label input:checked")[i].name;
 
                     if (i < $("#ObjectivesTerms label input:checked").length - 1)
                         termIds += ",";
                 } // utilizare la variable finalrating ya que es un string y no se utiliza
-                termIds +="#"+yearId;//como ultimo pasare el yearId separado por #
+                //termIds +="#"+yearId;//como ultimo pasare el yearId separado por #
                 
+                if($("#checkReportCard:checked").length > 0){
+                    checkReportCard = true;
+                }
+               
                 var myObj = {};
                 myObj["name"] = name;
                 myObj["finalrating"] = termIds;
@@ -453,6 +457,7 @@
                 var id = [subjectid];
                 myObj["id"] = id;
                 myObj["steps"] = steps;
+                myObj["reportCard"] = checkReportCard;
                 var json = JSON.stringify(myObj);
                 $.ajax({
                     type: 'POST',
@@ -937,10 +942,14 @@
                     <legend>Add objective to <span id="objectiveSelectedForAdd"></span></legend>
                         <%--Add objective--%>
                     <div class="col-xs-3 center-block form-group" id="addObjective">
-                        <label class="control-label">Name new objective</label>
-                        <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name" >
-                        <div id="NameObjectiveError" style="color:red">Write a name</div>
-
+                        <div class="col-xs-12"> 
+                            <label class="control-label">Name new objective</label>
+                            <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name" >
+                            <div id="NameObjectiveError" style="color:red">Write a name</div>
+                        </div>
+                        <div class="col-xs-12"> 
+                           <label class='checkbox-inline'><input id="checkReportCard" type='checkbox' name='checkReportCard'>Use in Report Card</label>
+                        </div>
                     </div>
                     <div class="col-xs-7 center-block form-group">
                         <label class="control-label">Description</label>

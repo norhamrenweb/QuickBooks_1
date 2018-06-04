@@ -1908,19 +1908,19 @@
                 </div>
             </div>-->
             <div class="col-xs-9 col-md-10" id="commentsContainer">
-                <div class="col-xs-12">
+                <div class="col-xs-12 pestanas">
                     <ul class="nav nav-tabs">
                         <li >
-                            <a data-toggle="tab" id="classroomCommentsButton">
+                            <a data-toggle="tab" id="classroomCommentsButton" >
                                 Academics observations
-                                <img style="width: 5%;" src='../recursos/img/iconos/post-it.svg' alt="Classroom observations" alt="Academics observations">
+                                <img class="iconosPestanas" src='../recursos/img/iconos/post-it.svg' alt="Academics observations">
                             </a>
                         </li>
 
                         <li class="active">
                             <a data-toggle="tab" id="dayCommentsButton">
-                                Classroom observations 
-                                <img style="width: 10%;" src='../recursos/img/iconos/computer-tool-for-education.svg' alt="Academics observations" >
+                                Classroom observations
+                                <img class="iconosPestanas" src='../recursos/img/iconos/computer-tool-for-education.svg' alt="Classroom observations" >
                             </a>
                         </li>
 
@@ -1929,17 +1929,18 @@
                 <div class="col-xs-12">
                     <div class="col-xs-12 text-left sinpadding" id="divSubjectObjectives">
                         <div class="col-xs-12 col-md-5">
-                            <select id="subjects">
+                            <select id="subjects" class="custom-select form-control">
                                 <option>Select Subject</option>
                             </select>
                         </div>
                         <div class="col-xs-12 col-md-5">
-                            <select id="objectives" class="custom-select">
+                            <select id="objectives" class="custom-select form-control">
                                 <option>Select Objectives</option>
                             </select>
                         </div>
-                        <div class="col-xs-12 col-md-5">
-                            <input type="checkbox" name="recommend" id="recommend" value="recommend" disabled="true"> Recommend for next presentation
+                        <div class="col-xs-12 col-md-5 form-check">
+                            <input class="form-check-input" type="checkbox" name="recommend" id="recommend" value="recommend" disabled="true">
+                            <label class="form-check-label" for="recommend">Recommend for next presentation</label>
                         </div>
                     </div>
                     <div id="divHora" class='col-xs-12'>
