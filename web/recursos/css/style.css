@@ -347,7 +347,7 @@ textarea
     .iconosPestanas
     {
         height: 90%;
-        margin-left: 20px;
+      //  margin-left: 20px;
     }
     /*Correccion para que la primera pestaña aparezca como seleccionada*/
     .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {

@@ -415,6 +415,7 @@
                     success: function (data) {
 
                         $('#modalimagen').modal('hide');
+                        $("#verphoto" + idComment).attr("color", "#bab8b8");
                         $("#verphoto" + idComment).attr("disabled", "true");
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -537,11 +538,11 @@
 
                                 if (booleanFoto === false) {
                                     disableFoto = "disabled='disabled'"
-                                    colorDisabled = "style='color:  #666666 !important;'";
+                                    colorDisabled = "style='color:  #bab8b8 !important;'";
                                 }
                                 if (userId !== idTeacher && userType !== 0) {
                                     disable = "disabled='disabled'";
-                                    colorDisabled = "style='color:  #666666 !important;'";
+                                    colorDisabled = "style='color:  #bab8b8 !important;'";
                                 }
 
                                 if (dayWeek === "1") { //PRIMERA SEMANA
@@ -650,33 +651,33 @@
                         if (cont6 === 0)
                             $("#semana6").append(divVacio("project-classroom2"));
                         $(".popOverFoto").mouseover(function () {
-                           /* if ($(this).prop("disabled") === false) {
-                                var id = $(this).val();
-                                var imageTag = '<div class="divFoto" style="position:absolute;">' + '<img class="fotoComment"  id="imgPop" src="" alt="image" height="100" />' + '</div>';
-                                if (window.XMLHttpRequest) //mozilla
-                                {
-                                    ajax = new XMLHttpRequest(); //No Internet explorer
-                                } else
-                                {
-                                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                                }
+                            /* if ($(this).prop("disabled") === false) {
+                             var id = $(this).val();
+                             var imageTag = '<div class="divFoto" style="position:absolute;">' + '<img class="fotoComment"  id="imgPop" src="" alt="image" height="100" />' + '</div>';
+                             if (window.XMLHttpRequest) //mozilla
+                             {
+                             ajax = new XMLHttpRequest(); //No Internet explorer
+                             } else
+                             {
+                             ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                             }
+                             
+                             ajax.onreadystatechange = function () {
+                             if (ajax.readyState === 4 && ajax.status === 200) {
+                             if (ajax.responseText !== "") {
+                             var json = JSON.parse(ajax.responseText);
+                             $('#imgPop').attr("src", "data:" + json.ext + ";base64," + json.imagen);
+                             }
+                             }
+                             };
+                             ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
+                             ajax.send("");
+                             $(this).parent('div').append(imageTag);
+                             }*/
 
-                                ajax.onreadystatechange = function () {
-                                    if (ajax.readyState === 4 && ajax.status === 200) {
-                                        if (ajax.responseText !== "") {
-                                            var json = JSON.parse(ajax.responseText);
-                                            $('#imgPop').attr("src", "data:" + json.ext + ";base64," + json.imagen);
-                                        }
-                                    }
-                                };
-                                ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
-                                ajax.send("");
-                                $(this).parent('div').append(imageTag);
-                            }*/
-                          //  alert("prueba");
                         });
                         $(".popOverFoto").mouseleave(function () {
-                         //   $(this).parent('div').children('div').remove();
+                            //    $(this).parent('div').children('div').remove();
                         });
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -1760,7 +1761,7 @@
                 margin: 0px;
             }
             .firstWeek button{
-                color:  #fb8f03 !important;
+                color:  #fb8f03 ;
                 position: relative;
                 top: 50px;
             }
@@ -1798,7 +1799,7 @@
             }
 
             .secondWeek button{
-                color:  #337ab7 !important;
+                color:  #337ab7 ;
                 position: relative;
                 top: 50px;
             }
@@ -1820,15 +1821,19 @@
             }
             .btn-link
             {
-                color: #777777 !important;
+                color: #777777 ;
             }
             .foto{
                 width: 100% !important;
             }
             .uk-form-small{
-                width: 50% !important;
+                width: 100% !important;
             }
-
+            #table_students_filter{
+                width:100%;
+                padding-left: 15px;
+                margin:0px;
+            }
         </style>
     </head>
     <body>
@@ -1849,7 +1854,7 @@
                     </select>
                 </div>
                 <div id="tabla_st" class="col-xs-12 studentarea">
-                    <table id="table_students" class="display" >
+                    <table id="table_students" class="col-xs-12 display" style="overflow-x: hidden;">
                         <thead>
                             <tr>
                                 <td>ID</td>
@@ -1910,18 +1915,26 @@
             </div>-->
             <div class="col-xs-9 col-md-10" id="commentsContainer">
                 <div class="col-xs-12 pestanas">
-                    <ul class="nav nav-tabs">
-                        <li >
-                            <a data-toggle="tab" id="classroomCommentsButton" >
-                                Academics observations
-                                <img class="iconosPestanas" src='../recursos/img/iconos/post-it.svg' alt="Academics observations">
+                    <ul class=" col-xs-12 col-md-8 col-lg-6 nav nav-tabs">
+                        <li class="col-xs-6 sin padding">
+                            <a data-toggle="tab" id="classroomCommentsButton" class=" col-xs-12" style="display: flex;align-items: center;">
+                                <div class="col-xs-9 sinpadding" style="text-align: center;">
+                                    Academics observations
+                                </div>
+                                <div class="col-xs-3 sinpadding">
+                                    <img class="iconosPestanas" src='../recursos/img/iconos/post-it.svg' alt="Academics observations">
+                                </div>
                             </a>
                         </li>
 
-                        <li class="active">
-                            <a data-toggle="tab" id="dayCommentsButton">
-                                Classroom observations
-                                <img class="iconosPestanas" src='../recursos/img/iconos/computer-tool-for-education.svg' alt="Classroom observations" >
+                        <li class=" col-xs-6 sin padding active">
+                            <a data-toggle="tab" id="dayCommentsButton"  class=" col-xs-12" style="display: flex;align-items: center;">
+                                <div class="col-xs-9 sinpadding" style="text-align: center;"> 
+                                    Classroom observations
+                                </div>
+                                <div class="col-xs-3 sinpadding">
+                                    <img class="iconosPestanas" src='../recursos/img/iconos/computer-tool-for-education.svg' alt="Classroom observations" >
+                                </div>  
                             </a>
                         </li>
 
