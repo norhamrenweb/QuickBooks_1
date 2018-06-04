@@ -231,7 +231,7 @@
                 <div class="col-xs-12 col-md-2" style="padding: 0px;">
                     <div class="form-group">
                         <label for="buttonYear">&nbsp</label>
-                        <button id="buttonYear" onclick="changeTermYear()" type="submit" class="form-control btn btn-primary" data-dismiss="modal">Change</button>
+                        <button id="buttonYear" onclick="changeTermYear()" type="submit" class="form-control btn btngreen_1" data-dismiss="modal">Change</button>
                     </div>
                 </div>
             </div>

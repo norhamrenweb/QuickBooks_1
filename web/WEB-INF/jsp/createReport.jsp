@@ -393,7 +393,7 @@
 
 
                 <div class="col-xs-12 text-center">
-                    <input type="submit" class="btn btn-info" id="generateReport" value="Generate">
+                    <input type="submit" class="btn btngreen_1" id="generateReport" value="Generate">
                 </div>
             </form:form>
         </div>

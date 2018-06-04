@@ -218,7 +218,7 @@ color: #F2F2F2; /* verde */
 } 
 /* SECTION 1 */
 a.nav-expander {
-  background: none repeat scroll 0 0 grey;
+  background: none repeat scroll 0 0 #76c472;
   color: #D0D2D3;
   border-radius: 15%; /*redondo*/
   border-bottom-width: 1px;
@@ -268,7 +268,7 @@ a.nav-expander.fixed {
 
 /* SECTION 2 */
 nav {
-  background: lightgrey;
+  background: #76c472;
   display: block;
   height: 75%;
   overflow: auto;
@@ -407,7 +407,7 @@ color: #F2F2F2; /* verde */
 } 
 /* SECTION 1 */
 a.nav-expander {
-  background: none repeat scroll 0 0 grey;
+  background: none repeat scroll 0 0 #76c472;
   color: #D0D2D3;
   border-radius: 15%; /*redondo*/
   border-bottom-width: 1px;
@@ -457,7 +457,7 @@ a.nav-expander.fixed {
 
 /* SECTION 2 */
 nav {
-  background: lightgrey;
+  background: #76c472;
   display: block;
   height: 70%;
   overflow: auto;

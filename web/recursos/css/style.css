@@ -355,3 +355,8 @@ textarea
     border-bottom-width: 2px !important;
     
     }
+       .btngreen_1{
+                background: linear-gradient(to bottom,#3aaa35 0,#3aaa35 100%)  !important;
+                color: #f0f0f0  !important;
+                border-color: #3aaa35 !important;
+            }

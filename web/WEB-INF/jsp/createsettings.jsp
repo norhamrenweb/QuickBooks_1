@@ -1141,7 +1141,7 @@
             </fieldset>
             <fieldset>
                 <div class="col-xs-12 text-center">
-                    <a class="btn btn-default" href="<c:url value="/sowdisplay/start.htm"/>">View Scheme of Work</a>  
+                    <a class="btn btngreen_1" href="<c:url value="/sowdisplay/start.htm"/>">View Scheme of Work</a>  
                 </div>
             </fieldset>
 

@@ -410,11 +410,7 @@
 
         </script>
         <style>
-            #showcalendar{
-                background: linear-gradient(to bottom,#3aaa35 0,#3aaa35 100%);
-                color: #f0f0f0;
-                border-color: #3aaa35;
-            }
+         
             #table_id_wrapper{
                 font-size: small;
             }
@@ -711,7 +707,7 @@
         </div>
 
         <div class="col-xs-12 text-center">
-            <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View Schedule</button>
+            <button type='button' class='btn btngreen_1' id="showcalendar"  value="View all" onclick="showCalendar()">View Schedule</button>
         </div>
     </body>
 </html>

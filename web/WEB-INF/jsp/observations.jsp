@@ -1421,7 +1421,12 @@
         </script>
         <style>
 
-            .speech {border: 1px solid #DDD; width: 300px; padding: 0; margin: 0}
+            .speech {
+                border: 1px solid #DDD; 
+                width: 100%; 
+                padding: 0; 
+                margin: 0
+            }
             .speech input {border: 0; width: 240px; display: inline-block; height: 30px;}
             .speech img {float: right; width: 40px }
 
@@ -2349,7 +2354,7 @@
                         <input class="btn-lg newcomment" type="image" id="newClassRoom" src="<c:url value='/recursos/img/iconos/add-comment(1).svg'/>" width="100px">
                     </div>
                 </div>
-                <div class="col-xs-8 col-md-10" id="divNotas">
+                <div class="col-xs-12 col-md-12" id="divNotas">
 
                     <div class="col-xs-12 firstWeekNotas ">
                         <div class="col-xs-12 sinpadding" > 
