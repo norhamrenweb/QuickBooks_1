@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
@@ -60,8 +61,12 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         while (rs4.next()) {
             nameYear = "" + rs4.getString("SchoolYear");
         }
-
-        this.term = nameTerm + " / " + nameYear;
+        if(nameTerm.contains("Q1") || nameTerm.contains("Q2"))
+            nameTerm = "Q1/Q2";
+        else
+            nameTerm = "Q3/Q4";
+        
+        this.term = nameTerm + " , " + nameYear;
 
         TreeMap<Integer, Profesor> mapTeachers = getTeachers(yearId, termId, idStudent);
         HashMap<String, String> mapComentarios = getComments(yearId, termId, idStudent);
@@ -74,8 +79,8 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         }
 
         for (Map.Entry<Integer, Profesor> entry : mapTeachers.entrySet()) {
-            String key = entry.getValue().getClassId();
-            String aux = "No Comments";
+            String key = ""+entry.getValue().getClassId();
+            String aux = "";
             Profesor value = entry.getValue();
 
             if (mapComentarios.containsKey(key)) {
@@ -83,14 +88,13 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             }
             os4 = new ArrayList<>();
             as4 = new ArrayList<>();
-            os4 = getSkills(key);
+            os4 = getSkills(as4, key, studentId, yearId, termId);
             String nameAsignatura = limpiarNameAsignatura(value.getAsignatura());
             String auxOs = nameAsignatura + "#" + value.getFirstName() + "# #" + aux;
-            for (int i = 0; i < os4.size(); i++) {
-                as4.add("");
+ 
+            if(!os4.isEmpty() && !as4.isEmpty()){
+                coll.add(new BeanWithList(auxOs, os4, as4, nameStudent, dob, age, grade, term));
             }
-            coll.add(new BeanWithList(auxOs, os4, as4, nameStudent, dob, age, grade, term));
-
         }
         coll.add(new BeanWithList("Head of School#Kim Euston-Brown# #" + getSuperComment(yearId, termId, idStudent), new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
         return coll;
@@ -111,13 +115,29 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         return "No Comments";
     }
 
-    private ArrayList<String> getSkills(String courseId) throws SQLException {
+    private ArrayList<String> getSkills(ArrayList<String> as, String courseId, String stdId, String yearID, String termId) throws SQLException {
         ArrayList<String> aux = new ArrayList<>();
         try {
-            String consulta = "select * from SS_Subjects where SS_Subjects.CourseID = " + courseId;
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            String consulta = "select name,progress_report.term_id,level_id "
+                    + "         from objective  inner join progress_report on (objective.id = progress_report.objective_id)"
+                    + "         where subject_id = " + courseId + " and progress_report.student_id = " + stdId + " and objective.reportcard = true and year_id=" + yearID
+                    + "         order by progress_report.comment_date DESC";
+
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
-                aux.add(rs.getString("Subject"));
+
+                String TermLevel = rs.getString("term_id");
+                if (termId.contains("1") || termId.contains("2")) {
+                    if (TermLevel.contains("1") || TermLevel.contains("2")) {
+                        aux.add(rs.getString("name"));
+                        as.add("" + rs.getInt("level_id"));
+                    }
+                } else {
+                    if (TermLevel.contains("3") || TermLevel.contains("4")) {
+                        aux.add(rs.getString("name"));
+                        as.add("" + rs.getInt("level_id"));
+                    }
+                } 
             }
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);

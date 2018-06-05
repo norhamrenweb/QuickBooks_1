@@ -122,7 +122,7 @@ public abstract class DataFactory {
             for (int i = 0; i < listaProfesores.size(); i++) {
                 listaProfesores.get(i).setAsignatura(coursesTitles.get(i));
                 listaProfesores.get(i).setClassId(classids.get(i));
-                mapTeachers.put(rcs.get(i), listaProfesores.get(i));
+                mapTeachers.put(Integer.parseInt(classids.get(i)), listaProfesores.get(i));
             }
 
         } catch (SQLException ex) {
