@@ -97,7 +97,7 @@ public class CreateSettingControlador {
         try {
             String[] levelid = new String[1];
             levelid = hsr.getParameterValues("seleccion1");
-            ResultSet rs1 = DBConect.ah.executeQuery("select title,courseid from courses where active = 1 and courseid in (select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID = " + levelid[0] + "))order by title asc");
+            ResultSet rs1 = DBConect.ah.executeQuery("select title,courseid from courses where active = 1 and reportcard = 1 and courseid in (select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID = " + levelid[0] + "))order by title asc");
             //ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
             while (rs1.next()) {
                 Subject sub = new Subject();
