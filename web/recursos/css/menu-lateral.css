@@ -398,10 +398,7 @@ body.nav-expanded {
 img{
     width: 90%;
 }
-.imgUser
-{
-    width: 50% !important;
-}
+
 a:hover {
 color: #F2F2F2; /* verde */
 } 
