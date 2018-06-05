@@ -14,8 +14,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -41,13 +44,112 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         cargarAlumno(studentId); // tarda 1
 
         String yearId = "" + hsr.getSession().getAttribute("yearId");
-        String termId  = ""+hsr.getSession().getAttribute("termId");
+        String termId = "" + hsr.getSession().getAttribute("termId");
 
-        ArrayList<String> lessons = new ArrayList<>();
         java.util.Vector coll = new java.util.Vector();
         ArrayList<Subject> subjects = new ArrayList<>();
+
+        try {
+            consulta = "SELECT distinct subject_id FROM objective where year_id = " + yearId + " and reportcard=true";
+            rs = DBConect.eduweb.executeQuery(consulta);
+            while (rs.next()) {
+                Subject su = new Subject();
+                String[] id = new String[1];
+                id[0] = "" + rs.getInt("subject_id");
+                su.setId(id);
+                subjects.add(su);
+            }
+            if (subjects.isEmpty()) {
+                BeanWithList bean = new BeanWithList("", new ArrayList<String>(), new ArrayList<String>(), nameStudent, dob, age);
+                coll.add(bean);
+            }
+            for (Subject x : subjects) {
+                String[] id = x.getId();
+                ArrayList<String> os = new ArrayList<>();
+                ResultSet rs1 = DBConect.eduweb.executeQuery("select * from objective where subject_id = " + id[0]);
+                while (rs1.next()) {
+                    if (!os.contains("" + rs1.getInt("id"))) {
+                        os.add("" + rs1.getInt("id"));
+                    }
+                }
+                int counter = 0;
+                ArrayList<String> finalratings = new ArrayList<>();
+                ArrayList<Integer> indEliminarObjectives = new ArrayList<>();
+                for (String d : os) {
+                    Objective b = new Objective();
+                    String name = b.fetchName(Integer.parseInt(d), servlet);
+                    consulta = "SELECT distinct rating.name,objective.term_id "
+                            + " FROM objective inner join progress_report on (objective.id = progress_report.objective_id) inner join rating on (progress_report.rating_id = rating.id)"
+                            + " where year_id = " + yearId + " and reportcard=true and student_id=" + studentId + " and "
+                            + " objective.id =" + d;
+                    ResultSet rs2 = DBConect.eduweb.executeQuery(consulta);
+                    if (!rs2.next()) {
+                        indEliminarObjectives.add(counter);
+                    } else {
+                        rs2 = DBConect.eduweb.executeQuery(consulta);
+                        if (rs2.next()) {
+                            ArrayList<String> arrTerms = new ArrayList<>();
+                            String terms = rs2.getString("term_id");
+                            if (terms.contains(",")) {
+                                String[] auxT = terms.split(",");
+                                arrTerms.addAll(Arrays.asList(auxT));
+                            } else {
+                                arrTerms.add(terms);
+                            }
+
+                            boolean exito = false;
+                            // por ser semestralk esto habra que modificarse para otro colegio
+                            if (termId.contains("2")) {
+                                if (arrTerms.contains("1") || arrTerms.contains("2")) {
+                                    finalratings.add(rs2.getString("name"));
+                                    exito = true;
+                                }
+                            } else if (termId.contains("4")) {
+                                if (arrTerms.contains("3") || arrTerms.contains("4")) {
+                                    finalratings.add(rs2.getString("name"));
+                                    exito = true;
+                                }
+                            } else if (arrTerms.contains(termId)) {
+                                finalratings.add(rs2.getString("name"));
+                                exito = true;
+                            }
+                            if (!exito) {
+                                indEliminarObjectives.add(counter);
+                            }
+                        }
+                    }
+                    os.set(counter, name);
+                    counter = counter + 1;
+                }
+                x.setObjectives(os);
+                Subject t = new Subject();
+
+                for (int i = indEliminarObjectives.size() - 1; i >= 0; i--) {
+                    int k = indEliminarObjectives.get(i);
+                    os.remove(k);
+                }
+
+                consulta = "SELECT comment FROM report_comments where supercomment=false and subject_id=" + id[0] + " and studentid=" + idStudent + "and yearterm_id=" + yearId + " ORDER BY date_created DESC";
+                ResultSet rs3 = DBConect.eduweb.executeQuery(consulta);
+                if (rs3.next()) {
+                    os.add(rs3.getString("comment"));
+                }
+
+                if (os.size() > 0) {
+                    ArrayList<String> subjectName = x.fetchNameAndElective(Integer.parseInt(id[0]), servlet);
+                    if (subjectName.get(1).equals("false")) { // compruebo que no sea electivo
+                        BeanWithList bean = new BeanWithList(subjectName.get(0), os, finalratings, nameStudent, dob, age);
+                        coll.add(bean);
+                    }
+                }
+
+            }
+
+        } catch (Exception e) {
+            System.err.println("");
+        }
         //  rs = DBConect.eduweb.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
-        rs = DBConect.eduweb.executeQuery("SELECT * from lesson_stud_att inner join lessons on lessons.id = lesson_stud_att.lesson_id where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' ' "
+        /*   rs = DBConect.eduweb.executeQuery("SELECT * from lesson_stud_att inner join lessons on lessons.id = lesson_stud_att.lesson_id where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' ' "
                 + "and term_id = "+termId+" and yearterm_id = "+yearId);
         while (rs.next()) {
             lessons.add("" + rs.getInt("lesson_id"));
@@ -139,16 +241,52 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
                     coll.add(bean);
                 }
             }
-        }
+        }*/
         // FALTA TERMINAR PODRIAMOS TOMAR LOS SUBJECT_ID DE LOS ALUMNOS QUE SEAN ELECTIVOS Y COMPROBAR QUE NO EXISTAN EN LA UQERY SIGUIENTE
         // tarda 2
+/*
+        HashMap<Integer, String> idCourseDepartment = new HashMap<>();
+        consulta = "SELECT CourseID,Department FROM Courses";
+        rs = DBConect.ah.executeQuery(consulta);
+        while (rs.next()) {
+            idCourseDepartment.put(rs.getInt("CourseID"), rs.getString("Department"));
+        }*/
+
+        HashMap<Integer, String> idCourseDepartment = new HashMap<>();
+        consulta = "SELECT CourseID,Title FROM Courses";
+        rs = DBConect.ah.executeQuery(consulta);
+        while (rs.next()) {
+            idCourseDepartment.put(rs.getInt("CourseID"), rs.getString("Title"));
+        }
+
         ArrayList<String> os = new ArrayList<>();
         ArrayList<String> as = new ArrayList<>();
+        HashMap<Integer, String> commentsPerSubject = new HashMap<>();
         Subject s = new Subject();
-        consulta = "SELECT lessons.subject_id,progress_report.comment FROM progress_report join lessons on (progress_report.lesson_id = lessons.id) where student_id= '" + studentId + "'";
-        rs = DBConect.eduweb.executeQuery(consulta);
+        //consulta = "SELECT lessons.subject_id,progress_report.comment FROM progress_report join lessons on (progress_report.lesson_id = lessons.id) where student_id= '" + studentId + "'";
+        consulta = "SELECT comment,subject_id FROM report_comments where term_id = " + termId + " and yearterm_id=" + yearId + " and studentid=" + studentId;
+        ResultSet rs2 = DBConect.eduweb.executeQuery(consulta);
 
-        while (rs.next()) {
+        while (rs2.next()) {
+            commentsPerSubject.put(rs2.getInt("subject_id"), rs2.getString("comment"));
+        }
+
+        if (!commentsPerSubject.isEmpty()) {
+            Iterator it = commentsPerSubject.entrySet().iterator();
+            while (it.hasNext()) {
+                HashMap.Entry pair = (HashMap.Entry) it.next();
+                //  ESTO HABRA QUE MODIFICARLO CUANDO SE ACTUALIC LA BBDD DE RENWEB
+                if (idCourseDepartment.get((Integer) pair.getKey()).contains("Art") ||
+                    idCourseDepartment.get((Integer) pair.getKey()).contains("Music") ||
+                    idCourseDepartment.get((Integer) pair.getKey()).contains("Creative Movement")) { 
+                        ArrayList<String> nombSubject = s.fetchNameAndElective((Integer) pair.getKey(), servlet);
+                        os.add(nombSubject.get(0));
+                        as.add("" + pair.getValue());
+                        it.remove();
+                }
+                
+            }
+                /*while (rs.next()) {
             String comment = rs.getString("comment");
             //   if (!comment.equals("")) {
             //os.add("" + rs.getInt("subject_id"));
@@ -158,50 +296,69 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
                 as.add(comment);
             }
             //  }
-        }
-        //============================================================
-        if (os.size() > 0) {
-            BeanWithList bean = new BeanWithList("Comments", os, as, nameStudent, dob, age);
-            coll.add(bean);
-        }
-        //==========================================
+        }*/
+                //============================================================
+                if (os.size() > 0) {
+                    BeanWithList bean = new BeanWithList("Comments", os, as, nameStudent, dob, age);
+                    coll.add(bean);
+                }
+
+                Iterator it2 = commentsPerSubject.entrySet().iterator();
+                while (it2.hasNext()) {
+                    HashMap.Entry pair = (HashMap.Entry) it2.next();
+                    //  ESTO HABRA QUE MODIFICARLO CUANDO SE ACTUALIC LA BBDD DE RENWEB
+                    if (idCourseDepartment.get((Integer) pair.getKey()).contains("Social Development") ||
+                    idCourseDepartment.get((Integer) pair.getKey()).contains("General") ||
+                    idCourseDepartment.get((Integer) pair.getKey()).contains("Social and Emotional Development") ||
+                    idCourseDepartment.get((Integer) pair.getKey()).contains("Emotional and Personal Development")) {
+                        ArrayList<String> nombSubject = s.fetchNameAndElective((Integer) pair.getKey(), servlet);
+                        ArrayList<String> os2 = new ArrayList<>();
+                        os2.add("" + pair.getValue());
+                        BeanWithList bean2 = new BeanWithList("" + nombSubject.get(0), os2, new ArrayList<String>(), nameStudent, dob, age);
+                        coll.add(bean2);
+                    }
+                    it2.remove(); // avoids a ConcurrentModificationException
+                }
+            }
+            /* //==========================================
         ArrayList<String> os2 = new ArrayList<>();
         os2.add("Informacion relacionada con Social Development");
-
         BeanWithList bean2 = new BeanWithList("SocialDevelopment", os2, new ArrayList<String>(), nameStudent, dob, age);
-
         coll.add(bean2);
         //============================
 
         ArrayList<String> os3 = new ArrayList<>();
         os3.add("Informacion relacionada con General");
-
         BeanWithList bean3 = new BeanWithList("General", os3, new ArrayList<String>(), nameStudent, dob, age);
+        coll.add(bean3);*/
+            //============================
+            return coll;
 
-        coll.add(bean3);
-        //============================
-        return coll;
-        // return new JRBeanCollectionDataSource(coll);
-    }
-
-    @Override
-    protected void cargarAlumno(String studentId) throws SQLException {
-        String consulta = "SELECT * FROM Students where StudentId = '" + studentId + "'";
-        ResultSet rs = DBConect.ah.executeQuery(consulta);
-
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        while (rs.next()) {
-            this.nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName");
-            this.dob = rs.getString("Birthdate");
-            this.dob = dob.split(" ")[0];
-            this.age = "" + (year - Integer.parseInt("" + dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3)));
-            this.grade = rs.getString("GradeLevel");
+            // return new JRBeanCollectionDataSource(coll);
         }
 
-    }
+        @Override
+        protected void cargarAlumno
+        (String studentId) throws SQLException {
+            String consulta = "SELECT * FROM Students where StudentId = '" + studentId + "'";
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
 
-    @Override
-    public String getNameReport() {
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            while (rs.next()) {
+                this.nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName");
+                this.dob = rs.getString("Birthdate");
+                this.dob = dob.split(" ")[0];
+                this.age = "" + (year - Integer.parseInt("" + dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3)));
+                this.grade = rs.getString("GradeLevel");
+            }
+
+        }
+
+        @Override
+        public String getNameReport
+
+        
+            () {
         return "Pre-Primary_Progress_Report_December2017_v2_4.jasper";
+        }
     }
-}

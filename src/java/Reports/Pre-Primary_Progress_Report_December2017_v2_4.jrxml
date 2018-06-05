@@ -286,10 +286,10 @@
 		</band>
 	</title>
 	<detail>
-		<band height="79" splitType="Stretch">
+		<band height="65" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout"/>
 			<componentElement>
-				<reportElement positionType="Float" stretchType="ElementGroupBottom" x="18" y="11" width="556" height="60" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="b6dbf7c4-72eb-439f-8a9e-68089f225ded">
+				<reportElement positionType="Float" stretchType="ElementGroupBottom" x="18" y="5" width="556" height="60" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="b6dbf7c4-72eb-439f-8a9e-68089f225ded">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -328,7 +328,7 @@
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement style="Table_TD" positionType="Float" stretchType="ElementGroupBottom" x="18" y="19" width="111" height="60" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="ec816aee-c76a-4e12-9785-1c3f305b5171">
+				<reportElement style="Table_TD" positionType="Float" stretchType="ElementGroupBottom" x="18" y="5" width="111" height="60" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="ec816aee-c76a-4e12-9785-1c3f305b5171">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -366,7 +366,7 @@
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="" positionType="Float" x="454" y="11" width="120" height="60" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="9e5f2b31-508c-47d5-b6f8-dbd527aaa880">
+				<reportElement key="" positionType="Float" x="454" y="5" width="120" height="60" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="9e5f2b31-508c-47d5-b6f8-dbd527aaa880">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -474,7 +474,7 @@
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement positionType="Float" x="129" y="19" width="445" height="60" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="4be81dc3-096a-4292-8d08-b3af916ed010">
+				<reportElement positionType="Float" x="129" y="5" width="445" height="60" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="4be81dc3-096a-4292-8d08-b3af916ed010">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -513,7 +513,7 @@
 				</jr:table>
 			</componentElement>
 			<textField>
-				<reportElement x="20" y="17" width="380" height="18" forecolor="#FFFFFF" uuid="8edf00c1-d9ec-4667-8855-e57866595e63">
+				<reportElement x="20" y="11" width="380" height="18" forecolor="#FFFFFF" uuid="8edf00c1-d9ec-4667-8855-e57866595e63">
 					<printWhenExpression><![CDATA[(($F{subject}.equals("Comments")) ? false : true)]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -522,7 +522,7 @@
 				<textFieldExpression><![CDATA[$F{subject}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement key="" positionType="Float" x="20" y="25" width="104" height="18" isRemoveLineWhenBlank="true" forecolor="#FFFFFF" uuid="a83cd503-44e2-4b91-967c-ea94f92deaf7">
+				<reportElement key="" positionType="Float" x="20" y="11" width="104" height="18" isRemoveLineWhenBlank="true" forecolor="#FFFFFF" uuid="a83cd503-44e2-4b91-967c-ea94f92deaf7">
 					<printWhenExpression><![CDATA[(($F{subject}.equals("Comments")) ? true: false)]]></printWhenExpression>
 				</reportElement>
 				<textElement>
