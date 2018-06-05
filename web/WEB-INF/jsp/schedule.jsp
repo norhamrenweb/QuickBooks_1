@@ -66,7 +66,7 @@
                         tooltip.hide()
                     },
                     events: {
-                        url: 'loadschedule.htm?termId='+termId+'-'+yearId,
+                        url: 'loadschedule.htm',
                         type: 'POST', // Send post data
                         error: function () {
                             alert('There was an error while fetching events.');

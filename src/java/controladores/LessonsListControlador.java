@@ -73,11 +73,29 @@ public class LessonsListControlador {
     public String loadschedule(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         User user = (User) hsr.getSession().getAttribute("user");
 
-        String idTerm = hsr.getParameter("termId");
+        String idYear = "" + hsr.getSession().getAttribute("yearId");
+        String idTerm = "" + hsr.getSession().getAttribute("termId");
+        
+        HashMap<Integer,String> hashLevel =  new HashMap<>();
+        HashMap<Integer,String> hashPersons = new HashMap<>();
+        try {    
+            String consulta = "SELECT GradeLevel,GradeLevelID FROM GradeLevels";
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            while (rs.next())
+            {
+                hashLevel.put(rs.getInt("GradeLevelID"), rs.getString("GradeLevel"));
+            }
+            
+            consulta = "select id,lastname,firstname from person";
+            rs = DBConect.ah.executeQuery(consulta);
 
-        String[] parts = idTerm.split("-");
-        String idYear = parts[1];
-        idTerm = parts[0];
+            while (rs.next()) {
+                hashPersons.put(rs.getInt("id"),rs.getString("lastname") + ", " + rs.getString("firstname"));
+            } 
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+        }
+        
 
         String consultAux = "";
         if (user.getType() == 1) {
@@ -86,6 +104,7 @@ public class LessonsListControlador {
         String consulta = "SELECT * FROM public.lessons where " + consultAux + " COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE and term_id= " + idTerm + " and " + "yearterm_id=" + idYear;
         ResultSet rs = DBConect.eduweb.executeQuery(consulta);
         ArrayList<JSONObject> lessonslist = new ArrayList<>();
+
         while (rs.next()) {
             JSONObject l = new JSONObject();
             l.put("title", rs.getString("name"));
@@ -97,13 +116,13 @@ public class LessonsListControlador {
             l.put("objid", rs.getString("objective_id"));
             l.put("idteacher", rs.getString("user_id"));
             Level g = new Level();
-            l.put("gradeLevel",g.fetchName(rs.getInt("level_id"),hsr.getServletContext()) );
+            l.put("gradeLevel",hashLevel.get(rs.getInt("level_id")));
             l.put("share", false);
             lessonslist.add(l);
         }
         consulta = "SELECT * FROM lessons inner join lessonpresentedby on lessonid=id where teacherid=" + user.getId() + " AND COALESCE(idea, FALSE) = FALSE and COALESCE(archive, FALSE) = FALSE  and term_id= " + idTerm + " and " + "yearterm_id=" + idYear;
         rs = DBConect.eduweb.executeQuery(consulta);
-        while (rs.next()) {
+        while (rs.next()) { // fast
             JSONObject l = new JSONObject();
             l.put("title", rs.getString("name"));
             Timestamp stamp = rs.getTimestamp("start");
@@ -114,7 +133,7 @@ public class LessonsListControlador {
             l.put("objid", rs.getString("objective_id"));
             l.put("idteacher", rs.getString("user_id"));
              Level g = new Level();
-            l.put("gradeLevel", g.fetchName(rs.getInt("level_id"),hsr.getServletContext()));
+            l.put("gradeLevel",hashLevel.get(rs.getInt("level_id")));
             l.put("share", true);
             lessonslist.add(l);
         }
@@ -125,7 +144,7 @@ public class LessonsListControlador {
             while (rs.next()) {
                 l.put("nameobj", rs.getString("name"));
             }
-            String nameteacher = fetchNameTeacher(Integer.parseInt(l.getString("idteacher")), hsr.getServletContext());
+            String nameteacher = hashPersons.get(Integer.parseInt(l.getString("idteacher")));
             l.put("createdby", nameteacher);
         }
         return lessonslist.toString();
