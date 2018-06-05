@@ -365,10 +365,10 @@ input[type="radio"] .styled:checked + label::after {
                 </div>
                     <div class="col-xs-12 center-block" id="buttons">
                         <div class="col-xs-4 center-block">
-                            <button type="button" class="btn btn-warning" onclick="editttree()" id="editIdea" disabled="true">View/Edit</button>
+                            <button type="button" class="btn btngreen_1" onclick="editttree()" id="editIdea" disabled="true">View/Edit</button>
                         </div>
                         <div class="col-xs-4 center-block">
-                            <button type="button" class="btn btn-warning" onclick="editrsrctree()" id="editIdearsrc" disabled="true">View/Edit Resources</button>
+                            <button type="button" class="btn btngreen_1" onclick="editrsrctree()" id="editIdearsrc" disabled="true">View/Edit Resources</button>
                         </div>
                         <div class="col-xs-4 center-block">
                             <button type="button"  class="btn btn-danger" onclick="delttree()" id="delIdea" disabled="true">Delete</button>

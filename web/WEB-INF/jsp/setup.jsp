@@ -207,7 +207,7 @@
 
 
                     <div class="col-xs-4">
-                        <input type="submit" class="btn btn-info" id="generateReport" value="Generate Report">
+                        <input type="submit" class="btn btngreen_1" id="generateReport" value="Generate Report">
                     </div>
 
 

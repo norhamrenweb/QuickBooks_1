@@ -410,6 +410,7 @@
 
         </script>
         <style>
+         
             #table_id_wrapper{
                 font-size: small;
             }
@@ -460,6 +461,7 @@
             {
                 background-color: #CC6666;
             }
+            
         </style>
     </head>
     <body>
@@ -704,8 +706,8 @@
             </div>
         </div>
 
-        <div class="col-xs-6 text-center">
-            <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View Schedule</button>
+        <div class="col-xs-12 text-center">
+            <button type='button' class='btn btngreen_1' id="showcalendar"  value="View all" onclick="showCalendar()">View Schedule</button>
         </div>
     </body>
 </html>

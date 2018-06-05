@@ -192,7 +192,7 @@
     }
 </script>
 
-<div class="infousuario noPrint bg-primary" id="infousuario">
+<div class="infousuario noPrint " id="infousuario" style="background-color: #76c472;">
     <div class="col-xs-3 text-left">
         <%--<img src="<c:url value="/recursos/img/iconoschool.png"/>">--%>
     </div>
@@ -202,11 +202,11 @@
         <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>
     </div>
     <div class="col-xs-2 text-center">
-        <button id="btnYearmTerm" onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
+        <button class="btn" id="btnYearmTerm" onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
     </div>
     <div class="col-xs-2 text-right">
         <!--<a href="<c:url value="/cerrarLogin.htm"/>" role="button" aria-haspopup="true" aria-expanded="false"><img class="imgUser" src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>-->
-        <a onclick="$('#logoutmodal').modal('show');" role="button" aria-haspopup="true" aria-expanded="false"><img class="imgUser" src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>
+        <a onclick="$('#logoutmodal').modal('show');" role="button" aria-haspopup="true" aria-expanded="false"><img class="imgUser" src="<c:url value="/recursos/img/iconos/logoBamboo_IconLogout.svg"/>"></a>
     </div>
 </div>    
 
@@ -231,7 +231,7 @@
                 <div class="col-xs-12 col-md-2" style="padding: 0px;">
                     <div class="form-group">
                         <label for="buttonYear">&nbsp</label>
-                        <button id="buttonYear" onclick="changeTermYear()" type="submit" class="form-control btn btn-primary" data-dismiss="modal">Change</button>
+                        <button id="buttonYear" onclick="changeTermYear()" type="submit" class="form-control btn btngreen_1" data-dismiss="modal">Change</button>
                     </div>
                 </div>
             </div>

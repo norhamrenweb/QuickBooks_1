@@ -222,7 +222,7 @@
                              }
                              */
                             $("#listObjectiveReport tbody").empty();
-                            $("#subjectsReports").val(-1)
+                        
 
 
 
@@ -248,7 +248,8 @@
                                 if (subjects[i].name !== undefined)
                                     $('#subjectsReports').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                             });
-
+    $("#subjectsReports").val(-1)
+    
                             $('#divCommentSubject').removeClass('hidden');
                             $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                             $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
@@ -493,18 +494,20 @@
                             if (subjects[i].name !== undefined)
                                 $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                         });
-
-                        $.each(subjects, function (i, item) {
-                            if (subjects[i].name !== undefined)
-                                $('#subjectsReports').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
-                        });
+                            $('#subjectsReports').empty();
+                            $('#subjectsReports').append('<option value ="-1">Select Subject</option>');
+                            $.each(subjects, function (i, item) {
+                                if (subjects[i].name !== undefined)
+                                    $('#subjectsReports').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
+                            });
+                        $("#subjectsReports").val(-1)
 
                         $('#divCommentSubject').removeClass('hidden');
                         $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                         $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
 
- $("#listObjectiveReport tbody").empty();
- $("#subjectsReports").val(-1);
+                        $("#listObjectiveReport tbody").empty();
+                        
                         /*var radioButtonCode="";
                          $("#divTerms").empty();
                          
@@ -1238,7 +1241,7 @@
                                     </div>             
                                     <div class=" col-xs-2" id="saveLengthDiv">
                                         <div class="col-xs-12">
-                                            <input type="button" name="saveCommentSubject" value="save" class="btn btn-info" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
+                                            <input type="button" name="saveCommentSubject" value="save" class="btn btngreen_1" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
                                         </div>
                                         <div class="col-xs-12" id="commentLength">
 

@@ -16,6 +16,13 @@
     });
 
 </script>
+<style>
+    #barralateral nav{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+</style>
 <!--MENU LATERAL-->
 <div id="barralateral">
     <nav>
@@ -26,7 +33,7 @@
                 </div>
             </a>
         </div>
-         <div class="col-xs-12 iconosmenulateral">
+        <div class="col-xs-12 iconosmenulateral">
             <a href="<c:url value='/observations/start.htm'/>" target="_blank">
                 <div class="center-block">
                     <img width="70%" src="<c:url value='/recursos/img/iconos/Icons_WorkSpace.svg'/>" data-toggle="tooltip" data-placement="top" title="Workspace">

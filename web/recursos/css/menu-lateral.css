@@ -218,7 +218,7 @@ color: #F2F2F2; /* verde */
 } 
 /* SECTION 1 */
 a.nav-expander {
-  background: none repeat scroll 0 0 grey;
+  background: none repeat scroll 0 0 #76c472;
   color: #D0D2D3;
   border-radius: 15%; /*redondo*/
   border-bottom-width: 1px;
@@ -268,7 +268,7 @@ a.nav-expander.fixed {
 
 /* SECTION 2 */
 nav {
-  background: lightgrey;
+  background: #76c472;
   display: block;
   height: 75%;
   overflow: auto;
@@ -407,7 +407,7 @@ color: #F2F2F2; /* verde */
 } 
 /* SECTION 1 */
 a.nav-expander {
-  background: none repeat scroll 0 0 grey;
+  background: none repeat scroll 0 0 #76c472;
   color: #D0D2D3;
   border-radius: 15%; /*redondo*/
   border-bottom-width: 1px;
@@ -424,7 +424,7 @@ a.nav-expander {
   text-transform: uppercase;
   text-align: center;
   vertical-align: middle;
-  bottom: 30%;
+  bottom: 42%;
   transition: left 0.3s ease-in-out 0s;  /* changed */
   
   height: 130px;
@@ -457,7 +457,7 @@ a.nav-expander.fixed {
 
 /* SECTION 2 */
 nav {
-  background: lightgrey;
+  background: #76c472;
   display: block;
   height: 70%;
   overflow: auto;
@@ -465,7 +465,7 @@ nav {
   left: -30%;
   padding-top: 1%;     /* changed */
   font-size: 15px;
-  top: 20%;
+  top: 15%;
   width: 10%;
   z-index: 2000;
  

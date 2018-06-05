@@ -184,8 +184,8 @@
                     $("#recommend").prop("checked", "");
 
                     $("#commentsContainer").show();
-              /*      $("#newClassRoom").show();
-                    $("#newcomment").hide();*/
+                    /*      $("#newClassRoom").show();
+                     $("#newcomment").hide();*/
                 });
 
                 $('#recommend').on('click', function () {
@@ -333,7 +333,7 @@
                     //$("#objectives").val("vacio")
                     $("#recommend").prop("checked", "");
 
-                   /*$("#newcomment").show();*/
+                    /*$("#newcomment").show();*/
                     $("#newClassRoom").hide();
 
                 });
@@ -415,6 +415,7 @@
                     success: function (data) {
 
                         $('#modalimagen').modal('hide');
+                        $("#verphoto" + idComment).attr("color", "#bab8b8");
                         $("#verphoto" + idComment).attr("disabled", "true");
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -504,13 +505,13 @@
                         $("#semana4").empty();
                         $("#semana5").empty();
                         $("#semana6").empty();
-                        $("#semana5").parent().parent().hide();
-                        $("#semana6").parent().parent().hide();
+                        $("#semana5").parent().parent().parent().hide();
+                        $("#semana6").parent().parent().parent().hide();
                         var weeksCount = weeksInAMonth($("#TXTfecha").val().split("-")[0], $("#TXTfecha").val().split("-")[1]);
                         if (weeksCount > 4) {
-                            $("#semana5").parent().parent().show();
+                            $("#semana5").parent().parent().parent().show();
                             if (weeksCount > 5)
-                                $("#semana6").parent().parent().show();
+                                $("#semana6").parent().parent().parent().show();
                         }
                         $.each(j, function (i, value) {
                             var f = value;
@@ -537,11 +538,11 @@
 
                                 if (booleanFoto === false) {
                                     disableFoto = "disabled='disabled'"
-                                    colorDisabled = "style='color:  #666666 !important;'";
+                                    colorDisabled = "style='color:  #bab8b8 !important;'";
                                 }
                                 if (userId !== idTeacher && userType !== 0) {
                                     disable = "disabled='disabled'";
-                                    colorDisabled = "style='color:  #666666 !important;'";
+                                    colorDisabled = "style='color:  #bab8b8 !important;'";
                                 }
 
                                 if (dayWeek === "1") { //PRIMERA SEMANA
@@ -650,32 +651,33 @@
                         if (cont6 === 0)
                             $("#semana6").append(divVacio("project-classroom2"));
                         $(".popOverFoto").mouseover(function () {
-                            if ($(this).prop("disabled") === false) {
-                                var id = $(this).val();
-                                var imageTag = '<div class="divFoto" style="position:absolute;">' + '<img class="fotoComment"  id="imgPop" src="" alt="image" height="100" />' + '</div>';
-                                if (window.XMLHttpRequest) //mozilla
-                                {
-                                    ajax = new XMLHttpRequest(); //No Internet explorer
-                                } else
-                                {
-                                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                                }
+                            /* if ($(this).prop("disabled") === false) {
+                             var id = $(this).val();
+                             var imageTag = '<div class="divFoto" style="position:absolute;">' + '<img class="fotoComment"  id="imgPop" src="" alt="image" height="100" />' + '</div>';
+                             if (window.XMLHttpRequest) //mozilla
+                             {
+                             ajax = new XMLHttpRequest(); //No Internet explorer
+                             } else
+                             {
+                             ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                             }
+                             
+                             ajax.onreadystatechange = function () {
+                             if (ajax.readyState === 4 && ajax.status === 200) {
+                             if (ajax.responseText !== "") {
+                             var json = JSON.parse(ajax.responseText);
+                             $('#imgPop').attr("src", "data:" + json.ext + ";base64," + json.imagen);
+                             }
+                             }
+                             };
+                             ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
+                             ajax.send("");
+                             $(this).parent('div').append(imageTag);
+                             }*/
 
-                                ajax.onreadystatechange = function () {
-                                    if (ajax.readyState === 4 && ajax.status === 200) {
-                                        if (ajax.responseText !== "") {
-                                            var json = JSON.parse(ajax.responseText);
-                                            $('#imgPop').attr("src", "data:" + json.ext + ";base64," + json.imagen);
-                                        }
-                                    }
-                                };
-                                ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
-                                ajax.send("");
-                                $(this).parent('div').append(imageTag);
-                            }
                         });
                         $(".popOverFoto").mouseleave(function () {
-                            $(this).parent('div').children('div').remove();
+                            //    $(this).parent('div').children('div').remove();
                         });
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -1419,7 +1421,12 @@
         </script>
         <style>
 
-            .speech {border: 1px solid #DDD; width: 300px; padding: 0; margin: 0}
+            .speech {
+                border: 1px solid #DDD; 
+                width: 100%; 
+                padding: 0; 
+                margin: 0
+            }
             .speech input {border: 0; width: 240px; display: inline-block; height: 30px;}
             .speech img {float: right; width: 40px }
 
@@ -1758,8 +1765,8 @@
                 font-weight: bolder;
                 margin: 0px;
             }
-            .firstWeek span{
-                color:  #fb8f03 !important;
+            .firstWeek button{
+                color:  #fb8f03 ;
                 position: relative;
                 top: 50px;
             }
@@ -1796,8 +1803,8 @@
                 color:  #337ab7 !important;
             }
 
-            .secondWeek span{
-                color:  #337ab7 !important;
+            .secondWeek button{
+                color:  #337ab7 ;
                 position: relative;
                 top: 50px;
             }
@@ -1819,15 +1826,19 @@
             }
             .btn-link
             {
-                color: #777777 !important;
+                color: #777777 ;
             }
             .foto{
                 width: 100% !important;
             }
             .uk-form-small{
-                width: 50% !important;
+                width: 100% !important;
             }
-
+            #table_students_filter{
+                width:100%;
+                padding-left: 15px;
+                margin:0px;
+            }
         </style>
     </head>
     <body>
@@ -1848,7 +1859,7 @@
                     </select>
                 </div>
                 <div id="tabla_st" class="col-xs-12 studentarea">
-                    <table id="table_students" class="display" >
+                    <table id="table_students" class="col-xs-12 display" style="overflow-x: hidden;">
                         <thead>
                             <tr>
                                 <td>ID</td>
@@ -1909,18 +1920,26 @@
             </div>-->
             <div class="col-xs-9 col-md-10" id="commentsContainer">
                 <div class="col-xs-12 pestanas">
-                    <ul class="nav nav-tabs">
-                        <li >
-                            <a data-toggle="tab" id="classroomCommentsButton" >
-                                Academics observations
-                                <img class="iconosPestanas" src='../recursos/img/iconos/post-it.svg' alt="Academics observations">
+                    <ul class=" col-xs-12 col-md-8 col-lg-6 nav nav-tabs">
+                        <li class="col-xs-6 sin padding">
+                            <a data-toggle="tab" id="classroomCommentsButton" class=" col-xs-12" style="display: flex;align-items: center;">
+                                <div class="col-xs-9 sinpadding" style="text-align: center;">
+                                    Academics observations
+                                </div>
+                                <div class="col-xs-3 sinpadding">
+                                    <img class="iconosPestanas" src='../recursos/img/iconos/post-it.svg' alt="Academics observations">
+                                </div>
                             </a>
                         </li>
 
-                        <li class="active">
-                            <a data-toggle="tab" id="dayCommentsButton">
-                                Classroom observations
-                                <img class="iconosPestanas" src='../recursos/img/iconos/computer-tool-for-education.svg' alt="Classroom observations" >
+                        <li class=" col-xs-6 sin padding active">
+                            <a data-toggle="tab" id="dayCommentsButton"  class=" col-xs-12" style="display: flex;align-items: center;">
+                                <div class="col-xs-9 sinpadding" style="text-align: center;"> 
+                                    Classroom observations
+                                </div>
+                                <div class="col-xs-3 sinpadding">
+                                    <img class="iconosPestanas" src='../recursos/img/iconos/computer-tool-for-education.svg' alt="Classroom observations" >
+                                </div>  
                             </a>
                         </li>
 
@@ -2156,7 +2175,7 @@
                             </div>
                         </div>
 
-                        <div id="editCommentModal" class="modal fade" role="dialog">
+                        <!--<div id="editCommentModal" class="modal fade" role="dialog">
                             <input type='text' name="TXTfecha" class="hide" id="idComentario"/>
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
@@ -2199,10 +2218,214 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> 
+                        </div> -->
+                        <div id="editCommentModal" class="modal fade" role="dialog">
+                            <input type='text' name="TXTfecha" class="hide" id="idComentario"/>
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h2>Enter a classroom observation</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <div id="contenedorDate">
+                                                <div class='col-xs-4'>
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="fecha">Comment Date</label>
+                                                        <div class='input-group date' id='fecha2'>
+                                                            <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6 center-block form-group">
+                                                    <label class="control-label">Observation</label>
+                                                    <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
+                                                </div>
+                                                <div class="col-xs-6 center-block form-group">
+                                                    <label class="control-label">Observation type</label>
+                                                    <select class="form-control" name="observationtype" id="observationtype" >
+                                                        <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
+                                                        <option value="Physical">Physical</option>
+                                                        <option value="Intellectual">Intellectual</option>
+                                                        <option value="Literacy">Literacy</option>
+                                                        <option value="Emotional">Emotional</option>
+                                                        <option value="Social">Social</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                            </div>  
+                                            <div class="col-xs-12" >
+                                                <input type="file" id="fileToUpload" accept="image/*">
+                                            </div>
+
+                                            <div class="col-xs-12 text-center">
+                                                <input type="submit" class="btn btn-success" id="savecomment"  value="Save" onclick="updateComment()">
+                                            </div>
+                                            <div class="col-xs-12 text-center hidden" id="error1">
+                                                <label>Please select a student first</label>
+                                            </div>
+                                            <div class="col-xs-12 text-center hidden" id="error2">
+                                                <label>Please make sure to fill all data</label>
+                                            </div>
+
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="confirmsave" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">comment saved</h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="showComment" class="modal fade" role="dialog">
+                        <div class="modal-dialog modal-lg">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">More Information</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-3 center-block form-group">
+                                                <label class="control-label">Comment Date:</label>
+                                                <div id="idCommentDate"></div>                        
+                                            </div>
+
+                                            <div class="col-xs-3 center-block form-group">
+                                                <label class="control-label">Created on:</label>
+                                                <div id="idCreateDate"></div>                        
+                                            </div>   
+                                            <div class="col-xs-3 center-block form-group">
+                                                <label class="control-label">Type:</label>
+                                                <div id="idTypeComment"></div>                        
+                                            </div>
+                                            <div class="col-xs-3 center-block form-group">
+                                                <label class="control-label">Teacher:</label>
+                                                <div id="idTeacher"></div>                        
+                                            </div> 
+                                        </div> 
+
+                                        <div  class="col-xs-12">
+                                            <div class="col-xs-12 form-group">
+                                                <label class="control-label">Comment:</label>
+                                                <div id="idComment"></div>                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div> 
+
+                    <div class="modal fade" id="modalimagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header col ">
+                                    <button type="button"  onclick="deletePhoto()" class='btn btn-link'  value='' id='deleteFoto'>Delete</button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="titleComment"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <img id="imagen" class="foto" src=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 text-right">
+                        <input class="btn-lg newcomment" type="image" id="newClassRoom" src="<c:url value='/recursos/img/iconos/add-comment(1).svg'/>" width="100px">
                     </div>
                 </div>
-                <div id="confirmsave" class="modal fade" role="dialog">
+                <div class="col-xs-12 col-md-12" id="divNotas">
+
+                    <div class="col-xs-12 firstWeekNotas ">
+                        <div class="col-xs-12 sinpadding" > 
+                            <div class="semana1" id="semana0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 text-right">
+                        <input class="btn-lg newcomment" type="image" id="newcomment" src="<c:url value='/recursos/img/iconos/add-comment(1).svg'/>" width="100px">
+                    </div>
+                </div>
+
+
+                <div id="newClassRoomModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" > Enter a classroom observation</h4>
+                            </div>
+                            <div class="modal-body text-center">
+                                <div class="row">
+                                    <div class='col-xs-6 form-group'>
+                                        <label class="control-label" for="fechaClassroom">Date</label>
+                                        <div class='input-group date' id='fechaClassroom'>
+                                            <input type='text' name="TXTfecha" class="form-control" id="observationfechaClassroom"/>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 center-block form-group">
+                                        <label class="control-label">Observation type</label>
+                                        <select class="form-control" name="observationtype" id="observationtypeClassroom" >
+                                            <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
+                                            <option value="Physical">Physical</option>
+                                            <option value="Intellectual">Intellectual</option>
+                                            <option value="Literacy">Literacy</option>
+                                            <option value="Emotional">Emotional</option>
+                                            <option value="Social">Social</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row center-block form-group">
+                                    <label class="control-label">Observation</label>
+                                    <textarea class="form-control" name="TXTdescription" id="observationcommentsClassroom" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
+                                </div>
+
+                                <div class="row  center-block form-group" >
+                                    <input type="file" id="fileToUploadClassroom" accept="image/*">
+                                </div>
+                                <div class="row text-center hidden" id="error1">
+                                    <label>Please select a student first</label>
+                                </div>
+                                <div class="row text-center hidden" id="error2">
+                                    <label>Please make sure to fill all data</label>
+                                </div>
+                                <div class="row text-center ">
+                                    <div class="col-xs-12 text-center">
+                                        <button type="button" class="btn btn-primary" id="savecommentClassroom"  value="Save" onclick="saveobservation()">Save observation</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="confirmsaveClassroom" class="modal fade" role="dialog">
                     <div class="modal-dialog">
 
                         <!-- Modal content-->
@@ -2213,264 +2436,118 @@
                             </div>
 
                         </div>
-                    </div>
-                </div>
-                <div id="showComment" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-lg">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header ">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">More Information</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="container-fluid">
-                                    <div class="col-xs-12">
-                                        <div class="col-xs-3 center-block form-group">
-                                            <label class="control-label">Comment Date:</label>
-                                            <div id="idCommentDate"></div>                        
-                                        </div>
-
-                                        <div class="col-xs-3 center-block form-group">
-                                            <label class="control-label">Created on:</label>
-                                            <div id="idCreateDate"></div>                        
-                                        </div>   
-                                        <div class="col-xs-3 center-block form-group">
-                                            <label class="control-label">Type:</label>
-                                            <div id="idTypeComment"></div>                        
-                                        </div>
-                                        <div class="col-xs-3 center-block form-group">
-                                            <label class="control-label">Teacher:</label>
-                                            <div id="idTeacher"></div>                        
-                                        </div> 
-                                    </div> 
-
-                                    <div  class="col-xs-12">
-                                        <div class="col-xs-12 form-group">
-                                            <label class="control-label">Comment:</label>
-                                            <div id="idComment"></div>                        
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
                 </div> 
+                <!--<h1>Hello World!</h1>-->
 
-                <div class="modal fade" id="modalimagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div id="commentModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myNewCommentTitle"></h4>
+                            </div>
+                            <div class="modal-body text-center clearfix">
+                                <div class="col-xs-6">
+                                    <div class="col-xs-12">
+                                        <label>Steps</label>
+                                    </div>
+                                    <div id="steps_show" class="col-xs-12 text-left"></div>
+                                </div>
+                                <div class="col-xs-6">
+
+
+                                    <div class="speech">
+                                        <textarea style="width:100%;" rows="7" id="commentcontent" required="required"></textarea>
+                                        <img onclick="startDictation()" src="//i.imgur.com/cHidSVu.gif" />
+                                    </div>
+                                    <select name="TXTrating" id="hi" class="studentRating rating" style="margin-top:10px">
+                                        <option></option>
+                                        <option value="N/A">N/A</option>
+                                        <option value="Presented">Presented</option>
+                                        <option value="Attempted">Attempted</option>
+                                        <option value="Mastered">Mastered</option>
+                                    </select>
+                                    <input type="number" name="steps" id="some_id" class="rating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="15" data-min="1" value="0" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="commentbutton" class="btn btn-primary" data-dismiss="modal" aria-label="Close" value="Comment">Comment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="editModal" class="modal fade" role="dialog">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                            <div class="modal-header col ">
-                                <button type="button"  onclick="deletePhoto()" class='btn btn-link'  value='' id='deleteFoto'>Delete</button>
+                            <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="titleComment"></h4>
+                                <h4 class="modal-title" id="myModalLabel">Edit comment</h4>
                             </div>
-                            <div class="modal-body">
-                                <img id="imagen" class="foto" src=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12 text-right">
-                    <input class="btn-lg newcomment" type="image" id="newClassRoom" src="<c:url value='/recursos/img/iconos/add-comment(1).svg'/>" width="100px">
-                </div>
-            </div>
-            <div class="col-xs-8 col-md-10" id="divNotas">
-
-                <div class="col-xs-12 firstWeekNotas ">
-                    <div class="col-xs-12 sinpadding" > 
-                        <div class="semana1" id="semana0">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12 text-right">
-                    <input class="btn-lg newcomment" type="image" id="newcomment" src="<c:url value='/recursos/img/iconos/add-comment(1).svg'/>" width="100px">
-                </div>
-            </div>
-
-
-            <div id="newClassRoomModal" class="modal fade" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" > Enter a classroom observation</h4>
-                        </div>
-                        <div class="modal-body text-center">
-                            <div class="row">
-                                <div class='col-xs-6 form-group'>
-                                    <label class="control-label" for="fechaClassroom">Date</label>
-                                    <div class='input-group date' id='fechaClassroom'>
-                                        <input type='text' name="TXTfecha" class="form-control" id="observationfechaClassroom"/>
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 center-block form-group">
-                                    <label class="control-label">Observation type</label>
-                                    <select class="form-control" name="observationtype" id="observationtypeClassroom" >
-                                        <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
-                                        <option value="Physical">Physical</option>
-                                        <option value="Intellectual">Intellectual</option>
-                                        <option value="Literacy">Literacy</option>
-                                        <option value="Emotional">Emotional</option>
-                                        <option value="Social">Social</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row center-block form-group">
-                                <label class="control-label">Observation</label>
-                                <textarea class="form-control" name="TXTdescription" id="observationcommentsClassroom" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
-                            </div>
-
-                            <div class="row  center-block form-group" >
-                                <input type="file" id="fileToUploadClassroom" accept="image/*">
-                            </div>
-                            <div class="row text-center hidden" id="error1">
-                                <label>Please select a student first</label>
-                            </div>
-                            <div class="row text-center hidden" id="error2">
-                                <label>Please make sure to fill all data</label>
-                            </div>
-                            <div class="row text-center ">
-                                <div class="col-xs-12 text-center">
-                                    <button type="button" class="btn btn-primary" id="savecommentClassroom"  value="Save" onclick="saveobservation()">Save observation</button>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div id="confirmsaveClassroom" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">comment saved</h4>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div> 
-            <!--<h1>Hello World!</h1>-->
-
-            <div id="commentModal" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myNewCommentTitle"></h4>
-                        </div>
-                        <div class="modal-body text-center clearfix">
-                            <div class="col-xs-6">
-                                <div class="col-xs-12">
-                                    <label>Steps</label>
-                                </div>
-                                <div id="steps_show" class="col-xs-12 text-left"></div>
-                            </div>
-                            <div class="col-xs-6">
-
-
-                                <div class="speech">
-                                    <textarea style="width:100%;" rows="7" id="commentcontent" required="required"></textarea>
-                                    <img onclick="startDictation()" src="//i.imgur.com/cHidSVu.gif" />
-                                </div>
-                                <select name="TXTrating" id="hi" class="studentRating rating" style="margin-top:10px">
+                            <div id="steps_show2" class="col-xs-6"></div>
+                            <div class="modal-body text-center">
+                                <textarea style="width:100%;" rows="7" id="commentcontent2" required="required"></textarea>
+                                <select name="TXTrating2" id="hi2" class="studentRating rating">
                                     <option></option>
-                                    <option value="N/A">N/A</option>
-                                    <option value="Presented">Presented</option>
-                                    <option value="Attempted">Attempted</option>
-                                    <option value="Mastered">Mastered</option>
+                                    <option>N/A</option>
+                                    <option>Presented</option>
+                                    <option>Attempted</option>
+                                    <option>Mastered</option>
                                 </select>
-                                <input type="number" name="steps" id="some_id" class="rating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="15" data-min="1" value="0" />
+                                <input type="number" name="steps2" id="some_id" class="rating editrating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="15" data-min="1" value="0" />
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" id="idedit">
+                                <button id="editcomment" class="btn btn-primary btn-lg" data-dismiss="modal" aria-label="Close">Edit</button>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button id="commentbutton" class="btn btn-primary" data-dismiss="modal" aria-label="Close" value="Comment">Comment</button>
-                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="editModal" class="modal fade" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Edit comment</h4>
-                        </div>
-                        <div id="steps_show2" class="col-xs-6"></div>
-                        <div class="modal-body text-center">
-                            <textarea style="width:100%;" rows="7" id="commentcontent2" required="required"></textarea>
-                            <select name="TXTrating2" id="hi2" class="studentRating rating">
-                                <option></option>
-                                <option>N/A</option>
-                                <option>Presented</option>
-                                <option>Attempted</option>
-                                <option>Mastered</option>
-                            </select>
-                            <input type="number" name="steps2" id="some_id" class="rating editrating" data-clearable="X" data-icon-lib="iconsAragon fa" data-active-icon="icon-Pie_PieIzqSelect" data-inactive-icon="icon-Pie_PieIzqUnSelect" data-clearable-icon="fa-null" data-max="15" data-min="1" value="0" />
-                        </div>
-                        <div class="modal-footer">
-                            <input type="hidden" id="idedit">
-                            <button id="editcomment" class="btn btn-primary btn-lg" data-dismiss="modal" aria-label="Close">Edit</button>
+                <div id="deleteModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <p class="modal-title" id="myModalLabel">Delete comment</p>
+                            </div>
+                            <div id="steps_show2" class="col-xs-6"></div>
+                            <div class="modal-body text-center">
+                                <h3>Are you sure?</h3>
+                            </div>
+                            <div class="modal-footer" id="delcomment">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="deleteModal" class="modal fade" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <p class="modal-title" id="myModalLabel">Delete comment</p>
-                        </div>
-                        <div id="steps_show2" class="col-xs-6"></div>
-                        <div class="modal-body text-center">
-                            <h3>Are you sure?</h3>
-                        </div>
-                        <div class="modal-footer" id="delcomment">
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
+                            </div>
+                            <div id="messagediv" class="modal-body text-center">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
-                        </div>
-                        <div id="messagediv" class="modal-body text-center">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal fade" id="completemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Details</h4>
-                        </div>
-                        <div id="commentcomplete" class="modal-body text-left " style="margin:5px;">
+                <div class="modal fade" id="completemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Details</h4>
+                            </div>
+                            <div id="commentcomplete" class="modal-body text-left " style="margin:5px;">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </body>
 </html>
