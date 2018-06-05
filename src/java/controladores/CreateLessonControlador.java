@@ -435,7 +435,7 @@ public class CreateLessonControlador {
                 termid = "" + rs.getInt("defaulttermid");
                 yearid = "" + rs.getInt("defaultyearid");
             }
-            ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from courses where courses.active = 1 " );// the term and year need to be dynamic, check with vincent
+            ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from courses where courses.active = 1 and courses.reportcard = 1 " );// the term and year need to be dynamic, check with vincent
 
             String name9, id;
             while (rs1.next()) {

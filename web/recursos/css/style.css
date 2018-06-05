@@ -191,6 +191,7 @@ div {
     float: left;
     margin-bottom: 20px;
     padding-top: 5px;
+    padding-bottom: 5px;
     padding-right: 20px;
     padding-left: 20px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -360,3 +361,8 @@ textarea
                 color: #f0f0f0  !important;
                 border-color: #3aaa35 !important;
             }
+    /*Icono LogOUT*/
+    .imgUser
+{
+    max-width: 50% !important;
+}

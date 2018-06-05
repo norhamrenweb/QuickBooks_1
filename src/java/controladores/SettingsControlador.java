@@ -83,7 +83,7 @@ public class SettingsControlador extends MultiActionController {
             for (Subject su : subjects.subList(1, subjects.size())) {
                 String[] ids = new String[1];
                 ids = su.getId();
-                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = " + ids[0]);
+                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where reportcard = 1 and CourseID = " + ids[0]);
                 while (rs2.next()) {
                     if (rs2.getBoolean("Active") == true) {
                         s.setName(rs2.getString("Title"));
