@@ -16,78 +16,81 @@
     });
 
 </script>
-<style>
-    #barralateral nav{
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-    }
-</style>
+
 <!--MENU LATERAL-->
 <div id="barralateral">
     <nav>
         <div class="col-xs-12 iconosmenulateral">
             <a href="<c:url value='/homepage/loadLessons.htm'/>" >
                 <div class="center-block">
-                    <img width="70%" src="<c:url value='/recursos/img/iconos/Home-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Home">
+                    <img width="70%" src="<c:url value='/recursos/img/iconos/menu_lateral/Home.svg'/>" data-toggle="tooltip" data-placement="top" title="Home">
                 </div>
             </a>
         </div>
         <div class="col-xs-12 iconosmenulateral">
             <a href="<c:url value='/observations/start.htm'/>" target="_blank">
                 <div class="center-block">
-                    <img width="70%" src="<c:url value='/recursos/img/iconos/Icons_WorkSpace.svg'/>" data-toggle="tooltip" data-placement="top" title="Workspace">
+                    <img width="70%" src="<c:url value='/recursos/img/iconos/menu_lateral/WorkSpace.svg'/>" data-toggle="tooltip" data-placement="top" title="Workspace">
                 </div>
             </a>
+        </div>
+        <div class="col-xs-12">
+            <hr class="separadorMenu">
         </div>
         <div class="col-xs-12 iconosmenulateral">
             <a href="<c:url value='/lessonarchive/loadLessons.htm'/>">
                 <div class="center-block">
-                    <img width="70%" src="<c:url value='/recursos/img/iconos/Calendar-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Completed Presentations">
+                    <img width="70%" src="<c:url value='/recursos/img/iconos/menu_lateral/Calendar.svg'/>" data-toggle="tooltip" data-placement="top" title="Completed Presentations">
                 </div>
             </a>
         </div>
         <div class="col-xs-12 iconosmenulateral">
             <a href="<c:url value='/lessonidea/start.htm'/>">
                 <div class="center-block">
-                    <img width="70%" src="<c:url value='/recursos/img/iconos/LessonsIdea.svg'/>" data-toggle="tooltip" data-placement="top" title="Presentations Ideas">
+                    <img width="70%" src="<c:url value='/recursos/img/iconos/menu_lateral/LessonsIdea.svg'/>" data-toggle="tooltip" data-placement="top" title="Presentations Ideas">
                 </div>
             </a>
         </div>
         <div class="col-xs-12 iconosmenulateral">
             <a href="<c:url value='/createlesson/start.htm'/>" >
                 <div class="center-block">
-                    <img width="70%" src="<c:url value='/recursos/img/iconos/classroomDashboard-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Create new presentation">
+                    <img width="70%" src="<c:url value='/recursos/img/iconos/menu_lateral/classroomDashboard.svg'/>" data-toggle="tooltip" data-placement="top" title="Create new presentation">
                 </div>
             </a>
+        </div>
+        <div class="col-xs-12">
+            <hr class="separadorMenu">
         </div>
         <div class="col-xs-12 iconosmenulateral">
             <a href="<c:url value='/progressbystudent/start.htm'/>" >
                 <div class="center-block">
-                    <img width="70%" src="<c:url value='/recursos/img/iconos/students-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Students">
+                    <img width="70%" src="<c:url value='/recursos/img/iconos/menu_lateral/students.svg'/>" data-toggle="tooltip" data-placement="top" title="Students">
                 </div>
             </a>
         </div>
         <div class="col-xs-12 iconosmenulateral">
             <a href="<c:url value='/reportControlador/start.htm'/>" >
                 <div class="center-block">
-                    <img width="70%" src="<c:url value='/recursos/img/iconos/Reports.svg'/>" data-toggle="tooltip" data-placement="top" title="Reports">
+                    <img width="70%" src="<c:url value='/recursos/img/iconos/menu_lateral/Reports.svg'/>" data-toggle="tooltip" data-placement="top" title="Reports">
                 </div>
             </a>
+        </div>
+        <div class="col-xs-12">
+            <hr class="separadorMenu">
         </div>
         <c:choose>
             <c:when test = "${user.type == 0 || user.type == 2}">
                 <div class="col-xs-12 iconosmenulateral">
                     <a href="<c:url value='/createsetting/start.htm'/>" >
                         <div class="center-block">
-                            <img width="70%" src="<c:url value='/recursos/img/iconos/CreateSettings-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Modify SOW">
+                            <img width="70%" src="<c:url value='/recursos/img/iconos/menu_lateral/CreateSettings.svg'/>" data-toggle="tooltip" data-placement="top" title="Modify SOW">
                         </div>
                     </a>
                 </div>
                 <div class="col-xs-12 iconosmenulateral">
                     <a href="<c:url value='/setupControlador/start.htm'/>" >
                         <div class="center-block">
-                            <img width="70%" src="<c:url value='/recursos/img/iconos/Setup-01.svg'/>" data-toggle="tooltip" data-placement="top" title="Setup">
+                            <img width="70%" src="<c:url value='/recursos/img/iconos/menu_lateral/Setup.svg'/>" data-toggle="tooltip" data-placement="top" title="Setup">
                         </div>
                     </a>                    
                 </div>
@@ -96,7 +99,7 @@
                 <div class="col-xs-12 iconosmenulateral">
                     <a href="<c:url value='/sowdisplay/start.htm'/>" >
                         <div class="center-block">
-                            <img width="70%" src="<c:url value='/recursos/img/iconos/CreateSettings-01.svg'/>" data-toggle="tooltip" data-placement="top" title="SOW">
+                            <img width="70%" src="<c:url value='/recursos/img/iconos/menu_lateral/CreateSettings.svg'/>" data-toggle="tooltip" data-placement="top" title="SOW">
                         </div>
                     </a>
                 </div>

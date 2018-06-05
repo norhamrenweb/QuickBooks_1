@@ -1052,7 +1052,7 @@
                 display: block !important;
                 float: left !important;
                 text-align: left !important;
-                padding-left: 16px;
+                padding-left: 0px;
             }
             #divCommentSubject{
                 margin-top: 5px;
@@ -1077,6 +1077,13 @@
                 -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
                 transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
             }
+            div.dataTables_wrapper div.dataTables_filter input 
+            {
+                display: inline-block !important;
+                width: 100% !important;
+                margin-bottom: 0;
+                margin-left: 0.5em;
+              }
             .tree-icon{
                 display:none;
             }
@@ -1112,7 +1119,7 @@
                 <fieldset>
                     <!--                    <legend>Select student</legend>-->
                     <div class="col-xs-3">
-                        <div class="col-xs-12">
+                        <div class="col-xs-12 sinpadding">
                             <label>Filter</label>
                             <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
                                 <c:forEach var="levels" items="${gradelevels}">
