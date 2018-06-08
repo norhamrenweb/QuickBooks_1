@@ -95,9 +95,9 @@ public abstract class DataFactory {
             ArrayList<Integer> rcs = new ArrayList<>();
 
             String consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"
-                    + " on Roster.ClassID = Classes.ClassID"
-                    + " inner join Courses on  Classes.CourseID = Courses.CourseID"
-                    + "  where Roster.StudentID = " + id + " and Classes.Term"+termId+"= 'true' and Classes.yearid = " + yearId + " and Courses.ReportCard = 1 order by courses.RCPlacement";
+                    + "  on Roster.ClassID = Classes.ClassID"
+                    + "  inner join Courses on  Classes.CourseID = Courses.CourseID"
+                    + "  where Classes.Term"+termId+"=1 and Roster.StudentID = " + id + " and Classes.yearid = " + yearId + " and Courses.ReportCard = 1 order by courses.RCPlacement";
             ResultSet rs = DBConect.ah.executeQuery(consulta);
             while (rs.next()) {
                 staffids.add(rs.getInt("StaffID"));
@@ -122,7 +122,7 @@ public abstract class DataFactory {
             for (int i = 0; i < listaProfesores.size(); i++) {
                 listaProfesores.get(i).setAsignatura(coursesTitles.get(i));
                 listaProfesores.get(i).setClassId(classids.get(i));
-                mapTeachers.put(Integer.parseInt(classids.get(i)), listaProfesores.get(i));
+                mapTeachers.put(rcs.get(i), listaProfesores.get(i));
             }
 
         } catch (SQLException ex) {

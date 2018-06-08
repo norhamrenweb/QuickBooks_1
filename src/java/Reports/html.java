@@ -85,7 +85,7 @@ public class html extends HttpServlet {
                 return new FactoryProgressReport_grade4();
 
             case "progress_Gr7":
-                return new FactoryAcademicReport_grade7();
+                return new FactoryAcademicReport_grade7("false");
 
             default:
                 return null;
@@ -124,7 +124,16 @@ public class html extends HttpServlet {
         // VARIARA SEGUNE L TIPO DE REPORTE SELECCIONADO
         //DataFactory d = new FactoryProgressReport_Pre_Primary();
         //DataFactory d = new FactoryProgressReport_grade4();
-        DataFactory d = createFactory(reportType);
+        
+        boolean showGrade = false;
+         DataFactory d;
+        if(reportType.equals("progress_Gr7_JP")){
+             d = new FactoryAcademicReport_grade7("true");
+        }
+        else{
+           d= createFactory(reportType);
+        }
+        
         // InputStream jasperStream = this.getClass().getResourceAsStream("progress_report_2017_gr4.jasper");
         InputStream jasperStream = this.getClass().getResourceAsStream(d.getNameReport());
         JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);

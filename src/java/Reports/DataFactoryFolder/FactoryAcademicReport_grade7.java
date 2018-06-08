@@ -32,12 +32,15 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class FactoryAcademicReport_grade7 extends DataFactory {
 
-    public FactoryAcademicReport_grade7() {
+    private String showGrade;
+    
+    public FactoryAcademicReport_grade7(String showgrade) {
         nameStudent = "";
         dob = "";
         age = "";
         grade = "";
         term = "";
+        showGrade = showgrade;
     }
 
     @Override
@@ -61,16 +64,17 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         while (rs4.next()) {
             nameYear = "" + rs4.getString("SchoolYear");
         }
-        if(nameTerm.contains("Q1") || nameTerm.contains("Q2"))
+        if (nameTerm.contains("Q1") || nameTerm.contains("Q2")) {
             nameTerm = "Q1/Q2";
-        else
+        } else {
             nameTerm = "Q3/Q4";
-        
-        this.term = nameTerm + " , " + nameYear;
+        }
+
+        this.term = nameTerm + " , " + nameYear+"#"+showGrade;
 
         TreeMap<Integer, Profesor> mapTeachers = getTeachers(yearId, termId, idStudent);
         HashMap<String, String> mapComentarios = getComments(yearId, termId, idStudent);
-
+      //  ArrayList<String> coursesAsignados = new ArrayList<>();
         ArrayList<String> lessons = new ArrayList<>();
         ResultSet rs;
         rs = DBConect.eduweb.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
@@ -78,24 +82,40 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             lessons.add("" + rs.getInt("lesson_id"));
         }
 
-        for (Map.Entry<Integer, Profesor> entry : mapTeachers.entrySet()) {
-            String key = ""+entry.getValue().getClassId();
-            String aux = "";
+         for (Map.Entry<Integer, Profesor> entry : mapTeachers.entrySet()) {
+            String key = entry.getValue().getClassId();
+            String aux = "No Comments";
             Profesor value = entry.getValue();
-
+            
             if (mapComentarios.containsKey(key)) {
                 aux = mapComentarios.get(key);
             }
+
             os4 = new ArrayList<>();
             as4 = new ArrayList<>();
             os4 = getSkills(as4, key, studentId, yearId, termId);
             String nameAsignatura = limpiarNameAsignatura(value.getAsignatura());
+
             String auxOs = nameAsignatura + "#" + value.getFirstName() + "# #" + aux;
- 
-            if(!os4.isEmpty() && !as4.isEmpty()){
+
+           // if (!os4.isEmpty() && !as4.isEmpty()) {
+      
+              //  coursesAsignados.add(value.getClassId());
+            coll.add(new BeanWithList(auxOs, os4, as4, nameStudent, dob, age, grade, term));
+            
+        }
+/*
+        for (Map.Entry<String, String> entry : mapComentarios.entrySet()) {
+            String key = "" + entry.getKey();
+            if (!coursesAsignados.contains(key)) {   
+                
+                String nameAsignatura =  key;
+                String auxOs = nameAsignatura + "#" + "Teacher TEST" + "# #" + entry.getValue();
+
                 coll.add(new BeanWithList(auxOs, os4, as4, nameStudent, dob, age, grade, term));
             }
-        }
+        }*/
+
         coll.add(new BeanWithList("Head of School#Kim Euston-Brown# #" + getSuperComment(yearId, termId, idStudent), new ArrayList<>(), new ArrayList<>(), nameStudent, dob, age, grade, term));
         return coll;
     }
@@ -132,12 +152,10 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
                         aux.add(rs.getString("name"));
                         as.add("" + rs.getInt("level_id"));
                     }
-                } else {
-                    if (TermLevel.contains("3") || TermLevel.contains("4")) {
-                        aux.add(rs.getString("name"));
-                        as.add("" + rs.getInt("level_id"));
-                    }
-                } 
+                } else if (TermLevel.contains("3") || TermLevel.contains("4")) {
+                    aux.add(rs.getString("name"));
+                    as.add("" + rs.getInt("level_id"));
+                }
             }
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
