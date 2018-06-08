@@ -463,6 +463,7 @@
                             $('#subject').append("<option value='"
                                     + json[i].id[0] + "'>" + json[i].name + "</option>");
                         }
+                        sortSelect("subject");
                     }
                 }
             }
@@ -592,6 +593,7 @@
                     ajax.open("POST", "subjectlistLevel.htm?seleccion1=" + seleccion1, true);
                     $('#objective').val("");
                     $('#subject').val("");
+                    sortSelect("subject");
                     ajax.send("");
                 }
             }

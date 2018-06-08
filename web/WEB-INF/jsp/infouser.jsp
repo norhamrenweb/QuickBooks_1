@@ -115,6 +115,21 @@
         $("#termSelect").val(termId);
 
     });
+    function sortSelect(selectname) {
+
+        var options = $('#' + selectname + ' option');
+        var arr = options.map(function (_, o) {
+            return {t: $(o).text(), v: o.value};
+        }).get();
+        arr.sort(function (o1, o2) {
+            return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0;
+        });
+        options.each(function (i, o) {
+            o.value = arr[i].v;
+            $(o).text(arr[i].t);
+        });
+    }
+
     function terms() {
 
         if (window.XMLHttpRequest) //mozilla
@@ -133,27 +148,27 @@
     }
 
     function changeTermYear() {
-                var year = $('#yearSelect option:selected').val();
-                var term = $('#termSelect option:selected').val();
-                var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
-                var nameYearAndTerm = $('#termSelect option:selected').text() + " / " + $('#yearSelect option:selected').text();
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    contentType: "application/json",
-                    success: function (data) {
-                        $('#btnYearmTerm').text(nameYearAndTerm);
-                        refresh();
+        var year = $('#yearSelect option:selected').val();
+        var term = $('#termSelect option:selected').val();
+        var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
+        var nameYearAndTerm = $('#termSelect option:selected').text() + " / " + $('#yearSelect option:selected').text();
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json",
+            success: function (data) {
+                $('#btnYearmTerm').text(nameYearAndTerm);
+                refresh();
 
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        console.log(xhr.status);
-                        console.log(xhr.responseText);
-                        console.log(thrownError);
-                    }
-
-                });
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(xhr.responseText);
+                console.log(thrownError);
             }
+
+        });
+    }
     function CallBackYear()
     {
         if (ajax.readyState === 4 && ajax.status === 200) {
@@ -165,27 +180,27 @@
             }
         }
     }
-   
-        /*
-         if (window.XMLHttpRequest) //mozilla
-         {
-         ajax = new XMLHttpRequest(); //No Internet explorer
-         } else
-         {
-         ajax = new ActiveXObject("Microsoft.XMLHTTP");
-         }
-         
-         ajax.onreadystatechange = function () {
-         if (ajax.readyState === 4 && ajax.status === 200) {
-         window.location.reload();
-         }
-         };
-         var seleccion = $('#yearSelect option:selected').val();
-         var term = $('#termSelect option:selected').val();
-         var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + seleccion + "&termid=" + term;
-         ajax.open("POST", url, true);
-         ajax.send("");
-    }*/
+
+    /*
+     if (window.XMLHttpRequest) //mozilla
+     {
+     ajax = new XMLHttpRequest(); //No Internet explorer
+     } else
+     {
+     ajax = new ActiveXObject("Microsoft.XMLHTTP");
+     }
+     
+     ajax.onreadystatechange = function () {
+     if (ajax.readyState === 4 && ajax.status === 200) {
+     window.location.reload();
+     }
+     };
+     var seleccion = $('#yearSelect option:selected').val();
+     var term = $('#termSelect option:selected').val();
+     var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + seleccion + "&termid=" + term;
+     ajax.open("POST", url, true);
+     ajax.send("");
+     }*/
 
     function logout() {
         document.location.href = "<c:url value="/cerrarLogin.htm"/>";

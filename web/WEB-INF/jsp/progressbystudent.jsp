@@ -222,7 +222,7 @@
                              }
                              */
                             $("#listObjectiveReport tbody").empty();
-                        
+
 
 
 
@@ -240,7 +240,7 @@
                                 if (subjects[i].name !== undefined)
                                     $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                             });
-
+                            sortSelect("subjects");
 
                             $('#subjectsReports').empty();
                             $('#subjectsReports').append('<option value ="-1">Select Subject</option>');
@@ -248,8 +248,12 @@
                                 if (subjects[i].name !== undefined)
                                     $('#subjectsReports').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                             });
-    $("#subjectsReports").val(-1)
-    
+
+
+                            sortSelect("subjectsReports");
+
+                            $("#subjectsReports").val(-1)
+
                             $('#divCommentSubject').removeClass('hidden');
                             $('#saveCommentSubject>i').removeClass('glyphicon-chevron-up');
                             $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
@@ -489,17 +493,25 @@
                         $('#divTableObjective').addClass('hidden'); //to avoid having the general comments of the previous selected student
                         $('#divNotObjective').addClass('hidden');
                         $('#subjects').empty();
-                        $('#subjects').append('<option>Select Subject</option>');
+                        $('#subjects').append('<option value ="-1">Select Subject</option>');
                         $.each(subjects, function (i, item) {
                             if (subjects[i].name !== undefined)
                                 $('#subjects').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                         });
-                            $('#subjectsReports').empty();
-                            $('#subjectsReports').append('<option value ="-1">Select Subject</option>');
-                            $.each(subjects, function (i, item) {
-                                if (subjects[i].name !== undefined)
-                                    $('#subjectsReports').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
-                            });
+
+                        sortSelect("subjects");
+                        $("#subjects").val(-1);
+                        
+                        $('#subjectsReports').empty();
+                        $('#subjectsReports').append('<option value ="-1">Select Subject</option>');
+                        $.each(subjects, function (i, item) {
+                            if (subjects[i].name !== undefined)
+                                $('#subjectsReports').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
+                        });
+
+                        sortSelect("subjectsReports");
+
+
                         $("#subjectsReports").val(-1)
 
                         $('#divCommentSubject').removeClass('hidden');
@@ -507,7 +519,7 @@
                         $('#saveCommentSubject>i').addClass('glyphicon-chevron-down');
 
                         $("#listObjectiveReport tbody").empty();
-                        
+
                         /*var radioButtonCode="";
                          $("#divTerms").empty();
                          
@@ -532,6 +544,8 @@
                 }
             }
             ;
+           
+
             function selectTreeByTerm(value) {
 
                 var studentId = $('#studentid').val();
@@ -911,7 +925,7 @@
                     type: "POST",
                     url: "updateObjectivesReport.htm",
                     data: json,
-                    contentType:  "application/json",
+                    contentType: "application/json",
                     datatype: "json",
                     success: function (data) {
                         var f = "fd";
@@ -1083,7 +1097,7 @@
                 width: 100% !important;
                 margin-bottom: 0;
                 margin-left: 0.5em;
-              }
+            }
             .tree-icon{
                 display:none;
             }

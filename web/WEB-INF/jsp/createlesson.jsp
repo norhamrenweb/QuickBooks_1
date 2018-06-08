@@ -460,6 +460,8 @@
                            $('#subject').append("<option value='"
                                    +json[i].id[0]+"'>"+json[i].name+"</option>"); 
                         }
+                        
+                        sortSelect("subject");
                     }
                 }
             }
@@ -524,6 +526,9 @@
                                  $('#subject').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                             }
                         });
+                        
+                        sortSelect("subject");
+                        
                         $('#objective').empty();
                         var pos1 = objective[0].toString();
                          $.each(objectives, function (i, item) {
