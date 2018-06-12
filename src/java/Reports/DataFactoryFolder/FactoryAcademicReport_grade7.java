@@ -15,10 +15,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,7 +37,9 @@ import javax.servlet.http.HttpServletRequest;
 public class FactoryAcademicReport_grade7 extends DataFactory {
 
     private String showGrade;
-    
+    private String dateNewTerm;
+        private String  daysAbsent ;
+
     public FactoryAcademicReport_grade7(String showgrade) {
         nameStudent = "";
         dob = "";
@@ -64,17 +70,19 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         while (rs4.next()) {
             nameYear = "" + rs4.getString("SchoolYear");
         }
-        if (nameTerm.contains("Q1") || nameTerm.contains("Q2")) {
+        if (nameTerm.contains("Q2")) {
             nameTerm = "Q1/Q2";
-        } else {
+        } else if (nameTerm.contains("Q4")) {
             nameTerm = "Q3/Q4";
         }
-
-        this.term = nameTerm + " , " + nameYear+"#"+showGrade;
+        this.dateNewTerm = "";
+        this.daysAbsent = "";
+        getDaysAbsent_And_DateNewTerm(termId, yearId, idStudent, nameTerm);
+        this.term = nameTerm + " , " + nameYear + "#" + showGrade + "#" + this.daysAbsent + "#" + this.dateNewTerm;
 
         TreeMap<Integer, Profesor> mapTeachers = getTeachers(yearId, termId, idStudent);
         HashMap<String, String> mapComentarios = getComments(yearId, termId, idStudent);
-      //  ArrayList<String> coursesAsignados = new ArrayList<>();
+        //  ArrayList<String> coursesAsignados = new ArrayList<>();
         ArrayList<String> lessons = new ArrayList<>();
         ResultSet rs;
         rs = DBConect.eduweb.executeQuery("SELECT lesson_id from lesson_stud_att where student_id = '" + studentId + "' and attendance != 'null' and attendance !=' '");
@@ -82,11 +90,11 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             lessons.add("" + rs.getInt("lesson_id"));
         }
 
-         for (Map.Entry<Integer, Profesor> entry : mapTeachers.entrySet()) {
+        for (Map.Entry<Integer, Profesor> entry : mapTeachers.entrySet()) {
             String key = entry.getValue().getClassId();
             String aux = "No Comments";
             Profesor value = entry.getValue();
-            
+
             if (mapComentarios.containsKey(key)) {
                 aux = mapComentarios.get(key);
             }
@@ -98,13 +106,12 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
 
             String auxOs = nameAsignatura + "#" + value.getFirstName() + "# #" + aux;
 
-           // if (!os4.isEmpty() && !as4.isEmpty()) {
-      
-              //  coursesAsignados.add(value.getClassId());
+            // if (!os4.isEmpty() && !as4.isEmpty()) {
+            //  coursesAsignados.add(value.getClassId());
             coll.add(new BeanWithList(auxOs, os4, as4, nameStudent, dob, age, grade, term));
-            
+
         }
-/*
+        /*
         for (Map.Entry<String, String> entry : mapComentarios.entrySet()) {
             String key = "" + entry.getKey();
             if (!coursesAsignados.contains(key)) {   
@@ -120,6 +127,89 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         return coll;
     }
 
+    private void getDaysAbsent_And_DateNewTerm(String termId, String yearId, String studentID, String nameTerm) {
+        String consulta = "";
+        ResultSet rs;
+         Timestamp aux = null;
+        int numDays=0,numTotal=0;
+        try {
+
+            String startDate = "";
+            String endDate = "";
+            String termIni = termId;
+            if (termId == "2") {
+                termIni = "1";
+            } else if (termId == "4") {
+                termIni = "3";
+            }
+
+            consulta = " select firstday from schoolterm where termid =" + termIni + " and yearid =" + yearId;
+            rs = DBConect.ah.executeQuery(consulta);
+            while (rs.next()) {
+                startDate = "" + rs.getTimestamp("firstday");
+            }
+            consulta = " select lastday from schoolterm where termid =" + termId + " and yearid =" + yearId;
+            rs = DBConect.ah.executeQuery(consulta);
+            while (rs.next()) {
+                endDate = "" + rs.getTimestamp(1);
+            }
+           
+            consulta = "select count(Absent) from AttendanceDaySummary "
+                    + " where studentid =" +studentID+" and \"date\" >= '"
+                    + startDate +"'  and \"date\" <=  '"+endDate+"'";
+            rs = DBConect.ah.executeQuery(consulta);
+            while (rs.next()) {
+                numDays = rs.getInt(1);
+            }
+            
+            consulta = "select count(attendance) as daysPresent"
+                    + " from daysetup where DayType = 0"
+                +"and convert (varchar, DaySetupDate, 23) >= '"+startDate
+                +"' and convert (varchar, DaySetupDate, 23) <= '"+endDate+"'";
+            rs = DBConect.ah.executeQuery(consulta);
+            while (rs.next()) {
+                numTotal = rs.getInt(1);
+            }
+            
+           
+            if(termId != "4"){
+                consulta = " select firstday from schoolterm where termid =" + (Integer.parseInt(termIni)+1)  + " and yearid =" + yearId;
+                rs = DBConect.ah.executeQuery(consulta);
+                 
+                while (rs.next()) {
+                    aux =  rs.getTimestamp("firstday");
+                }
+            }
+            else{
+                consulta = " select firstday from schoolterm where termid =1 and yearid =" + (Integer.parseInt(yearId)+1);
+                rs = DBConect.ah.executeQuery(consulta);
+                
+                while (rs.next()) {
+                    aux =  rs.getTimestamp("firstday");
+                }
+            }
+        
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+        }
+        this.daysAbsent = numDays +" / "+numTotal;
+        Format formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy ");
+        this.dateNewTerm = formatter.format(aux); 
+        //   return "No Comments";
+    }
+
+    /*
+select count(Present) from AttendanceDaySummary where studentid = ... and "date" >= 'fechainicioT1'
+                and "date" <= 'fechafinalT2' 
+
+select count(attendance) as daysPresent
+                from daysetup
+                where DayType = 0<!---
+                and MODIFIEDBY = '-433'--->
+                and convert (varchar, DaySetupDate, 23) >= '#fechainicioT1#'
+                and convert (varchar, DaySetupDate, 23) <= '#fechafinalT2#'*/
     private String getSuperComment(String yearId, String termId, String idStudent) {
         try {
             String consulta = "select * from report_comments where supercomment=true and studentid = " + idStudent;
