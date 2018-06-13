@@ -421,14 +421,14 @@
 				<reportElement key="" x="30" y="10" width="532" height="30" isPrintWhenDetailOverflows="true" backcolor="#3D913D" uuid="0f52ec5f-00c8-49c1-96a7-acbe0c9217ee"/>
 			</rectangle>
 			<textField>
-				<reportElement x="32" y="10" width="100" height="20" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" uuid="695f8c94-727a-4db9-b117-c41344b198e6"/>
+				<reportElement x="32" y="10" width="448" height="20" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" uuid="695f8c94-727a-4db9-b117-c41344b198e6"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{subject}.split("#")[0]]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="32" y="23" width="100" height="20" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" uuid="75d6d2c2-685d-42c3-a886-20bf478ae51a"/>
+				<reportElement x="32" y="23" width="448" height="20" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" uuid="75d6d2c2-685d-42c3-a886-20bf478ae51a"/>
 				<textFieldExpression><![CDATA[$F{subject}.split("#")[1]]]></textFieldExpression>
 			</textField>
 			<textField>
