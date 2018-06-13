@@ -207,12 +207,15 @@
                             var foto = JSON.parse(json.prueba);
                             var prog = JSON.parse(json.prog);
                             var subjects = JSON.parse(json.sub);
+                            var nextPresentations = JSON.parse(json.nextPresentations);
+
                             $('#gradelevel').text(info.level_id);
                             $('#nextlevel').text(info.nextlevel);
                             $('#student').text(info.nombre_students);
                             $('#studentid').val(info.id_students);
                             $('#BOD').text(info.fecha_nacimiento);
                             $("#TXTsupervisorComment").val(json.commentHead);
+
                             $("#commentSubject").val("");
                             /* if (typeof info.foto === 'undefined' || info.foto === "") {
                              $('#foto').attr('src', '../recursos/img/NotPhoto.png');
@@ -264,7 +267,17 @@
                             });
                             $("#divTerms").append("<div class='radio' style='margin-left: 5%;'><label><input onclick='selectTreeByTerm(-1)' type='radio' name='opt' vlaue='all' checked>All</label></div>");
 
+                            $("#nextPresentations").empty();
+                            for (var i = 0; i < nextPresentations.length; i++) {
+                                var html_Li = " <div class='col-xs-12 nextPresentation'>\n\
+                                                <div class='col-xs-10'>" + nextPresentations[i].col2 + " </div>\n\
+                                                <div class='col-xs-2> <span class='badgeGoglyphicon glyphicon-eye-open' title='Progress Presentation' onclick='rowselect(" + nextPresentations[i].col1 + ")'></span></div> \n\
+                                            </div>";
+                                $("#nextPresentations").append(html_Li);
+                            }
+
                             $('#loadingmessage').hide();
+
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                             console.log(xhr.status);
@@ -470,6 +483,8 @@
                         var foto = JSON.parse(json.prueba);
                         var prog = JSON.parse(json.prog);
                         var subjects = JSON.parse(json.sub);
+                        var nextPresentations = JSON.parse(json.nextPresentations);
+
                         $('#gradelevel').text(info.level_id);
                         $('#nextlevel').text(info.nextlevel);
                         $('#student').text(info.nombre_students);
@@ -501,7 +516,7 @@
 
                         sortSelect("subjects");
                         $("#subjects").val(-1);
-                        
+
                         $('#subjectsReports').empty();
                         $('#subjectsReports').append('<option value ="-1">Select Subject</option>');
                         $.each(subjects, function (i, item) {
@@ -540,11 +555,28 @@
                         });
                         $("#divTerms").append("<div class='radio' style='margin-left: 5%;'><label><input onclick='selectTreeByTerm(-1)' type='radio' name='opt' vlaue='all' checked>All</label></div>");
 
+                        $("#nextPresentations").empty();
+                        for (var i = 0; i < nextPresentations.length; i++) {
+                            var html_Li = " <div class='col-xs-12 nextPresentation'>\n\
+                                                    <div class='col-xs-10 sinpadding'>\n\
+                                                        <div class='col-xs-12 namePresentation'>" + nextPresentations[i].col2 + "</div> \n\
+                                                        <div class='col-xs-12 nameTeacher'>" + nextPresentations[i].col3 + "</div> \n\
+                                                    </div>\n\
+                                                    <div class='col-xs-2'><span class='badgeGo  sinpadding glyphicon glyphicon-eye-open' title='Progress Presentation' onclick='rowselect(" + nextPresentations[i].col1 + ")'></span></div> \n\
+                                                </div>";
+                            $("#nextPresentations").append(html_Li);
+                        }
+
                     }
                 }
             }
             ;
-           
+
+            function rowselect(LessonsSelected)
+            {
+
+                window.open("<c:url value="/lessonprogress/loadRecords.htm?LessonsSelected="/>" + LessonsSelected);
+            }
 
             function selectTreeByTerm(value) {
 
@@ -607,6 +639,11 @@
                     }
 
                 });
+            }
+
+            function modifySelect(LessonsSelected)
+            {
+                window.open("<c:url value="/editlesson/start.htm?LessonsSelected="/>" + LessonsSelected);
             }
 
             function comboSelectionLevel()
@@ -1028,7 +1065,7 @@
                 /*                background-color: lightgray;*/
                 border-right: 1px #D0D2D3 double;
                 text-align: center;
-                min-height: 600px;
+                /*min-height: 600px;*/
             }
             .cell{
                 display: table-cell;
@@ -1104,6 +1141,7 @@
             .foto
             {
                 width: 75%;
+                border-radius: 10px;
             }
             .tree-title {
                 font-size: 12px;
@@ -1120,6 +1158,23 @@
             }
             #table_students{
                 width: 100% !important;
+            }
+            .badgeGo{
+                cursor: pointer;
+
+                text-align: center;
+            }
+            .nextPresentation{
+                padding: 5px;
+                border: solid 1px #cdcdcd;
+                display: flex;
+                align-items: center;
+            }
+            .nameTeacher{
+                font-size: smaller;
+            }
+            .namePresentation{
+                font-weight: bold;
             }
         </style>
     </head>
@@ -1180,25 +1235,33 @@
                         <div class="tab-content">
 
                             <div role="tabpanel" class="col-xs-12 tab-pane in active" id="demographic">
-                                <div class="col-xs-6 text-center containerPhoto">
-                                    <div class="cell">
-
+                                <div class="col-xs-5 text-center containerPhoto">
+                                    <div class="col-xs-12 cell">
                                         <img id="foto" src="../recursos/img/NotPhoto.png" class="foto">
-                                    </div>                                        
+                                    </div>   
+                                    <div class="col-xs-12 sinpadding">
+                                        <div class="col-xs-offset-1 col-xs-10 sinpadding form-group" style="margin-top: 5%;">
+                                            <label class="text-left col-xs-6" >Birthday:</label>
+                                            <span class="text-right col-xs-6" id="BOD"></span>
+                                        </div>
+                                        <div class="col-xs-offset-1 col-xs-10 sinpadding form-group">
+                                            <label class="text-left col-xs-6  " >Grade level:</label>
+                                            <span class="text-right col-xs-6 " id="gradelevel"></span>
+                                        </div>
+                                        <div class="col-xs-offset-1 col-xs-10 sinpadding form-group">
+                                            <label class="text-left col-xs-6 " >Next level:</label>
+                                            <span class="text-right col-xs-6 " id="nextlevel"></span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-xs-6">
-                                    <div class="col-xs-12 sinpadding form-group">
-                                        <label class="col-xs-6 label-demographic" >Birthday</label>
-                                        <span class="col-xs-12 demographic" id="BOD"></span>
-                                    </div>
-                                    <div class="col-xs-12 sinpadding form-group">
-                                        <label class="col-xs-6 label-demographic" >Grade level</label>
-                                        <span class="col-xs-12 demographic" id="gradelevel"></span>
-                                    </div>
-                                    <div class="col-xs-12 sinpadding form-group">
-                                        <label class="col-xs-6 label-demographic" >Next level</label>
-                                        <span class="col-xs-12 demographic" id="nextlevel"></span>
-                                    </div>
+                                <div class="col-xs-7">
+                                    <div class="col-xs-12">
+                                        <label class="col-xs-12 sinpadding">Upcoming presentations:</label>
+
+                                        <div id="nextPresentations" class="col-xs-12">
+
+                                        </div>
+                                    </div>  
                                 </div>
                             </div>
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="progress">

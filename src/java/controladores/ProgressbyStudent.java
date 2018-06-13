@@ -550,18 +550,66 @@ public class ProgressbyStudent {
 
         // List<Subject> subjects = new ArrayList<>();
         subjects = getSubjects(student.getId_students(), hsr);
+        
         String info = new Gson().toJson(student);
         String sub = new Gson().toJson(subjects);
         String prueba2 = new Gson().toJson(prueba);
+        
         obj.put("info", info);
         obj.put("sub", sub);
         obj.put("prueba", prueba2);
         obj.put("commentHead", this.getCommentHead(student.getId_students(), hsr));
         obj.put("prog", this.loadtree(getAllSubjectsYear(student.getId_students(), hsr), student.getId_students(), hsr, "-1"));
-
+        obj.put("nextPresentations", new Gson().toJson(this.getNextPresentations(student.getId_students())));
         return obj.toString();
     }
 
+    private ArrayList<DBRecords> getNextPresentations(int idStudent){
+        ArrayList<DBRecords> nextPresentations = new ArrayList<>(); // col1 = id Presentation 
+                                                                    // col2 = name Presentation
+                                                                    // col3 = name Teacher
+        Timestamp timestampNow = new Timestamp(System.currentTimeMillis());
+        try {
+            HashMap<Integer,String> nameTeachers = new HashMap<>();
+            String consulta = "select  PersonID,FirstName,LastName  from Person";
+            ResultSet rs =DBConect.ah.executeQuery(consulta);
+            
+            while (rs.next()) {
+              String name =  rs.getString(2)+" "+rs.getString(3);
+              nameTeachers.put(rs.getInt(1),name);
+            }
+                    
+            consulta = "SELECT lessons.id,lessons.name,user_id FROM lesson_stud_att inner join lessons "
+                    + "                                         on lessons.id = lesson_stud_att.lesson_id "
+                    + "                     where student_id = "+idStudent+" and timestamp >= '"+timestampNow+"' order by timestamp ASC";
+            rs = DBConect.eduweb.executeQuery(consulta);
+            while (rs.next()) {
+               DBRecords auxDB = new DBRecords();
+               auxDB.setCol1(""+rs.getInt(1));
+               auxDB.setCol2(rs.getString(2));
+               
+               
+               String auxName;
+               if(nameTeachers.containsKey(rs.getInt(3))){
+                   auxName = nameTeachers.get(rs.getInt(3));
+               }
+               else{
+                   auxName = "No teacher";
+               }
+               
+               auxDB.setCol3(auxName);
+               nextPresentations.add(new DBRecords(auxDB));
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error : " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        
+        return nextPresentations;
+    }
     private ArrayList<String[]> getRatings() {
         ArrayList<String[]> ratings = new ArrayList<>();
 

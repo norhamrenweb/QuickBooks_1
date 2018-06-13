@@ -10,12 +10,25 @@ package Montessori;
  * @author nmohamed
  */
 public class DBRecords {
+
     private String col1;
     private String col2;
     private String col3;
     private String col4;
     private String col5;
     private String col6;
+    
+    public DBRecords(){
+        
+    }
+    public DBRecords(DBRecords r) {
+        this.col1 = r.getCol1();
+        this.col2 = r.getCol2();
+        this.col3 = r.getCol3();
+        this.col4 = r.getCol4();
+        this.col5 = r.getCol5();
+        this.col6 = r.getCol6();
+    }
 
     public String getCol1() {
         return col1;
@@ -65,7 +78,4 @@ public class DBRecords {
         this.col6 = col6;
     }
 
-   
-    
-    
 }
