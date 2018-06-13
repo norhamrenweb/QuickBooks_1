@@ -170,23 +170,26 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             while (rs.next()) {
                 numTotal = rs.getInt(1);
             }
-            
+             Format formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy ");
+      
            
-            if(termId != "4"){
-                consulta = " select firstday from schoolterm where termid =" + (Integer.parseInt(termIni)+1)  + " and yearid =" + yearId;
+            if(termId.equals("4")){
+                consulta = "select * from schoolYear where firstDay >= (select LastDay from schoolYear where yearId = "+yearId+") order by FirstDay";
                 rs = DBConect.ah.executeQuery(consulta);
-                 
-                while (rs.next()) {
-                    aux =  rs.getTimestamp("firstday");
+                
+                if (rs.next()) {
+                    aux =  rs.getTimestamp("FirstDay");
+                    this.dateNewTerm = formatter.format(aux);
                 }
             }
             else{
-                consulta = " select firstday from schoolterm where termid =1 and yearid =" + (Integer.parseInt(yearId)+1);
+                consulta = " select firstday from schoolterm where termid =" + (Integer.parseInt(termIni)+1)  + " and yearid =" + yearId;
                 rs = DBConect.ah.executeQuery(consulta);
                 
                 while (rs.next()) {
-                    aux =  rs.getTimestamp("firstday");
+                    aux =  rs.getTimestamp("firstday"); 
                 }
+                this.dateNewTerm = formatter.format(aux);
             }
         
         } catch (SQLException ex) {
@@ -195,8 +198,7 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             ex.printStackTrace(new PrintWriter(errors));
         }
         this.daysAbsent = numDays +" / "+numTotal;
-        Format formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy ");
-        this.dateNewTerm = formatter.format(aux); 
+       
         //   return "No Comments";
     }
 
