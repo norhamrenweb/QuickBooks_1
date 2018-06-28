@@ -1176,6 +1176,9 @@
             .namePresentation{
                 font-weight: bold;
             }
+            img{
+                width: auto;
+            }
         </style>
     </head>
 
