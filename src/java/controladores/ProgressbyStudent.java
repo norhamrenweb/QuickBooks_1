@@ -1016,8 +1016,8 @@ public class ProgressbyStudent {
     private ArrayList<Objective> getObjectivesTree(String[] subjectid, String termId) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
-
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select objective.term_id,name,id from public.objective where subject_id=" + subjectid[0] + " and reportcard <> true ORDER BY name ASC");
+            String consulta = "select objective.term_id,name,id from public.objective where subject_id=" + subjectid[0] + " and  (reportcard <> true or reportcard is null) ORDER BY name ASC";
+            ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
             while (rs1.next()) {
                 String aux = rs1.getString("term_id");
                 String[] termIds = aux.split(",");
