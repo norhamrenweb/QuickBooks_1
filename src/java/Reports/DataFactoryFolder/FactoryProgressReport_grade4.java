@@ -54,7 +54,7 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         String yearId = "" + hsr.getSession().getAttribute("yearId");
         String termId = "" + hsr.getSession().getAttribute("termId");
 
-        TreeMap<Integer , Profesor> mapTeachers = getTeachers(yearId, termId,idStudent);
+        TreeMap<Integer , Profesor> mapTeachers = getTeachers(yearId, termId,idStudent,1);
         HashMap<String, String> mapComentarios = getComments(yearId, termId, idStudent);
 
         for (Map.Entry<Integer, Profesor> entry : mapTeachers.entrySet()) {

@@ -83,7 +83,7 @@ public abstract class DataFactory {
         return name.substring(ini, name.length());
     }
      
-      protected TreeMap<Integer, Profesor> getTeachers(String yearId,String termId,String id) throws SQLException {
+      protected TreeMap<Integer, Profesor> getTeachers(String yearId,String termId,String id,int reportno) throws SQLException {
         TreeMap<Integer, Profesor> mapTeachers = new TreeMap<>();
         ArrayList<Profesor> listaProfesores = new ArrayList<>();
         TreeMap<String, String> mapNames = new TreeMap<>();
@@ -93,11 +93,25 @@ public abstract class DataFactory {
             ArrayList<String> classids = new ArrayList<>();
             ArrayList<String> coursesTitles = new ArrayList<>();
             ArrayList<Integer> rcs = new ArrayList<>();
-
-            String consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"
+            //the default query that shows all
+             String consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"
                     + "  on Roster.ClassID = Classes.ClassID"
                     + "  inner join Courses on  Classes.CourseID = Courses.CourseID"
                     + "  where Classes.Term"+termId+"=1 and Roster.StudentID = " + id + " and Classes.yearid = " + yearId + " and Courses.ReportCard = 1 order by courses.RCPlacement";
+//             the query that shows courses that has departemnt Reportcode1 or reportcard1,2
+            if(reportno == 1){
+             consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"
+                      
+                    + "  on Roster.ClassID = Classes.ClassID"
+                    + "  inner join Courses on  Classes.CourseID = Courses.CourseID"
+                    + "  where Classes.Term"+termId+"=1 and Roster.StudentID = " + id + " and Classes.yearid = " + yearId + " and Courses.ReportCard = 1 and (department='Report Codes 1' or department='Report Codes 1,2' )order by courses.RCPlacement";
+            }else if(reportno == 2){
+//                  the query that shows courses that has departemnt Reportcode2 or reportcard1,2
+               consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"
+                    + "  on Roster.ClassID = Classes.ClassID"
+                    + "  inner join Courses on  Classes.CourseID = Courses.CourseID"
+                    + "  where Classes.Term"+termId+"=1 and Roster.StudentID = " + id + " and Classes.yearid = " + yearId + " and Courses.ReportCard = 1 and (department='Report Codes 2' or department='Report Codes 1, 2' )order by courses.RCPlacement";
+        }
             ResultSet rs = DBConect.ah.executeQuery(consulta);
             while (rs.next()) {
                 staffids.add(rs.getInt("StaffID"));

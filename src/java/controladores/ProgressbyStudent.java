@@ -581,7 +581,7 @@ public class ProgressbyStudent {
                     
             consulta = "SELECT lessons.id,lessons.name,user_id FROM lesson_stud_att inner join lessons "
                     + "                                         on lessons.id = lesson_stud_att.lesson_id "
-                    + "                     where student_id = "+idStudent+" and timestamp >= '"+timestampNow+"' order by timestamp ASC";
+                    + "                     where student_id = "+idStudent+" and start >= '"+timestampNow+"' order by timestamp ASC";
             rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                DBRecords auxDB = new DBRecords();
@@ -729,7 +729,7 @@ public class ProgressbyStudent {
             String termid = "" + hsr.getSession().getAttribute("termId");
 
             String consulta = " SELECT id,name,description from objective where "
-                    + "year_id= " + yearid + " and term_id like '%" + termid + "%' and subject_id= '" + subjectid+"' and reportcard <> true";
+                    + "year_id= " + yearid + " and term_id like '%" + termid + "%' and subject_id= '" + subjectid+"' and COALESCE(reportcard, FALSE) = FALSE";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 DBRecords r = new DBRecords();
@@ -1449,7 +1449,7 @@ public class ProgressbyStudent {
         ArrayList<Objective> objectives = new ArrayList<>();
         try {
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0] + "' and reportcard <> true ORDER BY name ASC");
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0] + "' and COALESCE(reportcard, FALSE) = FALSE ORDER BY name ASC");
             while (rs1.next()) {
                 String[] ids = new String[1];
                 Objective sub = new Objective();

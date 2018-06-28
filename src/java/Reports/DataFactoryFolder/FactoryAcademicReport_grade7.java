@@ -80,7 +80,7 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         getDaysAbsent_And_DateNewTerm(termId, yearId, idStudent, nameTerm);
         this.term = nameTerm + " , " + nameYear + "#" + showGrade + "#" + this.daysAbsent + "#" + this.dateNewTerm;
 
-        TreeMap<Integer, Profesor> mapTeachers = getTeachers(yearId, termId, idStudent);
+        TreeMap<Integer, Profesor> mapTeachers = getTeachers(yearId, termId, idStudent,2);
         HashMap<String, String> mapComentarios = getComments(yearId, termId, idStudent);
         //  ArrayList<String> coursesAsignados = new ArrayList<>();
         ArrayList<String> lessons = new ArrayList<>();
@@ -214,7 +214,7 @@ select count(attendance) as daysPresent
                 and convert (varchar, DaySetupDate, 23) <= '#fechafinalT2#'*/
     private String getSuperComment(String yearId, String termId, String idStudent) {
         try {
-            String consulta = "select * from report_comments where supercomment=true and studentid = " + idStudent;
+            String consulta = "select * from report_comments where supercomment=true and term_id = '"+termId+"' and yearterm_id = '"+yearId+"' and studentid = " + idStudent;
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 return rs.getString("comment");

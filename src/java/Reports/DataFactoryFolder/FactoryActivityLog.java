@@ -103,7 +103,7 @@ public class FactoryActivityLog extends DataFactory {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
         }
-        if(os4.isEmpty()) os4.add(nameTeacher+"#Not Data#Not Data#Not Data#Not Data");
+        if(os4.isEmpty()) os4.add(nameTeacher+"#No Data#No Data#No Data#No Data");
         coll.add(new BeanWithList(null, os4, as4,nameUser, "", ini.toString(), fin.toString(), ""));
 
         return coll;
