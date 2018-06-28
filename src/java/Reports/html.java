@@ -127,7 +127,7 @@ public class html extends HttpServlet {
         
         boolean showGrade = false;
          DataFactory d;
-        if(reportType.equals("progress_Gr7_JP")){
+        if(reportType != null && reportType.equals("progress_Gr7_JP")){
              d = new FactoryAcademicReport_grade7("true");
         }
         else{
