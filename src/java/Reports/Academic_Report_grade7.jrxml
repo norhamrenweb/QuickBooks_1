@@ -440,7 +440,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<paragraph leftIndent="5"/>
+					<paragraph lineSpacing="Single" leftIndent="5" rightIndent="238"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{subject}.substring($F{subject}.indexOf("#",$F{subject}.indexOf("#",$F{subject}.indexOf("#")+1)+1)+1)]]></textFieldExpression>
 			</textField>
