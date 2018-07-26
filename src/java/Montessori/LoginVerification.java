@@ -18,6 +18,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 public class LoginVerification {
     
@@ -103,13 +104,13 @@ public class LoginVerification {
         return mapGroups;
     }
     
-     public int fromGroup(int staffid) throws SQLException{
-        int aux  = -1;
+     public ArrayList<Integer> fromGroup(int staffid) throws SQLException{
+        ArrayList<Integer> aux  = new ArrayList<>();
         String query = "select groupid from SecurityGroupMembership where StaffID = " + staffid;
        // ResultSet rs = SQLQuery(query);
        ResultSet rs = DBConect.ah.executeQuery(query);
             while(rs.next()){
-                aux = rs.getInt("groupid");
+                aux.add(rs.getInt("groupid"));
             }
       
         return aux;

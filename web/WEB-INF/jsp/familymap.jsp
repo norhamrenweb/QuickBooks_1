@@ -18,26 +18,23 @@
     </head>
     <body>
         <h1>Mapping Families</h1>
-        
-         <!--COMBO SECCION--> 
-         <form:form id="form" method="POST" >                  
-                           <div class="col-xs-3 center-block">
-                               <label class="control-label">
- 
-</label>
 
-                                       <select class="form-control select-subsection" id="subsection" name="TXTsubsection" >
-                                           <jstl:forEach items="${allfamily}" var="family" >
-                                               <option value="${family.familyName}" selected></option>
-                                           </jstl:forEach>
-                                           <jstl:forEach var="family" items="${allfamily}">
-                                               <option value="${family.familyName}" ></option>
-                                           </jstl:forEach>
-                                       </select>
-  
-                               <input type="hidden" class="btn btn-default" name='accion' id="comboEquipment" value="comboEquipment"/>
-                           </div>
-                  </form:form>             
-                           
+         <!--COMBO SECCION--> 
+                 <form:form id="form" method="POST" >                  
+                                       <div class="col-xs-3 center-block">
+                                               <label class="control-label"></label>
+                                                       <select class="form-control select-subsection" id="subsection" name="TXTsubsection" >
+                                                               <jstl:forEach items="${allfamily}" var="family" >
+                                                                       <option value="${family.familyName}" selected></option>
+                                                                   </jstl:forEach>
+                                                               <jstl:forEach var="family" items="${allfamily}">
+                                                                       <option value="${family.familyName}" ></option>
+                                                                   </jstl:forEach>
+                                                               </select>
+                      
+                                                   <input type="hidden" class="btn btn-default" name='accion' id="comboEquipment" value="comboEquipment"/>
+                                               </div>
+                                  </form:form>             
+                                   
     </body>
 </html>

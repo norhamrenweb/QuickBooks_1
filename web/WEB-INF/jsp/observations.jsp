@@ -540,7 +540,7 @@
                                     disableFoto = "disabled='disabled'"
                                     colorDisabled = "style='color:  #bab8b8 !important;'";
                                 }
-                                if (userId !== idTeacher && userType !== 0) {
+                                if (userId !== idTeacher && userType === 1) {
                                     disable = "disabled='disabled'";
                                     colorDisabled = "style='color:  #bab8b8 !important;'";
                                 }
@@ -817,10 +817,11 @@
             /////////////////////////////////////////////
 
             function newcomment(idobjective, comment, steps, rating) {
+                var boolGrade = !$("#cbUseGrade").is(":checked");
                 $.ajax({
                     type: 'POST',
                     url: 'newcomment.htm?idstudent=' + studentid + '&idobjective=' + idobjective + '&comment=' + comment
-                            + '&step=' + steps + '&rating=' + rating,
+                            + '&step=' + steps + '&rating=' + rating + '&cbUseGrade=' + boolGrade,
                     datatype: "json",
                     contentType: "application/json",
                     success: function (data) {
@@ -1039,6 +1040,8 @@
                             $("#recommend").prop("checked", "true");
                         else
                             $("#recommend").prop("checked", "");
+                        
+                        $("#semana0").children().last().hide();
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
@@ -2454,6 +2457,9 @@
                                         <label>Steps</label>
                                     </div>
                                     <div id="steps_show" class="col-xs-12 text-left"></div>
+                                    <div class="col-xs-12 text-left hidden" style="margin-top: 15px;">
+                                        <input type="checkbox" id="cbUseGrade" value="cbUseGrade" checked> <label for="cbUseGrade">Use for grade</label>
+                                    </div>
                                 </div>
                                 <div class="col-xs-6">
 

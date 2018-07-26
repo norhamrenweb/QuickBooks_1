@@ -78,25 +78,28 @@ public class Homepage extends MultiActionController {
         } else {
 
             HashMap<Integer, String> mapGroups = login.getSecurityGroupID();
-            int userGroup = login.fromGroup(user.getId());
-
-            if (mapGroups.containsKey(userGroup)) {
-                String groupName = mapGroups.get(userGroup);
-                switch (groupName) {
-                    case "MontessoriTeacher":
-                        user.setType(1);
-                        break;
-                    case "MontessoriAdmin":
-                        user.setType(0);
-                        break;
-                    case "MontessoriHead":
-                        user.setType(2);
-                        break;
-                }
-            } else {
-                result = false;
+            ArrayList<Integer> arrayGroupIds = login.fromGroup(user.getId());
+            int i = 0;
+            user.setType(-1);
+            while(i < arrayGroupIds.size()){
+                int userGroup = arrayGroupIds.get(i);
+                if (mapGroups.containsKey(userGroup)) {
+                    String groupName = mapGroups.get(userGroup);
+                    switch (groupName) {
+                        case "MontessoriHead":
+                            user.setType(2);
+                            break;
+                        case "MontessoriAdmin":
+                            user.setType(0);
+                            break;
+                        case "MontessoriTeacher":
+                            user.setType(1);
+                            break;
+                    }
+                } 
+                i++;
             }
-            if (result == true) {
+            if (user.getType() != -1) {
                 ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
                 String message = "welcome user";
                 int termId = 1, yearId = 1;

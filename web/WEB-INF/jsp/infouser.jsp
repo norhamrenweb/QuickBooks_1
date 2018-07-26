@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.ttf"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.svg"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.eot"/>">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.wott"/>">
+<!--    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.wott"/>">-->
 
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/style.css" />"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/menu-lateral.css"/>"/>
@@ -71,7 +71,8 @@
     <%--        <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/dataTables/dataTables.uikit.css"/>" />--%>
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/dataTables/jquery.dataTables.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/dataTables/jquery.dataTables_themeroller.css"/>" />
-    <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/css/estilocolegio.css" />"/>
+
+    
 
     <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/jquery.dataTables.js"/>" ></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/dataTables.bootstrap.js"/>" ></script>
@@ -90,12 +91,10 @@
     $(document).ready(function () {
         setInterval(function () {
             alert("Your session is going to be end by 5 min, Please click OK and continue")
-        }, 3000000);
-
+        }, 6000000);
         var yearId = ${yearId};
         var termId = ${termId};
         var listYear = ${yearsids};
-
         for (var i = 0; i < listYear.length; ++i) {
             $("#yearSelect").append("<option value='" + listYear[i].x + "'>" + listYear[i].y + "</option>");
         }
@@ -114,7 +113,9 @@
         terms();
         $("#termSelect").val(termId);
 
+
     });
+  
     function sortSelect(selectname) {
 
         var options = $('#' + selectname + ' option');
@@ -159,7 +160,6 @@
             success: function (data) {
                 $('#btnYearmTerm').text(nameYearAndTerm);
                 refresh();
-
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);

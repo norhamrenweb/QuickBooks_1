@@ -90,6 +90,9 @@
                 });
 
                 $('#table_id').DataTable({
+                    language: {
+                        "search": "Buscar:"
+                    },
                     aLengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
                     iDisplayLength: 5,
                     order: [[5, "desc"]],

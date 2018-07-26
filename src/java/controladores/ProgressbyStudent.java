@@ -581,7 +581,7 @@ public class ProgressbyStudent {
                     
             consulta = "SELECT lessons.id,lessons.name,user_id FROM lesson_stud_att inner join lessons "
                     + "                                         on lessons.id = lesson_stud_att.lesson_id "
-                    + "                     where student_id = "+idStudent+" and start >= '"+timestampNow+"' order by timestamp ASC";
+                    + "                     where student_id = "+idStudent+" and start >= '"+timestampNow+"' order by start ASC";
             rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                DBRecords auxDB = new DBRecords();
@@ -598,7 +598,8 @@ public class ProgressbyStudent {
                }
                
                auxDB.setCol3(auxName);
-               nextPresentations.add(new DBRecords(auxDB));
+               if(nextPresentations.size() < 7) // posibnle mejopra mostrando desplegables.
+                    nextPresentations.add(new DBRecords(auxDB));
             }
 
         } catch (SQLException ex) {
@@ -887,8 +888,9 @@ public class ProgressbyStudent {
                     }
                 }
             }
-            consulta = "select * from progress_report a where comment_date = (select max(comment_date) from public.progress_report where objective_id = a.objective_id and generalcomment = false and student_id ='" + studentid + "') and generalcomment = false and student_id ='" + studentid + "'";
-            ResultSet rs7 = DBConect.eduweb.executeQuery(consulta);
+           consulta = "select * from progress_report a where comment_date = (select max(comment_date) from public.progress_report where objective_id = a.objective_id and generalcomment = false and student_id ='" + studentid + "') and generalcomment = false and student_id ='" + studentid + "'";
+
+           ResultSet rs7 = DBConect.eduweb.executeQuery(consulta);
             HashMap<String, String> mapDBR = new HashMap<String, String>();
 
             while (rs7.next()) {
@@ -969,13 +971,13 @@ public class ProgressbyStudent {
             //aqui 2
             for (Subject x : subs)//subjects)
             {
-                Nodetreegrid<String> nodeC = new Nodetreegrid<String>("L" + i, x.getName(), "", "", "", "");
+                Nodetreegrid<String> nodeC = new Nodetreegrid<String>("L" + i, "<img src='../recursos/js/treeGrid/subject.svg' style='width:18px;height:18px;padding-right:5px;'>"+x.getName(), "", "", "", "");
                 rootNode.addChild(nodeC);
                 i++;
                 ArrayList<Objective> obj = this.getObjectivesTree(x.getId(), idTerm);
                 for (Objective y : obj) {
                     String[] id = y.getId();
-                    Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C" + z, y.getName(), finalRatings.get(studentid + "_" + id[0]), plannedLess.get(studentid + "_" + id[0]), archiveLess.get(studentid + "_" + id[0]), percents.get(studentid + "_" + id[0]) /*this.getpercent(id[0],""+studentid)*/);
+                    Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C" + z, "<img src='../recursos/js/treeGrid/target.svg' style='width:18px;height:18px;padding-right:5px;'>"+y.getName(), finalRatings.get(studentid + "_" + id[0]), plannedLess.get(studentid + "_" + id[0]), archiveLess.get(studentid + "_" + id[0]), percents.get(studentid + "_" + id[0]) /*this.getpercent(id[0],""+studentid)*/);
                     nodeC.addChild(nodeA);
                     z++;
                     for (DBRecords l : steps) {
@@ -988,7 +990,7 @@ public class ProgressbyStudent {
                                 //     if (k.getCol4().equalsIgnoreCase(y.getName())) {
                                 String[] match = y.getId();
                                 if (k.getCol6().equalsIgnoreCase(match[0])) {
-                                    Nodetreegrid<String> nodeB = new Nodetreegrid<String>(k.getCol1(), k.getCol2(), "", "", "", k.getCol5());
+                                    Nodetreegrid<String> nodeB = new Nodetreegrid<String>(k.getCol1(), "<img src='../recursos/js/treeGrid/step.svg' style='width:18px;height:18px;padding-right:5px;'>"+k.getCol2(), "", "", "", k.getCol5());
                                     nodeA.addChild(nodeB);
                                 }
                             }
@@ -1526,11 +1528,10 @@ public class ProgressbyStudent {
             while (rs1.next()) {
                 auxTotal.put(rs1.getInt("obj_id"), rs1.getInt("count"));
             }
-
             ResultSet rs2 = DBConect.eduweb.executeQuery("select comment_date,step_id,objective_id,student_id from progress_report a where comment_date = (select max(comment_date) from public.progress_report where student_id = a.student_id AND objective_id = a.objective_id and generalcomment = false) and generalcomment = false");
             while (rs2.next()) {
                 String stsdone = rs2.getString("step_id");
-                if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
+                if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("") && auxTotal.containsKey(rs2.getInt("objective_id"))) {
                     List<String> ste = Arrays.asList(stsdone.split(","));
                     double percent = (ste.size() * 100) / auxTotal.get(rs2.getInt("objective_id"));
                     result.put(rs2.getInt("student_id") + "_" + rs2.getInt("objective_id"), "" + percent);

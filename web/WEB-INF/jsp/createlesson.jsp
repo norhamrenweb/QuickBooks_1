@@ -462,6 +462,7 @@
                         }
                         
                         sortSelect("subject");
+                        $("#subject").val(-1);
                     }
                 }
             }
@@ -480,6 +481,7 @@
                                     +json[i].id[0]+"'>"+json[i].name+"</option>");
                             
                         }
+                        $("#objective").val(-1);
                     }
                 }
             }

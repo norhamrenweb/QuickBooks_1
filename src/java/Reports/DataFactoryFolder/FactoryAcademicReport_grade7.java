@@ -214,7 +214,20 @@ select count(attendance) as daysPresent
                 and convert (varchar, DaySetupDate, 23) <= '#fechafinalT2#'*/
     private String getSuperComment(String yearId, String termId, String idStudent) {
         try {
-            String consulta = "select * from report_comments where supercomment=true and term_id = '"+termId+"' and yearterm_id = '"+yearId+"' and studentid = " + idStudent;
+                    String termQuery ;
+        
+        switch (termId) {
+            case "2":
+                termQuery = " and (term_id = 1 or term_id = 2) ";
+                break;
+            case "4":
+                termQuery = " and (term_id = 3 or term_id = 4) ";
+                break;
+            default:
+                termQuery = " and term_id = " + termId;
+                break;
+        }
+            String consulta = "select * from report_comments where supercomment=true "+termQuery+" and yearterm_id = '"+yearId+"' and studentid = " + idStudent +"ORDER BY date_created DESC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 return rs.getString("comment");
@@ -260,9 +273,22 @@ select count(attendance) as daysPresent
 
     private HashMap<String, String> getComments(String yearId, String termId, String id) throws SQLException {
         HashMap<String, String> mapComment = new HashMap<>();
-
+        String termQuery ;
+        
+        switch (termId) {
+            case "2":
+                termQuery = " and (term_id = 1 or term_id = 2) ";
+                break;
+            case "4":
+                termQuery = " and (term_id = 3 or term_id = 4) ";
+                break;
+            default:
+                termQuery = " and term_id = " + termId;
+                break;
+        }
+                
         try {
-            String consulta = "select * from report_comments where supercomment=false and studentid = " + id + " and term_id = " + termId + " and yearterm_id=" + yearId + "order by date_created DESC";
+            String consulta = "select * from report_comments where supercomment=false and studentid = " + id + termQuery + " and yearterm_id=" + yearId + "order by date_created DESC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 mapComment.put(rs.getString("subject_id"), rs.getString("comment"));

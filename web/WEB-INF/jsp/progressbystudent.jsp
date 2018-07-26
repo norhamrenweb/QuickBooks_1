@@ -398,11 +398,13 @@
                 $('#Objectivestracking').tab('show');
                 $('#tg').empty();
                 $('#tg').treegrid({
-                    initialState: 'collapsed',
+                    
                     data: prog.children,
                     idField: 'id',
                     treeField: 'name',
                     fitColumns: true,
+                    loadonce: false,
+                    initialState: 'collapsed',
 //                    nowrap: false, // this will allow the text wrap but it looks bad
                     columns: [[
                             {title: 'Name', field: 'name', width: '63%', formatter: function (value) {
@@ -418,14 +420,14 @@
                 });
                 $(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").each(function (index) {
                     //  console.log( index + ": " + $( this ).text() );
-                    var img;
+                  /*  var img;
                     if ($(this).parent().parent().parent().attr("node-id")[0] === "L")
-                        img = "subject.svg";
+                        img = "subject.png";
                     else if ($(this).parent().parent().parent().attr("node-id")[0] === "C")
-                        img = "target.svg";
+                        img = "target.png";
                     else
-                        img = "step.svg";
-
+                        img = "step.png";
+*/
                     var text = $(this).text();
                     var fontSize = 12;
                     var fontHeight = 1.58;
@@ -452,7 +454,7 @@
                             }
                         }
                     }
-                    jQuery("<img/> ").prependTo($(this)).attr({src: '../recursos/js/treeGrid/' + img + '', width: '16px', height: '18px', style: 'padding-right:5px;'});
+                   // jQuery("<img/> ").prependTo($(this)).attr({src: '../recursos/js/treeGrid/' + img + '', width: '16px', height: '18px', style: 'padding-right:5px;'});
 
                 });
                 //jQuery("<img/>").prependTo(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").attr({src: '../recursos/js/treeGrid/target.svg', width:'16px', height:'18px'});
@@ -461,7 +463,7 @@
 
 
                 $('#loadingmessage').hide();
-                // $("#tg").treegrid('collapseAll');
+               // $("#tg").treegrid('collapseAll');
                 $('.datagrid-row').mouseover(function () {
                     $(this).attr("title", $(this).first().children().first().children().last().children().last().text());
                 });

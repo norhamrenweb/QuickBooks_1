@@ -1263,3 +1263,18 @@ be a descendant of the grid when it is being dragged.
 .fc-unthemed .fc-list-empty {
   /* theme will provide own background */
   background-color: #eee; }
+
+#legendPresentations li{  
+    display:  flex;
+    align-items:  center;
+    margin-left: 10px;
+}
+#legendPresentations li:nth-child(1) {
+     margin-left: 0px;
+}
+
+#legendPresentations li>label{  
+    padding: 0px;
+    margin:  0px;
+    margin-left: 3px;
+}

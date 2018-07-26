@@ -66,7 +66,7 @@ public class ObservationControlador {
         if ((new SessionCheck()).checkSession(hsr)) {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
-         HashMap<String, String> mapPersons = new HashMap<String, String>();
+        HashMap<String, String> mapPersons = new HashMap<String, String>();
         ModelAndView mv = new ModelAndView("observations");
         List<Level> grades = new ArrayList();
         try {
@@ -84,10 +84,10 @@ public class ObservationControlador {
                 x.setName(rs.getString("GradeLevel"));
                 grades.add(x);
             }
-            
+
             ResultSet rs7 = DBConect.ah.executeQuery("select * from Staff");
             // ResultSet rs4 = st.executeQuery(consulta);
-           
+
             String first, lastName, staffID;
             while (rs7.next()) {
                 first = rs7.getString("firstName");
@@ -101,10 +101,10 @@ public class ObservationControlador {
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
-        
+
         mv.addObject("gradelevels", grades);
         mv.addObject("students", Students.getStudents(log));
-        mv.addObject("teachers",new Gson().toJson(mapPersons));
+        mv.addObject("teachers", new Gson().toJson(mapPersons));
         return mv;
     }
 
@@ -131,7 +131,7 @@ public class ObservationControlador {
     public String getsubjects(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String id = hsr.getParameter("idstudent");
         JSONObject json = new JSONObject();
-        List<Subject> subs = ProgressbyStudent.getSubjects(Integer.parseInt(id),hsr);
+        List<Subject> subs = ProgressbyStudent.getSubjects(Integer.parseInt(id), hsr);
         Subject sub = new Subject();
         sub.setName("Select Subject");
         String[] s = new String[1];
@@ -248,6 +248,7 @@ public class ObservationControlador {
         comment = comment.replace("\"", "\"\"");
         String rating = hsr.getParameter("rating");
         String step = hsr.getParameter("step");
+        String cbUseGrade = hsr.getParameter("cbUseGrade");
         HttpSession sesion;
         sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
@@ -275,9 +276,15 @@ public class ObservationControlador {
                 ratingid = "" + rs1.getInt("id");
             }
             if (ratingid != null) {
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + ratingid + "','" + idstudent + "','" + idobjective + "',true,'" + step + "','" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + ratingid + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
             } else {
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + idstudent + "','" + idobjective + "',true,'" + step + "','" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
+            }
+            if (!cbUseGrade.equals("true")) {
+                String aux = "UPDATE progress_report"
+                        + " SET rating_id=" + ratingid + " , step_id= '" + step
+                        + "' WHERE objective_id=" + idobjective + " and lesson_id is not null";
+                DBConect.eduweb.executeUpdate(aux);
             }
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -459,7 +466,7 @@ public class ObservationControlador {
             //
             // byte[] buf = new byte[inStream.available()];
             inStream.read(buf);
-             String imagen = Base64.getEncoder().encodeToString(buf);
+            String imagen = Base64.getEncoder().encodeToString(buf);
             json.put("imagen", imagen);
             json.put("ext", mimeType);
             ftpClient.disconnect();
