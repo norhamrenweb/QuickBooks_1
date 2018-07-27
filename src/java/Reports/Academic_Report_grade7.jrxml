@@ -273,7 +273,7 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="Table 10_TH" mode="Opaque" backcolor="#69B86A">
+	<style name="Table 10_CH" mode="Opaque" backcolor="#BFE1FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 			<topPen lineWidth="0.5" lineColor="#000000"/>
@@ -282,7 +282,7 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="Table 10_CH" mode="Opaque" backcolor="#BFE1FF">
+	<style name="Table 10_TH" mode="Opaque" backcolor="#69B86A">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 			<topPen lineWidth="0.5" lineColor="#000000"/>
@@ -409,7 +409,7 @@
 				<textFieldExpression><![CDATA[$F{term}.split("#")[0]]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="27" y="30" width="120" height="116" uuid="ec9c3c85-f8d3-4615-a7ec-b122e41ad808"/>
+				<reportElement x="0" y="0" width="147" height="146" uuid="ec9c3c85-f8d3-4615-a7ec-b122e41ad808"/>
 				<imageExpression><![CDATA["https://ah-zaf.client.renweb.com/ftp/ah-zaf/Customization/-96/AuburnHouse.PNG"]]></imageExpression>
 			</image>
 		</band>
@@ -431,21 +431,24 @@
 				<reportElement x="32" y="23" width="448" height="20" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" uuid="75d6d2c2-685d-42c3-a886-20bf478ae51a"/>
 				<textFieldExpression><![CDATA[$F{subject}.split("#")[1]]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement stretchType="ElementGroupHeight" x="30" y="40" width="532" height="40" isPrintWhenDetailOverflows="true" uuid="615996bb-79d2-4b88-acbc-29bf5637cad0"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ContainerHeight" x="30" y="40" width="270" height="40" isPrintWhenDetailOverflows="true" uuid="615996bb-79d2-4b88-acbc-29bf5637cad0">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="cm"/>
+					<printWhenExpression><![CDATA[!$F{rating}.isEmpty()]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle">
-					<paragraph lineSpacing="Single" leftIndent="5" rightIndent="238"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<paragraph lineSpacing="Single" leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{subject}.substring($F{subject}.indexOf("#",$F{subject}.indexOf("#",$F{subject}.indexOf("#")+1)+1)+1)]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement key="" positionType="Float" stretchType="ElementGroupHeight" x="325" y="40" width="87" height="40" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="057a6cdd-63f7-4eb9-9865-ab220a5acb6b">
+				<reportElement key="" positionType="Float" stretchType="ContainerHeight" x="300" y="40" width="112" height="40" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="057a6cdd-63f7-4eb9-9865-ab220a5acb6b">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 10_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 10_CH"/>
@@ -456,7 +459,7 @@
 					<datasetRun subDataset="Dataset1" uuid="91ca51a0-44bd-4825-b7ed-f75175e89c4c">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{objectives})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="87" uuid="55b2ef05-46b0-414c-8904-dc319f46d118">
+					<jr:column width="112" uuid="55b2ef05-46b0-414c-8904-dc319f46d118">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
 						<jr:tableHeader style="Table 10_TH" height="10">
 							<box>
@@ -468,15 +471,18 @@
 						</jr:tableHeader>
 						<jr:detailCell style="Table 10_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="87" height="30" uuid="000e0f3a-cdb7-432d-8df8-e301c7e1adf5"/>
+								<reportElement stretchType="ContainerHeight" x="0" y="0" width="112" height="30" uuid="000e0f3a-cdb7-432d-8df8-e301c7e1adf5">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="cm"/>
+								</reportElement>
 								<box>
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement verticalAlignment="Middle">
-									<paragraph leftIndent="5"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font size="8"/>
+									<paragraph leftIndent="5" rightIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{_THIS}]]></textFieldExpression>
 							</textField>
@@ -485,7 +491,7 @@
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="" positionType="Float" stretchType="ElementGroupHeight" x="412" y="40" width="150" height="40" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="eb97fad8-84d7-44a3-90eb-c307a70e6e25">
+				<reportElement key="" positionType="Float" x="412" y="40" width="150" height="40" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="eb97fad8-84d7-44a3-90eb-c307a70e6e25">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 10_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 10_CH"/>
@@ -500,18 +506,9 @@
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 						<jr:tableHeader style="Table 10_TH" height="10" rowSpan="1">
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
-							<staticText>
-								<reportElement x="0" y="0" width="30" height="10" forecolor="#FFFFFF" uuid="619b74cc-c02a-439a-86ee-95de00afd3a9"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-									<font size="7" pdfEncoding=""/>
-									<paragraph lineSpacing="1_1_2"/>
-								</textElement>
-								<text><![CDATA[]]></text>
-							</staticText>
 							<rectangle>
-								<reportElement x="14" y="3" width="4" height="4" uuid="3978c638-e42b-441d-a8e5-d663e494291b">
+								<reportElement x="12" y="2" width="7" height="6" uuid="3978c638-e42b-441d-a8e5-d663e494291b">
 									<property name="com.jaspersoft.studio.unit.width" value="cm"/>
-									<property name="com.jaspersoft.studio.unit.height" value="cm"/>
 								</reportElement>
 								<graphicElement>
 									<pen lineWidth="0.5"/>
@@ -537,9 +534,8 @@
 						<jr:tableHeader style="Table 10_TH" height="10" rowSpan="1">
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 							<ellipse>
-								<reportElement x="13" y="3" width="4" height="4" uuid="5bdf3e9c-be90-4719-a95a-39118d8d18de">
+								<reportElement x="12" y="2" width="7" height="6" uuid="5bdf3e9c-be90-4719-a95a-39118d8d18de">
 									<property name="com.jaspersoft.studio.unit.width" value="cm"/>
-									<property name="com.jaspersoft.studio.unit.height" value="cm"/>
 								</reportElement>
 								<graphicElement>
 									<pen lineWidth="0.5"/>
@@ -564,18 +560,9 @@
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 						<jr:tableHeader style="Table 10_TH" height="10" rowSpan="1">
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
-							<staticText>
-								<reportElement x="0" y="0" width="30" height="10" forecolor="#FFFFFF" uuid="16bb3ba3-63f8-4b59-a413-1fcece9fb0ec"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
-									<font size="7"/>
-									<paragraph lineSpacing="1_1_2"/>
-								</textElement>
-								<text><![CDATA[]]></text>
-							</staticText>
 							<rectangle>
-								<reportElement x="13" y="3" width="4" height="4" backcolor="#69B86A" uuid="95d54fa5-9379-46f8-9158-8577974ef3c9">
+								<reportElement x="12" y="2" width="7" height="6" backcolor="#69B86A" uuid="95d54fa5-9379-46f8-9158-8577974ef3c9">
 									<property name="com.jaspersoft.studio.unit.width" value="cm"/>
-									<property name="com.jaspersoft.studio.unit.height" value="cm"/>
 								</reportElement>
 								<graphicElement>
 									<pen lineWidth="0.5" lineColor="#FFFFFF"/>
@@ -609,9 +596,8 @@
 								<text><![CDATA[]]></text>
 							</staticText>
 							<ellipse>
-								<reportElement x="13" y="3" width="4" height="4" backcolor="#69B86A" uuid="97e16002-a3d6-4da8-93ca-344da1477255">
+								<reportElement x="12" y="2" width="7" height="6" backcolor="#69B86A" uuid="97e16002-a3d6-4da8-93ca-344da1477255">
 									<property name="com.jaspersoft.studio.unit.width" value="cm"/>
-									<property name="com.jaspersoft.studio.unit.height" value="cm"/>
 								</reportElement>
 								<graphicElement>
 									<pen lineWidth="0.5" lineColor="#FFFFFF"/>
@@ -642,25 +628,18 @@
 								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
-							<staticText>
-								<reportElement x="0" y="0" width="30" height="10" forecolor="#FFFFFF" uuid="bf1ed40b-d952-4c2d-8c7b-7e1feeda1538"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
-									<font size="7"/>
-									<paragraph lineSpacing="1_1_2"/>
-								</textElement>
-								<text><![CDATA[]]></text>
-							</staticText>
 							<rectangle>
-								<reportElement x="13" y="3" width="4" height="4" backcolor="#69B86A" uuid="feb97463-5adc-4501-b98f-047011996308">
+								<reportElement x="12" y="2" width="7" height="6" backcolor="#69B86A" uuid="feb97463-5adc-4501-b98f-047011996308">
 									<property name="com.jaspersoft.studio.unit.width" value="cm"/>
-									<property name="com.jaspersoft.studio.unit.height" value="cm"/>
 								</reportElement>
 								<graphicElement>
 									<pen lineWidth="0.5" lineColor="#FFFFFF"/>
 								</graphicElement>
 							</rectangle>
 							<ellipse>
-								<reportElement x="14" y="4" width="2" height="2" backcolor="#69B86A" uuid="e905c439-3d4d-4685-b936-9863c9b0a388"/>
+								<reportElement x="13" y="3" width="5" height="4" backcolor="#69B86A" uuid="e905c439-3d4d-4685-b936-9863c9b0a388">
+									<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+								</reportElement>
 								<graphicElement>
 									<pen lineWidth="0.5" lineColor="#FFFFFF"/>
 								</graphicElement>
@@ -689,6 +668,22 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<text><![CDATA[%]]></text>
 			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ContainerHeight" x="30" y="40" width="532" height="40" isPrintWhenDetailOverflows="true" uuid="9b968848-f3db-4a75-9a79-a8e9f7cf6ac2">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="cm"/>
+					<printWhenExpression><![CDATA[$F{rating}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<paragraph lineSpacing="Single" leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subject}.substring($F{subject}.indexOf("#",$F{subject}.indexOf("#",$F{subject}.indexOf("#")+1)+1)+1)]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>

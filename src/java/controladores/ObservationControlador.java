@@ -7,6 +7,8 @@ package controladores;
 
 import Montessori.CommentObjective;
 import Montessori.DBConect;
+import static Montessori.DBConect.eduweb;
+import Montessori.DBRecords;
 import Montessori.Level;
 import Montessori.Objective;
 import Montessori.Observation;
@@ -27,8 +29,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,10 +51,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -182,10 +190,21 @@ public class ObservationControlador {
         String idstudent = hsr.getParameter("idstudent");
         String idobjective = hsr.getParameter("idobjective");
         ArrayList<CommentObjective> comments = new ArrayList<>();
+        HttpSession sesion;
+        sesion = hsr.getSession();
+        String termId = "" + sesion.getAttribute("termId");
+        String yearId = "" + sesion.getAttribute("yearId");
         JSONObject json = new JSONObject();
         try {
-            String consulta = "select * from progress_report inner join rating on progress_report.rating_id = rating.id where objective_id=" + idobjective + " and student_id=" + idstudent + " ORDER BY comment_date DESC";
+            HashMap<Integer, String> lessons = new HashMap<>();
+            String consulta = "select id,name from lessons where term_id=" + termId + " and yearterm_id=" + yearId;
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            while (rs.next()) {
+                lessons.put(rs.getInt(1), rs.getString(2));
+            }
+
+            consulta = "select * from progress_report inner join rating on progress_report.rating_id = rating.id where objective_id=" + idobjective + " and student_id=" + idstudent + " and term_id=" + termId + " and yearterm_id=" + yearId + " and lesson_id is null ORDER BY comment_date DESC";
+            rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 CommentObjective c
                         = new CommentObjective(rs.getString("id"),
@@ -194,7 +213,7 @@ public class ObservationControlador {
                                 rs.getString("objective_id"), rs.getBoolean("generalcomment"),
                                 rs.getString("step_id"), rs.getString("createdby"),
                                 rs.getString("modifyby"), rs.getString("term_id"),
-                                rs.getString("yearterm_id"), rs.getString("colorcode"));
+                                rs.getString("yearterm_id"), rs.getString("colorcode"), lessons.get(rs.getInt("linklesson_id")));
                 comments.add(c);
             }
             for (CommentObjective c : comments) {
@@ -270,6 +289,8 @@ public class ObservationControlador {
                 step = rString.toString();
                 step = step.substring(0, step.length() - 1);
             }
+            checkFirstCommentLessons(idstudent, idobjective, comment, ratingid, step, "" + sesion.getAttribute("yearId"), "" + sesion.getAttribute("termId"), "" + user.getId(), hsr);
+
             String consulta = "select id from rating where name = '" + rating + "'";
             ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
             while (rs1.next()) {
@@ -280,10 +301,11 @@ public class ObservationControlador {
             } else {
                 DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
             }
+
             if (!cbUseGrade.equals("true")) {
                 String aux = "UPDATE progress_report"
                         + " SET rating_id=" + ratingid + " , step_id= '" + step
-                        + "' WHERE objective_id=" + idobjective + " and lesson_id is not null";
+                        + "' WHERE objective_id=" + idobjective + " and lesson_id is not null and student_id=" + idstudent + " and term_id=" + sesion.getAttribute("termId") + " and yearterm_id=" + sesion.getAttribute("yearId");
                 DBConect.eduweb.executeUpdate(aux);
             }
         } catch (SQLException ex) {
@@ -291,6 +313,61 @@ public class ObservationControlador {
             return "error";
         }
         return "succes";
+    }
+
+    private void checkFirstCommentLessons(String idStudent, String idObjective, String comment, String rating, String step, String yearId, String termId, String userId, HttpServletRequest hsr) throws SQLException {
+
+        String auxCheck1 = "select * from  progress_report where objective_id=" + idObjective + " and lesson_id is not null and student_id=" + idStudent + " and term_id=" + termId + " and yearterm_id=" + yearId;
+        ResultSet rs3 = DBConect.eduweb.executeQuery(auxCheck1);
+        ArrayList<DBRecords> list = new ArrayList<>();
+        DBRecords auxDB = new DBRecords();
+        ArrayList<Integer> listLessonWithoutProgress = new ArrayList<>();
+
+        while (rs3.next()) {
+            auxDB.setCol1("" + rs3.getInt("rating_id"));//rating 
+            auxDB.setCol2("" + rs3.getInt("lesson_id"));//lesson
+            auxDB.setCol3(rs3.getString("comment"));//comment
+            auxDB.setCol4(rs3.getString("step_id"));//step_id
+            auxDB.setCol5("" + rs3.getInt("createdby"));//created by
+            auxDB.setCol6("" + rs3.getInt("level_id"));
+            list.add(new DBRecords(auxDB));
+        }
+
+        String auxCheck2 = "select id from lessons where id NOT IN (select lesson_id from progress_report where lesson_id is not null and  student_id=" + idStudent + " and term_id=" + termId + " and yearterm_id=" + yearId+") and objective_id=" + idObjective;
+        rs3 = DBConect.eduweb.executeQuery(auxCheck2);
+        while (rs3.next()) {
+            listLessonWithoutProgress.add(rs3.getInt(1));
+        }
+        for (Integer listLesson1 : listLessonWithoutProgress) {
+            DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,rating_id,comment,lesson_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),7,' ','" + listLesson1 + "','" + idStudent + "','" + idObjective + "',false,'','" + userId + "'," + termId + "," + yearId + ")");
+            //clone
+            DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,rating_id,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id,linklesson_id) values (now(),7,' ','" + idStudent + "','" + idObjective + "',false,'','" + userId + "'," + termId + "," + yearId + "," + listLesson1 + ")");
+
+        }
+        for (DBRecords list1 : list) {
+
+            String checkLink = "select * from  progress_report where linklesson_id=" + list1.getCol2() +"  and  student_id=" + idStudent + " and term_id=" + termId + " and yearterm_id=" + yearId;
+//            ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(hsr.getServletContext());
+//            Object beanobject = contexto.getBean("dataSource");
+//            
+//            DriverManagerDataSource dataSource =  (DriverManagerDataSource) beanobject;
+//            Connection c =  dataSource.getConnection();
+//            Statement stat_aux = c.createStatement();
+//
+            ResultSet rs4 = DBConect.eduweb.executeQuery(checkLink);
+            if (!rs4.next()) { // noe existe el comentario asociado
+                String testClone = "insert into progress_report"
+                        + "(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id,linklesson_id)"
+                        + " values (now(),'" + list1.getCol3() + "','" + list1.getCol1() + "','" + idStudent + "','" + idObjective
+                        + "',false,'" + list1.getCol4() + "','" + list1.getCol5() + "'," + termId + "," + yearId
+                        + "," + list1.getCol2() + ")";
+                DBConect.eduweb.executeUpdate(testClone);
+
+            } else { // existe
+
+            }
+        }
+
     }
 
     @RequestMapping("/observations/loadComentsStudent.htm")

@@ -21,6 +21,7 @@
             var error = ${DatainBBDD};
             var mapStudents = new Map();
             $(document).ready(function () {
+             //   sortSelect("subject");
                 $("#linkRecommend").show();
                 $("#studentsName").val("");
                 $('#origen option').each(function () {
@@ -34,7 +35,13 @@
                 $("#objectiveName").val($("#objective :selected").text());
                 $("#subjectName").val($("#subject :selected").text());
                 $("#levelName").val($("#level :selected").text());
-
+                
+                var subjectId = $("#subject :selected").val();
+                
+                sortSelect("subject");
+                $("#subject").val(subjectId);
+                
+                
                 $('#loadingmessage').hide();
                 var userLang = navigator.language || navigator.userLanguage;
                 var myDate = new Date();
@@ -464,6 +471,7 @@
                                     + json[i].id[0] + "'>" + json[i].name + "</option>");
                         }
                         sortSelect("subject");
+                        $('#subject').val(-1);
                     }
                 }
             }
@@ -521,6 +529,7 @@
                                  $('#subject').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                             }
                         });
+                        sortSelect("subject");
                         $('#objective').empty();
                         var pos1 = objective[0].toString();
                          $.each(objectives, function (i, item) {
@@ -535,6 +544,7 @@
                                  $('#objective').append('<option value= "' + objectives[i].id + '">' + objectives[i].name + '</option>');
                             }
                         });
+                         sortSelect("objective");
                         $('#content').empty();
                         var pos1 = content.toString();
                          $.each(contents, function (i, item) {
@@ -594,6 +604,7 @@
                     $('#objective').val("");
                     $('#subject').val("");
                     sortSelect("subject");
+                    $('#subject').val(-1);
                     ajax.send("");
                 }
             }

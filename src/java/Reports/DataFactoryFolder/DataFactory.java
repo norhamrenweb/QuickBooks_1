@@ -70,13 +70,13 @@ public abstract class DataFactory {
 
         this.term = nameTerm + " / " + nameYear;
     }
-     protected String limpiarNameAsignatura(String name) {
+     protected String limpiarNameAsignatura(String name) { //SOLO POR QUE LAS ASIGNATURAS NO ESTABAN LIMPIAS
         int ini = 0;
         int posEspacio = name.indexOf(" ");
         if (posEspacio == -1) {
             return name;
         }
-        if (name.substring(0, posEspacio).toUpperCase().contains("GR") || name.substring(0, posEspacio).toUpperCase().contains("JP") || name.substring(0, posEspacio).toUpperCase().contains("PP")) {
+        if (!name.substring(0, posEspacio).toUpperCase().contains("GROSS") && ( name.substring(0, posEspacio).toUpperCase().contains("GR") || name.substring(0, posEspacio).toUpperCase().contains("JP") || name.substring(0, posEspacio).toUpperCase().contains("PP"))) {
             ini = posEspacio + 1;
         }
 
@@ -100,18 +100,17 @@ public abstract class DataFactory {
                     + "  where Classes.Term"+termId+"=1 and Roster.StudentID = " + id + " and Classes.yearid = " + yearId + " and Courses.ReportCard = 1 order by courses.RCPlacement";
 //             the query that shows courses that has departemnt Reportcode1 or reportcard1,2
             if(reportno == 1){
-             consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"
-                      
+             consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"      
                     + "  on Roster.ClassID = Classes.ClassID"
                     + "  inner join Courses on  Classes.CourseID = Courses.CourseID"
-                    + "  where Classes.Term"+termId+"=1 and Roster.StudentID = " + id + " and Classes.yearid = " + yearId + " and Courses.ReportCard = 1 and (department='Report Codes 1' or department='Report Codes 1,2' )order by courses.RCPlacement";
+                    + "  where Classes.Term"+termId+"=1 and Roster.StudentID = " + id + " and Classes.yearid = " + yearId + " and Courses.ReportCard = 1 and (department='Report Codes 1' or department='Report Codes 1, 2' )order by courses.RCPlacement";
             }else if(reportno == 2){
 //                  the query that shows courses that has departemnt Reportcode2 or reportcard1,2
                consulta = "select StaffID, Classes.ClassID , Courses.Title ,Courses.CourseID,courses.RCPlacement from Roster inner join Classes"
                     + "  on Roster.ClassID = Classes.ClassID"
                     + "  inner join Courses on  Classes.CourseID = Courses.CourseID"
                     + "  where Classes.Term"+termId+"=1 and Roster.StudentID = " + id + " and Classes.yearid = " + yearId + " and Courses.ReportCard = 1 and (department='Report Codes 2' or department='Report Codes 1, 2' )order by courses.RCPlacement";
-        }
+            }
             ResultSet rs = DBConect.ah.executeQuery(consulta);
             while (rs.next()) {
                 staffids.add(rs.getInt("StaffID"));

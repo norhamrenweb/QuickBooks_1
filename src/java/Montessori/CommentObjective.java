@@ -24,9 +24,9 @@ public class CommentObjective {
     private String term_id;
     private String yearterm_id;
     private String color;
-
+    private String namePresentation;
     
-    public CommentObjective(String id, String rating_id, String student_id, String comment, String comment_date, String objective_id, boolean generalcomment, String step_id, String createdby, String modifyby, String term_id, String yearterm_id,String c) {
+    public CommentObjective(String id, String rating_id, String student_id, String comment, String comment_date, String objective_id, boolean generalcomment, String step_id, String createdby, String modifyby, String term_id, String yearterm_id,String c,String np) {
         this.id = id;
         this.rating_id = rating_id;
         this.student_id = student_id;
@@ -40,6 +40,15 @@ public class CommentObjective {
         this.term_id = term_id;
         this.yearterm_id = yearterm_id;
         this.color = c;
+        this.namePresentation = np;
+    }
+
+    public String getNamePresentation() {
+        return namePresentation;
+    }
+
+    public void setNamePresentation(String namePresentation) {
+        this.namePresentation = namePresentation;
     }
     
     public String getColor() {

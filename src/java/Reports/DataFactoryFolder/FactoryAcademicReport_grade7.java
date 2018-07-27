@@ -130,7 +130,8 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
     private void getDaysAbsent_And_DateNewTerm(String termId, String yearId, String studentID, String nameTerm) {
         String consulta = "";
         ResultSet rs;
-         Timestamp aux = null;
+        Timestamp aux = null;
+        String schoolCode =  "AH";//IMPORTANT!! NO ESTAMOS TENIENDO ENCUENTA ESTO
         int numDays=0,numTotal=0;
         try {
 
@@ -153,18 +154,18 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             while (rs.next()) {
                 endDate = "" + rs.getTimestamp(1);
             }
-           
-            consulta = "select count(Absent) from AttendanceDaySummary "
-                    + " where studentid =" +studentID+" and \"date\" >= '"
+ 
+            consulta = "select count(*) from AttendanceDaySummary "
+                    + " where absent =1 and SchoolCode= '"+schoolCode+"' and studentid =" +studentID+" and \"date\" >= '"
                     + startDate +"'  and \"date\" <=  '"+endDate+"'";
             rs = DBConect.ah.executeQuery(consulta);
             while (rs.next()) {
                 numDays = rs.getInt(1);
             }
-            
-            consulta = "select count(attendance) as daysPresent"
-                    + " from daysetup where DayType = 0"
-                +"and convert (varchar, DaySetupDate, 23) >= '"+startDate
+    
+            consulta = "select count(*) as daysPresent"
+                    + " from daysetup where attendance=1 and SchoolCode='"+schoolCode+"' and DayType = 0 "
+                +" and convert (varchar, DaySetupDate, 23) >= '"+startDate
                 +"' and convert (varchar, DaySetupDate, 23) <= '"+endDate+"'";
             rs = DBConect.ah.executeQuery(consulta);
             while (rs.next()) {

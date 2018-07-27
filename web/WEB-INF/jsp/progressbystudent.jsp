@@ -276,7 +276,7 @@
                                 $("#nextPresentations").append(html_Li);
                             }
 
-                            $('#loadingmessage').hide();
+                            
 
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
@@ -287,6 +287,8 @@
 
                     });
                 }
+                $('#loadingmessage').hide();
+                
             }
             function funcionCallBackloadGeneralcomments()
             {

@@ -66,7 +66,7 @@ public class FactoryProgressReport_grade4 extends DataFactory {
                 aux = mapComentarios.get(key);
             }
 
-            String nameAsignatura = limpiarNameAsignatura(value.getAsignatura());
+            String nameAsignatura = value.getAsignatura(); //limpiarNameAsignatura(value.getAsignatura());
             String auxOs = nameAsignatura + "#" + value.getFirstName() + "#" + aux;
             os4.add(auxOs);
         }

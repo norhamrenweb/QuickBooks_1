@@ -29,6 +29,7 @@
 
             $(document).ready(function () {
                 $("#infousuario").addClass("navbar-fixed-top");
+               
                 ////////////////////////////////////////////NUEVO//////////
                 var userLang = navigator.language || navigator.userLanguage;
                 var myDate = new Date();
@@ -249,8 +250,12 @@
                     $('#steps_show').empty();
                     $('#steps_show2').empty();
                     $('#semana0').empty();
-                    if (this.value !== 'vacio')
+                    if (this.value !== 'vacio'){
                         getobjectives(this.value);
+                        sortSelect("objectives");
+                         
+                $("#objectives").val("vacio");
+                    }
                     else {
                         $("#objectives").attr("disabled", true);
                         $("#divNotas").hide();
@@ -887,6 +892,8 @@
                         });
                         $("#subjects").attr("disabled", false);
                         $("#objectives").attr("disabled", true);
+                        sortSelect("subjects");
+                        $("#subjects").val("vacio");
                         $("#divNotas").hide();
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -998,6 +1005,11 @@
                                 tresPuntosComment = "";
                             if (textLastStep.length < 70)
                                 tresPuntosStep = "";
+                            
+                            var namePresentation ="";
+                            if(comment.namePresentation !== undefined)
+                                namePresentation = "<p><strong>Name Presentation: </strong> "+comment.namePresentation+"</p>";
+                            
                             $('#semana0').append("<div class='divAddNotas' id='" + comment.id + "'> \n\
                                                     <div class='project project-radius project-" + colorRating + "'>\n\
                                                         <div class='shape' id='" + comment.id + "shape'>	\n\
@@ -1005,11 +1017,12 @@
                                                         </div>\n\
                                                         <div class='project-content'>\n\
                                                             <h3 class='lead'> <strong style='color:" + color + "'>" + comment.rating_name + "</strong><br>" + date.substring(0, 10) + "         <span class='badge badge-pill badge-success'>Presentation</span></h3>\n\
-                                                                <p><strong>Comment: </strong>" + cc.substring(0, 120) + " " + tresPuntosComment + "\
-                                                                    <div><strong>Last Step: </strong>" + textLastStep.substring(0, 70) + " " + tresPuntosStep + "\n\
-                                                                    </div>\n\
+     "+namePresentation+"\
+\n\
+    <p><strong>Comment: </strong>" + cc.substring(0, 120) + " " + tresPuntosComment + "</p>\
+                                                                    <p><strong>Last Step: </strong>" + textLastStep.substring(0, 70) + " " + tresPuntosStep + "\n\
+                                                                    </p>\n\
                                                                 \n\
-                                                                </p>\n\
                                                                 <div class = 'col-xs-12 text-center sinpadding optionsObservationsNotas' >\n\
                                                                     <div class='col-xs-4 text-center sinpadding'>\n\
                                                                             <button onclick='mostrarComentario(" + comment.id + ")' type='button' class='btn btn-link showMore'>                         \n\
@@ -1041,7 +1054,7 @@
                         else
                             $("#recommend").prop("checked", "");
                         
-                        $("#semana0").children().last().hide();
+                        //$("#semana0").children().last().hide();
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);
