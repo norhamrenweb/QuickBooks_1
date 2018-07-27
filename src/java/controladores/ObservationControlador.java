@@ -279,11 +279,11 @@ public class ObservationControlador {
                 DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + ratingid + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
             } else {
                 DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
-            }
+            } 
             if (!cbUseGrade.equals("true")) {
                 String aux = "UPDATE progress_report"
                         + " SET rating_id=" + ratingid + " , step_id= '" + step
-                        + "' WHERE objective_id=" + idobjective + " and lesson_id is not null";
+                        + "' WHERE objective_id=" + idobjective + " and lesson_id is not null and student_id="+idstudent +" and term_id="+sesion.getAttribute("termId")+" and yearterm_id="+sesion.getAttribute("yearId");
                 DBConect.eduweb.executeUpdate(aux);
             }
         } catch (SQLException ex) {
