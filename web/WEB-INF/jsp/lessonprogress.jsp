@@ -78,6 +78,7 @@
 
                 $('#table_progress').DataTable(
                         {
+                            language: idioma,
                             "searching": false,
                             "paging": false,
                             "aaSorting": [[1, "asc"]],
