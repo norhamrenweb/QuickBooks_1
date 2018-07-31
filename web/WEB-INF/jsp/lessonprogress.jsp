@@ -16,7 +16,7 @@
     <%@ include file="infouser.jsp" %>
     <%--<%@ include file="menu.jsp" %>--%>
 
-    <head>
+    <head> 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.css"/>"/>
@@ -78,6 +78,7 @@
 
                 $('#table_progress').DataTable(
                         {
+                            language: idioma,
                             "searching": false,
                             "paging": false,
                             "aaSorting": [[1, "asc"]],

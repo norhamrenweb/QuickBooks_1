@@ -83,12 +83,50 @@
     <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/dataTables.jqueryui.js"/>" ></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/dataTables.material.js"/>" ></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/dataTables.uikit.js"/>" ></script>
+    <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/LanguageJSON/Spanish.json"/>" ></script>
 </head>
 
 <script>
 
     var ajax;
+     var idioma = '<spring:message code="etiq.idioma"/>'; 
+             
+             if (idioma === 'spanish')
+             {
+                var idioma = '{"url": "../recursos/js/dataTables/LanguageJSON/Spanish.json"}';
+             }else if(idioma === 'english'){
+                var idioma = '';
+             }else if(idioma === 'arabic'){
+                var idioma = {
+	"sProcessing":     "Procesando...",
+	"sLengthMenu":     "Mostrar _MENU_ registros",
+	"sZeroRecords":    "No se encontraron resultados",
+	"sEmptyTable":     "Ningún dato disponible en esta tabla",
+	"sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+	"sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+	"sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+	"sInfoPostFix":    "",
+	"sSearch":         "???:",
+	"sUrl":            "",
+	"sInfoThousands":  ",",
+	"sLoadingRecords": "Cargando...",
+	"oPaginate": {
+		"sFirst":    "Primero",
+		"sLast":     "Último",
+		"sNext":     "Siguiente",
+		"sPrevious": "Anterior"
+	},
+	"oAria": {
+		"sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+		"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+	}
+};
+             }
+    
     $(document).ready(function () {
+        
+       
+        
         setInterval(function () {
             alert("Your session is going to be end by 5 min, Please click OK and continue")
         }, 6000000);
