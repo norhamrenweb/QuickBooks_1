@@ -21,6 +21,7 @@
 
 
             $(document).ready(function () {
+                
                 // $('#loadingmessage').hide();
                 $('#generateReport').attr('disabled', true);
 

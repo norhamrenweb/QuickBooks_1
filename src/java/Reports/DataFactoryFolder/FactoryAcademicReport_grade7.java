@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.servlet.ServletContext;
@@ -171,7 +172,7 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
             while (rs.next()) {
                 numTotal = rs.getInt(1);
             }
-             Format formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy ");
+             Format formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy ", Locale.US);
       
            
             if(termId.equals("4")){

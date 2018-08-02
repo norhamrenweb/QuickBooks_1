@@ -232,7 +232,7 @@ public class ProgressbyStudent {
 
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
 
-             while (rs.next()) {
+            while (rs.next()) {
                 String[] s = rs.getString("term_id").split(",");
                 boolean encontro = false;
                 int i = 0;
@@ -247,21 +247,21 @@ public class ProgressbyStudent {
                     DBRecords r = new DBRecords();
                     r.setCol1(rs.getString("name"));
                     r.setCol3(rs.getString("id"));
-                    
+
                     Integer rId = rs.getInt("rating_id");
-                    if(rId == 0){
+                    if (rId == 0) {
                         rId = 7;
-                    }     
-                    r.setCol2(""+rId);      
-                    
+                    }
+                    r.setCol2("" + rId);
+
                     Integer lId = rs.getInt("level_id");
-                    if(lId == 0){
+                    if (lId == 0) {
                         lId = 6;
                     }
                     r.setCol5("" + lId);
                     result.add(r);
                 }
-             }
+            }
             /*String consulta = " SELECT * from objective where reportcard= 'true' and year_id= " + yearid + " and subject_id = " + subjectid + " order by name ASC";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
@@ -550,11 +550,11 @@ public class ProgressbyStudent {
 
         // List<Subject> subjects = new ArrayList<>();
         subjects = getSubjects(student.getId_students(), hsr);
-        
+
         String info = new Gson().toJson(student);
         String sub = new Gson().toJson(subjects);
         String prueba2 = new Gson().toJson(prueba);
-        
+
         obj.put("info", info);
         obj.put("sub", sub);
         obj.put("prueba", prueba2);
@@ -564,42 +564,44 @@ public class ProgressbyStudent {
         return obj.toString();
     }
 
-    private ArrayList<DBRecords> getNextPresentations(int idStudent){
+ 
+
+    private ArrayList<DBRecords> getNextPresentations(int idStudent) {
         ArrayList<DBRecords> nextPresentations = new ArrayList<>(); // col1 = id Presentation 
-                                                                    // col2 = name Presentation
-                                                                    // col3 = name Teacher
+        // col2 = name Presentation
+        // col3 = name Teacher
         Timestamp timestampNow = new Timestamp(System.currentTimeMillis());
         try {
-            HashMap<Integer,String> nameTeachers = new HashMap<>();
+            HashMap<Integer, String> nameTeachers = new HashMap<>();
             String consulta = "select  PersonID,FirstName,LastName  from Person";
-            ResultSet rs =DBConect.ah.executeQuery(consulta);
-            
+            ResultSet rs = DBConect.ah.executeQuery(consulta);
+
             while (rs.next()) {
-              String name =  rs.getString(2)+" "+rs.getString(3);
-              nameTeachers.put(rs.getInt(1),name);
+                String name = rs.getString(2) + " " + rs.getString(3);
+                nameTeachers.put(rs.getInt(1), name);
             }
-                    
+
             consulta = "SELECT lessons.id,lessons.name,user_id FROM lesson_stud_att inner join lessons "
                     + "                                         on lessons.id = lesson_stud_att.lesson_id "
-                    + "                     where student_id = "+idStudent+" and start >= '"+timestampNow+"' order by start ASC";
+                    + "                     where student_id = " + idStudent + " and start >= '" + timestampNow + "' order by start ASC";
             rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
-               DBRecords auxDB = new DBRecords();
-               auxDB.setCol1(""+rs.getInt(1));
-               auxDB.setCol2(rs.getString(2));
-               
-               
-               String auxName;
-               if(nameTeachers.containsKey(rs.getInt(3))){
-                   auxName = nameTeachers.get(rs.getInt(3));
-               }
-               else{
-                   auxName = "No teacher";
-               }
-               
-               auxDB.setCol3(auxName);
-               if(nextPresentations.size() < 7) // posibnle mejopra mostrando desplegables.
+                DBRecords auxDB = new DBRecords();
+                auxDB.setCol1("" + rs.getInt(1));
+                auxDB.setCol2(rs.getString(2));
+
+                String auxName;
+                if (nameTeachers.containsKey(rs.getInt(3))) {
+                    auxName = nameTeachers.get(rs.getInt(3));
+                } else {
+                    auxName = "No teacher";
+                }
+
+                auxDB.setCol3(auxName);
+                if (nextPresentations.size() < 7) // posibnle mejopra mostrando desplegables.
+                {
                     nextPresentations.add(new DBRecords(auxDB));
+                }
             }
 
         } catch (SQLException ex) {
@@ -608,9 +610,10 @@ public class ProgressbyStudent {
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
         }
-        
+
         return nextPresentations;
     }
+
     private ArrayList<String[]> getRatings() {
         ArrayList<String[]> ratings = new ArrayList<>();
 
@@ -638,6 +641,8 @@ public class ProgressbyStudent {
         ArrayList<String[]> levels = new ArrayList<>();
 
         try {
+            ArrayList<String> listLevel = new ArrayList<>();
+
             String consulta = " SELECT DISTINCT * from levels ";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
@@ -730,7 +735,7 @@ public class ProgressbyStudent {
             String termid = "" + hsr.getSession().getAttribute("termId");
 
             String consulta = " SELECT id,name,description from objective where "
-                    + "year_id= " + yearid + " and term_id like '%" + termid + "%' and subject_id= '" + subjectid+"' and COALESCE(reportcard, FALSE) = FALSE";
+                    + "year_id= " + yearid + " and term_id like '%" + termid + "%' and subject_id= '" + subjectid + "' and COALESCE(reportcard, FALSE) = FALSE";
             ResultSet rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
                 DBRecords r = new DBRecords();
@@ -888,9 +893,9 @@ public class ProgressbyStudent {
                     }
                 }
             }
-           consulta = "select * from progress_report a where comment_date = (select max(comment_date) from public.progress_report where objective_id = a.objective_id and generalcomment = false and student_id ='" + studentid + "') and generalcomment = false and student_id ='" + studentid + "'";
+            consulta = "select * from progress_report a where comment_date = (select max(comment_date) from public.progress_report where objective_id = a.objective_id and generalcomment = false and student_id ='" + studentid + "') and generalcomment = false and student_id ='" + studentid + "'";
 
-           ResultSet rs7 = DBConect.eduweb.executeQuery(consulta);
+            ResultSet rs7 = DBConect.eduweb.executeQuery(consulta);
             HashMap<String, String> mapDBR = new HashMap<String, String>();
 
             while (rs7.next()) {
@@ -971,13 +976,13 @@ public class ProgressbyStudent {
             //aqui 2
             for (Subject x : subs)//subjects)
             {
-                Nodetreegrid<String> nodeC = new Nodetreegrid<String>("L" + i, "<img src='../recursos/js/treeGrid/subject.svg' style='width:18px;height:18px;padding-right:5px;'>"+x.getName(), "", "", "", "");
+                Nodetreegrid<String> nodeC = new Nodetreegrid<String>("L" + i, "<img src='../recursos/js/treeGrid/subject.svg' style='width:18px;height:18px;padding-right:5px;'>" + x.getName(), "", "", "", "");
                 rootNode.addChild(nodeC);
                 i++;
                 ArrayList<Objective> obj = this.getObjectivesTree(x.getId(), idTerm);
                 for (Objective y : obj) {
                     String[] id = y.getId();
-                    Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C" + z, "<img src='../recursos/js/treeGrid/target.svg' style='width:18px;height:18px;padding-right:5px;'>"+y.getName(), finalRatings.get(studentid + "_" + id[0]), plannedLess.get(studentid + "_" + id[0]), archiveLess.get(studentid + "_" + id[0]), percents.get(studentid + "_" + id[0]) /*this.getpercent(id[0],""+studentid)*/);
+                    Nodetreegrid<String> nodeA = new Nodetreegrid<String>("C" + z, "<img src='../recursos/js/treeGrid/target.svg' style='width:18px;height:18px;padding-right:5px;'>" + y.getName(), finalRatings.get(studentid + "_" + id[0]), plannedLess.get(studentid + "_" + id[0]), archiveLess.get(studentid + "_" + id[0]), percents.get(studentid + "_" + id[0]) /*this.getpercent(id[0],""+studentid)*/);
                     nodeC.addChild(nodeA);
                     z++;
                     for (DBRecords l : steps) {
@@ -990,7 +995,7 @@ public class ProgressbyStudent {
                                 //     if (k.getCol4().equalsIgnoreCase(y.getName())) {
                                 String[] match = y.getId();
                                 if (k.getCol6().equalsIgnoreCase(match[0])) {
-                                    Nodetreegrid<String> nodeB = new Nodetreegrid<String>(k.getCol1(), "<img src='../recursos/js/treeGrid/step.svg' style='width:18px;height:18px;padding-right:5px;'>"+k.getCol2(), "", "", "", k.getCol5());
+                                    Nodetreegrid<String> nodeB = new Nodetreegrid<String>(k.getCol1(), "<img src='../recursos/js/treeGrid/step.svg' style='width:18px;height:18px;padding-right:5px;'>" + k.getCol2(), "", "", "", k.getCol5());
                                     nodeA.addChild(nodeB);
                                 }
                             }
@@ -1144,21 +1149,21 @@ public class ProgressbyStudent {
     @RequestMapping("/progressbystudent/updateObjectivesReport.htm")
     @ResponseBody
     public String updateObjectivesReport(@RequestBody DBRecords dbRec, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        
+
         String newId = dbRec.getCol1();
         String id_objective = dbRec.getCol2();
         String nameColumn = dbRec.getCol3();
         String idStudent = dbRec.getCol4();
         String yearid = "" + hsr.getSession().getAttribute("yearId");
         String termid = "" + hsr.getSession().getAttribute("termId");
-        
+
         ModelAndView mv = new ModelAndView("progressbystudent");
-        try { 
-            String test = "update progress_report set "+nameColumn+"=" + newId + ",comment_date = now() where yearterm_id =" +  yearid  + " and term_id =" +termid+ " and objective_id=" + id_objective +" and student_id="+idStudent ;
-       //     String ifTest= "select * from progress_report where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective +" and student_id="+idStudent;
-           
-            if (!DBConect.eduweb.executeQuery("select * from progress_report where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective +" and student_id="+idStudent).next()) {
-                test = "insert into progress_report(comment_date,"+nameColumn+",objective_id,yearterm_id,term_id,student_id)values(now(),"+newId+","+id_objective+","+yearid+","+termid+","+idStudent+")";
+        try {
+            String test = "update progress_report set " + nameColumn + "=" + newId + ",comment_date = now() where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective + " and student_id=" + idStudent;
+            //     String ifTest= "select * from progress_report where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective +" and student_id="+idStudent;
+
+            if (!DBConect.eduweb.executeQuery("select * from progress_report where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective + " and student_id=" + idStudent).next()) {
+                test = "insert into progress_report(comment_date," + nameColumn + ",objective_id,yearterm_id,term_id,student_id)values(now()," + newId + "," + id_objective + "," + yearid + "," + termid + "," + idStudent + ")";
             }
             DBConect.eduweb.executeUpdate(test);
 
@@ -1169,8 +1174,7 @@ public class ProgressbyStudent {
         }
         return "success";
     }
-    
-    
+
     @RequestMapping("/progcal.htm")
     @ResponseBody
     public ModelAndView progcal(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {

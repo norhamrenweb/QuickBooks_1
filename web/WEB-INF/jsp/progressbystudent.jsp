@@ -81,6 +81,11 @@
                     pestaña = $(this).text();
                 });
 
+
+                $('#collapseTree').on('click', function () {
+                    $("#tg").treegrid('collapseAll');
+                });
+
                 $('#table_students tbody').on('click', 'tr', function () {
 
                     data = table.row(this).data();
@@ -276,7 +281,7 @@
                                 $("#nextPresentations").append(html_Li);
                             }
 
-                            
+
 
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
@@ -288,7 +293,7 @@
                     });
                 }
                 $('#loadingmessage').hide();
-                
+
             }
             function funcionCallBackloadGeneralcomments()
             {
@@ -400,7 +405,6 @@
                 $('#Objectivestracking').tab('show');
                 $('#tg').empty();
                 $('#tg').treegrid({
-                    
                     data: prog.children,
                     idField: 'id',
                     treeField: 'name',
@@ -422,14 +426,14 @@
                 });
                 $(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").each(function (index) {
                     //  console.log( index + ": " + $( this ).text() );
-                  /*  var img;
-                    if ($(this).parent().parent().parent().attr("node-id")[0] === "L")
-                        img = "subject.png";
-                    else if ($(this).parent().parent().parent().attr("node-id")[0] === "C")
-                        img = "target.png";
-                    else
-                        img = "step.png";
-*/
+                    /*  var img;
+                     if ($(this).parent().parent().parent().attr("node-id")[0] === "L")
+                     img = "subject.png";
+                     else if ($(this).parent().parent().parent().attr("node-id")[0] === "C")
+                     img = "target.png";
+                     else
+                     img = "step.png";
+                     */
                     var text = $(this).text();
                     var fontSize = 12;
                     var fontHeight = 1.58;
@@ -456,7 +460,7 @@
                             }
                         }
                     }
-                   // jQuery("<img/> ").prependTo($(this)).attr({src: '../recursos/js/treeGrid/' + img + '', width: '16px', height: '18px', style: 'padding-right:5px;'});
+                    // jQuery("<img/> ").prependTo($(this)).attr({src: '../recursos/js/treeGrid/' + img + '', width: '16px', height: '18px', style: 'padding-right:5px;'});
 
                 });
                 //jQuery("<img/>").prependTo(".datagrid-btable tbody>tr td[field*='name'] >div>span[class*='tree-title']").attr({src: '../recursos/js/treeGrid/target.svg', width:'16px', height:'18px'});
@@ -465,7 +469,7 @@
 
 
                 $('#loadingmessage').hide();
-               // $("#tg").treegrid('collapseAll');
+                // $("#tg").treegrid('collapseAll');
                 $('.datagrid-row').mouseover(function () {
                     $(this).attr("title", $(this).first().children().first().children().last().children().last().text());
                 });
@@ -559,6 +563,8 @@
                         });
                         $("#divTerms").append("<div class='radio' style='margin-left: 5%;'><label><input onclick='selectTreeByTerm(-1)' type='radio' name='opt' vlaue='all' checked>All</label></div>");
 
+                        $("#divTerms :first").css("margin-left","0px"); // cambiar que se haga en el css
+                        
                         $("#nextPresentations").empty();
                         for (var i = 0; i < nextPresentations.length; i++) {
                             var html_Li = " <div class='col-xs-12 nextPresentation'>\n\
@@ -1183,6 +1189,9 @@
             img{
                 width: auto;
             }
+            .radio{  
+                margin: 0px;
+            }
         </style>
     </head>
 
@@ -1272,306 +1281,317 @@
                                 </div>
                             </div>
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="progress">
-                                <div class="col-xs-12">
-                                    <div class="row"><p class="text-info"><Strong>PP:</Strong> Presentations planned.</p></div>
-                                    <div class="row">
-                                        <!--<p class="text-info"><Strong>PD:</Strong> Presentations done.</p>-->
-                                        <div class="row" style="display: flex;justify-content: space-between;">
-                                            <p class="col-xs-4 text-info"><strong>PD:</strong> Presentations done.</p>
-                                            <div class="col-xs-8" id="divTerms" style="display: flex;justify-content: end;align-items: baseline;">
+                                <div class="col-xs-12 sinpadding">
+                                    <div class="col-xs-12 sinpadding"><p class="text-info"><Strong>PP:</Strong> Presentations planned.</p></div>
+                                    <div class="col-xs-12 sinpadding"><p class="text-info"><Strong>PD:</Strong> Presentations done.</p></div>
+                                    <!--<div class="col-xs-12 sinpadding">
+                                    <!--<p class="text-info"><Strong>PD:</Strong> Presentations done.</p>-->
+                                    <!--<div class="row" style="display: flex;justify-content: space-between;">
+                                        <p class="col-xs-4 text-info"><strong>PD:</strong> Presentations done.</p>
+                                      
 
-                                                <!--<div class="form-check">
-                                                    <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" type="radio">
-                                                    <label class="form-check-label" for="exampleRadios1">Term1</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="exampleRadios" id="exampleRadios2" value="option2" type="radio">
-                                                    <label class="form-check-label" for="exampleRadios2">Term2</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" type="radio">
-                                                    <label class="form-check-label" for="exampleRadios1">Term3</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="exampleRadios" id="exampleRadios2" value="option2" type="radio">
-                                                    <label class="form-check-label" for="exampleRadios2">Term4</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" checked="" type="radio">
-                                                    <label class="form-check-label" for="exampleRadios1">All</label>
-                                                </div>-->
-                                            </div>
-                                        </div>
+                                    <!--<div class="form-check">
+                                        <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" type="radio">
+                                        <label class="form-check-label" for="exampleRadios1">Term1</label>
                                     </div>
-                                </div>
-                                <div class="col-xs-12">
-                                    <div class="row" id="containerTG">
-                                        <table id="tg" class="easyui-treegrid"></table>
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="exampleRadios" id="exampleRadios2" value="option2" type="radio">
+                                        <label class="form-check-label" for="exampleRadios2">Term2</label>
                                     </div>
-                                </div>     
-                            </div>
-                            <div role="tabpanel" class="col-xs-12 tab-pane" id="gradebook">
-                                <div class="col-xs-12">
-                                    <div class="col-xs-10" >
-                                        <Label>Subject</Label>
-                                        <button type='button' class='btn-link editResource' onclick='showCommentSubject()' data-toggle='tooltip' data-placement='bottom' value='edit' id='saveCommentSubject'>
-                                            <i class='glyphicon glyphicon-chevron-down'></i>
-                                        </button>
-                                        <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
-                                        </select>
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" type="radio">
+                                        <label class="form-check-label" for="exampleRadios1">Term3</label>
                                     </div>
-                                    <!--<div class=" col-xs-2 center-block form-group paddingLabel">
-                                        <input type="button" name="saveCommentSubject" value="save" class="btn btn-success" id="saveCommentSubject" data-target=".bs-example-modal-lg" onclick="showCommentSubject()"/> 
-                                        
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="exampleRadios" id="exampleRadios2" value="option2" type="radio">
+                                        <label class="form-check-label" for="exampleRadios2">Term4</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="exampleRadios" id="exampleRadios1" value="option1" checked="" type="radio">
+                                        <label class="form-check-label" for="exampleRadios1">All</label>
                                     </div>-->
-                                </div>
-                                <div class="col-xs-12 hidden" id="divCommentSubject">
-                                    <div class="col-xs-10 center-block form-group">
 
-                                        <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject"maxlength="1000"  spellcheck="true"></textarea>
-                                    </div>             
-                                    <div class=" col-xs-2" id="saveLengthDiv">
-                                        <div class="col-xs-12">
-                                            <input type="button" name="saveCommentSubject" value="save" class="btn btngreen_1" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
-                                        </div>
-                                        <div class="col-xs-12" id="commentLength">
 
+
+                                    <div class="col-xs-12 sinpadding" id="collapseTree">
+                                        <div class="col-xs-9 sinpadding text-left" id="divTerms" style="display: flex;justify-content: end;align-items: baseline;"></div>
+                                        <div class="col-xs-3 sinpadding text-right">
+                                            <p class="text-info" style="margin-bottom: 2px;cursor: pointer;">
+                                                Collapse tree
+                                                <span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
+                                            </p>
                                         </div>
                                     </div>
+                                </div>  
+                            
+                            <div class="col-xs-12">
+                                <div class="row" id="containerTG">
+                                    <table id="tg" class="easyui-treegrid"></table>
                                 </div>
-
-                                <div class="col-xs-12 hidden" id="divNotObjective">
-                                    The selected subject does not have objectives
-                                </div>
-
-                                <div class="col-xs-12 hidden" id="divTableObjective">
-                                    <table id="tableobjective" class="display">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Description</th>
-                                                <th>Most recent comment</th>
-                                                <th>Last update date</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead> 
-                                    </table>
-
-                                </div>
-                                <div id="confirmsaveSubject" class="modal fade" role="dialog">
-                                    <div class="modal-dialog">
-
-                                        <!-- Modal content-->
-                                        <div class="modal-content">
-                                            <div class="modal-header modal-header-delete">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title">comment saved</h4>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div> 
-
-                            </div>
-                            <div role="tabpanel" class="col-xs-12 tab-pane" id="observations">
-                                <div class="col-xs-12 text-center">
-                                    <h2>Enter a classroom observation</h2>
-                                </div>
-                                <div class='col-xs-6 form-group'>
-                                    <label class="control-label" for="fecha">Date</label>
-                                    <div class='input-group date' id='fecha'>
-                                        <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 center-block form-group">
-                                    <label class="control-label">Observation type</label>
-                                    <select class="form-control" name="observationtype" id="observationtype" >
-                                        <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
-                                        <option value="Physical">Physical</option>
-                                        <option value="Intellectual">Intellectual</option>
-                                        <option value="Literacy">Literacy</option>
-                                        <option value="Emotional">Emotional</option>
-                                        <option value="Social">Social</option>
+                            </div>     
+                        </div>
+                        <div role="tabpanel" class="col-xs-12 tab-pane" id="gradebook">
+                            <div class="col-xs-12">
+                                <div class="col-xs-10" >
+                                    <Label>Subject</Label>
+                                    <button type='button' class='btn-link editResource' onclick='showCommentSubject()' data-toggle='tooltip' data-placement='bottom' value='edit' id='saveCommentSubject'>
+                                        <i class='glyphicon glyphicon-chevron-down'></i>
+                                    </button>
+                                    <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
                                     </select>
                                 </div>
-                                <div class="col-xs-12 center-block form-group">
-                                    <label class="control-label">Observation</label>
-                                    <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
-                                </div>
-
-                                <div class="col-xs-12" >
-                                    <input type="file" id="fileToUpload" accept="image/*">
-                                </div>
-                                <div class="col-xs-12 text-center hidden" id="error1">
-                                    <label>Please select a student first</label>
-                                </div>
-                                <div class="col-xs-12 text-center hidden" id="error2">
-                                    <label>Please make sure to fill all data</label>
-                                </div>
-
-                                <div class="col-xs-6 text-center">
-                                    <button type="button" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">Save observation</button>
-                                </div>
-
-                                <div class="col-xs-6 text-center">
-                                    <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View all comments</button>
-                                </div>
-                                <div id="confirmsave" class="modal fade" role="dialog">
-                                    <div class="modal-dialog">
-
-                                        <!-- Modal content-->
-                                        <div class="modal-content">
-                                            <div class="modal-header modal-header-delete">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title">comment saved</h4>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div> 
-
+                                <!--<div class=" col-xs-2 center-block form-group paddingLabel">
+                                    <input type="button" name="saveCommentSubject" value="save" class="btn btn-success" id="saveCommentSubject" data-target=".bs-example-modal-lg" onclick="showCommentSubject()"/> 
+                                    
+                                </div>-->
                             </div>
-                            <div role="tabpanel" class="col-xs-12 tab-pane" id="supervisorComment">
-                                <div class="col-xs-12 text-center">
-                                    <h2>Enter a supervisor comment</h2>
-                                </div>
-                                <div class="col-xs-12 center-block form-group">
-                                    <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
-                                </div>
-                                <div id="divReport" class="col-xs-12 text-center">
+                            <div class="col-xs-12 hidden" id="divCommentSubject">
+                                <div class="col-xs-10 center-block form-group">
+
+                                    <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject"maxlength="1000"  spellcheck="true"></textarea>
+                                </div>             
+                                <div class=" col-xs-2" id="saveLengthDiv">
                                     <div class="col-xs-12">
-                                        <div class="col-xs-7">
-                                            <select class="form-control" id="subjectsReports" onchange="loadObjectiveReport()">
-                                                <option value="-1">Select Subject</option>
-                                                <!--<option value="374">Physical Education</option>
-                                                <option value="410">Drama</option>
-                                                <option value="368">Life Skills</option>
-                                                <option value="405">Social and Emotional Development</option>
-                                                <option value="356">Creative Movement</option>
-                                                <option value="371">Music</option>
-                                                <option value="354">Art</option>
-                                                <option value="404">Fine Motor Skills</option>
-                                                <option value="403">Gross Motor Skills</option>
-                                                <option value="389">History</option>
-                                                <option value="386">Biology</option>
-                                                <option value="377">Physical Science</option>
-                                                <option value="362">Knowledge and Understanding of the World</option>
-                                                <option value="348">Mathematics</option>
-                                                <option value="380">Xhosa</option>
-                                                <option value="351">Afrikaans</option>
-                                                <option value="365">English</option>
-                                                <option value="305">Lunch and Play time</option>-->
-                                            </select>
-                                        </div>
-                                        <div class="col-xs-5">
-                                            <form>
-                                                <div class="form-group row">
-                                                    <label for="staticEmail" class="col-sm-2 col-form-label">Grade</label>
-                                                    <div class="col-sm-10">
-                                                        <input disabled="" type="text" readonly class="form-control-plaintext" id="gradeSubject" value="">
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
+                                        <input type="button" name="saveCommentSubject" value="save" class="btn btngreen_1" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
                                     </div>
-                                    <div class=" col-xs-12">
-                                        <table class="table table-bordered" id="listObjectiveReport">
-                                            <thead>
-                                                <tr>
-                                                    <th>Objective</th>
-                                                    <th>Rating</th>
-                                                    <th>Level</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                    <div class="col-xs-12" id="commentLength">
 
-                                            </tbody>
-                                        </table>
                                     </div>
-
-                                </div> 
-
-                                <div class="col-xs-12  text-center">
-                                    <button type="button" class="btn btn-info" id="saveSupervisorComment"  value="Save" onclick="saveSupervisorCommentFunction()">Save Comment</button>
                                 </div>
-
-
-                                <div id="confirmsaveSupervisorComment" class="modal fade" role="dialog">
-                                    <div class="modal-dialog">
-
-                                        <!-- Modal content-->
-                                        <div class="modal-content">
-                                            <div class="modal-header modal-header-delete">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title">comment saved</h4>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div> 
-
                             </div>
 
+                            <div class="col-xs-12 hidden" id="divNotObjective">
+                                The selected subject does not have objectives
+                            </div>
+
+                            <div class="col-xs-12 hidden" id="divTableObjective">
+                                <table id="tableobjective" class="display">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Most recent comment</th>
+                                            <th>Last update date</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead> 
+                                </table>
+
+                            </div>
+                            <div id="confirmsaveSubject" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header modal-header-delete">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">comment saved</h4>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div> 
+
                         </div>
-                    </div>
-                </fieldset>
-            </form:form>
-            <div>
+                        <div role="tabpanel" class="col-xs-12 tab-pane" id="observations">
+                            <div class="col-xs-12 text-center">
+                                <h2>Enter a classroom observation</h2>
+                            </div>
+                            <div class='col-xs-6 form-group'>
+                                <label class="control-label" for="fecha">Date</label>
+                                <div class='input-group date' id='fecha'>
+                                    <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 center-block form-group">
+                                <label class="control-label">Observation type</label>
+                                <select class="form-control" name="observationtype" id="observationtype" >
+                                    <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
+                                    <option value="Physical">Physical</option>
+                                    <option value="Intellectual">Intellectual</option>
+                                    <option value="Literacy">Literacy</option>
+                                    <option value="Emotional">Emotional</option>
+                                    <option value="Social">Social</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-12 center-block form-group">
+                                <label class="control-label">Observation</label>
+                                <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
+                            </div>
 
+                            <div class="col-xs-12" >
+                                <input type="file" id="fileToUpload" accept="image/*">
+                            </div>
+                            <div class="col-xs-12 text-center hidden" id="error1">
+                                <label>Please select a student first</label>
+                            </div>
+                            <div class="col-xs-12 text-center hidden" id="error2">
+                                <label>Please make sure to fill all data</label>
+                            </div>
+
+                            <div class="col-xs-6 text-center">
+                                <button type="button" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">Save observation</button>
+                            </div>
+
+                            <div class="col-xs-6 text-center">
+                                <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View all comments</button>
+                            </div>
+                            <div id="confirmsave" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header modal-header-delete">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">comment saved</h4>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div> 
+
+                        </div>
+                        <div role="tabpanel" class="col-xs-12 tab-pane" id="supervisorComment">
+                            <div class="col-xs-12 text-center">
+                                <h2>Enter a supervisor comment</h2>
+                            </div>
+                            <div class="col-xs-12 center-block form-group">
+                                <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
+                            </div>
+                            <div id="divReport" class="col-xs-12 text-center">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-7">
+                                        <select class="form-control" id="subjectsReports" onchange="loadObjectiveReport()">
+                                            <option value="-1">Select Subject</option>
+                                            <!--<option value="374">Physical Education</option>
+                                            <option value="410">Drama</option>
+                                            <option value="368">Life Skills</option>
+                                            <option value="405">Social and Emotional Development</option>
+                                            <option value="356">Creative Movement</option>
+                                            <option value="371">Music</option>
+                                            <option value="354">Art</option>
+                                            <option value="404">Fine Motor Skills</option>
+                                            <option value="403">Gross Motor Skills</option>
+                                            <option value="389">History</option>
+                                            <option value="386">Biology</option>
+                                            <option value="377">Physical Science</option>
+                                            <option value="362">Knowledge and Understanding of the World</option>
+                                            <option value="348">Mathematics</option>
+                                            <option value="380">Xhosa</option>
+                                            <option value="351">Afrikaans</option>
+                                            <option value="365">English</option>
+                                            <option value="305">Lunch and Play time</option>-->
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-5">
+                                        <form>
+                                            <div class="form-group row">
+                                                <label for="staticEmail" class="col-sm-2 col-form-label">Grade</label>
+                                                <div class="col-sm-10">
+                                                    <input disabled="" type="text" readonly class="form-control-plaintext" id="gradeSubject" value="">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class=" col-xs-12">
+                                    <table class="table table-bordered" id="listObjectiveReport">
+                                        <thead>
+                                            <tr>
+                                                <th>Objective</th>
+                                                <th>Rating</th>
+                                                <th>Level</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div> 
+
+                            <div class="col-xs-12  text-center">
+                                <button type="button" class="btn btn-info" id="saveSupervisorComment"  value="Save" onclick="saveSupervisorCommentFunction()">Save Comment</button>
+                            </div>
+
+
+                            <div id="confirmsaveSupervisorComment" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header modal-header-delete">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">comment saved</h4>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div> 
+
+                        </div>
+
+                    </div>
             </div>
-        </div>
+        </fieldset>
+    </form:form>
+    <div>
 
-        <div class="divLoadStudent" id="loadingmessage">
-            <div class="text-center"> 
-                <img class="imgLoading" src='../recursos/img/large_loading2.gif'/>
+    </div>
+</div>
+
+<div class="divLoadStudent" id="loadingmessage">
+    <div class="text-center"> 
+        <img class="imgLoading" src='../recursos/img/large_loading2.gif'/>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
             </div>
+            <div class="modal-body text-center">
+                <H1><%= request.getParameter("message")%></H1>
+            </div>
+            <!--      <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>-->
         </div>
+    </div>
+</div>
 
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
-                    </div>
-                    <div class="modal-body text-center">
-                        <H1><%= request.getParameter("message")%></H1>
-                    </div>
-                    <!--      <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                          </div>-->
+
+<div id="modalCommentGeneral">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#modalComment" id="showModalComment">
+        Launch demo modal
+    </button>   
+    <!-- Modal -->
+    <div class="modal fade" id="modalComment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="titleComment"></h4>
                 </div>
             </div>
         </div>
-
-
-        <div id="modalCommentGeneral">
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#modalComment" id="showModalComment">
-                Launch demo modal
-            </button>   
-            <!-- Modal -->
-            <div class="modal fade" id="modalComment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="titleComment"></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
+</div>
 
 
 
 
-    </body>
+</body>
 </html>
