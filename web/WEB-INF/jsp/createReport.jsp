@@ -21,7 +21,7 @@
 
 
             $(document).ready(function () {
-                
+
                 // $('#loadingmessage').hide();
                 $('#generateReport').attr('disabled', true);
 
@@ -169,7 +169,9 @@
 
             }
 
-
+            function refresh(){
+                
+            }
         </script>
         <style>
             textarea 
@@ -384,15 +386,22 @@
                             <option value="" disabled="true"  disabled="true">Select Type</option>
                             <option value="progress_prePrimary" >Progress Pre-Primary</option>
                             <option value="progress_Yr1_4" >Progress Yr1_4</option>
-                            <option value="progress_Gr7" >Academic Report Gr7</option>   
-                            <option value="progress_Gr7_JP" >Academic Report JP</option>  
+                            <option value="academic_Gr7" >Academic Report Gr7</option>   
+                            <option value="academic_Gr7_JP" >Academic Report JP</option>  
                         </select>
-                    </div></div>
+                    </div>
+                </div>
 
                 <div class="hide col-xs-12 text-center">
                     <input type="submit" class="btn btn-success" id="createOnClick" value="<spring:message code="etiq.txtcreate"/>">
                 </div>
 
+                <div class="col-xs-12 form-check">
+                    <div class="col-xs-12">
+                        <input type="checkbox" class="form-check-input" name="checkArchive" id="checkArchive">
+                        <label class="form-check-label" for="checkArchive">Store</label>
+                    </div>
+                </div>
 
                 <div class="col-xs-12 text-center">
                     <input type="submit" class="btn btngreen_1" id="generateReport" value="Generate">

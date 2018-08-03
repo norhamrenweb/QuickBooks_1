@@ -197,9 +197,12 @@
                     }
 
                 });
+                $('#loadingmessage').hide();
             }
             function chargeDataStudent() {
                 var idStudent = $("#studentid").val();
+                var idSubjectAcademic = $("#subjects").val();
+                
                 if (idStudent !== undefined && idStudent !== "") {
 //  ajax.open("POST", "studentPage.htm?selectStudent=" + selectStudent, true);
                     $.ajax({
@@ -230,10 +233,6 @@
                              }
                              */
                             $("#listObjectiveReport tbody").empty();
-
-
-
-
                             $('.cell').off('click');
                             //treeload(info.level_id, info.id_students);
                             ///  treeload2(prog);
@@ -242,6 +241,8 @@
                             //hide the objectives in case a previous student was selected
                             $('#divTableObjective').addClass('hidden'); //to avoid having the general comments of the previous selected student
                             $('#divNotObjective').addClass('hidden');
+                            
+        
                             $('#subjects').empty();
                             $('#subjects').append('<option>Select Subject</option>');
                             $.each(subjects, function (i, item) {
@@ -250,6 +251,15 @@
                             });
                             sortSelect("subjects");
 
+
+                            if($("#subjects option[value='"+idSubjectAcademic+"']").length > 0)
+                                $('#subjects').val(idSubjectAcademic);
+                            else
+                                $('#subjects').val("-1");
+                            
+                            loadobjGeneralcomments();
+                                                
+        
                             $('#subjectsReports').empty();
                             $('#subjectsReports').append('<option value ="-1">Select Subject</option>');
                             $.each(subjects, function (i, item) {
@@ -292,7 +302,7 @@
 
                     });
                 }
-                $('#loadingmessage').hide();
+               
 
             }
             function funcionCallBackloadGeneralcomments()
