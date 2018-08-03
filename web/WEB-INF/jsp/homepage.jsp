@@ -14,7 +14,7 @@
     <%@ include file="menu.jsp" %>
 
     <head>
-        <title>Home</title>
+        <title><spring:message code="etiq.Home"/></title>
 
         <script type="text/javascript">
 
@@ -90,9 +90,7 @@
                 });
 
                 $('#table_id').DataTable({
-                    language: {
-                        "search": "Buscar:"
-                    },
+                    language: idioma,
                     aLengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]],
                     iDisplayLength: 5,
                     order: [[5, "desc"]],
@@ -479,12 +477,12 @@
                 <thead>
                     <tr>
                         <td>id</td>
-                        <td>Presentation Title</td>
-                        <td>Grade Level</td>
-                        <td>Subject</td>
-                        <td>Objective</td>
+                        <td><spring:message code="etiq.PresentationTitle"/><!--Presentation Title--></td>
+                        <td><spring:message code="etiq.GradeLevel"/><!--Grade Level--></td>
+                        <td><spring:message code="etiq.Subject"/><!--Subject--></td>
+                        <td><spring:message code="etiq.Objective"/><!--Objective--></td>
 
-                        <td>Date</td>
+                        <td><spring:message code="etiq.Date"/><!--Date--></td>
                         <td><spring:message code="etiq.actionlessons"/></td>
                     </tr>
                 </thead>
@@ -504,22 +502,22 @@
                             <td>${lecciones.date} (${lecciones.start} / ${lecciones.finish})</td>
                             <td>
                                 <div class="col-xs-4 col-md-2 text-center">
-                                    <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Progress">
+                                    <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="<spring:message code="etiq.Progress"/>">
                                 </div>
                                 <div class="col-xs-4 col-md-2 text-center">
-                                    <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
+                                    <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="<spring:message code="etiq.Details"/>">
                                 </div>
                                 <div class="col-xs-4 col-md-2 text-center">
-                                    <input name="TXTid_lessons_modificar" type="image" src="<c:url value="/recursos/img/btn/btn_Edit.svg"/>" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="Modify">
+                                    <input name="TXTid_lessons_modificar" type="image" src="<c:url value="/recursos/img/btn/btn_Edit.svg"/>" value="${lecciones.id}" id="modify" onclick="modifySelect(${lecciones.id})" width="40px" data-placement="bottom" title="<spring:message code="etiq.Modify"/>">
                                 </div>
                                 <div class="col-xs-4 col-md-2 text-center">
-                                    <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete${lecciones.id}" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
+                                    <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete${lecciones.id}" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="<spring:message code="etiq.Delete"/>">
                                 </div>
                                 <div class="col-xs-4 col-md-2 text-center">
-                                    <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Resources">
+                                    <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="<spring:message code="etiq.Resources"/>">
                                 </div>
                                 <div class="col-xs-4 col-md-2 text-center">
-                                    <input class="resources" name="TXTid_lessons_compartir" type="image" src="<c:url value="/recursos/img/btn/compartir.png"/>" value="${lecciones.id}" id="resources" onclick="compartirSelect(${lecciones.id},${lecciones.teacherid})" width="40px" data-placement="bottom" title="Share">
+                                    <input class="resources" name="TXTid_lessons_compartir" type="image" src="<c:url value="/recursos/img/btn/compartir.png"/>" value="${lecciones.id}" id="resources" onclick="compartirSelect(${lecciones.id},${lecciones.teacherid})" width="40px" data-placement="bottom" title="<spring:message code="etiq.Share"/>">
                                 </div>
                             </td>
                         </tr>  
@@ -710,7 +708,7 @@
         </div>
 
         <div class="col-xs-12 text-center">
-            <button type='button' class='btn btngreen_1' id="showcalendar"  value="View all" onclick="showCalendar()">View Schedule</button>
+            <button type='button' class='btn btngreen_1' id="showcalendar"  value="View all" onclick="showCalendar()"><spring:message code="etiq.ViewSchedule"/></button>
         </div>
     </body>
 </html>

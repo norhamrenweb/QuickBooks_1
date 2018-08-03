@@ -83,7 +83,7 @@
     <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/dataTables.jqueryui.js"/>" ></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/dataTables.material.js"/>" ></script>
     <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/dataTables.uikit.js"/>" ></script>
-    <script type="text/javascript" src="<c:url value="/recursos/js/dataTables/LanguageJSON/Spanish.json"/>" ></script>
+  
 </head>
 
 <script>
@@ -93,34 +93,11 @@
              
              if (idioma === 'spanish')
              {
-                var idioma = '{"url": "../recursos/js/dataTables/LanguageJSON/Spanish.json"}';
+                var idioma = {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"};
              }else if(idioma === 'english'){
                 var idioma = '';
              }else if(idioma === 'arabic'){
-                var idioma = {
-	"sProcessing":     "Procesando...",
-	"sLengthMenu":     "Mostrar _MENU_ registros",
-	"sZeroRecords":    "No se encontraron resultados",
-	"sEmptyTable":     "Ningún dato disponible en esta tabla",
-	"sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-	"sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-	"sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-	"sInfoPostFix":    "",
-	"sSearch":         "???:",
-	"sUrl":            "",
-	"sInfoThousands":  ",",
-	"sLoadingRecords": "Cargando...",
-	"oPaginate": {
-		"sFirst":    "Primero",
-		"sLast":     "Último",
-		"sNext":     "Siguiente",
-		"sPrevious": "Anterior"
-	},
-	"oAria": {
-		"sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-		"sSortDescending": ": Activar para ordenar la columna de manera descendente"
-	}
-};
+                var idioma = {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Arabic.json"};;
              }
     
     $(document).ready(function () {
@@ -245,14 +222,14 @@
     }
 </script>
 
-<div class="infousuario noPrint " id="infousuario" style="background-color: #76c472;">
+<div class="infousuario noPrint" id="infousuario" style="background-color: #76c472;">
     <div class="col-xs-3 text-left">
         <%--<img src="<c:url value="/recursos/img/iconoschool.png"/>">--%>
     </div>
 
 
     <div class="col-xs-5 text-center">
-        <h1 class="text-center">Hi, <c:out value="${sessionScope.user.name}"/></h1>
+        <h1 class="text-center"><spring:message code="etiq.Welcome"/>, <c:out value="${sessionScope.user.name}"/></h1>
     </div>
     <div class="col-xs-2 text-center">
         <button class="btn" id="btnYearmTerm" onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
@@ -269,14 +246,14 @@
             <div class="col-xs-12 col-md-12">
                 <div class="col-xs-12 col-md-5">
                     <div class="form-group">
-                        <label for="yearSelect">Year</label>
+                        <label for="yearSelect"><spring:message code="etiq.Year"/></label>
                         <select class="form-control" id="yearSelect" onchange="terms()">
                         </select> 
                     </div>  
                 </div>   
                 <div class="col-xs-12 col-md-5">
                     <div class="form-group">
-                        <label for="termSelect">Term</label>
+                        <label for="termSelect"><spring:message code="etiq.Term"/></label>
                         <select class="form-control" id ="termSelect">
                         </select>
                     </div> 
@@ -284,7 +261,7 @@
                 <div class="col-xs-12 col-md-2" style="padding: 0px;">
                     <div class="form-group">
                         <label for="buttonYear">&nbsp</label>
-                        <button id="buttonYear" onclick="changeTermYear()" type="submit" class="form-control btn btngreen_1" data-dismiss="modal">Change</button>
+                        <button id="buttonYear" onclick="changeTermYear()" type="submit" class="form-control btn btngreen_1" data-dismiss="modal"><spring:message code="etiq.Change"/></button>
                     </div>
                 </div>
             </div>
