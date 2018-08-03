@@ -20,6 +20,7 @@
 
 
             $(document).ready(function () {
+                
                 $("#linkRecommend").hide();
                 $('#origen option').each(function () {
                     mapStudents[$(this).val()] = $(this).text();

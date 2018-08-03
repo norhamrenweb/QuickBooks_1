@@ -203,18 +203,21 @@ public class ObservationControlador {
                 lessons.put(rs.getInt(1), rs.getString(2));
             }
 
-            consulta = "select * from progress_report inner join rating on progress_report.rating_id = rating.id where objective_id=" + idobjective + " and student_id=" + idstudent + " and term_id=" + termId + " and yearterm_id=" + yearId + " and lesson_id is null ORDER BY comment_date DESC";
+            consulta = "select * from progress_report inner join rating on progress_report.rating_id = rating.id where objective_id=" + idobjective + " and student_id=" + idstudent + " and term_id=" + termId + " and yearterm_id=" + yearId + /*" and lesson_id is null*/" ORDER BY comment_date DESC";
             rs = DBConect.eduweb.executeQuery(consulta);
             while (rs.next()) {
-                CommentObjective c
-                        = new CommentObjective(rs.getString("id"),
+                String auxName ="";
+                if( lessons.containsKey(rs.getInt("lesson_id")))
+                    auxName = lessons.get(rs.getInt("lesson_id"));
+                
+                comments.add(new CommentObjective(rs.getString("id"),
                                 rs.getString("rating_id"), rs.getString("student_id"),
                                 rs.getString("comment"), rs.getString("comment_date"),
                                 rs.getString("objective_id"), rs.getBoolean("generalcomment"),
                                 rs.getString("step_id"), rs.getString("createdby"),
                                 rs.getString("modifyby"), rs.getString("term_id"),
-                                rs.getString("yearterm_id"), rs.getString("colorcode"), lessons.get(rs.getInt("linklesson_id")));
-                comments.add(c);
+                                rs.getString("yearterm_id"), rs.getString("colorcode"),
+                                auxName));
             }
             for (CommentObjective c : comments) {
                 ResultSet rs1 = DBConect.eduweb.executeQuery("select name from rating where id = " + c.getRating_id() + "");
@@ -289,7 +292,7 @@ public class ObservationControlador {
                 step = rString.toString();
                 step = step.substring(0, step.length() - 1);
             }
-            checkFirstCommentLessons(idstudent, idobjective, comment, ratingid, step, "" + sesion.getAttribute("yearId"), "" + sesion.getAttribute("termId"), "" + user.getId(), hsr);
+           // checkFirstCommentLessons(idstudent, idobjective, comment, ratingid, step, "" + sesion.getAttribute("yearId"), "" + sesion.getAttribute("termId"), "" + user.getId(), hsr);
 
             String consulta = "select id from rating where name = '" + rating + "'";
             ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
@@ -302,12 +305,12 @@ public class ObservationControlador {
                 DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
             }
 
-            if (!cbUseGrade.equals("true")) {
+           /* if (!cbUseGrade.equals("true")) {
                 String aux = "UPDATE progress_report"
                         + " SET rating_id=" + ratingid + " , step_id= '" + step
                         + "' WHERE objective_id=" + idobjective + " and lesson_id is not null and student_id=" + idstudent + " and term_id=" + sesion.getAttribute("termId") + " and yearterm_id=" + sesion.getAttribute("yearId");
                 DBConect.eduweb.executeUpdate(aux);
-            }
+            }*/
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             return "error";

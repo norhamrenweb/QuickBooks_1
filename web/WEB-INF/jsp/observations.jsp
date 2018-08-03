@@ -1006,9 +1006,9 @@
                             if (textLastStep.length < 70)
                                 tresPuntosStep = "";
                             
-                            var namePresentation ="";
-                            if(comment.namePresentation !== undefined)
-                                namePresentation = "<p><strong>Name Presentation: </strong> "+comment.namePresentation+"</p>";
+                            var presentationName ="";
+                            if(comment.presentationName !== undefined && comment.presentationName !== "")
+                                presentationName = "<p><strong>Name Presentation: </strong> "+comment.presentationName+"</p>";
                             
                             $('#semana0').append("<div class='divAddNotas' id='" + comment.id + "'> \n\
                                                     <div class='project project-radius project-" + colorRating + "'>\n\
@@ -1017,7 +1017,7 @@
                                                         </div>\n\
                                                         <div class='project-content'>\n\
                                                             <h3 class='lead'> <strong style='color:" + color + "'>" + comment.rating_name + "</strong><br>" + date.substring(0, 10) + "         <span class='badge badge-pill badge-success'>Presentation</span></h3>\n\
-     "+namePresentation+"\
+     "+presentationName+"\
 \n\
     <p><strong>Comment: </strong>" + cc.substring(0, 120) + " " + tresPuntosComment + "</p>\
                                                                     <p><strong>Last Step: </strong>" + textLastStep.substring(0, 70) + " " + tresPuntosStep + "\n\
