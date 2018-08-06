@@ -14,7 +14,7 @@
     <%@ include file="menu.jsp" %>
         
     <head>
-        <title>Completed Presentations</title>
+        <title><spring:message code="etiq.compPresentations"/></title>
 
     <script type="text/javascript">
     
@@ -28,6 +28,7 @@
          
      
     $('#table_id').DataTable({
+        language: idioma,
     "aLengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
     "iDisplayLength": 5,
     "order": [[ 5, "desc" ]],
@@ -36,7 +37,8 @@
             "targets": [ 0 ],
             "visible": false,
             "searchable": false
-        }]
+        }],
+         responsive: true
     });
         $('#table_datelessons').DataTable();
        
@@ -376,7 +378,7 @@ function funcionCallBackdetailsLesson()
         <div class="col-xs-12">
             <div class="col-sm-12" id="maincontainer">
                 <div class="col-sm-12 center-block text-center">
-                    <h2>Completed Presentations</h2>
+                    <h2><spring:message code="etiq.compPresentations"/></h2>
                 </div>
             </div>
             <div class="container">
@@ -384,14 +386,15 @@ function funcionCallBackdetailsLesson()
                     <thead>
                         <tr>
                             <td>id</td>
-                            <td>Presentation Title</td>
-                            <td>Grade Level</td>
-                            <td>Subject</td>
-                            <td>Objective</td>
                             
-                            <td>Date</td>
-                            <td>Start Hour</td>
-                            <td>End Hour</td>
+                            <td><spring:message code="etiq.PresentationTitle"/><!--Presentation Title--></td>
+                            <td><spring:message code="etiq.GradeLevel"/><!--Grade Level--></td>
+                            <td><spring:message code="etiq.Subject"/><!--Subject--></td>
+                            <td><spring:message code="etiq.Objective"/><!--Objective--></td>
+
+                            <td><spring:message code="etiq.Date"/><!--Date--></td>
+                            <td><spring:message code="etiq.startHour"/><!--Date--></td>
+                            <td><spring:message code="etiq.endHour"/><!--Date--></td>
                             <td><spring:message code="etiq.actionlessons"/></td>
                         </tr>
                     </thead>
@@ -413,11 +416,11 @@ function funcionCallBackdetailsLesson()
                             <td>${lecciones.finish}</td>
                             <td>
                                 <div class="col-xs-3">
-                                    <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="Attendance">
+                                    <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="<spring:message code="etiq.txtattendance"/>">
                                 </div>
                                 
                                 <div class="col-xs-3">
-                                    <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="Details">
+                                    <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="<spring:message code="etiq.Details"/>">
                                 </div>
                                <%-- the user can not delete an archived presentation,must unarchive and remove progress records first--%>
                                <%-- <c:if test="${user.type==0 || user.type ==2}">
@@ -426,7 +429,7 @@ function funcionCallBackdetailsLesson()
                                     </div>
                                 </c:if>--%>
                                 <div class="col-xs-3">
-                                    <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Resources">
+                                    <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="<spring:message code="etiq.Resources"/>">
                                 </div>
 
                             </td>

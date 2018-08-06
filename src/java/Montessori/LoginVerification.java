@@ -104,7 +104,19 @@ public class LoginVerification {
         return mapGroups;
     }
     
-     public ArrayList<Integer> fromGroup(int staffid) throws SQLException{
+     public ArrayList<String> fromGroupNames(int staffid) throws SQLException{
+        ArrayList<String> aux  = new ArrayList<>();
+        HashMap<Integer, String> mapGroups = getSecurityGroupID();
+        String query = "select groupid from SecurityGroupMembership where StaffID = " + staffid;
+       // ResultSet rs = SQLQuery(query);
+       ResultSet rs = DBConect.ah.executeQuery(query);
+            while(rs.next()){
+                aux.add(mapGroups.get(rs.getInt("groupid")));
+            }
+      
+        return aux;
+    }
+      public ArrayList<Integer> fromGroup(int staffid) throws SQLException{
         ArrayList<Integer> aux  = new ArrayList<>();
         String query = "select groupid from SecurityGroupMembership where StaffID = " + staffid;
        // ResultSet rs = SQLQuery(query);
@@ -115,7 +127,6 @@ public class LoginVerification {
       
         return aux;
     }
-    
     public boolean fromGroup(int groupid, int staffid) throws SQLException{
         boolean aux  = false;
         String query = "select * from SecurityGroupMembership where groupid = "+groupid+" and StaffID = " + staffid;
