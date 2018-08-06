@@ -14,7 +14,7 @@
     <%@ include file="infouser.jsp" %>
     <%@ include file="menu.jsp" %>
     <head>
-        <title>Create Presentations</title>
+        <title><spring:message code="etiq.createNewPresentation"/></title>
         <script>
             var mapStudents = new Map();
 
@@ -305,6 +305,12 @@
                 $("#horafin").on("dp.change", function (e) {
                     $('#horainicio').data("DateTimePicker").maxDate(e.date);
                 });
+                var selectlevel = "<spring:message code="etiq.selectlevel"/>";
+                $("#level option[value=-1]").text(selectlevel);
+                $("#levelStudent option[value=-1]").text(selectlevel);
+                
+                var selectIdea = "<spring:message code="etiq.selectAnIdea"/>";
+                $("#ideas option[value=-1]").text(selectIdea);
 
             });
 
@@ -464,6 +470,8 @@
                         
                         sortSelect("subject");
                         $("#subject").val(-1);
+                        var selectSubject = "<spring:message code="etiq.selectSubject"/>";
+                        $("#subject option[value=-1]").text(selectSubject);
                     }
                 }
             }
@@ -483,6 +491,8 @@
                             
                         }
                         $("#objective").val(-1);
+                        var selectObjective = "<spring:message code="etiq.selectObject"/>";
+                        $("#objective option[value=-1]").text(selectObjective);
                     }
                 }
             }
@@ -906,9 +916,7 @@
             .marginSelect{
                 margin-right: 17px !important;
             }
-            .marginStudents{
-                margin-right: 80% !important;
-            }
+          
             .help-block {
 
                 color: #a94442;
@@ -917,32 +925,32 @@
     </head>
     <body>
         <div class="container">
-            <h1 class="text-center">Create New Presentation</h1>
+            <h1 class="text-center"><spring:message code="etiq.createNewPresentation"/></h1>
 
 
             <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
                 <fieldset>
                     <legend id="showPropiertys">
-                        Presentation name and description
+                        <spring:message code="etiq.nameAndDesc"/>
                         <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
                         </span>
                     </legend>
                     <div class="form-group collapse" id="contenedorPropiertys">
                         <div class=" col-xs-6 center-block form-group">
-                            <label class="control-label">Presentation Name</label>
+                            <label class="control-label"><spring:message code="etiq.namePresentation"/></label>
                             <div class="required-field-block">
-                                <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="add name">
+                                <input type="text" class="form-control" name="TXTnombreLessons" id="NameLessons" required="" placeholder="<spring:message code='etiq.addName'/>">
                                 <div class="required-icon">
                                     <div class="text">*</div>
                                 </div>
                             </div>
 
-                            <span class="help-block hide">Invalid Name (contains special characters)</span>
+                            <span class="help-block hide"><spring:message code="etiq.invName"/></span>
                         </div>               
                         <div class="col-xs-6 center-block form-group">
-                            <label class="control-label">Presentation description</label>
+                            <label class="control-label"><spring:message code="etiq.presDesc"/></label>
                             <div class="required-field-block">
-                                <textarea class="form-control" name="TXTdescription" id="comments" placeholder="add description" maxlength="200"  spellcheck="true"></textarea>
+                                <textarea class="form-control" name="TXTdescription" id="comments" placeholder="<spring:message code='etiq.addDescrip'/>" maxlength="200"  spellcheck="true"></textarea>
                                 <div class="required-icon">
                                     <div class="text">*</div>
                                 </div>
@@ -951,7 +959,7 @@
                         <div class="col-xs-6 center-block checkbox checkbox-success">
                             <input class="styled" type="checkbox" id="ideaCheck" name="ideaCheck">
                             <label for="ideaCheck" >
-                                Presentation idea
+                                <spring:message code='etiq.presIdea'/>
                             </label>
 
                         </div>
@@ -959,7 +967,7 @@
                 </fieldset>
                 <fieldset>
                     <legend id="showDate">
-                        Select date and time
+                        <spring:message code='etiq.selectDateAndHour'/>
                         <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
                             <!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDate" >
                                                         <span class="glyphicon glyphicon-triangle-bottom"></span>
@@ -969,7 +977,7 @@
                     <div class="form-group collapse" id="contenedorDate">
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="fecha">Date</label> 
+                                <label class="control-label" for="fecha"><spring:message code='etiq.Date'/></label> 
                                 <div class='input-group date' id='fecha'>
                                     <div class="required-field-block">
                                         <input id = 'fechaInput'type='text' name="TXTfecha"  class="form-control" id="fecha" />
@@ -986,7 +994,7 @@
 
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="horainicio">Start hour</label> 
+                                <label class="control-label" for="horainicio"><spring:message code='etiq.startHour'/></label> 
                                 <div class='input-group date' id='horainicio'>
                                     <div class="required-field-block">
 
@@ -1003,7 +1011,7 @@
                         </div>
                         <div class='col-xs-4'>
                             <div class="form-group">
-                                <label class="control-label" for="horafin">Finish hour</label> 
+                                <label class="control-label" for="horafin"><spring:message code='etiq.endHour'/></label> 
                                 <div class='input-group date' id='horafin'>
                                     <div class="required-field-block">
                                         <input id='horafinInput' type='text' required="required" name="TXThorafin" class="form-control"/>
@@ -1022,7 +1030,7 @@
                 </fieldset>
                 <fieldset>
                     <legend id="showDetails">
-                        Presentation details
+                        <spring:message code="etiq.presentDetails"/>
                         <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
                             <!--                        <button type="button" class="unStyle" data-toggle="collapse" data-target="#contenedorDetails" >
                                                         <span class="glyphicon glyphicon-triangle-bottom"></span>
@@ -1067,7 +1075,7 @@
                         </div>
 
                         <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Objective</label>
+                            <label class="control-label"><spring:message code='etiq.Objective'/></label>
                             <input type="hidden" id="objectiveName" name="objectiveName" value = "">                                                        
 
                             <div class="required-field-block">
@@ -1082,12 +1090,12 @@
                                 </div>
                             </div>
                             <div>
-                                <a id="linkRecommend" data-toggle="modal" href="#recommendations" class="disabled">Recommended Students<br>for this objective</a>
+                                <a id="linkRecommend" data-toggle="modal" href="#recommendations" class="disabled"><spring:message code='etiq.recomm'/></a>
                             </div>    
                         </div>
 
                         <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Equipment</label>
+                            <label class="control-label"><spring:message code='etiq.equip'/></label>
                             <select class="form-control" name="TXTcontent" id="content" multiple>
                                 <c:forEach var="content" items="${contents}">
                                     <option value="${content.id[0]}" >${content.name}</option>
@@ -1098,7 +1106,7 @@
 
                         <div class="col-xs-12" id="divLoadLessons" style="padding-left: 0px;">   
                             <div class="col-xs-3 center-block form-group">
-                                <label class="control-label">Copy from idea</label>
+                                <label class="control-label"><spring:message code='etiq.copyIdea'/></label>
                                 <select class="form-control" name="ideas" id="ideas" onchange="comboSelectionIdeaLessons()">
                                     <c:forEach var="idea" items="${ideas}">
                                         <option value="${idea.id}" >${idea.name}</option>
@@ -1109,7 +1117,7 @@
 
                         </div>    
                         <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Method</label>
+                            <label class="control-label"><spring:message code='etiq.method'/></label>
                             <select class="form-control" name="TXTmethod" size="2" id="method">                   
                                 <c:forEach var="method" items="${methods}">
                                     <option value="${method.id[0]}"  data-title="${method.description}" data-content="${method.description}">${method.name}</option>
@@ -1128,7 +1136,7 @@
                 <fieldset>
                     <div class="required-field-block">
                         <legend id="showStudents">
-                            Select Learners 
+                            <spring:message code='etiq.selectLearners'/> 
                             <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom"></span>
                         </legend>
 
@@ -1141,7 +1149,7 @@
                         <div class="col-xs-12">
                             <div class="col-xs-2"></div>
                             <div class="col-xs-3">
-                                <label>Filter</label>     
+                                <label><spring:message code='etiq.filter'/> </label>     
                             </div>
                         </div>
                         <div class="col-xs-12">
@@ -1245,7 +1253,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title"> Students to select</h4>
+                        <h4 class="modal-title"><spring:message code="etiq.studentsToSelect"/></h4>
                     </div>
                     <div class="modal-body text-center">
                         <div class="row">

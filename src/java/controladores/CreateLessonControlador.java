@@ -99,6 +99,7 @@ public class CreateLessonControlador {
             ResultSet rs2 = DBConect.eduweb.executeQuery("SELECT * FROM public.lessons where idea = true");
             Lessons d = new Lessons();
             d.setName("Select an idea");
+            d.setId(-1);
             ideas.add(d);
             while (rs2.next()) {
                 Lessons idea = new Lessons();
@@ -488,6 +489,9 @@ public class CreateLessonControlador {
             ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
             Objective s = new Objective();
             s.setName("Select Objective");
+               String[] aux = new String[1];
+            aux[0] = "-1";
+            s.setId(aux);
             objectives.add(s);
 
             while (rs1.next()) {

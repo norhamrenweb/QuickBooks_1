@@ -20,7 +20,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="<c:url value="/recursos/fonts/icons/iconsAragon.css"/>"/>
-        <title>Presentation progress</title>
+        <title><spring:message code="etiq.presentationProgress"/></title>
         <script>
             window.onbeforeunload = function exitAlert() {
                 var textillo = "Changes you made may not be saved.";
@@ -243,32 +243,32 @@
 
 
         <div class="container">
-            <h1 class="text-center">Presentation progress</h1>
+            <h1 class="text-center"><spring:message code="etiq.presentationProgress"/></h1>
             <form:form id="formStudents" method ="post" action="saveRecords.htm" >
 
                 <input type="hidden" class="form-control" id="namePresentation" name="namePresentation" value=""/>
                 <input type="hidden" class="form-control" id="nameTeacher" name="nameTeacher" value=""/>
 
                 <fieldset>
-                    <legend>Presentation details</legend>
+                    <legend><spring:message code="etiq.presentDetails"/></legend>
 
                     <div class="col-xs-4 center-block sinpadding">
-                        Presentation Title:<br>
+                        <spring:message code="etiq.PresentationTitle"/>:<br>
                         <label class="control-label"><input type="hidden" class="form-control" name="TXTlessonid" value="${lessondetailes.id}"/> ${lessondetailes.name}</label>
                     </div>
 
                     <div class="col-xs-4 center-block sinpadding">
-                        Subject:<br>
+                        <spring:message code="etiq.Subject"/>:<br>
                         <label class="control-label"> ${lessondetailes.subject.name}</label>
                     </div>
                     <div class="col-xs-4 center-block  sinpadding">
-                        Objective:  <label class="control-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
+                        <spring:message code="etiq.Objective"/>:  <label class="coObjective:ntrol-label"><input type="hidden" class="form-control" name="TXTobjectiveid" value="${lessondetailes.objective.id[0]}"/> ${lessondetailes.objective.name}</label>
                     </div>
                     <div class="col-xs-12 center-block  sinpadding">
                         <c:forEach var="step" items="${steps}" varStatus="i">
                             <div class="col-xs-3 sinpadding">
                                 <div class="col-xs-12 sinpadding">
-                                    Step${(i.index +1)}:<br> <label class="control-label">${step.name}</label>
+                                    <spring:message code="etiq.step"/>${(i.index +1)}:<br> <label class="control-label">${step.name}</label>
                                 </div>
                             </div>
                         </c:forEach> 
@@ -276,10 +276,10 @@
                     </div>
                     <div class="col-xs-12 text-right">
                         <input type="checkbox" id="buttonAchived2" onchange="$('#buttonAchived')[0].checked = $('#buttonAchived2')[0].checked;">              
-                        <label> Mark as completed </label>
+                        <label> <spring:message code="etiq.markAsCompleted"/></label>
                     </div>
                     <div class="col-xs-12 text-center">
-                        <img style="width:5%" src="<c:url value="/recursos/img/iconos/lightbulb-idea.svg"/>"> <label> To mark the presentation as completed, you must fill all the students´ ratings and attendance codes</label>
+                        <img style="width:5%" src="<c:url value="/recursos/img/iconos/lightbulb-idea.svg"/>"> <label> <spring:message code="etiq.toMark"/></label>
                     </div>
                 </fieldset> 
 
@@ -290,15 +290,15 @@
                             <thead>
                                 <tr>
                                     <td hidden="true">Student Id</td>
-                                    <td>Student Name</td>
-                                    <td>Rating</td>
-                                    <td>Comment</td>
-                                    <td>Attendance 
-                                        <input type="button" class="btn btn-xs btn-info" id="rellenarP" value="Fill P"> 
-                                        <input type="button" class="btn btn-xs btn-info" id="rellenar" value="Clear">
+                                    <td><spring:message code="etiq.studentName"/></td>
+                                    <td><spring:message code="etiq.rating"/></td>
+                                    <td><spring:message code="etiq.comment"/></td>
+                                    <td><spring:message code="etiq.txtattendance"/> 
+                                        <input type="button" class="btn btn-xs btn-info" id="rellenarP" value="<spring:message code='etiq.fillP'/> "> 
+                                        <input type="button" class="btn btn-xs btn-info" id="rellenar" value="<spring:message code='etiq.clear'/> ">
                                     </td>
                                     <td>
-                                        Work accomplished
+                                        <spring:message code="etiq.workAcc"/>
                                     </td>
                                 </tr>
                             </thead>
@@ -318,10 +318,10 @@
                                             <option selected>${record.rating}</option>
                                         </c:if>
                                         <option></option>
-                                        <option>N/A</option>
-                                        <option>Presented</option>
-                                        <option>Attempted</option>
-                                        <option>Mastered</option>
+                                     <option value="N/A"><spring:message code="etiq.na"/></option>
+                                        <option value="Presented"><spring:message code="etiq.presented"/></option>
+                                        <option value="Attempted"><spring:message code="etiq.attempted"/></option>
+                                        <option value="Mastered"><spring:message code="etiq.mastered"/></option>
                                     </select>
                                 </td>
 
@@ -425,7 +425,7 @@
 
                 <div class="col-xs-4 text-center">   
                     <label class="control-label">
-                        Presented by
+                        <option value="Mastered"><spring:message code="etiq.presenBy"/></option>
                     </label>
 
                     <select name="TXTinstructor"> 
@@ -441,11 +441,11 @@
                     </select>
                 </div>
                 <div class="col-xs-4 text-center">   
-                    <input type="submit" id="buttonSave" class="btn btn-success" value="Save" onclick="window.onbeforeunload = null;">
+                    <input type="submit" id="buttonSave" class="btn btn-success" value="<spring:message code='etiq.save'/> " onclick="window.onbeforeunload = null;">
                 </div>
                 <div class="col-xs-4 text-right">
                     <input type="checkbox" name="buttonAchived" id="buttonAchived" onclick="$('#buttonAchived2')[0].checked = $('#buttonAchived')[0].checked">              
-                    <label> Mark as completed </label>
+                    <label> <spring:message code="etiq.markAsCompleted"/> </label>
                 </div>
             </form:form>
         </div>

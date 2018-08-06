@@ -280,8 +280,8 @@
                 <h4 class="modal-title"><spring:message code="etiq.areUlogout"/></h4>
             </div>
             <div class="modal-footer text-center">
-                <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="logout()">Yes</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="logout()"><spring:message code="etiq.yes"/></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="etiq.no"/></button>
             </div>
         </div>
 

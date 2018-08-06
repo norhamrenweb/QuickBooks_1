@@ -64,12 +64,15 @@ public class LessonIdeaControlador {
         ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
         List <Level> grades = new ArrayList();
         Level l = new Level();
+        String[] ids = new String[1];
+        ids[0]="-1";
         l.setName("Select level");
+        l.setId(ids);
         grades.add(l);
         while(rs.next())
         {
             Level x = new Level();
-             String[] ids = new String[1];
+             ids = new String[1];
              ids[0]=""+rs.getInt("GradeLevelID");
             x.setId(ids);
             x.setName(rs.getString("GradeLevel"));

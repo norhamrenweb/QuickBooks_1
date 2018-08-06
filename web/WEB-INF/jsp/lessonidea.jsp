@@ -14,7 +14,7 @@
     <%@ include file="infouser.jsp" %>
     <%@ include file="menu.jsp" %>
     <head>
-        <title>Presentation Ideas</title>
+        <title><spring:message code="etiq.presIdeas"/></title>
         <script>
 
  $(document).ready(function(){
@@ -48,7 +48,9 @@
                         
                     
                     //$(this).html('Lesson name and description<span class="glyphicon glyphicon-triangle-bottom"></span>');
-            });      
+            });  
+            var selectlevel = "<spring:message code="etiq.selectlevel"/>";
+            $("#level option[value=-1]").text(selectlevel);
     });    
  
  
@@ -322,7 +324,7 @@ input[type="radio"] .styled:checked + label::after {
     </head>
     <body>
         <div class="container">
-        <h1 class="text-center">Presentation Ideas</h1>
+        <h1 class="text-center"><spring:message code="etiq.presIdeas"/></h1>
 
         
 <!--                <legend id="showDetails">
@@ -335,7 +337,7 @@ input[type="radio"] .styled:checked + label::after {
                 </legend>-->
                 <div class="form-group" id="contenedorDetails">
                 <div class="col-xs-3 form-group">
-                    <label class="control-label">Select Grade Level</label>
+                    <label class="control-label"><spring:message code="etiq.selectGradeLevel"/></label>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="level" items="${levels}">
                             <option value="${level.id[0]}" >${level.name}</option>
@@ -345,7 +347,7 @@ input[type="radio"] .styled:checked + label::after {
                 </div>
                 </div>
                 <div class="col-xs-12 center-block">
-                    <label class="control-label" for="findIdea">Find Presentation Idea</label>
+                    <label class="control-label" for="findIdea"><spring:message code="etiq.findPresentation"/></label>
                     <input id="findIdea" class="form-group" type="text">
                 </div>
                 <div class="col-xs-12 center-block" id="tree">
@@ -365,13 +367,13 @@ input[type="radio"] .styled:checked + label::after {
                 </div>
                     <div class="col-xs-12 center-block" id="buttons">
                         <div class="col-xs-4 center-block">
-                            <button type="button" class="btn btngreen_1" onclick="editttree()" id="editIdea" disabled="true">View/Edit</button>
+                            <button type="button" class="btn btngreen_1" onclick="editttree()" id="editIdea" disabled="true"><spring:message code="etiq.viewEdit"/></button>
                         </div>
                         <div class="col-xs-4 center-block">
-                            <button type="button" class="btn btngreen_1" onclick="editrsrctree()" id="editIdearsrc" disabled="true">View/Edit Resources</button>
+                            <button type="button" class="btn btngreen_1" onclick="editrsrctree()" id="editIdearsrc" disabled="true"><spring:message code="etiq.viewEditReso"/></button>
                         </div>
                         <div class="col-xs-4 center-block">
-                            <button type="button"  class="btn btn-danger" onclick="delttree()" id="delIdea" disabled="true">Delete</button>
+                            <button type="button"  class="btn btn-danger" onclick="delttree()" id="delIdea" disabled="true"><spring:message code="etiq.delete"/></button>
                         </div>
                 </div>
         </div>
@@ -383,7 +385,7 @@ input[type="radio"] .styled:checked + label::after {
 <!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
       </div>
       <div class="modal-body text-center">
-       <H1>Presentation idea deleted</H1>
+       <H1><spring:message code="etiq.Presdelete"/></H1>
       </div>
 <!--      <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

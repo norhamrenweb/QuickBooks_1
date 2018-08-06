@@ -14,7 +14,7 @@
     <%@ include file="infouser.jsp" %>
 
     <head>
-        <title>Presentation Resources</title>
+        <title><spring:message code="etiq.presentResources"/></title>
         <script>
 
             $(document).ready(function () {
@@ -861,12 +861,12 @@ border-radius: 10px;
 
         <div class="container">
             <div class="col-xs-12" style="margin-bottom: 30px;">
-                <h1 class=" text-center">${lessonsName} Resources</h1>
+                <h1 class=" text-center">${lessonsName}</h1>
             </div>
             <div class="col-xs-12 col-md-12 col-lg-12">
                 <fieldset>
                     <legend id="showPropiertys">
-                        External links and videos
+                        <spring:message code="etiq.externalLinksAndVideos"/>
                         <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
                         </span>
                     </legend>
@@ -878,7 +878,7 @@ border-radius: 10px;
                                     <c:when test="${item.type =='Video'}">
                                         <div id ="divRecurso${item.id}" class="col-xs-12 label-video">
                                             <div class="col-xs-10 text-center tableCell sinpadding">       
-                                                    <div class="col-xs-2 sinpadding cell">${item.type}</div>
+                                                    <div class="col-xs-2 sinpadding cell"><spring:message code="etiq.video"/></div>
                                                     <div class="col-xs-10 sinpadding">
                                                        <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}</a>
                                                     </div>      
@@ -901,7 +901,7 @@ border-radius: 10px;
                                     <c:otherwise> 
                                         <div id ="divRecurso${item.id}" class="col-xs-12 label-link">
                                             <div class="col-xs-10 text-center tableCell sinpadding">       
-                                                    <div class="col-xs-2 sinpadding cell">${item.type}</div>
+                                                    <div class="col-xs-2 sinpadding cell"><spring:message code="etiq.link"/></div>
                                                     <div class="col-xs-10 sinpadding">
                                                        <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}</a>
                                                     </div>      
@@ -926,7 +926,7 @@ border-radius: 10px;
                         </div>
                         <div class="col-xs-12 text-right">
                             <button class=" btn btn-sm" data-toggle="tooltip" data-placement="bottom" id="addLink">
-                                Add link or video <i class='glyphicon glyphicon-plus'></i>
+                                <spring:message code="etiq.addLink"/><i class='glyphicon glyphicon-plus'></i>
                             </button>
                         </div>
                     </div>
@@ -935,7 +935,7 @@ border-radius: 10px;
             <div class="col-xs-12 col-md-12 col-lg-12">
                 <fieldset>
                     <legend id="showDetails">
-                        Files
+                        <spring:message code="etiq.files"/>
                         <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom">
                         </span>
                     </legend>
@@ -950,7 +950,7 @@ border-radius: 10px;
                                             <input type="hidden" id="txtUrl" name="txtUrl" value="" />
                                             <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>
                                             <div class="col-xs-10 text-center tableCell sinpadding">
-                                                <div class="col-xs-2 sinpadding cell">${item.type}</div>
+                                                <div class="col-xs-2 sinpadding cell"><spring:message code="etiq.file"/></div>
                                                 <div class="col-xs-10 sinpadding text-center " >
                                                     <a data-id="${item.id}" class="list-group-item link fileNames" >
                                                         <span class="fileName">${item.name}</span>
@@ -974,7 +974,7 @@ border-radius: 10px;
                         </div>
                         <div class="col-xs-12 text-right">
                             <button class=" btn btn-sm" data-toggle="tooltip" data-placement="bottom" id="addFile">
-                                Upload file <i class='glyphicon glyphicon-circle-arrow-up'></i>
+                                <spring:message code="etiq.uploadFile"/><i class='glyphicon glyphicon-circle-arrow-up'></i>
                             </button>
                         </div>
                     </div>
@@ -993,33 +993,33 @@ border-radius: 10px;
                 <div class="modal-content">
                     <div class="modal-header modal-header-details">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 id="nameEditNewLink" class="modal-title">Edit a link or video</h4>
+                        <h4 id="nameEditNewLink" class="modal-title"><spring:message code="Name"/></h4>
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div id="divLinks" class="col-xs-12">
 
                                 <div class="col-xs-3 center-block form-group">
-                                    <label class="control-label">Title</label>
+                                    <label class="control-label"><spring:message code="etiq.title"/></label>
                                     <input type="text" class="form-control" name="TXTnameeditethod" id="editLinkName" >
                                 </div>
                                 <div id ="editLinkError" class="col-xs-6 center-block form-group">
-                                    <label class="control-label">Link</label>
+                                    <label class="control-label"><spring:message code="etiq.link"/></label>
                                     <input type="text" class="form-control" name="TXTcommenteditmethod" id="editLinkComments">
-                                    <span class="help-block hide">(http or https:)//www.example.com</span>
+                                    <span class="help-block hide"><spring:message code="etiq.exampleLink"/></span>
                                 </div>   
                                 <div class="col-xs-3 center-block form-group">
-                                    <label class="control-label">Type</label>
+                                    <label class="control-label"><spring:message code="etiq.type"/></label>
                                     <select class="form-control" name="selectTipo" id="selectLinkTipo" placeholder="Type">
                                         <option></option>
-                                        <option value ="Link">Link</option>
-                                        <option value ="Video">Video</option>
+                                        <option value ="Link"><spring:message code="etiq.link"/></option>
+                                        <option value ="Video"><spring:message code="etiq.video"/></option>
                                     </select>
                                 </div>
                             </div>        
                             <div class="col-xs-offset-9 col-xs-12">        
                                 <div class=" col-xs-3 center-block form-group paddingLabel">
-                                    <input type="button" name="EditMethod" diabled="true" value="save changes" class="btn btn-success" id="EditLink" data-target=".bs-example-modal-lg" onclick="saveEditLink()"/> 
+                                    <input type="button" name="EditMethod" diabled="true" value="<spring:message code='etiq.save'/>" class="btn btn-success" id="EditLink" data-target=".bs-example-modal-lg" onclick="saveEditLink()"/> 
                                 </div>
                             </div>
 
@@ -1039,34 +1039,33 @@ border-radius: 10px;
                 <div class="modal-content">
                     <div class="modal-header modal-header-details">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 id="nameNewLink" class="modal-title">Add new link</h4>
+                        <h4 id="nameNewLink" class="modal-title"><spring:message code="etiq.addLink"/></h4>
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div class="col-xs-12">
 
                                 <div class="col-xs-3 center-block form-group">
-                                    <label class="control-label">Title</label>
+                                    <label class="control-label"><spring:message code="etiq.title"/></label>
                                     <input type="text" class="form-control" name="TXTnameeditethod" id="editNameMethod"  placeholder="Title">
                                 </div>
                                 <div id ="addLinkError" class="col-xs-6 center-block form-group">
-                                    <label class="control-label">Link</label>
+                                    <label class="control-label"><spring:message code="etiq.link"/></label>
                                     <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="Link" data-toggle="tooltip" data-placement="bottom" title="(http or https:)//www.example.com">
-                                    <span class="help-block hide">(http or https:)//www.example.com</span>
+                                    <span class="help-block hide"><spring:message code="etiq.exampleLink"/></span>
                                 </div>   
                                 <div class="col-xs-3 center-block form-group">
-                                    <label class="control-label">Type</label>
-                                    <select class="form-control" name="selectTipo" id="selectTipo" placeholder="Type">placeholder="Select"
-                                        <option >Select</option>
-                                        <option >Link</option>
-                                        <option>Video</option>
-
+                                    <label class="control-label"><spring:message code="etiq.type"/></label>
+                                    <select class="form-control" name="selectTipo" id="selectTipo" placeholder="Type">
+                                         <option></option>
+                                        <option value ="Link"><spring:message code="etiq.link"/></option>
+                                        <option value ="Video"><spring:message code="etiq.video"/></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-xs-offset-9 col-xs-12">
                                 <div class=" col-xs-3 center-block form-group paddingLabel">
-                                    <input type="button" name="EditMethod" disabled="true" value="save" class="btn btn-success" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveEditMethod()"/> 
+                                    <input type="button" name="EditMethod" disabled="true" value="<spring:message code='etiq.save'/>" class="btn btn-success" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveEditMethod()"/> 
                                 </div>
                             </div>
 
@@ -1086,7 +1085,7 @@ border-radius: 10px;
                 <div class="modal-content">
                     <div class="modal-header modal-header-details">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 id="nameLessonDetails" class="modal-title">Add new file</h4>
+                        <h4 id="nameLessonDetails" class="modal-title"><spring:message code='etiq.addFile'/></h4>
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
@@ -1212,19 +1211,19 @@ border-radius: 10px;
                             <form class="col-xs-12 center-block form-group" action="${post_url}" method="POST" enctype="multipart/form-data">      
                                 <!--<form class="col-xs-12 center-block form-group" action="saveFile.htm" method="POST" enctype="multipart/form-data">-->
                                 <div id ="divAddFile" class="col-xs-10 center-block form-group">
-                                    <label class="control-label">Name</label>
+                                    <label class="control-label"><spring:message code='etiq.txtname'/></label>
 
                                     <input type="hidden" id="txtUrl" name="txtUrl" value="" />
                                     <input type="hidden" id="lessonid" name="lessonid" value = ${lessonid}> 
                                     <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}> 
 
-                                    <input type="text" class=" col-xs-3 form-control" name="idNameFile" id="idNameFile"  placeholder="Name">
-                                    <span class="help-block hide">Invalid Name (Name can not be repeated nor contain special characters / " ')</span>
+                                    <input type="text" class=" col-xs-3 form-control" name="idNameFile" id="idNameFile"  placeholder="<spring:message code='etiq.addName'/>">
+                                    <span class="help-block hide"><spring:message code='etiq.invNameFile'/></span>
                                     <input type="file" class=" col-xs-7 center-block form-control" name="fileToUpload" id="file">
-                                    <span id="spanSelectFile"class="help-block hide">Select a file</span>
+                                    <span id="spanSelectFile"class="help-block hide"><spring:message code='etiq.selectFile'/></span>
                                 </div>
 
-                                <input id = "submitSave" type="submit" disabled="true" value="save" class="col-xs-2 center-block form-group paddingLabel btn btn-success" >     
+                                <input id = "submitSave" type="submit" disabled="true" value="<spring:message code='etiq.save'/>" class="col-xs-2 center-block form-group paddingLabel btn btn-success" >     
                             </form>
 
                         </div>

@@ -313,14 +313,16 @@
             <%--    var lessondeleteconfirm = '<%= request.getParameter("messageDelete") %>'; --%>
                         var lessondeleteconfirm = "";
                         var lessondeleteconfirm = JSON.parse(ajax.responseText);
-
+                        var presentationHasProgress = "<spring:message code="etiq.presentationHasProgress"/>";
+                        var presentationDeleteSuc = "<spring:message code="etiq.presentationDeleteSuc"/>";
+                        
                         if (lessondeleteconfirm.message === 'Presentation has progress records,it can not be deleted') {
                             $('#lessonDeleteMessage').empty();
-                            $('#lessonDeleteMessage').append('<H1>' + lessondeleteconfirm.message + '</H1>');
+                            $('#lessonDeleteMessage').append('<H1>' + presentationHasProgress + '</H1>');
                             $('#deleteLessonMessage').modal('show');
                         } else {
                             $('#lessonDeleteMessage').empty();
-                            $('#lessonDeleteMessage').append('<H1>' + lessondeleteconfirm.message + '</H1>');
+                            $('#lessonDeleteMessage').append('<H1>' + presentationDeleteSuc + '</H1>');
                             $('#deleteLessonMessage').modal('show'); //  Presentation deleted successfully
 
                             refresh();
@@ -540,7 +542,7 @@
                         <div class="container-fluid">
                             <div class="col-xs-6">
                                 <div class="row title">
-                                    Students
+                                    <spring:message code="etiq.txtstudents"/>
                                 </div>
                                 <div id="studentarea" class="row studentarea">
 
@@ -548,25 +550,25 @@
                             </div>
                             <div class="col-xs-6">
                                 <div class="row title">
-                                    Description:
+                                    <spring:message code="etiq.txtdescription"/>:
                                 </div>
                                 <div class="row" id="commentDetails">
 
                                 </div>
                                 <div class="row title">
-                                    Objective:   
+                                    <spring:message code="etiq.Objective"/>:   
                                 </div>
                                 <div class="row" id ="objectivedetails">
 
                                 </div>
                                 <div class="row title">
-                                    Method:
+                                    <spring:message code="etiq.method"/>:
                                 </div>
                                 <div class="row" id="methodDetails">
 
                                 </div>
                                 <div class="row title">
-                                    Equipment: 
+                                    <spring:message code="etiq.txtequipment"/>: 
                                 </div>
                                 <div class="row">
                                     <ul id="contentDetails">
@@ -574,14 +576,14 @@
                                     </ul>
                                 </div>
                                 <div class="row title">
-                                    Created by: 
+                                    <spring:message code="etiq.createByEtiq"/>: 
                                 </div>
                                 <div class="row">
                                     <ul id="createBy">
                                     </ul>
                                 </div>
                                 <div class="row title">
-                                    Steps:
+                                    <spring:message code="etiq.steps"/>:
                                 </div>
                                 <div class="row">
                                     <ul id="steps">
@@ -591,7 +593,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="etiq.txtclose"/></button>
                     </div>
                 </div>
 
@@ -606,14 +608,14 @@
                 <div class="modal-content">
                     <div class="modal-header modal-header-delete">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Are you sure you want to delete?</h4>
+                        <h4 class="modal-title"><spring:message code="etiq.areUsure"/></h4>
                     </div>
                     <div id="lessonDelete" class="modal-body">
 
                     </div>
                     <div class="modal-footer text-center">
-                        <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect()">Yes</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                        <button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteSelect()"><spring:message code="etiq.yes"/></button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="etiq.no"/></button>
                     </div>
                 </div>
 

@@ -18,7 +18,7 @@
         <link rel="manifest" href="manifest.webapp">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-        <title>Workspace</title>
+        <title><spring:message code="etiq.WorkSpace"/></title>
         <script>
             var ajax;
             var userId = ${user.id};
@@ -2196,7 +2196,7 @@
                                     </div>
                                     <div class="modal-footer text-center">
                                         <button id="buttonDeleteObservation" type="button" class="btn btn-danger" data-dismiss="modal" onclick='deleteComentario(value)' value=""><h4 class="modal-title"><spring:message code="etiq.yes"/></button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="etiq.no"/></button>
                                     </div>
                                 </div>
 
