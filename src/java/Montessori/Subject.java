@@ -28,6 +28,14 @@ public class Subject {
     private ServletContext servlet;
     private List<String> objectives;
 
+    public Subject(){
+        this.objectives = new ArrayList<>();
+    }
+    public Subject(Subject s){
+        this.id = s.getId();
+        this.name = s.getName();
+        this.objectives = s.getObjectives();
+    }
     public List<String> getObjectives() {
         return objectives;
     }

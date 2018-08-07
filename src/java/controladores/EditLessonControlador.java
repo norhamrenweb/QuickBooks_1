@@ -253,6 +253,9 @@ public class EditLessonControlador {
             ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
             Subject s = new Subject();
             s.setName("Select Subject");
+            String[] aux = new String[1];
+            aux[0] = "-1";
+            s.setId(aux);
             subjects.add(s);
 
             while (rs1.next()) {
@@ -261,9 +264,9 @@ public class EditLessonControlador {
                 ids[0] = "" + rs1.getInt("CourseID");
                 sub.setId(ids);
 
-                subjects.add(sub);
+                subjects.add(new Subject(sub));
             }
-            String[] aux = new String[1];
+            aux = new String[1];
             aux[0] = "-1";
             Subject sub = new Subject();
             sub.setId(aux);
@@ -276,7 +279,7 @@ public class EditLessonControlador {
                 while (rs2.next()) {
                     if (rs2.getBoolean("Active") == true) {
                         su.setName(rs2.getString("Title"));
-                        activesubjects.add(su);
+                        activesubjects.add(new Subject(su));
                     }
                 }
             }

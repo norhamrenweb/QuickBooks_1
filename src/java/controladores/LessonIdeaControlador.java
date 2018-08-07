@@ -41,131 +41,127 @@ import java.util.Iterator;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
-
 /**
  *
  * @author nmohamed
  */
 @Controller
 public class LessonIdeaControlador {
-     static Logger log = Logger.getLogger(LessonIdeaControlador.class.getName());
-     private Object getBean(String nombrebean, ServletContext servlet)
-    {
+
+    static Logger log = Logger.getLogger(LessonIdeaControlador.class.getName());
+
+    private Object getBean(String nombrebean, ServletContext servlet) {
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
+
     @RequestMapping("/lessonidea/start.htm")
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if((new SessionCheck()).checkSession(hsr))
-               return new ModelAndView("redirect:/userform.htm?opcion=inicio");
-        ModelAndView mv = new ModelAndView("lessonidea");
-    try{
-        ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
-        List <Level> grades = new ArrayList();
-        Level l = new Level();
-        String[] ids = new String[1];
-        ids[0]="-1";
-        l.setName("Select level");
-        l.setId(ids);
-        grades.add(l);
-        while(rs.next())
-        {
-            Level x = new Level();
-             ids = new String[1];
-             ids[0]=""+rs.getInt("GradeLevelID");
-            x.setId(ids);
-            x.setName(rs.getString("GradeLevel"));
-        grades.add(x);
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
-    mv.addObject("levels", grades);
-    }catch(SQLException ex){
-        StringWriter errors = new StringWriter();
-        ex.printStackTrace(new PrintWriter(errors));
-        log.error(ex+errors.toString());
+        ModelAndView mv = new ModelAndView("lessonidea");
+        try {
+            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
+            List<Level> grades = new ArrayList();
+            Level l = new Level();
+            String[] ids = new String[1];
+            ids[0] = "-1";
+            l.setName("Select level");
+            l.setId(ids);
+            grades.add(l);
+            while (rs.next()) {
+                Level x = new Level();
+                ids = new String[1];
+                ids[0] = "" + rs.getInt("GradeLevelID");
+                x.setId(ids);
+                x.setName(rs.getString("GradeLevel"));
+                grades.add(x);
+            }
+            mv.addObject("levels", grades);
+        } catch (SQLException ex) {
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        }
+        return mv;
     }
-    return mv;
-    }
+
     @RequestMapping("/lessonidea/loadtree.htm")
     @ResponseBody
     public String loadtree(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-    ModelAndView mv = new ModelAndView("lessonidea");
-     JSONObject json = new JSONObject();
-      ArrayList<DBRecords> lessons = new ArrayList<>();
-      ArrayList<String> subjects = new ArrayList<>();
-      ArrayList<String> objectives = new ArrayList<>();
-    try{
-        String[] lessonid = hsr.getParameterValues("seleccion1");
-        ResultSet rs = DBConect.eduweb.executeQuery("SELECT lessons.id,lessons.subject_id,lessons.objective_id,objective.name as obj,lessons.name FROM lessons inner join objective on lessons.objective_id = objective.id where lessons.level_id= "+lessonid[0]+" and lessons.idea = true ");
-        while(rs.next())
-        {
-            DBRecords l = new DBRecords();
-            l.setCol1(""+rs.getInt("id"));
-            l.setCol2(rs.getString("name"));
-            l.setCol4(rs.getString("obj"));
-            l.setCol3(""+rs.getInt("subject_id"));
-            if(!objectives.contains(rs.getString("obj"))){
-            objectives.add(rs.getString("obj"));
+        ModelAndView mv = new ModelAndView("lessonidea");
+        JSONObject json = new JSONObject();
+        ArrayList<DBRecords> lessons = new ArrayList<>();
+        ArrayList<String> subjects = new ArrayList<>();
+        ArrayList<String> objectives = new ArrayList<>();
+        try {
+            String[] lessonid = hsr.getParameterValues("seleccion1");
+            ResultSet rs = DBConect.eduweb.executeQuery("SELECT lessons.id,lessons.subject_id,lessons.objective_id,objective.name as obj,lessons.name FROM lessons inner join objective on lessons.objective_id = objective.id where lessons.level_id= " + lessonid[0] + " and lessons.idea = true ");
+            while (rs.next()) {
+                DBRecords l = new DBRecords();
+                l.setCol1("" + rs.getInt("id"));
+                l.setCol2(rs.getString("name"));
+                l.setCol4(rs.getString("obj"));
+                l.setCol3("" + rs.getInt("subject_id"));
+                if (!objectives.contains(rs.getString("obj"))) {
+                    objectives.add(rs.getString("obj"));
+                }
+                lessons.add(l);
+
             }
-            lessons.add(l); 
-          
-        }
-        for (DBRecords x :lessons)
-        {
-            Subject s = new Subject();
-            String id = null;
-            id = x.getCol3();
-            x.setCol3(s.fetchName(Integer.parseInt(id), hsr.getServletContext()));
-            if(!subjects.contains(x.getCol3())){
-            subjects.add(x.getCol3());
+            for (DBRecords x : lessons) {
+                Subject s = new Subject();
+                String id = null;
+                id = x.getCol3();
+                x.setCol3(s.fetchName(Integer.parseInt(id), hsr.getServletContext()));
+                if (!subjects.contains(x.getCol3())) {
+                    subjects.add(x.getCol3());
+                }
             }
-        }
-  
-    }catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
+            log.error(ex + errors.toString());
         }
-    String test = new Gson().toJson(lessons);
-    Tree tree = new Tree();
-    Node<String> rootNode = new Node<String>("root","A"," {\"disabled\":true}");
-    int i = 0;
-   int z = 0;
-    for(String x:subjects)
-    {
-         
-        Node<String> nodeC = new Node<String>(x,"L"+i," {\"disabled\":true}");
-        rootNode.addChild(nodeC); 
-      i++;
-         for(String y:objectives)
-    {
-    
-     for (DBRecords l:lessons){
-         if(l.getCol3().equalsIgnoreCase(x)&&l.getCol4().equalsIgnoreCase(y))
-         {
-            Node<String> nodeA = new Node<String>(y,"C"+z," {\"disabled\":true}");
-             nodeC.addChild(nodeA);
-         z++;
-       for (DBRecords k:lessons){
-          if(k.getCol4().equalsIgnoreCase(y)){
-         Node<String> nodeB = new Node<String>(k.getCol2(),k.getCol1()," {\"disabled\":false}"); 
-         nodeA.addChild(nodeB);
-          }
-       }
-       break;
-         }
+        String test = new Gson().toJson(lessons);
+        Tree tree = new Tree();
+        Node<String> rootNode = new Node<String>("root", "A", " {\"disabled\":true}");
+        int i = 0;
+        int z = 0;
+        for (String x : subjects) {
+
+            Node<String> nodeC = new Node<String>(x, "L" + i, " {\"disabled\":true}");
+            rootNode.addChild(nodeC);
+            i++;
+            for (String y : objectives) {
+
+                for (DBRecords l : lessons) {
+                    if (l.getCol3().equalsIgnoreCase(x) && l.getCol4().equalsIgnoreCase(y)) {
+                        Node<String> nodeA = new Node<String>(y, "C" + z, " {\"disabled\":true}");
+                        nodeC.addChild(nodeA);
+                        z++;
+                        for (DBRecords k : lessons) {
+                            if (k.getCol4().equalsIgnoreCase(y)) {
+                                Node<String> nodeB = new Node<String>(k.getCol2(), k.getCol1(), " {\"disabled\":false}");
+                                nodeA.addChild(nodeB);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+
         }
-    }
-        
-    }
-   
-    
 
         tree.setRootElement(rootNode);
         String test2 = this.generateJSONfromTree(tree);
-    return test2;
+        return test2;
     }
+
     public String generateJSONfromTree(Tree tree) throws IOException, JSONException {
         ObjectMapper mapper = new ObjectMapper();
         JsonFactory factory = new JsonFactory();
@@ -185,331 +181,343 @@ public class LessonIdeaControlador {
 
         obN.put("text", node.getData());
         obN.put("id", node.getId());
-        obN.put("state",node.getState());
+        obN.put("state", node.getState());
         JSONObject j = new JSONObject();
 //        j.put("opened",true);
 //        j.put("disabled",false);
 //        obN.put("state",j.toString());
         ArrayNode childN = obN.arrayNode();
-        obN.set("children", childN);        
+        obN.set("children", childN);
         if (node.getChildren() == null || node.getChildren().isEmpty()) {
             return obN;
         }
 
         Iterator<Node<String>> it = node.getChildren().iterator();
-        while (it.hasNext()) {  
+        while (it.hasNext()) {
             childN.add(generateJSON(it.next(), new ObjectMapper().createObjectNode()));
         }
         return obN;
     }
-     @RequestMapping("/editlessonidea.htm")
-    public ModelAndView editlessonidea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
-    { 
-        if((new SessionCheck()).checkSession(hsr))
-           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+
+    @RequestMapping("/editlessonidea.htm")
+    public ModelAndView editlessonidea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        }
         ModelAndView mv = new ModelAndView("editlessonidea");
         String lessonid = hsr.getParameter("LessonsSelected");
         Lessons data = new Lessons();
         Level l = new Level();
         ArrayList<Content> c = new ArrayList<>();
-    //   ArrayList<Students> stud = new ArrayList<>();
+        //   ArrayList<Students> stud = new ArrayList<>();
         Objective o = new Objective();
         Subject s = new Subject();
         Method m = new Method();
         String[] id = new String[1];
-        try{
-       ResultSet rs = DBConect.eduweb.executeQuery("select * from lessons where id= "+lessonid);
-         while(rs.next()){
-             data.setComments(rs.getString("comments"));
-           
+        try {
+            ResultSet rs = DBConect.eduweb.executeQuery("select * from lessons where id= " + lessonid);
+            while (rs.next()) {
+                data.setComments(rs.getString("comments"));
+
                 data.setId(Integer.parseInt(lessonid));
-                l.setId(new String[] {""+rs.getInt("level_id")});
-                m.setId(new String[] {""+rs.getInt("method_id")});
+                l.setId(new String[]{"" + rs.getInt("level_id")});
+                m.setId(new String[]{"" + rs.getInt("method_id")});
                 data.setName(rs.getString("name"));
-                o.setId(new String[] {""+rs.getInt("objective_id")});
-                s.setId(new String[] {""+rs.getInt("subject_id")});
-                
-         }
-         id = s.getId() ;
-       s.setName(s.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
-       data.setSubject(s);
-       id=null;
-       id = m.getId();
-       m.setName(m.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
-       data.setMethod(m);
-        id=null;
-        id = o.getId();
-       o.setName(o.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
-        data.setObjective(o);
-         id=null;
-        id = l.getId();
-       l.setName(l.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
-       data.setLevel(l);
-       id=null;
-       ResultSet rs2 = DBConect.eduweb.executeQuery("select * from lesson_content where lesson_id = "+lessonid);
-      
-       List<String>cid =new ArrayList<>();
-       while(rs2.next())
-       {
-           cid.add(rs2.getString("content_id")); 
-          
-       }
-      
-       data.setContentid(cid);
-       mv.addObject("data",data);
-       ArrayList<Objective> test = this.getObjectives(data.getSubject().getId());
-        mv.addObject("objectives",this.getObjectives(data.getSubject().getId()));
-                 mv.addObject("contents",this.getContent(data.getObjective().getId()));
-               mv.addObject("subjects",this.getSubjects(data.getLevel().getId()));
-         List <Lessons> ideas = new ArrayList();
-        ResultSet rs4 = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
-        List <Level> grades = new ArrayList();
-        Level le = new Level();
-        le.setName("Select level");
-        grades.add(le);
-        while(rs4.next())
-        {
-            Level x = new Level();
-             String[] ids = new String[1];
-             ids[0]=""+rs4.getInt("GradeLevelID");
-            x.setId(ids);
-            x.setName(rs4.getString("GradeLevel"));
-        grades.add(x);
-        }
-        ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT * FROM public.method");
-        List <Method> methods = new ArrayList();
-        Method me = new Method();
-        me.setName("Select Method");
-        methods.add(me);
-        while(rs1.next())
-        {
-            Method x = new Method();
-             String[] ids = new String[1];
-             ids[0]=""+rs1.getInt("id");
-            x.setId(ids);
-            x.setName(rs1.getString("name"));
-            x.setDescription(rs1.getString("description"));
-        methods.add(x);
-        }
+                o.setId(new String[]{"" + rs.getInt("objective_id")});
+                s.setId(new String[]{"" + rs.getInt("subject_id")});
+
+            }
+            id = s.getId();
+            s.setName(s.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
+            data.setSubject(s);
+            id = null;
+            id = m.getId();
+            m.setName(m.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
+            data.setMethod(m);
+            id = null;
+            id = o.getId();
+            o.setName(o.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
+            data.setObjective(o);
+            id = null;
+            id = l.getId();
+            l.setName(l.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
+            data.setLevel(l);
+            id = null;
+            ResultSet rs2 = DBConect.eduweb.executeQuery("select * from lesson_content where lesson_id = " + lessonid);
+
+            List<String> cid = new ArrayList<>();
+            while (rs2.next()) {
+                cid.add(rs2.getString("content_id"));
+
+            }
+
+            data.setContentid(cid);
+            mv.addObject("data", data);
+            ArrayList<Objective> test = this.getObjectives(data.getSubject().getId());
+            mv.addObject("objectives", this.getObjectives(data.getSubject().getId()));
+            mv.addObject("contents", this.getContent(data.getObjective().getId()));
+            mv.addObject("subjects", this.getSubjects(data.getLevel().getId()));
+            List<Lessons> ideas = new ArrayList();
+            ResultSet rs4 = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
+            List<Level> grades = new ArrayList();
+            Level le = new Level();
+            le.setName("Select level");
+            String[] ids = new String[1];
+            ids[0] = "-1";
+            le.setId(ids);
+            grades.add(le);
+            while (rs4.next()) {
+                Level x = new Level();
+                ids = new String[1];
+                ids[0] = "" + rs4.getInt("GradeLevelID");
+                x.setId(ids);
+                x.setName(rs4.getString("GradeLevel"));
+                grades.add(x);
+            }
+            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT * FROM public.method");
+            List<Method> methods = new ArrayList();
+            Method me = new Method();
+            me.setName("Select Method");
+            ids = new String[1];
+            ids[0] = "-1";
+            me.setId(ids);
+            methods.add(me);
+            while (rs1.next()) {
+                Method x = new Method();
+                ids = new String[1];
+                ids[0] = "" + rs1.getInt("id");
+                x.setId(ids);
+                x.setName(rs1.getString("name"));
+                x.setDescription(rs1.getString("description"));
+                methods.add(x);
+            }
             mv.addObject("gradelevels", grades);
-            mv.addObject("methods",methods);
-        }catch (SQLException ex) {
+            mv.addObject("methods", methods);
+        } catch (SQLException ex) {
             System.out.println("Error: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
+            log.error(ex + errors.toString());
         }
-        
-       return mv;
+
+        return mv;
     }
-      @RequestMapping("/lessonidea/deletetree.htm")
-      @ResponseBody
-    public String deletetree(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception
-    { 
+
+    @RequestMapping("/lessonidea/deletetree.htm")
+    @ResponseBody
+    public String deletetree(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         ModelAndView mv = new ModelAndView("redirect:/lessonidea/start.htm");
         String lessonid = hsr.getParameter("selected");
         JSONObject jsonObj = new JSONObject();
-        try{
-       String message = null;
-        HttpSession sesion = hsr.getSession();
-        User user = (User) sesion.getAttribute("user");
-          String consulta = "DELETE FROM lesson_content WHERE lesson_id="+lessonid;
-          DBConect.eduweb.executeUpdate(consulta);
-        consulta = "DELETE FROM public.lessons WHERE id="+lessonid;
-           DBConect.eduweb.executeUpdate(consulta);
-           message = "Presentation deleted successfully";
-        jsonObj.put("message", message);
-        }catch (SQLException ex) {
+        try {
+            String message = null;
+            HttpSession sesion = hsr.getSession();
+            User user = (User) sesion.getAttribute("user");
+            String consulta = "DELETE FROM lesson_content WHERE lesson_id=" + lessonid;
+            DBConect.eduweb.executeUpdate(consulta);
+            consulta = "DELETE FROM public.lessons WHERE id=" + lessonid;
+            DBConect.eduweb.executeUpdate(consulta);
+            message = "Presentation deleted successfully";
+            jsonObj.put("message", message);
+        } catch (SQLException ex) {
             System.out.println("Error: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
+            log.error(ex + errors.toString());
         }
         return jsonObj.toString();
     }
-    public ArrayList<Subject> getSubjects(String[] levelid) throws SQLException
-       {
-           
+
+    public ArrayList<Subject> getSubjects(String[] levelid) throws SQLException {
+
         ArrayList<Subject> subjects = new ArrayList<>();
         ArrayList<Subject> activesubjects = new ArrayList<>();
-        try{
-             
-          ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID ="+levelid[0]+")");
-           Subject s = new Subject();
-          s.setName("Select Subject");
-          subjects.add(s);
-           
-           while (rs1.next())
-            {
-             Subject sub = new Subject();
-             String[] ids = new String[1];
-            ids[0]=""+rs1.getInt("CourseID");
-             sub.setId(ids);
-            
+        try {
+
+            ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
+            Subject s = new Subject();
+            s.setName("Select Subject");
+            String[] ids = new String[1];
+            ids[0] = "-1";
+
+            s.setId(ids);
+            subjects.add(s);
+            activesubjects.add(new Subject(s));
+            while (rs1.next()) {
+                Subject sub = new Subject();
+                ids = new String[1];
+                ids[0] = "" + rs1.getInt("CourseID");
+                sub.setId(ids);
+
                 subjects.add(sub);
             }
-           for(Subject su:subjects.subList(1,subjects.size()))
-          {
-              String[] ids = new String[1];
-              ids=su.getId();
-           ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where reportcard = 1 and CourseID = '"+ids[0]+"' order by Title");
-           while(rs2.next())
-           {
-            if(rs2.getBoolean("Active")== true)
-               {
-                   su.setName(rs2.getString("Title"));
-                   activesubjects.add(su);
-               }
-           }
-          }
-        }catch(SQLException ex){
-        StringWriter errors = new StringWriter();
-        ex.printStackTrace(new PrintWriter(errors));
-        log.error(ex+errors.toString());
+            for (Subject su : subjects.subList(1, subjects.size())) {
+                ids = new String[1];
+                ids = su.getId();
+                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where reportcard = 1 and CourseID = '" + ids[0] + "' order by Title");
+                while (rs2.next()) {
+                    if (rs2.getBoolean("Active") == true) {
+                        su.setName(rs2.getString("Title"));
+                        activesubjects.add(su);
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
         }
-           return activesubjects;
-       }
-        public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException
-       {
-           ArrayList<Objective> objectives = new ArrayList<>();
-       try {
+        return activesubjects;
+    }
 
-          ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='"+subjectid[0]+"' order by name");
+    public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException {
+        ArrayList<Objective> objectives = new ArrayList<>();
+        try {
+            String[] ids = new String[1];
+            Objective sub = new Objective();
+            ids[0] = "-1";
+            sub.setId(ids);
+            sub.setName("Select objective");
+            objectives.add(sub);
+
+            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0] + "' order by name");
 //          Objective s = new Objective();
 //          s.setName("Select Objective");
 //          objectives.add(s);
-           
-           while (rs1.next())
-            {
-             String[] ids = new String[1];
-                Objective sub = new Objective();
-            ids[0] = ""+rs1.getInt("id");
-             sub.setId(ids);
-             sub.setName(rs1.getString("name"));
+
+            while (rs1.next()) {
+                ids = new String[1];
+                sub = new Objective();
+                ids[0] = "" + rs1.getInt("id");
+                sub.setId(ids);
+                sub.setName(rs1.getString("name"));
                 objectives.add(sub);
             }
-          
-            
+
         } catch (SQLException ex) {
             System.out.println("Error leyendo Objectives: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
+            log.error(ex + errors.toString());
         }
-       return objectives;
-       }
-        public ArrayList<Content> getContent(String[] objectiveid) throws SQLException
-       {
-           ArrayList<Content> contents = new ArrayList<>();
-       try {
+        return objectives;
+    }
 
-          ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id ="+objectiveid[0]+")");
-         
-           while (rs1.next())
-            {
+    public ArrayList<Content> getContent(String[] objectiveid) throws SQLException {
+        ArrayList<Content> contents = new ArrayList<>();
+        try {
+
+            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id =" + objectiveid[0] + ")");
+
+            while (rs1.next()) {
                 Content eq = new Content();
-                String[] id= new String[1];
-               id[0]= ""+rs1.getInt("id");
-              
+                String[] id = new String[1];
+                id[0] = "" + rs1.getInt("id");
+
                 eq.setId(id);
-              eq.setName(rs1.getString("name"));
-               contents.add(eq);
+                eq.setName(rs1.getString("name"));
+                contents.add(eq);
             }
-            
+
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
+            log.error(ex + errors.toString());
         }
-       return contents;
-       }
-   @RequestMapping("/savelessonidea.htm")
-    public ModelAndView savelessonidea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception  
-    {
-        if((new SessionCheck()).checkSession(hsr))
-           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        return contents;
+    }
+
+    @RequestMapping("/savelessonidea.htm")
+    public ModelAndView savelessonidea(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        }
         String id = hsr.getParameter("lessonid");
         String message = "Idea Updated";
-        ModelAndView mv = new ModelAndView("redirect:/editlessonidea.htm?LessonsSelected="+id,"message",message);
-        try{
-       HttpSession sesion = hsr.getSession();
-        User user = (User) sesion.getAttribute("user");
-       Lessons newlesson = new Lessons();
-       List<String> contentids;
-       Subject subject = new Subject();
-       Objective objective = new Objective();
-       Level level = new Level();
-       level.setName(hsr.getParameter("TXTlevel"));
-       level.setId(hsr.getParameterValues("TXTlevel"));
-       subject.setName(hsr.getParameter("TXTsubject"));
-       subject.setId(hsr.getParameterValues("TXTsubject"));
-       objective.setName(hsr.getParameter("TXTobjective"));
-       objective.setId(hsr.getParameterValues("TXTobjective"));
-       String[] test = hsr.getParameterValues("TXTcontent");
-       //optional field, avoid null pointer exception
-       if(test!=null && test.length>0){
-       contentids=Arrays.asList(hsr.getParameterValues("TXTcontent"));
-       newlesson.setContentid(contentids);
-       }
-      
-       newlesson.setComments(hsr.getParameter("TXTdescription"));
-       Method m = new Method();
-       String[] test2 = hsr.getParameterValues("TXTmethod");
-       //optional field, avoid null pointer exception
-       if(test2!=null && test2.length>0){
-       m.setId(hsr.getParameterValues("TXTmethod"));
-       m.setName(hsr.getParameter("TXTmethod"));
-       newlesson.setMethod(m);
-       }
-       else{
-       m.setName("");
-       newlesson.setMethod(m);
-       }
-        newlesson.setId(Integer.parseInt(id));
-      newlesson.setLevel(level);
-      newlesson.setSubject(subject);
-      newlesson.setObjective(objective);
-    
-       newlesson.setName(hsr.getParameter("TXTnombreLessons"));
-        Updatelesson c = new Updatelesson(hsr.getServletContext());
-        c.updateidea(newlesson);
-        }catch(Exception ex){
+        ModelAndView mv = new ModelAndView("redirect:/editlessonidea.htm?LessonsSelected=" + id, "message", message);
+        try {
+            HttpSession sesion = hsr.getSession();
+            User user = (User) sesion.getAttribute("user");
+            Lessons newlesson = new Lessons();
+            List<String> contentids;
+            Subject subject = new Subject();
+            Objective objective = new Objective();
+            Level level = new Level();
+            level.setName(hsr.getParameter("TXTlevel"));
+            level.setId(hsr.getParameterValues("TXTlevel"));
+            subject.setName(hsr.getParameter("TXTsubject"));
+            subject.setId(hsr.getParameterValues("TXTsubject"));
+            objective.setName(hsr.getParameter("TXTobjective"));
+            objective.setId(hsr.getParameterValues("TXTobjective"));
+            String[] test = hsr.getParameterValues("TXTcontent");
+            //optional field, avoid null pointer exception
+            if (test != null && test.length > 0) {
+                contentids = Arrays.asList(hsr.getParameterValues("TXTcontent"));
+                newlesson.setContentid(contentids);
+            }
+
+            newlesson.setComments(hsr.getParameter("TXTdescription"));
+            Method m = new Method();
+            String[] test2 = hsr.getParameterValues("TXTmethod");
+            //optional field, avoid null pointer exception
+            if (test2 != null && test2.length > 0) {
+                m.setId(hsr.getParameterValues("TXTmethod"));
+                m.setName(hsr.getParameter("TXTmethod"));
+                newlesson.setMethod(m);
+            } else {
+                m.setName("");
+                newlesson.setMethod(m);
+            }
+            newlesson.setId(Integer.parseInt(id));
+            newlesson.setLevel(level);
+            newlesson.setSubject(subject);
+            newlesson.setObjective(objective);
+
+            newlesson.setName(hsr.getParameter("TXTnombreLessons"));
+            Updatelesson c = new Updatelesson(hsr.getServletContext());
+            c.updateidea(newlesson);
+        } catch (Exception ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
+            log.error(ex + errors.toString());
         }
-       
+
         return mv;
     }
-     @RequestMapping("/editlessonidea/subjectlistLevel.htm")
+
+    @RequestMapping("/editlessonidea/subjectlistLevel.htm")
     public ModelAndView subjectlistLevel(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if((new SessionCheck()).checkSession(hsr))
-           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        }
         ModelAndView mv = new ModelAndView("editlessonidea");
 
-         mv.addObject("subjects",this.getSubjects(hsr.getParameterValues("seleccion1")));
-        
+        mv.addObject("subjects", this.getSubjects(hsr.getParameterValues("seleccion1")));
+
         return mv;
     }
-        @RequestMapping("/editlessonidea/objectivelistSubject.htm")
+
+    @RequestMapping("/editlessonidea/objectivelistSubject.htm")
     public ModelAndView objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if((new SessionCheck()).checkSession(hsr))
-           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        }
         ModelAndView mv = new ModelAndView("editlessonidea");
-    //    mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
+        //    mv.addObject("templatessubsection", hsr.getParameter("seleccion2"));
         mv.addObject("objectives", this.getObjectives(hsr.getParameterValues("seleccion2")));
-        
+
         return mv;
     }
+
     @RequestMapping("/editlessonidea/contentlistObjective.htm")
     public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        if((new SessionCheck()).checkSession(hsr))
-           return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        if ((new SessionCheck()).checkSession(hsr)) {
+            return new ModelAndView("redirect:/userform.htm?opcion=inicio");
+        }
         ModelAndView mv = new ModelAndView("editlessonidea");
-         mv.addObject("contents", this.getContent(hsr.getParameterValues("seleccion3")));
-        
-        return mv;
-    }   
-}    
+        mv.addObject("contents", this.getContent(hsr.getParameterValues("seleccion3")));
 
+        return mv;
+    }
+}

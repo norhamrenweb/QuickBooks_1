@@ -649,7 +649,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Share presentation:</h4>
+                        <h4 class="modal-title"><spring:message code="etiq.sharePresentation"/>:</h4>
                     </div>
                     <input type="hidden" id="compartirid" name ="compartirid" value="">
                     <div id="shareselect" class="modal-body">
@@ -664,16 +664,16 @@
 
                             <div class="col-xs-3">
                                 <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
-                                    <input type="button" class="btn btn-success btn-block pasar" value="Add »">
+                                    <input type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
                                 </div>
                                 <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                    <input type="button" class="btn btn-danger btn-block quitar" value="« Remove">
+                                    <input type="button" class="btn btn-danger btn-block quitar" value="« <spring:message code="etiq.txtremove"/>">
                                 </div>
                                 <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                    <input type="button" class="btn btn-success btn-block pasartodos" value="Add All »">
+                                    <input type="button" class="btn btn-success btn-block pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
                                 </div>
                                 <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                    <input type="button" class="btn btn-danger btn-block quitartodos" value="« Remove All">
+                                    <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
                                 </div>
                                 <!--                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
                                                                 <input type="button" class="btn btn-danger btn-block test" value="test">
@@ -687,7 +687,7 @@
                         </div>
                     </div>
                     <div class="modal-footer text-center">
-                        <input type="button" id="createOnClick" class="btn btn-success" value="Share" data-dismiss="modal" onclick="compartirajax()">
+                        <input type="button" id="createOnClick" class="btn btn-success" value="<spring:message code='etiq.share'/>" data-dismiss="modal" onclick="compartirajax()">
                     </div>
                 </div>
             </div>
