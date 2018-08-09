@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html>
     <%@ include file="infouser.jsp" %>
-
+<%@ include file="menu.jsp" %>
     <head>
         <title><spring:message code="etiq.editPresentation"/></title>
         <script>
@@ -907,7 +907,14 @@
             .marginSelect{
                 margin-right: 17px !important;
             }
-
+            #saveEdit{
+                  font-size: medium;
+                width: 30%;
+                
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+            
         </style>
     </head>
     <body>
@@ -1175,21 +1182,20 @@
                     </div>
 
                     <div class="form-group collapse in" id="contenedorStudents">
-                        <div class="col-xs-12">
-                            <div class="col-xs-2"></div>
+                        <div class="col-xs-12 sinpadding">  
                             <div class="col-xs-3">
                                 <label><spring:message code='etiq.filter'/> </label>     
                             </div>
                         </div>
-                        <div class="col-xs-12">
-                            <div class="col-xs-2">
-                                <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
+                        <div class="col-xs-12 sinpadding">
+                            <div class="col-xs-12 sinpadding" style="margin-bottom:  10px;">
+                                <select class="form-control" name="levelStudent" id="levelStudent" style="width: 33.4%;" onchange="comboSelectionLevelStudent()">
                                     <c:forEach var="levels" items="${gradelevels}">
                                         <option value="${levels.id[0]}" >${levels.name}</option>
                                     </c:forEach>
                                 </select>
                             </div>
-                            <div class="col-xs-3">
+                            <div class="col-xs-4 sinpadding">
                                 <input type="hidden" id="studentsName" name="studentsName" value = "">                                                        
 
                                 <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
@@ -1199,17 +1205,17 @@
                                 </select>
                             </div>
 
-                            <div class="col-xs-2">
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
+                            <div class="col-xs-4">
+                                <div class="col-xs-12 text-center btnStudents" style=" padding-top: 50px;">
                                     <input type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
                                 </div>
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <div class="col-xs-12 text-center btnStudents">
                                     <input type="button" class="btn btn-danger btn-block quitar" value="« <spring:message code="etiq.txtremove"/>">
                                 </div>
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <div class="col-xs-12 text-center btnStudents">
                                     <input type="button" class="btn btn-success btn-block pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
                                 </div>
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <div class="col-xs-12 text-center btnStudents">
                                     <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
                                 </div>
                                 <!--                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
@@ -1217,7 +1223,7 @@
                                                             </div>-->
                             </div>
 
-                            <div class="col-xs-3">
+                            <div class="col-xs-4 sinpadding">
                                 <select class="form-control" size="20" multiple name="destino[]" id="destino" style="width: 100% !important;"> 
                                     <c:forEach var="studentsSelected" items="${data.students}">
                                         <option value="${studentsSelected.id_students}" selected="" >${studentsSelected.nombre_students}</option>
@@ -1228,7 +1234,7 @@
                     </div>
                 </fieldset>
                 <div class="col-xs-12 text-center">
-                    <input type="submit" class="btn btn-success" id="saveEdit" value="<spring:message code="etiq.save"/>">
+                    <input type="submit" class="btn btn-info" id="saveEdit" value="<spring:message code="etiq.save"/>">
                 </div>
             </form:form>
 

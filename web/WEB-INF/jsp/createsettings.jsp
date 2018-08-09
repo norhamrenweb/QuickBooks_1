@@ -16,7 +16,7 @@
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>SOW</title>
+        <title><spring:message code="etiq.sow"/></title>
 
         <script>
             $(document).ready(function () {
@@ -96,6 +96,8 @@
                     }
                 });
 
+                var selectlevel = "<spring:message code="etiq.selectlevel"/>";
+                $("#level option[value='?']").text(selectlevel);
             });
 
 
@@ -285,10 +287,12 @@
                     var objective = JSON.parse(json.objective);
 
                     //objective.finalrating = tiene los ids de los terms para el editar
-
+                    var thisObjective1_1 = "<spring:message code="etiq.thisObjective1_1"/>";
+                    var thisObjective1_2 = "<spring:message code="etiq.thisObjective1_2"/>";
+                    
                     var content = JSON.parse(json.content);
                     if (objective.nooflessons !== 'NaN') {
-                        $('#nooflessons').text("This objective is currently linked to " + objective.nooflessonsplanned + " presentations");
+                        $('#nooflessons').text( thisObjective1_1+" "+ objective.nooflessonsplanned + " "+thisObjective1_2);
                     }
                     ;
 
@@ -898,19 +902,22 @@
             .popover{
                 width: 500px;
             }
+            .width100{
+                width: 100%;
+            }
         </style>
     </head>
     <body>
 
 
         <div class="container">
-            <h1 class="text-center">Create Scheme of Work</h1>
+            <h1 class="text-center"><spring:message code="etiq.createScheme"/></h1>
 
 
             <form:form id="formSettings" method ="post" action="createsetting.htm?select=createsetting" >
 
                 <fieldset>
-                    <legend>Select an item to edit</legend>
+                    <legend><spring:message code="etiq.selectAnItem"/></legend>
 
                     <div class="col-xs-12">
                         <div class="col-xs-3 form-group">
@@ -931,40 +938,40 @@
                             </select>
                         </div>
                         <div class="col-xs-3 center-block">
-                            <label class="control-label">Objective</label>
+                            <label class="control-label"><spring:message code="etiq.Objective"/></label>
                             <select class="form-control" disabled="true" name="TXTobjective" id="objective" multiple size="10" onclick="comboSelectionObjective()">
                                 <c:forEach var="objective" items="${objectives}">
                                     <option value="${objective.id[0]}" title ="${objective.description}" >${objective.name}</option>
                                 </c:forEach>
                             </select>
-                            <div class="col-xs-12" style="padding-top: 10px;">
-                                <div class="col-xs-4 text-center">
-                                    <input type="button" class="btn btn-success" disabled data-toggle="tooltip" data-placement="bottom" value="add" id="addObjective"/>
+                            <div class="col-xs-12 sinpadding" style="padding-top: 10px !important;">
+                                <div class="col-xs-12 col-sm-6 col-lg-4 sinpadding text-center" style="margin-bottom: 2px;">
+                                    <input type="button" class="btn btn-success" disabled data-toggle="tooltip" data-placement="bottom" value="<spring:message code='etiq.add'/>" id="addObjective"/>
                                 </div>
-                                <div class="col-xs-4 text-center">
-                                    <input type="button" class="btn btn-warning" disabled data-toggle="tooltip" data-placement="bottom"  value="edit" id="editObjective"/>
+                                <div class="col-xs-12 col-sm-6 col-lg-4 sinpadding text-center">
+                                    <input type="button" class="btn btn-warning" disabled data-toggle="tooltip" data-placement="bottom"  value="<spring:message code='etiq.edit'/>" id="editObjective"/>
                                 </div>
-                                <div class="col-xs-4 text-center">
-                                    <input type="button" class="btn btn-danger" disabled data-toggle="modal" data-target="#confirmedDeleteObjective" data-placement="bottom" value="del" id="delObjective"/>
+                                <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-0 sinpadding text-center">
+                                    <input type="button" class="btn btn-danger" disabled data-toggle="modal" data-target="#confirmedDeleteObjective" data-placement="bottom" value="<spring:message code='etiq.delete'/>" id="delObjective"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-3 center-block">
-                            <label class="control-label">Equipment</label>
+                            <label class="control-label"><spring:message code='etiq.equip'/></label>
                             <select class="form-control" disabled="true" name="TXTcontent" id="content" multiple size="10" onclick="comboSelectionContent()">
                                 <c:forEach var="content" items="${contents}">
                                     <option value="${content.id[0]}" title="${content.description}" >${content.name}</option>
                                 </c:forEach>
                             </select>
-                            <div class="col-xs-12" style="padding-top: 10px;">
-                                <div class="col-xs-4 text-center">
-                                    <input type="button" class="btn btn-success" disabled data-toggle="tooltip" data-placement="bottom" value="add" id="addContent">
+                            <div class="col-xs-12 sinpadding" style="padding-top: 10px !important;">
+                                <div class="col-xs-12 col-sm-6 col-lg-4 sinpadding text-center"  style="margin-bottom: 2px;">
+                                    <input type="button" class="btn btn-success" disabled data-toggle="tooltip" data-placement="bottom" value="<spring:message code='etiq.add'/>" id="addContent">
                                 </div>
-                                <div class="col-xs-4 text-center">
-                                    <input type="button" class="btn btn-warning" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editContent">
+                                <div class="col-xs-12 col-sm-6 col-lg-4 sinpadding text-center">
+                                    <input type="button" class="btn btn-warning" disabled data-toggle="tooltip" data-placement="bottom" value="<spring:message code='etiq.edit'/>" id="editContent">
                                 </div>
-                                <div class="col-xs-4 text-center">
-                                    <input type="button" class="btn btn-danger" disabled data-toggle="modal" data-target="#confirmedDeleteContent" data-placement="bottom" value="del" id="delContent" >
+                                <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-0 sinpadding text-center">
+                                    <input type="button" class="btn btn-danger" disabled data-toggle="modal" data-target="#confirmedDeleteContent" data-placement="bottom" value="<spring:message code='etiq.delete'/>" id="delContent" >
                                 </div>
                             </div>
                         </div>
@@ -973,184 +980,178 @@
             </form:form>
             <form:form id="formpepi" method ="post"  >
                 <fieldset class="hidden" id="formAddobjetive">
-                    <legend>Add objective to <span id="objectiveSelectedForAdd"></span></legend>
+                    <legend><spring:message code='etiq.addObjectiveTo'/> <span id="objectiveSelectedForAdd"></span></legend>
                         <%--Add objective--%>
-                    <div class="col-xs-3 center-block form-group" id="addObjective">
+                    <div class="col-xs-4 col-lg-3 center-block form-group" id="addObjective">
                         <div class="col-xs-12"> 
-                            <label class="control-label">Name new objective</label>
-                            <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="Name" >
-                            <div id="NameObjectiveError" style="color:red">Write a name</div>
+                            <label class="control-label"><spring:message code='etiq.nameNewObjec'/></label>
+                            <input type="text" class="form-control" name="TXTnamenewobjective" id="namenewobjective"  placeholder="<spring:message code='etiq.writeName'/>" >
+                            <div id="NameObjectiveError" style="color:red"><spring:message code='etiq.writeName'/></div>
                         </div>
                         <div class="col-xs-12"> 
-                            <label class='checkbox-inline'><input id="checkReportCard" type='checkbox' name='checkReportCard'>Use in Report Card</label>
+                            <label class='checkbox-inline'><input id="checkReportCard" type='checkbox' name='checkReportCard'><spring:message code='etiq.useReport'/></label>
                         </div>
                     </div>
-                    <div class="col-xs-7 center-block form-group">
-                        <label class="control-label">Description</label>
-                        <textarea type="text" class="form-control" name="TXTnamenewobjective" id="descriptionnewobjective"  placeholder="Description"  spellcheck="true"></textarea>
+                    <div class="col-xs-8 col-lg-6 center-block form-group">
+                        <label class="control-label"><spring:message code='etiq.txtdescription'/></label>
+                        <textarea type="text" class="form-control" name="TXTnamenewobjective" id="descriptionnewobjective"  placeholder="<spring:message code='etiq.txtdescription'/>"  spellcheck="true"></textarea>
                         <div class="col-xs-12" id="ObjectivesTerms"></div>
-                        <div class="col-xs-12" id="ObjectivesTermsError"  style="color:red">Selected a term please</div>
+                        <div class="col-xs-12" id="ObjectivesTermsError"  style="color:red"><spring:message code='etiq.selectTerm'/></div>
                     </div>
-                    <div class="col-xs-2 center-block form-group">
-                        <label class="control-label">Steps</label>
-                        <ol id="newsteps">   
-                        </ol>
+                    <div class="col-xs-12 col-lg-3 center-block form-group">
+                        <label class="control-label col-xs-12"><spring:message code='etiq.steps'/></label>
+                        <div class="col-xs-12"><ol id="newsteps">   
+                            </ol></div>
                     </div>
-                    <div class="col-xs-2 text-center form-group paddingLabel">
-                        <div class="col-xs-8 center-block form-group paddingLabel">
-                            <input type="button" name="addObjectiveSteps" value="Add Steps" class="btn btn-success" id="addObjectiveSteps" data-target=".bs-example-modal-lg" onclick="stepsAdd()"/>
-                        </div>
-                        <div class="col-xs-4 center-block form-group paddingLabel">
-                            <input type="button" name="AddObjective" value="save" class="btn btn-success" id="AddObjective" data-target=".bs-example-modal-lg" onclick="saveCheckObjective()"/> 
-                        </div>
+                    <div class="col-xs-12 text-center form-group paddingLabel">
+                        
+                            <input type="button" name="addObjectiveSteps" value="<spring:message code='etiq.addSteps'/>" class="btn btn-success" id="addObjectiveSteps" data-target=".bs-example-modal-lg" onclick="stepsAdd()"/>
+                            <input type="button" name="AddObjective" value="<spring:message code="etiq.save"/>" class="btn btn-info" id="AddObjective" data-target=".bs-example-modal-lg" onclick="saveCheckObjective()"/> 
+                      
                     </div>
                 </fieldset>
                 <fieldset class="hidden" id="formEditobjetive">
-                    <legend>Edit objective in <span id="objectiveSelectedForEdit"></span></legend>
+                    <legend><spring:message code="etiq.editObjective"/><span id="objectiveSelectedForEdit"></span></legend>
                         <%--Edit objective--%>
-                    <div class="col-xs-3 center-block form-group" id="addObjective">
+                    <div class="col-xs-4 col-lg-3 center-block form-group" id="addObjective">
                         <div class="col-xs-12">
-                            <label class="control-label">Edit objective</label>
-                            <input type="text" class="form-control" name="TXTeditNameObjective" id="editNameObjective"  placeholder="Name">
-                            <div id="NameObjectiveErrorEdit" style="color:red">Write a name</div>
+                            <label class="control-label"><spring:message code='etiq.editObjective'/></label>
+                            <input type="text" class="form-control" name="TXTeditNameObjective" id="editNameObjective"  placeholder="<spring:message code='etiq.name'/>">
+                            <div id="NameObjectiveErrorEdit" style="color:red"><spring:message code='etiq.writeName'/></div>
                         </div>
                         <div class="col-xs-12"> 
-                            <label class='checkbox-inline'><input id="checkEditReportCard" type='checkbox' name='checkReportCard'>Use in Report Card</label>
+                            <label class='checkbox-inline'><input id="checkEditReportCard" type='checkbox' name='checkReportCard'><spring:message code='etiq.useReport'/></label>
                         </div>
                     </div>
-                    <div class="col-xs-4 center-block form-group">
-                        <label class="control-label">Description</label>
-                        <textarea type="text" class="form-control" rows="5" name="TXTeditDescriptionObjective" id="editDescriptionObjective"  placeholder="Description"></textarea>
-                        <div class="col-xs-12" id="ObjectivesTermsEdit"></div>
-                        <div class="col-xs-12" id="ObjectivesTermsErrorEdit"  style="color:red">Selected a term please</div>
+                    <div class="col-xs-8 col-lg-6 center-block form-group">
+                        <label class="control-label"><spring:message code='etiq.txtdescription'/></label>
+                        <textarea type="text" class="form-control" rows="5" name="TXTeditDescriptionObjective" id="editDescriptionObjective"  placeholder="<spring:message code='etiq.txtdescription'/>"></textarea>
+                        <div class="col-xs-12 sinpadding" id="ObjectivesTermsEdit"></div>
+                        <div class="col-xs-12 sinpadding" id="ObjectivesTermsErrorEdit"  style="color:red"><spring:message code='etiq.selectTerm'/></div>
                     </div>
-                    <div class="col-xs-2 center-block form-group">
-                        <label class="control-label">Steps</label>
-                        <ol id="steps">   
-                        </ol>
+                    <div class="col-xs-12 col-lg-3 center-block form-group">
+                        <label class="col-xs-12 control-label"><spring:message code='etiq.steps'/></label>
+                        <div class="col-xs-12"><ol id="steps">   
+                            </ol></div>
                     </div>
-                    <div class="col-xs-2 center-block form-group paddingLabel">
-                        <div class="col-xs-8 center-block form-group paddingLabel">
-                            <input type="button" name="EditObjectiveSteps" value="Edit Steps" class="btn btn-success" id="editObjectiveSteps" data-target=".bs-example-modal-lg" onclick="stepsEdit()"/>
+                    <div class="col-xs-12 center-block form-group paddingLabel text-center" style="padding-top:0px">
+                     
+                        <div class="col-xs-12 center-block form-group paddingLabel" style="padding-top:0px;margin-bottom: 0px">
+                            <input type="button" name="EditObjectiveSteps" value="<spring:message code='etiq.editStep'/>" class="btn btn-success" id="editObjectiveSteps" data-target=".bs-example-modal-lg" onclick="stepsEdit()"/>
+                            <input type="button" name="AddObjective" value="<spring:message code='etiq.save'/>" class="btn btn-info" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveCheckEditObjective()"/>
                         </div>
-                        <div class="col-xs-4 center-block form-group paddingLabel">
-                            <input type="button" name="AddObjective" value="Save" class="btn btn-success" id="savedEditObjective" data-target=".bs-example-modal-lg" onclick="saveCheckEditObjective()"/>
-                        </div>
                     </div>
-                    <div class="col-xs-3 center-block form-group" id="addObjective">
-                        <span id="nooflessons"></span>
+                    <div class="col-xs-12 center-block form-group" id="addObjective">
+                        <span class="col-xs-12" id="nooflessons"></span>
 
                     </div>
                 </fieldset>
                 <fieldset class="hidden" id="formAddcontent">
-                    <legend>Add equipment to <span id="contentSelectedForAdd"></span></legend>  
+                    <legend><spring:message code='etiq.addEquipTo'/><span id="contentSelectedForAdd"></span></legend>  
                     <div class="col-xs-12" style="margin-top: 20px;">
 
-                        <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Name new equipment</label>
-                            <input type="text" class="form-control" name="TXTnamenewcontent" id="namenewcontent"  placeholder="Name new equipment">
+                        <div class="col-xs-4 col-lg-3 center-block form-group">
+                            <label class="control-label"><spring:message code='etiq.nameNewEquip'/></label>
+                            <input type="text" class="form-control" name="TXTnamenewcontent" id="namenewcontent"  placeholder="<spring:message code='etiq.nameNewEquip'/>">
                         </div>
-                        <div class="col-xs-6 center-block form-group">
-                            <label class="control-label">Description</label>
-                            <input type="text" class="form-control" name="TXTnamenewcontent" id="commentsnewcontent"  placeholder="Description">
+                        <div class="col-xs-8 col-lg-6 center-block form-group">
+                            <label class="control-label"><spring:message code='etiq.txtdescription'/></label>
+                            <input type="text" class="form-control" name="TXTnamenewcontent" id="commentsnewcontent"  placeholder="<spring:message code='etiq.txtdescription'/>">
                         </div>
-                        <div class="col-xs-3 center-block form-group paddingLabel">
-                            <input type="button" name="AddContent" value="save" class="btn btn-success" id="AddContent" data-target=".bs-example-modal-lg" onclick="saveaddContent()"/>
-
-
+                        <div class="col-xs-12 col-lg-3 center-block form-group paddingLabel">
+                            <input type="button" name="AddContent" value="<spring:message code='etiq.save'/>" class="btn btn-info" id="AddContent" data-target=".bs-example-modal-lg" onclick="saveaddContent()"/>
                         </div>
 
                     </div>
                 </fieldset>
                 <fieldset class="hidden" id="formEditcontent">
-                    <legend>Edit equipment in <span id="contentSelectedForEdit"></span></legend>  
+                    <legend><spring:message code='etiq.editEqIn'/><span id="contentSelectedForEdit"></span></legend>  
                     <div class="col-xs-12" style="margin-top: 20px;">
 
-                        <div class="col-xs-3 center-block form-group">
-                            <label class="control-label">Edit equipment</label>
-                            <input type="text" class="form-control" name="TXTnameeditcontent" id="editNameContent"  placeholder="Name new equipment">
+                        <div class="col-xs-4 col-lg-3 center-block form-group">
+                            <label class="control-label"><spring:message code='etiq.editEq'/></label>
+                            <input type="text" class="form-control" name="TXTnameeditcontent" id="editNameContent"  placeholder="<spring:message code='etiq.editEq'/>">
                         </div>
-                        <div class="col-xs-6 center-block form-group">
-                            <label class="control-label">Description</label>
-                            <input type="text" class="form-control" name="TXTnameeditcontent" id="editCommentsContent"  placeholder="Description">
+                        <div class="col-xs-8 col-lg-6 center-block form-group">
+                            <label class="control-label"><spring:message code='etiq.txtdescription'/></label>
+                            <input type="text" class="form-control" name="TXTnameeditcontent" id="editCommentsContent"  placeholder="<spring:message code='etiq.txtdescription'/>">
                         </div>
-                        <div class="col-xs-3 center-block form-group paddingLabel">
-                            <input type="button" name="EditContent" value="save" class="btn btn-success" id="EditContent" data-target=".bs-example-modal-lg" onclick="saveeditContent()"/> 
+                        <div class="col-xs-12 col-lg-3 center-block form-group paddingLabel">
+                            <input type="button" name="EditContent" value="<spring:message code='etiq.save'/>" class="btn btn-info" id="EditContent" data-target=".bs-example-modal-lg" onclick="saveeditContent()"/> 
                         </div>
                     </div>
                 </fieldset>        
             </form:form>
             <fieldset>
-                <legend>Select a method to edit</legend>
-                <div class="col-xs-12">
-                    <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Method</label>
+                <legend><spring:message code='etiq.selectMethodEdit'/></legend>
+                <div class="col-xs-12" style="display: flex;align-items: center;border-bottom: 1px solid #e5e5e5;">
+                    <div class="col-xs-4 center-block form-group">
+                        <label class="control-label"><spring:message code='etiq.method'/></label>
                         <select class="form-control methodSelect" size="2" name="method" id="method">
                             <c:forEach var="method" items="${methods}">
                                 <option value="${method.id[0]}"  data-title="${method.name}" data-content="${method.description}">${method.name}</option>
                             </c:forEach>
                         </select>
                     </div>
-                    <div class="col-xs-9 form-group paddingLabel">
-                        <div class="col-xs-2 text-center ">
-                            <input type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" value="add" id="addMethod">
+                    <div class="col-xs-8 form-group paddingLabel">
+                        <div class="col-xs-4 col-md-2 text-center ">
+                            <input type="button" class="btn btn-success width100" data-toggle="tooltip" data-placement="bottom" value="<spring:message code='etiq.add'/>" id="addMethod">
                         </div>
-                        <div class="col-xs-2 text-center">
-                            <input type="button" class="btn btn-warning" disabled data-toggle="tooltip" data-placement="bottom" value="edit" id="editMethod">
+                        <div class="col-xs-4 col-md-2 text-center">
+                            <input type="button" class="btn btn-warning  width100" disabled data-toggle="tooltip" data-placement="bottom" value="<spring:message code='etiq.edit'/>" id="editMethod">
                         </div>
-                        <div class="col-xs-2 text-center">
-                            <input type="button" class="btn btn-danger" disabled data-toggle="modal" data-target="#confirmedDeleteMethod" data-placement="bottom" value="del" id="delMethod" >
+                        <div class="col-xs-4 col-md-2 text-center">
+                            <input type="button" class="btn btn-danger  width100" disabled data-toggle="modal" data-target="#confirmedDeleteMethod" data-placement="bottom" value="<spring:message code='etiq.delete'/>" id="delMethod" >
                         </div>
                     </div>
                 </div>
 
             </fieldset>
             <fieldset class="hidden" id="formAddmethod">
-                <legend>Add method</legend>  
+                <legend><spring:message code='etiq.addMethod'/></legend>  
                 <div class="col-xs-12">
 
                     <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Name new method</label>
-                        <input type="text" class="form-control" name="TXTnamenewmethod" id="namenewmethod"  placeholder="Name new method">
+                        <label class="control-label"><spring:message code='etiq.nameNewMethod'/></label>
+                        <input type="text" class="form-control" name="TXTnamenewmethod" id="namenewmethod"  placeholder="<spring:message code='etiq.nameNewMethod'/>">
                     </div>
                     <div class="col-xs-6 center-block form-group">
-                        <label class="control-label">Description</label>
-                        <input type="text" class="form-control" name="TXTnamenewmethod" id="commentsnewmethod"  placeholder="Description">
+                        <label class="control-label"><spring:message code='etiq.txtdescription'/></label>
+                        <input type="text" class="form-control" name="TXTnamenewmethod" id="commentsnewmethod"  placeholder="<spring:message code='etiq.txtdescription'/>">
                     </div>
                     <div class="col-xs-3 center-block form-group paddingLabel">
-                        <input type="button" name="Addmethod" value="save" class="btn btn-success" id="Addmethod" data-target=".bs-example-modal-lg" onclick="saveaddMethod()"/>
+                        <input type="button" name="Addmethod" value="<spring:message code='etiq.save'/>" class="btn btn-info" id="Addmethod" data-target=".bs-example-modal-lg" onclick="saveaddMethod()"/>
                     </div>
                 </div>
             </fieldset>
             <fieldset class="hidden" id="formEditmethod">
-                <legend>Edit method in <span id="methodSelectedForEdit"></span></legend>  
+                <legend><spring:message code='etiq.editMethodIn'/><span id="methodSelectedForEdit"></span></legend>  
                 <div class="col-xs-12">
 
                     <div class="col-xs-3 center-block form-group">
-                        <label class="control-label">Edit method</label>
-                        <input type="text" class="form-control" name="TXTnameeditethod" id="editNameMethod"  placeholder="Name new method">
+                        <label class="control-label"><spring:message code='etiq.editMethod'/></label>
+                        <input type="text" class="form-control" name="TXTnameeditethod" id="editNameMethod"  placeholder="<spring:message code='etiq.nameNewMethod'/>">
                     </div>
                     <div class="col-xs-6 center-block form-group">
-                        <label class="control-label">Description</label>
-                        <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="Description">
+                        <label class="control-label"><spring:message code='etiq.txtdescription'/></label>
+                        <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="<spring:message code='etiq.txtdescription'/>">
                     </div>
                     <div class="col-xs-3 center-block form-group paddingLabel">
-                        <input type="button" name="EditMethod" value="save" class="btn btn-success" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveeditMethod()"/> 
+                        <input type="button" name="EditMethod" value="<spring:message code='etiq.save'/>" class="btn btn-info" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveeditMethod()"/> 
                     </div>
                 </div>
             </fieldset>
             <fieldset>
-                <div class="col-xs-12 text-center">
-                    <a class="btn btngreen_1" href="<c:url value="/sowdisplay/start.htm"/>">View Scheme of Work</a>  
+                <div class="col-xs-12 text-center"  style="margin-top: 15px;">
+                    <a class="btn btngreen_1" href="<c:url value="/sowdisplay/start.htm"/>"><spring:message code='etiq.viewSchemeWork'/></a>  
                 </div>
             </fieldset>
 
         </div>
-
+                
         <div class="col-xs-12 text-center">
-
-
         </div>
+                
         <div id="modalConfirmeDeleteObjective">
             <!-- Modal -->
             <div class="modal fade" id="confirmedDeleteObjective" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -1158,11 +1159,11 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Are you sure you want to delete this objective?</h4>
+                            <h4 class="modal-title" id="myModalLabel"><spring:message code='etiq.areUdelObjective'/></h4>
                         </div>
                         <div class="modal-body">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" id="" onclick="deleteObjective()">Yes</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" >No</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="" onclick="deleteObjective()"><spring:message code='etiq.yes'/></button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" ><spring:message code='etiq.no'/></button>
                         </div>
                     </div>
                 </div>
@@ -1176,11 +1177,11 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Are you sure you want to delete this equipment?</h4>
+                            <h4 class="modal-title" id="myModalLabel"><spring:message code='etiq.areUdelEqu'/></h4>
                         </div>
                         <div class="modal-body">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" id="" onclick="deleteContent()">Yes</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" >No</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="" onclick="deleteContent()"><spring:message code='etiq.yes'/></button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" ><spring:message code='etiq.no'/></button>
                         </div>
                     </div>
                 </div>
@@ -1193,12 +1194,12 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Are you sure you want to delete this method?</h4>
+                            <h4 class="modal-title" id="myModalLabel"><spring:message code='etiq.areUdelMethod'/></h4>
                             <h1 id="methodSelectForDelete"></h1>
                         </div>
                         <div class="modal-body">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" id="" onclick="deleteMethod()">Yes</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" >No</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="" onclick="deleteMethod()"><spring:message code='etiq.yes'/></button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" ><spring:message code='etiq.no'/></button>
                         </div>
                     </div>
                 </div>
@@ -1283,7 +1284,9 @@
 
 
                 var i = 1;
-
+                var stepLabel = "<spring:message code="etiq.step"/>";
+                
+                
                 $("#add_row").click(function () {
 
 //      $('#addr'+i).html("<td class='text-center' style='width: 20%; vertical-align: middle;'>"+ (i+1) +"</td><td><input id='country"+i+"' name='country"+i+"' type='text' placeholder='Step'  class='form-control input-md'></td>");
@@ -1294,7 +1297,7 @@
 //del step ,if the id is zero will not add to the del array or the updated array, always will be only in the new array,because it was a step that was added and removed while editing
                     $('#tab_logic').append("<tr>\n\
                        <td class='text-center' style='width:10%;'>" + (rowCount + 1) + "</td>\n\
-                       <td style='width:75%;'><input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'></td>\n\
+                       <td style='width:75%;'><input id='0' name='' value='' type='text' placeholder='"+stepLabel+"' class='form-control input-md'></td>\n\
 <td class='text-center' style='width:5%;'><button id='up_row' class='btn btn-default subir'><span class='glyphicon glyphicon-chevron-up'></span></button></td>\n\
 <td class='text-center' style='width:5%;'><button id='down_row' class='btn btn-default bajar'><span class='glyphicon glyphicon-chevron-down'></span></button></td>\n\
 <td class='text-center' style='width:5%;'><button id='delete_row' class='btn btn-default eliminar' ><span class='glyphicon glyphicon-remove'></span></button></td></tr>");
@@ -1310,7 +1313,7 @@
 //del step ,if the id is zero will not add to the del array or the updated array, always will be only in the new array,because it was a step that was added and removed while editing
                     $('#tab_logic2').append("<tr>\n\
                        <td class='text-center' style='width:10%;'>" + (rowCount + 1) + "</td>\n\
-                       <td style='width:75%;'><input id='0' name='' value='' type='text' placeholder='Step' class='form-control input-md'></td>\n\
+                       <td style='width:75%;'><input id='0' name='' value='' type='text' placeholder='"+stepLabel+"' class='form-control input-md'></td>\n\
 <td class='text-center' style='width:5%;'><button id='up_row' class='btn btn-default subir'><span class='glyphicon glyphicon-chevron-up'></span></button></td>\n\
 <td class='text-center' style='width:5%;'><button id='down_row' class='btn btn-default bajar'><span class='glyphicon glyphicon-chevron-down'></span></button></td>\n\
 <td class='text-center' style='width:5%;'><button id='delete_row' class='btn btn-default eliminar' ><span class='glyphicon glyphicon-remove'></span></button></td></tr>");
@@ -1414,8 +1417,8 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header modal-header-details">
-                        <button type="button" class="close" data-dismiss="modal" onclick="paintnewsteps()">Done</button>
-                        <h4 id="nameLessonDetails" class="modal-title"> Add the work that needs to be accomplished</h4>
+                        <button type="button" class="close" data-dismiss="modal" onclick="paintnewsteps()"><spring:message code='etiq.done'/></button>
+                        <h4 id="nameLessonDetails" class="modal-title"><spring:message code='etiq.addWorkAcc'/></h4>
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
@@ -1427,7 +1430,7 @@
                                 </table>
                             </div>
                             <div class="col-xs-12">
-                                <a id="add_row" class="btn btn-default pull-left">Add Row</a>
+                                <a id="add_row" class="btn btn-default pull-left"><spring:message code='etiq.addRow'/></a>
                             </div>
                         </div>
                     </div>
@@ -1441,8 +1444,8 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header modal-header-details">
-                        <button type="button" class="close" data-dismiss="modal" onclick="paintsteps()">Done</button>
-                        <h4 id="nameLessonDetails" class="modal-title"> Add the work that needs to be accomplished</h4>
+                        <button type="button" class="close" data-dismiss="modal" onclick="paintsteps()"><spring:message code='etiq.done'/></button>
+                        <h4 id="nameLessonDetails" class="modal-title"><spring:message code='etiq.addWorkAcc'/></h4>
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
@@ -1465,7 +1468,7 @@
                                 </table>
                             </div>
                             <div class="col-xs-12">
-                                <a id="add_row2" class="btn btn-default pull-left">Add Row</a>
+                                <a id="add_row2" class="btn btn-default pull-left"><spring:message code='etiq.addRow'/></a>
                             </div>
                         </div>
                     </div>

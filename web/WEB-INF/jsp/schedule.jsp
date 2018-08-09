@@ -124,7 +124,7 @@
     <body>
         <ul class="col-xs-12 legend" id="legendPresentations">
             <li>
-                <span class="share"></span><label>Shared presentations </label>
+                <span class="share"></span><label><spring:message code="etiq.sharedPresentations"/></label>
             </li>
         </ul>
         <div class="col-xs-12 container">

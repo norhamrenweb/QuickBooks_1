@@ -20,7 +20,7 @@
 
 
             $(document).ready(function () {
-                
+
                 $("#linkRecommend").hide();
                 $('#origen option').each(function () {
                     mapStudents[$(this).val()] = $(this).text();
@@ -67,7 +67,7 @@
 
                 $("#ideaCheck").change(function () {
                     if ($(this).is(":checked")) {
-                        
+
                         $('#showDate').addClass("desactivada");
                         $('#showDate').off('click');
                         $("#contenedorDate").removeClass('in');
@@ -95,9 +95,9 @@
                         });
                         $("#contenedorStudents").addClass('in');
                         $('#createOnClick').attr('disabled', true);
-                        
-                        $("#horainicioInput").attr('required','');
-                        $("#horafinInput").attr('required','');
+
+                        $("#horainicioInput").attr('required', '');
+                        $("#horafinInput").attr('required', '');
 
                         var numAlum = $('#destino option').length;
                         if (document.getElementById("objective").value !== 'Select Objective' && document.getElementById("objective").value !== '' && document.getElementById("NameLessons").value !== '' && document.getElementById("comments").value !== '' && $('#fecha input').val() !== '' && $('#horainicio input').val() !== '' && $('#horafin input').val() !== '' && numAlum > 0) {
@@ -131,11 +131,11 @@
                         $('#NameLessons').parent().removeClass("has-error");
                         $('#NameLessons').parent().parent().children().last().addClass("hide");
                     }
-                    if($(this).prop("id") === "objective" && $(this).val() !== "" && !$('#ideaCheck').is(':checked'))
+                    if ($(this).prop("id") === "objective" && $(this).val() !== "" && !$('#ideaCheck').is(':checked'))
                         $("#linkRecommend").show();
-                    else 
+                    else
                         $("#linkRecommend").hide();
-                        
+
                 });
 
                 $("#createOnClick").focus(function () {
@@ -229,7 +229,7 @@
                         $("#studentsName").val($("#studentsName").val().concat($(this).text().trim() + " | "));
 
                     });
-                        $('#recommendations').modal('toggle');
+                    $('#recommendations').modal('toggle');
                     // $("#studentsName").val($("#destino").text().trim());
                     return;
                 });
@@ -308,7 +308,7 @@
                 var selectlevel = "<spring:message code="etiq.selectlevel"/>";
                 $("#level option[value=-1]").text(selectlevel);
                 $("#levelStudent option[value=-1]").text(selectlevel);
-                
+
                 var selectIdea = "<spring:message code="etiq.selectAnIdea"/>";
                 $("#ideas option[value=-1]").text(selectIdea);
 
@@ -331,7 +331,7 @@
                                 exist = true;
                         });
                         if (!exist)
-                           $("#destino").append(" <option value='" + value1.val() + "' >" + value1.text().trim() + "</option>")
+                            $("#destino").append(" <option value='" + value1.val() + "' >" + value1.text().trim() + "</option>")
                     });
 
 
@@ -463,11 +463,11 @@
                         $('#loadingmessage').hide();
                         $('#subject').empty();
                         var json = JSON.parse(ajax.responseText);
-                        for(i in json){
-                           $('#subject').append("<option value='"
-                                   +json[i].id[0]+"'>"+json[i].name+"</option>"); 
+                        for (i in json) {
+                            $('#subject').append("<option value='"
+                                    + json[i].id[0] + "'>" + json[i].name + "</option>");
                         }
-                        
+
                         sortSelect("subject");
                         $("#subject").val(-1);
                         var selectSubject = "<spring:message code="etiq.selectSubject"/>";
@@ -481,14 +481,14 @@
                     if (ajax.status === 200) {
                         var json = JSON.parse(ajax.responseText);
                         $('#objective').empty();
-                        for(var i=0; i< json.length;i+=1){
-                            if(i === 0)
+                        for (var i = 0; i < json.length; i += 1) {
+                            if (i === 0)
                                 $('#objective').append("<option value='"
-                                    +-1+"'>"+json[i].name+"</option>");
+                                        + -1 + "'>" + json[i].name + "</option>");
                             else
                                 $('#objective').append("<option value='"
-                                    +json[i].id[0]+"'>"+json[i].name+"</option>");
-                            
+                                        + json[i].id[0] + "'>" + json[i].name + "</option>");
+
                         }
                         $("#objective").val(-1);
                         var selectObjective = "<spring:message code="etiq.selectObject"/>";
@@ -539,9 +539,9 @@
                                  $('#subject').append('<option value= "' + subjects[i].id + '">' + subjects[i].name + '</option>');
                             }
                         });
-                        
+
                         sortSelect("subject");
-                        
+
                         $('#objective').empty();
                         var pos1 = objective[0].toString();
                          $.each(objectives, function (i, item) {
@@ -580,9 +580,9 @@
                     if (ajax.status === 200) {
                         $('#content').empty();
                         var json = JSON.parse(ajax.responseText);
-                        for(var i=0;i < json.length;i+=1)
-                            $('#content').append("<option value='"+json[i].id[0]+"'>"
-                                +json[i].name+"</option>");
+                        for (var i = 0; i < json.length; i += 1)
+                            $('#content').append("<option value='" + json[i].id[0] + "'>"
+                                    + json[i].name + "</option>");
                     }
                 }
             }
@@ -916,11 +916,20 @@
             .marginSelect{
                 margin-right: 17px !important;
             }
-          
+
             .help-block {
 
                 color: #a94442;
             }
+    
+            #createOnClick{
+                font-size: medium;
+                width: 30%;
+                
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+        
         </style>
     </head>
     <body>
@@ -1146,21 +1155,20 @@
                     </div>
 
                     <div class="form-group collapse in" id="contenedorStudents">
-                        <div class="col-xs-12">
-                            <div class="col-xs-2"></div>
-                            <div class="col-xs-3">
+                        <div class="col-xs-12 sinpadding">
+                            <div class="col-xs-3 sinpadding">
                                 <label><spring:message code='etiq.filter'/> </label>     
                             </div>
                         </div>
-                        <div class="col-xs-12">
-                            <div class="col-xs-2">
-                                <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
+                        <div class="col-xs-12 sinpadding">
+                            <div class="col-xs-12 sinpadding" style="margin-bottom:  10px;">
+                                <select class="form-control" name="levelStudent" id="levelStudent" style="width: 33.4%;" onchange="comboSelectionLevelStudent()">
                                     <c:forEach var="levels" items="${gradelevels}">
                                         <option value="${levels.id[0]}" >${levels.name}</option>
                                     </c:forEach>
                                 </select>
                             </div>
-                            <div class="col-xs-3">
+                            <div class="col-xs-4 sinpadding">
                                 <input type="hidden" id="studentsName" name="studentsName" value = "">                                                        
 
                                 <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
@@ -1170,22 +1178,22 @@
                                 </select>
                             </div>
 
-                            <div class="col-xs-2">
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
+                            <div class="col-xs-4"  >
+                                <div class="col-xs-12 text-center btnStudents" style="padding-top: 50px;">
                                     <input id='btnPasar' type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
                                 </div>
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <div class="col-xs-12 text-center btnStudents" >
                                     <input type="button" class="btn btn-danger btn-block quitar" value="« <spring:message code="etiq.txtremove"/>">
                                 </div>
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <div class="col-xs-12 text-center btnStudents" >
                                     <input id='btnPasarTodos' type="button" class="btn btn-success btn-block pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
                                 </div>
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <div class="col-xs-12 text-center btnStudents"  >
                                     <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
                                 </div>
                             </div>
 
-                            <div class="col-xs-3">
+                            <div class="col-xs-4 sinpadding">
                                 <select class="form-control submit" size="20" multiple name="destino[]" id="destino" style="width: 100% !important;"> 
 
                                 </select>
@@ -1194,7 +1202,7 @@
                     </div>
                 </fieldset>
                 <div class="col-xs-12 text-center">
-                    <input type="submit" class="btn btn-success" id="createOnClick" disabled="True" value="<spring:message code="etiq.txtcreate"/>">
+                    <input type="submit" class="btn btn-info" id="createOnClick" disabled="True" value="<spring:message code="etiq.txtcreate"/>">
                 </div>
             </form:form>
 

@@ -16,7 +16,7 @@
     <%@ include file="menu.jsp" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Students</title>
+        <title><spring:message code="etiq.students"/></title>
         <script>
 
 
@@ -67,6 +67,7 @@
                 $('#tableobjective').DataTable();
                 table = $('#table_students').DataTable(
                         {
+                            language: idioma,
                             "searching": true,
                             "paging": false,
                             "ordering": false,
@@ -1208,14 +1209,14 @@
     <body>
 
         <div class="container">
-            <h1 class="text-center">Progress by Student</h1>
+            <h1 class="text-center"><spring:message code="etiq.progressByStudent"/></h1>
             <form:form id="formStudents" >
 
                 <fieldset>
                     <!--                    <legend>Select student</legend>-->
                     <div class="col-xs-3">
                         <div class="col-xs-12 sinpadding">
-                            <label>Filter</label>
+                            <label><spring:message code="etiq.filter"/></label>
                             <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
                                 <c:forEach var="levels" items="${gradelevels}">
                                     <option value="${levels.id[0]}">${levels.name}</option>
@@ -1231,7 +1232,7 @@
                                 <thead>
                                     <tr>
                                         <td>ID</td>
-                                        <td>Name students</td>
+                                        <td><spring:message code="etiq.studentName"/></td>
                                     </tr>
                                 </thead>
                                 <c:forEach var="alumnos" items="${listaAlumnos}" >
@@ -1244,18 +1245,18 @@
                         </div>
                     </div> 
 
-                    <div id="divProgress" class="col-xs-9 hidden">
+                    <div id="divProgress" class="col-xs-9 hidden sinpadding">
                         <div class="col-xs-12 text-center nameStudent">
                             <span id="student"> </span>
                             <input type="hidden" id="studentid" name="studentid">
                         </div>
-                        <div class="col-xs-12 text-center" id="myTab">
+                        <div class="col-xs-12 text-center sinpadding" id="myTab">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a id="Demographic" data-toggle="tab" href="#demographic" role="tab" >Demographic</a></li>
-                                <li><a id="Objectivestracking" data-toggle="tab" href="#progress" role="tab">Objectives tracking</a></li>
-                                <li><a id="AcademicProgress" data-toggle="tab" href="#gradebook" role="tab">Academic Progress</a></li>
-                                <li><a id="ClassroomObservation" data-toggle="tab" href="#observations" role="tab">Classroom Observation</a></li>
-                                <li><a id="ReportCard" data-toggle="tab" href="#supervisorComment" role="tab">Report Card</a></li>
+                                <li class="active"><a id="<spring:message code='etiq.demographicProgressID'/>" data-toggle="tab" href="#demographic" role="tab" ><spring:message code="etiq.demographicProgress"/></a></li>
+                                <li><a id="<spring:message code="etiq.objectivesProgressID"/>" data-toggle="tab" href="#progress" role="tab"><spring:message code="etiq.objectivesProgress"/></a></li>
+                                <li><a id="<spring:message code="etiq.acadProgressID"/>" data-toggle="tab" href="#gradebook" role="tab"><spring:message code="etiq.acadProgress"/></a></li>
+                                <li><a id="<spring:message code="etiq.classProgressID"/>" data-toggle="tab" href="#observations" role="tab"><spring:message code="etiq.classProgress"/></a></li>
+                                <li><a id="<spring:message code="etiq.reportProgressID"/>" data-toggle="tab" href="#supervisorComment" role="tab"><spring:message code="etiq.reportProgress"/></a></li>
                             </ul>
                         </div>
                         <div class="tab-content">
@@ -1267,22 +1268,22 @@
                                     </div>   
                                     <div class="col-xs-12 sinpadding">
                                         <div class="col-xs-offset-1 col-xs-10 sinpadding form-group" style="margin-top: 5%;">
-                                            <label class="text-left col-xs-6" >Birthday:</label>
+                                            <label class="text-left col-xs-6" ><spring:message code="etiq.birthday"/>:</label>
                                             <span class="text-right col-xs-6" id="BOD"></span>
                                         </div>
                                         <div class="col-xs-offset-1 col-xs-10 sinpadding form-group">
-                                            <label class="text-left col-xs-6  " >Grade level:</label>
+                                            <label class="text-left col-xs-6  " ><spring:message code="etiq.GradeLevel"/>:</label>
                                             <span class="text-right col-xs-6 " id="gradelevel"></span>
                                         </div>
                                         <div class="col-xs-offset-1 col-xs-10 sinpadding form-group">
-                                            <label class="text-left col-xs-6 " >Next level:</label>
+                                            <label class="text-left col-xs-6 " ><spring:message code="etiq.nextLevel"/>:</label>
                                             <span class="text-right col-xs-6 " id="nextlevel"></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-7">
                                     <div class="col-xs-12">
-                                        <label class="col-xs-12 sinpadding">Upcoming presentations:</label>
+                                        <label class="col-xs-12 sinpadding"><spring:message code="etiq.upPrese"/>:</label>
 
                                         <div id="nextPresentations" class="col-xs-12">
 
@@ -1292,8 +1293,8 @@
                             </div>
                             <div role="tabpanel" class="col-xs-12 tab-pane" id="progress">
                                 <div class="col-xs-12 sinpadding">
-                                    <div class="col-xs-12 sinpadding"><p class="text-info"><Strong>PP:</Strong> Presentations planned.</p></div>
-                                    <div class="col-xs-12 sinpadding"><p class="text-info"><Strong>PD:</Strong> Presentations done.</p></div>
+                                    <div class="col-xs-12 sinpadding"><p class="text-info"><Strong><spring:message code="etiq.pp"/>:</Strong> <spring:message code="etiq.ppDescr"/></p></div>
+                                    <div class="col-xs-12 sinpadding"><p class="text-info"><Strong><spring:message code="etiq.pd"/>:</Strong> <spring:message code="etiq.pdDescr"/></p></div>
                                     <!--<div class="col-xs-12 sinpadding">
                                     <!--<p class="text-info"><Strong>PD:</Strong> Presentations done.</p>-->
                                     <!--<div class="row" style="display: flex;justify-content: space-between;">
@@ -1327,7 +1328,7 @@
                                         <div class="col-xs-9 sinpadding text-left" id="divTerms" style="display: flex;justify-content: end;align-items: baseline;"></div>
                                         <div class="col-xs-3 sinpadding text-right">
                                             <p class="text-info" style="margin-bottom: 2px;cursor: pointer;">
-                                                Collapse tree
+                                                <spring:message code="etiq.collapseTree"/>
                                                 <span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
                                             </p>
                                         </div>
@@ -1343,8 +1344,8 @@
                         <div role="tabpanel" class="col-xs-12 tab-pane" id="gradebook">
                             <div class="col-xs-12">
                                 <div class="col-xs-10" >
-                                    <Label>Subject</Label>
-                                    <button type='button' class='btn-link editResource' onclick='showCommentSubject()' data-toggle='tooltip' data-placement='bottom' value='edit' id='saveCommentSubject'>
+                                    <Label><spring:message code='etiq.txtsubject'/></Label>
+                                    <button type='button' class='btn-link editResource' onclick='showCommentSubject()' data-toggle='tooltip' data-placement='bottom' value='<spring:message code='etiq.edit'/>' id='saveCommentSubject'>
                                         <i class='glyphicon glyphicon-chevron-down'></i>
                                     </button>
                                     <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
@@ -1358,11 +1359,11 @@
                             <div class="col-xs-12 hidden" id="divCommentSubject">
                                 <div class="col-xs-10 center-block form-group">
 
-                                    <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="Comment Subject"maxlength="1000"  spellcheck="true"></textarea>
+                                    <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="<spring:message code='etiq.commentSubject'/>" maxlength="1000"  spellcheck="true"></textarea>
                                 </div>             
                                 <div class=" col-xs-2" id="saveLengthDiv">
                                     <div class="col-xs-12">
-                                        <input type="button" name="saveCommentSubject" value="save" class="btn btngreen_1" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
+                                        <input type="button" name="saveCommentSubject" value="<spring:message code='etiq.save'/>" class="btn btn-info" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
                                     </div>
                                     <div class="col-xs-12" id="commentLength">
 
@@ -1371,17 +1372,17 @@
                             </div>
 
                             <div class="col-xs-12 hidden" id="divNotObjective">
-                                The selected subject does not have objectives
+                                <spring:message code='etiq.selectSubjectNoObjec'/>
                             </div>
 
                             <div class="col-xs-12 hidden" id="divTableObjective">
                                 <table id="tableobjective" class="display">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Most recent comment</th>
-                                            <th>Last update date</th>
+                                            <th><spring:message code='etiq.txtname'/></th>
+                                            <th><spring:message code='etiq.txtdescription'/></th>
+                                            <th><spring:message code='etiq.mostRecentComment'/></th>
+                                            <th><spring:message code='etiq.lastdate'/></th>
                                             <th></th>
                                         </tr>
                                     </thead> 
@@ -1395,7 +1396,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header modal-header-delete">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">comment saved</h4>
+                                            <h4 class="modal-title"><spring:message code='etiq.commentSaved'/></h4>
                                         </div>
 
                                     </div>
@@ -1406,10 +1407,10 @@
                         </div>
                         <div role="tabpanel" class="col-xs-12 tab-pane" id="observations">
                             <div class="col-xs-12 text-center">
-                                <h2>Enter a classroom observation</h2>
+                                <h2><spring:message code='etiq.enterClassObs'/></h2>
                             </div>
                             <div class='col-xs-6 form-group'>
-                                <label class="control-label" for="fecha">Date</label>
+                                <label class="control-label" for="fecha"><spring:message code='etiq.Date'/></label>
                                 <div class='input-group date' id='fecha'>
                                     <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
                                     <span class="input-group-addon">
@@ -1418,37 +1419,37 @@
                                 </div>
                             </div>
                             <div class="col-xs-6 center-block form-group">
-                                <label class="control-label">Observation type</label>
+                                <label class="control-label"><spring:message code='etiq.observationType'/></label>
                                 <select class="form-control" name="observationtype" id="observationtype" >
-                                    <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
-                                    <option value="Physical">Physical</option>
-                                    <option value="Intellectual">Intellectual</option>
-                                    <option value="Literacy">Literacy</option>
-                                    <option value="Emotional">Emotional</option>
-                                    <option value="Social">Social</option>
+                                    <option value="" selected><spring:message code='etiq.selectType'/></option> <!--if you change this value must change as well in savecomment function-->
+                                    <option value="Physical"><spring:message code='etiq.physical'/></option>
+                                    <option value="Intellectual"><spring:message code='etiq.intellectual'/></option>
+                                    <option value="Literacy"><spring:message code='etiq.literacy'/></option>
+                                    <option value="Emotional"><spring:message code='etiq.emotional'/></option>
+                                    <option value="Social"><spring:message code='etiq.social'/></option>
                                 </select>
                             </div>
                             <div class="col-xs-12 center-block form-group">
-                                <label class="control-label">Observation</label>
-                                <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
+                                <label class="control-label"><spring:message code='etiq.observation'/></label>
+                                <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="<spring:message code='etiq.addObservation'/>" maxlength="1000"  spellcheck="true"></textarea>
                             </div>
 
                             <div class="col-xs-12" >
                                 <input type="file" id="fileToUpload" accept="image/*">
                             </div>
                             <div class="col-xs-12 text-center hidden" id="error1">
-                                <label>Please select a student first</label>
+                                <label><spring:message code='etiq.pleaseSelect'/></label>
                             </div>
                             <div class="col-xs-12 text-center hidden" id="error2">
-                                <label>Please make sure to fill all data</label>
+                                <label><spring:message code='etiq.pleaseMake'/></label>
                             </div>
 
                             <div class="col-xs-6 text-center">
-                                <button type="button" class="btn btn-success" id="savecomment"  value="Save" onclick="saveobservation()">Save observation</button>
+                                <button type="button" class="btn btn-success" id="savecomment"  value="<spring:message code='etiq.save'/>" onclick="saveobservation()"><spring:message code='etiq.saveObservation'/></button>
                             </div>
 
                             <div class="col-xs-6 text-center">
-                                <button type='button' class='btn btn-info' id="showcalendar"  value="View all" onclick="showCalendar()">View all comments</button>
+                                <button type='button' class='btn btn-info' id="showcalendar"  value="<spring:message code='etiq.viewAll'/>" onclick="showCalendar()"><spring:message code='etiq.viewAll'/></button>
                             </div>
                             <div id="confirmsave" class="modal fade" role="dialog">
                                 <div class="modal-dialog">
@@ -1457,7 +1458,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header modal-header-delete">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">comment saved</h4>
+                                            <h4 class="modal-title"><spring:message code='etiq.commentSaved'/></h4>
                                         </div>
 
                                     </div>
@@ -1468,16 +1469,16 @@
                         </div>
                         <div role="tabpanel" class="col-xs-12 tab-pane" id="supervisorComment">
                             <div class="col-xs-12 text-center">
-                                <h2>Enter a supervisor comment</h2>
+                                <h2><spring:message code='etiq.enterSuperComment'/></h2>
                             </div>
                             <div class="col-xs-12 center-block form-group">
-                                <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
+                                <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="<spring:message code='etiq.addComment'/>" maxlength="1000"  spellcheck="true"></textarea>
                             </div>
                             <div id="divReport" class="col-xs-12 text-center">
                                 <div class="col-xs-12">
                                     <div class="col-xs-7">
                                         <select class="form-control" id="subjectsReports" onchange="loadObjectiveReport()">
-                                            <option value="-1">Select Subject</option>
+                                            <option value="-1"><spring:message code='etiq.selectSubject'/></option>
                                             <!--<option value="374">Physical Education</option>
                                             <option value="410">Drama</option>
                                             <option value="368">Life Skills</option>
@@ -1501,7 +1502,7 @@
                                     <div class="col-xs-5">
                                         <form>
                                             <div class="form-group row">
-                                                <label for="staticEmail" class="col-sm-2 col-form-label">Grade</label>
+                                                <label for="staticEmail" class="col-sm-2 col-form-label"><spring:message code='etiq.GradeLevel'/></label>
                                                 <div class="col-sm-10">
                                                     <input disabled="" type="text" readonly class="form-control-plaintext" id="gradeSubject" value="">
                                                 </div>
@@ -1513,9 +1514,9 @@
                                     <table class="table table-bordered" id="listObjectiveReport">
                                         <thead>
                                             <tr>
-                                                <th>Objective</th>
-                                                <th>Rating</th>
-                                                <th>Level</th>
+                                                <th><spring:message code='etiq.Objective'/></th>
+                                                <th><spring:message code='etiq.rating'/></th>
+                                                <th><spring:message code='etiq.level'/></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1527,7 +1528,7 @@
                             </div> 
 
                             <div class="col-xs-12  text-center">
-                                <button type="button" class="btn btn-info" id="saveSupervisorComment"  value="Save" onclick="saveSupervisorCommentFunction()">Save Comment</button>
+                                <button type="button" class="btn btn-info" id="saveSupervisorComment"  value="<spring:message code='etiq.save'/>" onclick="saveSupervisorCommentFunction()"><spring:message code='etiq.commentSaved'/></button>
                             </div>
 
 
@@ -1538,7 +1539,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header modal-header-delete">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">comment saved</h4>
+                                            <h4 class="modal-title"><spring:message code='etiq.commentSaved'/></h4>
                                         </div>
 
                                     </div>

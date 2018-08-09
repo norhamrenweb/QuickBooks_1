@@ -144,6 +144,24 @@
                 });
 
 
+                $("#file").change(function () {
+
+                    $(this).next().children().next().text($(this).val().split('/').pop().split('\\').pop());
+                });
+
+                $("#file").mouseover(function () {
+
+                    $("#file").next().children().first().css("background-color", "#99cc66");
+                    $("#file").next().children().first().css("color", "white");
+                    $("#file").next().children().first().css("border-color", "white");
+                });
+
+                $("#file").mouseout(function () {
+                    // alert("over");             
+                    $("#file").next().children().first().css("background-color", "white");
+                    $("#file").next().children().first().css("color", "#99cc66");
+                    $("#file").next().children().first().css("border-color", "#99cc66");
+                });
             });
 
             $().ready(function ()
@@ -331,7 +349,7 @@
 
                 });
             }
-            
+
             function saveEditLink() {
                 if (window.XMLHttpRequest) //mozilla
                 {
@@ -370,7 +388,7 @@
                         //MODIFICAR EL JSON PARA QUE DEVUELVA EL ID OBTENIDO
                         $('#listResources').append("<div id = 'divRecurso" + id + "' class='col-xs-12 " + claseTipo + "'>\n\
 <div class='col-xs-10 text-center tableCell sinpadding'>\n\
-    <div class='col-xs-2 sinpadding cell'>" + type +"</div>\n\
+    <div class='col-xs-2 sinpadding cell'>" + type + "</div>\n\
     <div class='col-xs-10 sinpadding'>\n\
         <a href=" + linkResource + " class='list-group-item link' target='_blank'>\n\
              " + nameResource + "\n\
@@ -389,7 +407,7 @@
 </div>\n\
 </div>\n\
 <div id='separador" + id + "' class='col-xs-12'><hr></div>");
-       
+
                         $('#divRecurso' + id).remove();
                         $('#separador' + id).remove();
                         $("#editnewLink").modal('hide');
@@ -436,14 +454,14 @@
                     success: function (data) {   //NO ENTRA A SUCCESS                       
                         //var j = JSON.parse(data);
                         id = data;
-                         var claseTipo = "label-link";
+                        var claseTipo = "label-link";
                         if (type === "Video") {
                             claseTipo = "label-video";
                         }
                         //MODIFICAR EL JSON PARA QUE DEVUELVA EL ID OBTENIDO
                         $('#listResources').append("<div id = 'divRecurso" + id + "' class='col-xs-12 " + claseTipo + "'>\n\
                 <div class='col-xs-10 text-center tableCell sinpadding'>\n\
-                <div class='col-xs-2 sinpadding cell'>" + type +"</div>\n\
+                <div class='col-xs-2 sinpadding cell'>" + type + "</div>\n\
                 <div class='col-xs-10 sinpadding'>\n\
                      <a href=" + linkResource + "   class='list-group-item link' target='_blank' >" + nameResource + "\n\
                     </a>\n\
@@ -640,7 +658,7 @@
                     $('#idNameFile').val("");
                     $('#file').val("");
                     $('#divAddFile').removeClass("has-error");
-                    $('#divAddFile').children().last().prev().prev().addClass("hide");
+                    $('#divAddFile').children().last().prev().prev().prev().addClass("hide");
                     $('#spanSelectFile').addClass("hide");
                     $('#addnewFile').modal('show');
                 });
@@ -813,27 +831,27 @@
             }
             .label-link
             {
-            padding-left: 0px;
-            padding-right: 0px;
-            background-image: linear-gradient(to right, rgba(0,155,0,0.6), rgba(0,155,0,0));
-            color: white;
-border-radius: 10px;
+                padding-left: 0px;
+                padding-right: 0px;
+                background-image: linear-gradient(to right, rgba(0,155,0,0.6), rgba(0,155,0,0));
+                color: white;
+                border-radius: 10px;
             }
             .label-video
             {
-            padding-left: 0px;
-            padding-right: 0px;
-            background-image: linear-gradient(to right, rgba(0,0,155,0.6), rgba(0,0,155,0));
-            color: white;
-            border-radius: 10px;
+                padding-left: 0px;
+                padding-right: 0px;
+                background-image: linear-gradient(to right, rgba(0,0,155,0.6), rgba(0,0,155,0));
+                color: white;
+                border-radius: 10px;
             }
             .label-file
             {
-            padding-left: 0px;
-            padding-right: 0px;
-            background-image: linear-gradient(to right, rgba(155,0,0,0.6), rgba(155,0,0,0));
-            color: white;
-            border-radius: 10px;
+                padding-left: 0px;
+                padding-right: 0px;
+                background-image: linear-gradient(to right, rgba(155,0,0,0.6), rgba(155,0,0,0));
+                color: white;
+                border-radius: 10px;
             }
             .tableCell
             {
@@ -849,6 +867,35 @@ border-radius: 10px;
             .list-group-item
             {
                 background-color: rgba(255,255,255,0.5)
+            }
+            .maskFile{
+                position: relative;
+                top: -22px;
+                padding: 0px;
+            }
+            .maskFile button{
+                background-color: #ffffff;
+                color: #76c472;
+                border-radius: 8px;
+                border-color: #76c472;
+            }
+            .maskFile label{
+                font-weight: normal;
+                color: #76c472;
+                padding-left: 5px;
+            }
+            #file{
+                z-index: 1;
+                position: relative;
+                opacity: 0;
+                cursor: pointer;
+            }
+
+            .colorSuccess{
+                color: #76c472;
+            }
+            #divAddFile{
+                margin-bottom: 0px; 
             }
         </style>
     </head>
@@ -878,14 +925,14 @@ border-radius: 10px;
                                     <c:when test="${item.type =='Video'}">
                                         <div id ="divRecurso${item.id}" class="col-xs-12 label-video">
                                             <div class="col-xs-10 text-center tableCell sinpadding">       
-                                                    <div class="col-xs-2 sinpadding cell"><spring:message code="etiq.video"/></div>
-                                                    <div class="col-xs-10 sinpadding">
-                                                       <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}</a>
-                                                    </div>      
+                                                <div class="col-xs-2 sinpadding cell"><spring:message code="etiq.video"/></div>
+                                                <div class="col-xs-10 sinpadding">
+                                                    <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}</a>
+                                                </div>      
                                             </div> 
                                             <div class="col-xs-1 text-center padding5TopBottom">
                                                 <button type='button' class="btn-link editResource" onclick="loadInfResource(${item.id})" id="editResource(${item.id})">
-                                                   <i class='glyphicon glyphicon-pencil'></i>
+                                                    <i class='glyphicon glyphicon-pencil'></i>
                                                 </button>
                                             </div>
                                             <div class="col-xs-1 text-center padding5TopBottom">
@@ -893,22 +940,22 @@ border-radius: 10px;
                                                     <i class='glyphicon glyphicon-remove'></i>
                                                 </button>
                                             </div>
-                                        
+
                                         </div>
                                         <div id="separador${item.id}" class='col-xs-12'><hr></div>
-                                    </c:when>
+                                        </c:when>
 
                                     <c:otherwise> 
                                         <div id ="divRecurso${item.id}" class="col-xs-12 label-link">
                                             <div class="col-xs-10 text-center tableCell sinpadding">       
-                                                    <div class="col-xs-2 sinpadding cell"><spring:message code="etiq.link"/></div>
-                                                    <div class="col-xs-10 sinpadding">
-                                                       <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}</a>
-                                                    </div>      
+                                                <div class="col-xs-2 sinpadding cell"><spring:message code="etiq.link"/></div>
+                                                <div class="col-xs-10 sinpadding">
+                                                    <a href="${item.link}" data-id="${item.id}"  class="list-group-item link" target="_blank">${item.name}</a>
+                                                </div>      
                                             </div> 
                                             <div class="col-xs-1 text-center padding5TopBottom">
                                                 <button type='button' class="btn-link editResource" onclick="loadInfResource(${item.id})" id="editResource(${item.id})">
-                                                   <i class='glyphicon glyphicon-pencil'></i>
+                                                    <i class='glyphicon glyphicon-pencil'></i>
                                                 </button>
                                             </div>
                                             <div class="col-xs-1 text-center padding5TopBottom">
@@ -918,7 +965,7 @@ border-radius: 10px;
                                             </div>
                                         </div>
                                         <div id="separador${item.id}" class='col-xs-12'><hr></div>
-                                    </c:otherwise> 
+                                        </c:otherwise> 
 
                                 </c:choose>
 
@@ -926,7 +973,7 @@ border-radius: 10px;
                         </div>
                         <div class="col-xs-12 text-right">
                             <button class=" btn btn-sm" data-toggle="tooltip" data-placement="bottom" id="addLink">
-                                <spring:message code="etiq.addLink"/><i class='glyphicon glyphicon-plus'></i>
+                                <spring:message code="etiq.addLink"/><i class='glyphicon glyphicon-plus'  style=" margin-left: 4px;"></i>
                             </button>
                         </div>
                     </div>
@@ -943,38 +990,38 @@ border-radius: 10px;
                         <div class="list-group col-xs-12 link">
                             <c:forEach var="item" items="${files}">  
                                 <div id = "divRecurso${item.id}" class="col-xs-12 label-file">
-                                    
-                                        <c:url var="post_url"  value="/upload" />    
-                                        <form class=" text-center form-group" action="${post_url}" method="GET" enctype="multipart/form-data">  
-                                            <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}> 
-                                            <input type="hidden" id="txtUrl" name="txtUrl" value="" />
-                                            <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>
-                                            <div class="col-xs-10 text-center tableCell sinpadding">
-                                                <div class="col-xs-2 sinpadding cell"><spring:message code="etiq.file"/></div>
-                                                <div class="col-xs-10 sinpadding text-center " >
-                                                    <a data-id="${item.id}" class="list-group-item link fileNames" >
-                                                        <span class="fileName">${item.name}</span>
-                                                    </a>
-                                                </div> 
-                                            </div>
-                                            <div class="col-xs-1 text-center padding5TopBottom">
-                                                <button type="submit" class="btn-link"  data-toggle="tooltip" data-placement="bottom" value="Download">
-                                                    <i class='glyphicon glyphicon-circle-arrow-down'></i>
-                                                </button>
+
+                                    <c:url var="post_url"  value="/upload" />    
+                                    <form class=" text-center form-group" action="${post_url}" method="GET" enctype="multipart/form-data">  
+                                        <input type="hidden" id="lessonsName" name="lessonsName" value = ${lessonsName}> 
+                                        <input type="hidden" id="txtUrl" name="txtUrl" value="" />
+                                        <input type="hidden" id="lessonid" name="idNameFileDown" value = ${item.id}>
+                                        <div class="col-xs-10 text-center tableCell sinpadding">
+                                            <div class="col-xs-2 sinpadding cell"><spring:message code="etiq.file"/></div>
+                                            <div class="col-xs-10 sinpadding text-center " >
+                                                <a data-id="${item.id}" class="list-group-item link fileNames" >
+                                                    <span class="fileName">${item.name}</span>
+                                                </a>
                                             </div> 
-                                            <div class="col-xs-1 text-center padding5TopBottom">
-                                                <button type="button" class="btn-link"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})">
-                                                    <i class='glyphicon glyphicon-remove'></i>
-                                                </button>
-                                            </div>
-                                        </form>
+                                        </div>
+                                        <div class="col-xs-1 text-center padding5TopBottom">
+                                            <button type="submit" class="btn-link"  data-toggle="tooltip" data-placement="bottom" value="Download">
+                                                <i class='glyphicon glyphicon-circle-arrow-down'></i>
+                                            </button>
+                                        </div> 
+                                        <div class="col-xs-1 text-center padding5TopBottom">
+                                            <button type="button" class="btn-link"  onclick="deleteLink(${item.id})" data-toggle="tooltip" data-placement="bottom" value="delete" id="deleteLink(${item.id})">
+                                                <i class='glyphicon glyphicon-remove'></i>
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div id="separador${item.id}" class='col-xs-12'><hr></div>
-                            </c:forEach>
+                                </c:forEach>
                         </div>
                         <div class="col-xs-12 text-right">
                             <button class=" btn btn-sm" data-toggle="tooltip" data-placement="bottom" id="addFile">
-                                <spring:message code="etiq.uploadFile"/><i class='glyphicon glyphicon-circle-arrow-up'></i>
+                                <spring:message code="etiq.uploadFile"/><i class='glyphicon glyphicon-circle-arrow-up' style=" margin-left: 4px;"></i>
                             </button>
                         </div>
                     </div>
@@ -1010,7 +1057,7 @@ border-radius: 10px;
                                 </div>   
                                 <div class="col-xs-3 center-block form-group">
                                     <label class="control-label"><spring:message code="etiq.type"/></label>
-                                    <select class="form-control" name="selectTipo" id="selectLinkTipo" placeholder="Type">
+                                    <select class="form-control" name="selectTipo" id="selectLinkTipo" placeholder="<spring:message code="etiq.type"/>">
                                         <option></option>
                                         <option value ="Link"><spring:message code="etiq.link"/></option>
                                         <option value ="Video"><spring:message code="etiq.video"/></option>
@@ -1039,36 +1086,35 @@ border-radius: 10px;
                 <div class="modal-content">
                     <div class="modal-header modal-header-details">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 id="nameNewLink" class="modal-title"><spring:message code="etiq.addLink"/></h4>
+                        <h4 id="nameNewLink" class="modal-title colorSuccess"><spring:message code="etiq.addLink"/></h4>
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div class="col-xs-12">
 
-                                <div class="col-xs-3 center-block form-group">
+                                <div class="col-xs-12 col-md-3 center-block form-group">
                                     <label class="control-label"><spring:message code="etiq.title"/></label>
-                                    <input type="text" class="form-control" name="TXTnameeditethod" id="editNameMethod"  placeholder="Title">
+                                    <input type="text" class="form-control" name="TXTnameeditethod" id="editNameMethod"  placeholder="<spring:message code="etiq.title"/>">
                                 </div>
-                                <div id ="addLinkError" class="col-xs-6 center-block form-group">
+                                <div id ="addLinkError" class="col-xs-12 col-md-6 center-block form-group">
                                     <label class="control-label"><spring:message code="etiq.link"/></label>
-                                    <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="Link" data-toggle="tooltip" data-placement="bottom" title="(http or https:)//www.example.com">
+                                    <input type="text" class="form-control" name="TXTcommenteditmethod" id="editCommentsMethod"  placeholder="<spring:message code="etiq.link"/>" data-toggle="tooltip" data-placement="bottom" title="(http or https:)//www.example.com">
                                     <span class="help-block hide"><spring:message code="etiq.exampleLink"/></span>
                                 </div>   
-                                <div class="col-xs-3 center-block form-group">
+                                <div class="col-xs-12 col-md-3 center-block form-group">
                                     <label class="control-label"><spring:message code="etiq.type"/></label>
-                                    <select class="form-control" name="selectTipo" id="selectTipo" placeholder="Type">
-                                         <option></option>
+                                    <select class="form-control" name="selectTipo" id="selectTipo" placeholder="<spring:message code="etiq.type"/>">
+                                        <option></option>
                                         <option value ="Link"><spring:message code="etiq.link"/></option>
                                         <option value ="Video"><spring:message code="etiq.video"/></option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-xs-offset-9 col-xs-12">
-                                <div class=" col-xs-3 center-block form-group paddingLabel">
+                             
+                                <div class=" text-center center-block form-group paddingLabel">
                                     <input type="button" name="EditMethod" disabled="true" value="<spring:message code='etiq.save'/>" class="btn btn-success" id="EditMethod" data-target=".bs-example-modal-lg" onclick="saveEditMethod()"/> 
                                 </div>
-                            </div>
-
+                           
                         </div>
                     </div>
                     <!--      <div class="modal-footer">
@@ -1085,7 +1131,7 @@ border-radius: 10px;
                 <div class="modal-content">
                     <div class="modal-header modal-header-details">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 id="nameLessonDetails" class="modal-title"><spring:message code='etiq.addFile'/></h4>
+                        <h4 id="nameLessonDetails" class="modal-title colorSuccess"><spring:message code='etiq.addFile'/></h4>
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
@@ -1170,7 +1216,7 @@ border-radius: 10px;
                                         if (existeNombre === "1") {
                                             $('#submitSave').prop('disabled', true);
                                             $('#divAddFile').addClass("has-error");
-                                            $('#divAddFile').children().prev().prev().last().removeClass("hide");
+                                            $('#divAddFile').children().last().prev().prev().prev().last().removeClass("hide");
                                         }
 
                                         if ($('#file').val() !== "") {
@@ -1179,10 +1225,10 @@ border-radius: 10px;
                                             if (existeNombre === "0" && $('#idNameFile').val().indexOf("/") === -1 && $('#idNameFile').val().indexOf("\"") === -1 && $('#idNameFile').val().indexOf("'") === -1) {
                                                 $('#submitSave').prop('disabled', false);
                                                 $('#divAddFile').removeClass("has-error");
-                                                $('#divAddFile').children().last().prev().prev().addClass("hide");
+                                                $('#divAddFile').children().last().prev().prev().prev().addClass("hide");
                                             } else {
                                                 $('#divAddFile').addClass("has-error");
-                                                $('#divAddFile').children().prev().prev().last().removeClass("hide");
+                                                $('#divAddFile').children().prev().prev().prev().last().removeClass("hide");
                                                 $('#submitSave').prop('disabled', true);
                                             }
                                         } else {
@@ -1210,7 +1256,7 @@ border-radius: 10px;
                             <c:url var="post_url"  value="/upload" />    
                             <form class="col-xs-12 center-block form-group" action="${post_url}" method="POST" enctype="multipart/form-data">      
                                 <!--<form class="col-xs-12 center-block form-group" action="saveFile.htm" method="POST" enctype="multipart/form-data">-->
-                                <div id ="divAddFile" class="col-xs-10 center-block form-group">
+                                <div id ="divAddFile" class="col-xs-12 center-block form-group">
                                     <label class="control-label"><spring:message code='etiq.txtname'/></label>
 
                                     <input type="hidden" id="txtUrl" name="txtUrl" value="" />
@@ -1220,10 +1266,19 @@ border-radius: 10px;
                                     <input type="text" class=" col-xs-3 form-control" name="idNameFile" id="idNameFile"  placeholder="<spring:message code='etiq.addName'/>">
                                     <span class="help-block hide"><spring:message code='etiq.invNameFile'/></span>
                                     <input type="file" class=" col-xs-7 center-block form-control" name="fileToUpload" id="file">
+                                    <div class="col-xs-12 text-left maskFile" >
+                                        <button> 
+                                            <spring:message code="etiq.upload"/> 
+                                            <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> 
+                                        </button>
+                                        <label> 
+                                            <spring:message code="etiq.fileNotFound"/>
+                                        </label>
+                                    </div>
                                     <span id="spanSelectFile"class="help-block hide"><spring:message code='etiq.selectFile'/></span>
                                 </div>
 
-                                <input id = "submitSave" type="submit" disabled="true" value="<spring:message code='etiq.save'/>" class="col-xs-2 center-block form-group paddingLabel btn btn-success" >     
+                                <input id = "submitSave" type="submit" disabled="true" value="<spring:message code='etiq.save'/>" class="center-block form-group paddingLabel btn btn-success" >     
                             </form>
 
                         </div>

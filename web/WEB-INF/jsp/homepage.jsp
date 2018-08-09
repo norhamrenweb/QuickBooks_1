@@ -242,7 +242,10 @@
                         var p = JSON.parse(object.steps);
 
                         $('#nameLessonDetails').empty();
-                        $('#nameLessonDetails').append('Details ' + nameLessons);
+
+                        var detailsLabel = "<spring:message code="etiq.Details"/>";
+
+                        $('#nameLessonDetails').append(detailsLabel + " " + nameLessons);
                         $('#studentarea').append('<table id="detailsStudents" class="table table-striped">');
                         $.each(s, function (i, student) {
                             $('#detailsStudents').append('<tr><td class="studentDetails">' + s[i].studentname + '</td></tr>');
@@ -315,7 +318,7 @@
                         var lessondeleteconfirm = JSON.parse(ajax.responseText);
                         var presentationHasProgress = "<spring:message code="etiq.presentationHasProgress"/>";
                         var presentationDeleteSuc = "<spring:message code="etiq.presentationDeleteSuc"/>";
-                        
+
                         if (lessondeleteconfirm.message === 'Presentation has progress records,it can not be deleted') {
                             $('#lessonDeleteMessage').empty();
                             $('#lessonDeleteMessage').append('<H1>' + presentationHasProgress + '</H1>');
@@ -413,7 +416,7 @@
 
         </script>
         <style>
-         
+
             #table_id_wrapper{
                 font-size: small;
             }
@@ -464,7 +467,16 @@
             {
                 background-color: #CC6666;
             }
-            
+            .divButtonCompartir{
+                margin-top: 10px;
+                border-top: solid 1px lightgray;
+                padding-top: 10px;
+                width: 90%;
+                margin-left: 5%;
+            }
+            #compartirLesson .modal-footer{
+                border: none;
+            }
         </style>
     </head>
     <body>
@@ -536,7 +548,7 @@
                 <div class="modal-content">
                     <div class="modal-header modal-header-details">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 id="nameLessonDetails" class="modal-title">Details</h4>
+                        <h4 id="nameLessonDetails" class="modal-title"><spring:message code="etiq.Details"/></h4>
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
@@ -548,46 +560,56 @@
 
                                 </div>
                             </div>
-                            <div class="col-xs-6">
-                                <div class="row title">
-                                    <spring:message code="etiq.txtdescription"/>:
+                            <div class="col-xs-6 padding0">
+                                <div class="col-xs-12 divDetails">
+                                    <div class="col-xs-12 title">
+                                        <spring:message code="etiq.txtdescription"/>:
+                                    </div>
+                                    <div class="col-xs-12" id="commentDetails">
+                                    </div>
                                 </div>
-                                <div class="row" id="commentDetails">
+                                <div class="col-xs-12 divDetails">
+                                    <div class="col-xs-12 title">
+                                        <spring:message code="etiq.Objective"/>:   
+                                    </div>
+                                    <div class="col-xs-12" id ="objectivedetails">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 divDetails">
+                                    <div class="col-xs-12 title">
+                                        <spring:message code="etiq.method"/>:
+                                    </div>
+                                    <div class="col-xs-12" id="methodDetails">
 
+                                    </div>
                                 </div>
-                                <div class="row title">
-                                    <spring:message code="etiq.Objective"/>:   
-                                </div>
-                                <div class="row" id ="objectivedetails">
+                                <div class="col-xs-12 divDetails">
+                                    <div class="col-xs-12 title">
+                                        <spring:message code="etiq.txtequipment"/>: 
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <ul id="contentDetails">
 
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div class="row title">
-                                    <spring:message code="etiq.method"/>:
+                                <div class="col-xs-12 divDetails">
+                                    <div class="col-xs-12 title">
+                                        <spring:message code="etiq.createByEtiq"/>: 
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <ul id="createBy">
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div class="row" id="methodDetails">
-
-                                </div>
-                                <div class="row title">
-                                    <spring:message code="etiq.txtequipment"/>: 
-                                </div>
-                                <div class="row">
-                                    <ul id="contentDetails">
-
-                                    </ul>
-                                </div>
-                                <div class="row title">
-                                    <spring:message code="etiq.createByEtiq"/>: 
-                                </div>
-                                <div class="row">
-                                    <ul id="createBy">
-                                    </ul>
-                                </div>
-                                <div class="row title">
-                                    <spring:message code="etiq.steps"/>:
-                                </div>
-                                <div class="row">
-                                    <ul id="steps">
-                                    </ul>
+                                <div class="col-xs-12 divDetails">
+                                    <div class="col-xs-12 title">
+                                        <spring:message code="etiq.steps"/>:
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <ul id="steps" style="-webkit-padding-start: 15px;">
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -647,14 +669,14 @@
 
                 <!-- Modal content-->
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header modal-header-details">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title"><spring:message code="etiq.sharePresentation"/>:</h4>
                     </div>
                     <input type="hidden" id="compartirid" name ="compartirid" value="">
                     <div id="shareselect" class="modal-body">
                         <div class="col-xs-12">
-                            <div class="col-xs-4">
+                            <div class="col-xs-6 col-md-4">
                                 <select class="form-control" size="20" multiple="" name="origen[]" id="origen" style="width: 100% !important;">  
                                     <c:forEach var="teacher" items="${teacherlist}" >
                                         <option value="${teacher.id}">${teacher.name}</option>
@@ -662,7 +684,7 @@
                                 </select>
                             </div>
 
-                            <div class="col-xs-3">
+                            <div class="hidden-xs hidden-sm col-md-4">
                                 <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
                                     <input type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
                                 </div>
@@ -680,14 +702,34 @@
                                                             </div>-->
                             </div>
 
-                            <div class="col-xs-4">
+                            <div class="col-xs-6 col-md-4">
                                 <select class="form-control" size="20" multiple="" name="destino[]" id="destino" style="width: 100% !important;">
                                 </select>
                             </div>
+                                
+                            <div class="hidden-md hidden-lg col-xs-12"  style="padding-top:10px;">
+                                <div class="col-xs-3 text-center" style="padding-right: 2px;padding-left: 2px;">
+                                    <input type="button" style="font-size: small;" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
+                                </div>
+                                <div class="col-xs-3 text-center" style="padding-right: 2px;padding-left: 2px;">
+                                    <input type="button" style="font-size: small;"  class="btn btn-danger btn-block quitar" value="« <spring:message code="etiq.txtremove"/>">
+                                </div>
+                                <div class="col-xs-3 text-center" style="padding-right: 2px;padding-left: 2px;">
+                                    <input type="button" style="font-size: small;"  class="btn btn-success btn-block pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
+                                </div>
+                                <div class="col-xs-3 text-center" style="padding-right: 2px;padding-left: 2px;">
+                                    <input type="button" style="font-size: small;"  class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
+                                </div>
+                                <!--                            <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                                                <input type="button" class="btn btn-danger btn-block test" value="test">
+                                                            </div>-->
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer text-center">
-                        <input type="button" id="createOnClick" class="btn btn-success" value="<spring:message code='etiq.share'/>" data-dismiss="modal" onclick="compartirajax()">
+                    <div class="modal-footer">
+                        <div class="col-xs-12 text-center divButtonCompartir">
+                            <input type="button" id="createOnClick" class="btn btn-default" value="<spring:message code='etiq.share'/>" data-dismiss="modal" onclick="compartirajax()">
+                        </div>
                     </div>
                 </div>
             </div>

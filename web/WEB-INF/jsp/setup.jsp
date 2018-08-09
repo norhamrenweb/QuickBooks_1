@@ -13,9 +13,9 @@
     <%@ include file="infouser.jsp" %>
     <%@ include file="menu.jsp" %>
     <head>
-        <title>Setup</title>
+        <title><spring:message code="etiq.setup"/></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+
         <script>
 
             $(document).ready(function () {
@@ -123,7 +123,7 @@
                 $("#generateReport").focus(function () {
                     $('#destino option').prop('selected', true);
                 });
-                
+
             });
 
             function changecolor() {
@@ -148,23 +148,23 @@
     <body>
 
         <div class="container">
-            <button type="button" class="btn btn-primary" onclick="mostrarActivityLog()">Activity Log</button>
-<!--            <button type="button" class="btn btn-primary" onclick="mostrarSetup()">Setup</button>-->
+            <button type="button" class="btn btn-primary" onclick="mostrarActivityLog()"><spring:message code="etiq.activLog"/></button>
+            <!--            <button type="button" class="btn btn-primary" onclick="mostrarSetup()">Setup</button>-->
 
             <div id="setup" class="col-xs-12">
-                <h1 class="text-center">Setup</h1>
+                <h1 class="text-center"><spring:message code="etiq.setup"/></h1>
                 <form:form id="formConfig" method ="post" action="save.htm" >
                     <div class="col-xs-4 text-center">
-                        <h2>Header Color</h2>
+                        <h2><spring:message code="etiq.headerColor"/></h2>
                         <input type="color" id="headcolor" name="headcolor" value="#ff0000" onchange="changecolor()">
                     </div>
-                    
+
                     <div class="col-xs-4 text-center">
-                        <h2>Body Color</h2>
+                        <h2><spring:message code="etiq.bodyColor"/></h2>
                         <input type="color" id="bodycolor" name="bodycolor" value="#ff0000" onchange="changecolor2()">
                     </div>
                     <div class="col-xs-4 text-center">
-                        <input type="submit" class="btn btn-success" value="set">
+                        <input type="submit" class="btn btn-success" value="<spring:message code="etiq.set"/>">
                     </div>
                 </form:form>
                 <form:form enctype="multipart/form-data" id="formIcono" method ="post" action="/QuickBooks_1/setupicono" >
@@ -181,41 +181,37 @@
             <div id="report" class="col-xs-12">
                 <c:url var="post_url"  value="/html" />
                 <form:form id="formStudents" method ="post" action="${post_url}" >
-
-                    <div class='col-xs-4'>
-                        <div class="form-group">
-                            <label class="control-label" for="horainicio">Date From</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                            <div class='input-group date' id='horainicio'>
-                                <input  id='horainicioInput' type='text' name="TXThorainicio" class="form-control"/>
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
+                    <div class="col-xs-12 " style="margin-top: 20px;">
+                        <div class='col-xs-6 col-md-4 col-lg-3 sinpadding' style="padding-right: 5px !important;">
+                            <div class="form-group">
+                                <label class="control-label" for="horainicio"><spring:message code="etiq.dateFrom"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                                <div class='input-group date' id='horainicio'>
+                                    <input  id='horainicioInput' type='text' name="TXThorainicio" class="form-control"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-xs-6 col-md-4 col-lg-3 sinpadding' style="padding-left: 5px !important;">
+                            <div class="form-group">
+                                <label class="control-label" for="horafin"><spring:message code="etiq.to"/></label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
+                                <div class='input-group date' id='horafin'>
+                                    <input id='horafinInput' type='text' name="TXThorafin" class="form-control"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class='col-xs-4'>
-                        <div class="form-group">
-                            <label class="control-label" for="horafin">Date To</label> <span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span>
-                            <div class='input-group date' id='horafin'>
-                                <input id='horafinInput' type='text' name="TXThorafin" class="form-control"/>
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
 
 
-                    <div class="col-xs-4">
-                        <input type="submit" class="btn btngreen_1" id="generateReport" value="Generate Report">
-                    </div>
-
-
-                    <div class="col-xs-12">
+                    <div class="col-xs-12 sinpadding">
                         <input type="hidden" id="compartirid" name ="compartirid" value="">
                         <div id="shareselect" class="modal-body">
-                            <div class="col-xs-12">
-                                <div class="col-xs-4">
+                            <div class="col-xs-12 sinpadding">
+                                <div class="col-xs-4 sinpadding">
                                     <select class="form-control" size="20" multiple="" name="origen[]" id="origen" style="width: 100% !important;">  
                                         <c:forEach var="teacher" items="${teacherlist}" >
                                             <option value="${teacher.id}$${teacher.name}">${teacher.name}</option>
@@ -223,44 +219,48 @@
                                     </select>
                                 </div>
 
-                                <div class="col-xs-3">
-                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
-                                        <input type="button" class="btn btn-success btn-block pasar" value="Add »">
-                                    </div>
-                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                        <input type="button" class="btn btn-danger btn-block quitar" value="« Remove">
-                                    </div>
-                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                        <input type="button" class="btn btn-success btn-block pasartodos" value="Add All »">
-                                    </div>
-                                    <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
-                                        <input type="button" class="btn btn-danger btn-block quitartodos" value="« Remove All">
+                                <div class="col-xs-4">
+                                    <div class="col-xs-10">
+                                        <div class="col-xs-12 text-center btnStudents" style="padding-top: 50px;">
+                                            <input type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
+                                        </div>
+                                        <div class="col-xs-12 text-center btnStudents" >
+                                            <input type="button" class="btn btn-danger btn-block quitar" value="« <spring:message code="etiq.txtremove"/>">
+                                        </div>
+                                        <div class="col-xs-12 text-center btnStudents">
+                                            <input type="button" class="btn btn-success btn-block pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
+                                        </div>
+                                        <div class="col-xs-12 text-center btnStudents" >
+                                            <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="col-xs-4">
+                                <div class="col-xs-4 sinpadding">
                                     <select class="form-control" size="20" multiple="" name="destino[]" id="destino" style="width: 100% !important;">
                                     </select>
                                 </div>
                             </div>
-                        </div
-                    </form:form>
-                </div>
+                        </div>
+                    </div>   
+                    <div class="col-xs-12 text-center">
+                        <input type="submit" class="btn btn-info" id="generateReport" value="<spring:message code='etiq.generateReport'/>" style="margin-top: 20px;">
+                    </div>
+                </form:form>
+
             </div>
 
-        </div>
 
 
-
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="titleComment"><%= request.getParameter("message")%></h4>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="titleComment"><%= request.getParameter("message")%></h4>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>   
+            </div>   
     </body>
 </html>

@@ -14,7 +14,7 @@
     <%@ include file="infouser.jsp" %>
     <%@ include file="menu.jsp" %>
     <head>
-        <title>View Scheme of work</title>
+        <title><spring:message code="etiq.viewSchemeWork"/></title>
         <script>
 
             $(document).ready(function () {
@@ -54,7 +54,8 @@
                  alert("cambios");
                  });/*/
 
-
+                 var selectlevel = "<spring:message code="etiq.selectlevel"/>";
+                $("#level option[value='']").text(selectlevel);
             });
 
 
@@ -360,7 +361,7 @@
     </head>
     <body>
         <div class="container">
-            <h1 class="text-center">Scheme of work display</h1>
+            <h1 class="text-center"><spring:message code="etiq.viewSchemeWorkDisplay"/></h1>
 
 
 
@@ -375,7 +376,7 @@
                             </legend>-->
             <div class="form-group" id="contenedorDetails">
                 <div class="col-xs-3 form-group">
-                    <label class="control-label">Select Grade Level</label>
+                    <label class="control-label"><spring:message code="etiq.selectGradeLvl"/></label>
                     <select class="form-control" name="TXTlevel" id="level" onchange="comboSelectionLevel()">
                         <c:forEach var="level" items="${levels}">
                             <option value="${level.id[0]}" >${level.name}</option>
@@ -385,7 +386,7 @@
                 </div>
             </div>
             <div class="col-xs-12 center-block">
-                <label class="control-label">Find Objectives</label>
+                <label class="control-label"><spring:message code="etiq.findObjectives"/></label>
                 <input id="findIdea" class="form-group" type="search">
             </div>
             <div class="col-xs-12 center-block" id="tree">

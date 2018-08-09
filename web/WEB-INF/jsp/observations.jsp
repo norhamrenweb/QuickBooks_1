@@ -27,7 +27,7 @@
             var comments;
             var mapTeachers = ${teachers};
             var noCommentThisWeek = "<spring:message code="etiq.NoCommentWeek"/>";
-            
+
             $(document).ready(function () {
                 $("#infousuario").addClass("navbar-fixed-top");
 
@@ -114,6 +114,10 @@
                     var type = $(this).data('type');
                     var commentDate = $(this).data('commentdate');
                     var nameTeacher = $(this).data('nameteacher');
+
+                    var typeComment = "<spring:message code="etiq.selectlevel"/>";
+
+
                     $('#idCommentDate').text(commentDate);
                     $('#idCreateDate').text(createDate);
                     $('#idTypeComment').text(type);
@@ -257,6 +261,8 @@
                         sortSelect("objectives");
 
                         $("#objectives").val("vacio");
+                        var selectObject = "<spring:message code="etiq.selectObject"/>";
+                        $("#objectives option[value='vacio']").text(selectObject);
                     } else {
                         $("#objectives").attr("disabled", true);
                         $("#divNotas").hide();
@@ -344,7 +350,29 @@
 
                 });
 
+                $("#levelStudent").val("");
+                var selectlevel = "<spring:message code="etiq.selectlevel"/>";
+                $("#level option[value='']").text(selectlevel);
 
+             
+                $("#fileToUploadClassroom,#fileToUpload").change(function () {
+
+                    $(this).next().children().next().text($(this).val().split('/').pop().split('\\').pop());
+                });
+                
+                $("#fileToUploadClassroom,#fileToUpload").mouseover(function () {
+
+                    $("#fileToUploadClassroom").next().children().first().css("background-color", "#3074af")
+                    $("#fileToUploadClassroom").next().children().first().css("color", "white")
+                    $("#fileToUploadClassroom").next().children().first().css("border-color", "white")
+                });
+     
+                $("#fileToUploadClassroom,#fileToUpload").mouseout(function () {
+               ;             
+                    $("#fileToUploadClassroom").next().children().first().css("background-color", "white")
+                    $("#fileToUploadClassroom").next().children().first().css("color", "#3074af")
+                    $("#fileToUploadClassroom").next().children().first().css("border-color", "#3074af")
+                });
 
             });
 
@@ -606,10 +634,10 @@
                                     path = path.substring(0, i);
                                     i--;
                                 }
-                                
+
                                 var dateEtiq = "<spring:message code="etiq.Date"/>";
                                 var obsEtiq = "<spring:message code="etiq.observation"/>";
-                            
+
             <%--Create Date: " + fechaCreacion + "<br>\n\
             Type: " + category + "<br>\n\--%>
                                 $(numSemana).append("<div id='comment" + id + "' value='" + commentdate + "' class='divAdd " + visible + "'>\n\
@@ -618,8 +646,8 @@
                                                                                     <div class='shape-text'></div>\n\
                                                                                 </div>\n\
                                                                                 <div class='project-content projectProgcal'>\n\
-                                                                                    \n\<strong>"+dateEtiq+":</strong> " + commentdate + " </strong> <br>\n\
-                                                                                    <strong>"+obsEtiq+":</strong> " + comentario.substring(0, 86) + " " + comentarioExtenso + "<br>\n\
+                                                                                    \n\<strong>" + dateEtiq + ":</strong> " + commentdate + " </strong> <br>\n\
+                                                                                    <strong>" + obsEtiq + ":</strong> " + comentario.substring(0, 86) + " " + comentarioExtenso + "<br>\n\
                                                                                     \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
                                                                                     <div class='col-xs-3 text-center sinpadding'>\n\
                                                                                     <button type='button' class='btn btn-link showMoreFuncion'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
@@ -661,33 +689,33 @@
                         if (cont6 === 0)
                             $("#semana6").append(divVacio("project-classroom2"));
                         $(".popOverFoto").mouseover(function () {
-                            /* if ($(this).prop("disabled") === false) {
-                             var id = $(this).val();
-                             var imageTag = '<div class="divFoto" style="position:absolute;">' + '<img class="fotoComment"  id="imgPop" src="" alt="image" height="100" />' + '</div>';
-                             if (window.XMLHttpRequest) //mozilla
-                             {
-                             ajax = new XMLHttpRequest(); //No Internet explorer
-                             } else
-                             {
-                             ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                             }
-                             
-                             ajax.onreadystatechange = function () {
-                             if (ajax.readyState === 4 && ajax.status === 200) {
-                             if (ajax.responseText !== "") {
-                             var json = JSON.parse(ajax.responseText);
-                             $('#imgPop').attr("src", "data:" + json.ext + ";base64," + json.imagen);
-                             }
-                             }
-                             };
-                             ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
-                             ajax.send("");
-                             $(this).parent('div').append(imageTag);
-                             }*/
+                            if ($(this).prop("disabled") === false) {
+                                var id = $(this).val();
+                                var imageTag = '<div class="divFoto" style="position:absolute;">' + '<img class="fotoComment"  id="imgPop" src="" alt="image" height="100" />' + '</div>';
+                                if (window.XMLHttpRequest) //mozilla
+                                {
+                                    ajax = new XMLHttpRequest(); //No Internet explorer
+                                } else
+                                {
+                                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                                }
+
+                                ajax.onreadystatechange = function () {
+                                    if (ajax.readyState === 4 && ajax.status === 200) {
+                                        if (ajax.responseText !== "") {
+                                            var json = JSON.parse(ajax.responseText);
+                                            $('#imgPop').attr("src", "data:" + json.ext + ";base64," + json.imagen);
+                                        }
+                                    }
+                                };
+                                ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
+                                ajax.send("");
+                                $(this).parent('div').append(imageTag);
+                            }
 
                         });
                         $(".popOverFoto").mouseleave(function () {
-                            //    $(this).parent('div').children('div').remove();
+                            $(this).parent('div').children('div').remove();
                         });
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -722,7 +750,7 @@
                                                             <div class='shape-text'></div>\n\
                                                         </div>\n\
                                                         <div class='project-content'>\n\
-                                                        "+noCommentThisWeek+"\n\
+                                                        " + noCommentThisWeek + "\n\
                                                         </div>\n\
                                                   </div></div>"
             }
@@ -899,6 +927,10 @@
                         $("#objectives").attr("disabled", true);
                         sortSelect("subjects");
                         $("#subjects").val("vacio");
+
+                        var selectSubject = "<spring:message code="etiq.selectSubject"/>";
+                        $("#subjects option[value='vacio']").text(selectSubject);
+
                         $("#divNotas").hide();
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -927,6 +959,8 @@
                             $('#objectives').append('<option value="' + objective.id + '">' + objective.name + '</option>');
                         });
                         $("#objectives").attr("disabled", false);
+                        var selectObject = "<spring:message code="etiq.selectObject"/>";
+                        $("#objectives option[value='vacio']").text(selectObject);
                         $("#divNotas").hide();
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -1015,12 +1049,12 @@
                             var presentNameEtq = "<spring:message code="etiq.namePresentation"/>";
                             var commentEtiq = "<spring:message code="etiq.comment"/>";
                             var lastStepEtiq = "<spring:message code="etiq.lastStepEtiq"/>";
-                            var createdByEtiq =  "<spring:message code="etiq.createByEtiq"/>";
+                            var createdByEtiq = "<spring:message code="etiq.createByEtiq"/>";
                             var presentationEtiq = "<spring:message code="etiq.presentationEtiq"/>";
-    
+
                             var presentationName = "";
                             if (comment.presentationName !== undefined && comment.presentationName !== "")
-                                presentationName = "<p><strong>"+presentNameEtq+": </strong> " + comment.presentationName + "</p>";
+                                presentationName = "<p><strong>" + presentNameEtq + ": </strong> " + comment.presentationName + "</p>";
 
                             $('#semana0').append("<div class='divAddNotas' id='" + comment.id + "'> \n\
                                                     <div class='project project-radius project-" + colorRating + "'>\n\
@@ -1028,16 +1062,16 @@
                                                             <div class='shape-text'></div>\n\
                                                         </div>\n\
                                                         <div class='project-content'>\n\
-                                                            <h3 class='lead'> <strong style='color:" + color + "'>" + comment.rating_name + "</strong><br>" + date.substring(0, 10) + "         <span class='badge badge-pill badge-success'>"+presentationEtiq+"</span></h3>\n\
+                                                            <h3 class='lead'> <strong style='color:" + color + "'>" + comment.rating_name + "</strong><br>" + date.substring(0, 10) + "         <span class='badge badge-pill badge-success'>" + presentationEtiq + "</span></h3>\n\
      " + presentationName + "\
 \n\
-    <p><strong>"+commentEtiq+": </strong>" + cc.substring(0, 120) + " " + tresPuntosComment + "</p>\
-                                                                    <p><strong>"+lastStepEtiq+": </strong>" + textLastStep.substring(0, 70) + " " + tresPuntosStep + "\n\
+    <p><strong>" + commentEtiq + ": </strong>" + cc.substring(0, 120) + " " + tresPuntosComment + "</p>\
+                                                                    <p><strong>" + lastStepEtiq + ": </strong>" + textLastStep.substring(0, 70) + " " + tresPuntosStep + "\n\
                                                                     </p>\n\
                                                                 \n\
                                                                 <div class = 'col-xs-12 text-center sinpadding optionsObservationsNotas' >\n\
                                                                     <div class='col-xs-4 text-center sinpadding'>\n\
-                                                                            <button onclick='mostrarComentario(" + comment.id + ",\""+createdByEtiq+"\",\""+commentEtiq+"\")' type='button' class='btn btn-link showMore'>                         \n\
+                                                                            <button onclick='mostrarComentario(" + comment.id + ",\"" + createdByEtiq + "\",\"" + commentEtiq + "\")' type='button' class='btn btn-link showMore'>                         \n\
                                                                                 <span class='glyphicon glyphicon-list-alt'></span>\n\
                                                                             </button>\n\
                                                                     </div>" + editdelete +
@@ -1123,14 +1157,14 @@
                 });
             }
 
-            function mostrarComentario(id,createdbyEtiq,CommentEtiq) {
+            function mostrarComentario(id, createdbyEtiq, CommentEtiq) {
                 id = '' + id;
                 $('#commentcomplete').empty();
                 $.each(comments, function (i, comment) {
                     if (comment.id === id) {
                         /* $('#commentcomplete').append('<div><h4>Comment</h4></div>\n\
                          <div>' + comment.comment + '</div');*/
-                        $('#commentcomplete').append("<div class='row'><strong>"+createdbyEtiq+": </strong>" + mapTeachers[Number(comment.createdby)] + "</div><div class='row'><strong>"+CommentEtiq+": </strong> " + comment.comment + "</div");
+                        $('#commentcomplete').append("<strong>" + createdbyEtiq + ": </strong>" + mapTeachers[Number(comment.createdby)] + "<br><strong>" + CommentEtiq + ": </strong> " + comment.comment);
                         $('#completemodal').modal('show');
                     }
                 });
@@ -1350,6 +1384,10 @@
                         $('#divHora').hide();
                         $('#divSubjectObjectives').hide();
                         $("#objectives").val("vacio");
+
+                        var selectObject = "<spring:message code="etiq.selectObject"/>";
+                        $("#objectives option[value='vacio']").text(selectObject);
+
                         $("#classroomCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
                         $("#dayCommentsButton").parent().css({"background-color": "", "padding": "", "border-radius": ""});
                         table.clear();
@@ -1862,10 +1900,45 @@
             .uk-form-small{
                 width: 100% !important;
             }
+            #table_students{
+                width: 100% !important;
+                padding-right: 0px;
+            }
             #table_students_filter{
                 width:100%;
                 padding-left: 15px;
                 margin:0px;
+            }
+            .maskFile{
+                position: relative;
+                top: -22px;
+                padding: 0px;
+            }
+            .maskFile button{
+                background-color: #ffffff;
+                color: #3074af;
+                border-radius: 8px;
+                border-color: #2f6fa7;
+            }
+            .maskFile label{
+                font-weight: normal;
+                color: #2f6fa7;
+                padding-left: 5px;
+            }
+            #fileToUpload{
+                z-index: 1;
+                position: relative;
+                opacity: 0;
+                cursor: pointer;
+            }
+            #fileToUploadClassroom{
+                z-index: 1;
+                position: relative;
+                opacity: 0;
+                cursor: pointer;
+            }
+            .colorSuccess{
+                color: #2f6fa7;
             }
         </style>
     </head>
@@ -2289,6 +2362,15 @@
                                             </div>  
                                             <div class="col-xs-12" >
                                                 <input type="file" id="fileToUpload" accept="image/*">
+                                                <div class="col-xs-12 text-left maskFile" >
+                                                    <button> 
+                                                        <spring:message code="etiq.upload"/> 
+                                                        <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> 
+                                                    </button>
+                                                    <label> 
+                                                        <spring:message code="etiq.fileNotFound"/>
+                                                    </label>
+                                                </div>
                                             </div>
 
                                             <div class="col-xs-12 text-center">
@@ -2327,7 +2409,7 @@
                             <div class="modal-content">
                                 <div class="modal-header ">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title"><spring:message code="etiq.moreInf"/></h4>
+                                    <h4 class="modal-title colorSuccess"><spring:message code="etiq.moreInf"/></h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="container-fluid">
@@ -2370,7 +2452,7 @@
                                 <div class="modal-header col ">
                                     <button type="button"  onclick="deletePhoto()" class='btn btn-link'  value='' id='deleteFoto'><spring:message code="etiq.delete"/></button>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="titleComment"></h4>
+                                    <h4 class="modal-title colorSuccess" id="titleComment"></h4>
                                 </div>
                                 <div class="modal-body">
                                     <img id="imagen" class="foto" src=""/>
@@ -2401,7 +2483,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" ><spring:message code="etiq.enterClassObs"/></h4>
+                                <h4 class="modal-title colorSuccess" ><spring:message code="etiq.enterClassObs"/></h4>
                             </div>
                             <div class="modal-body text-center">
                                 <div class="row">
@@ -2429,11 +2511,20 @@
                                 </div>
                                 <div class="row center-block form-group">
                                     <label class="control-label"><spring:message code="etiq.observation"/></label>
-                                    <textarea class="form-control" name="TXTdescription" id="observationcommentsClassroom" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
+                                    <textarea class="form-control" name="TXTdescription" id="observationcommentsClassroom" placeholder="<spring:message code="etiq.addComment"/>" maxlength="1000"  spellcheck="true"></textarea>
                                 </div>
 
                                 <div class="row  center-block form-group" >
                                     <input type="file" id="fileToUploadClassroom" accept="image/*">
+                                    <div class="col-xs-12 text-left maskFile" >
+                                        <button> 
+                                            <spring:message code="etiq.upload"/> 
+                                            <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> 
+                                        </button>
+                                        <label> 
+                                            <spring:message code="etiq.fileNotFound"/>
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="row text-center hidden" id="error1">
                                     <label><spring:message code="etiq.pleaseSelect"/></label>
@@ -2444,7 +2535,7 @@
                                 </div>
                                 <div class="row text-center ">
                                     <div class="col-xs-12 text-center">
-                                        <button type="button" class="btn btn-primary" id="savecommentClassroom"  value="Save" onclick="saveobservation()">Save observation</button>
+                                        <button type="button" class="btn btn-primary" id="savecommentClassroom"  value="Save" onclick="saveobservation()"><spring:message code="etiq.saveObservation"/></button>
                                     </div>
                                 </div>
 
@@ -2475,7 +2566,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myNewCommentTitle"></h4>
+                                <h4 class="modal-title colorSuccess" id="myNewCommentTitle"></h4>
                             </div>
                             <div class="modal-body text-center clearfix">
                                 <div class="col-xs-6">
@@ -2516,7 +2607,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel"><spring:message code="etiq.editComment"/></h4>
+                                <h4 class="modal-title colorSuccess" id="myModalLabel"><spring:message code="etiq.editComment"/></h4>
                             </div>
                             <div id="steps_show2" class="col-xs-6"></div>
                             <div class="modal-body text-center">
@@ -2573,7 +2664,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel"><spring:message code="etiq.Details"/></h4>
+                                <h4 class="modal-title colorSuccess" id="myModalLabel"><spring:message code="etiq.Details"/></h4>
                             </div>
                             <div id="commentcomplete" class="modal-body text-left " style="margin:5px;">
                             </div>

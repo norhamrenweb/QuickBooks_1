@@ -16,7 +16,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
 
     <head>
-        <title>Generate Report</title>
+        <title><spring:message code='etiq.report'/></title>
         <script>
 
 
@@ -92,7 +92,8 @@
                     });
                     $('#generateReport').attr('disabled', true);
                 });
-
+                var selectlevel = "<spring:message code="etiq.selectlevel"/>";
+                $("#levelStudent option[value='']").text(selectlevel);
 
             });
 
@@ -169,8 +170,8 @@
 
             }
 
-            function refresh(){
-                
+            function refresh() {
+
             }
         </script>
         <style>
@@ -210,9 +211,6 @@
                 position: relative;
                 padding-left: 5px; }
 
-            #generateReport{
-                margin-top: 20px;
-            }
             .checkbox label::before {
                 content: "";
                 display: inline-block;
@@ -315,35 +313,46 @@
             input[type="radio"] .styled:checked + label::after {
                 color: #fff; }
 
+            #generateReport{
+                font-size: medium;
+                width: 30%;
+
+                margin-bottom: 10px;
+            }
+            .etiqReport{
+                margin-top: 20px;
+                padding-top: 5px !important;
+                border-top: solid 1px lightgray;
+            }
         </style>
     </head>
     <body>
         <div class="container">
-            <h1 class="text-center">Generate Report</h1>
+            <h1 class="text-center"><spring:message code='etiq.generateReport'/></h1>
 
             <c:url var="post_url"  value="/html" />
             <form:form id="formStudents" method ="post" action="${post_url}"  >
 
                 <fieldset>
                     <legend id="showStudents">
-                        Select Learners 
+                        <spring:message code='etiq.selectLearners'/>
                         <span class="col-xs-12 text-right glyphicon glyphicon-triangle-bottom"></span>
                     </legend>
                     <div class="form-group collapse in" id="contenedorStudents">
-                        <div class="col-xs-12">
-                            <div class="col-xs-3">
-                                <label>Filter</label>     
+                        <div class="col-xs-12 sinpadding">
+                            <div class="col-xs-3 sinpadding">
+                                <label><spring:message code='etiq.filter'/></label>     
                             </div>
                         </div>
-                        <div class="col-xs-12">
-                            <div class="col-xs-2">
-                                <select class="form-control" name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
+                        <div class="col-xs-12 sinpadding">
+                            <div class="col-xs-12 sinpadding" style="margin-bottom:  10px;">
+                                <select class="form-control" name="levelStudent" id="levelStudent" style="width: 33.4%;" onchange="comboSelectionLevelStudent()">
                                     <c:forEach var="levels" items="${gradelevels}">
                                         <option value="${levels.id[0]}" >${levels.name}</option>
                                     </c:forEach>
                                 </select>
                             </div>
-                            <div class="col-xs-3">
+                            <div class="col-xs-4 sinpadding">
                                 <select class="form-control" size="20" multiple name="origen[]" id="origen" style="width: 100% !important;">
                                     <!--<select class="form-control" size="20" name="origen[]" id="origen" style="width: 100% !important;">-->
                                     <c:forEach var="alumnos" items="${listaAlumnos}">
@@ -352,22 +361,22 @@
                                 </select>
                             </div>
 
-                            <div class="  col-xs-2">
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px; padding-top: 50px;">
+                            <div class="  col-xs-4">
+                                <div class="col-xs-12 text-center btnStudents" style="padding-bottom: 10px; padding-top: 50px;">
                                     <input id='btnPasar' type="button" class="btn btn-success btn-block pasar" value="<spring:message code="etiq.txtadd"/> »">
                                 </div>
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <div class="col-xs-12 text-center btnStudents">
                                     <input type="button" class="btn btn-danger btn-block quitar" value="« <spring:message code="etiq.txtremove"/>">
                                 </div>
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <div class="col-xs-12 text-center btnStudents">
                                     <input id='btnPasarTodos' type="button" class="btn btn-success btn-block pasartodos" value="<spring:message code="etiq.txtaddAll"/> »">
                                 </div>
-                                <div class="col-xs-12 text-center" style="padding-bottom: 10px;">
+                                <div class="col-xs-12 text-center btnStudents">
                                     <input type="button" class="btn btn-danger btn-block quitartodos" value="« <spring:message code="etiq.txtremoveAll"/>">
                                 </div>
                             </div>
 
-                            <div class=" col-xs-3">
+                            <div class=" col-xs-4 sinpadding">
                                 <select class="form-control submit" size="20" multiple name="destino[]" id="destino" style="width: 100% !important;"> 
 
                                 </select>
@@ -375,15 +384,15 @@
                         </div>
                     </div>
                 </fieldset>
-                <div class="col-xs-12">
-                    <div class="col-xs-3">
-                        <label>Report</label>     
+                <div class="col-xs-12 sinpadding etiqReport">
+                    <div class="col-xs-3 sinpadding">
+                        <label><spring:message code='etiq.report'/></label>     
                     </div>
                 </div>
-                <div class="col-xs-12">
-                    <div class="col-xs-3">
+                <div class="col-xs-12 sinpadding">
+                    <div class="col-xs-3 sinpadding">
                         <select class="form-control" name="typeReport" id="typeReport" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">              
-                            <option value="" disabled="true"  disabled="true">Select Type</option>
+                            <option value="" disabled="true"  disabled="true"><spring:message code='etiq.selectType'/></option>
                             <option value="progress_prePrimary" >Progress Pre-Primary</option>
                             <option value="progress_Yr1_4" >Progress Yr1_4</option>
                             <option value="academic_Gr7" >Academic Report Gr7</option>   
@@ -396,15 +405,15 @@
                     <input type="submit" class="btn btn-success" id="createOnClick" value="<spring:message code="etiq.txtcreate"/>">
                 </div>
 
-                <div class="col-xs-12 form-check">
-                    <div class="col-xs-12">
+                <div class="col-xs-12 form-check sinpadding">
+                    <div class="col-xs-12 sinpadding">
                         <input type="checkbox" class="form-check-input" name="checkArchive" id="checkArchive">
-                        <label class="form-check-label" for="checkArchive">Store</label>
+                        <label class="form-check-label" for="checkArchive"><spring:message code='etiq.store'/></label>
                     </div>
                 </div>
 
                 <div class="col-xs-12 text-center">
-                    <input type="submit" class="btn btngreen_1" id="generateReport" value="Generate">
+                    <input type="submit" class="btn btn-info" id="generateReport" value="<spring:message code='etiq.generate'/>">
                 </div>
             </form:form>
         </div>
