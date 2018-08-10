@@ -362,17 +362,26 @@
                 
                 $("#fileToUploadClassroom,#fileToUpload").mouseover(function () {
 
-                    $("#fileToUploadClassroom").next().children().first().css("background-color", "#3074af")
-                    $("#fileToUploadClassroom").next().children().first().css("color", "white")
-                    $("#fileToUploadClassroom").next().children().first().css("border-color", "white")
-                });
+                    $("#fileToUploadClassroom").next().children().first().css("background-color", "#3074af");
+                    $("#fileToUploadClassroom").next().children().first().css("color", "white");
+                    $("#fileToUploadClassroom").next().children().first().css("border-color", "white");
+    
+                    $("#fileToUpload").next().children().first().css("background-color", "#3074af");
+                    $("#fileToUpload").next().children().first().css("color", "white");
+                    $("#fileToUpload").next().children().first().css("border-color", "white");           
+    });
      
                 $("#fileToUploadClassroom,#fileToUpload").mouseout(function () {
-               ;             
-                    $("#fileToUploadClassroom").next().children().first().css("background-color", "white")
-                    $("#fileToUploadClassroom").next().children().first().css("color", "#3074af")
-                    $("#fileToUploadClassroom").next().children().first().css("border-color", "#3074af")
-                });
+                            
+                    $("#fileToUploadClassroom").next().children().first().css("background-color", "white");
+                    $("#fileToUploadClassroom").next().children().first().css("color", "#3074af");
+                    $("#fileToUploadClassroom").next().children().first().css("border-color", "#3074af");
+                 
+                    $("#fileToUpload").next().children().first().css("background-color", "white");
+                    $("#fileToUpload").next().children().first().css("color", "#3074af");
+                    $("#fileToUpload").next().children().first().css("border-color", "#3074af");
+                
+            });
 
             });
 
@@ -414,7 +423,7 @@
             function editComentario(id) {
                 var comment = $('#editComentario' + id).data('comment');
                 var createDate = $('#editComentario' + id).data('createdate');
-                var type = $('#editComentario' + id).data('type');
+                var type = $('#editComentario' + id).data('type').trim();
                 var commentDate = $('#editComentario' + id).data('commentdate');
                 $('#observationfecha').val(commentDate);
                 $('#observationtype').val(type);

@@ -157,6 +157,24 @@
 //                    }
 //                });
 
+                $("#fileToUpload").change(function () {
+
+                    $(this).next().children().next().text($(this).val().split('/').pop().split('\\').pop());
+                });
+                
+                $("#fileToUpload").mouseover(function () {
+
+                    $("#fileToUpload").next().children().first().css("background-color", "#3074af")
+                    $("#fileToUpload").next().children().first().css("color", "white")
+                    $("#fileToUpload").next().children().first().css("border-color", "white")
+                });
+     
+                $("#fileToUpload").mouseout(function () {
+                   
+                    $("#fileToUpload").next().children().first().css("background-color", "white")
+                    $("#fileToUpload").next().children().first().css("color", "#3074af")
+                    $("#fileToUpload").next().children().first().css("border-color", "#3074af")
+                });
 
             });
             var ajax;
@@ -1174,9 +1192,7 @@
                 height: auto;
                 line-height: 18px;
             }
-            #myTab > ul > li >a{
-                padding: 10px 9px;
-            }
+            
             #table_students{
                 width: 100% !important;
             }
@@ -1202,6 +1218,32 @@
             }
             .radio{  
                 margin: 0px;
+            }
+            .maskFile{
+                position: relative;
+                top: -22px;
+                padding: 0px;
+            }
+            .maskFile button{
+                background-color: #ffffff;
+                color: #3074af;
+                border-radius: 8px;
+                border-color: #2f6fa7;
+            }
+            .maskFile label{
+                font-weight: normal;
+                color: #2f6fa7;
+                padding-left: 5px;
+            }
+             #fileToUpload{
+                z-index: 1;
+                position: relative;
+                opacity: 0;
+                cursor: pointer;
+            }
+         
+            .colorSuccess{
+                color: #2f6fa7;
             }
         </style>
     </head>
@@ -1436,6 +1478,15 @@
 
                             <div class="col-xs-12" >
                                 <input type="file" id="fileToUpload" accept="image/*">
+                                <div class="col-xs-12 text-left maskFile" >
+                                                    <button> 
+                                                        <spring:message code="etiq.upload"/> 
+                                                        <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> 
+                                                    </button>
+                                                    <label> 
+                                                        <spring:message code="etiq.fileNotFound"/>
+                                                    </label>
+                                                </div>
                             </div>
                             <div class="col-xs-12 text-center hidden" id="error1">
                                 <label><spring:message code='etiq.pleaseSelect'/></label>

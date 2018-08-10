@@ -219,6 +219,9 @@ hr.separadorMenu{
         margin: 0.1em 0.8em -0.1em 0;
         opacity: 1;
     }
+#myTab > ul > li >a{
+                padding: 10px 9px;
+            }
 }
 
 @media (max-width: 1280px){
@@ -409,6 +412,9 @@ hr.separadorMenu{
         margin: 0.1em 0.8em -0.1em 0;
         opacity: 1;
     }
+    #myTab > ul > li >a{
+                padding: 10px 9px;
+            }
 }
 
 @media (max-width: 1024px){
@@ -596,6 +602,9 @@ hr.separadorMenu{
         margin: 0.1em 0.8em -0.1em 0;
         opacity: 1;
     }
+    #myTab > ul > li >a{
+                padding: 10px 6px;
+            }
 }
 
 
@@ -710,7 +719,7 @@ hr.separadorMenu{
         padding-bottom: 3%;
         text-align: center;
         padding-left: 10px !important;
-         padding-right: 10px !important;
+        padding-right: 10px !important;
     }
     .main-menu li {
         /*  border-bottom: 1px solid #323949;*/
@@ -787,4 +796,16 @@ hr.separadorMenu{
         margin: 0.1em 0.8em -0.1em 0;
         opacity: 1;
     }
+    #myTab ul {
+        font-size: 10.8px;
+        padding: 0px;
+    }
+    #myTab ul {
+        font-size: 10.8px;
+        padding: 0px;
+    }
+    #myTab > ul > li > a{
+        padding: 10px 3px;
+    }
+
 }
