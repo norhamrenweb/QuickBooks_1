@@ -1526,8 +1526,8 @@
                                 <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="<spring:message code='etiq.addComment'/>" maxlength="1000"  spellcheck="true"></textarea>
                             </div>
                             <div id="divReport" class="col-xs-12 text-center">
-                                <div class="col-xs-12">
-                                    <div class="col-xs-7">
+                                <div class="col-xs-12" style="   margin-bottom:  10px;   display:  flex;    align-items: center;">
+                                    <div class="col-xs-12 col-md-7 sinpadding">
                                         <select class="form-control" id="subjectsReports" onchange="loadObjectiveReport()">
                                             <option value="-1"><spring:message code='etiq.selectSubject'/></option>
                                             <!--<option value="374">Physical Education</option>
@@ -1550,12 +1550,12 @@
                                             <option value="305">Lunch and Play time</option>-->
                                         </select>
                                     </div>
-                                    <div class="col-xs-5">
+                                    <div class="col-xs-12 col-md-5 sinpadding">
                                         <form>
-                                            <div class="form-group row">
-                                                <label for="staticEmail" class="col-sm-2 col-form-label"><spring:message code='etiq.GradeLevel'/></label>
-                                                <div class="col-sm-10">
-                                                    <input disabled="" type="text" readonly class="form-control-plaintext" id="gradeSubject" value="">
+                                            <div class="form-group col-xs-12" style=" padding-right:  0px;  display:  flex;  align-items: center;margin-bottom: 0px;">
+                                                <label for="staticEmail" class="col-xs-4 col-form-label" style="  margin-bottom:  0px;"><spring:message code='etiq.nota'/>:</label>
+                                                <div class="col-xs-8 sinpadding">
+                                                    <input disabled="" type="text" readonly class="form-control-plaintext" id="gradeSubject" value="" style=" width:  100%;">
                                                 </div>
                                             </div>
                                         </form>

@@ -539,7 +539,7 @@ public class ProgressbyStudent {
 
             }
             if (student.getFoto() != null) {
-                prueba = getImage(student.getFoto(), hsr);
+             //   prueba = getImage(student.getFoto(), hsr);
             }
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);

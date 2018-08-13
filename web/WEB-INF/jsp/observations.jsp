@@ -697,7 +697,7 @@
                             $("#semana5").append(divVacio("project-classroom1"));
                         if (cont6 === 0)
                             $("#semana6").append(divVacio("project-classroom2"));
-                        $(".popOverFoto").mouseover(function () {
+                        /*$(".popOverFoto").mouseover(function () {
                             if ($(this).prop("disabled") === false) {
                                 var id = $(this).val();
                                 var imageTag = '<div class="divFoto" style="position:absolute;">' + '<img class="fotoComment"  id="imgPop" src="" alt="image" height="100" />' + '</div>';
@@ -722,7 +722,7 @@
                                 $(this).parent('div').append(imageTag);
                             }
 
-                        });
+                        });*/
                         $(".popOverFoto").mouseleave(function () {
                             $(this).parent('div').children('div').remove();
                         });

@@ -14,7 +14,7 @@
 
 
     <head>
-        <title>Classroom Observation</title>
+        <title><spring:message code="etiq.classroomObservations"/></title>
 
         <script type="text/javascript">
 
@@ -238,9 +238,10 @@
                     success: function (data) {
 
                         var parentAux = $('#comment' + id).parent();
+                        var noCommentThisWeek = "<spring:message code="etiq.NoCommentWeek"/>";
                         //var j = JSON.parse(data);   
                         if ($('#comment' + id).parent().children().length === 1) {
-                            $('#comment' + id).parent().append("<div class='divAdd'>No comments this week</div>");
+                            $('#comment' + id).parent().append("<div class='divAdd'>"+noCommentThisWeek+"</div>");
                         }
                         $('#comment' + id).remove();
                         parentAux.children().not(".hide").last().next().removeClass("hide");
@@ -373,6 +374,8 @@
                                     path = path.substring(0, i);
                                     i--;
                                 }
+                                         var dateEtiq = "<spring:message code="etiq.Date"/>";
+                                var obsEtiq = "<spring:message code="etiq.observation"/>";
             <%--Create Date: " + fechaCreacion + "<br>\n\
             Type: " + category + "<br>\n\--%>
                                 $(numSemana).append("<div id='comment" + id + "' value='" + commentdate + "' class='divAdd " + visible + "'>\n\
@@ -381,8 +384,8 @@
                                                                                     <div class='shape-text'></div>\n\
                                                                                 </div>\n\
                                                                                 <div class='project-content projectProgcal'>\n\
-                                                                                    \n\<strong>Date:</strong> " + commentdate + " </strong> <br>\n\
-                                                                                    <strong>Observation:</strong> " + comentario.substring(0, 90) + " " + comentarioExtenso + "<br>\n\
+                                                                                    \n\<strong>"+dateEtiq+":</strong> " + commentdate + " </strong> <br>\n\
+                                                                                    <strong>"+obsEtiq+":</strong> " + comentario.substring(0, 90) + " " + comentarioExtenso + "<br>\n\
                                                                                     \n\<div class='col-xs-12 text-center sinpadding optionsObservations'>\n\
                                                                                     <div class='col-xs-3 text-center sinpadding'>\n\
                                                                                     <button type='button' class='btn btn-link showMore'  data-nameTeacher='" + nameTeacher + "' data-comment='" + comentario + "' data-createdate='" + fechaCreacion.toString() + "' data-type='" + category + "' data-commentdate='" + commentdate + "'>\n\
@@ -460,12 +463,14 @@
             }
           
             function divVacio(){
+             var dateEtiq = "<spring:message code="etiq.NoCommentWeek"/>";
+                               
              return "<div class='divAdd'><div class='project project-radius project-default'>\n\
                                                         <div class='shape'>\n\
                                                             <div class='shape-text'></div>\n\
                                                         </div>\n\
                                                         <div class='project-content'>\n\
-                                                        No comments this week\n\
+                                                        "+dateEtiq+"\n\
                                                         </div>\n\
                                                   </div></div>"
             }
@@ -853,7 +858,7 @@
         <div class="col-xs-12">
             <div class="col-sm-12" id="maincontainer">
                 <div class="col-sm-12 center-block text-center">
-                    <h1>CLASSROOM OBSERVATIONS</h1>
+                    <h1><spring:message code="etiq.classroomObservations"/></h1>
                 </div>
                 <div class="col-sm-12 center-block text-center">
                     <h2>${nameStudent}</h2> 
@@ -921,7 +926,7 @@
                     <div class="col-xs-2" >
                         <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
                             <div class="col-xs-12 sinpadding">
-                                <h4>First Week</h4>
+                                <h4><spring:message code="etiq.firstWeek"/></h4>
                             </div>
                         </div>
                     </div>
@@ -940,7 +945,7 @@
                     <div class="col-xs-2">
                         <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
                             <div class="col-xs-12 sinpadding">
-                                <h4>Second Week</h4>
+                                <h4><spring:message code="etiq.secondWeek"/></h4>
                             </div>
                         </div>
                     </div>
@@ -960,7 +965,7 @@
                     <div class="col-xs-2">
                         <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
                             <div class="col-xs-12 sinpadding">
-                                <h4>Third Week</h4>
+                                <h4><spring:message code="etiq.thirdWeek"/></h4>
                             </div>
                         </div>
                     </div>
@@ -979,7 +984,7 @@
                     <div class="col-xs-2" >
                         <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
                             <div class="col-xs-12 sinpadding">
-                                <h4>Fourth Week</h4>
+                                <h4><spring:message code="etiq.fourthWeek"/></h4>
                             </div>
                         </div>
                     </div>
@@ -1000,7 +1005,7 @@
                     <div class="col-xs-2">
                         <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
                             <div class="col-xs-12 sinpadding">
-                                <h4>Fifth Week</h4>
+                                <h4><spring:message code="etiq.fifthWeek"/></h4>
                             </div>
                         </div>
                     </div>
@@ -1019,7 +1024,7 @@
                     <div class="col-xs-2" >
                         <div class="col-xs-12 divClass sinpadding" data-idclass="1919">
                             <div class="col-xs-12 sinpadding">
-                                <h4>Sixth Week</h4>
+                                <h4><spring:message code="etiq.sixthWeek"/></h4>
                             </div>
                         </div>
                     </div>
@@ -1045,14 +1050,14 @@
                     <div class="modal-content">
                         <div class="modal-header modal-header-delete">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">are you sure you want to delete?</h4>
+                            <h4 class="modal-title"><spring:message code="etiq.areUsure"/></h4>
                         </div>
                         <div id="lessonDelete" class="modal-body">
 
                         </div>
                         <div class="modal-footer text-center">
-                            <button id="buttonDeleteObservation" type="button" class="btn btn-danger" data-dismiss="modal" onclick='deleteComentario(value)' value="">Yes</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                            <button id="buttonDeleteObservation" type="button" class="btn btn-danger" data-dismiss="modal" onclick='deleteComentario(value)' value=""><spring:message code="etiq.yes"/></button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="etiq.no"/></button>
                         </div>
                     </div>
 
@@ -1083,14 +1088,14 @@
 
                         <div class="modal-header modal-header-details">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h2>Enter a classroom observation</h2>
+                            <h2><spring:message code="etiq.enterClassObs"/></h2>
                         </div>
                         <div class="modal-body">
                             <div class="container-fluid">
                                 <div id="contenedorDate">
                                     <div class='col-xs-4'>
                                         <div class="form-group">
-                                            <label class="control-label" for="fecha">Comment Date</label>
+                                            <label class="control-label" for="fecha"><spring:message code="etiq.commentDate"/></label>
                                             <div class='input-group date' id='fecha2'>
                                                 <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
                                                 <span class="input-group-addon">
@@ -1100,19 +1105,19 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-6 center-block form-group">
-                                        <label class="control-label">Observation</label>
+                                        <label class="control-label"><spring:message code="etiq.observation"/></label>
                                         <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="add comment" maxlength="1000"  spellcheck="true"></textarea>
                                     </div>
                                     <div class="col-xs-6 center-block form-group">
-                                        <label class="control-label">Observation type</label>
+                                        <label class="control-label"><spring:message code="etiq.observationType"/></label>
                                         <select class="form-control" name="observationtype" id="observationtype" >
-                                            <option value="" selected>Select type</option> <!--if you change this value must change as well in savecomment function-->
-                                            <option value="Physical">Physical</option>
-                                            <option value="Intellectual">Intellectual</option>
-                                            <option value="Literacy">Literacy</option>
-                                            <option value="Emotional">Emotional</option>
-                                            <option value="Social">Social</option>
-                                            <option value="Other">Other</option>
+                                            <option value="" selected> <spring:message code="etiq.selectType"/></option> <!--if you change this value must change as well in savecomment function-->
+                                         <option value="Physical"><spring:message code="etiq.physical"/></option>
+                                        <option value="Intellectual"><spring:message code="etiq.intellectual"/></option>
+                                        <option value="Literacy"><spring:message code="etiq.literacy"/></option>
+                                        <option value="Emotional"><spring:message code="etiq.emotional"/></option>
+                                        <option value="Social"><spring:message code="etiq.social"/></option>
+                                        <option value="Other"><spring:message code="etiq.other"/></option>
                                         </select>
                                     </div>
                                 </div>  
@@ -1124,10 +1129,10 @@
                                     <input type="submit" class="btn btn-success" id="savecomment"  value="Save" onclick="updateComment()">
                                 </div>
                                 <div class="col-xs-12 text-center hidden" id="error1">
-                                    <label>Please select a student first</label>
+                                    <label><spring:message code="etiq.pleaseSelect"/></label>
                                 </div>
                                 <div class="col-xs-12 text-center hidden" id="error2">
-                                    <label>Please make sure to fill all data</label>
+                                    <label><spring:message code="etiq.pleaseMake"/></label>
                                 </div>
 
                             </div> 
@@ -1143,7 +1148,7 @@
                 <div class="modal-content">
                     <div class="modal-header modal-header-delete">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">comment saved</h4>
+                        <h4 class="modal-title"><spring:message code="etiq.commentSaved"/></h4>
                     </div>
 
                 </div>
@@ -1156,33 +1161,33 @@
                 <div class="modal-content">
                     <div class="modal-header modal-header-details">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">More Information</h4>
+                        <h4 class="modal-title"><spring:message code="etiq.moreInf"/></h4>
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div class="col-xs-12">
                                 <div class="col-xs-3 center-block form-group">
-                                    <label class="control-label">Comment Date:</label>
+                                    <label class="control-label"><spring:message code="etiq.commentDate"/>:</label>
                                     <div id="idCommentDate"></div>                        
                                 </div>
 
                                 <div class="col-xs-3 center-block form-group">
-                                    <label class="control-label">Created on:</label>
+                                    <label class="control-label"><spring:message code="etiq.createdOn"/>:</label>
                                     <div id="idCreateDate"></div>                        
                                 </div>   
                                 <div class="col-xs-3 center-block form-group">
-                                    <label class="control-label">Type:</label>
+                                    <label class="control-label"><spring:message code="etiq.type"/>:</label>
                                     <div id="idTypeComment"></div>                        
                                 </div>
                                 <div class="col-xs-3 center-block form-group">
-                                    <label class="control-label">Teacher:</label>
+                                    <label class="control-label"><spring:message code="etiq.teacher"/>:</label>
                                     <div id="idTeacher"></div>                        
                                 </div> 
                             </div> 
 
                             <div  class="col-xs-12">
                                 <div class="col-xs-12 form-group">
-                                    <label class="control-label">Comment:</label>
+                                    <label class="control-label"><spring:message code="etiq.comment"/>:</label>
                                     <div id="idComment"></div>                        
                                 </div>
                             </div>
@@ -1197,7 +1202,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header col ">
-                        <button type="button"  onclick="deletePhoto()" class='btn btn-link'  value='' id='deleteFoto'>Delete</button>
+                        <button type="button"  onclick="deletePhoto()" class='btn btn-link'  value='' id='deleteFoto'><spring:message code="etiq.Delete"/></button>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="titleComment"></h4>
                     </div>
