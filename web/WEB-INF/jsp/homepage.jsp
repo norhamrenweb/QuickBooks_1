@@ -139,6 +139,8 @@
                 var term = $('#termSelect option:selected').val();
                 var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
                 var nameYearAndTerm = $('#termSelect option:selected').text() + " / " + $('#yearSelect option:selected').text();
+                yearId_view =term;
+                termId_view =year;
                 $.ajax({
                     type: 'POST',
                     url: url,

@@ -136,9 +136,9 @@ public class Homepage extends MultiActionController {
                 while (rs4.next()) {
                     nameYear = "" + rs4.getString("SchoolYear");
                 }
-
+                
                 session.setAttribute("termYearName", nameTerm + " / " + nameYear);     
-            
+                
                 mv.addObject("message", message);
                 return mv;
             } else {

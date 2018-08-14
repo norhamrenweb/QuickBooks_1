@@ -27,7 +27,6 @@
             var comments;
             var mapTeachers = ${teachers};
             var noCommentThisWeek = "<spring:message code="etiq.NoCommentWeek"/>";
-
             $(document).ready(function () {
                 $("#infousuario").addClass("navbar-fixed-top");
 
@@ -868,7 +867,7 @@
                 $.ajax({
                     type: 'POST',
                     url: 'newcomment.htm?idstudent=' + studentid + '&idobjective=' + idobjective + '&comment=' + comment
-                            + '&step=' + steps + '&rating=' + rating + '&cbUseGrade=' + boolGrade,
+                            + '&step=' + steps + '&rating=' + rating + '&cbUseGrade=' + boolGrade + '&yearId=' + yearId_view + '&termId=' + termId_view,
                     datatype: "json",
                     contentType: "application/json",
                     success: function (data) {
@@ -981,9 +980,10 @@
             }
 
             function getcomments(idobjective) {
-                $.ajax({
+                $.ajax({  
                     type: 'POST',
-                    url: 'comments.htm?idstudent=' + studentid + '&idobjective=' + idobjective,
+                    url: 'comments.htm?idstudent=' + studentid + '&idobjective=' + idobjective
+                                       + '&yearId=' + yearId_view + '&termId=' + termId_view,
                     datatype: "json",
                     contentType: "application/json",
                     success: function (data) {
@@ -1477,7 +1477,7 @@
                     recognition.continuous = false;
                     recognition.interimResults = false;
 
-                    recognition.lang = "en-EN";
+                    recognition.lang = "es-ES";
                     recognition.start();
 
                     recognition.onresult = function (e) {

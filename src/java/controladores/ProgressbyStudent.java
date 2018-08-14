@@ -226,7 +226,7 @@ public class ProgressbyStudent {
          */
         try {
             String consulta = "SELECT objective.id,name,rating_id,level_id,objective.term_id from objective left join \n"
-                    + "(select * from progress_report where student_id = " + studentId + ") b\n"
+                    + "(select * from progress_report where student_id = " + studentId + " and term_id = "+termid+") b\n"
                     + " on (objective.id = b.objective_id) where  objective.reportcard= 'true' and \n"
                     + "objective.year_id= " + yearid + " and objective.subject_id = " + subjectid;
 

@@ -192,8 +192,9 @@ public class ObservationControlador {
         ArrayList<CommentObjective> comments = new ArrayList<>();
         HttpSession sesion;
         sesion = hsr.getSession();
-        String termId = "" + sesion.getAttribute("termId");
-        String yearId = "" + sesion.getAttribute("yearId");
+ 
+        String termId = "" + hsr.getParameter("termId");
+        String yearId = "" + hsr.getParameter("yearId");
         JSONObject json = new JSONObject();
         try {
             HashMap<Integer, String> lessons = new HashMap<>();
@@ -271,8 +272,14 @@ public class ObservationControlador {
         String rating = hsr.getParameter("rating");
         String step = hsr.getParameter("step");
         String cbUseGrade = hsr.getParameter("cbUseGrade");
+        
+        String termId = "" + hsr.getParameter("termId");
+        String yearId = "" + hsr.getParameter("yearId");
+        
         HttpSession sesion;
         sesion = hsr.getSession();
+        
+    
         User user = (User) sesion.getAttribute("user");
         String ratingid = null;
         try {
@@ -300,9 +307,9 @@ public class ObservationControlador {
                 ratingid = "" + rs1.getInt("id");
             }
             if (ratingid != null) {
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + ratingid + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + ratingid + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + termId + "," + yearId + ")");
             } else {
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
+                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + termId + "," + yearId + ")");
             }
 
            /* if (!cbUseGrade.equals("true")) {

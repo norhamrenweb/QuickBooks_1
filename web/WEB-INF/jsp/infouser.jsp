@@ -89,7 +89,7 @@
 <script>
 
     var ajax;
-     var idioma = '<spring:message code="etiq.idioma"/>'; 
+    var idioma = '<spring:message code="etiq.idioma"/>'; 
              
              if (idioma === 'spanish')
              {
@@ -99,11 +99,10 @@
              }else if(idioma === 'arabic'){
                 var idioma = {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Arabic.json"};;
              }
+    var yearId_view ="<c:out value="${sessionScope.yearId}"/>"  ;
+    var termId_view ="<c:out value="${sessionScope.termId}"/>";
     
     $(document).ready(function () {
-        
-       
-        
         setInterval(function () {
             alert("Your session is going to be end by 5 min, Please click OK and continue")
         }, 6000000);
@@ -232,7 +231,7 @@
         <h1 class="text-center"><spring:message code="etiq.Welcome"/>, <c:out value="${sessionScope.user.name}"/></h1>
     </div>
     <div class="col-xs-2 text-center">
-        <button class="btn" id="btnYearmTerm" onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
+        <button class="btn" id="btnYearmTerm"  onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
     </div>
     <div class="col-xs-2 text-right">
         <!--<a href="<c:url value="/cerrarLogin.htm"/>" role="button" aria-haspopup="true" aria-expanded="false"><img class="imgUser" src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>-->
