@@ -13,6 +13,10 @@
             o.preventDefault();
             $('body').removeClass('nav-expanded');
         });
+        
+        $(".iconosmenulateral").click(function () {
+            changeTermYearModify();
+        });
     });
 
 </script>

@@ -139,7 +139,7 @@ public class ObservationControlador {
     public String getsubjects(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String id = hsr.getParameter("idstudent");
         JSONObject json = new JSONObject();
-        List<Subject> subs = ProgressbyStudent.getSubjects(Integer.parseInt(id), hsr);
+        List<Subject> subs = ProgressbyStudent.getSubjects(Integer.parseInt(id), hsr,"2","59");
         Subject sub = new Subject();
         sub.setName("Select Subject");
         String[] s = new String[1];

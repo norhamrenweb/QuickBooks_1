@@ -492,10 +492,11 @@
                 myObj["name"] = name;
                 myObj["finalrating"] = termIds;
                 myObj["description"] = description;
-                var id = [subjectid];
+                var id = [subjectid,$("#btnYearmTerm").attr("data-idyear")];
                 myObj["id"] = id;
                 myObj["steps"] = steps;
                 myObj["reportCard"] = checkReportCard;
+                
                 var json = JSON.stringify(myObj);
                 $.ajax({
                     type: 'POST',

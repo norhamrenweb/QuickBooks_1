@@ -91,18 +91,21 @@
     var ajax;
     var idioma = '<spring:message code="etiq.idioma"/>'; 
              
-             if (idioma === 'spanish')
-             {
-                var idioma = {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"};
-             }else if(idioma === 'english'){
-                var idioma = '';
-             }else if(idioma === 'arabic'){
-                var idioma = {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Arabic.json"};;
-             }
-    var yearId_view ="<c:out value="${sessionScope.yearId}"/>"  ;
-    var termId_view ="<c:out value="${sessionScope.termId}"/>";
+            if (idioma === 'spanish')
+            {
+               var idioma = {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"};
+            }else if(idioma === 'english'){
+               var idioma = '';
+            }else if(idioma === 'arabic'){
+               var idioma = {"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Arabic.json"};;
+            }
+             
+    var yearId_view;
+    var termId_view;
     
     $(document).ready(function () {
+        yearId_view = $("#btnYearmTerm").data("idyear");
+        termId_view =  $("#btnYearmTerm").data("idterm");
         setInterval(function () {
             alert("Your session is going to be end by 5 min, Please click OK and continue")
         }, 6000000);
@@ -165,15 +168,42 @@
     function changeTermYear() {
         var year = $('#yearSelect option:selected').val();
         var term = $('#termSelect option:selected').val();
+        yearId_view = year;
+        termId_view = term;
+        
         var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
-        var nameYearAndTerm = $('#termSelect option:selected').text() + " / " + $('#yearSelect option:selected').text();
+        var nameYearAndTerm =  $("#termSelect option[value='"+term+"']").text() + " / " + $("#yearSelect option[value='"+year+"']").text();
         $.ajax({
             type: 'POST',
             url: url,
             contentType: "application/json",
             success: function (data) {
                 $('#btnYearmTerm').text(nameYearAndTerm);
+                $("#btnYearmTerm").attr("data-idyear",year);
+                $("#btnYearmTerm").attr("data-idterm",term);
                 refresh();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(xhr.responseText);
+                console.log(thrownError);
+            }
+
+        });
+    }
+    function changeTermYearModify() {
+        var term =  $("#btnYearmTerm").attr("data-idterm");
+        var year =  $("#btnYearmTerm").attr("data-idyear");   
+  
+        var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
+   
+         var nameYearAndTerm = $("#termSelect option[value='"+term+"']").text() + " / " + $("#yearSelect option[value='"+year+"']").text();
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json",
+            success: function (data) {
+                  $('#btnYearmTerm').text(nameYearAndTerm);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);
@@ -231,7 +261,7 @@
         <h1 class="text-center"><spring:message code="etiq.Welcome"/>, <c:out value="${sessionScope.user.name}"/></h1>
     </div>
     <div class="col-xs-2 text-center">
-        <button class="btn" id="btnYearmTerm"  onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
+        <button class="btn" id="btnYearmTerm" data-idTerm="<c:out value='${sessionScope.termId}'/>" data-idYear="<c:out value='${sessionScope.yearId}'/>" onclick="$('#yearTermModal').modal('show');"><c:out value="${sessionScope.termYearName}"/></button>
     </div>
     <div class="col-xs-2 text-right">
         <!--<a href="<c:url value="/cerrarLogin.htm"/>" role="button" aria-haspopup="true" aria-expanded="false"><img class="imgUser" src="<c:url value="/recursos/img/iconos/user-01.svg"/>"></a>-->

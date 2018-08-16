@@ -27,8 +27,10 @@
             var comments;
             var mapTeachers = ${teachers};
             var noCommentThisWeek = "<spring:message code="etiq.NoCommentWeek"/>";
+            
             $(document).ready(function () {
                 $("#infousuario").addClass("navbar-fixed-top");
+                
 
                 ////////////////////////////////////////////NUEVO//////////
                 var userLang = navigator.language || navigator.userLanguage;
@@ -1433,6 +1435,9 @@
                     myObj["date"] = date;
                     myObj["type"] = type;
                     myObj["studentid"] = studentId;
+                    myObj["termId"] = termId_view;
+                    myObj["yearId"] = yearId_view;
+                    
                     var json = JSON.stringify(myObj);
                     var data = new FormData();
                     data.append("obj", json);

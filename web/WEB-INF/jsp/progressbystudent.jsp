@@ -83,7 +83,7 @@
                 });
 
 
-                $('#collapseTree').on('click', function () {
+                $('#collapseTree .col-xs-3').on('click', function () {
                     $("#tg").treegrid('collapseAll');
                 });
 
@@ -161,16 +161,16 @@
 
                     $(this).next().children().next().text($(this).val().split('/').pop().split('\\').pop());
                 });
-                
+
                 $("#fileToUpload").mouseover(function () {
 
                     $("#fileToUpload").next().children().first().css("background-color", "#3074af")
                     $("#fileToUpload").next().children().first().css("color", "white")
                     $("#fileToUpload").next().children().first().css("border-color", "white")
                 });
-     
+
                 $("#fileToUpload").mouseout(function () {
-                   
+
                     $("#fileToUpload").next().children().first().css("background-color", "white")
                     $("#fileToUpload").next().children().first().css("color", "#3074af")
                     $("#fileToUpload").next().children().first().css("border-color", "#3074af")
@@ -196,6 +196,8 @@
             function changeTermYear() {
                 var year = $('#yearSelect option:selected').val();
                 var term = $('#termSelect option:selected').val();
+                yearId_view = year;
+                termId_view = term;
                 var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
                 var nameYearAndTerm = $('#termSelect option:selected').text() + " / " + $('#yearSelect option:selected').text();
                 $('#loadingmessage').show();
@@ -206,6 +208,8 @@
                     success: function (data) {
                         $('#btnYearmTerm').text(nameYearAndTerm);
                         // alert("progress by student");
+                        $("#btnYearmTerm").attr("data-idyear", year);
+                        $("#btnYearmTerm").attr("data-idterm", term);
                         chargeDataStudent();
 
                     },
@@ -221,12 +225,17 @@
             function chargeDataStudent() {
                 var idStudent = $("#studentid").val();
                 var idSubjectAcademic = $("#subjects").val();
-                
+                var term = $("#btnYearmTerm").attr("data-idterm");
+                var year = $("#btnYearmTerm").attr("data-idyear");
+                /*
+                 *  
+                 $("#btnYearmTerm").attr("data-idyear");   
+                 var term =  $("#btnYearmTerm").attr("data-idterm");*/
                 if (idStudent !== undefined && idStudent !== "") {
 //  ajax.open("POST", "studentPage.htm?selectStudent=" + selectStudent, true);
                     $.ajax({
                         type: 'POST',
-                        url: 'studentPage.htm?selectStudent=' + idStudent,
+                        url: 'studentPage.htm?selectStudent=' + idStudent + "&yearid=" + year + "&termid=" + term,
                         contentType: "application/json",
                         success: function (data) {
                             var json = JSON.parse(data);
@@ -260,8 +269,8 @@
                             //hide the objectives in case a previous student was selected
                             $('#divTableObjective').addClass('hidden'); //to avoid having the general comments of the previous selected student
                             $('#divNotObjective').addClass('hidden');
-                            
-        
+
+
                             $('#subjects').empty();
                             $('#subjects').append('<option>Select Subject</option>');
                             $.each(subjects, function (i, item) {
@@ -271,14 +280,14 @@
                             sortSelect("subjects");
 
 
-                            if($("#subjects option[value='"+idSubjectAcademic+"']").length > 0)
+                            if ($("#subjects option[value='" + idSubjectAcademic + "']").length > 0)
                                 $('#subjects').val(idSubjectAcademic);
                             else
                                 $('#subjects').val("-1");
-                            
+
                             loadobjGeneralcomments();
-                                                
-        
+
+
                             $('#subjectsReports').empty();
                             $('#subjectsReports').append('<option value ="-1">Select Subject</option>');
                             $.each(subjects, function (i, item) {
@@ -321,7 +330,7 @@
 
                     });
                 }
-               
+
 
             }
             function funcionCallBackloadGeneralcomments()
@@ -592,8 +601,8 @@
                         });
                         $("#divTerms").append("<div class='radio' style='margin-left: 5%;'><label><input onclick='selectTreeByTerm(-1)' type='radio' name='opt' vlaue='all' checked>All</label></div>");
 
-                        $("#divTerms :first").css("margin-left","0px"); // cambiar que se haga en el css
-                        
+                        $("#divTerms :first").css("margin-left", "0px"); // cambiar que se haga en el css
+
                         $("#nextPresentations").empty();
                         for (var i = 0; i < nextPresentations.length; i++) {
                             var html_Li = " <div class='col-xs-12 nextPresentation'>\n\
@@ -625,6 +634,7 @@
                 var myObj = {};
                 myObj["idSubject"] = idSubject; //termId
                 myObj["idStudent"] = studentId; // studentId
+                myObj["idTeacher"] = $("#btnYearmTerm").attr("data-idyear"); // yearId
                 var json = JSON.stringify(myObj);
                 $.ajax({
                     type: 'POST',
@@ -726,11 +736,14 @@
                 var studentId = $('#studentid').val();
                 var idSubject = "-1";
                 var comment = $("#TXTsupervisorComment").val()
+                var termYear = $("#btnYearmTerm").attr("data-idterm") + "_" + $("#btnYearmTerm").attr("data-idyear");
 
                 var myObj = {};
                 myObj["idSubject"] = idSubject;
                 myObj["idStudent"] = studentId;
                 myObj["comment"] = comment;
+                myObj["idTeacher"] = termYear;
+
                 var json = JSON.stringify(myObj);
                 $.ajax({
                     type: 'POST',
@@ -762,10 +775,14 @@
                 var studentId = $('#studentid').val();
                 var idSubject = $('#subjects option:selected').val();
                 var comment = $('#commentSubject').val();
+                var termYear = $("#btnYearmTerm").attr("data-idterm") + "_" + $("#btnYearmTerm").attr("data-idyear");
+
                 var myObj = {};
                 myObj["idSubject"] = idSubject;
                 myObj["idStudent"] = studentId;
                 myObj["comment"] = comment;
+                myObj["idTeacher"] = termYear;
+
                 var json = JSON.stringify(myObj);
                 $.ajax({
                     type: 'POST',
@@ -798,8 +815,11 @@
                 $('#loadingmessage').show(); // show the loading message.
                 //$('#createOnClick').attr('disabled', true);
                 ajax.onreadystatechange = funcionCallBackSelectStudent;
-                //  var selectStudent = document.getElementsByClassName("nameStudent").value;
-                ajax.open("POST", "studentPage.htm?selectStudent=" + selectStudent, true);
+                
+                var term = $("#btnYearmTerm").attr("data-idterm");
+                var year = $("#btnYearmTerm").attr("data-idyear");
+
+                ajax.open("POST", "studentPage.htm?selectStudent=" + selectStudent+ "&yearid=" + year + "&termid=" + term, true);
                 ajax.send("");
             }
 
@@ -871,7 +891,9 @@
                     ajax.onreadystatechange = funcionCallBackloadGeneralcomments;
                     var selectSubject = document.getElementById("subjects").value;
                     var selectStudent = document.getElementById("studentid").value;
-                    ajax.open("POST", "objGeneralcomments.htm?selection=" + selectSubject + "," + selectStudent, true);
+                    var idTerm = $("#btnYearmTerm").attr("data-idterm");
+                    var idYear = $("#btnYearmTerm").attr("data-idyear");
+                    ajax.open("POST", "objGeneralcomments.htm?selection=" + selectSubject + "," + selectStudent + "," + idTerm + "," + idYear, true);
                     ajax.send("");
                 }
             }
@@ -881,6 +903,10 @@
                 var date = $("#observationfecha").val();
                 var type = $("#observationtype :selected").text();
                 var studentId = $('#studentid').val();
+
+                var idTerm = $("#btnYearmTerm").attr("data-idterm");
+                var idYear = $("#btnYearmTerm").attr("data-idyear");
+                    
                 if (observation === "" || date === "" || type === "" || studentId === "" || type === "Select type")
                 {
                     if (studentId === "") {
@@ -894,6 +920,9 @@
                     myObj["date"] = date;
                     myObj["type"] = type;
                     myObj["studentid"] = studentId;
+                    myObj["termId"] = idTerm;
+                    myObj["yearId"] = idYear;
+                    
                     var json = JSON.stringify(myObj);
                     var data = new FormData();
                     data.append("obj", json);
@@ -932,12 +961,13 @@
             function loadObjectiveReport() {
                 var seleccion = $("#subjectsReports").val();
                 var stdId = $("#studentid").val();
-
+                var idTerm = $("#btnYearmTerm").attr("data-idterm");
+                var idYear = $("#btnYearmTerm").attr("data-idyear");
                 $("#listObjectiveReport tbody").empty();
                 if (seleccion !== "Select Subject") {
                     $.ajax({
                         type: "POST",
-                        url: "objectiveListReport.htm?seleccion=" + seleccion + "&studId=" + stdId,
+                        url: "objectiveListReport.htm?seleccion=" + seleccion + "&studId=" + stdId + "&termId=" + idTerm + "&yearId=" + idYear,
                         data: seleccion,
                         dataType: 'text',
                         success: function (data) {
@@ -992,10 +1022,14 @@
                     rating_select = "rating_id";
 
                 var myObj = {};
+                var term = $("#btnYearmTerm").attr("data-idterm");
+                var year = $("#btnYearmTerm").attr("data-idyear");
                 myObj["col1"] = newSeleccion; //nueva seleccion
                 myObj["col2"] = objectiveId; // objective id
                 myObj["col3"] = rating_select; // name column
                 myObj["col4"] = $("#studentid").val();
+                myObj["col5"] = term;//term
+                myObj["col6"] = year;//year
                 var json = JSON.stringify(myObj);
                 $.ajax({
                     type: "POST",
@@ -1192,7 +1226,7 @@
                 height: auto;
                 line-height: 18px;
             }
-            
+
             #table_students{
                 width: 100% !important;
             }
@@ -1235,13 +1269,13 @@
                 color: #2f6fa7;
                 padding-left: 5px;
             }
-             #fileToUpload{
+            #fileToUpload{
                 z-index: 1;
                 position: relative;
                 opacity: 0;
                 cursor: pointer;
             }
-         
+
             .colorSuccess{
                 color: #2f6fa7;
             }
@@ -1376,284 +1410,285 @@
                                         </div>
                                     </div>
                                 </div>  
-                            
-                            <div class="col-xs-12">
-                                <div class="row" id="containerTG">
-                                    <table id="tg" class="easyui-treegrid"></table>
-                                </div>
-                            </div>     
-                        </div>
-                        <div role="tabpanel" class="col-xs-12 tab-pane" id="gradebook">
-                            <div class="col-xs-12">
-                                <div class="col-xs-10" >
-                                    <Label><spring:message code='etiq.txtsubject'/></Label>
-                                    <button type='button' class='btn-link editResource' onclick='showCommentSubject()' data-toggle='tooltip' data-placement='bottom' value='<spring:message code='etiq.edit'/>' id='saveCommentSubject'>
-                                        <i class='glyphicon glyphicon-chevron-down'></i>
-                                    </button>
-                                    <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
-                                    </select>
-                                </div>
-                                <!--<div class=" col-xs-2 center-block form-group paddingLabel">
-                                    <input type="button" name="saveCommentSubject" value="save" class="btn btn-success" id="saveCommentSubject" data-target=".bs-example-modal-lg" onclick="showCommentSubject()"/> 
-                                    
-                                </div>-->
-                            </div>
-                            <div class="col-xs-12 hidden" id="divCommentSubject">
-                                <div class="col-xs-10 center-block form-group">
 
-                                    <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="<spring:message code='etiq.commentSubject'/>" maxlength="1000"  spellcheck="true"></textarea>
-                                </div>             
-                                <div class=" col-xs-2" id="saveLengthDiv">
-                                    <div class="col-xs-12">
-                                        <input type="button" name="saveCommentSubject" value="<spring:message code='etiq.save'/>" class="btn btn-info" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
+                                <div class="col-xs-12">
+                                    <div class="row" id="containerTG">
+                                        <table id="tg" class="easyui-treegrid"></table>
                                     </div>
-                                    <div class="col-xs-12" id="commentLength">
-
-                                    </div>
-                                </div>
+                                </div>     
                             </div>
-
-                            <div class="col-xs-12 hidden" id="divNotObjective">
-                                <spring:message code='etiq.selectSubjectNoObjec'/>
-                            </div>
-
-                            <div class="col-xs-12 hidden" id="divTableObjective">
-                                <table id="tableobjective" class="display">
-                                    <thead>
-                                        <tr>
-                                            <th><spring:message code='etiq.txtname'/></th>
-                                            <th><spring:message code='etiq.txtdescription'/></th>
-                                            <th><spring:message code='etiq.mostRecentComment'/></th>
-                                            <th><spring:message code='etiq.lastdate'/></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead> 
-                                </table>
-
-                            </div>
-                            <div id="confirmsaveSubject" class="modal fade" role="dialog">
-                                <div class="modal-dialog">
-
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header modal-header-delete">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title"><spring:message code='etiq.commentSaved'/></h4>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </div> 
-
-                        </div>
-                        <div role="tabpanel" class="col-xs-12 tab-pane" id="observations">
-                            <div class="col-xs-12 text-center">
-                                <h2><spring:message code='etiq.enterClassObs'/></h2>
-                            </div>
-                            <div class='col-xs-6 form-group'>
-                                <label class="control-label" for="fecha"><spring:message code='etiq.Date'/></label>
-                                <div class='input-group date' id='fecha'>
-                                    <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-xs-6 center-block form-group">
-                                <label class="control-label"><spring:message code='etiq.observationType'/></label>
-                                <select class="form-control" name="observationtype" id="observationtype" >
-                                    <option value="" selected><spring:message code='etiq.selectType'/></option> <!--if you change this value must change as well in savecomment function-->
-                                    <option value="Physical"><spring:message code='etiq.physical'/></option>
-                                    <option value="Intellectual"><spring:message code='etiq.intellectual'/></option>
-                                    <option value="Literacy"><spring:message code='etiq.literacy'/></option>
-                                    <option value="Emotional"><spring:message code='etiq.emotional'/></option>
-                                    <option value="Social"><spring:message code='etiq.social'/></option>
-                                </select>
-                            </div>
-                            <div class="col-xs-12 center-block form-group">
-                                <label class="control-label"><spring:message code='etiq.observation'/></label>
-                                <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="<spring:message code='etiq.addObservation'/>" maxlength="1000"  spellcheck="true"></textarea>
-                            </div>
-
-                            <div class="col-xs-12" >
-                                <input type="file" id="fileToUpload" accept="image/*">
-                                <div class="col-xs-12 text-left maskFile" >
-                                                    <button> 
-                                                        <spring:message code="etiq.upload"/> 
-                                                        <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> 
-                                                    </button>
-                                                    <label> 
-                                                        <spring:message code="etiq.fileNotFound"/>
-                                                    </label>
-                                                </div>
-                            </div>
-                            <div class="col-xs-12 text-center hidden" id="error1">
-                                <label><spring:message code='etiq.pleaseSelect'/></label>
-                            </div>
-                            <div class="col-xs-12 text-center hidden" id="error2">
-                                <label><spring:message code='etiq.pleaseMake'/></label>
-                            </div>
-
-                            <div class="col-xs-6 text-center">
-                                <button type="button" class="btn btn-success" id="savecomment"  value="<spring:message code='etiq.save'/>" onclick="saveobservation()"><spring:message code='etiq.saveObservation'/></button>
-                            </div>
-
-                            <div class="col-xs-6 text-center">
-                                <button type='button' class='btn btn-info' id="showcalendar"  value="<spring:message code='etiq.viewAll'/>" onclick="showCalendar()"><spring:message code='etiq.viewAll'/></button>
-                            </div>
-                            <div id="confirmsave" class="modal fade" role="dialog">
-                                <div class="modal-dialog">
-
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header modal-header-delete">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title"><spring:message code='etiq.commentSaved'/></h4>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </div> 
-
-                        </div>
-                        <div role="tabpanel" class="col-xs-12 tab-pane" id="supervisorComment">
-                            <div class="col-xs-12 text-center">
-                                <h2><spring:message code='etiq.enterSuperComment'/></h2>
-                            </div>
-                            <div class="col-xs-12 center-block form-group">
-                                <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="<spring:message code='etiq.addComment'/>" maxlength="1000"  spellcheck="true"></textarea>
-                            </div>
-                            <div id="divReport" class="col-xs-12 text-center">
-                                <div class="col-xs-12" style="   margin-bottom:  10px;   display:  flex;    align-items: center;">
-                                    <div class="col-xs-12 col-md-7 sinpadding">
-                                        <select class="form-control" id="subjectsReports" onchange="loadObjectiveReport()">
-                                            <option value="-1"><spring:message code='etiq.selectSubject'/></option>
-                                            <!--<option value="374">Physical Education</option>
-                                            <option value="410">Drama</option>
-                                            <option value="368">Life Skills</option>
-                                            <option value="405">Social and Emotional Development</option>
-                                            <option value="356">Creative Movement</option>
-                                            <option value="371">Music</option>
-                                            <option value="354">Art</option>
-                                            <option value="404">Fine Motor Skills</option>
-                                            <option value="403">Gross Motor Skills</option>
-                                            <option value="389">History</option>
-                                            <option value="386">Biology</option>
-                                            <option value="377">Physical Science</option>
-                                            <option value="362">Knowledge and Understanding of the World</option>
-                                            <option value="348">Mathematics</option>
-                                            <option value="380">Xhosa</option>
-                                            <option value="351">Afrikaans</option>
-                                            <option value="365">English</option>
-                                            <option value="305">Lunch and Play time</option>-->
+                            <div role="tabpanel" class="col-xs-12 tab-pane" id="gradebook">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-10" >
+                                        <Label><spring:message code='etiq.txtsubject'/></Label>
+                                        <button type='button' class='btn-link editResource' onclick='showCommentSubject()' data-toggle='tooltip' data-placement='bottom' value='<spring:message code='etiq.edit'/>' id='saveCommentSubject'>
+                                            <i class='glyphicon glyphicon-chevron-down'></i>
+                                        </button>
+                                        <select class="form-control" id="subjects" onchange="loadobjGeneralcomments()">
                                         </select>
                                     </div>
-                                    <div class="col-xs-12 col-md-5 sinpadding">
-                                        <form>
-                                            <div class="form-group col-xs-12" style=" padding-right:  0px;  display:  flex;  align-items: center;margin-bottom: 0px;">
-                                                <label for="staticEmail" class="col-xs-4 col-form-label" style="  margin-bottom:  0px;"><spring:message code='etiq.nota'/>:</label>
-                                                <div class="col-xs-8 sinpadding">
-                                                    <input disabled="" type="text" readonly class="form-control-plaintext" id="gradeSubject" value="" style=" width:  100%;">
-                                                </div>
-                                            </div>
-                                        </form>
+                                    <!--<div class=" col-xs-2 center-block form-group paddingLabel">
+                                        <input type="button" name="saveCommentSubject" value="save" class="btn btn-success" id="saveCommentSubject" data-target=".bs-example-modal-lg" onclick="showCommentSubject()"/> 
+                                        
+                                    </div>-->
+                                </div>
+                                <div class="col-xs-12 hidden" id="divCommentSubject">
+                                    <div class="col-xs-10 center-block form-group">
+
+                                        <textarea class="form-control" name="TXTCommentSubject" id="commentSubject"  placeholder="<spring:message code='etiq.commentSubject'/>" maxlength="1000"  spellcheck="true"></textarea>
+                                    </div>             
+                                    <div class=" col-xs-2" id="saveLengthDiv">
+                                        <div class="col-xs-12">
+                                            <input type="button" name="saveCommentSubject" value="<spring:message code='etiq.save'/>" class="btn btn-info" id="saveCommentSubjectButton" data-target=".bs-example-modal-lg" onclick="saveCommentSubjects()"/> 
+                                        </div>
+                                        <div class="col-xs-12" id="commentLength">
+
+                                        </div>
                                     </div>
                                 </div>
-                                <div class=" col-xs-12">
-                                    <table class="table table-bordered" id="listObjectiveReport">
-                                        <thead>
-                                            <tr>
-                                                <th><spring:message code='etiq.Objective'/></th>
-                                                <th><spring:message code='etiq.rating'/></th>
-                                                <th><spring:message code='etiq.level'/></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
 
-                                        </tbody>
-                                    </table>
+                                <div class="col-xs-12 hidden" id="divNotObjective">
+                                    <spring:message code='etiq.selectSubjectNoObjec'/>
                                 </div>
 
-                            </div> 
+                                <div class="col-xs-12 hidden" id="divTableObjective">
+                                    <table id="tableobjective" class="display">
+                                        <thead>
+                                            <tr>
+                                                <th><spring:message code='etiq.txtname'/></th>
+                                                <th><spring:message code='etiq.txtdescription'/></th>
+                                                <th><spring:message code='etiq.mostRecentComment'/></th>
+                                                <th><spring:message code='etiq.lastdate'/></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead> 
+                                    </table>
 
-                            <div class="col-xs-12  text-center">
-                                <button type="button" class="btn btn-info" id="saveSupervisorComment"  value="<spring:message code='etiq.save'/>" onclick="saveSupervisorCommentFunction()"><spring:message code='etiq.commentSaved'/></button>
-                            </div>
+                                </div>
+                                <div id="confirmsaveSubject" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
 
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header modal-header-delete">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title"><spring:message code='etiq.commentSaved'/></h4>
+                                            </div>
 
-                            <div id="confirmsaveSupervisorComment" class="modal fade" role="dialog">
-                                <div class="modal-dialog">
-
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header modal-header-delete">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title"><spring:message code='etiq.commentSaved'/></h4>
                                         </div>
 
                                     </div>
+                                </div> 
 
+                            </div>
+                            <div role="tabpanel" class="col-xs-12 tab-pane" id="observations">
+                                <div class="col-xs-12 text-center">
+                                    <h2><spring:message code='etiq.enterClassObs'/></h2>
                                 </div>
-                            </div> 
+                                <div class='col-xs-6 form-group'>
+                                    <label class="control-label" for="fecha"><spring:message code='etiq.Date'/></label>
+                                    <div class='input-group date' id='fecha'>
+                                        <input type='text' name="TXTfecha" class="form-control" id="observationfecha"/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 center-block form-group">
+                                    <label class="control-label"><spring:message code='etiq.observationType'/></label>
+                                    <select class="form-control" name="observationtype" id="observationtype" >
+                                        <option value="" selected><spring:message code='etiq.selectType'/></option> <!--if you change this value must change as well in savecomment function-->
+                                        <option value="Physical"><spring:message code='etiq.physical'/></option>
+                                        <option value="Intellectual"><spring:message code='etiq.intellectual'/></option>
+                                        <option value="Literacy"><spring:message code='etiq.literacy'/></option>
+                                        <option value="Emotional"><spring:message code='etiq.emotional'/></option>
+                                        <option value="Social"><spring:message code='etiq.social'/></option>
+                                    </select>
+                                </div>
+                                <div class="col-xs-12 center-block form-group">
+                                    <label class="control-label"><spring:message code='etiq.observation'/></label>
+                                    <textarea class="form-control" name="TXTdescription" id="observationcomments" placeholder="<spring:message code='etiq.addObservation'/>" maxlength="1000"  spellcheck="true"></textarea>
+                                </div>
+
+                                <div class="col-xs-12" >
+                                    <input type="file" id="fileToUpload" accept="image/*">
+                                    <div class="col-xs-12 text-left maskFile" >
+                                        <button> 
+                                            <spring:message code="etiq.upload"/> 
+                                            <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> 
+                                        </button>
+                                        <label> 
+                                            <spring:message code="etiq.fileNotFound"/>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 text-center hidden" id="error1">
+                                    <label><spring:message code='etiq.pleaseSelect'/></label>
+                                </div>
+                                <div class="col-xs-12 text-center hidden" id="error2">
+                                    <label><spring:message code='etiq.pleaseMake'/></label>
+                                </div>
+
+                                <div class="col-xs-6 text-center">
+                                    <button type="button" class="btn btn-success" id="savecomment"  value="<spring:message code='etiq.save'/>" onclick="saveobservation()"><spring:message code='etiq.saveObservation'/></button>
+                                </div>
+
+                                <div class="col-xs-6 text-center">
+                                    <button type='button' class='btn btn-info' id="showcalendar"  value="<spring:message code='etiq.viewAll'/>" onclick="showCalendar()"><spring:message code='etiq.viewAll'/></button>
+                                </div>
+                                <div id="confirmsave" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header modal-header-delete">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title"><spring:message code='etiq.commentSaved'/></h4>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div> 
+
+                            </div>
+                            <div role="tabpanel" class="col-xs-12 tab-pane" id="supervisorComment">
+                                <div class="col-xs-12 text-center">
+                                    <h2><spring:message code='etiq.enterSuperComment'/></h2>
+                                </div>
+                                <div class="col-xs-12 center-block form-group"  style="margin-bottom: 5px;">
+                                    <textarea class="form-control" name="TXTdescription" id="TXTsupervisorComment" placeholder="<spring:message code='etiq.addComment'/>" maxlength="1000"  spellcheck="true"></textarea>
+                                </div>
+                                <div class="col-xs-12  text-center" style="margin-bottom: 30px;">
+                                    <button type="button" class="btn btn-info" id="saveSupervisorComment"  value="<spring:message code='etiq.save'/>" onclick="saveSupervisorCommentFunction()"><spring:message code='etiq.commentSaved'/></button>
+                                </div>
+                                <div id="divReport" class="col-xs-12 text-center">
+                                    <div class="col-xs-12" style="   margin-bottom:  10px;   display:  flex;    align-items: center;">
+                                        <div class="col-xs-12 col-md-7 sinpadding">
+                                            <select class="form-control" id="subjectsReports" onchange="loadObjectiveReport()">
+                                                <option value="-1"><spring:message code='etiq.selectSubject'/></option>
+                                                <!--<option value="374">Physical Education</option>
+                                                <option value="410">Drama</option>
+                                                <option value="368">Life Skills</option>
+                                                <option value="405">Social and Emotional Development</option>
+                                                <option value="356">Creative Movement</option>
+                                                <option value="371">Music</option>
+                                                <option value="354">Art</option>
+                                                <option value="404">Fine Motor Skills</option>
+                                                <option value="403">Gross Motor Skills</option>
+                                                <option value="389">History</option>
+                                                <option value="386">Biology</option>
+                                                <option value="377">Physical Science</option>
+                                                <option value="362">Knowledge and Understanding of the World</option>
+                                                <option value="348">Mathematics</option>
+                                                <option value="380">Xhosa</option>
+                                                <option value="351">Afrikaans</option>
+                                                <option value="365">English</option>
+                                                <option value="305">Lunch and Play time</option>-->
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-12 col-md-5 sinpadding">
+                                            <form>
+                                                <div class="form-group col-xs-12" style=" padding-right:  0px;  display:  flex;  align-items: center;margin-bottom: 0px;">
+                                                    <label for="staticEmail" class="col-xs-4 col-form-label" style="  margin-bottom:  0px;"><spring:message code='etiq.nota'/>:</label>
+                                                    <div class="col-xs-8 sinpadding">
+                                                        <input disabled="" type="text" readonly class="form-control-plaintext" id="gradeSubject" value="" style=" width:  100%;">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class=" col-xs-12">
+                                        <table class="table table-bordered" id="listObjectiveReport">
+                                            <thead>
+                                                <tr>
+                                                    <th><spring:message code='etiq.Objective'/></th>
+                                                    <th><spring:message code='etiq.rating'/></th>
+                                                    <th><spring:message code='etiq.level'/></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div> 
+
+
+
+
+                                <div id="confirmsaveSupervisorComment" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header modal-header-delete">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title"><spring:message code='etiq.commentSaved'/></h4>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div> 
+
+                            </div>
 
                         </div>
-
                     </div>
-            </div>
-        </fieldset>
-    </form:form>
-    <div>
+                </fieldset>
+            </form:form>
+            <div>
 
-    </div>
-</div>
-
-<div class="divLoadStudent" id="loadingmessage">
-    <div class="text-center"> 
-        <img class="imgLoading" src='../recursos/img/large_loading2.gif'/>
-    </div>
-</div>
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
             </div>
-            <div class="modal-body text-center">
-                <H1><%= request.getParameter("message")%></H1>
-            </div>
-            <!--      <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                  </div>-->
         </div>
-    </div>
-</div>
 
+        <div class="divLoadStudent" id="loadingmessage">
+            <div class="text-center"> 
+                <img class="imgLoading" src='../recursos/img/large_loading2.gif'/>
+            </div>
+        </div>
 
-<div id="modalCommentGeneral">
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#modalComment" id="showModalComment">
-        Launch demo modal
-    </button>   
-    <!-- Modal -->
-    <div class="modal fade" id="modalComment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="titleComment"></h4>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <!--        <h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
+                    </div>
+                    <div class="modal-body text-center">
+                        <H1><%= request.getParameter("message")%></H1>
+                    </div>
+                    <!--      <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                          </div>-->
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
+
+        <div id="modalCommentGeneral">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#modalComment" id="showModalComment">
+                Launch demo modal
+            </button>   
+            <!-- Modal -->
+            <div class="modal fade" id="modalComment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="titleComment"></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
 
-</body>
+    </body>
 </html>

@@ -48,14 +48,14 @@ public class Createlesson {
         return beanobject;
     }
 
-    public void newlesson(HttpServletRequest hsr, String note, String nameStudents, String[] studentIds, Lessons newlessons) throws SQLException {
+    public void newlesson(HttpServletRequest hsr, String note, String nameStudents, String[] studentIds, Lessons newlessons,String termid, String yearId) throws SQLException {
         String lessonid = null;
         List<String> equipmentids;
         DriverManagerDataSource dataSource;
         FTPClient ftpClient = new FTPClient();
 
         try {
-            HttpSession sesion = hsr.getSession();
+           
             String test = null;
             String server = "192.168.1.36";
             int port = 21;
@@ -65,9 +65,9 @@ public class Createlesson {
             comment = comment.replaceAll("\"", "\"\"");
             comment = comment.replaceAll("'", "''");
             if (!newlessons.getMethod().getName().equals("")) {
-                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,method_id,archive,presentedby,idea ,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment + "','" + newlessons.getMethod().getName() + "',false,0,false,"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")";
+                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,method_id,archive,presentedby,idea ,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment + "','" + newlessons.getMethod().getName() + "',false,0,false,"+ termid +"," +yearId +")";
             } else {
-                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,archive,presentedby,idea ,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment + "',false,0,false,"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")";
+                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,start,finish,comments,archive,presentedby,idea ,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + newlessons.getStart() + "','" + newlessons.getFinish() + "','" + comment + "',false,0,false,"+ termid +"," + yearId +")";
             }
             //(String userid, String studentid, String type,String note)   session.setAttribute("user", user);
 
@@ -118,7 +118,7 @@ public class Createlesson {
         //          st.executeUpdate("insert into lessons_time(teacher_id,lesson_id,lesson_start,lesson_end) values (5,"+lessonid+",'"+newlessons.getStart()+"','"+newlessons.getFinish()+"')");
     }
 
-    public void newidea(HttpServletRequest hsr,String note, Lessons newlessons) throws SQLException {
+    public void newidea(HttpServletRequest hsr,String note, Lessons newlessons,String termId, String yearId) throws SQLException {
         int lessonid = 0;
         List<String> equipmentids;
         String server = "192.168.1.36";
@@ -128,16 +128,16 @@ public class Createlesson {
         DriverManagerDataSource dataSource;
         FTPClient ftpClient = new FTPClient();
         try {
-            HttpSession sesion = hsr.getSession();
+ 
             String comment = newlessons.getComments();
             comment = comment.replaceAll("\"", "\"\"");
             comment = comment.replaceAll("'", "''");
             String test = null;
             //to avoid null pointer exception when there is no method
             if (newlessons.getMethod().getName() != "") {
-                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,method_id,archive,presentedby,idea,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + comment + "','" + newlessons.getMethod().getName() + "',false,0,true,"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")";
+                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,method_id,archive,presentedby,idea,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + comment + "','" + newlessons.getMethod().getName() + "',false,0,true,"+ termId +"," + yearId+")";
             } else {
-                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,archive,presentedby,idea,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + comment + "',false,0,true,"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")";
+                test = "insert into lessons(name,level_id,subject_id,objective_id,date_created,user_id,comments,archive,presentedby,idea,term_id,yearterm_id) values (' " + newlessons.getName() + "'," + newlessons.getLevel().getName() + "," + newlessons.getSubject().getName() + "," + newlessons.getObjective().getName() + ",now()," + newlessons.getTeacherid() + ",'" + comment + "',false,0,true,"+ termId+"," + yearId+")";
             }
             // ActivityLog.log(); //crear idea
             DBConect.eduweb.executeUpdate(test, Statement.RETURN_GENERATED_KEYS);

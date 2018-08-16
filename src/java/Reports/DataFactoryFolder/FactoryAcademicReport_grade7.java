@@ -41,13 +41,15 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
     private String dateNewTerm;
         private String  daysAbsent ;
 
-    public FactoryAcademicReport_grade7(String showgrade) {
+    public FactoryAcademicReport_grade7(String showgrade,String cTerm,String cYear) {
         nameStudent = "";
         dob = "";
         age = "";
         grade = "";
         term = "";
         showGrade = showgrade;
+        this.currentTerm = cTerm;
+        this.currentYear = cYear;
     }
 
     @Override
@@ -59,8 +61,8 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         ArrayList<String> as4 = new ArrayList<>();
         cargarAlumno(studentId);
 
-        String yearId = "" + hsr.getSession().getAttribute("yearId");
-        String termId = "" + hsr.getSession().getAttribute("termId");
+        String yearId = this.currentYear;
+        String termId = this.currentTerm;
 
         String nameTerm = "", nameYear = "";
         ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + termId + " and YearID = " + yearId);

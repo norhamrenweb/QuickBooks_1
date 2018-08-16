@@ -50,10 +50,10 @@
 
             });
 
-            function changeTermYear() {
+        /*    function changeTermYear() {
                 var year = $('#yearSelect option:selected').val();
                 var term = $('#termSelect option:selected').val();
-            var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
+                var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
                 var nameYearAndTerm = $('#termSelect option:selected').text() + " / " + $('#yearSelect option:selected').text();
                 $.ajax({
                     type: 'POST',
@@ -71,7 +71,7 @@
                     }
 
                 });
-            }
+            }*/
             function compartirSelect(id) {
                 $.ajax({
                     type: "POST",

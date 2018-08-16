@@ -34,12 +34,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class FactoryProgressReport_grade4 extends DataFactory {
 
-    public FactoryProgressReport_grade4() {
+    public FactoryProgressReport_grade4(String cTerm,String cYear) {
         nameStudent = "";
         dob = "";
         age = "";
         grade = "";
         term = "";
+         this.currentTerm = cTerm;
+        this.currentYear = cYear;
     }
 
     @Override
@@ -50,10 +52,10 @@ public class FactoryProgressReport_grade4 extends DataFactory {
         ArrayList<String> os4 = new ArrayList<>();
         ArrayList<String> as4 = new ArrayList<>();
         cargarAlumno(studentId);
-
-        String yearId = "" + hsr.getSession().getAttribute("yearId");
-        String termId = "" + hsr.getSession().getAttribute("termId");
-
+        
+        String yearId = this.currentYear;
+        String termId = this.currentTerm;
+        
         TreeMap<Integer , Profesor> mapTeachers = getTeachers(yearId, termId,idStudent,1);
         HashMap<String, String> mapComentarios = getComments(yearId, termId, idStudent);
 

@@ -28,12 +28,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class FactoryProgressReport_Pre_Primary extends DataFactory {
 
-    public FactoryProgressReport_Pre_Primary() {
+    public FactoryProgressReport_Pre_Primary(String cTerm,String cYear) {
         nameStudent = "";
         dob = "";
         age = "";
         grade = "";
         term = "";
+         this.currentTerm = cTerm;
+        this.currentYear = cYear;
     }
 
     public Collection getDataSource(HttpServletRequest hsr, String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException {
@@ -43,8 +45,8 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         ResultSet rs;
         cargarAlumno(studentId); // tarda 1
 
-        String yearId = "" + hsr.getSession().getAttribute("yearId");
-        String termId = "" + hsr.getSession().getAttribute("termId");
+               String yearId = this.currentYear;
+        String termId = this.currentTerm;
 
         java.util.Vector coll = new java.util.Vector();
         ArrayList<Subject> subjects = new ArrayList<>();

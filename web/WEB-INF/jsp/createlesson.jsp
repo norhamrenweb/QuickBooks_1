@@ -18,9 +18,11 @@
         <script>
             var mapStudents = new Map();
 
-
             $(document).ready(function () {
 
+                $("#termIdInput").val(termId_view);
+                $("#yearIdInput").val(yearId_view);
+                
                 $("#linkRecommend").hide();
                 $('#origen option').each(function () {
                     mapStudents[$(this).val()] = $(this).text();
@@ -702,6 +704,10 @@
                     title: 'Required field'
                 });
             });
+            function refresh() {
+                $("#termIdInput").val($('#termSelect option:selected').val());
+                $("#yearIdInput").val($('#yearSelect option:selected').val());
+            }
         </script>
         <style>
             #recommendStudent label{
@@ -938,6 +944,8 @@
 
 
             <form:form id="formStudents" method ="post" action="createlesson.htm?select=createlesson" >
+                <input id="termIdInput" name="termId" type="hidden" value="">
+                <input id="yearIdInput" name="yearId" type="hidden" value="">
                 <fieldset>
                     <legend id="showPropiertys">
                         <spring:message code="etiq.nameAndDesc"/>

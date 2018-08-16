@@ -275,7 +275,9 @@ public class CreateSettingControlador {
         String message = null;
         Objective o = new Objective();
         String termIds = ob.getFinalrating();
-        String yearId = ""+hsr.getSession().getAttribute("yearId"); 
+        String[] subid = ob.getId();
+        
+        String yearId = ""+subid[1]; 
      //   termIds = termIds.split("#")[0];
    //  termIds = termIds;
         boolean reportCard = ob.isReportCard();
@@ -283,7 +285,7 @@ public class CreateSettingControlador {
         try {
             
             
-            String[] subid = ob.getId();
+            
             String consulta = "insert into objective(name,description,subject_id,year_id,term_id,reportcard) values('" 
                     + ob.getName() + "','" + ob.getDescription() + "','" + subid[0] + "','"+yearId+
                     "','"+termIds+ "','"+reportCard+"')";

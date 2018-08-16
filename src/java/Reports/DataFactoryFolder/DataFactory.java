@@ -34,8 +34,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class DataFactory {
 
-    String nameStudent, dob, age, grade, term, termid = "", yearid = "";
-
+    protected String nameStudent, dob, age, grade, term, termid = "", yearid = "";
+    protected String currentTerm, currentYear;
     public abstract Collection getDataSource(HttpServletRequest hsr, String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException;
     public abstract String getNameReport();
 

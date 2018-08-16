@@ -242,6 +242,8 @@ public class CreateLessonControlador {
             String objName = hsr.getParameter("objectiveName");
             String studNames = hsr.getParameter("studentsName");
 
+            String termId =  hsr.getParameter("termId");
+            String yearId =  hsr.getParameter("yearId");
             //optional field, avoid null pointer exception
             if (test != null && test.length > 0) {
                 contentids = Arrays.asList(hsr.getParameterValues("TXTcontent"));
@@ -278,7 +280,7 @@ public class CreateLessonControlador {
 
             if (ideaCheck != null) {
                 if (ideaCheck[0].equals("on")) {
-                    c.newidea(hsr, note, newlesson);
+                    c.newidea(hsr, note, newlesson,termId,yearId);
                     message = "Presentation idea created";
                 }
             } else {
@@ -288,7 +290,7 @@ public class CreateLessonControlador {
 
                 newlesson.setStart("" + timestampstart);
                 newlesson.setFinish("" + timestampend);
-                c.newlesson(hsr, note, studNames, studentIds, newlesson);
+                c.newlesson(hsr, note, studNames, studentIds, newlesson,termId,yearId);
                 message = "Presentation created";
             }
 

@@ -21,7 +21,9 @@
 
 
             $(document).ready(function () {
-
+                $("#termIdInput").val(termId_view);
+                $("#yearIdInput").val(yearId_view);
+                
                 // $('#loadingmessage').hide();
                 $('#generateReport').attr('disabled', true);
 
@@ -171,7 +173,8 @@
             }
 
             function refresh() {
-
+                $("#termIdInput").val($('#termSelect option:selected').val());
+                $("#yearIdInput").val($('#yearSelect option:selected').val());
             }
         </script>
         <style>
@@ -332,7 +335,8 @@
 
             <c:url var="post_url"  value="/html" />
             <form:form id="formStudents" method ="post" action="${post_url}"  >
-
+                <input id="termIdInput" name="termId" type="hidden" value="">
+                <input id="yearIdInput" name="yearId" type="hidden" value="">
                 <fieldset>
                     <legend id="showStudents">
                         <spring:message code='etiq.selectLearners'/>

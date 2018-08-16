@@ -24,8 +24,8 @@
                 //VARIABLE CUANDO HEMOS CREADO UNA LESSONS CORRECTAMENTE
 
             <%--      var lessondelete = '<%= request.getParameter("messageDelete") %>'; --%>
-
-
+           
+                
                 $('.pasar').click(function () {
                     var exist = false;
                     $('#destino option').each(function () {
@@ -134,7 +134,7 @@
                 $("#table_id").DataTable().page(Number(nP)).draw('page')
 
             });
-            function changeTermYear() {
+           /* function changeTermYear() {
                 var year = $('#yearSelect option:selected').val();
                 var term = $('#termSelect option:selected').val();
                 var url = "<c:url value="/changeTermYear.htm"/>?yearid=" + year + "&termid=" + term;
@@ -157,7 +157,7 @@
                     }
 
                 });
-            }
+            }*/
 
 
             function deleteSelectSure(deleteLessonsSelected, deleteLessonsName) {

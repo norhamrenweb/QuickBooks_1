@@ -77,20 +77,20 @@ import org.apache.commons.net.ftp.FTPClient;
 @WebServlet(name = "html", urlPatterns = {"/html"})
 public class html extends HttpServlet {
 
-    private DataFactory createFactory(String reportType) {
+    private DataFactory createFactory(String reportType,String cTerm, String cYear) {
         if (reportType == null) {
             return new FactoryActivityLog();
         }
 
         switch (reportType) {
             case "progress_prePrimary":
-                return new FactoryProgressReport_Pre_Primary();
+                return new FactoryProgressReport_Pre_Primary(cTerm,cYear);
 
             case "progress_Yr1_4":
-                return new FactoryProgressReport_grade4();
+                return new FactoryProgressReport_grade4(cTerm,cYear);
 
             case "academic_Gr7":
-                return new FactoryAcademicReport_grade7("false");
+                return new FactoryAcademicReport_grade7("false",cTerm,cYear);
 
             default:
                 return null;
@@ -117,6 +117,10 @@ public class html extends HttpServlet {
         String checkArchive = request.getParameter("checkArchive");
         String start = request.getParameter("TXThorainicio");
         String finish = request.getParameter("TXThorafin");
+        
+        String termId =  request.getParameter("termId");
+        String yearId =  request.getParameter("yearId");
+        
         DefaultJasperReportsContext context = DefaultJasperReportsContext.getInstance();
         JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.xpath.executer.factory",
                 "net.sf.jasperreports.engine.util.xml.JaxenXPathExecuterFactory");
@@ -133,9 +137,9 @@ public class html extends HttpServlet {
         boolean showGrade = false;
         DataFactory d;
         if (reportType != null && reportType.equals("academic_Gr7_JP")) {
-            d = new FactoryAcademicReport_grade7("true");
+            d = new FactoryAcademicReport_grade7("true",termId,yearId);
         } else {
-            d = createFactory(reportType);
+            d = createFactory(reportType,termId,yearId);
         }
 
         // InputStream jasperStream = this.getClass().getResourceAsStream("progress_report_2017_gr4.jasper");
