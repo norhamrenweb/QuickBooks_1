@@ -19,6 +19,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -351,7 +353,11 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
 
         int year = Calendar.getInstance().get(Calendar.YEAR);
         while (rs.next()) {
-            this.nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName");
+            String resultado = getLinkSelfPortrait(studentId);
+            if(resultado.equals(""))
+                resultado= "AH-ZAF/configSchool/noImage.png";
+                
+            this.nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName") +"#ftp://david:david@192.168.1.36:21/"+resultado;
             this.dob = rs.getString("Birthdate");
             this.dob = dob.split(" ")[0];
             this.age = "" + (year - Integer.parseInt("" + dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3)));
@@ -359,7 +365,25 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         }
 
     }
+    private String getLinkSelfPortrait(String stdId){
+        String resul ="";
+        String consulta =" SELECT id,img_name FROM classobserv where student_id = "+stdId+
+                        " and term_id ="+this.currentTerm+" and yearterm_id ="+this.currentYear+" and category='Self portrait' order by commentdate DESC";
+        
+        try {
+            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            if(!rs.next()){
+                return "";
+            }
+            else{
+                resul = "MontessoriTesting/"+rs.getInt(1) +"/"+ rs.getInt(1) +"-"+rs.getString(2);
+            }      
+        } catch (SQLException ex) {
+            Logger.getLogger(FactoryProgressReport_Pre_Primary.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+        return resul;
+    }
     @Override
     public String getNameReport() {
         return "Pre-Primary_Progress_Report_December2017_v2_4.jasper";

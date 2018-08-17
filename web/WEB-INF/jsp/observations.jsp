@@ -2430,6 +2430,7 @@
                                                         <option value="Literacy"><spring:message code="etiq.literacy"/></option>
                                                         <option value="Emotional"><spring:message code="etiq.emotional"/></option>
                                                         <option value="Social"><spring:message code="etiq.social"/></option>
+                                                        <option value="myself"><spring:message code="etiq.myself"/></option>
                                                         <option value="Other"><spring:message code="etiq.other"/></option>
                                                     </select>
                                                 </div>
@@ -2579,6 +2580,7 @@
                                             <option value="Literacy"><spring:message code="etiq.literacy"/></option>
                                             <option value="Emotional"><spring:message code="etiq.emotional"/></option>
                                             <option value="Social"><spring:message code="etiq.social"/></option>
+                                            <option value="myself"><spring:message code="etiq.myself"/></option>
                                             <option value="Other"><spring:message code="etiq.other"/></option>
                                         </select>
                                     </div>

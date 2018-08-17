@@ -490,14 +490,14 @@ public class ObservationControlador {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
 
-            ftpClient.changeWorkingDirectory("/MontessoriObservations");
+            ftpClient.changeWorkingDirectory("/MontessoriTesting");
             ftpClient.mkd(commentId);
             ftpClient.changeWorkingDirectory(commentId);
             if (ftpClient.listNames().length > 0) {
                 ftpClient.deleteFile(ftpClient.listNames()[0]);
             }
 
-            ftpClient.changeWorkingDirectory("/MontessoriObservations");
+            ftpClient.changeWorkingDirectory("/MontessoriTesting");
             ftpClient.removeDirectory(commentId);
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
@@ -517,7 +517,7 @@ public class ObservationControlador {
         String user = "david";
         String pass = "david";
 
-        String filePath = "/MontessoriObservations/" + obsid + "/";
+        String filePath = "/MontessoriTesting/" + obsid + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
@@ -630,12 +630,12 @@ public class ObservationControlador {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            ftpClient.mkd("/MontessoriObservations/");
-            String rutaCompleta = "/MontessoriObservations/" + commentId;
+            ftpClient.mkd("/MontessoriTesting/");
+            String rutaCompleta = "/MontessoriTesting/" + commentId;
 
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/MontessoriObservations");
+                ftpClient.changeWorkingDirectory("/MontessoriTesting");
 
                 ftpClient.mkd(commentId);
                 ftpClient.changeWorkingDirectory(commentId);
