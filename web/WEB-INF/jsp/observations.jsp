@@ -27,10 +27,10 @@
             var comments;
             var mapTeachers = ${teachers};
             var noCommentThisWeek = "<spring:message code="etiq.NoCommentWeek"/>";
-            
+
             $(document).ready(function () {
                 $("#infousuario").addClass("navbar-fixed-top");
-                
+
 
                 ////////////////////////////////////////////NUEVO//////////
                 var userLang = navigator.language || navigator.userLanguage;
@@ -200,6 +200,8 @@
                     var myObj = {};
                     myObj["id"] = $('#objectives option:selected').val();
                     myObj["name"] = studentid;
+                    myObj["link"] = $("#btnYearmTerm").attr("data-idterm"); // termId
+                    myObj["type"] = $("#btnYearmTerm").attr("data-idyear");   //yearId       
                     var json = JSON.stringify(myObj);
                     $.ajax({
                         type: 'POST',
@@ -355,34 +357,34 @@
                 var selectlevel = "<spring:message code="etiq.selectlevel"/>";
                 $("#level option[value='']").text(selectlevel);
 
-             
+
                 $("#fileToUploadClassroom,#fileToUpload").change(function () {
 
                     $(this).next().children().next().text($(this).val().split('/').pop().split('\\').pop());
                 });
-                
+
                 $("#fileToUploadClassroom,#fileToUpload").mouseover(function () {
 
                     $("#fileToUploadClassroom").next().children().first().css("background-color", "#3074af");
                     $("#fileToUploadClassroom").next().children().first().css("color", "white");
                     $("#fileToUploadClassroom").next().children().first().css("border-color", "white");
-    
+
                     $("#fileToUpload").next().children().first().css("background-color", "#3074af");
                     $("#fileToUpload").next().children().first().css("color", "white");
-                    $("#fileToUpload").next().children().first().css("border-color", "white");           
-    });
-     
+                    $("#fileToUpload").next().children().first().css("border-color", "white");
+                });
+
                 $("#fileToUploadClassroom,#fileToUpload").mouseout(function () {
-                            
+
                     $("#fileToUploadClassroom").next().children().first().css("background-color", "white");
                     $("#fileToUploadClassroom").next().children().first().css("color", "#3074af");
                     $("#fileToUploadClassroom").next().children().first().css("border-color", "#3074af");
-                 
+
                     $("#fileToUpload").next().children().first().css("background-color", "white");
                     $("#fileToUpload").next().children().first().css("color", "#3074af");
                     $("#fileToUpload").next().children().first().css("border-color", "#3074af");
-                
-            });
+
+                });
 
             });
 
@@ -699,31 +701,31 @@
                         if (cont6 === 0)
                             $("#semana6").append(divVacio("project-classroom2"));
                         /*$(".popOverFoto").mouseover(function () {
-                            if ($(this).prop("disabled") === false) {
-                                var id = $(this).val();
-                                var imageTag = '<div class="divFoto" style="position:absolute;">' + '<img class="fotoComment"  id="imgPop" src="" alt="image" height="100" />' + '</div>';
-                                if (window.XMLHttpRequest) //mozilla
-                                {
-                                    ajax = new XMLHttpRequest(); //No Internet explorer
-                                } else
-                                {
-                                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                                }
-
-                                ajax.onreadystatechange = function () {
-                                    if (ajax.readyState === 4 && ajax.status === 200) {
-                                        if (ajax.responseText !== "") {
-                                            var json = JSON.parse(ajax.responseText);
-                                            $('#imgPop').attr("src", "data:" + json.ext + ";base64," + json.imagen);
-                                        }
-                                    }
-                                };
-                                ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
-                                ajax.send("");
-                                $(this).parent('div').append(imageTag);
-                            }
-
-                        });*/
+                         if ($(this).prop("disabled") === false) {
+                         var id = $(this).val();
+                         var imageTag = '<div class="divFoto" style="position:absolute;">' + '<img class="fotoComment"  id="imgPop" src="" alt="image" height="100" />' + '</div>';
+                         if (window.XMLHttpRequest) //mozilla
+                         {
+                         ajax = new XMLHttpRequest(); //No Internet explorer
+                         } else
+                         {
+                         ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                         }
+                         
+                         ajax.onreadystatechange = function () {
+                         if (ajax.readyState === 4 && ajax.status === 200) {
+                         if (ajax.responseText !== "") {
+                         var json = JSON.parse(ajax.responseText);
+                         $('#imgPop').attr("src", "data:" + json.ext + ";base64," + json.imagen);
+                         }
+                         }
+                         };
+                         ajax.open("POST", "getimage.htm?id=" + id + "&date=" + $('#date' + id).val(), true);
+                         ajax.send("");
+                         $(this).parent('div').append(imageTag);
+                         }
+                         
+                         });*/
                         $(".popOverFoto").mouseleave(function () {
                             $(this).parent('div').children('div').remove();
                         });
@@ -982,10 +984,10 @@
             }
 
             function getcomments(idobjective) {
-                $.ajax({  
+                $.ajax({
                     type: 'POST',
                     url: 'comments.htm?idstudent=' + studentid + '&idobjective=' + idobjective
-                                       + '&yearId=' + yearId_view + '&termId=' + termId_view,
+                            + '&yearId=' + yearId_view + '&termId=' + termId_view,
                     datatype: "json",
                     contentType: "application/json",
                     success: function (data) {
@@ -1437,7 +1439,7 @@
                     myObj["studentid"] = studentId;
                     myObj["termId"] = termId_view;
                     myObj["yearId"] = yearId_view;
-                    
+
                     var json = JSON.stringify(myObj);
                     var data = new FormData();
                     data.append("obj", json);
@@ -1920,7 +1922,7 @@
             }
             #table_students_filter{
                 width:100%;
-                padding-left: 15px;
+                padding-left: 5px;
                 margin:0px;
             }
             .maskFile{
@@ -1954,6 +1956,64 @@
             .colorSuccess{
                 color: #2f6fa7;
             }
+            .studentarea
+            {            
+                height: 500px;
+                width: 100%;
+                overflow-y: scroll;
+            }
+            #table_students{
+                width: 100% !important;
+            }
+            .dataTables_filter {
+                display: block !important;
+                float: left !important;
+                text-align: left !important;
+                padding-left: 0px;
+            }
+            #divCommentSubject{
+                margin-top: 5px;
+            }
+            .dataTables_filter input {
+                display: block;
+                float: left;
+                width: 100%;
+                height: 34px;
+                padding: 6px 12px;
+                margin-left: 0px !important;
+                font-size: 14px;
+                line-height: 1.42857143;
+                color: #555;
+                background-color: #fff;
+                background-image: none;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+                -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+                -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            }
+            div.dataTables_wrapper div.dataTables_filter input 
+            {
+                display: inline-block !important;
+                width: 100% !important;
+                margin-bottom: 0;
+                margin-left: 0.5em;
+            }
+            .divFilter{
+                margin-top: 10px;
+                padding-left: 5px;
+                padding-right: 0px;
+            }
+            .dt-merge-grid{
+                padding-left: 5px;
+            }
+            #table_students_filter>label{
+                    float: left;
+                        width: 100%;
+            }
+            
         </style>
     </head>
     <body>
@@ -1965,7 +2025,7 @@
                 </c:forEach>
             </select>-->
 
-                <div class="col-xs-12">
+                <div class="col-xs-12 divFilter">
                     <label><spring:message code="etiq.filter"/></label>
                     <select class="form-control " name="levelStudent" id="levelStudent" style="width: 100% !important;" onchange="comboSelectionLevelStudent()">
                         <c:forEach var="levels" items="${gradelevels}">
@@ -1974,21 +2034,21 @@
                     </select>
                 </div>
                 <div id="tabla_st" class="col-xs-12 studentarea">
-                    <table id="table_students" class="col-xs-12 display" style="overflow-x: hidden;">
+                    <table id="table_students" class="display" >
                         <thead>
                             <tr>
                                 <td>ID</td>
                                 <td><spring:message code="etiq.studentName"/></td>
                             </tr>
                         </thead>
-                        <tbody>
-                            <c:forEach var="alumnos" items="${students}" >
-                                <tr>
-                                    <td >${alumnos.id_students}</td>
-                                    <td >${alumnos.nombre_students}</td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
+
+                        <c:forEach var="alumnos" items="${students}" >
+                            <tr>
+                                <td >${alumnos.id_students}</td>
+                                <td >${alumnos.nombre_students}</td>
+                            </tr>
+                        </c:forEach>
+
                     </table>
                 </div>
             </div> <!-- fin tabla students-->
@@ -2036,7 +2096,7 @@
             <div class="col-xs-9 col-md-10" id="commentsContainer">
                 <div class="col-xs-12 pestanas">
                     <ul class=" col-xs-12 col-md-8 col-lg-6 nav nav-tabs">
-                        <li class="col-xs-6 sin padding">
+                        <li class="col-xs-6 sinpadding">
                             <a data-toggle="tab" id="classroomCommentsButton" class=" col-xs-12" style="display: flex;align-items: center;">
                                 <div class="col-xs-9 sinpadding" style="text-align: center;">
                                     <spring:message code="etiq.academicObservations"/> 
@@ -2047,7 +2107,7 @@
                             </a>
                         </li>
 
-                        <li class=" col-xs-6 sin padding active">
+                        <li class=" col-xs-6 sinpadding active">
                             <a data-toggle="tab" id="dayCommentsButton"  class=" col-xs-12" style="display: flex;align-items: center;">
                                 <div class="col-xs-9 sinpadding" style="text-align: center;"> 
                                     <spring:message code="etiq.classroomObservations"/> 

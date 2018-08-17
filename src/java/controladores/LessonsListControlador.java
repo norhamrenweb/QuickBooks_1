@@ -73,8 +73,11 @@ public class LessonsListControlador {
     public String loadschedule(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         User user = (User) hsr.getSession().getAttribute("user");
 
-        String idYear = "" + hsr.getSession().getAttribute("yearId");
+       /* String idYear = "" + hsr.getSession().getAttribute("yearId");
         String idTerm = "" + hsr.getSession().getAttribute("termId");
+        */
+        String idTerm = hsr.getParameter("termid");
+        String idYear = hsr.getParameter("yearid");
         
         HashMap<Integer,String> hashLevel =  new HashMap<>();
         HashMap<Integer,String> hashPersons = new HashMap<>();

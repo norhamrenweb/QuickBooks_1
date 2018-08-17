@@ -22,7 +22,6 @@
             var cont = 0;
 
             $(document).ready(function () {
-
                 // page is now ready, initialize the calendar...
                 var calendar = $('#calendar').fullCalendar({
                     defaultView: 'month',
@@ -80,7 +79,7 @@
                         tooltip.hide()
                     },
                     events: {
-                        url: 'loadschedule.htm',
+                        url: 'loadschedule.htm?termid=' + termId_view + "&yearid=" + yearId_view ,
                         type: 'POST', // Send post data
                         error: function () {
                             alert('There was an error while fetching events.');

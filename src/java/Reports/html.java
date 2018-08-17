@@ -166,7 +166,7 @@ public class html extends HttpServlet {
         if (checkArchive != null && checkArchive.equals("on")) {
             bitesFtp = JasperExportManager.exportReportToPdf(jasperPrint);
             //private void uploadFileToFTP(byte[] b,String codeSchool,String studentId,String term,String year,String nameReport) {
-            uploadFileToFTP(bitesFtp, codeSchool, stids[0], "" + request.getSession().getAttribute("termId"), "" + request.getSession().getAttribute("yearId"), reportType);
+            uploadFileToFTP(bitesFtp, codeSchool, stids[0],termId, yearId, reportType);
         }
         for (int i = 1; i < stids.length; i++) {
             JRDataSource datasource2;
@@ -179,7 +179,7 @@ public class html extends HttpServlet {
                 if (checkArchive != null && checkArchive.equals("on")) {
                     bitesFtp = JasperExportManager.exportReportToPdf(jasperPrintAux);
                     //private void uploadFileToFTP(byte[] b,String codeSchool,String studentId,String term,String year,String nameReport) {
-                    uploadFileToFTP(bitesFtp, codeSchool, stids[i], "" + request.getSession().getAttribute("termId"), "" + request.getSession().getAttribute("yearId"), reportType);
+                    uploadFileToFTP(bitesFtp, codeSchool, stids[i],termId, yearId, reportType);
                 }
             } else {
                 datasource2 = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(request, ((User) request.getSession().getAttribute("user")).getName(), start, finish, stids[i], this.getServletContext()), true);

@@ -195,13 +195,14 @@ public class ProgressControlador {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
         String message = "Records successfully saved";
-
+ 
         String[] lessonid = hsr.getParameterValues("TXTlessonid");
+        
         ModelAndView mv = new ModelAndView("redirect:/lessonprogress/loadRecords.htm?LessonsSelected=" + lessonid[0], "message", message);
         try {
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
-            String userId = "" + user.getId();
+     
             String[] objectiveid = hsr.getParameterValues("TXTobjectiveid");
             String[] comments = hsr.getParameterValues("TXTcomment");
             String[] ratings = hsr.getParameterValues("TXTrating");
@@ -215,7 +216,10 @@ public class ProgressControlador {
             String[] teacher = hsr.getParameterValues("TXTinstructor");
             String[] steps = hsr.getParameterValues("your_awesome_parameter");
             String archived = hsr.getParameter("buttonAchived");// is equal to on or null
-
+            
+            String termId = hsr.getParameter("termId");
+            String yearId = hsr.getParameter("yearId");
+            
             if (!teacher[0].isEmpty()) {
                 DBConect.eduweb.executeUpdate("update lessons set presentedby = " + teacher[0] + " where id = " + lessonid[0]);
             }
@@ -267,13 +271,13 @@ public class ProgressControlador {
                 ResultSet rs = DBConect.eduweb.executeQuery("select * from progress_report where lesson_id =" + lessonid[0] + " AND student_id = '" + studentids[i] + "'");
                 if (!rs.next()) {
                     if (ratingid != null) {
-                        DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comments[i] + "','" + ratingid + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")");
+                        DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comments[i] + "','" + ratingid + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ termId +"," + yearId +")");
                         
                         //clone
                         /*String testClone= "insert into progress_report(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id,linklesson_id) values (now(),'" + comments[i] + "','" + ratingid + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId")  + "," + lessonid[0]  +")";
                         DBConect.eduweb.executeUpdate(testClone);  */ 
                     } else {
-                        DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,lesson_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comments[i] + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId") +")");
+                        DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,lesson_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comments[i] + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ termId +"," + yearId +")");
                         
                         //clone
                       //  DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id,linklesson_id) values (now(),'" + comments[i] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId")  + "," + lessonid[0] +")");                   

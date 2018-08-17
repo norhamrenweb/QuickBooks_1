@@ -590,9 +590,9 @@ public class ObservationControlador {
         try {
             String objId = r.getId();
             String studentId = r.getName();
-            HttpSession sesion = hsr.getSession();
-            String termid = "" + sesion.getAttribute("termId");
-            String yearterm_id = "" + sesion.getAttribute("yearId");
+          
+            String termid = r.getLink();
+            String yearterm_id = r.getType();
 
             String consulta = "insert into recommendations(id_student,id_objective,term_id,yearterm_id) values (" + studentId + "," + objId + "," + termid + "," + yearterm_id + ")";
             ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where  id_student = " + studentId + " and id_objective=" + objId);

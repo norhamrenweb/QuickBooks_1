@@ -29,6 +29,8 @@
 
             $(document).ready(function () {
 
+                $("#termIdInput").val(termId_view);
+                $("#yearIdInput").val(yearId_view);
                 $('.studentRating').change(function () {
                     if ($("option:selected", this).val() === "Mastered") {
                         $(this).parents('.rows').find('.iconsAragon').not('.fa-null').addClass('icon-Pie_PieIzqSelect');
@@ -210,6 +212,10 @@
                 });
 
             });
+            function refresh() {
+                $("#termIdInput").val($('#termSelect option:selected').val());
+                $("#yearIdInput").val($('#yearSelect option:selected').val());
+            }
         </script>
         <style>
 
@@ -245,7 +251,8 @@
         <div class="container">
             <h1 class="text-center"><spring:message code="etiq.presentationProgress"/></h1>
             <form:form id="formStudents" method ="post" action="saveRecords.htm" >
-
+                <input id="termIdInput" name="termId" type="hidden" value="">
+                <input id="yearIdInput" name="yearId" type="hidden" value="">
                 <input type="hidden" class="form-control" id="namePresentation" name="namePresentation" value=""/>
                 <input type="hidden" class="form-control" id="nameTeacher" name="nameTeacher" value=""/>
 

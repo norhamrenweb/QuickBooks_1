@@ -280,6 +280,7 @@
             }
             function accessrsrcs(LessonsSelected, LessonsName)
             {
+                changeTermYearModify();
                 var lessonName = LessonsName.substring(1, LessonsName.length);
                 var path = LessonsSelected + "-" + lessonName;
                 window.open("<c:url value="/lessonresources/loadResources.htm?LessonsSelected="/>" + path);
@@ -287,7 +288,7 @@
             }
             function rowselect(LessonsSelected)
             {
-
+                changeTermYearModify();
                 window.open("<c:url value="/lessonprogress/loadRecords.htm?LessonsSelected="/>" + LessonsSelected);
             }
             ;
@@ -308,6 +309,8 @@
             ;
             function modifySelect(LessonsSelected)
             {
+                changeTermYearModify();
+
                 window.open("<c:url value="/editlesson/start.htm?LessonsSelected="/>" + LessonsSelected);
             }
             ;
@@ -403,7 +406,7 @@
             }
             function showCalendar()
                         {
-
+                                changeTermYearModify();
                                 id = '11343';
                                 window.open("<c:url value="/schedule.htm?id="/>" + id);
                         }
