@@ -49,7 +49,7 @@ public class ImageObservation extends HttpServlet {
         String user = "david";
         String pass = "david";
 
-        String filePath = "/MontessoriTesting/" + obsid + "_" + obsdate + "/";
+        String filePath = "/"+DBConect.codeSchool+"/MontessoriTesting/" + obsid + "_" + obsdate + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
@@ -140,12 +140,12 @@ public class ImageObservation extends HttpServlet {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            ftpClient.mkd("/MontessoriTesting/");
-            String rutaCompleta = "/MontessoriTesting/" + idobs;
+            ftpClient.mkd("/"+DBConect.codeSchool+"/MontessoriTesting/");
+            String rutaCompleta = "/"+DBConect.codeSchool+"/MontessoriTesting/" + idobs;
 
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/MontessoriTesting");
+                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/MontessoriTesting");
 
                 ftpClient.mkd(idobs);
                 ftpClient.changeWorkingDirectory(idobs);

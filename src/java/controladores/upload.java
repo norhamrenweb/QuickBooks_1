@@ -1,5 +1,6 @@
 package controladores;
 
+import Montessori.DBConect;
 import Montessori.Resource;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -109,10 +110,10 @@ public class upload extends HttpServlet {
             String filename = name + "-" + filePart.getSubmittedFileName();
             presentationName = presentationName.replace("/", "_");
             presentationName = presentationName.replace(" ", "-");
-            String rutaCompleta = "/MontessoriTesting/'" + lessonId + "-" + presentationName + "'";
+            String rutaCompleta = "/"+DBConect.codeSchool+"/MontessoriTesting/'" + lessonId + "-" + presentationName + "'";
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/MontessoriTesting");
+                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/MontessoriTesting");
                 ftpClient.mkd(lessonId + "-" + presentationName);
                 ftpClient.changeWorkingDirectory(lessonId + "-" + presentationName);
             }

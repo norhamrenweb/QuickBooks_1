@@ -26,10 +26,15 @@ public class DBConect {
     public static Connection cn;
     public static Connection cn2;
     public static Connection cn3;
-
+    public static String codeSchool;
     public static Statement eduweb;
     public static Statement ah;
     public static Statement eduwebBeforeFirst;
+    
+    public static String serverFtp = "ftp02.eduwebgroup.com";
+    public static String userFTP = "david";
+    public static String passFTP = "david";
+    public static int portFTP = 21;
     
     private Object getBean(String nombrebean, ServletContext servlet){
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
@@ -46,8 +51,9 @@ public class DBConect {
             cn3.close();
     }
     
-    public DBConect (HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+    public DBConect (HttpServletRequest hsr, HttpServletResponse hsr1,String cSchool) throws Exception {
         //connection to comunication
+        codeSchool = cSchool;
         DriverManagerDataSource dataSource = (DriverManagerDataSource) this.getBean("dataSource", hsr.getServletContext());
         if(this.cn!=null)
             this.cn.close();

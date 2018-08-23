@@ -5,6 +5,7 @@
  */
 package Reports;
 
+import Montessori.DBConect;
 import Montessori.User;
 import Reports.DataFactoryFolder.*;
 import controladores.upload;
@@ -240,25 +241,18 @@ public class html extends HttpServlet {
         int port = 21;
         String user = "david";
         String pass = "david";
-
+//** arreglar **//
         FTPClient ftpClient = new FTPClient();
         try {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
-            String rutaCompleta = "/ReportCards/" + codeSchool;
+            String rutaCompleta = "/"+DBConect.codeSchool+"/ReportCards/" + studentId;
+          
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/ReportCards");
-                ftpClient.mkd(codeSchool);
-                ftpClient.changeWorkingDirectory(codeSchool);
-            }
-
-            rutaCompleta += "/" + studentId;
-            if (!ftpClient.changeWorkingDirectory(rutaCompleta));
-            {
-                ftpClient.changeWorkingDirectory("/ReportCards/" + codeSchool);
+                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/ReportCards/");
                 ftpClient.mkd(studentId);
                 ftpClient.changeWorkingDirectory(studentId);
             }

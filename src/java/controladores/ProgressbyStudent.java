@@ -1223,7 +1223,7 @@ public class ProgressbyStudent {
         String user = "david";
         String pass = "david";
 
-        String filePath = "/MontessoriTesting/" + obsid + "/";
+        String filePath = "/"+DBConect.codeSchool+"/MontessoriTesting/" + obsid + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
@@ -1317,12 +1317,12 @@ public class ProgressbyStudent {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            ftpClient.mkd("/MontessoriTesting/");
-            String rutaCompleta = "/MontessoriTesting/" + commentId;
+            ftpClient.mkd("/"+DBConect.codeSchool+"/MontessoriTesting/");
+            String rutaCompleta = "/"+DBConect.codeSchool+"/MontessoriTesting/" + commentId;
 
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/MontessoriTesting");
+                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/MontessoriTesting");
 
                 ftpClient.mkd(commentId);
                 ftpClient.changeWorkingDirectory(commentId);
@@ -1358,12 +1358,12 @@ public class ProgressbyStudent {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
 
-            ftpClient.changeWorkingDirectory("/MontessoriTesting");
+            ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/MontessoriTesting");
             ftpClient.mkd(commentId);
             ftpClient.changeWorkingDirectory(commentId);
             ftpClient.deleteFile(ftpClient.listNames()[0]);
 
-            ftpClient.removeDirectory("/MontessoriTesting/" + commentId);
+            ftpClient.removeDirectory("/"+DBConect.codeSchool+"/MontessoriTesting/" + commentId);
             ftpClient.logout();
 
             DBConect.eduweb.executeUpdate(consulta);

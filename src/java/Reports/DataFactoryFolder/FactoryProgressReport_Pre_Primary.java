@@ -355,7 +355,7 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         while (rs.next()) {
             String resultado = getLinkSelfPortrait(studentId);
             if(resultado.equals(""))
-                resultado= "AH-ZAF/configSchool/noImage.png";
+                resultado= "/"+DBConect.codeSchool+"/configSchool/noImage.png";
                 
             this.nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName") +"#ftp://david:david@192.168.1.36:21/"+resultado;
             this.dob = rs.getString("Birthdate");
@@ -376,7 +376,7 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
                 return "";
             }
             else{
-                resul = "MontessoriTesting/"+rs.getInt(1) +"/"+ rs.getInt(1) +"-"+rs.getString(2);
+                resul = "/"+DBConect.codeSchool+"/MontessoriTesting/"+rs.getInt(1) +"/"+ rs.getInt(1) +"-"+rs.getString(2);
             }      
         } catch (SQLException ex) {
             Logger.getLogger(FactoryProgressReport_Pre_Primary.class.getName()).log(Level.SEVERE, null, ex);
