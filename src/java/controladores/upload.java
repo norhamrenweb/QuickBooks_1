@@ -47,15 +47,15 @@ public class upload extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String url = "/lessonresources/loadResources.htm?LessonsSelected=" + rLoaded.getLesson_id();
-        String server = DBConect.serverFtp;
+            String url = "/lessonresources/loadResources.htm?LessonsSelected=" + rLoaded.getLesson_id();
+            String server = DBConect.serverFtp;
             int port = DBConect.portFTP;
             String user = DBConect.userFTP;
             String pass = DBConect.passFTP;
 
         presentationName = presentationName.replace("/", "_");
         presentationName = presentationName.replace(" ", "-");
-        String filePath = "/PresentationsResources/" + rLoaded.getLesson_id() + "-" + presentationName + "/" + rLoaded.getLink();
+        String filePath = "/"+DBConect.codeSchool+"/PresentationsResources/" + rLoaded.getLesson_id() + "-" + presentationName + "/" + rLoaded.getLink();
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         boolean ok = ftpClient.login(user, pass);
@@ -88,7 +88,7 @@ public class upload extends HttpServlet {
         IOUtils.copy(inStream, response.getOutputStream());
         response.flushBuffer();
         
-        response.sendRedirect(request.getContextPath() + url);
+    //    response.sendRedirect(request.getContextPath() + url);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException {
