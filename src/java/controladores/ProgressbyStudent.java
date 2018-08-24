@@ -436,7 +436,7 @@ public class ProgressbyStudent {
         }
         return "";
     }
-*/
+
     private String cargarFoto(String photoName, HttpServletResponse hsr1) {
         // $('#foto').attr('src', "ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + info.foto).css('width', '300px').css('height', '500px');
 
@@ -462,7 +462,7 @@ public class ProgressbyStudent {
         }
         return total;
     }
-
+*/
     public String getImage(String photoName, HttpServletRequest request) throws IOException {
         try {
             /*URL url = new URL("ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + photoName);
@@ -470,10 +470,10 @@ public class ProgressbyStudent {
             InputStream inStream = conn.getInputStream();*/
             //***********
 
-            String server = "192.168.1.36";
-            int port = 21;
-            String user = "david";
-            String pass = "david";
+           String server = DBConect.serverFtp;
+            int port = DBConect.portFTP;
+            String user = DBConect.userFTP;
+            String pass = DBConect.passFTP;
 
             String filepath = "/Pictures/" + photoName;
             FTPClient ftpClient = new FTPClient();
@@ -1218,12 +1218,12 @@ public class ProgressbyStudent {
     public String getimage(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String obsdate = request.getParameter("date");
         String obsid = request.getParameter("id");
-        String server = "192.168.1.36";
-        int port = 21;
-        String user = "david";
-        String pass = "david";
-
-        String filePath = "/"+DBConect.codeSchool+"/MontessoriTesting/" + obsid + "/";
+String server = DBConect.serverFtp;
+            int port = DBConect.portFTP;
+            String user = DBConect.userFTP;
+            String pass = DBConect.passFTP;
+            
+        String filePath = "/"+DBConect.codeSchool+"/Observations/" + obsid + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
@@ -1308,21 +1308,21 @@ public class ProgressbyStudent {
             String consulta = "update classobserv set foto = false where id = " + commentId;
             DBConect.eduweb.executeUpdate(consulta);
 
-            String server = "192.168.1.36";
-            int port = 21;
-            String user = "david";
-            String pass = "david";
+       String server = DBConect.serverFtp;
+            int port = DBConect.portFTP;
+            String user = DBConect.userFTP;
+            String pass = DBConect.passFTP;
 
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            ftpClient.mkd("/"+DBConect.codeSchool+"/MontessoriTesting/");
-            String rutaCompleta = "/"+DBConect.codeSchool+"/MontessoriTesting/" + commentId;
+            ftpClient.mkd("/"+DBConect.codeSchool+"/Observations/");
+            String rutaCompleta = "/"+DBConect.codeSchool+"/Observations/" + commentId;
 
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/MontessoriTesting");
+                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/Observations");
 
                 ftpClient.mkd(commentId);
                 ftpClient.changeWorkingDirectory(commentId);
@@ -1349,21 +1349,21 @@ public class ProgressbyStudent {
             String commentId = r.getId();
             String consulta = "delete from classobserv where id = " + commentId;
 
-            String server = "192.168.1.36";
-            int port = 21;
-            String user = "david";
-            String pass = "david";
+      String server = DBConect.serverFtp;
+            int port = DBConect.portFTP;
+            String user = DBConect.userFTP;
+            String pass = DBConect.passFTP;
 
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
 
-            ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/MontessoriTesting");
+            ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/Observations");
             ftpClient.mkd(commentId);
             ftpClient.changeWorkingDirectory(commentId);
             ftpClient.deleteFile(ftpClient.listNames()[0]);
 
-            ftpClient.removeDirectory("/"+DBConect.codeSchool+"/MontessoriTesting/" + commentId);
+            ftpClient.removeDirectory("/"+DBConect.codeSchool+"/Observations/" + commentId);
             ftpClient.logout();
 
             DBConect.eduweb.executeUpdate(consulta);

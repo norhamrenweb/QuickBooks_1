@@ -112,7 +112,7 @@ public class html extends HttpServlet {
         Connection conn = null;
 
         ServletOutputStream os = response.getOutputStream();
-        String codeSchool = "AH-ZAF";
+        String codeSchool = "AH-ZAF"; // cambiar DConect.codeSchool
         String[] stids = request.getParameterValues("destino[]");
         String reportType = request.getParameter("typeReport");
         String checkArchive = request.getParameter("checkArchive");
@@ -237,10 +237,10 @@ public class html extends HttpServlet {
     }
 
     private void uploadFileToFTP(byte[] b, String codeSchool, String studentId, String term, String year, String nameReport) {
-        String server = "192.168.1.36";
-        int port = 21;
-        String user = "david";
-        String pass = "david";
+        String server = DBConect.serverFtp;
+        int port = DBConect.portFTP;
+        String user = DBConect.userFTP;
+        String pass = DBConect.passFTP;
 //** arreglar **//
         FTPClient ftpClient = new FTPClient();
         try {

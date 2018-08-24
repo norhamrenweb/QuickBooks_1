@@ -99,7 +99,7 @@ public class Createlesson {
             // create a folder in the FTP to upload resources to the new presentation
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
-            boolean success = ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/MontessoriTesting");
+            boolean success = ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/PresentationsResources");
             if (success) {
                 String lessonName = newlessons.getName().replace("/", "_");
                 lessonName = newlessons.getName().replace(" ", "-");
@@ -158,7 +158,7 @@ public class Createlesson {
             }
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
-            boolean success = ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/MontessoriTesting");
+            boolean success = ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/PresentationsResources");
             if (success) {
                 ftpClient.mkd(lessonid + "-" + newlessons.getName());
             }

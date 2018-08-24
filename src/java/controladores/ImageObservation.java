@@ -44,12 +44,12 @@ public class ImageObservation extends HttpServlet {
     protected void processResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException {
         String obsdate = request.getParameter("date");
         String obsid = request.getParameter("id");
-        String server = "192.168.1.36";
-        int port = 21;
-        String user = "david";
-        String pass = "david";
+        String server = DBConect.serverFtp;
+        int port = DBConect.portFTP;
+        String user = DBConect.userFTP;
+        String pass = DBConect.passFTP;
 
-        String filePath = "/"+DBConect.codeSchool+"/MontessoriTesting/" + obsid + "_" + obsdate + "/";
+        String filePath = "/" + DBConect.codeSchool + "/Observations/" + obsid + "_" + obsdate + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
@@ -91,20 +91,20 @@ public class ImageObservation extends HttpServlet {
         String idobs = "";
         //get the file chosen by the user
         String updateComment = request.getParameter("update");
- 
+
         String photoBoolean = "true";
         Part filePart = request.getPart("fileToUpload");
         if (filePart.getSubmittedFileName() == null) {
             photoBoolean = "false";
         }
-         InputStream fileInputStream = filePart.getInputStream();
+        InputStream fileInputStream = filePart.getInputStream();
         try {
             HttpSession sesion = request.getSession();
             User user = (User) sesion.getAttribute("user");
- 
-            String consulta;    
-            if (updateComment == null) {                                                                                                                                    
-                consulta = "insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate,term_id,yearterm_id,foto,img_name)values('" + user.getId() + "',now(),'" + json.getString("observation") + "','" + json.getString("type") + "','" + json.getString("studentid") + "','" + json.getString("date") + "','" + json.getString("termId") + "','" + json.getString("yearId") + "'," + photoBoolean + ",'" + filePart.getSubmittedFileName()+"')";
+
+            String consulta;
+            if (updateComment == null) {
+                consulta = "insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate,term_id,yearterm_id,foto,img_name)values('" + user.getId() + "',now(),'" + json.getString("observation") + "','" + json.getString("type") + "','" + json.getString("studentid") + "','" + json.getString("date") + "','" + json.getString("termId") + "','" + json.getString("yearId") + "'," + photoBoolean + ",'" + filePart.getSubmittedFileName() + "')";
                 DBConect.eduweb.executeUpdate(consulta, Statement.RETURN_GENERATED_KEYS);
                 ResultSet rs = DBConect.eduweb.getGeneratedKeys();
                 while (rs.next()) {
@@ -116,7 +116,7 @@ public class ImageObservation extends HttpServlet {
                     photoUpdateBoolean = ",foto = true ";
                 }
 
-                consulta = "update classobserv set date_created = now(), comment = '" + json.getString("observation")+ "' ,img_name = '" + filePart.getSubmittedFileName() + "' ,category = '" + json.getString("type") + "', commentdate = '" + json.getString("dateString") + "' " + photoUpdateBoolean + " where id = '" + json.getString("id") + "'";
+                consulta = "update classobserv set date_created = now(), comment = '" + json.getString("observation") + "' ,img_name = '" + filePart.getSubmittedFileName() + "' ,category = '" + json.getString("type") + "', commentdate = '" + json.getString("dateString") + "' " + photoUpdateBoolean + " where id = '" + json.getString("id") + "'";
                 DBConect.eduweb.executeUpdate(consulta);
                 idobs = json.getString("id");
             }
@@ -129,27 +129,25 @@ public class ImageObservation extends HttpServlet {
 
         ResourcesControlador rCont = new ResourcesControlador();
         //get the InputStream to store the file somewhere
-      
-        String server = "192.168.1.36";
-        int port = 21;
-        String user = "david";
-        String pass = "david";
+String server = DBConect.serverFtp;
+            int port = DBConect.portFTP;
+            String user = DBConect.userFTP;
+            String pass = DBConect.passFTP;
 
         FTPClient ftpClient = new FTPClient();
         try {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            ftpClient.mkd("/"+DBConect.codeSchool+"/MontessoriTesting/");
-            String rutaCompleta = "/"+DBConect.codeSchool+"/MontessoriTesting/" + idobs;
+            ftpClient.mkd("/" + DBConect.codeSchool + "/Observations/");
+            String rutaCompleta = "/" + DBConect.codeSchool + "/Observations/" + idobs;
 
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/MontessoriTesting");
-
+                ftpClient.changeWorkingDirectory("/" + DBConect.codeSchool + "/Observations");
                 ftpClient.mkd(idobs);
                 ftpClient.changeWorkingDirectory(idobs);
-                
+
                 if (filePart.getSubmittedFileName() != null && ftpClient.listNames().length > 0) {
 
                     ftpClient.deleteFile(ftpClient.listNames()[0]);

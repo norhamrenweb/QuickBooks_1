@@ -10,12 +10,15 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -44,18 +47,19 @@ public class upload extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String url = "/lessonresources/loadResources.htm?LessonsSelected=" + rLoaded.getLesson_id() + "-" + presentationName;
-        String server = "192.168.1.36";
-        int port = 21;
-        String user = "david";
-        String pass = "david";
+        String url = "/lessonresources/loadResources.htm?LessonsSelected=" + rLoaded.getLesson_id();
+        String server = DBConect.serverFtp;
+            int port = DBConect.portFTP;
+            String user = DBConect.userFTP;
+            String pass = DBConect.passFTP;
 
         presentationName = presentationName.replace("/", "_");
         presentationName = presentationName.replace(" ", "-");
-        String filePath = "/MontessoriTesting/" + rLoaded.getLesson_id() + "-" + presentationName + "/" + rLoaded.getLink();
+        String filePath = "/PresentationsResources/" + rLoaded.getLesson_id() + "-" + presentationName + "/" + rLoaded.getLink();
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
-        ftpClient.login(user, pass);
+        boolean ok = ftpClient.login(user, pass);
+        ftpClient.enterLocalPassiveMode();
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
         InputStream inStream = ftpClient.retrieveFileStream(filePath);
 
@@ -68,6 +72,7 @@ public class upload extends HttpServlet {
         String mimeType = context.getMimeType(rLoaded.getLink());
         if (mimeType == null) {
             // set to binary type if MIME mapping not found
+            
             mimeType = "application/octet-stream";
         }
         System.out.println("MIME type: " + mimeType);
@@ -76,13 +81,14 @@ public class upload extends HttpServlet {
         response.setContentType(mimeType);
 
         // forces download
-        String headerKey = "Content-Disposition";
+        String headerKey = "Content-disposition";
         String headerValue = String.format("attachment; filename=\"%s\"", rLoaded.getLink());
         response.setHeader(headerKey, headerValue);
-        IOUtils.copy(inStream, response.getOutputStream());
 
+        IOUtils.copy(inStream, response.getOutputStream());
         response.flushBuffer();
-     //  response.sendRedirect(request.getContextPath() + url);
+        
+        response.sendRedirect(request.getContextPath() + url);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException {
@@ -96,10 +102,10 @@ public class upload extends HttpServlet {
         String presentationName = request.getParameter("lessonsName");
 
         String url = "/lessonresources/loadResources.htm?LessonsSelected=" + lessonId + "-" + presentationName;
-        String server = "192.168.1.36";
-        int port = 21;
-        String user = "david";
-        String pass = "david";
+    String server = DBConect.serverFtp;
+            int port = DBConect.portFTP;
+            String user = DBConect.userFTP;
+            String pass = DBConect.passFTP;
 
         FTPClient ftpClient = new FTPClient();
         try {
@@ -110,10 +116,10 @@ public class upload extends HttpServlet {
             String filename = name + "-" + filePart.getSubmittedFileName();
             presentationName = presentationName.replace("/", "_");
             presentationName = presentationName.replace(" ", "-");
-            String rutaCompleta = "/"+DBConect.codeSchool+"/MontessoriTesting/'" + lessonId + "-" + presentationName + "'";
+            String rutaCompleta = "/"+DBConect.codeSchool+"/PresentationsResources/'" + lessonId + "-" + presentationName + "'";
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/MontessoriTesting");
+                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/PresentationsResources");
                 ftpClient.mkd(lessonId + "-" + presentationName);
                 ftpClient.changeWorkingDirectory(lessonId + "-" + presentationName);
             }
@@ -142,7 +148,7 @@ public class upload extends HttpServlet {
         try {
             processResponse(request, response);
         } catch (ClassNotFoundException ex) {
-
+            System.out.println("controladores.upload.doGet()");
         }
     }
 
@@ -160,6 +166,7 @@ public class upload extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
+            System.out.println("controladores.upload.doPost()");
         }
     }
 
