@@ -1646,7 +1646,7 @@
 
         <div class="divLoadStudent" id="loadingmessage">
             <div class="text-center"> 
-                <img class="imgLoading" src='../recursos/img/large_loading2.gif'/>
+                <img class="imgLoading" src='../recursos/img/chargePanda.svg'/>
             </div>
         </div>
 

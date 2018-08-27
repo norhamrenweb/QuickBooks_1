@@ -73,32 +73,30 @@ public class LessonsListControlador {
     public String loadschedule(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         User user = (User) hsr.getSession().getAttribute("user");
 
-       /* String idYear = "" + hsr.getSession().getAttribute("yearId");
+        /* String idYear = "" + hsr.getSession().getAttribute("yearId");
         String idTerm = "" + hsr.getSession().getAttribute("termId");
-        */
+         */
         String idTerm = hsr.getParameter("termid");
         String idYear = hsr.getParameter("yearid");
-        
-        HashMap<Integer,String> hashLevel =  new HashMap<>();
-        HashMap<Integer,String> hashPersons = new HashMap<>();
-        try {    
+
+        HashMap<Integer, String> hashLevel = new HashMap<>();
+        HashMap<Integer, String> hashPersons = new HashMap<>();
+        try {
             String consulta = "SELECT GradeLevel,GradeLevelID FROM GradeLevels";
             ResultSet rs = DBConect.ah.executeQuery(consulta);
-            while (rs.next())
-            {
+            while (rs.next()) {
                 hashLevel.put(rs.getInt("GradeLevelID"), rs.getString("GradeLevel"));
             }
-            
+
             consulta = "select id,lastname,firstname from person";
             rs = DBConect.ah.executeQuery(consulta);
 
             while (rs.next()) {
-                hashPersons.put(rs.getInt("id"),rs.getString("lastname") + ", " + rs.getString("firstname"));
-            } 
+                hashPersons.put(rs.getInt("id"), rs.getString("lastname") + ", " + rs.getString("firstname"));
+            }
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
         }
-        
 
         String consultAux = "";
         if (user.getType() == 1) {
@@ -119,7 +117,7 @@ public class LessonsListControlador {
             l.put("objid", rs.getString("objective_id"));
             l.put("idteacher", rs.getString("user_id"));
             Level g = new Level();
-            l.put("gradeLevel",hashLevel.get(rs.getInt("level_id")));
+            l.put("gradeLevel", hashLevel.get(rs.getInt("level_id")));
             l.put("share", false);
             lessonslist.add(l);
         }
@@ -135,8 +133,8 @@ public class LessonsListControlador {
             l.put("allDay", "false");
             l.put("objid", rs.getString("objective_id"));
             l.put("idteacher", rs.getString("user_id"));
-             Level g = new Level();
-            l.put("gradeLevel",hashLevel.get(rs.getInt("level_id")));
+            Level g = new Level();
+            l.put("gradeLevel", hashLevel.get(rs.getInt("level_id")));
             l.put("share", true);
             lessonslist.add(l);
         }
@@ -362,15 +360,14 @@ public class LessonsListControlador {
                 consulta = "DELETE FROM public.lessons WHERE id=" + id[0];
                 DBConect.eduweb.executeUpdate(consulta);
                 message = "Presentation deleted successfully";
+                String note = "id: " + id[0] + " | namePresentation: " + nombre;
+                ActivityLog.log(((User) (hsr.getSession().getAttribute("user"))), "", "Delete Presentation", note); //crear lesson
             }
+
             //mv.addObject("lessonslist", this.getLessons(user.getId(),hsr.getServletContext()));
             //mv.addObject("messageDelete",message);
             jsonObj.put("message", message);
             DBConect.eduweb.executeUpdate("Delete from lessonpresentedby where lessonid=" + id[0]);
-
-            String note = "id: " + id[0] + " | namePresentation: " + nombre;
-
-            ActivityLog.log(((User) (hsr.getSession().getAttribute("user"))), "", "Delete Presentation", note); //crear lesson
 
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);

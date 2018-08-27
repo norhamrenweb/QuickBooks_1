@@ -53,7 +53,7 @@ public class Homepage extends MultiActionController {
     @RequestMapping
     public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         DBConect.close();
-        c = new DBConect(hsr, hsr1,"TEST");
+        c = new DBConect(hsr, hsr1,"TEST","95.216.37.137","david","david",21);
         HttpSession session = hsr.getSession();
         String schoolCode = "AH";
            

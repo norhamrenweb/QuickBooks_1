@@ -51,13 +51,14 @@ public class DBConect {
             cn3.close();
     }
     
-    public DBConect (HttpServletRequest hsr, HttpServletResponse hsr1,String cSchool) throws Exception {
+    public DBConect (HttpServletRequest hsr, HttpServletResponse hsr1,String cSchool,String server,String user
+    ,String pass,int port) throws Exception {
         //connection to comunication
         codeSchool = cSchool;
-        serverFtp ="95.216.37.137";
-        userFTP = "david";
-        passFTP = "david";
-        portFTP = 21;
+        serverFtp = server;
+        userFTP = user;
+        passFTP = pass;
+        portFTP = port;
         
         DriverManagerDataSource dataSource = (DriverManagerDataSource) this.getBean("dataSource", hsr.getServletContext());
         if(this.cn!=null)

@@ -121,10 +121,10 @@ public class Createlesson {
     public void newidea(HttpServletRequest hsr,String note, Lessons newlessons,String termId, String yearId) throws SQLException {
         int lessonid = 0;
         List<String> equipmentids;
-        String server = "192.168.1.36";
-        int port = 21;
-        String user = "david";
-        String pass = "david";
+        String server = DBConect.serverFtp;
+        int port = DBConect.portFTP;
+        String user = DBConect.userFTP;
+        String pass = DBConect.passFTP;
         DriverManagerDataSource dataSource;
         FTPClient ftpClient = new FTPClient();
         try {
