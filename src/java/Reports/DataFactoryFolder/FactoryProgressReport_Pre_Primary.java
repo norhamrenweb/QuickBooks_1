@@ -49,10 +49,10 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         String studentId = idStudent;
         String consulta = "";
         ResultSet rs;
-        cargarAlumno(studentId); // tarda 1
-
         String yearId = this.currentYear;
         String termId = this.currentTerm;
+        getDaysAbsent_And_DateNewTerm(termId, yearId, idStudent, "");
+        cargarAlumno(studentId); // tarda 1
 
         java.util.Vector coll = new java.util.Vector();
         ArrayList<Subject> subjects = new ArrayList<>();
@@ -127,15 +127,15 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
                 //por semestre
                 consulta = "SELECT comment,term_id FROM report_comments where supercomment=false and subject_id=" + id[0] + " and studentid=" + idStudent + "and yearterm_id=" + yearId + " and term_id=" + termId + " ORDER BY date_created DESC";
                 ResultSet rs4 = DBConect.eduweb.executeQuery(consulta);
-                String resComment ="#oculto";
+                String resComment = "#oculto";
                 while (rs4.next()) {
-                  //  os.add("commentSubjectEduWeb#"+rs4.getString("comment"));
-                  resComment = "#"+rs4.getString("comment");
+                    //  os.add("commentSubjectEduWeb#"+rs4.getString("comment"));
+                    resComment = "#" + rs4.getString("comment");
                 }
                 if (os.size() > 0) {
                     ArrayList<String> subjectName = x.fetchNameAndElective(Integer.parseInt(id[0]), servlet);
                     if (subjectName.get(1).equals("false") && existInExcludeList(subjectName.get(0))) { // compruebo que no sea electivo
-                        String nameSubject = subjectName.get(0)+resComment;
+                        String nameSubject = subjectName.get(0) + resComment;
                         //BeanWithList bean = new BeanWithList(subjectName.get(0), os, finalratings, nameStudent, dob, age);
                         BeanWithList bean = new BeanWithList(nameSubject, os, finalratings, nameStudent, dob, age);
                         coll.add(bean);
@@ -312,10 +312,10 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
                         || idCourseDepartment.get((Integer) pair.getKey()).contains("Emotional and Personal Development")) {
                     ArrayList<String> nombSubject = s.fetchNameAndElective((Integer) pair.getKey(), servlet);
                     ArrayList<String> os2 = new ArrayList<>();
-                    String cleanComment = ""+pair.getValue();
+                    String cleanComment = "" + pair.getValue();
                     cleanComment = cleanComment.trim();
-                    os2.add(cleanComment);
-                    BeanWithList bean2 = new BeanWithList( nombSubject.get(0)+"#oculto", os2, new ArrayList<String>(), nameStudent, dob, age);
+                    os2.add(" ");
+                    BeanWithList bean2 = new BeanWithList(nombSubject.get(0) + "#" + cleanComment, new ArrayList<String>(), new ArrayList<String>(), nameStudent, dob, age);
                     coll.add(bean2);
                 }
                 it2.remove(); // avoids a ConcurrentModificationException
@@ -365,10 +365,10 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
         while (rs.next()) {
             String resultado = getLinkSelfPortrait(studentId);
             if (resultado.equals("")) {
-               resultado = "/"+DBConect.codeSchool+"/configSchool/noImage.png";
-              // this.nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName") + "#noImage";
+                resultado = "/" + DBConect.codeSchool + "/configSchool/noImage.png";
+                // this.nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName") + "#noImage";
             }
-           
+
             this.nameStudent = rs.getString("LastName") + ", " + rs.getString("FirstName") + " " + rs.getString("MiddleName") + "#ftp://david:david@95.216.37.137:21" + resultado;
 
             Date dNow = new Date();
@@ -379,7 +379,7 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
 
             String test1 = dateFormat.format(dBirth);
 
-            this.age = "" + diff / 365 + "yrs";
+            this.age = "" + diff / 365 + "yrs" + "#" + this.daysAbsent + "#" + this.dateNewTerm + "#Profesor Lead test";
             this.grade = rs.getString("GradeLevel");
         }
         String consultaNameYear = "select SchoolYear from SchoolYear where yearID = " + this.currentYear;
@@ -401,7 +401,7 @@ public class FactoryProgressReport_Pre_Primary extends DataFactory {
             if (!rs.next()) {
                 return "";
             } else {
-                resul = "/"+DBConect.codeSchool+"/Observations/" + rs.getInt(1) + "/" + rs.getInt(1) + "-" + rs.getString(2);
+                resul = "/" + DBConect.codeSchool + "/Observations/" + rs.getInt(1) + "/" + rs.getInt(1) + "-" + rs.getString(2);
             }
         } catch (SQLException ex) {
             Logger.getLogger(FactoryProgressReport_Pre_Primary.class.getName()).log(Level.SEVERE, null, ex);

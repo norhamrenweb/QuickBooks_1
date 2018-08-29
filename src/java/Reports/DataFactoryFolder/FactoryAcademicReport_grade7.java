@@ -38,8 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 public class FactoryAcademicReport_grade7 extends DataFactory {
 
     private String showGrade;
-    private String dateNewTerm;
-        private String  daysAbsent ;
+
 
     public FactoryAcademicReport_grade7(String showgrade,String cTerm,String cYear) {
         nameStudent = "";
@@ -130,81 +129,7 @@ public class FactoryAcademicReport_grade7 extends DataFactory {
         return coll;
     }
 
-    private void getDaysAbsent_And_DateNewTerm(String termId, String yearId, String studentID, String nameTerm) {
-        String consulta = "";
-        ResultSet rs;
-        Timestamp aux = null;
-        String schoolCode =  "AH";//IMPORTANT!! NO ESTAMOS TENIENDO ENCUENTA ESTO
-        int numDays=0,numTotal=0;
-        try {
-
-            String startDate = "";
-            String endDate = "";
-            String termIni = termId;
-            if (termId == "2") {
-                termIni = "1";
-            } else if (termId == "4") {
-                termIni = "3";
-            }
-
-            consulta = " select firstday from schoolterm where termid =" + termIni + " and yearid =" + yearId;
-            rs = DBConect.ah.executeQuery(consulta);
-            while (rs.next()) {
-                startDate = "" + rs.getTimestamp("firstday");
-            }
-            consulta = " select lastday from schoolterm where termid =" + termId + " and yearid =" + yearId;
-            rs = DBConect.ah.executeQuery(consulta);
-            while (rs.next()) {
-                endDate = "" + rs.getTimestamp(1);
-            }
- 
-            consulta = "select count(*) from AttendanceDaySummary "
-                    + " where absent =1 and SchoolCode= '"+schoolCode+"' and studentid =" +studentID+" and \"date\" >= '"
-                    + startDate +"'  and \"date\" <=  '"+endDate+"'";
-            rs = DBConect.ah.executeQuery(consulta);
-            while (rs.next()) {
-                numDays = rs.getInt(1);
-            }
     
-            consulta = "select count(*) as daysPresent"
-                    + " from daysetup where attendance=1 and SchoolCode='"+schoolCode+"' and DayType = 0 "
-                +" and convert (varchar, DaySetupDate, 23) >= '"+startDate
-                +"' and convert (varchar, DaySetupDate, 23) <= '"+endDate+"'";
-            rs = DBConect.ah.executeQuery(consulta);
-            while (rs.next()) {
-                numTotal = rs.getInt(1);
-            }
-             Format formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy ", Locale.US);
-      
-           
-            if(termId.equals("4")){
-                consulta = "select * from schoolYear where firstDay >= (select LastDay from schoolYear where yearId = "+yearId+") order by FirstDay";
-                rs = DBConect.ah.executeQuery(consulta);
-                
-                if (rs.next()) {
-                    aux =  rs.getTimestamp("FirstDay");
-                    this.dateNewTerm = formatter.format(aux);
-                }
-            }
-            else{
-                consulta = " select firstday from schoolterm where termid =" + (Integer.parseInt(termIni)+1)  + " and yearid =" + yearId;
-                rs = DBConect.ah.executeQuery(consulta);
-                
-                while (rs.next()) {
-                    aux =  rs.getTimestamp("firstday"); 
-                }
-                this.dateNewTerm = formatter.format(aux);
-            }
-        
-        } catch (SQLException ex) {
-            System.out.println("Error leyendo Alumnos: " + ex);
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-        }
-        this.daysAbsent = numDays +" / "+numTotal;
-       
-        //   return "No Comments";
-    }
 
     /*
 select count(Present) from AttendanceDaySummary where studentid = ... and "date" >= 'fechainicioT1'

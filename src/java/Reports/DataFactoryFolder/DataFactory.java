@@ -25,6 +25,10 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import Montessori.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Timestamp;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,7 +38,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class DataFactory {
 
-    protected String nameStudent, dob, age, grade, term, termid = "", yearid = "";
+    protected String nameStudent, dob, age, grade, term, termid = "", yearid = "",dateNewTerm= "",daysAbsent="";
     protected String currentTerm, currentYear;
     public abstract Collection getDataSource(HttpServletRequest hsr, String idStudent, ServletContext servlet) throws SQLException, ClassNotFoundException;
     public abstract String getNameReport();
@@ -145,5 +149,80 @@ public abstract class DataFactory {
         }
 
         return mapTeachers;
+    }
+    protected void getDaysAbsent_And_DateNewTerm(String termId, String yearId, String studentID, String nameTerm) {
+        String consulta = "";
+        ResultSet rs;
+        Timestamp aux = null;
+        String schoolCode =  "AH";//IMPORTANT!! NO ESTAMOS TENIENDO ENCUENTA ESTO
+        int numDays=0,numTotal=0;
+        try {
+
+            String startDate = "";
+            String endDate = "";
+            String termIni = termId;
+            if (termId == "2") {
+                termIni = "1";
+            } else if (termId == "4") {
+                termIni = "3";
+            }
+
+            consulta = " select firstday from schoolterm where termid =" + termIni + " and yearid =" + yearId;
+            rs = DBConect.ah.executeQuery(consulta);
+            while (rs.next()) {
+                startDate = "" + rs.getTimestamp("firstday");
+            }
+            consulta = " select lastday from schoolterm where termid =" + termId + " and yearid =" + yearId;
+            rs = DBConect.ah.executeQuery(consulta);
+            while (rs.next()) {
+                endDate = "" + rs.getTimestamp(1);
+            }
+ 
+            consulta = "select count(*) from AttendanceDaySummary "
+                    + " where absent =1 and SchoolCode= '"+schoolCode+"' and studentid =" +studentID+" and \"date\" >= '"
+                    + startDate +"'  and \"date\" <=  '"+endDate+"'";
+            rs = DBConect.ah.executeQuery(consulta);
+            while (rs.next()) {
+                numDays = rs.getInt(1);
+            }
+    
+            consulta = "select count(*) as daysPresent"
+                    + " from daysetup where attendance=1 and SchoolCode='"+schoolCode+"' and DayType = 0 "
+                +" and convert (varchar, DaySetupDate, 23) >= '"+startDate
+                +"' and convert (varchar, DaySetupDate, 23) <= '"+endDate+"'";
+            rs = DBConect.ah.executeQuery(consulta);
+            while (rs.next()) {
+                numTotal = rs.getInt(1);
+            }
+             Format formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy ", Locale.US);
+      
+           
+            if(termId.equals("4")){
+                consulta = "select * from schoolYear where firstDay >= (select LastDay from schoolYear where yearId = "+yearId+") order by FirstDay";
+                rs = DBConect.ah.executeQuery(consulta);
+                
+                if (rs.next()) {
+                    aux =  rs.getTimestamp("FirstDay");
+                    this.dateNewTerm = formatter.format(aux);
+                }
+            }
+            else{
+                consulta = " select firstday from schoolterm where termid =" + (Integer.parseInt(termIni)+1)  + " and yearid =" + yearId;
+                rs = DBConect.ah.executeQuery(consulta);
+                
+                while (rs.next()) {
+                    aux =  rs.getTimestamp("firstday"); 
+                }
+                this.dateNewTerm = formatter.format(aux);
+            }
+        
+        } catch (SQLException ex) {
+            System.out.println("Error leyendo Alumnos: " + ex);
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+        }
+        this.daysAbsent = numDays +" / "+numTotal;
+       
+        //   return "No Comments";
     }
 }
