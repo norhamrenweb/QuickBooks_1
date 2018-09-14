@@ -6,7 +6,7 @@
 package controladores;
 
 
-import Montessori.DBConect;
+ 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,7 +26,7 @@ public class CerrarLogin {
     @RequestMapping(value="/cerrarLogin")
     public ModelAndView cerrarLogin(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
             ModelAndView mv =  new ModelAndView("redirect:/userform.htm?opcion=inicio");
-            DBConect.close();
+          //  DBCPDataSource.close();
             HttpSession sesion = hsr.getSession(false);
             sesion.invalidate();
             return mv;

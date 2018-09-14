@@ -5,7 +5,7 @@
  */
 package Reports;
 
-import Montessori.DBConect;
+import Montessori.BambooConfig;
 import Montessori.User;
 import Reports.DataFactoryFolder.*;
 import controladores.upload;
@@ -70,7 +70,34 @@ import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-
+import Montessori.BambooConfig;
+ import Montessori.Objective;
+import Montessori.PoolC3P0_Local;
+import Montessori.PoolC3P0_RenWeb;
+import Montessori.Subject;
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletContext;
+import javax.swing.RepaintManager;
 /**
  *
  * @author nmohamed
@@ -78,20 +105,20 @@ import org.apache.commons.net.ftp.FTPClient;
 @WebServlet(name = "html", urlPatterns = {"/html"})
 public class html extends HttpServlet {
 
-    private DataFactory createFactory(String reportType,String cTerm, String cYear) {
+    private DataFactory createFactory(String reportType, String cTerm, String cYear) {
         if (reportType == null) {
             return new FactoryActivityLog();
         }
 
         switch (reportType) {
             case "progress_prePrimary":
-                return new FactoryProgressReport_Pre_Primary(cTerm,cYear);
+                return new FactoryProgressReport_Pre_Primary(cTerm, cYear);
 
             case "progress_Yr1_4":
-                return new FactoryProgressReport_grade4(cTerm,cYear);
+                return new FactoryProgressReport_grade4(cTerm, cYear);
 
             case "academic_Gr7":
-                return new FactoryAcademicReport_grade7("false",cTerm,cYear);
+                return new FactoryAcademicReport_grade7("false", cTerm, cYear);
 
             default:
                 return null;
@@ -112,16 +139,16 @@ public class html extends HttpServlet {
         Connection conn = null;
 
         ServletOutputStream os = response.getOutputStream();
-        String codeSchool = "AH-ZAF"; // cambiar DConect.codeSchool
+       // String codeSchool = "AH-ZAF"; // cambiar DConect.codeSchool
         String[] stids = request.getParameterValues("destino[]");
         String reportType = request.getParameter("typeReport");
         String checkArchive = request.getParameter("checkArchive");
         String start = request.getParameter("TXThorainicio");
         String finish = request.getParameter("TXThorafin");
-        
-        String termId =  request.getParameter("termId");
-        String yearId =  request.getParameter("yearId");
-        
+
+        String termId = request.getParameter("termId");
+        String yearId = request.getParameter("yearId");
+
         DefaultJasperReportsContext context = DefaultJasperReportsContext.getInstance();
         JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.xpath.executer.factory",
                 "net.sf.jasperreports.engine.util.xml.JaxenXPathExecuterFactory");
@@ -138,9 +165,9 @@ public class html extends HttpServlet {
         boolean showGrade = false;
         DataFactory d;
         if (reportType != null && reportType.equals("academic_Gr7_JP")) {
-            d = new FactoryAcademicReport_grade7("true",termId,yearId);
+            d = new FactoryAcademicReport_grade7("true", termId, yearId);
         } else {
-            d = createFactory(reportType,termId,yearId);
+            d = createFactory(reportType, termId, yearId);
         }
 
         // InputStream jasperStream = this.getClass().getResourceAsStream("progress_report_2017_gr4.jasper");
@@ -153,7 +180,7 @@ public class html extends HttpServlet {
 //            java.util.Date enddate = sdf.parse(end);
 //           String where = "timestamp between '"+start+"' and '"+end+"'";
 //        map.put("studentid",stids[0]);
-//            map.put("end",enddate);
+//            map.put("end",enddate); 
         //   List<SimpleExporterInput> list = new ArrayList<SimpleExporterInput>();
         JRDataSource datasource;
         if (!d.getClass().equals(FactoryActivityLog.class)) {
@@ -167,7 +194,7 @@ public class html extends HttpServlet {
         if (checkArchive != null && checkArchive.equals("on")) {
             bitesFtp = JasperExportManager.exportReportToPdf(jasperPrint);
             //private void uploadFileToFTP(byte[] b,String codeSchool,String studentId,String term,String year,String nameReport) {
-            uploadFileToFTP(bitesFtp, codeSchool, stids[0],termId, yearId, reportType);
+            uploadFileToFTP(bitesFtp, stids[0], termId, yearId, reportType);
         }
         for (int i = 1; i < stids.length; i++) {
             JRDataSource datasource2;
@@ -180,7 +207,7 @@ public class html extends HttpServlet {
                 if (checkArchive != null && checkArchive.equals("on")) {
                     bitesFtp = JasperExportManager.exportReportToPdf(jasperPrintAux);
                     //private void uploadFileToFTP(byte[] b,String codeSchool,String studentId,String term,String year,String nameReport) {
-                    uploadFileToFTP(bitesFtp, codeSchool, stids[i],termId, yearId, reportType);
+                    uploadFileToFTP(bitesFtp,  stids[i], termId, yearId, reportType);
                 }
             } else {
                 datasource2 = new JRBeanCollectionDataSource(FactoryActivityLog.getDataSource(request, ((User) request.getSession().getAttribute("user")).getName(), start, finish, stids[i], this.getServletContext()), true);
@@ -236,11 +263,11 @@ public class html extends HttpServlet {
         //  exporter.exportReport ();
     }
 
-    private void uploadFileToFTP(byte[] b, String codeSchool, String studentId, String term, String year, String nameReport) {
-        String server = DBConect.serverFtp;
-        int port = DBConect.portFTP;
-        String user = DBConect.userFTP;
-        String pass = DBConect.passFTP;
+    private void uploadFileToFTP(byte[] b, String studentId, String term, String year, String nameReport) {
+        String server = BambooConfig.url_ftp_bamboo;
+        int port = BambooConfig.port_ftp_bamboo;
+        String user = BambooConfig.user_ftp_bamboo;
+        String pass = BambooConfig.pass_ftp_bamboo;
 //** arreglar **//
         FTPClient ftpClient = new FTPClient();
         try {
@@ -248,11 +275,11 @@ public class html extends HttpServlet {
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
-            String rutaCompleta = "/"+DBConect.codeSchool+"/ReportCards/" + studentId;
-          
+            String rutaCompleta = "/" + BambooConfig.nameFolder_ftp_bamboo + "/ReportCards/" + studentId;
+
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/ReportCards/");
+                ftpClient.changeWorkingDirectory("/" + BambooConfig.nameFolder_ftp_bamboo + "/ReportCards/");
                 ftpClient.mkd(studentId);
                 ftpClient.changeWorkingDirectory(studentId);
             }

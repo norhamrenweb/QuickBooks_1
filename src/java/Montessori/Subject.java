@@ -5,12 +5,16 @@
  */
 package Montessori;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -68,18 +72,29 @@ public class Subject {
 
     public String fetchName(int id, ServletContext servlet) {
         String subjectName = null;
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
             String consulta = "SELECT Title FROM Courses where CourseID = " + id;
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
 
             while (rs.next()) {
                 subjectName = rs.getString("Title");
 
             }
+            con.close();
             //this.finalize();
 
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
+        } catch (IOException ex) { 
+            Logger.getLogger(Subject.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(Subject.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return subjectName;
@@ -87,20 +102,29 @@ public class Subject {
     }
 
     public ArrayList<String> fetchNameAndElective(int id, ServletContext servlet) {
-        ArrayList<String> subjectName = new ArrayList<String>();
+        ArrayList<String> subjectName = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
-
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
             String consulta = "SELECT Title,Elective FROM Courses where CourseID = " + id;
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
 
             while (rs.next()) {
                 subjectName.add(rs.getString("Title"));
                 subjectName.add("" + rs.getBoolean("Elective"));
             }
             //this.finalize();
-
+            con.close();
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
+        } catch (IOException ex) { 
+            Logger.getLogger(Subject.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(Subject.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return subjectName;

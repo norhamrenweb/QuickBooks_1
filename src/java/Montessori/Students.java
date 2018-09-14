@@ -9,6 +9,8 @@ package Montessori;
  *
  * @author nmohamed
  */
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.*;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.logging.Level;
 import javax.servlet.ServletContext;
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
@@ -28,9 +31,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-
 public class Students {
-   
+
     private int id_students;
     private String nombre_students;// will get from firstname,lastname
     private String fecha_nacimiento;
@@ -41,7 +43,7 @@ public class Students {
     private CachedRowSet rs;
     private String nextlevel;//new
     private String substatus;//new
-    
+
     public String getNextlevel() {
         return nextlevel;
     }
@@ -57,12 +59,11 @@ public class Students {
     public void setSubstatus(String substatus) {
         this.substatus = substatus;
     }
-    
 
-    public Students(){
-        
+    public Students() {
+
     }
-    
+
     public Students(int id_students, String nombre_students, String fecha_nacimiento, String foto, String level_id) {
         this.id_students = id_students;
         this.nombre_students = nombre_students;
@@ -110,22 +111,24 @@ public class Students {
     public void setFoto(String foto) {
         this.foto = foto;
     }
-    
-public static ArrayList<Students> getStudents(Logger log) throws SQLException
-    {
+
+    public static ArrayList<Students> getStudents(Logger log) throws SQLException {
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 //        this.conectarOracle();
         ArrayList<Students> listaAlumnos = new ArrayList<>();
         try {
-            
-             
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
             String consulta = "SELECT * FROM Students where Status = 'Enrolled' order by LastName";
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
-          
-            while (rs.next())
-            {
+            rs = stAux.executeQuery(consulta);
+
+            while (rs.next()) {
                 Students alumnos = new Students();
                 alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("FirstName")+" "+ rs.getString("MiddleName") + " "+rs.getString("LastName") );
+                alumnos.setNombre_students(rs.getString("FirstName") + " " + rs.getString("MiddleName") + " " + rs.getString("LastName"));
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
@@ -134,37 +137,49 @@ public static ArrayList<Students> getStudents(Logger log) throws SQLException
                 listaAlumnos.add(alumnos);
             }
             //this.finalize();
-             Collections.sort(listaAlumnos, new Comparator<Students>() {
+            Collections.sort(listaAlumnos, new Comparator<Students>() {
                 @Override
                 public int compare(Students o1, Students o2) {
-                    return o1.getNombre_students().compareTo(o2.getNombre_students());                }
+                    return o1.getNombre_students().compareTo(o2.getNombre_students());
+                }
             });
+            con.close();
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            log.error(ex+errors.toString());
+            log.error(ex + errors.toString());
+        } catch (IOException ex) {  
+            java.util.logging.Logger.getLogger(Students.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(Students.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
         return listaAlumnos;
     }
 
-    public static ArrayList<Students> getStudentslevel(String gradeid,Logger log) throws SQLException {
+    public static ArrayList<Students> getStudentslevel(String gradeid, Logger log) throws SQLException {
         ArrayList<Students> listaAlumnos = new ArrayList<>();
+         Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         String gradelevel = null;
         try {
-            ResultSet rs1 = DBConect.ah.executeQuery("select GradeLevel from GradeLevels where GradeLevelID =" + gradeid);
-            while (rs1.next()) {
-                gradelevel = rs1.getString("GradeLevel");
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+            
+            rs = stAux.executeQuery("select GradeLevel from GradeLevels where GradeLevelID =" + gradeid);
+            while (rs.next()) {
+                gradelevel = rs.getString("GradeLevel");
             }
-
             String consulta = "SELECT * FROM Students where Status = 'Enrolled' and GradeLevel = '" + gradelevel + "'";
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
 
             while (rs.next()) {
                 Students alumnos = new Students();
                 alumnos.setId_students(rs.getInt("StudentID"));
-                alumnos.setNombre_students(rs.getString("FirstName")+" "+ rs.getString("MiddleName") + " "+rs.getString("LastName"));
+                alumnos.setNombre_students(rs.getString("FirstName") + " " + rs.getString("MiddleName") + " " + rs.getString("LastName"));
                 alumnos.setFecha_nacimiento(rs.getString("Birthdate"));
                 alumnos.setFoto(rs.getString("PathToPicture"));
                 alumnos.setLevel_id(rs.getString("GradeLevel"));
@@ -172,26 +187,30 @@ public static ArrayList<Students> getStudents(Logger log) throws SQLException
                 alumnos.setSubstatus(rs.getString("Substatus"));
                 listaAlumnos.add(alumnos);
             }
-            
+
             //this.finalize();
-           Collections.sort(listaAlumnos, new Comparator<Students>() {
+            Collections.sort(listaAlumnos, new Comparator<Students>() {
                 @Override
                 public int compare(Students o1, Students o2) {
-                    return o1.getNombre_students().compareTo(o2.getNombre_students());                }
+                    return o1.getNombre_students().compareTo(o2.getNombre_students());
+                }
             });
+            con.close();
         } catch (SQLException ex) {
             System.out.println("Error leyendo Alumnos: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
-        }
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(Students.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(Students.class.getName()).log(Level.SEVERE, null, ex);
+        } 
 
         return listaAlumnos;
 
     }
-    
-   
-    
+
 //    public ArrayList<Students> getStudentsForLevel(int idLevel) throws SQLException{
 //        this.conectarOracle();
 //        ArrayList<Students> listaAlumnos = new ArrayList<>();

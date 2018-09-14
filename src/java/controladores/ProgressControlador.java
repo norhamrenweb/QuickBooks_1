@@ -6,10 +6,14 @@
 package controladores;
 
 import Montessori.*;
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,48 +54,58 @@ public class ProgressControlador {
         List<Students> instructors = new ArrayList<>();
         String disable = null;
         Students teacher = new Students();
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
+        PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+        PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+
         try {
             String lessonid = hsr.getParameter("LessonsSelected");
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
 
             String consulta = "SELECT * FROM public.lesson_detailes where id =" + lessonid;
-            ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             Lessons lesson = new Lessons();
-            while (rs1.next()) {
+            while (rs.next()) {
                 Objective obj = new Objective();
-                obj.setName(rs1.getString("objectivename"));
+                obj.setName(rs.getString("objectivename"));
                 String[] ids = new String[1];
-                ids[0] = String.valueOf(rs1.getInt("objective_id"));
+                ids[0] = String.valueOf(rs.getInt("objective_id"));
                 obj.setId(ids);
                 lesson.setObjective(obj);
                 Subject sub = new Subject();
-                String name = sub.fetchName(rs1.getInt("subject_id"), hsr.getServletContext());
+                String name = sub.fetchName(rs.getInt("subject_id"), hsr.getServletContext());
                 sub.setName(name);
                 String[] subids = new String[1];
-                subids[0] = String.valueOf(rs1.getInt("subject_id"));
+                subids[0] = String.valueOf(rs.getInt("subject_id"));
                 sub.setId(ids);
                 lesson.setSubject(sub);
-                lesson.setName(rs1.getString("name"));
+                lesson.setName(rs.getString("name"));
                 lesson.setId(Integer.parseInt(lessonid));
             }
             consulta = "select presentedby from lessons where id = " + lessonid;
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             while (rs.next()) {
 
                 teacher.setId_students(rs.getInt("presentedby"));
             }
             List<Step> steps = new ArrayList<>();
             String[] objid = lesson.getObjective().getId();
-            ResultSet rs3 = DBConect.eduweb.executeQuery("select name,id,storder from obj_steps where obj_id =" + objid[0]);
-            while (rs3.next()) {
+            rs = stAux.executeQuery("select name,id,storder from obj_steps where obj_id =" + objid[0]);
+            while (rs.next()) {
                 Step s = new Step();
-                s.setName(rs3.getString("name"));
-                s.setId("" + rs3.getInt("id"));
-                s.setOrder(rs3.getInt("storder"));
+                s.setName(rs.getString("name"));
+                s.setId("" + rs.getInt("id"));
+                s.setOrder(rs.getInt("storder"));
                 steps.add(s);
             }
-            ResultSet rs4 = DBConect.eduweb.executeQuery("select archive from lessons where id =" + lessonid);
-            while (rs4.next()) {
-                if (rs4.getBoolean("archive")) {
+            rs = stAux.executeQuery("select archive from lessons where id =" + lessonid);
+            while (rs.next()) {
+                if (rs.getBoolean("archive")) {
                     disable = "t";
                 }
             }
@@ -101,11 +115,17 @@ public class ProgressControlador {
             mv.addObject("disable", disable);
             mv.addObject("steps", steps);
             consulta = "select LastName,FirstName,MiddleName,PersonID from Person where PersonID in (select PersonID from Staff where Faculty = 1) order by FirstName";
-            ResultSet rs2 = DBConect.ah.executeQuery(consulta);
-            while (rs2.next()) {
+
+            con.close();
+
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery(consulta);
+            while (rs.next()) {
                 Students s = new Students();
-                s.setId_students(rs2.getInt("PersonID"));
-                s.setNombre_students( rs2.getString("FirstName") + " " + rs2.getString("MiddleName") + " "+rs2.getString("LastName"));
+                s.setId_students(rs.getInt("PersonID"));
+                s.setNombre_students(rs.getString("FirstName") + " " + rs.getString("MiddleName") + " " + rs.getString("LastName"));
                 if (teacher.getId_students() == s.getId_students()) {
                     teacher.setNombre_students(s.getNombre_students());
                 }
@@ -118,6 +138,25 @@ public class ProgressControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return mv;
 
@@ -126,9 +165,16 @@ public class ProgressControlador {
     public List<Progress> getRecords(Lessons lesson, ServletContext servlet) throws SQLException {
 
         List<Progress> records = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
             String consulta = "SELECT * FROM public.lesson_stud_att where lesson_id =" + lesson.getId();
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
 
             while (rs.next()) {
                 Progress att = new Progress();
@@ -145,13 +191,13 @@ public class ProgressControlador {
                 String[] ids = new String[1];
                 ids = lesson.getObjective().getId();
                 consulta = "SELECT rating.name as ratingname,progress_report.comment,progress_report.step_id,progress_report.comment_date FROM progress_report  left JOIN rating on progress_report.rating_id = rating.id where lesson_id =" + lesson.getId() + " AND student_id = '" + record.getStudentid() + "' ";
-                ResultSet rs3 = DBConect.eduweb.executeQuery(consulta);
-                while (rs3.next()) {
-                    record.setRating(rs3.getString("ratingname"));
-                    record.setComment(rs3.getString("comment"));
-                    record.setComment_date("" + rs3.getDate("comment_date"));
-                    String steps = rs3.getString("step_id");
-                    if (rs3.wasNull() ) {
+                rs = stAux.executeQuery(consulta);
+                while (rs.next()) {
+                    record.setRating(rs.getString("ratingname"));
+                    record.setComment(rs.getString("comment"));
+                    record.setComment_date("" + rs.getDate("comment_date"));
+                    String steps = rs.getString("step_id");
+                    if (rs.wasNull()) {
                         record.setSteps("0");
                     } else if (steps.isEmpty() || steps.equals("null") || steps == null || steps.equals("") || steps.equals("0")) {
                         record.setSteps("0");
@@ -162,15 +208,19 @@ public class ProgressControlador {
                     }
                 }
             }
+            con.close();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
             consulta = "SELECT FirstName,LastName,MiddleName,StudentID FROM Students ";
-            ResultSet rs2 = DBConect.ah.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             HashMap<String, String> map = new HashMap<String, String>();
             String first, LastName, middle, studentID;
-            while (rs2.next()) {
-                first = rs2.getString("FirstName");
-                LastName = rs2.getString("LastName");
-                middle = rs2.getString("MiddleName");
-                studentID = rs2.getString("StudentID");
+            while (rs.next()) {
+                first = rs.getString("FirstName");
+                LastName = rs.getString("LastName");
+                middle = rs.getString("MiddleName");
+                studentID = rs.getString("StudentID");
                 map.put(studentID, first + " " + middle + " " + LastName);
             }
             for (Progress record : records) {
@@ -184,6 +234,29 @@ public class ProgressControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         return records;
@@ -195,14 +268,22 @@ public class ProgressControlador {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
         String message = "Records successfully saved";
- 
+
         String[] lessonid = hsr.getParameterValues("TXTlessonid");
-        
+
         ModelAndView mv = new ModelAndView("redirect:/lessonprogress/loadRecords.htm?LessonsSelected=" + lessonid[0], "message", message);
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
-     
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String[] objectiveid = hsr.getParameterValues("TXTobjectiveid");
             String[] comments = hsr.getParameterValues("TXTcomment");
             String[] ratings = hsr.getParameterValues("TXTrating");
@@ -216,34 +297,35 @@ public class ProgressControlador {
             String[] teacher = hsr.getParameterValues("TXTinstructor");
             String[] steps = hsr.getParameterValues("your_awesome_parameter");
             String archived = hsr.getParameter("buttonAchived");// is equal to on or null
-            
+
             String termId = hsr.getParameter("termId");
             String yearId = hsr.getParameter("yearId");
-            
+
             if (!teacher[0].isEmpty()) {
-                DBConect.eduweb.executeUpdate("update lessons set presentedby = " + teacher[0] + " where id = " + lessonid[0]);
+                stAux.executeUpdate("update lessons set presentedby = " + teacher[0] + " where id = " + lessonid[0]);
             }
             for (int i = 0; i < studentids.length; i++) {
                 String attAux = "";
                 if (!att[i].equals("0")) {
                     attAux = att[i];
                 }
-                String auxArch ="off";
-                if(archived != null) auxArch ="on";
-                    
-                String note = "idPresentation: " + lessonid[0] + " | namePresentation: " + namePresentation +" | nameTeacher: "+nameTeacher+ " | rating: " + ratings[i];
+                String auxArch = "off";
+                if (archived != null) {
+                    auxArch = "on";
+                }
+
+                String note = "idPresentation: " + lessonid[0] + " | namePresentation: " + namePresentation + " | nameTeacher: " + nameTeacher + " | rating: " + ratings[i];
                 note += " | comment: " + comments[i] + " | attendace: " + attAux + " | work accomplished: " + steps[i] + " | archived : " + auxArch;
-                
+
                 ActivityLog.log(user, "id: " + studentids[i] + " | studentName: " + studentNames[i], "Update Presentation Progress", note); //crear lesson        
-                
-                
+
                 String test = "update lesson_stud_att set attendance = '" + att[i] + "',timestamp= now() where lesson_id = " + lessonid[0] + " AND student_id = '" + studentids[i] + "'";
-                DBConect.eduweb.executeUpdate(test);
+                stAux.executeUpdate(test);
             }
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select id from obj_steps where obj_id = '" + objectiveid[0] + "' order by storder");
+            rs = stAux.executeQuery("select id from obj_steps where obj_id = '" + objectiveid[0] + "' order by storder");
             ArrayList<String> allsteps = new ArrayList();
-            while (rs2.next()) {
-                allsteps.add("" + rs2.getInt("id"));
+            while (rs.next()) {
+                allsteps.add("" + rs.getInt("id"));
             }
 
             for (int i = 0; i < studentids.length; i++) {
@@ -262,42 +344,61 @@ public class ProgressControlador {
                 }
 
                 String ratingid = null;
-                ResultSet rs1 = DBConect.eduweb.executeQuery("select id from rating where name = '" + ratings[i] + "'");
+                rs = stAux.executeQuery("select id from rating where name = '" + ratings[i] + "'");
 
-                while (rs1.next()) {
-                    ratingid = "" + rs1.getInt("id");
+                while (rs.next()) {
+                    ratingid = "" + rs.getInt("id");
                 }
 
-                ResultSet rs = DBConect.eduweb.executeQuery("select * from progress_report where lesson_id =" + lessonid[0] + " AND student_id = '" + studentids[i] + "'");
+                rs = stAux.executeQuery("select * from progress_report where lesson_id =" + lessonid[0] + " AND student_id = '" + studentids[i] + "'");
                 if (!rs.next()) {
                     if (ratingid != null) {
-                        DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comments[i] + "','" + ratingid + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ termId +"," + yearId +")");
-                        
+                        stAux.executeUpdate("insert into progress_report(comment_date,comment,rating_id,lesson_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comments[i] + "','" + ratingid + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "'," + termId + "," + yearId + ")");
+
                         //clone
                         /*String testClone= "insert into progress_report(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id,linklesson_id) values (now(),'" + comments[i] + "','" + ratingid + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId")  + "," + lessonid[0]  +")";
-                        DBConect.eduweb.executeUpdate(testClone);  */ 
+                        DBConect.eduweb.executeUpdate(testClone);  */
                     } else {
-                        DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,lesson_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comments[i] + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ termId +"," + yearId +")");
-                        
+                        stAux.executeUpdate("insert into progress_report(comment_date,comment,lesson_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comments[i] + "','" + lessonid[0] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "'," + termId + "," + yearId + ")");
+
                         //clone
-                      //  DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id,linklesson_id) values (now(),'" + comments[i] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId")  + "," + lessonid[0] +")");                   
+                        //  DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id,linklesson_id) values (now(),'" + comments[i] + "','" + studentids[i] + "','" + objectiveid[0] + "',false,'" + step + "','" + user.getId() + "',"+ sesion.getAttribute("termId") +"," + sesion.getAttribute("yearId")  + "," + lessonid[0] +")");                   
                     }
                 } else if (ratingid != null) {
                     String test = "update progress_report set comment_date = now(),comment = '" + comments[i] + "',rating_id ='" + ratingid + "' ,lesson_id = '" + lessonid[0] + "',student_id = '" + studentids[i] + "',objective_id ='" + objectiveid[0] + "',generalcomment = false ,step_id = '" + step + "' where lesson_id = " + lessonid[0] + " AND student_id = '" + studentids[i] + "'";
-                    DBConect.eduweb.executeUpdate("update progress_report set  modifyby = '" + user.getId() + "', comment_date = now(),comment = '" + comments[i] + "',rating_id ='" + ratingid + "' ,lesson_id = '" + lessonid[0] + "',student_id = '" + studentids[i] + "',objective_id ='" + objectiveid[0] + "',generalcomment = false ,step_id = '" + step + "' where lesson_id = " + lessonid[0] + " AND student_id = '" + studentids[i] + "'");
+                    stAux.executeUpdate("update progress_report set  modifyby = '" + user.getId() + "', comment_date = now(),comment = '" + comments[i] + "',rating_id ='" + ratingid + "' ,lesson_id = '" + lessonid[0] + "',student_id = '" + studentids[i] + "',objective_id ='" + objectiveid[0] + "',generalcomment = false ,step_id = '" + step + "' where lesson_id = " + lessonid[0] + " AND student_id = '" + studentids[i] + "'");
                 } else {
-                    DBConect.eduweb.executeUpdate("update progress_report set  modifyby = '" + user.getId() + "',comment_date = now(),comment = '" + comments[i] + "',lesson_id = '" + lessonid[0] + "',student_id = '" + studentids[i] + "',objective_id ='" + objectiveid[0] + "',generalcomment = false ,step_id = '" + step + "' where lesson_id = " + lessonid[0] + " AND student_id = '" + studentids[i] + "'");
+                    stAux.executeUpdate("update progress_report set  modifyby = '" + user.getId() + "',comment_date = now(),comment = '" + comments[i] + "',lesson_id = '" + lessonid[0] + "',student_id = '" + studentids[i] + "',objective_id ='" + objectiveid[0] + "',generalcomment = false ,step_id = '" + step + "' where lesson_id = " + lessonid[0] + " AND student_id = '" + studentids[i] + "'");
                 }
             }
             if ("on".equals(archived)) {
-                DBConect.eduweb.executeUpdate("update lessons set archive = TRUE where id = '" + lessonid[0] + "'");
+                stAux.executeUpdate("update lessons set archive = TRUE where id = '" + lessonid[0] + "'");
             } else {
-                DBConect.eduweb.executeUpdate("update lessons set archive = FALSE where id = '" + lessonid[0] + "'");
+                stAux.executeUpdate("update lessons set archive = FALSE where id = '" + lessonid[0] + "'");
             }
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         return mv;

@@ -5,12 +5,16 @@
  */
 package Montessori;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -21,6 +25,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author nmohamed
  */
 public class Objective {
+
     private ServletContext servlet;
     private String description;
     private String finalrating;
@@ -32,7 +37,6 @@ public class Objective {
     private int nooflessonsdone;
     private boolean reportCard;
     Connection cn;
-    
 
     public boolean isReportCard() {
         return reportCard;
@@ -42,7 +46,6 @@ public class Objective {
         this.reportCard = reportCard;
     }
 
-    
     public String getFinalrating() {
         return finalrating;
     }
@@ -83,8 +86,6 @@ public class Objective {
         this.steps = steps;
     }
 
-
-
     public String getDescription() {
         return description;
     }
@@ -93,15 +94,13 @@ public class Objective {
         this.description = description;
     }
 
-      
 //      private ServletContext servlet;
-    
-    private Object getBean(String nombrebean, ServletContext servlet)
-    {
+    private Object getBean(String nombrebean, ServletContext servlet) {
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
         Object beanobject = contexto.getBean(nombrebean);
         return beanobject;
     }
+
     public String[] getId() {
         return id;
     }
@@ -117,25 +116,34 @@ public class Objective {
     public void setName(String name) {
         this.name = name;
     }
- public String fetchName(int id, ServletContext servlet)
-    { String subName = null ;
+
+    public String fetchName(int id, ServletContext servlet) {
+        String subName = null;
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+        
         try {
-             
-            String consulta = "SELECT name FROM public.objective where id = "+id;
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
-          
-            while (rs.next())
-            {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            String consulta = "SELECT name FROM public.objective where id = " + id;
+            rs = stAux.executeQuery(consulta);
+
+            while (rs.next()) {
                 subName = rs.getString("name");
-                
+
             }
             //this.finalize();
-            
+            con.close();
         } catch (SQLException ex) {
             System.out.println("Error reading objectives: " + ex);
+        } catch (IOException ex) { 
+            Logger.getLogger(Objective.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(Objective.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
         return subName;
-    
-    }   
+
+    }
 }

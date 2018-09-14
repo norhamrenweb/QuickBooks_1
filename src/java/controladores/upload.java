@@ -1,6 +1,6 @@
 package controladores;
 
-import Montessori.DBConect;
+import Montessori.BambooConfig;
 import Montessori.Resource;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -48,14 +48,14 @@ public class upload extends HttpServlet {
             Logger.getLogger(upload.class.getName()).log(Level.SEVERE, null, ex);
         }
             String url = "/lessonresources/loadResources.htm?LessonsSelected=" + rLoaded.getLesson_id();
-            String server = DBConect.serverFtp;
-            int port = DBConect.portFTP;
-            String user = DBConect.userFTP;
-            String pass = DBConect.passFTP;
+        String server = BambooConfig.url_ftp_bamboo;
+            int port = BambooConfig.port_ftp_bamboo;
+            String user = BambooConfig.user_ftp_bamboo;
+            String pass = BambooConfig.pass_ftp_bamboo;
 
         presentationName = presentationName.replace("/", "_");
         presentationName = presentationName.replace(" ", "-");
-        String filePath = "/"+DBConect.codeSchool+"/PresentationsResources/" + rLoaded.getLesson_id() + "-" + presentationName + "/" + rLoaded.getLink();
+        String filePath = "/"+BambooConfig.nameFolder_ftp_bamboo+"/PresentationsResources/" + rLoaded.getLesson_id() + "-" + presentationName + "/" + rLoaded.getLink();
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         boolean ok = ftpClient.login(user, pass);
@@ -102,10 +102,10 @@ public class upload extends HttpServlet {
         String presentationName = request.getParameter("lessonsName");
 
         String url = "/lessonresources/loadResources.htm?LessonsSelected=" + lessonId + "-" + presentationName;
-    String server = DBConect.serverFtp;
-            int port = DBConect.portFTP;
-            String user = DBConect.userFTP;
-            String pass = DBConect.passFTP;
+String server = BambooConfig.url_ftp_bamboo;
+            int port = BambooConfig.port_ftp_bamboo;
+            String user = BambooConfig.user_ftp_bamboo;
+            String pass = BambooConfig.pass_ftp_bamboo;
 
         FTPClient ftpClient = new FTPClient();
         try {
@@ -116,10 +116,10 @@ public class upload extends HttpServlet {
             String filename = name + "-" + filePart.getSubmittedFileName();
             presentationName = presentationName.replace("/", "_");
             presentationName = presentationName.replace(" ", "-");
-            String rutaCompleta = "/"+DBConect.codeSchool+"/PresentationsResources/'" + lessonId + "-" + presentationName + "'";
+            String rutaCompleta = "/"+BambooConfig.nameFolder_ftp_bamboo+"/PresentationsResources/'" + lessonId + "-" + presentationName + "'";
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/PresentationsResources");
+                ftpClient.changeWorkingDirectory("/"+BambooConfig.nameFolder_ftp_bamboo+"/PresentationsResources");
                 ftpClient.mkd(lessonId + "-" + presentationName);
                 ftpClient.changeWorkingDirectory(lessonId + "-" + presentationName);
             }

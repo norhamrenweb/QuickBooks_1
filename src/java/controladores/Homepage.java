@@ -12,6 +12,9 @@ package controladores;
 import Montessori.*;
 import Reports.DataFactoryFolder.Profesor;
 import com.google.gson.Gson;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +41,6 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 public class Homepage extends MultiActionController {
 
     Connection cn;
-    DBConect c;
 
     private Object getBean(String nombrebean, ServletContext servlet) {
         ApplicationContext contexto = WebApplicationContextUtils.getRequiredWebApplicationContext(servlet);
@@ -52,171 +54,257 @@ public class Homepage extends MultiActionController {
 
     @RequestMapping
     public ModelAndView login(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        DBConect.close();
-        c = new DBConect(hsr, hsr1,"TEST","95.216.37.137","david","david",21);
+        //  DBConect.close();
+
+        //DBCPDataSource testC22 = new DBCPDataSource(2);
+        // c = new DBConect(hsr, hsr1, "TEST", "95.216.37.137", "david", "david", 21);
+        // DBCPDataSource.getInstance();
         HttpSession session = hsr.getSession();
-        String schoolCode = "AH";
-           
-        session.setAttribute("yearsids", new Gson().toJson(this.getYears(schoolCode)));
-        session.setAttribute("schoolCode", schoolCode);
-        
+        //  String schoolCode = "AH";
+
+        chargeConfigFile();
+        // Connection con_ah = DBCPDataSource.getConnection_ah();
+
+        Statement stAux = null;
+        ResultSet rs = null;
+        session.setAttribute("yearsids", new Gson().toJson(this.getYears(BambooConfig.schoolCode)));
+        session.setAttribute("schoolCode", BambooConfig.schoolCode);
         User user = new User();
-        
-        boolean result = true;
         LoginVerification login = new LoginVerification();
-        if ("QuickBook".equals(hsr.getParameter("txtusuario"))) {
-            ModelAndView mv = new ModelAndView("redirect:/suhomepage.htm?opcion=loadconfig");
-            return mv;
-        } else {
-            user = login.consultUserDB(hsr.getParameter("txtusuario"), hsr.getParameter("txtpassword"));
-        }
+        ModelAndView mv = new ModelAndView("userform");
+        String message = "Username or Password incorrect";
 
-        if (user.getId() == 0) {
-            ModelAndView mv = new ModelAndView("userform");
-            String message = "Username or password incorrect";
-            mv.addObject("message", message);
-            return mv;
-        } else {
-
-           //HashMap<Integer, String> mapGroups = login.getSecurityGroupID();
-            ArrayList<String>  arrayGroupIds = login.fromGroupNames(user.getId());
-            
-            //int i = 0;
-           
-            if(arrayGroupIds.contains("MontessoriHead")){
-                user.setType(2);
+        try {
+            if ("QuickBook".equals(hsr.getParameter("txtusuario"))) {
+                mv = new ModelAndView("redirect:/suhomepage.htm?opcion=loadconfig");
+                return mv;
+            } else {
+                user = login.consultUserDB(hsr.getParameter("txtusuario"), hsr.getParameter("txtpassword"));
             }
-            else if(arrayGroupIds.contains("MontessoriAdmin")){
-                user.setType(0);
-            }
-            else if(arrayGroupIds.contains("MontessoriTeacher")){
-                user.setType(1);
-            }
-            else{
-                user.setType(-1);
-            }
-            /*while(i < arrayGroupIds.size()){
-                int userGroup = arrayGroupIds.get(i);
-                if (mapGroups.containsKey(userGroup)) {
-                    String groupName = mapGroups.get(userGroup);
-                    switch (groupName) {
-                        case "MontessoriHead":
-                            user.setType(2);
-                            break;
-                        case "MontessoriAdmin":
-                            user.setType(0);
-                            break;
-                        case "MontessoriTeacher":
-                            user.setType(1);
-                            break;
-                    }
-                } 
-                i++;
-            }
-            */
-            
-            if (user.getType() != -1) {
-                ModelAndView mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
-                String message = "welcome user";
-                int termId = 1, yearId = 1;
-                ResultSet rs2 = DBConect.ah.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where  SchoolCode ='"+schoolCode+"'");
-                while (rs2.next()) {
-                    termId = rs2.getInt("defaulttermid");
-                    yearId = rs2.getInt("defaultyearid");
-                }
-                session.setAttribute("user", user);
-                session.setAttribute("termId", termId);
-                session.setAttribute("yearId", yearId);
-                
-                String nameTerm = "", nameYear = "";
-                ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + termId + " and YearID = " + yearId);
-                while (rs3.next()) {
-                    nameTerm = "" + rs3.getString("name");
-                }
-                ResultSet rs4 = DBConect.ah.executeQuery("select SchoolYear from SchoolYear where yearID = " + yearId);
-                while (rs4.next()) {
-                    nameYear = "" + rs4.getString("SchoolYear");
-                }
-                
-                session.setAttribute("termYearName", nameTerm + " / " + nameYear);     
-                
+            if (user.getId() == 0) {
+                mv = new ModelAndView("userform");
+                message = "Username or password incorrect";
                 mv.addObject("message", message);
                 return mv;
             } else {
-                ModelAndView mv = new ModelAndView("userform");
-                String message = "Username or Password incorrect";
-                mv.addObject("message", message);
-                return mv;
+                ArrayList<String> arrayGroupIds = login.fromGroupNames(user.getId());
+                if (arrayGroupIds.contains("MontessoriHead")) {
+                    user.setType(2);
+                } else if (arrayGroupIds.contains("MontessoriAdmin")) {
+                    user.setType(0);
+                } else if (arrayGroupIds.contains("MontessoriTeacher")) {
+                    user.setType(1);
+                } else {
+                    user.setType(-1);
+                }
+
+                PoolC3P0_RenWeb pool = PoolC3P0_RenWeb.getInstance();
+                Connection c_ah = pool.getConnection();
+                stAux = c_ah.createStatement();
+                if (user.getType() != -1) {
+                    mv = new ModelAndView("redirect:/homepage/loadLessons.htm");
+                    message = "welcome user";
+                    int termId = 1, yearId = 1;
+                    rs = stAux.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where SchoolCode ='" + BambooConfig.schoolCode + "'");
+                    // ResultSet rs2 = DBConect.ah.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where  SchoolCode ='" + schoolCode + "'");
+                    while (rs.next()) {
+                        termId = rs.getInt("defaulttermid");
+                        yearId = rs.getInt("defaultyearid");
+                    }
+                    session.setAttribute("user", user);
+                    session.setAttribute("termId", termId);
+                    session.setAttribute("yearId", yearId);
+
+                    String nameTerm = "", nameYear = "";
+                    rs = stAux.executeQuery("select name from SchoolTerm where TermID = " + termId + " and YearID = " + yearId);
+                    //  ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + termId + " and YearID = " + yearId);
+                    while (rs.next()) {
+                        nameTerm = "" + rs.getString("name");
+                    }
+                    rs = stAux.executeQuery("select SchoolYear from SchoolYear where yearID = " + yearId);
+                    // ResultSet rs4 = DBConect.ah.executeQuery("select SchoolYear from SchoolYear where yearID = " + yearId);
+                    while (rs.next()) {
+                        nameYear = "" + rs.getString("SchoolYear");
+                    }
+                    session.setAttribute("termYearName", nameTerm + " / " + nameYear);
+                    mv.addObject("message", message);
+
+                } else {
+                    mv = new ModelAndView("userform");
+                    message = "Username or Password incorrect";
+                    mv.addObject("message", message);
+                }
+                c_ah.close();
+            }
+        } catch (Exception e) {
+            System.err.println("");
+        }/* finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con_ah != null) {
+                    con_ah.close();
+                }
+            } catch (Exception e) {
             }
         }
-
+         */
+        return mv;
     }
 
-    public ArrayList<Tupla<Integer,String>> getYears(String schoolCode){
-        ArrayList<Tupla<Integer,String>> ret = new ArrayList<>();
-        String consulta="select * from SchoolYear where SchoolCode ='"+schoolCode+"'";
+    private void chargeConfigFile() {
+        // try (Reader reader = new FileReader("C:\\Users\\David\\Documents\\NetBeansProjects\\configBamboo\\config.txt")) {
+       /* try (Reader reader = new FileReader("/home/usuario/configBamboo/configAH-ZAF.txt")) {
+
+            Gson gson = new Gson();
+            //BambooConfig configSchool = gson.fromJson(reader, BambooConfig.class);
+            BambooConfig1 configSchool1 = gson.fromJson(reader, BambooConfig1.class);
+            BambooConfig.charge(configSchool1);
+            System.out.println("controladores.Homepage.chargeConfigFile()");
+        } catch (IOException ex) {
+            Logger.getLogger(Homepage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }*/
+        /*BambooConfig.driverClassName_bamboo = "org.postgresql.Driver";
+        BambooConfig.driverClassName_renweb = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+        BambooConfig.nameFolder_ftp_bamboo = "CSG2";
+        BambooConfig.pass_bamboo = "postgres";
+        BambooConfig.pass_ftp_bamboo = "david";
+        BambooConfig.pass_renweb = "AlphaHotel+195";
+        BambooConfig.schoolCode = "GCS2";
+        BambooConfig.url_bamboo = "jdbc:postgresql://dbase02.eduwebgroup.com:5432/postgres";
+        BambooConfig.url_ftp_bamboo = "ftp02.eduwebgroup.com";
+        BambooConfig.url_renweb = "jdbc:sqlserver://rwi-spain.odbc.renweb.com\\rwi_spain:1433;databaseName=rwi_spain";
+        BambooConfig.user_bamboo = "postgres";
+        BambooConfig.user_ftp_bamboo = "david";
+        BambooConfig.user_renweb = "rwi_spain_cust";
+        BambooConfig.port_ftp_bamboo = 21;*/
+    BambooConfig.driverClassName_bamboo = "org.postgresql.Driver";
+        BambooConfig.driverClassName_renweb = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+        BambooConfig.nameFolder_ftp_bamboo = "AH-ZAF";
+        BambooConfig.pass_bamboo = "Madrid2016";
+        BambooConfig.pass_ftp_bamboo = "david";
+        BambooConfig.pass_renweb = "BravoJuggle+396";
+        BambooConfig.schoolCode = "AH";
+        BambooConfig.url_bamboo = "jdbc:postgresql://192.168.1.9:5432/Lessons";
+        BambooConfig.url_ftp_bamboo = "ftp02.eduwebgroup.com";
+        BambooConfig.url_renweb = "jdbc:sqlserver://ah-zaf.odbc.renweb.com\\ah_zaf:1433;databaseName=ah_zaf";
+        BambooConfig.user_bamboo = "eduweb";
+        BambooConfig.user_ftp_bamboo = "david";
+        BambooConfig.user_renweb = "AH_ZAF_CUST";
+        BambooConfig.port_ftp_bamboo = 21; 
+         
+ 
+    }
+
+    public ArrayList<Tupla<Integer, String>> getYears(String schoolCode) {
+        ArrayList<Tupla<Integer, String>> ret = new ArrayList<>();
+        String consulta = "select * from SchoolYear where SchoolCode ='" + schoolCode + "'";
+        /* Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+         */
         try {
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
-            while(rs.next()){
+            PoolC3P0_RenWeb pool = PoolC3P0_RenWeb.getInstance();
+            Connection con = pool.getConnection();
+            //   con = DBCPDataSource.getConnection_ah();
+            Statement stAux = con.createStatement();
+            ResultSet rs = stAux.executeQuery(consulta);
+            while (rs.next()) {
                 int yearid = rs.getInt("yearid");
                 String yearName = rs.getString("SchoolYear");
-                ret.add(new Tupla<>(yearid,yearName));
+                ret.add(new Tupla<>(yearid, yearName));
             }
-        } catch (SQLException ex) {
+            con.close();
+        } catch (Exception ex) {
             Logger.getLogger(Homepage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        /*finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+
+        }*/
         return ret;
-    } 
-    
+    }
+
     @RequestMapping("/getyear.htm")
     @ResponseBody
-    public String getTermYear(HttpServletRequest hsr, HttpServletResponse hsr1){
-        ArrayList<Tupla<Integer,String>> ret = new ArrayList<>();
-        String consulta="select * from SchoolTerm where YearID="+hsr.getParameter("id");
+    public String getTermYear(HttpServletRequest hsr, HttpServletResponse hsr1) {
+        ArrayList<Tupla<Integer, String>> ret = new ArrayList<>();
+        String consulta = "select * from SchoolTerm where YearID=" + hsr.getParameter("id");
         try {
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
-            while(rs.next()){
+            PoolC3P0_RenWeb pool = PoolC3P0_RenWeb.getInstance();
+            Connection con = pool.getConnection();
+            Statement stAux = con.createStatement();
+            ResultSet rs = stAux.executeQuery(consulta);
+            while (rs.next()) {
                 int yearid = rs.getInt("TermID");
                 String yearName = rs.getString("Name");
-                ret.add(new Tupla<>(yearid,yearName));
+                ret.add(new Tupla<>(yearid, yearName));
             }
-        } catch (SQLException ex) {
+            con.close();
+        } catch (Exception ex) {
             Logger.getLogger(Homepage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         return (new Gson()).toJson(ret);
-    } 
-    
+    }
+
     @RequestMapping("/changeTermYear.htm")
     @ResponseBody
-    public String changeTermAndYear(HttpServletRequest hsr, HttpServletResponse hsr1){
+    public String changeTermAndYear(HttpServletRequest hsr, HttpServletResponse hsr1) {
         int yearid = Integer.parseInt(hsr.getParameter("yearid"));
         int termid = Integer.parseInt(hsr.getParameter("termid"));
+
         if ((new SessionCheck()).checkSession(hsr)) {
             return "ERROR";
         } else {
             String nameTerm = "", nameYear = "";
-            try{
-                ResultSet rs3 = DBConect.ah.executeQuery("select name from SchoolTerm where TermID = " + termid + " and YearID = " + yearid);
-                while (rs3.next()) {
-                    nameTerm = "" + rs3.getString("name");
+            try {
+                PoolC3P0_RenWeb pool = PoolC3P0_RenWeb.getInstance();
+                Connection con = pool.getConnection();
+                Statement stAux = con.createStatement();
+                ResultSet rs = stAux.executeQuery("select name from SchoolTerm where TermID = " + termid + " and YearID = " + yearid);
+
+                while (rs.next()) {
+                    nameTerm = "" + rs.getString("name");
                 }
-                ResultSet rs4 = DBConect.ah.executeQuery("select SchoolYear from SchoolYear where yearID = " + yearid);
-                while (rs4.next()) {
-                    nameYear = "" + rs4.getString("SchoolYear");
+                rs = stAux.executeQuery("select SchoolYear from SchoolYear where yearID = " + yearid);
+                while (rs.next()) {
+                    nameYear = "" + rs.getString("SchoolYear");
                 }
-            }catch(Exception e){
-                
+                con.close();
+            } catch (Exception e) {
+
             }
             hsr.getSession().removeAttribute("yearId");
             hsr.getSession().removeAttribute("termId");
             hsr.getSession().setAttribute("termYearName", nameTerm + " / " + nameYear);
             hsr.getSession().setAttribute("yearId", yearid);
             hsr.getSession().setAttribute("termId", termid);
-            
+
             return "OK";
         }
     }
-    
+
     public ModelAndView save(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         ModelAndView mv = new ModelAndView("suhomepage");
         String qbdburl = hsr.getParameter("qbdburl");

@@ -32,12 +32,20 @@
                     "aLengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
                     "iDisplayLength": 5,
                     "order": [[5, "desc"]],
-                    "columnDefs": [
-                        {
-                            "targets": [0],
+                    columnDefs: [
+                        {"width": "0%", "targets": [0],
                             "visible": false,
-                            "searchable": false
-                        }],
+                            "searchable": false},
+                        {"width": "15%", "targets": [1]},
+                        {"width": "7%", "targets": [2]},
+                        {"width": "10%", "targets": [3]},
+                        {"width": "20%", "targets": [4]},
+                        {"width": "10%", "targets": [5]},
+                        {"width": "10%", "targets": [6]},
+                        {"width": "10%", "targets": [7]},
+                        {"width": "18%", "targets": [8]}
+
+                    ],
                     responsive: true
                 });
                 $('#table_datelessons').DataTable();
@@ -345,6 +353,24 @@
 
         </script>
         <style>
+            
+             #table_id_wrapper{
+                font-size: small;
+            }
+            .uk-form-small{
+                min-height: 0px;
+            }
+
+            #table_id{
+                width: 100% !important;
+            }
+            .sinpadding
+            {
+                padding-left: 4px;
+                padding-right: 4px;
+                display: inline-block;
+                width: 18%;
+            }
             .title
             {
                 font-size: medium;
@@ -418,11 +444,11 @@
                                 <td>${lecciones.start}</td>
                                 <td>${lecciones.finish}</td>
                                 <td>
-                                    <div class="col-xs-3">
+                                    <div class="col-xs-4 text-center">
                                         <input name="TXTid_lessons_attendance" class="btn-unbutton" type="image" src="<c:url value="/recursos/img/btn/btn_Attendance.svg"/>" value="${lecciones.id}" id="attendance" onclick="rowselect(${lecciones.id})" width="40px" data-placement="bottom" title="<spring:message code="etiq.txtattendance"/>">
                                     </div>
 
-                                    <div class="col-xs-3">
+                                    <div class="col-xs-4 text-center">
                                         <input name="TXTid_lessons_detalles" type="image" src="<c:url value="/recursos/img/btn/btn_details.svg"/>" value="${lecciones.id}" id="details" onclick="detailsSelect(${lecciones.id})" width="40px" data-placement="bottom" title="<spring:message code="etiq.Details"/>">
                                     </div>
                                     <%-- the user can not delete an archived presentation,must unarchive and remove progress records first--%>
@@ -431,7 +457,7 @@
                                              <input class="delete" name="TXTid_lessons_eliminar" type="image" src="<c:url value="/recursos/img/btn/btn_delete.svg"/>" value="${lecciones.id}" id="delete" onclick="deleteSelectSure(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="Delete">
                                          </div>
                                      </c:if>--%>
-                                    <div class="col-xs-3">
+                                    <div class="col-xs-4 text-center">
                                         <input class="resources" name="TXTid_lessons_resources" type="image" src="<c:url value="/recursos/img/btn/btn_Resources.png"/>" value="${lecciones.id}" id="resources" onclick="accessrsrcs(${lecciones.id}, '${lecciones.name}')" width="40px" data-placement="bottom" title="<spring:message code="etiq.Resources"/>">
                                     </div>
 

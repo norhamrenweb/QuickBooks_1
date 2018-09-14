@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package controladores;
-//x
 
 import Montessori.*;
 import Montessori.Objective;
@@ -22,6 +21,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 import java.util.Base64;
 import static controladores.ReportControlador.log;
+import java.beans.PropertyVetoException;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -94,9 +94,17 @@ public class ProgressbyStudent {
         }
         ModelAndView mv = new ModelAndView("progressbystudent");
         List<Level> grades = new ArrayList();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
             mv.addObject("listaAlumnos", Students.getStudents(log));
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
+            rs = stAux.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
 
             Level l = new Level();
             l.setName("Select level");
@@ -113,6 +121,25 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         mv.addObject("gradelevels", grades);
 
@@ -150,27 +177,35 @@ public class ProgressbyStudent {
         String idTerm = cSub.getIdSubject();
         int studentId = Integer.parseInt(cSub.getIdStudent());
         String idYear = cSub.getIdTeacher();
-        List<Subject> subjects = getSubjects(studentId, hsr,idTerm,idYear);
+        List<Subject> subjects = getSubjects(studentId, hsr, idTerm, idYear);
 
-        return this.loadtree(subjects, studentId, hsr, idTerm,idYear);
+        return this.loadtree(subjects, studentId, hsr, idTerm, idYear);
     }
 
-    static List<Subject> getSubjects(int studentid, HttpServletRequest hsr,String cTerm, String cYear) throws SQLException {
+    static List<Subject> getSubjects(int studentid, HttpServletRequest hsr, String cTerm, String cYear) throws SQLException {
         List<Subject> subjects = new ArrayList<>();
         List<Subject> activesubjects = new ArrayList<>();
         HashMap<String, String> mapSubject = new HashMap<String, String>();
         String yearid = cYear;
-        
+
         String termid = cTerm;
-        
+
         String condTerms = "";
-        if(!termid.equals("-1"))
+        if (!termid.equals("-1")) {
             condTerms = " and roster.enrolled" + termid + "=1";
-        
+        }
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
-            ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
+            ResultSet rs1 = stAux.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
                     + "                 inner join courses on courses.courseid=classes.courseid\n"
-                    + "                  where roster.studentid = " + studentid + condTerms+" and courses.active = 1 and courses.reportcard = 1 and classes.yearid = '" + yearid + "' order by courses.rcplacement DESC");// the term and year need to be dynamic, check with vincent
+                    + "                  where roster.studentid = " + studentid + condTerms + " and courses.active = 1 and courses.reportcard = 1 and classes.yearid = '" + yearid + "' order by courses.rcplacement DESC");// the term and year need to be dynamic, check with vincent
 
             String name9, id;
             while (rs1.next()) {
@@ -198,6 +233,29 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         return activesubjects;
@@ -230,13 +288,20 @@ public class ProgressbyStudent {
          *
          *
          */
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
             String consulta = "SELECT objective.id,name,rating_id,level_id,objective.term_id from objective left join \n"
-                    + "(select * from progress_report where student_id = " + studentId + " and term_id = "+termid+") b\n"
+                    + "(select * from progress_report where student_id = " + studentId + " and term_id = " + termid + ") b\n"
                     + " on (objective.id = b.objective_id) where  objective.reportcard= 'true' and \n"
                     + "objective.year_id= " + yearid + " and objective.subject_id = " + subjectid;
 
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
 
             while (rs.next()) {
                 String[] s = rs.getString("term_id").split(",");
@@ -294,6 +359,25 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         obj.put("result", new Gson().toJson(result));
         obj.put("ratings", new Gson().toJson(getRatings()));
@@ -321,6 +405,9 @@ public class ProgressbyStudent {
         if ((new SessionCheck()).checkSession(hsr)) {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
         ModelAndView mv = new ModelAndView("progressdetails");
         Objective o = new Objective();
@@ -332,26 +419,29 @@ public class ProgressbyStudent {
         String mastereddate = null;
         List<String> attemptdates = new ArrayList<>();
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement(1004, 1007);
 //will display only if there is a lesson that has a progress record,but if a lesson is only planned will not be displayed
 
-            ResultSet rs1 = DBConect.eduwebBeforeFirst.executeQuery("select comment,comment_date,ratingname,lessonname,createdby from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = '" + d.getCol2() + "' order by comment_date DESC");
+            rs = stAux.executeQuery("select comment,comment_date,ratingname,lessonname,createdby from public.progresslessonname where objective_id=" + d.getCol1() + " AND student_id = '" + d.getCol2() + "' order by comment_date DESC");
 
-            if (!rs1.next()) {
+            if (!rs.next()) {
                 String message = "Student does not have progress under the selected objective";//if i change this message must change as well in the jsp
                 mv.addObject("message", message);
             } else {
-                rs1.beforeFirst();
-                while (rs1.next()) {
+                rs.beforeFirst();
+                while (rs.next()) {
                     Progress p = new Progress();
-                    p.setCreatedby(fetchTeacher(rs1.getInt("createdby"), hsr));
-                    p.setComment(rs1.getString("comment"));
-                    p.setRating(rs1.getString("ratingname"));
-                    if (rs1.getString("lessonname") != null) {
-                        p.setLesson_name(rs1.getString("lessonname"));
+                    p.setCreatedby(fetchTeacher(rs.getInt("createdby"), hsr));
+                    p.setComment(rs.getString("comment"));
+                    p.setRating(rs.getString("ratingname"));
+                    if (rs.getString("lessonname") != null) {
+                        p.setLesson_name(rs.getString("lessonname"));
                     } else {
                         p.setLesson_name("");// so that null will not appear in the table in case of a general comment
                     }
-                    Timestamp stamp = rs1.getTimestamp("comment_date");
+                    Timestamp stamp = rs.getTimestamp("comment_date");
                     SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
                     String dateStr = sdfDate.format(stamp);
                     p.setComment_date(dateStr);
@@ -366,11 +456,11 @@ public class ProgressbyStudent {
 
                 finalrating = this.getfinalrating(d.getCol1(), d.getCol2());
                 String consulta = "select min(comment_date) as date from progress_report where student_id =" + d.getCol2() + " and rating_id in (select id from rating where name = 'Presented') and objective_id =" + d.getCol1();
-                ResultSet rs3 = DBConect.eduwebBeforeFirst.executeQuery(consulta);
-                if (rs3.next()) {
-                    rs3.beforeFirst();
-                    while (rs3.next()) {
-                        Timestamp stamp = rs3.getTimestamp("date");
+                rs = stAux.executeQuery(consulta);
+                if (rs.next()) {
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        Timestamp stamp = rs.getTimestamp("date");
                         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
                         if (stamp != null) {
                             presenteddate = sdfDate.format(stamp);
@@ -379,11 +469,11 @@ public class ProgressbyStudent {
                     }
                 }
                 consulta = "select min(comment_date) as date from progress_report where student_id =" + d.getCol2() + " and rating_id in (select id from rating where name = 'Attempted') and objective_id =" + d.getCol1();
-                ResultSet rs4 = DBConect.eduwebBeforeFirst.executeQuery(consulta);
-                if (rs4.next()) {
-                    rs4.beforeFirst();
-                    while (rs4.next()) {
-                        Timestamp stamp = rs4.getTimestamp("date");
+                rs = stAux.executeQuery(consulta);
+                if (rs.next()) {
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        Timestamp stamp = rs.getTimestamp("date");
                         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
                         if (stamp != null) {
                             attempteddate = sdfDate.format(stamp);
@@ -391,11 +481,11 @@ public class ProgressbyStudent {
                     }
                 }
                 consulta = "select min(comment_date) as date from progress_report where student_id =" + d.getCol2() + " and rating_id in (select id from rating where name = 'Mastered') and objective_id =" + d.getCol1();
-                ResultSet rs5 = DBConect.eduwebBeforeFirst.executeQuery(consulta);
-                if (rs5.next()) {
-                    rs5.beforeFirst();
-                    while (rs5.next()) {
-                        Timestamp stamp = rs5.getTimestamp("date");
+                rs = stAux.executeQuery(consulta);
+                if (rs.next()) {
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        Timestamp stamp = rs.getTimestamp("date");
                         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
                         if (stamp != null) {
                             mastereddate = sdfDate.format(stamp);
@@ -422,10 +512,30 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return mv;
     }
-/*
+
+    /*
     @RequestMapping("/progressbystudent/loadtree.htm")
     @ResponseBody
     public String treeload(HttpServletRequest hsr, HttpServletResponse hsr1) {
@@ -462,7 +572,7 @@ public class ProgressbyStudent {
         }
         return total;
     }
-*/
+     */
     public String getImage(String photoName, HttpServletRequest request) throws IOException {
         try {
             /*URL url = new URL("ftp://AH-ZAF:e3f14+7mANDp@ftp2.renweb.com/Pictures/" + photoName);
@@ -470,12 +580,12 @@ public class ProgressbyStudent {
             InputStream inStream = conn.getInputStream();*/
             //***********
 
-           String server = DBConect.serverFtp;
-            int port = DBConect.portFTP;
-            String user = DBConect.userFTP;
-            String pass = DBConect.passFTP;
+           String server = BambooConfig.url_ftp_bamboo;
+            int port = BambooConfig.port_ftp_bamboo;
+            String user = BambooConfig.user_ftp_bamboo;
+            String pass = BambooConfig.pass_ftp_bamboo;
 
-            String filepath = "/Pictures/" + photoName;
+            String filepath = "/"+BambooConfig.nameFolder_ftp_bamboo+"/Pictures/" + photoName;
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
@@ -528,14 +638,23 @@ public class ProgressbyStudent {
         String[] studentIds = hsr.getParameterValues("selectStudent");
         String termId = hsr.getParameter("termid");
         String yearId = hsr.getParameter("yearid");
-        
+
         Students student = new Students();
         JSONObject obj = new JSONObject();
         //String prueba = "";
         String prueba = "";
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
             String consulta = "SELECT * FROM Students where StudentID = " + studentIds[0];
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
 
             while (rs.next()) {
 
@@ -555,10 +674,29 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         // List<Subject> subjects = new ArrayList<>();
-        subjects = getSubjects(student.getId_students(), hsr,"2","59");
+        subjects = getSubjects(student.getId_students(), hsr, termId, yearId);
 
         String info = new Gson().toJson(student);
         String sub = new Gson().toJson(subjects);
@@ -567,23 +705,31 @@ public class ProgressbyStudent {
         obj.put("info", info);
         obj.put("sub", sub);
         obj.put("prueba", prueba2);
-        obj.put("commentHead", this.getCommentHead(student.getId_students(), hsr,termId,yearId));
-        obj.put("prog", this.loadtree(getAllSubjectsYear(student.getId_students(), hsr,yearId), student.getId_students(), hsr, "-1",yearId));
+        obj.put("commentHead", this.getCommentHead(student.getId_students(), hsr, termId, yearId));
+        obj.put("prog", this.loadtree(getAllSubjectsYear(student.getId_students(), hsr, yearId), student.getId_students(), hsr, "-1", yearId));
         obj.put("nextPresentations", new Gson().toJson(this.getNextPresentations(student.getId_students())));
         return obj.toString();
     }
-
- 
 
     private ArrayList<DBRecords> getNextPresentations(int idStudent) {
         ArrayList<DBRecords> nextPresentations = new ArrayList<>(); // col1 = id Presentation 
         // col2 = name Presentation
         // col3 = name Teacher
         Timestamp timestampNow = new Timestamp(System.currentTimeMillis());
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
             HashMap<Integer, String> nameTeachers = new HashMap<>();
             String consulta = "select  PersonID,FirstName,LastName  from Person";
-            ResultSet rs = DBConect.ah.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
 
             while (rs.next()) {
                 String name = rs.getString(2) + " " + rs.getString(3);
@@ -593,7 +739,12 @@ public class ProgressbyStudent {
             consulta = "SELECT lessons.id,lessons.name,user_id FROM lesson_stud_att inner join lessons "
                     + "                                         on lessons.id = lesson_stud_att.lesson_id "
                     + "                     where student_id = " + idStudent + " and start >= '" + timestampNow + "' order by start ASC";
-            rs = DBConect.eduweb.executeQuery(consulta);
+
+            con.close();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery(consulta);
             while (rs.next()) {
                 DBRecords auxDB = new DBRecords();
                 auxDB.setCol1("" + rs.getInt(1));
@@ -618,6 +769,29 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         return nextPresentations;
@@ -625,10 +799,16 @@ public class ProgressbyStudent {
 
     private ArrayList<String[]> getRatings() {
         ArrayList<String[]> ratings = new ArrayList<>();
-
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String consulta = " SELECT DISTINCT * from rating ";
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             while (rs.next()) {
                 String[] auxString = new String[2];
                 auxString[0] = "" + rs.getInt(1);
@@ -641,6 +821,29 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         return ratings;
@@ -648,12 +851,18 @@ public class ProgressbyStudent {
 
     private ArrayList<String[]> getLevels() {
         ArrayList<String[]> levels = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
             ArrayList<String> listLevel = new ArrayList<>();
 
             String consulta = " SELECT DISTINCT * from levels ";
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             while (rs.next()) {
                 String[] auxString = new String[2];
                 auxString[0] = "" + rs.getInt(1);
@@ -666,32 +875,62 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         return levels;
     }
 
-    private List<Subject> getAllSubjectsYear(int studentid, HttpServletRequest hsr,String yearid) throws SQLException {
+    private List<Subject> getAllSubjectsYear(int studentid, HttpServletRequest hsr, String yearid) throws SQLException {
         List<Subject> subjects = new ArrayList<>();
         List<Subject> activesubjects = new ArrayList<>();
         HashMap<String, String> mapSubject = new HashMap<String, String>();
-       
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
         try {
-            ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from roster    inner join classes on roster.classid=classes.classid\n"
                     + "                 inner join courses on courses.courseid=classes.courseid\n"
                     + "                  where roster.studentid = " + studentid + " and courses.active = 1 and courses.reportcard = 1 and classes.yearid = '" + yearid + "' order by courses.rcplacement DESC");// the term and year need to be dynamic, check with vincent
 
             String name9, id;
-            while (rs1.next()) {
+            while (rs.next()) {
                 Subject sub = new Subject();
                 String[] ids = new String[1];
-                ids[0] = "" + rs1.getInt("CourseID");
+                ids[0] = "" + rs.getInt("CourseID");
                 sub.setId(ids);
                 subjects.add(sub);
 
-                name9 = rs1.getString("Title");
-                id = rs1.getString("CourseID");
+                name9 = rs.getString("Title");
+                id = rs.getString("CourseID");
                 mapSubject.put(id, name9);
 
             }
@@ -708,22 +947,75 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         return activesubjects;
     }
 
-    private String getCommentHead(int idStudent, HttpServletRequest hsr,String termId,String yearId) {
+    private String getCommentHead(int idStudent, HttpServletRequest hsr, String termId, String yearId) {
         String yearid = yearId;
         String termid = termId;
         String consulta = " SELECT comment from report_comments where yearterm_id =" + yearid + " and term_id= " + termid + " and studentid = " + idStudent + " and supercomment = true", res = "";
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            rs = stAux.executeQuery(consulta);
             while (rs.next()) {
                 res = rs.getString("comment");
             }
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return res;
     }
@@ -739,15 +1031,19 @@ public class ProgressbyStudent {
         String studentid = data[1];
         String yearid = data[3];
         String termid = data[2];
-        
+
         List<DBRecords> result = new ArrayList<>();
         String comment = "";
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
-       
-
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
             String consulta = " SELECT id,name,description from objective where "
                     + "year_id= " + yearid + " and term_id like '%" + termid + "%' and subject_id= '" + subjectid + "' and COALESCE(reportcard, FALSE) = FALSE";
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             while (rs.next()) {
                 DBRecords r = new DBRecords();
                 r.setCol1(rs.getString("name"));
@@ -758,16 +1054,16 @@ public class ProgressbyStudent {
             for (DBRecords r : result) {
 
                 consulta = "SELECT comment,comment_date FROM progress_report where objective_id =" + r.getCol5() + "AND comment_date in(select max(comment_date) from progress_report where objective_id =" + r.getCol5() + "AND student_id ='" + studentid + "')AND student_id =" + studentid;
-                ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
-                while (rs1.next()) {
-                    r.setCol3(rs1.getString("comment"));
-                    r.setCol4("" + rs1.getDate("comment_date"));
+                rs = stAux.executeQuery(consulta);
+                while (rs.next()) {
+                    r.setCol3(rs.getString("comment"));
+                    r.setCol4("" + rs.getDate("comment_date"));
 
                 }
 
             }
             consulta = "select comment from report_comments where subject_id = " + subjectid + " and term_id = " + termid + " and yearterm_id =" + yearid + " and studentid =" + studentid + " order by date_created DESC";
-            ResultSet rs2 = DBConect.eduweb.executeQuery(consulta);
+            ResultSet rs2 = stAux.executeQuery(consulta);
 
             if (rs2.next()) {
                 comment = rs2.getString("comment");
@@ -778,6 +1074,25 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         String objs = new Gson().toJson(result);
         JSONObject info = new JSONObject();
@@ -812,7 +1127,6 @@ public class ProgressbyStudent {
 //
 //        return comment;
 //    }
-    
     // no se usa
     @RequestMapping("/progressbystudent/saveGeneralcomment.htm")
     @ResponseBody
@@ -824,16 +1138,24 @@ public class ProgressbyStudent {
         String objectiveid = data.getCol1();
         String comment = data.getCol3();
         String studentid = data.getCol2();
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String consulta = "select id from progress_report where objective_id = " + objectiveid + " and generalcomment = TRUE and student_id ='" + studentid + "'";
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             if (!rs.next()) {
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + studentid + "','" + objectiveid + "',true,'" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
+                stAux.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + studentid + "','" + objectiveid + "',true,'" + user.getId() + "'," + sesion.getAttribute("termId") + "," + sesion.getAttribute("yearId") + ")");
                 message = "Comment successfully updated";
 
             } else {
                 String s = "update progress_report set modifyby = '" + user.getId() + "',comment_date = now(),comment = '" + comment + "' where objective_id = " + objectiveid + " AND student_id = '" + studentid + "' and generalcomment = true";
-                DBConect.eduweb.executeUpdate(s);
+                stAux.executeUpdate(s);
                 message = "Comment successfully updated";
             }
             obj.put("message", message);
@@ -844,12 +1166,31 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         return obj.toString();
     }
 
-    public String loadtree(List<Subject> ls, int studentid, HttpServletRequest hsr, String idTerm,String yearTerm) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
+    public String loadtree(List<Subject> ls, int studentid, HttpServletRequest hsr, String idTerm, String yearTerm) throws Exception { // CAMBIAR ESTO PARA ADAPTARLO A LA NEUVA QUERY
 
         ModelAndView mv = new ModelAndView("progressbystudent");
         JSONObject json = new JSONObject();
@@ -861,32 +1202,46 @@ public class ProgressbyStudent {
         List<Subject> subs = new ArrayList<>();
         Nodetreegrid<String> rootNode = new Nodetreegrid<String>("Subjects", "A", "", "", "", "");
 
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
             if (ls.isEmpty()) {
-                subs = getSubjects(studentid, hsr,"2","59");
+                subs = getSubjects(studentid, hsr, "2", "59");
             } else {
                 subs = ls;
             }
 
             String consulta = "select * from Courses";
-            ResultSet rs9 = DBConect.ah.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             String name9, idHash;
 
-            while (rs9.next()) {
-                if (rs9.getBoolean("Active")) {
-                    name9 = rs9.getString("Title");
-                    idHash = rs9.getString("CourseID");
+            while (rs.next()) {
+                if (rs.getBoolean("Active")) {
+                    name9 = rs.getString("Title");
+                    idHash = rs.getString("CourseID");
                     mapSubject.put(idHash, name9);
                 }
             }
+            con.close();
+
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
 
             for (Subject sub : subs) {
                 String[] sid = sub.getId();
                 String consulta3 = "select objective.term_id , obj_steps.id,obj_steps.name,objective.name as obj ,objective.id as objid,objective.subject_id "
                         + "from obj_steps inner join objective on obj_steps.obj_id = objective.id "
-                        + "where objective.year_id="+yearTerm+" and objective.subject_id = '" + sid[0] + "' order by obj_steps.storder ASC";
+                        + "where objective.year_id=" + yearTerm + " and objective.subject_id = '" + sid[0] + "' order by obj_steps.storder ASC";
 
-                ResultSet rs = DBConect.eduweb.executeQuery(consulta3);
+                rs = stAux.executeQuery(consulta3);
 
                 while (rs.next()) {
                     String aux = rs.getString("term_id");
@@ -908,11 +1263,11 @@ public class ProgressbyStudent {
             }
             consulta = "select * from progress_report a where comment_date = (select max(comment_date) from public.progress_report where objective_id = a.objective_id and generalcomment = false and student_id ='" + studentid + "') and generalcomment = false and student_id ='" + studentid + "'";
 
-            ResultSet rs7 = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             HashMap<String, String> mapDBR = new HashMap<String, String>();
 
-            while (rs7.next()) {
-                String stsdone = rs7.getString("step_id");
+            while (rs.next()) {
+                String stsdone = rs.getString("step_id");
                 if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
 
                     String[] stepsDone = stsdone.split(",");
@@ -1025,6 +1380,25 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         tree.setRootElement(rootNode);
@@ -1035,19 +1409,27 @@ public class ProgressbyStudent {
 
     private ArrayList<Objective> getObjectivesTree(String[] subjectid, String termId) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String consulta = "select objective.term_id,name,id from public.objective where subject_id=" + subjectid[0] + " and  (reportcard <> true or reportcard is null) ORDER BY name ASC";
-            ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
-            while (rs1.next()) {
-                String aux = rs1.getString("term_id");
+            rs = stAux.executeQuery(consulta);
+            while (rs.next()) {
+                String aux = rs.getString("term_id");
                 String[] termIds = aux.split(",");
 
                 if (termId.equals("-1") || comprobarTerm(termIds, termId)) {
                     String[] ids = new String[1];
                     Objective sub = new Objective();
-                    ids[0] = "" + rs1.getInt("id");
+                    ids[0] = "" + rs.getInt("id");
                     sub.setId(ids);
-                    sub.setName(rs1.getString("name"));
+                    sub.setName(rs.getString("name"));
                     objectives.add(sub);
                 }
             }
@@ -1057,6 +1439,29 @@ public class ProgressbyStudent {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return objectives;
     }
@@ -1133,12 +1538,20 @@ public class ProgressbyStudent {
     @ResponseBody
     public String saveSubjectComment(@RequestBody CommentSubject cSub, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         ModelAndView mv = new ModelAndView("progressbystudent");
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
             String superComment = "false";
             String comment = cSub.getComment();
-            
+
             String termId = cSub.getIdTeacher().split("_")[0];
             String yearId = cSub.getIdTeacher().split("_")[1];
             comment = comment.replace("'", "\'\'");
@@ -1149,15 +1562,34 @@ public class ProgressbyStudent {
             }
             String test = "update report_comments set subject_id=" + cSub.getIdSubject() + " , date_created = 'now()' ,createdby_id =" + user.getId() + " ,comment= '" + comment + "',studentid =" + cSub.getIdStudent() + ",term_id =" + termId + ",yearterm_id =" + yearId + ",supercomment=" + superComment + " where yearterm_id =" + yearId + " and term_id =" + termId + " and subject_id=" + cSub.getIdSubject() + " and supercomment = " + superComment + " and studentid =" + cSub.getIdStudent();
 
-            if (!DBConect.eduweb.executeQuery("select * from report_comments where yearterm_id =" + yearId + " and term_id =" + termId + " and createdby_id =" + user.getId() + " and subject_id=" + cSub.getIdSubject() + " and supercomment = " + superComment + " and studentid =" + cSub.getIdStudent()).next()) {
+            if (!stAux.executeQuery("select * from report_comments where yearterm_id =" + yearId + " and term_id =" + termId + " and createdby_id =" + user.getId() + " and subject_id=" + cSub.getIdSubject() + " and supercomment = " + superComment + " and studentid =" + cSub.getIdStudent()).next()) {
                 test = "insert into report_comments(subject_id,date_created,createdby_id,comment,studentid,term_id,yearterm_id,supercomment)values('" + cSub.getIdSubject() + "',now(),'" + user.getId() + "','" + comment + "','" + cSub.getIdStudent() + "'," + termId + "," + yearId + "," + superComment + ")";
             }
-            DBConect.eduweb.executeUpdate(test);
+            stAux.executeUpdate(test);
 
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return "success";
     }
@@ -1173,20 +1605,47 @@ public class ProgressbyStudent {
         String yearid = dbRec.getCol6();
         String termid = dbRec.getCol5();
 
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         ModelAndView mv = new ModelAndView("progressbystudent");
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String test = "update progress_report set " + nameColumn + "=" + newId + ",comment_date = now() where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective + " and student_id=" + idStudent;
             //     String ifTest= "select * from progress_report where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective +" and student_id="+idStudent;
 
-            if (!DBConect.eduweb.executeQuery("select * from progress_report where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective + " and student_id=" + idStudent).next()) {
+            if (!stAux.executeQuery("select * from progress_report where yearterm_id =" + yearid + " and term_id =" + termid + " and objective_id=" + id_objective + " and student_id=" + idStudent).next()) {
                 test = "insert into progress_report(comment_date," + nameColumn + ",objective_id,yearterm_id,term_id,student_id)values(now()," + newId + "," + id_objective + "," + yearid + "," + termid + "," + idStudent + ")";
             }
-            DBConect.eduweb.executeUpdate(test);
+            stAux.executeUpdate(test);
 
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return "success";
     }
@@ -1218,12 +1677,12 @@ public class ProgressbyStudent {
     public String getimage(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String obsdate = request.getParameter("date");
         String obsid = request.getParameter("id");
-String server = DBConect.serverFtp;
-            int port = DBConect.portFTP;
-            String user = DBConect.userFTP;
-            String pass = DBConect.passFTP;
-            
-        String filePath = "/"+DBConect.codeSchool+"/Observations/" + obsid + "/";
+     String server = BambooConfig.url_ftp_bamboo;
+            int port = BambooConfig.port_ftp_bamboo;
+            String user = BambooConfig.user_ftp_bamboo;
+            String pass = BambooConfig.pass_ftp_bamboo;
+
+        String filePath = "/"  + BambooConfig.nameFolder_ftp_bamboo + "/Observations/" + obsid + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
@@ -1285,13 +1744,39 @@ String server = DBConect.serverFtp;
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
         ModelAndView mv = new ModelAndView("lessonresources");
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
-            DBConect.eduweb.executeUpdate("update classobserv set date_created = now(), comment = '" + r.getObservation() + "' ,category = '" + r.getType() + "', commentdate = '" + r.getDateString() + "' where id = '" + r.getId() + "'");
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            stAux.executeUpdate("update classobserv set date_created = now(), comment = '" + r.getObservation() + "' ,category = '" + r.getType() + "', commentdate = '" + r.getDateString() + "' where id = '" + r.getId() + "'");
 
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return mv;
     }
@@ -1302,27 +1787,34 @@ String server = DBConect.serverFtp;
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
         ModelAndView mv = new ModelAndView("lessonresources");
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
             String commentId = r.getId();
 
             String consulta = "update classobserv set foto = false where id = " + commentId;
-            DBConect.eduweb.executeUpdate(consulta);
+            stAux.executeUpdate(consulta);
 
-       String server = DBConect.serverFtp;
-            int port = DBConect.portFTP;
-            String user = DBConect.userFTP;
-            String pass = DBConect.passFTP;
+         String server = BambooConfig.url_ftp_bamboo;
+            int port = BambooConfig.port_ftp_bamboo;
+            String user = BambooConfig.user_ftp_bamboo;
+            String pass = BambooConfig.pass_ftp_bamboo;
 
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            ftpClient.mkd("/"+DBConect.codeSchool+"/Observations/");
-            String rutaCompleta = "/"+DBConect.codeSchool+"/Observations/" + commentId;
+            ftpClient.mkd("/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations/");
+            String rutaCompleta = "/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations/" + commentId;
 
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/Observations");
+                ftpClient.changeWorkingDirectory("/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations");
 
                 ftpClient.mkd(commentId);
                 ftpClient.changeWorkingDirectory(commentId);
@@ -1335,6 +1827,25 @@ String server = DBConect.serverFtp;
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return mv;
     }
@@ -1344,44 +1855,101 @@ String server = DBConect.serverFtp;
         if ((new SessionCheck()).checkSession(hsr)) {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         ModelAndView mv = new ModelAndView("lessonresources");
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String commentId = r.getId();
             String consulta = "delete from classobserv where id = " + commentId;
 
-      String server = DBConect.serverFtp;
-            int port = DBConect.portFTP;
-            String user = DBConect.userFTP;
-            String pass = DBConect.passFTP;
+            String server = BambooConfig.url_ftp_bamboo;
+            int port = BambooConfig.port_ftp_bamboo;
+            String user = BambooConfig.user_ftp_bamboo;
+            String pass = BambooConfig.pass_ftp_bamboo;
 
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
 
-            ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/Observations");
+            ftpClient.changeWorkingDirectory("/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations");
             ftpClient.mkd(commentId);
             ftpClient.changeWorkingDirectory(commentId);
             ftpClient.deleteFile(ftpClient.listNames()[0]);
 
-            ftpClient.removeDirectory("/"+DBConect.codeSchool+"/Observations/" + commentId);
+            ftpClient.removeDirectory("/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations/" + commentId);
             ftpClient.logout();
 
-            DBConect.eduweb.executeUpdate(consulta);
+            stAux.executeUpdate(consulta);
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return mv;
     }
 
     private String fetchTeacher(int id, HttpServletRequest hsr) throws Exception {
         String first, LastName, name = "";
-        ResultSet rs7 = DBConect.ah.executeQuery("select lastname,firstname from person where personid =" + id);
-        while (rs7.next()) {
-            first = rs7.getString("firstName");
-            LastName = rs7.getString("lastName");
-            name = LastName + ", " + first;
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+        try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+            rs = stAux.executeQuery("select lastname,firstname from person where personid =" + id);
+            while (rs.next()) {
+                first = rs.getString("firstName");
+                LastName = rs.getString("lastName");
+                name = LastName + ", " + first;
+            }
+        } catch (SQLException ex) {
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return name;
     }
@@ -1390,49 +1958,64 @@ String server = DBConect.serverFtp;
     @ResponseBody
     public String loadComentsStudent(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 
-        ResultSet rs7 = DBConect.ah.executeQuery("select lastname,firstname,personid from person");
-        // ResultSet rs4 = st.executeQuery(consulta);
-        HashMap<String, String> mapPersons = new HashMap<String, String>();
-        String first, LastName, studentID;
-        while (rs7.next()) {
-            first = rs7.getString("firstName");
-            LastName = rs7.getString("lastName");
-            studentID = rs7.getString("personid");
-            mapPersons.put(studentID, LastName + ", " + first);
-        }
-
-        DateFormat formatoFecha;// = new SimpleDateFormat("M/d/yyyy");
-        String date = r.getDateString() + "-01";
-
-        LocalDate convertedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-M-d"));
-        convertedDate = convertedDate.withDayOfMonth(convertedDate.getMonth().length(convertedDate.isLeapYear()));
-
-        int DIAS_MAX = convertedDate.getDayOfMonth();
-
-        String studentId = "" + r.getStudentid();
-
-        String monthSelected = "" + r.getDateString().charAt(5) + r.getDateString().charAt(6);
-
-        String yearSelected = "" + r.getDateString().charAt(0) + r.getDateString().charAt(1) + r.getDateString().charAt(2) + r.getDateString().charAt(3);
-        int days = 0, logId;
-
-        Observation oAux = new Observation();
-
-        formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-        String dateSelected = yearSelected + "-" + monthSelected + "-" + "01";
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
         ArrayList<ArrayList<Observation>> arrayObservations = new ArrayList<ArrayList<Observation>>();
-        ArrayList<Observation> arrayComments = new ArrayList<Observation>();
-        String consulta = "SELECT * FROM public.classobserv WHERE student_id = " + studentId + " AND commentdate = '" + dateSelected + "'";
-        String s;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("select lastname,firstname,personid from person");
+            // ResultSet rs4 = st.executeQuery(consulta);
+            HashMap<String, String> mapPersons = new HashMap<String, String>();
+            String first, LastName, studentID;
+            while (rs.next()) {
+                first = rs.getString("firstName");
+                LastName = rs.getString("lastName");
+                studentID = rs.getString("personid");
+                mapPersons.put(studentID, LastName + ", " + first);
+            }
+
+            DateFormat formatoFecha;// = new SimpleDateFormat("M/d/yyyy");
+            String date = r.getDateString() + "-01";
+
+            LocalDate convertedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-M-d"));
+            convertedDate = convertedDate.withDayOfMonth(convertedDate.getMonth().length(convertedDate.isLeapYear()));
+
+            int DIAS_MAX = convertedDate.getDayOfMonth();
+
+            String studentId = "" + r.getStudentid();
+
+            String monthSelected = "" + r.getDateString().charAt(5) + r.getDateString().charAt(6);
+
+            String yearSelected = "" + r.getDateString().charAt(0) + r.getDateString().charAt(1) + r.getDateString().charAt(2) + r.getDateString().charAt(3);
+            int days = 0, logId;
+
+            Observation oAux = new Observation();
+
+            formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+            String dateSelected = yearSelected + "-" + monthSelected + "-" + "01";
+
+            ArrayList<Observation> arrayComments = new ArrayList<Observation>();
+            String consulta = "SELECT * FROM public.classobserv WHERE student_id = " + studentId + " AND commentdate = '" + dateSelected + "'";
+            String s;
+
+            con.close();
+
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
 
             // while (days < DIAS_MAX && !currentDate.equals(dateSelected)) {
             while (days < DIAS_MAX) {
                 //dateSelected = getNextDate(dateSelected);
                 arrayComments.clear();
                 consulta = "SELECT * FROM classobserv WHERE student_id = " + studentId + " AND commentdate = '" + dateSelected + "' ORDER BY commentdate";
-                ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+                rs = stAux.executeQuery(consulta);
 
                 while (rs.next()) {
                     oAux.setId(rs.getInt("id"));
@@ -1463,15 +2046,40 @@ String server = DBConect.serverFtp;
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return new Gson().toJson(arrayObservations);
     }
 
     static ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
-        try {
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0] + "' and COALESCE(reportcard, FALSE) = FALSE ORDER BY name ASC");
+        try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            ResultSet rs1 = stAux.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0] + "' and COALESCE(reportcard, FALSE) = FALSE ORDER BY name ASC");
             while (rs1.next()) {
                 String[] ids = new String[1];
                 Objective sub = new Objective();
@@ -1486,14 +2094,44 @@ String server = DBConect.serverFtp;
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return objectives;
     }
 
     private HashMap<String, String> getnoofplannedlessons() throws SQLException {
         HashMap<String, String> result = new HashMap<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
-            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT student_id,objective_id,count(*) from (SELECT * FROM lesson_stud_att left join lessons on lesson_stud_att.lesson_id = lessons.id where COALESCE(lessons.archive, FALSE) = FALSE) b group by b.student_id,b.objective_id;");
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            ResultSet rs1 = stAux.executeQuery("SELECT student_id,objective_id,count(*) from (SELECT * FROM lesson_stud_att left join lessons on lesson_stud_att.lesson_id = lessons.id where COALESCE(lessons.archive, FALSE) = FALSE) b group by b.student_id,b.objective_id;");
             while (rs1.next()) {
                 result.put(rs1.getInt("student_id") + "_" + rs1.getInt("objective_id"), "" + rs1.getInt("count"));
             }
@@ -1502,30 +2140,92 @@ String server = DBConect.serverFtp;
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return result;
     }
 
     private HashMap<String, String> getnoofarchivedlessons() throws SQLException {
         HashMap<String, String> result = new HashMap<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
-            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT student_id,objective_id,count(*) from (SELECT * FROM lesson_stud_att left join lessons on lesson_stud_att.lesson_id = lessons.id where archive = TRUE) b group by b.student_id,b.objective_id;");
-            while (rs1.next()) {
-                result.put(rs1.getInt("student_id") + "_" + rs1.getInt("objective_id"), "" + rs1.getInt("count"));
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("SELECT student_id,objective_id,count(*) from (SELECT * FROM lesson_stud_att left join lessons on lesson_stud_att.lesson_id = lessons.id where archive = TRUE) b group by b.student_id,b.objective_id;");
+            while (rs.next()) {
+                result.put(rs.getInt("student_id") + "_" + rs.getInt("objective_id"), "" + rs.getInt("count"));
             }
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return result;
     }
 
     private HashMap<String, String> getfinalrating() throws SQLException {
         HashMap<String, String> result = new HashMap<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
-            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT rating.name,student_id,objective_id FROM rating inner join (select rating_id,student_id,objective_id from progress_report a where comment_date = (select max(comment_date) from progress_report \n"
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
+            ResultSet rs1 = stAux.executeQuery("SELECT rating.name,student_id,objective_id FROM rating inner join (select rating_id,student_id,objective_id from progress_report a where comment_date = (select max(comment_date) from progress_report \n"
                     + "                                                        where student_id = a.student_id AND objective_id =a.objective_id and rating_id not in(6,7))) c ON id = c.rating_id");
             while (rs1.next()) {
                 result.put(rs1.getInt("student_id") + "_" + rs1.getInt("objective_id"), rs1.getString("name"));
@@ -1535,6 +2235,29 @@ String server = DBConect.serverFtp;
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return result;
     }
@@ -1542,19 +2265,26 @@ String server = DBConect.serverFtp;
     private HashMap<String, String> getpercent() throws SQLException {
         HashMap<String, String> result = new HashMap<>();
         HashMap<Integer, Integer> auxTotal = new HashMap<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
         try {
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select count(id),obj_id from obj_steps group by obj_id");
-            while (rs1.next()) {
-                auxTotal.put(rs1.getInt("obj_id"), rs1.getInt("count"));
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("select count(id),obj_id from obj_steps group by obj_id");
+            while (rs.next()) {
+                auxTotal.put(rs.getInt("obj_id"), rs.getInt("count"));
             }
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select comment_date,step_id,objective_id,student_id from progress_report a where comment_date = (select max(comment_date) from public.progress_report where student_id = a.student_id AND objective_id = a.objective_id and generalcomment = false) and generalcomment = false");
-            while (rs2.next()) {
-                String stsdone = rs2.getString("step_id");
-                if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("") && auxTotal.containsKey(rs2.getInt("objective_id"))) {
+            rs = stAux.executeQuery("select comment_date,step_id,objective_id,student_id from progress_report a where comment_date = (select max(comment_date) from public.progress_report where student_id = a.student_id AND objective_id = a.objective_id and generalcomment = false) and generalcomment = false");
+            while (rs.next()) {
+                String stsdone = rs.getString("step_id");
+                if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("") && auxTotal.containsKey(rs.getInt("objective_id"))) {
                     List<String> ste = Arrays.asList(stsdone.split(","));
-                    double percent = (ste.size() * 100) / auxTotal.get(rs2.getInt("objective_id"));
-                    result.put(rs2.getInt("student_id") + "_" + rs2.getInt("objective_id"), "" + percent);
+                    double percent = (ste.size() * 100) / auxTotal.get(rs.getInt("objective_id"));
+                    result.put(rs.getInt("student_id") + "_" + rs.getInt("objective_id"), "" + percent);
                 }
             }
         } catch (SQLException ex) {
@@ -1562,49 +2292,138 @@ String server = DBConect.serverFtp;
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return result;
     }
 
     public String getnoofplannedlessons(String objid, String studid) throws SQLException {
         String result = "";
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select count(id) from lesson_stud_att where student_id = '" + studid + "' and lesson_id in (select id from lessons where objective_id ='" + objid + "' and COALESCE(archive, FALSE) = FALSE);");
-
-            while (rs1.next()) {
-                result = "" + rs1.getInt("count");
+            rs = stAux.executeQuery("select count(id) from lesson_stud_att where student_id = '" + studid + "' and lesson_id in (select id from lessons where objective_id ='" + objid + "' and COALESCE(archive, FALSE) = FALSE);");
+            while (rs.next()) {
+                result = "" + rs.getInt("count");
             }
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return result;
     }
 
     public String getnoofarchivedlessons(String objid, String studid) throws SQLException {
         String result = "";
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select count(id) from lesson_stud_att where student_id = '" + studid + "' and lesson_id in (select id from lessons where objective_id ='" + objid + "' and archive = TRUE);");
+            rs = stAux.executeQuery("select count(id) from lesson_stud_att where student_id = '" + studid + "' and lesson_id in (select id from lessons where objective_id ='" + objid + "' and archive = TRUE);");
 
-            while (rs1.next()) {
-                result = "" + rs1.getInt("count");
+            while (rs.next()) {
+                result = "" + rs.getInt("count");
             }
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return result;
     }
 
     public String getfinalrating(String objid, String studid) throws SQLException {
         String result = "";
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String consulta = "SELECT rating.name FROM rating where id in"
                     + "(select rating_id from progress_report where student_id = '" + studid + "'"
                     + " AND comment_date = (select max(comment_date)   from public.progress_report "
@@ -1612,15 +2431,38 @@ String server = DBConect.serverFtp;
                     + " and rating_id not in(6,7)) "
                     + "AND objective_id ='" + objid + "' )";
 
-            ResultSet rs2 = DBConect.eduweb.executeQuery(consulta);
-            while (rs2.next()) {
-                result = rs2.getString("name");
+            rs = stAux.executeQuery(consulta);
+            while (rs.next()) {
+                result = rs.getString("name");
             }
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return result;
     }
@@ -1628,16 +2470,23 @@ String server = DBConect.serverFtp;
     public String getpercent(String objid, String studid) throws SQLException {
         String result = "";
         int count = 0;
-        try {
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select count(id) from obj_steps where obj_id = '" + objid + "'");
-            while (rs1.next()) {
-                count = rs1.getInt("count");
+        try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("select count(id) from obj_steps where obj_id = '" + objid + "'");
+            while (rs.next()) {
+                count = rs.getInt("count");
             }
 
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select comment_date,step_id from progress_report where objective_id='" + objid + "' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '" + studid + "' AND objective_id = '" + objid + "' and generalcomment = false) and generalcomment = false");
-            if (rs2.next()) {
-                String stsdone = rs2.getString("step_id");
+            rs = stAux.executeQuery("select comment_date,step_id from progress_report where objective_id='" + objid + "' AND comment_date = (select max(comment_date) from public.progress_report where student_id = '" + studid + "' AND objective_id = '" + objid + "' and generalcomment = false) and generalcomment = false");
+            if (rs.next()) {
+                String stsdone = rs.getString("step_id");
                 if (stsdone != null && !stsdone.equals("null") && !stsdone.equals("")) {
                     List<String> ste = Arrays.asList(stsdone.split(","));
                     double percent = (ste.size() * 100) / count;
@@ -1649,7 +2498,31 @@ String server = DBConect.serverFtp;
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ProgressbyStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
+
         return result;
     }
 }

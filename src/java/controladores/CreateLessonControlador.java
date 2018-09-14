@@ -20,6 +20,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.google.gson.*;
 import static controladores.ProgressbyStudent.getNextDate;
 import static controladores.ProgressbyStudent.log;
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.DateFormat;
@@ -59,11 +61,24 @@ public class CreateLessonControlador {
         if ((new SessionCheck()).checkSession(hsr)) {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
+
+        Connection conRW = null,conLocal = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         ModelAndView mv = new ModelAndView("createlesson");
         try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            conRW = pool_renweb.getConnection();
+            
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            conLocal = pool_local.getConnection();
+            
+            stAux = conRW.createStatement();
+
             List<Lessons> ideas = new ArrayList();
             mv.addObject("listaAlumnos", Students.getStudents(log));
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
+            rs = stAux.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
             List<Level> grades = new ArrayList();
             Level l = new Level();
             l.setName("Select level");
@@ -79,40 +94,45 @@ public class CreateLessonControlador {
                 x.setName(rs.getString("GradeLevel"));
                 grades.add(x);
             }
-            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT * FROM public.method");
+
+            stAux = conLocal.createStatement();
+            rs = stAux.executeQuery("SELECT * FROM public.method");
             List<Method> methods = new ArrayList();
             Method m = new Method();
             m.setName("Select Method");
             methods.add(m);
-            while (rs1.next()) {
+            while (rs.next()) {
                 Method x = new Method();
                 String[] ids = new String[1];
-                ids[0] = "" + rs1.getInt("id");
+                ids[0] = "" + rs.getInt("id");
                 x.setId(ids);
-                x.setName(rs1.getString("name"));
-                x.setDescription(rs1.getString("description"));
+                x.setName(rs.getString("name"));
+                x.setDescription(rs.getString("description"));
                 methods.add(x);
             }
             mv.addObject("gradelevels", grades);
             mv.addObject("methods", methods);
             //get lesson ideas
-            ResultSet rs2 = DBConect.eduweb.executeQuery("SELECT * FROM public.lessons where idea = true");
+            rs = stAux.executeQuery("SELECT * FROM public.lessons where idea = true");
             Lessons d = new Lessons();
             d.setName("Select an idea");
             d.setId(-1);
             ideas.add(d);
-            while (rs2.next()) {
+            while (rs.next()) {
                 Lessons idea = new Lessons();
-                idea.setId(rs2.getInt("id"));
-                idea.setName(rs2.getString("name"));
+                idea.setId(rs.getInt("id"));
+                idea.setName(rs.getString("name"));
                 ideas.add(idea);
             }
             mv.addObject("ideas", ideas);
+            conLocal.close();
+            conRW.close();
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
-        }
+        }  
+
         return mv;
     }
 
@@ -121,11 +141,22 @@ public class CreateLessonControlador {
         if ((new SessionCheck()).checkSession(hsr)) {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
+        Connection conRW = null,conLocal = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         ModelAndView mv = new ModelAndView("lessonidea");
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            conLocal = pool_local.getConnection();
+            
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            conRW = pool_renweb.getConnection();
+            
+            stAux = conRW.createStatement();
+
             List<Lessons> ideas = new ArrayList();
             mv.addObject("listaAlumnos", Students.getStudents(log));
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
+            rs = stAux.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
             List<Level> grades = new ArrayList();
             Level l = new Level();
             l.setName("Select level");
@@ -138,36 +169,42 @@ public class CreateLessonControlador {
                 x.setName(rs.getString("GradeLevel"));
                 grades.add(x);
             }
-            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT * FROM public.method");
+
+            
+            stAux = conLocal.createStatement();
+
+            rs = stAux.executeQuery("SELECT * FROM public.method");
             List<Method> methods = new ArrayList();
             Method m = new Method();
             m.setName("Select Method");
             methods.add(m);
-            while (rs1.next()) {
+            while (rs.next()) {
                 Method x = new Method();
                 String[] ids = new String[1];
-                ids[0] = "" + rs1.getInt("id");
+                ids[0] = "" + rs.getInt("id");
                 x.setId(ids);
-                x.setName(rs1.getString("name"));
-                x.setDescription(rs1.getString("description"));
+                x.setName(rs.getString("name"));
+                x.setDescription(rs.getString("description"));
                 methods.add(x);
             }
             mv.addObject("gradelevels", grades);
             mv.addObject("methods", methods);
             //get lesson ideas
-            ResultSet rs2 = DBConect.eduweb.executeQuery("SELECT * FROM public.lessons where idea = true");
-            while (rs2.next()) {
+            rs = stAux.executeQuery("SELECT * FROM public.lessons where idea = true");
+            while (rs.next()) {
                 Lessons idea = new Lessons();
-                idea.setId(rs2.getInt("id"));
-                idea.setName(rs2.getString("name"));
+                idea.setId(rs.getInt("id"));
+                idea.setName(rs.getString("name"));
                 ideas.add(idea);
             }
             mv.addObject("ideas", ideas);
+            conLocal.close();
+            conRW.close();
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
-        }
+        }  
 
         return mv;
     }
@@ -201,7 +238,7 @@ public class CreateLessonControlador {
     @RequestMapping("/createlesson/objectivelistSubject.htm")
     @ResponseBody
     public String objectivelistSubject(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-        return (new Gson()).toJson(this.getObjectives(hsr.getSession(),hsr.getParameterValues("seleccion2")));
+        return (new Gson()).toJson(this.getObjectives(hsr.getSession(), hsr.getParameterValues("seleccion2")));
     }
 
     @RequestMapping("/createlesson/contentlistObjective.htm")
@@ -242,8 +279,8 @@ public class CreateLessonControlador {
             String objName = hsr.getParameter("objectiveName");
             String studNames = hsr.getParameter("studentsName");
 
-            String termId =  hsr.getParameter("termId");
-            String yearId =  hsr.getParameter("yearId");
+            String termId = hsr.getParameter("termId");
+            String yearId = hsr.getParameter("yearId");
             //optional field, avoid null pointer exception
             if (test != null && test.length > 0) {
                 contentids = Arrays.asList(hsr.getParameterValues("TXTcontent"));
@@ -280,7 +317,7 @@ public class CreateLessonControlador {
 
             if (ideaCheck != null) {
                 if (ideaCheck[0].equals("on")) {
-                    c.newidea(hsr, note, newlesson,termId,yearId);
+                    c.newidea(hsr, note, newlesson, termId, yearId);
                     message = "Presentation idea created";
                 }
             } else {
@@ -290,7 +327,7 @@ public class CreateLessonControlador {
 
                 newlesson.setStart("" + timestampstart);
                 newlesson.setFinish("" + timestampend);
-                c.newlesson(hsr, note, studNames, studentIds, newlesson,termId,yearId);
+                c.newlesson(hsr, note, studNames, studentIds, newlesson, termId, yearId);
                 message = "Presentation created";
             }
 
@@ -311,12 +348,18 @@ public class CreateLessonControlador {
         }
         ModelAndView mv = new ModelAndView("createlesson");
         List<Lessons> lessons = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
 
             String subjectid = null;
             subjectid = hsr.getParameter("seleccionTemplate");
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from lesson_plan where subject_id= " + subjectid);
+            ResultSet rs1 = stAux.executeQuery("select name,id from lesson_plan where subject_id= " + subjectid);
             Lessons l = new Lessons();
             l.setName("Select lesson name");
             lessons.add(l);
@@ -332,6 +375,25 @@ public class CreateLessonControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         mv.addObject("lessons", lessons);
@@ -353,14 +415,22 @@ public class CreateLessonControlador {
         int levelid = 0;
         List<String> contents = new ArrayList<>();
         DriverManagerDataSource dataSource;
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
             String[] oid = new String[1];
             String[] sid = new String[1];
             String[] mid = new String[1];
             String[] cid = new String[1];
 
             String consulta = "SELECT objective_id,subject_id,level_id,method_id,comments FROM public.lessons where id =" + lessonplanid[0];
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
 
             while (rs.next()) {
                 oid[0] = "" + rs.getInt("objective_id");
@@ -373,12 +443,12 @@ public class CreateLessonControlador {
                 comment = rs.getString("comments");
             }
 
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select content_id from public.lesson_content where lesson_id = " + lessonplanid[0]);
+            rs = stAux.executeQuery("select content_id from public.lesson_content where lesson_id = " + lessonplanid[0]);
 
-            while (rs2.next()) {
+            while (rs.next()) {
                 //  Content eq = new Content();
                 String ids = null;
-                ids = "" + rs2.getInt("content_id");
+                ids = "" + rs.getInt("content_id");
 
                 //   eq.setId(ids);
                 contents.add(ids);
@@ -396,11 +466,30 @@ public class CreateLessonControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         String hi = json.toString();
         String[] ids = new String[1];
         ids[0] = "" + levelid;
-        json.put("objectiveslist", new Gson().toJson(this.getObjectives(hsr.getSession(),sub.getId())));
+        json.put("objectiveslist", new Gson().toJson(this.getObjectives(hsr.getSession(), sub.getId())));
         json.put("contentslist", new Gson().toJson(this.getContent(obj.getId())));
         json.put("subjectslist", new Gson().toJson(this.getSubjects(ids)));
 
@@ -412,14 +501,43 @@ public class CreateLessonControlador {
     @ResponseBody
     public String loadRecommend(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         int objId = r.getId();
         ArrayList<String> studentIds = new ArrayList<>();
 
-        ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where id_objective=" + objId);
-        while (rs2.next()) {//existe
-            studentIds.add("" + rs2.getInt("id_student"));
+        try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            
+            rs = stAux.executeQuery("select * from recommendations where id_objective=" + objId);
+            while (rs.next()) {//existe
+                studentIds.add("" + rs.getInt("id_student"));
+            }
+        } catch (SQLException e) {
+            System.err.println("");
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
-
         return new Gson().toJson(studentIds);
     }
 
@@ -431,28 +549,35 @@ public class CreateLessonControlador {
         HashMap<String, String> mapSubject = new HashMap<String, String>();
         String termid = null;
         String yearid = null;
-
+        
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+        
         try {
-            ResultSet rs = DBConect.ah.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where configschoolid = 1");
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+            rs = stAux.executeQuery("select defaultyearid,defaulttermid from ConfigSchool where configschoolid = 1");
             while (rs.next()) {
                 termid = "" + rs.getInt("defaulttermid");
                 yearid = "" + rs.getInt("defaultyearid");
             }
-            ResultSet rs1 = DBConect.ah.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from courses where courses.active = 1 and courses.reportcard = 1 order by title DESC " );// the term and year need to be dynamic, check with vincent
+            rs = stAux.executeQuery("select distinct courses.courseid,courses.rcplacement, courses.title, courses.active from courses where courses.active = 1 and courses.reportcard = 1 order by title DESC ");// the term and year need to be dynamic, check with vincent
 
             String name9, id;
-            while (rs1.next()) {
-                name9 = rs1.getString("Title");
-                id = rs1.getString("CourseID");
+            while (rs.next()) {
+                name9 = rs.getString("Title");
+                id = rs.getString("CourseID");
                 mapSubject.put(id, name9);
             }
 
-            ResultSet rs4 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
+            rs = stAux.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
 
-            while (rs4.next()) {
+            while (rs.next()) {
                 Subject sub = new Subject();
                 String[] ids = new String[1];
-                ids[0] = "" + rs4.getInt("CourseID");
+                ids[0] = "" + rs.getInt("CourseID");
                 sub.setId(ids);
                 subjects.add(sub);
             }
@@ -476,32 +601,62 @@ public class CreateLessonControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(CreateLessonControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(CreateLessonControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         return activesubjects;
     }
 
-    public static ArrayList<Objective> getObjectives(HttpSession session,String[] subjectid) throws SQLException {
+    public static ArrayList<Objective> getObjectives(HttpSession session, String[] subjectid) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            
             String consulta = "select name,id from public.objective where subject_id='" + subjectid[0] + "' and COALESCE(reportcard, FALSE) = FALSE "
-//                    + " and year_id=" + session.getAttribute("yearId")
-//                    + " and term_id=" + session.getAttribute("termId")
+                    //                    + " and year_id=" + session.getAttribute("yearId")
+                    //                    + " and term_id=" + session.getAttribute("termId")
                     + " order by name";
-            ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             Objective s = new Objective();
             s.setName("Select Objective");
-               String[] aux = new String[1];
+            String[] aux = new String[1];
             aux[0] = "-1";
             s.setId(aux);
             objectives.add(s);
 
-            while (rs1.next()) {
+            while (rs.next()) {
                 String[] ids = new String[1];
                 Objective sub = new Objective();
-                ids[0] = "" + rs1.getInt("id");
+                ids[0] = "" + rs.getInt("id");
                 sub.setId(ids);
-                sub.setName(rs1.getString("name"));
+                sub.setName(rs.getString("name"));
                 objectives.add(sub);
             }
 
@@ -510,22 +665,52 @@ public class CreateLessonControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(CreateLessonControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(CreateLessonControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return objectives;
     }
 
     public ArrayList<Content> getContent(String[] objectiveid) throws SQLException {
         ArrayList<Content> contents = new ArrayList<>();
+          Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+        
         try {
-            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id =" + objectiveid[0] + ")");
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            rs = stAux.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id =" + objectiveid[0] + ")");
 
-            while (rs1.next()) {
+            while (rs.next()) {
                 Content eq = new Content();
                 String[] id = new String[1];
-                id[0] = "" + rs1.getInt("id");
+                id[0] = "" + rs.getInt("id");
 
                 eq.setId(id);
-                eq.setName(rs1.getString("name"));
+                eq.setName(rs.getString("name"));
                 contents.add(eq);
             }
 
@@ -534,6 +719,29 @@ public class CreateLessonControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(CreateLessonControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(CreateLessonControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return contents;
     }

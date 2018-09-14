@@ -1,13 +1,17 @@
 package controladores;
 
-import Montessori.DBConect;
+import Montessori.BambooConfig;
+
+import Montessori.PoolC3P0_Local;
 import Montessori.User;
 import atg.taglib.json.util.JSONException;
 import atg.taglib.json.util.JSONObject;
+import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -44,12 +48,12 @@ public class ImageObservation extends HttpServlet {
     protected void processResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException {
         String obsdate = request.getParameter("date");
         String obsid = request.getParameter("id");
-        String server = DBConect.serverFtp;
-        int port = DBConect.portFTP;
-        String user = DBConect.userFTP;
-        String pass = DBConect.passFTP;
+        String server = BambooConfig.url_ftp_bamboo;
+        int port = BambooConfig.port_ftp_bamboo;
+        String user = BambooConfig.user_ftp_bamboo;
+        String pass = BambooConfig.pass_ftp_bamboo;
 
-        String filePath = "/" + DBConect.codeSchool + "/Observations/" + obsid + "_" + obsdate + "/";
+        String filePath = "/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations/" + obsid + "_" + obsdate + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
@@ -89,6 +93,11 @@ public class ImageObservation extends HttpServlet {
         String obsjson = request.getParameter("obj");
         JSONObject json = new JSONObject(obsjson);
         String idobs = "";
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         //get the file chosen by the user
         String updateComment = request.getParameter("update");
 
@@ -99,14 +108,18 @@ public class ImageObservation extends HttpServlet {
         }
         InputStream fileInputStream = filePart.getInputStream();
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             HttpSession sesion = request.getSession();
             User user = (User) sesion.getAttribute("user");
 
             String consulta;
             if (updateComment == null) {
                 consulta = "insert into classobserv(logged_by,date_created,comment,category,student_id,commentdate,term_id,yearterm_id,foto,img_name)values('" + user.getId() + "',now(),'" + json.getString("observation") + "','" + json.getString("type") + "','" + json.getString("studentid") + "','" + json.getString("date") + "','" + json.getString("termId") + "','" + json.getString("yearId") + "'," + photoBoolean + ",'" + filePart.getSubmittedFileName() + "')";
-                DBConect.eduweb.executeUpdate(consulta, Statement.RETURN_GENERATED_KEYS);
-                ResultSet rs = DBConect.eduweb.getGeneratedKeys();
+                stAux.executeUpdate(consulta, Statement.RETURN_GENERATED_KEYS);
+                rs = stAux.getGeneratedKeys();
                 while (rs.next()) {
                     idobs = rs.getString("id");
                 }
@@ -117,7 +130,7 @@ public class ImageObservation extends HttpServlet {
                 }
 
                 consulta = "update classobserv set date_created = now(), comment = '" + json.getString("observation") + "' ,img_name = '" + filePart.getSubmittedFileName() + "' ,category = '" + json.getString("type") + "', commentdate = '" + json.getString("dateString") + "' " + photoUpdateBoolean + " where id = '" + json.getString("id") + "'";
-                DBConect.eduweb.executeUpdate(consulta);
+                stAux.executeUpdate(consulta);
                 idobs = json.getString("id");
             }
 
@@ -125,26 +138,47 @@ public class ImageObservation extends HttpServlet {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
 
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(ImageObservation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         ResourcesControlador rCont = new ResourcesControlador();
         //get the InputStream to store the file somewhere
-String server = DBConect.serverFtp;
-            int port = DBConect.portFTP;
-            String user = DBConect.userFTP;
-            String pass = DBConect.passFTP;
+        String server = BambooConfig.url_ftp_bamboo;
+        int port = BambooConfig.port_ftp_bamboo;
+        String user = BambooConfig.user_ftp_bamboo;
+        String pass = BambooConfig.pass_ftp_bamboo;
 
         FTPClient ftpClient = new FTPClient();
         try {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            ftpClient.mkd("/" + DBConect.codeSchool + "/Observations/");
-            String rutaCompleta = "/" + DBConect.codeSchool + "/Observations/" + idobs;
+            ftpClient.mkd("/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations/");
+            String rutaCompleta = "/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations/" + idobs;
 
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/" + DBConect.codeSchool + "/Observations");
+                ftpClient.changeWorkingDirectory("/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations");
                 ftpClient.mkd(idobs);
                 ftpClient.changeWorkingDirectory(idobs);
 

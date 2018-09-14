@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.beans.PropertyVetoException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
@@ -67,8 +68,14 @@ public class SOWTreeControlador {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
         ModelAndView mv = new ModelAndView("sowdisplay");
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+            rs = stAux.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
             List<Level> grades = new ArrayList();
             Level l = new Level();
             l.setName("Select level");
@@ -86,6 +93,25 @@ public class SOWTreeControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return mv;
     }
@@ -99,18 +125,30 @@ public class SOWTreeControlador {
         ArrayList<String> subjects = new ArrayList<>();
         ArrayList<String> objectives = new ArrayList<>();
         Tree tree = new Tree();
+
+        Connection conRW = null, conLocal = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         Node<String> rootNode = new Node<String>("Subjects", "A", " {\"disabled\":true}");
         try {
 
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+
+            conRW = pool_renweb.getConnection();
+            conLocal = pool_local.getConnection();
+
+            stAux = conRW.createStatement();
             String idHash;
             String consulta = "SELECT Title,Active,CourseID FROM Courses", name;
-            ResultSet rs4 = DBConect.ah.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             HashMap<String, String> mapSubject = new HashMap<String, String>();
 
-            while (rs4.next()) {
-                if (rs4.getBoolean("Active")) {
-                    name = rs4.getString("Title");
-                    idHash = "" + rs4.getInt("CourseID");
+            while (rs.next()) {
+                if (rs.getBoolean("Active")) {
+                    name = rs.getString("Title");
+                    idHash = "" + rs.getInt("CourseID");
                     mapSubject.put(idHash, name);
                 }
             }
@@ -119,15 +157,18 @@ public class SOWTreeControlador {
             //ArrayList<Subject> subs = this.getSubjects(levelid);
             ArrayList<Subject> subs = this.getSubjectsHashMap(mapSubject, levelid);
 //////
+
+            stAux = conLocal.createStatement();
+
             for (Subject sub : subs) {
                 String[] sid = sub.getId();
                 consulta = "select obj_steps.id,obj_steps.name,objective.name as "
-                                + "obj ,objective.subject_id from obj_steps inner join objective "
-                                + "on obj_steps.obj_id = objective.id "
-                                + "where objective.subject_id = '" + sid[0] + "' ";//need to think how we will apply the term in the objective
+                        + "obj ,objective.subject_id from obj_steps inner join objective "
+                        + "on obj_steps.obj_id = objective.id "
+                        + "where objective.subject_id = '" + sid[0] + "' ";//need to think how we will apply the term in the objective
 //                                + "and objective.year_id="+hsr.getSession().getAttribute("yearId")
 //                                +" and objective.term_id="+hsr.getSession().getAttribute("termId");
-                ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+                rs = stAux.executeQuery(consulta);
 
                 while (rs.next()) {
                     DBRecords l = new DBRecords();
@@ -179,7 +220,7 @@ public class SOWTreeControlador {
                 Node<String> nodeC = new Node<String>(x.getName(), "L" + i, " {\"disabled\":true}");
                 rootNode.addChild(nodeC);
                 i++;
-                ArrayList<Objective> obj = this.getObjectives(hsr.getSession(),x.getId());
+                ArrayList<Objective> obj = this.getObjectives(hsr.getSession(), x.getId());
                 for (Objective y : obj) {
 
                     Node<String> nodeA = new Node<String>(y.getName(), "C" + z, " {\"disabled\":true}");
@@ -205,6 +246,8 @@ public class SOWTreeControlador {
                 }
 
             }
+            conLocal.close();
+            conRW.close();
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);
             StringWriter errors = new StringWriter();
@@ -259,9 +302,16 @@ public class SOWTreeControlador {
 
         ArrayList<Subject> subjects = new ArrayList<>();
         ArrayList<Subject> activesubjects = new ArrayList<>();
-        try {
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
-            ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
+        try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
+            ResultSet rs1 = stAux.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
             Subject s = new Subject();
             s.setName("Select Subject");
             subjects.add(s);
@@ -286,6 +336,29 @@ public class SOWTreeControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(SOWTreeControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(SOWTreeControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return activesubjects;
     }
@@ -294,17 +367,25 @@ public class SOWTreeControlador {
 
         ArrayList<Subject> subjects = new ArrayList<>();
         ArrayList<Subject> activesubjects = new ArrayList<>();
-        try {
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
-            ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
+        try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
             Subject s = new Subject();
             s.setName("Select Subject");
             subjects.add(s);
 
-            while (rs1.next()) {
+            while (rs.next()) {
                 Subject sub = new Subject();
                 String[] ids = new String[1];
-                ids[0] = "" + rs1.getInt("CourseID");
+                ids[0] = "" + rs.getInt("CourseID");
                 sub.setId(ids);
 
                 subjects.add(sub);
@@ -312,10 +393,10 @@ public class SOWTreeControlador {
             for (Subject su : subjects.subList(1, subjects.size())) {
                 String[] ids = new String[1];
                 ids = su.getId();
-                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where CourseID = '" + ids[0]+"' order by Title");
-                while (rs2.next()) {
-                    if (rs2.getBoolean("Active") == true) {
-                        su.setName(rs2.getString("Title"));
+                rs = stAux.executeQuery("select Title,Active from Courses where CourseID = '" + ids[0] + "' order by Title");
+                while (rs.next()) {
+                    if (rs.getBoolean("Active") == true) {
+                        su.setName(rs.getString("Title"));
                         activesubjects.add(su);
                     }
                 }
@@ -324,27 +405,55 @@ public class SOWTreeControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(SOWTreeControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(SOWTreeControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return activesubjects;
     }
 
-    public ArrayList<Objective> getObjectives(HttpSession session,String[] subjectid) throws SQLException {
+    public ArrayList<Objective> getObjectives(HttpSession session, String[] subjectid) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
-        try {
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective "
-                    + "where subject_id=" + subjectid[0] + 
-//                    " and year_id="
-//                    + session.getAttribute("yearId") +" and term_id="+session.getAttribute("termId")+
+        try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance(); 
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            rs = stAux.executeQuery("select name,id from public.objective "
+                    + "where subject_id=" + subjectid[0]
+                    + //                    " and year_id="
+                    //                    + session.getAttribute("yearId") +" and term_id="+session.getAttribute("termId")+
                     " ORDER BY name ASC");
 
-
-            while (rs1.next()) {
+            while (rs.next()) {
                 String[] ids = new String[1];
                 Objective sub = new Objective();
-                ids[0] = "" + rs1.getInt("id");
+                ids[0] = "" + rs.getInt("id");
                 sub.setId(ids);
-                sub.setName(rs1.getString("name"));
+                sub.setName(rs.getString("name"));
                 objectives.add(sub);
             }
 
@@ -353,6 +462,29 @@ public class SOWTreeControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(SOWTreeControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(SOWTreeControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return objectives;
     }

@@ -307,8 +307,8 @@
 				<textFieldExpression><![CDATA[$F{term}.split("#")[0]]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="19" y="18" width="127" height="114" uuid="1000a543-6871-480f-8ab6-1c4e08b873f6"/>
-				<imageExpression><![CDATA["https://ah-zaf.client.renweb.com/ftp/ah-zaf/Customization/-96/AuburnHouse.PNG"]]></imageExpression>
+				<reportElement x="18" y="18" width="127" height="115" uuid="72ab2deb-2ef5-4668-83c6-706b0d22b036"/>
+				<imageExpression><![CDATA["ftp://david:david@ftp02.eduwebgroup.com/AH-ZAF/configSchool/logo.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -410,7 +410,7 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true">
-								<reportElement stretchType="ContainerHeight" x="0" y="0" width="397" height="30" uuid="5e167e4c-778d-4873-b630-2bb4b7970689">
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="397" height="30" uuid="5e167e4c-778d-4873-b630-2bb4b7970689">
 									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 									<property name="com.jaspersoft.studio.unit.spacingAfter" value="cm"/>
 								</reportElement>

@@ -6,12 +6,13 @@
 package controladores;
 
 import Montessori.CommentObjective;
-import Montessori.DBConect;
-import static Montessori.DBConect.eduweb;
+import Montessori.BambooConfig;
 import Montessori.DBRecords;
 import Montessori.Level;
 import Montessori.Objective;
 import Montessori.Observation;
+import Montessori.PoolC3P0_Local;
+import Montessori.PoolC3P0_RenWeb;
 import Montessori.Resource;
 import Montessori.Step;
 import Montessori.Students;
@@ -25,7 +26,9 @@ import com.google.gson.Gson;
 //import com.sun.org.apache.xml.internal.security.utils.Base64;
 import java.util.Base64;
 import static controladores.ProgressbyStudent.log;
+import java.beans.PropertyVetoException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -77,9 +80,16 @@ public class ObservationControlador {
         HashMap<String, String> mapPersons = new HashMap<String, String>();
         ModelAndView mv = new ModelAndView("observations");
         List<Level> grades = new ArrayList();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
             mv.addObject("listaAlumnos", Students.getStudents(log));
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels order by gradelevel ASC");
+            rs = stAux.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels order by gradelevel ASC");
 
             Level l = new Level();
             l.setName("Select level");
@@ -93,14 +103,14 @@ public class ObservationControlador {
                 grades.add(x);
             }
 
-            ResultSet rs7 = DBConect.ah.executeQuery("select * from Staff");
+            rs = stAux.executeQuery("select * from Staff");
             // ResultSet rs4 = st.executeQuery(consulta);
 
             String first, lastName, staffID;
-            while (rs7.next()) {
-                first = rs7.getString("firstName");
-                lastName = rs7.getString("lastName");
-                staffID = rs7.getString("personid");
+            while (rs.next()) {
+                first = rs.getString("firstName");
+                lastName = rs.getString("lastName");
+                staffID = rs.getString("personid");
                 mapPersons.put(staffID, lastName + ", " + first);
             }
 
@@ -108,6 +118,25 @@ public class ObservationControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         mv.addObject("gradelevels", grades);
@@ -139,7 +168,7 @@ public class ObservationControlador {
     public String getsubjects(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
         String id = hsr.getParameter("idstudent");
         JSONObject json = new JSONObject();
-        List<Subject> subs = ProgressbyStudent.getSubjects(Integer.parseInt(id), hsr,"2","59");
+        List<Subject> subs = ProgressbyStudent.getSubjects(Integer.parseInt(id), hsr, "2", "59");
         Subject sub = new Subject();
         sub.setName("Select Subject");
         String[] s = new String[1];
@@ -192,54 +221,63 @@ public class ObservationControlador {
         ArrayList<CommentObjective> comments = new ArrayList<>();
         HttpSession sesion;
         sesion = hsr.getSession();
- 
+
         String termId = "" + hsr.getParameter("termId");
         String yearId = "" + hsr.getParameter("yearId");
         JSONObject json = new JSONObject();
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
             HashMap<Integer, String> lessons = new HashMap<>();
             String consulta = "select id,name from lessons where term_id=" + termId + " and yearterm_id=" + yearId;
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             while (rs.next()) {
                 lessons.put(rs.getInt(1), rs.getString(2));
             }
 
-            consulta = "select * from progress_report inner join rating on progress_report.rating_id = rating.id where objective_id=" + idobjective + " and student_id=" + idstudent + " and term_id=" + termId + " and yearterm_id=" + yearId + /*" and lesson_id is null*/" ORDER BY comment_date DESC";
-            rs = DBConect.eduweb.executeQuery(consulta);
+            consulta = "select * from progress_report inner join rating on progress_report.rating_id = rating.id where objective_id=" + idobjective + " and student_id=" + idstudent + " and term_id=" + termId + " and yearterm_id=" + yearId + /*" and lesson_id is null*/ " ORDER BY comment_date DESC";
+            rs = stAux.executeQuery(consulta);
             while (rs.next()) {
-                String auxName ="";
-                if( lessons.containsKey(rs.getInt("lesson_id")))
+                String auxName = "";
+                if (lessons.containsKey(rs.getInt("lesson_id"))) {
                     auxName = lessons.get(rs.getInt("lesson_id"));
-                
+                }
+
                 comments.add(new CommentObjective(rs.getString("id"),
-                                rs.getString("rating_id"), rs.getString("student_id"),
-                                rs.getString("comment"), rs.getString("comment_date"),
-                                rs.getString("objective_id"), rs.getBoolean("generalcomment"),
-                                rs.getString("step_id"), rs.getString("createdby"),
-                                rs.getString("modifyby"), rs.getString("term_id"),
-                                rs.getString("yearterm_id"), rs.getString("colorcode"),
-                                auxName));
+                        rs.getString("rating_id"), rs.getString("student_id"),
+                        rs.getString("comment"), rs.getString("comment_date"),
+                        rs.getString("objective_id"), rs.getBoolean("generalcomment"),
+                        rs.getString("step_id"), rs.getString("createdby"),
+                        rs.getString("modifyby"), rs.getString("term_id"),
+                        rs.getString("yearterm_id"), rs.getString("colorcode"),
+                        auxName));
             }
             for (CommentObjective c : comments) {
-                ResultSet rs1 = DBConect.eduweb.executeQuery("select name from rating where id = " + c.getRating_id() + "");
-                while (rs1.next()) {
-                    c.setRating_name(rs1.getString("name"));
+                rs = stAux.executeQuery("select name from rating where id = " + c.getRating_id() + "");
+                while (rs.next()) {
+                    c.setRating_name(rs.getString("name"));
                 }
             }
 
             List<Step> steps = new ArrayList<>();
-            ResultSet rs3 = DBConect.eduweb.executeQuery("select name,id,storder from obj_steps where obj_id =" + idobjective);
-            while (rs3.next()) {
+            rs = stAux.executeQuery("select name,id,storder from obj_steps where obj_id =" + idobjective);
+            while (rs.next()) {
                 Step s = new Step();
-                s.setName(rs3.getString("name"));
-                s.setId("" + rs3.getInt("id"));
-                s.setOrder(rs3.getInt("storder"));
+                s.setName(rs.getString("name"));
+                s.setId("" + rs.getInt("id"));
+                s.setOrder(rs.getInt("storder"));
                 steps.add(s);
             }
             String recommend = "false";
 
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where  id_student = " + idstudent + " and id_objective=" + idobjective);
-            if (rs2.next()) {
+            rs = stAux.executeQuery("select * from recommendations where  id_student = " + idstudent + " and id_objective=" + idobjective);
+            if (rs.next()) {
                 recommend = "true";
             }
 
@@ -250,6 +288,29 @@ public class ObservationControlador {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (JSONException ex) {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return json.toString();
     }
@@ -272,21 +333,28 @@ public class ObservationControlador {
         String rating = hsr.getParameter("rating");
         String step = hsr.getParameter("step");
         String cbUseGrade = hsr.getParameter("cbUseGrade");
-        
+
         String termId = "" + hsr.getParameter("termId");
         String yearId = "" + hsr.getParameter("yearId");
-        
+
         HttpSession sesion;
         sesion = hsr.getSession();
-        
-    
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         User user = (User) sesion.getAttribute("user");
         String ratingid = null;
         try {
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select id from obj_steps where obj_id = '" + idobjective + "' order by storder");
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("select id from obj_steps where obj_id = '" + idobjective + "' order by storder");
             ArrayList<String> allsteps = new ArrayList();
-            while (rs2.next()) {
-                allsteps.add("" + rs2.getInt("id"));
+            while (rs.next()) {
+                allsteps.add("" + rs.getInt("id"));
             }
             if (!step.equals("0") && !allsteps.isEmpty() && !step.equals("")) {
                 ArrayList<String> al2 = new ArrayList<String>(allsteps.subList(0, (Integer.parseInt(step))));
@@ -299,20 +367,20 @@ public class ObservationControlador {
                 step = rString.toString();
                 step = step.substring(0, step.length() - 1);
             }
-           // checkFirstCommentLessons(idstudent, idobjective, comment, ratingid, step, "" + sesion.getAttribute("yearId"), "" + sesion.getAttribute("termId"), "" + user.getId(), hsr);
+            // checkFirstCommentLessons(idstudent, idobjective, comment, ratingid, step, "" + sesion.getAttribute("yearId"), "" + sesion.getAttribute("termId"), "" + user.getId(), hsr);
 
             String consulta = "select id from rating where name = '" + rating + "'";
-            ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
-            while (rs1.next()) {
-                ratingid = "" + rs1.getInt("id");
+            rs = stAux.executeQuery(consulta);
+            while (rs.next()) {
+                ratingid = "" + rs.getInt("id");
             }
             if (ratingid != null) {
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + ratingid + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + termId + "," + yearId + ")");
+                stAux.executeUpdate("insert into progress_report(comment_date,comment,rating_id,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + ratingid + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + termId + "," + yearId + ")");
             } else {
-                DBConect.eduweb.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + termId + "," + yearId + ")");
+                stAux.executeUpdate("insert into progress_report(comment_date,comment,student_id,objective_id,generalcomment,step_id,createdby,term_id,yearterm_id) values (now(),'" + comment + "','" + idstudent + "','" + idobjective + "'," + cbUseGrade + ",'" + step + "','" + user.getId() + "'," + termId + "," + yearId + ")");
             }
 
-           /* if (!cbUseGrade.equals("true")) {
+            /* if (!cbUseGrade.equals("true")) {
                 String aux = "UPDATE progress_report"
                         + " SET rating_id=" + ratingid + " , step_id= '" + step
                         + "' WHERE objective_id=" + idobjective + " and lesson_id is not null and student_id=" + idstudent + " and term_id=" + sesion.getAttribute("termId") + " and yearterm_id=" + sesion.getAttribute("yearId");
@@ -321,10 +389,35 @@ public class ObservationControlador {
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             return "error";
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
+
         return "succes";
     }
 
+    /*
     private void checkFirstCommentLessons(String idStudent, String idObjective, String comment, String rating, String step, String yearId, String termId, String userId, HttpServletRequest hsr) throws SQLException {
 
         String auxCheck1 = "select * from  progress_report where objective_id=" + idObjective + " and lesson_id is not null and student_id=" + idStudent + " and term_id=" + termId + " and yearterm_id=" + yearId;
@@ -379,22 +472,31 @@ public class ObservationControlador {
         }
 
     }
-
+     */
     @RequestMapping("/observations/loadComentsStudent.htm")
     @ResponseBody
     public String loadComentsStudent(@RequestBody Observation r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
-        ResultSet rs7 = DBConect.ah.executeQuery("select lastname,firstname,personid from person");
+        PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+        PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+
+        con = pool_renweb.getConnection();
+        stAux = con.createStatement();
+
+        rs = stAux.executeQuery("select lastname,firstname,personid from person");
         // ResultSet rs4 = st.executeQuery(consulta);
         HashMap<String, String> mapPersons = new HashMap<String, String>();
         String first, LastName, studentID;
-        while (rs7.next()) {
-            first = rs7.getString("firstName");
-            LastName = rs7.getString("lastName");
-            studentID = rs7.getString("personid");
+        while (rs.next()) {
+            first = rs.getString("firstName");
+            LastName = rs.getString("lastName");
+            studentID = rs.getString("personid");
             mapPersons.put(studentID, LastName + ", " + first);
         }
-
+        con.close();
         DateFormat formatoFecha;// = new SimpleDateFormat("M/d/yyyy");   
         String date = r.getDateString() + "-01";
 
@@ -421,12 +523,14 @@ public class ObservationControlador {
         String s;
         try {
 
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
             // while (days < DIAS_MAX && !currentDate.equals(dateSelected)) {
             while (days < DIAS_MAX) {
                 //dateSelected = getNextDate(dateSelected);
                 arrayComments.clear();
                 consulta = "SELECT * FROM classobserv WHERE student_id = " + studentId + " AND commentdate = '" + dateSelected + "' ORDER BY commentdate";
-                ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+                rs = stAux.executeQuery(consulta);
 
                 while (rs.next()) {
                     oAux.setId(rs.getInt("id"));
@@ -457,6 +561,25 @@ public class ObservationControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return new Gson().toJson(arrayObservations);
     }
@@ -475,34 +598,60 @@ public class ObservationControlador {
         if ((new SessionCheck()).checkSession(hsr)) {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         ModelAndView mv = new ModelAndView("lessonresources");
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
             String commentId = r.getId();
-
             String consulta = "delete from classobserv where id = " + commentId;
-            DBConect.eduweb.executeUpdate(consulta);
-            String server = DBConect.serverFtp;
-            int port = DBConect.portFTP;
-            String user = DBConect.userFTP;
-            String pass = DBConect.passFTP;
+            stAux.executeUpdate(consulta);
+           String server = BambooConfig.url_ftp_bamboo;
+            int port = BambooConfig.port_ftp_bamboo;
+            String user = BambooConfig.user_ftp_bamboo;
+            String pass = BambooConfig.pass_ftp_bamboo;
 
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
 
-            ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/Observations");
+            ftpClient.changeWorkingDirectory("/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations");
             ftpClient.mkd(commentId);
             ftpClient.changeWorkingDirectory(commentId);
             if (ftpClient.listNames().length > 0) {
                 ftpClient.deleteFile(ftpClient.listNames()[0]);
             }
 
-            ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/Observations");
+            ftpClient.changeWorkingDirectory("/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations");
             ftpClient.removeDirectory(commentId);
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return mv;
     }
@@ -512,12 +661,12 @@ public class ObservationControlador {
     public String getimage(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String obsdate = request.getParameter("date");
         String obsid = request.getParameter("id");
-  String server = DBConect.serverFtp;
-            int port = DBConect.portFTP;
-            String user = DBConect.userFTP;
-            String pass = DBConect.passFTP;
+   String server = BambooConfig.url_ftp_bamboo;
+            int port = BambooConfig.port_ftp_bamboo;
+            String user = BambooConfig.user_ftp_bamboo;
+            String pass = BambooConfig.pass_ftp_bamboo;
 
-        String filePath = "/"+DBConect.codeSchool+"/Observations/" + obsid + "/";
+        String filePath = "/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations/" + obsid + "/";
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(server, port);
         ftpClient.login(user, pass);
@@ -586,25 +735,51 @@ public class ObservationControlador {
     @RequestMapping("/observations/recommendStudent.htm")
     @ResponseBody
     public String recommendStudent(@RequestBody Resource r, HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
-
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            
+            con = pool_local.getConnection();
+            
+            stAux = con.createStatement();
             String objId = r.getId();
             String studentId = r.getName();
-          
+
             String termid = r.getLink();
             String yearterm_id = r.getType();
 
             String consulta = "insert into recommendations(id_student,id_objective,term_id,yearterm_id) values (" + studentId + "," + objId + "," + termid + "," + yearterm_id + ")";
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select * from recommendations where  id_student = " + studentId + " and id_objective=" + objId);
-            if (rs2.next()) {//existe
+            rs = stAux.executeQuery("select * from recommendations where  id_student = " + studentId + " and id_objective=" + objId);
+            if (rs.next()) {//existe
                 consulta = "delete from recommendations where id_student = " + studentId + " and id_objective=" + objId;
             }
-            DBConect.eduweb.executeUpdate(consulta);
+            stAux.executeUpdate(consulta);
 
         } catch (SQLException ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return "success";
     }
@@ -614,28 +789,36 @@ public class ObservationControlador {
         if ((new SessionCheck()).checkSession(hsr)) {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         ModelAndView mv = new ModelAndView("lessonresources");
+
         try {
             String commentId = r.getId();
-
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            
+            stAux = con.createStatement();
             String consulta = "update classobserv set foto = false where id = " + commentId;
-            DBConect.eduweb.executeUpdate(consulta);
 
-            String server = DBConect.serverFtp;
-            int port = DBConect.portFTP;
-            String user = DBConect.userFTP;
-            String pass = DBConect.passFTP;
+            stAux.executeUpdate(consulta);
+
+String server = BambooConfig.url_ftp_bamboo;
+            int port = BambooConfig.port_ftp_bamboo;
+            String user = BambooConfig.user_ftp_bamboo;
+            String pass = BambooConfig.pass_ftp_bamboo;
 
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            ftpClient.mkd("/"+DBConect.codeSchool+"/Observations/");
-            String rutaCompleta = "/"+DBConect.codeSchool+"/Observations/" + commentId;
+            ftpClient.mkd("/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations/");
+            String rutaCompleta = "/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations/" + commentId;
 
             if (!ftpClient.changeWorkingDirectory(rutaCompleta));
             {
-                ftpClient.changeWorkingDirectory("/"+DBConect.codeSchool+"/Observations");
+                ftpClient.changeWorkingDirectory("/" + BambooConfig.nameFolder_ftp_bamboo + "/Observations");
 
                 ftpClient.mkd(commentId);
                 ftpClient.changeWorkingDirectory(commentId);
@@ -648,6 +831,25 @@ public class ObservationControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return mv;
     }
@@ -667,11 +869,20 @@ public class ObservationControlador {
         sesion = hsr.getSession();
         User user = (User) sesion.getAttribute("user");
         String ratingid = null;
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select id from obj_steps where obj_id = '" + idobjective + "' order by storder");
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("select id from obj_steps where obj_id = '" + idobjective + "' order by storder");
             ArrayList<String> allsteps = new ArrayList();
-            while (rs2.next()) {
-                allsteps.add("" + rs2.getInt("id"));
+            while (rs.next()) {
+                allsteps.add("" + rs.getInt("id"));
             }
             if (!step.equals("0") && !allsteps.isEmpty() && !step.equals("")) {
                 ArrayList<String> al2 = new ArrayList<String>(allsteps.subList(0, (Integer.parseInt(step))));
@@ -685,20 +896,43 @@ public class ObservationControlador {
                 step = step.substring(0, step.length() - 1);
             }
             String consulta = "select id from rating where name = '" + rating + "'";
-            ResultSet rs1 = DBConect.eduweb.executeQuery(consulta);
+            ResultSet rs1 = stAux.executeQuery(consulta);
             while (rs1.next()) {
                 ratingid = "" + rs1.getInt("id");
             }
             if (ratingid != null) {
                 consulta = "update progress_report set comment = '" + comment + "',rating_id='" + ratingid + "' ,student_id='" + idstudent + "',objective_id='" + idobjective + "',step_id='" + step + "' where id=" + idcomment;
-                DBConect.eduweb.executeUpdate(consulta);
+                stAux.executeUpdate(consulta);
             } else {
                 consulta = "update progress_report set comment = '" + comment + "' ,student_id='" + idstudent + "',objective_id='" + idobjective + "',step_id='" + step + "' where id=" + idcomment;
-                DBConect.eduweb.executeUpdate(consulta);
+                stAux.executeUpdate(consulta);
             }
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             return "error";
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return "succes";
     }
@@ -714,11 +948,41 @@ public class ObservationControlador {
     @ResponseBody
     public String delComment(HttpServletRequest hsr, HttpServletResponse hsr1) {
         String id = hsr.getParameter("id");
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
-            DBConect.eduweb.executeUpdate("delete from progress_report where id=" + id);
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            stAux.executeUpdate("delete from progress_report where id=" + id);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             return "error";
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(ObservationControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return "succes";
     }

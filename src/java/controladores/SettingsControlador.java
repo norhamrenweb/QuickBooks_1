@@ -6,12 +6,16 @@
 package controladores;
 
 import Montessori.Content;
-import Montessori.DBConect;
+ 
 import Montessori.Level;
 import Montessori.Objective;
+import Montessori.PoolC3P0_Local;
+import Montessori.PoolC3P0_RenWeb;
 import Montessori.Subject;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
@@ -39,22 +43,50 @@ public class SettingsControlador extends MultiActionController {
     public ModelAndView start(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 
         ModelAndView mv = new ModelAndView("settings");
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+        try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
 
-        ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
-        List<Level> grades = new ArrayList();
-        Level l = new Level();
-        l.setName("Select level");
-        grades.add(l);
-        while (rs.next()) {
-            Level x = new Level();
-            String[] ids = new String[1];
-            ids[0] = "" + rs.getInt("GradeLevelID");
-            x.setId(ids);
-            x.setName(rs.getString("GradeLevel"));
-            grades.add(x);
+            rs = stAux.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
+            List<Level> grades = new ArrayList();
+            Level l = new Level();
+            l.setName("Select level");
+            grades.add(l);
+            while (rs.next()) {
+                Level x = new Level();
+                String[] ids = new String[1];
+                ids[0] = "" + rs.getInt("GradeLevelID");
+                x.setId(ids);
+                x.setName(rs.getString("GradeLevel"));
+                grades.add(x);
+            }
+            mv.addObject("gradelevels", grades);
+        } catch (Exception e) {
+
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
-        mv.addObject("gradelevels", grades);
-
         return mv;
     }
 
@@ -64,18 +96,26 @@ public class SettingsControlador extends MultiActionController {
         ModelAndView mv = new ModelAndView("settings");
         List<Subject> subjects = new ArrayList<>();
         List<Subject> activesubjects = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
             String[] levelid = new String[1];
             levelid = hsr.getParameterValues("seleccion1");
-            ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
+            rs = stAux.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
             Subject s = new Subject();
             s.setName("Select Subject");
             subjects.add(s);
 
-            while (rs1.next()) {
+            while (rs.next()) {
                 Subject sub = new Subject();
                 String[] ids = new String[1];
-                ids[0] = "" + rs1.getInt("CourseID");
+                ids[0] = "" + rs.getInt("CourseID");
                 sub.setId(ids);
 
                 subjects.add(sub);
@@ -83,10 +123,10 @@ public class SettingsControlador extends MultiActionController {
             for (Subject su : subjects.subList(1, subjects.size())) {
                 String[] ids = new String[1];
                 ids = su.getId();
-                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where reportcard = 1 and CourseID = " + ids[0]);
-                while (rs2.next()) {
-                    if (rs2.getBoolean("Active") == true) {
-                        s.setName(rs2.getString("Title"));
+                rs = stAux.executeQuery("select Title,Active from Courses where reportcard = 1 and CourseID = " + ids[0]);
+                while (rs.next()) {
+                    if (rs.getBoolean("Active") == true) {
+                        s.setName(rs.getString("Title"));
                         activesubjects.add(s);
                     }
                 }
@@ -94,10 +134,28 @@ public class SettingsControlador extends MultiActionController {
 
         } catch (SQLException ex) {
             System.out.println("Error leyendo Subjects: " + ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         mv.addObject("subjects", activesubjects);
-
         return mv;
     }
 
@@ -106,56 +164,108 @@ public class SettingsControlador extends MultiActionController {
 
         ModelAndView mv = new ModelAndView("settingtable");
         List<Objective> objectives = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String subjectid = null;
             subjectid = hsr.getParameter("seleccion2");
+            rs = stAux.executeQuery("select name,id,description from public.objective where subject_id=" + subjectid);
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id,description from public.objective where subject_id=" + subjectid);
-            
-            while (rs1.next()) {
+            while (rs.next()) {
                 String[] ids = new String[1];
                 Objective sub = new Objective();
-                ids[0] = "" + rs1.getInt("id");
+                ids[0] = "" + rs.getInt("id");
                 sub.setId(ids);
-                sub.setName(rs1.getString("name"));
-                sub.setDescription(rs1.getString("description"));
+                sub.setName(rs.getString("name"));
+                sub.setDescription(rs.getString("description"));
                 objectives.add(sub);
             }
 
         } catch (SQLException ex) {
             System.out.println("Error leyendo Objectives: " + ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         mv.addObject("objectives", objectives);
 
         return mv;
     }
-    
+
     //view content link per objective
     public ModelAndView contentlistObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
 
         ModelAndView mv = new ModelAndView("settings");
         List<Content> contents = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String objectiveid = null;
             objectiveid = hsr.getParameter("seleccion3");
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id =" + objectiveid + ")");
+            rs = stAux.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id =" + objectiveid + ")");
             //String[] ids = new String[1];
-            while (rs1.next()) {
+            while (rs.next()) {
                 Content eq = new Content();
                 String[] id = new String[1];
-                id[0] = "" + rs1.getInt("id");
+                id[0] = "" + rs.getInt("id");
 
                 eq.setId(id);
-                eq.setName(rs1.getString("name"));
+                eq.setName(rs.getString("name"));
                 contents.add(eq);
             }
 
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
-
         mv.addObject("contents", contents);
 
         return mv;
@@ -167,28 +277,37 @@ public class SettingsControlador extends MultiActionController {
         ModelAndView mv = new ModelAndView("settings");
         List<Content> contents = new ArrayList<>();
         List<Objective> objectives = new ArrayList<>();
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select id, name from objective where subject_id =" + hsr.getParameter("seleccion"));
-            while (rs2.next()) {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("select id, name from objective where subject_id =" + hsr.getParameter("seleccion"));
+            while (rs.next()) {
                 Objective o = new Objective();
                 String[] ids = new String[1];
-                ids[0] = String.valueOf(rs2.getInt("id"));
+                ids[0] = String.valueOf(rs.getInt("id"));
                 o.setId(ids);
-                o.setName(rs2.getString("name"));
+                o.setName(rs.getString("name"));
                 objectives.add(o);
             }
             for (Objective obj : objectives) {
                 String[] id = new String[1];
                 id = obj.getId();
-                ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id =" + id[0] + ")");
+                rs = stAux.executeQuery("SELECT name,id,description FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id =" + id[0] + ")");
 
-                while (rs1.next()) {
+                while (rs.next()) {
                     Content eq = new Content();
                     String[] i = new String[1];
-                    i[0] = "" + rs1.getInt("id");
+                    i[0] = "" + rs.getInt("id");
 
                     eq.setId(i);
-                    eq.setName(rs1.getString("name"));
+                    eq.setName(rs.getString("name"));
                     eq.setObj(obj);
                     contents.add(eq);
                 }
@@ -197,6 +316,25 @@ public class SettingsControlador extends MultiActionController {
 
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         mv.addObject("contents", contents);
@@ -209,10 +347,19 @@ public class SettingsControlador extends MultiActionController {
 
         ModelAndView mv = new ModelAndView("editsetting");
         Objective objective = new Objective();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String[] id = new String[1];
             id[0] = hsr.getParameter("id");
-            ResultSet rs = DBConect.eduweb.executeQuery("select name,description from objective where id =" + id[0]);
+            rs = stAux.executeQuery("select name,description from objective where id =" + id[0]);
             while (rs.next()) {
                 objective.setId(id);
                 objective.setName(rs.getString("name"));
@@ -222,6 +369,25 @@ public class SettingsControlador extends MultiActionController {
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
 
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         mv.addObject("objective", objective);
@@ -234,15 +400,40 @@ public class SettingsControlador extends MultiActionController {
 
         ModelAndView mv = new ModelAndView("editsetting");
         String message = null;
-        try {
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
+        try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
             String consulta = "update objective set name = '" + hsr.getParameter("name") + "',description ='" + hsr.getParameter("description") + "'where id =" + hsr.getParameter("id");
-            DBConect.eduweb.executeUpdate(consulta);
+            stAux.executeUpdate(consulta);
             message = "Objective edited successfully";
 
         } catch (SQLException ex) {
             System.out.println("Error leyendo contents: " + ex);
             message = "Something went wrong";
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         mv.addObject("message", message);
@@ -256,24 +447,51 @@ public class SettingsControlador extends MultiActionController {
         ModelAndView mv = new ModelAndView("settingtable");
         String[] id = hsr.getParameterValues("id");
         String message = null;
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
 
             String consulta = "select name from lessons where objective_id = " + id[0];
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             if (rs.next()) {
                 message = "This objective is linked to lessons";
             } else {
                 consulta = "DELETE FROM public.objective WHERE id=" + id[0];
-                DBConect.eduweb.executeUpdate(consulta);
+                stAux.executeUpdate(consulta);
                 // need to decide what to do with the contents
             }
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         mv.addObject("message", message);
         return mv;
     }
+
     // create new objective-method-content
     //
     public ModelAndView AddObjective(HttpServletRequest hsr, HttpServletResponse hsr1) throws Exception {
@@ -281,15 +499,42 @@ public class SettingsControlador extends MultiActionController {
         ModelAndView mv = new ModelAndView("settingtable");
         String[] id = hsr.getParameterValues("id");
         String message = null;
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String consulta = "insert into objectives(name,description,subject_id) values('" + hsr.getParameter("name") + "','" + hsr.getParameter("description") + "," + id[0] + ")";
-            DBConect.eduweb.executeUpdate(consulta);
+            stAux.executeUpdate(consulta);
 
             message = "Objectived added";
 
         } catch (SQLException ex) {
             System.out.println("Error : " + ex);
             message = "Something went wrong";
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         mv.addObject("message", message);

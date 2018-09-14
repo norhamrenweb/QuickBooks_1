@@ -34,8 +34,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.beans.PropertyVetoException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Iterator;
 import javax.servlet.http.HttpSession;
@@ -61,9 +64,16 @@ public class LessonIdeaControlador {
         if ((new SessionCheck()).checkSession(hsr)) {
             return new ModelAndView("redirect:/userform.htm?opcion=inicio");
         }
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         ModelAndView mv = new ModelAndView("lessonidea");
         try {
-            ResultSet rs = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
             List<Level> grades = new ArrayList();
             Level l = new Level();
             String[] ids = new String[1];
@@ -84,6 +94,25 @@ public class LessonIdeaControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return mv;
     }
@@ -96,9 +125,16 @@ public class LessonIdeaControlador {
         ArrayList<DBRecords> lessons = new ArrayList<>();
         ArrayList<String> subjects = new ArrayList<>();
         ArrayList<String> objectives = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
             String[] lessonid = hsr.getParameterValues("seleccion1");
-            ResultSet rs = DBConect.eduweb.executeQuery("SELECT lessons.id,lessons.subject_id,lessons.objective_id,objective.name as obj,lessons.name FROM lessons inner join objective on lessons.objective_id = objective.id where lessons.level_id= " + lessonid[0] + " and lessons.idea = true ");
+            rs = stAux.executeQuery("SELECT lessons.id,lessons.subject_id,lessons.objective_id,objective.name as obj,lessons.name FROM lessons inner join objective on lessons.objective_id = objective.id where lessons.level_id= " + lessonid[0] + " and lessons.idea = true ");
             while (rs.next()) {
                 DBRecords l = new DBRecords();
                 l.setCol1("" + rs.getInt("id"));
@@ -126,7 +162,27 @@ public class LessonIdeaControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
+
         String test = new Gson().toJson(lessons);
         Tree tree = new Tree();
         Node<String> rootNode = new Node<String>("root", "A", " {\"disabled\":true}");
@@ -214,8 +270,18 @@ public class LessonIdeaControlador {
         Subject s = new Subject();
         Method m = new Method();
         String[] id = new String[1];
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
-            ResultSet rs = DBConect.eduweb.executeQuery("select * from lessons where id= " + lessonid);
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            rs = stAux.executeQuery("select * from lessons where id= " + lessonid);
             while (rs.next()) {
                 data.setComments(rs.getString("comments"));
 
@@ -243,11 +309,11 @@ public class LessonIdeaControlador {
             l.setName(l.fetchName(Integer.parseInt(id[0]), hsr.getServletContext()));
             data.setLevel(l);
             id = null;
-            ResultSet rs2 = DBConect.eduweb.executeQuery("select * from lesson_content where lesson_id = " + lessonid);
+            rs = stAux.executeQuery("select * from lesson_content where lesson_id = " + lessonid);
 
             List<String> cid = new ArrayList<>();
-            while (rs2.next()) {
-                cid.add(rs2.getString("content_id"));
+            while (rs.next()) {
+                cid.add(rs.getString("content_id"));
 
             }
 
@@ -258,7 +324,13 @@ public class LessonIdeaControlador {
             mv.addObject("contents", this.getContent(data.getObjective().getId()));
             mv.addObject("subjects", this.getSubjects(data.getLevel().getId()));
             List<Lessons> ideas = new ArrayList();
-            ResultSet rs4 = DBConect.ah.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
+
+            con.close();
+
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("SELECT GradeLevel,GradeLevelID FROM GradeLevels");
             List<Level> grades = new ArrayList();
             Level le = new Level();
             le.setName("Select level");
@@ -266,15 +338,20 @@ public class LessonIdeaControlador {
             ids[0] = "-1";
             le.setId(ids);
             grades.add(le);
-            while (rs4.next()) {
+            while (rs.next()) {
                 Level x = new Level();
                 ids = new String[1];
-                ids[0] = "" + rs4.getInt("GradeLevelID");
+                ids[0] = "" + rs.getInt("GradeLevelID");
                 x.setId(ids);
-                x.setName(rs4.getString("GradeLevel"));
+                x.setName(rs.getString("GradeLevel"));
                 grades.add(x);
             }
-            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT * FROM public.method");
+
+            con.close();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("SELECT * FROM public.method");
             List<Method> methods = new ArrayList();
             Method me = new Method();
             me.setName("Select Method");
@@ -282,13 +359,13 @@ public class LessonIdeaControlador {
             ids[0] = "-1";
             me.setId(ids);
             methods.add(me);
-            while (rs1.next()) {
+            while (rs.next()) {
                 Method x = new Method();
                 ids = new String[1];
-                ids[0] = "" + rs1.getInt("id");
+                ids[0] = "" + rs.getInt("id");
                 x.setId(ids);
-                x.setName(rs1.getString("name"));
-                x.setDescription(rs1.getString("description"));
+                x.setName(rs.getString("name"));
+                x.setDescription(rs.getString("description"));
                 methods.add(x);
             }
             mv.addObject("gradelevels", grades);
@@ -298,6 +375,25 @@ public class LessonIdeaControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
 
         return mv;
@@ -309,14 +405,21 @@ public class LessonIdeaControlador {
         ModelAndView mv = new ModelAndView("redirect:/lessonidea/start.htm");
         String lessonid = hsr.getParameter("selected");
         JSONObject jsonObj = new JSONObject();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String message = null;
             HttpSession sesion = hsr.getSession();
             User user = (User) sesion.getAttribute("user");
             String consulta = "DELETE FROM lesson_content WHERE lesson_id=" + lessonid;
-            DBConect.eduweb.executeUpdate(consulta);
+            stAux.executeUpdate(consulta);
             consulta = "DELETE FROM public.lessons WHERE id=" + lessonid;
-            DBConect.eduweb.executeUpdate(consulta);
+            stAux.executeUpdate(consulta);
             message = "Presentation deleted successfully";
             jsonObj.put("message", message);
         } catch (SQLException ex) {
@@ -324,6 +427,25 @@ public class LessonIdeaControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return jsonObj.toString();
     }
@@ -332,9 +454,16 @@ public class LessonIdeaControlador {
 
         ArrayList<Subject> subjects = new ArrayList<>();
         ArrayList<Subject> activesubjects = new ArrayList<>();
-        try {
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
 
-            ResultSet rs1 = DBConect.ah.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
+        try {
+            PoolC3P0_RenWeb pool_renweb = PoolC3P0_RenWeb.getInstance();
+            con = pool_renweb.getConnection();
+            stAux = con.createStatement();
+
+            rs = stAux.executeQuery("select CourseID from Course_GradeLevel where GradeLevel IN (select GradeLevel from GradeLevels where GradeLevelID =" + levelid[0] + ")");
             Subject s = new Subject();
             s.setName("Select Subject");
             String[] ids = new String[1];
@@ -343,10 +472,10 @@ public class LessonIdeaControlador {
             s.setId(ids);
             subjects.add(s);
             activesubjects.add(new Subject(s));
-            while (rs1.next()) {
+            while (rs.next()) {
                 Subject sub = new Subject();
                 ids = new String[1];
-                ids[0] = "" + rs1.getInt("CourseID");
+                ids[0] = "" + rs.getInt("CourseID");
                 sub.setId(ids);
 
                 subjects.add(sub);
@@ -354,10 +483,10 @@ public class LessonIdeaControlador {
             for (Subject su : subjects.subList(1, subjects.size())) {
                 ids = new String[1];
                 ids = su.getId();
-                ResultSet rs2 = DBConect.ah.executeQuery("select Title,Active from Courses where reportcard = 1 and CourseID = '" + ids[0] + "' order by Title");
-                while (rs2.next()) {
-                    if (rs2.getBoolean("Active") == true) {
-                        su.setName(rs2.getString("Title"));
+                rs = stAux.executeQuery("select Title,Active from Courses where reportcard = 1 and CourseID = '" + ids[0] + "' order by Title");
+                while (rs.next()) {
+                    if (rs.getBoolean("Active") == true) {
+                        su.setName(rs.getString("Title"));
                         activesubjects.add(su);
                     }
                 }
@@ -366,13 +495,44 @@ public class LessonIdeaControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(LessonIdeaControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(LessonIdeaControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return activesubjects;
     }
 
     public ArrayList<Objective> getObjectives(String[] subjectid) throws SQLException {
         ArrayList<Objective> objectives = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+
             String[] ids = new String[1];
             Objective sub = new Objective();
             ids[0] = "-1";
@@ -380,17 +540,17 @@ public class LessonIdeaControlador {
             sub.setName("Select objective");
             objectives.add(sub);
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0] + "' order by name");
+            rs = stAux.executeQuery("select name,id from public.objective where subject_id='" + subjectid[0] + "' order by name");
 //          Objective s = new Objective();
 //          s.setName("Select Objective");
 //          objectives.add(s);
 
-            while (rs1.next()) {
+            while (rs.next()) {
                 ids = new String[1];
                 sub = new Objective();
-                ids[0] = "" + rs1.getInt("id");
+                ids[0] = "" + rs.getInt("id");
                 sub.setId(ids);
-                sub.setName(rs1.getString("name"));
+                sub.setName(rs.getString("name"));
                 objectives.add(sub);
             }
 
@@ -399,23 +559,52 @@ public class LessonIdeaControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(LessonIdeaControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(LessonIdeaControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return objectives;
     }
 
     public ArrayList<Content> getContent(String[] objectiveid) throws SQLException {
         ArrayList<Content> contents = new ArrayList<>();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
+
         try {
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            rs = stAux.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id =" + objectiveid[0] + ")");
 
-            ResultSet rs1 = DBConect.eduweb.executeQuery("SELECT name,id FROM public.content where public.content.id IN (select public.objective_content.content_id from public.objective_content where public.objective_content.objective_id =" + objectiveid[0] + ")");
-
-            while (rs1.next()) {
+            while (rs.next()) {
                 Content eq = new Content();
                 String[] id = new String[1];
-                id[0] = "" + rs1.getInt("id");
+                id[0] = "" + rs.getInt("id");
 
                 eq.setId(id);
-                eq.setName(rs1.getString("name"));
+                eq.setName(rs.getString("name"));
                 contents.add(eq);
             }
 
@@ -424,6 +613,29 @@ public class LessonIdeaControlador {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             log.error(ex + errors.toString());
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(LessonIdeaControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            java.util.logging.Logger.getLogger(LessonIdeaControlador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (stAux != null) {
+                    stAux.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return contents;
     }

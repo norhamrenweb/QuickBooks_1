@@ -409,8 +409,8 @@
 				<textFieldExpression><![CDATA[$F{term}.split("#")[0]]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="0" y="0" width="147" height="146" uuid="ec9c3c85-f8d3-4615-a7ec-b122e41ad808"/>
-				<imageExpression><![CDATA["https://ah-zaf.client.renweb.com/ftp/ah-zaf/Customization/-96/AuburnHouse.PNG"]]></imageExpression>
+				<reportElement x="2" y="5" width="140" height="146" uuid="72c773e0-e0c2-4b07-b783-9a34c85f5294"/>
+				<imageExpression><![CDATA["ftp://david:david@ftp02.eduwebgroup.com/AH-ZAF/configSchool/logo.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</title>

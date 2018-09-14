@@ -5,12 +5,16 @@
  */
 package Montessori;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -73,11 +77,16 @@ public class Step {
     }
 
     public void compareandupdate(List<Step> newsteps, String[] objid, ServletContext servlet) {
-
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stAux = null;
         try {
-
+            PoolC3P0_Local pool_local = PoolC3P0_Local.getInstance();
+            con = pool_local.getConnection();
+            stAux = con.createStatement();
+            
             String consulta = "SELECT * FROM obj_steps where obj_id = " + objid[0];
-            ResultSet rs = DBConect.eduweb.executeQuery(consulta);
+            rs = stAux.executeQuery(consulta);
             List<Step> old = new ArrayList<>();
             while (rs.next()) {
                 Step s = new Step();
@@ -97,7 +106,7 @@ public class Step {
                 }
                 if (found == 0) {
                     //delete step
-                    DBConect.eduweb.executeUpdate("delete from obj_steps where id =" + y.getId());
+                    stAux.executeUpdate("delete from obj_steps where id =" + y.getId());
 
                 }
             }
@@ -108,12 +117,12 @@ public class Step {
                 name = name.replace("\"", "\"\"");
                 if (x.getId().equals("0")) {
                     //add new step
-                    DBConect.eduweb.executeUpdate("insert into obj_steps(name,storder,obj_id) values('" + name + "','" + x.getOrder() + "','" + objid[0] + "')");
+                    stAux.executeUpdate("insert into obj_steps(name,storder,obj_id) values('" + name + "','" + x.getOrder() + "','" + objid[0] + "')");
                 } else {
                     for (Step y : old) {
                         if (y.getId().equals(x.getId())) {
                             //update step
-                            DBConect.eduweb.executeUpdate("update obj_steps set name = '" + name + "',storder= '" + x.getOrder() + "' where id = " + x.getId());
+                            stAux.executeUpdate("update obj_steps set name = '" + name + "',storder= '" + x.getOrder() + "' where id = " + x.getId());
                             break;
                         }
                     }
@@ -121,10 +130,14 @@ public class Step {
                 }
 
             }
-
+            con.close();
         } catch (SQLException ex) {
             System.out.println("Error updating steps: " + ex);
-        }
+        } catch (IOException ex) {
+            Logger.getLogger(Step.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(Step.class.getName()).log(Level.SEVERE, null, ex);
+        } 
 
     }
 
